@@ -1,17 +1,68 @@
-import { Search, TrendingUp, BarChart2 } from 'lucide-react'
+'use client'
+import { Search, TrendingUp, TrendingDown, BarChart2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import StockSearch from '@/components/research/StockSearch'
+import { cn } from '@/lib/utils'
 
 const POPULAR = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'TSLA', 'META', 'BRK-B', 'JPM', 'V']
 
+interface Mover {
+  ticker: string
+  name: string
+  price: number
+  change: number
+  changePercent: number
+}
+
+function MoverRow({ m }: { m: Mover }) {
+  const router = useRouter()
+  const pos = m.changePercent >= 0
+  return (
+    <div
+      onClick={() => router.push(`/research/${m.ticker}`)}
+      className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-colors border border-transparent hover:border-gray-700"
+    >
+      <div className="flex items-center gap-3">
+        <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0', pos ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400')}>
+          {pos ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white">{m.ticker}</p>
+          <p className="text-xs text-gray-500 truncate max-w-[140px]">{m.name}</p>
+        </div>
+      </div>
+      <div className="text-right">
+        <p className="text-sm font-medium text-white">${m.price.toFixed(2)}</p>
+        <p className={cn('text-xs font-semibold', pos ? 'text-green-400' : 'text-red-400')}>
+          {pos ? '+' : ''}{m.changePercent.toFixed(2)}%
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function ResearchPage() {
+  const [gainers, setGainers] = useState<Mover[]>([])
+  const [losers, setLosers] = useState<Mover[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/movers')
+      .then(r => r.json())
+      .then(d => { setGainers(d.gainers || []); setLosers(d.losers || []) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-white">Stock Research</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Search any stock or ETF for live data and AI-powered analysis</p>
+        <p className="text-sm text-gray-400 mt-0.5">Search any stock or ETF for live data, analyst ratings, and more</p>
       </div>
 
-      <div className="flex flex-col items-center py-12 space-y-6">
+      <div className="flex flex-col items-center py-8 space-y-4">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-12 w-12 rounded-xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
             <Search className="h-6 w-6 text-blue-400" />
@@ -22,6 +73,53 @@ export default function ResearchPage() {
           <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
         </div>
         <p className="text-xs text-gray-500">Press Enter to jump directly to a ticker</p>
+      </div>
+
+      {/* Top Movers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Gainers */}
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingUp className="h-4 w-4 text-green-400" />
+            <p className="text-sm font-semibold text-white">Top Gainers Today</p>
+            <span className="ml-auto text-xs text-gray-600">Yahoo Finance</span>
+          </div>
+          {loading ? (
+            <div className="space-y-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-12 rounded-lg bg-gray-800 animate-pulse" />
+              ))}
+            </div>
+          ) : gainers.length > 0 ? (
+            <div className="space-y-1">
+              {gainers.map(m => <MoverRow key={m.ticker} m={m} />)}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 py-4 text-center">No data available</p>
+          )}
+        </div>
+
+        {/* Losers */}
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingDown className="h-4 w-4 text-red-400" />
+            <p className="text-sm font-semibold text-white">Top Losers Today</p>
+            <span className="ml-auto text-xs text-gray-600">Yahoo Finance</span>
+          </div>
+          {loading ? (
+            <div className="space-y-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-12 rounded-lg bg-gray-800 animate-pulse" />
+              ))}
+            </div>
+          ) : losers.length > 0 ? (
+            <div className="space-y-1">
+              {losers.map(m => <MoverRow key={m.ticker} m={m} />)}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 py-4 text-center">No data available</p>
+          )}
+        </div>
       </div>
 
       <div>
@@ -39,7 +137,7 @@ export default function ResearchPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-4 w-4 text-blue-400" />
@@ -50,9 +148,9 @@ export default function ResearchPage() {
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <BarChart2 className="h-4 w-4 text-purple-400" />
-            <p className="text-sm font-medium text-white">AI-Powered Analysis</p>
+            <p className="text-sm font-medium text-white">Analyst Consensus</p>
           </div>
-          <p className="text-xs text-gray-500">Get structured research reports with Buy/Hold/Sell recommendations powered by Claude AI.</p>
+          <p className="text-xs text-gray-500">Wall Street analyst ratings, price targets, and reasoning from professional research coverage.</p>
         </div>
       </div>
     </div>
