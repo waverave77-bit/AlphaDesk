@@ -15,13 +15,14 @@ const HEDGE_FUNDS = [
 
 function parseXMLHoldings(xml: string): { name: string; value: number; shares: number }[] {
   const holdings: { name: string; value: number; shares: number }[] = []
-  const infoTableRegex = /<infoTable>([\s\S]*?)<\/infoTable>/gi
+  // Handle both plain and namespaced tags (e.g. ns1:infoTable)
+  const infoTableRegex = /<(?:\w+:)?infoTable>([\s\S]*?)<\/(?:\w+:)?infoTable>/gi
   let match
   while ((match = infoTableRegex.exec(xml)) !== null) {
     const block = match[1]
-    const name = block.match(/<nameOfIssuer>(.*?)<\/nameOfIssuer>/i)?.[1]?.trim() ?? ''
-    const value = parseInt(block.match(/<value>(.*?)<\/value>/i)?.[1]?.trim() ?? '0', 10)
-    const shares = parseInt(block.match(/<sshPrnamt>(.*?)<\/sshPrnamt>/i)?.[1]?.trim() ?? '0', 10)
+    const name = block.match(/<(?:\w+:)?nameOfIssuer>(.*?)<\/(?:\w+:)?nameOfIssuer>/i)?.[1]?.trim() ?? ''
+    const value = parseInt(block.match(/<(?:\w+:)?value>(.*?)<\/(?:\w+:)?value>/i)?.[1]?.trim() ?? '0', 10)
+    const shares = parseInt(block.match(/<(?:\w+:)?sshPrnamt>(.*?)<\/(?:\w+:)?sshPrnamt>/i)?.[1]?.trim() ?? '0', 10)
     if (name) holdings.push({ name, value, shares })
   }
   return holdings.sort((a, b) => b.value - a.value).slice(0, 10)
@@ -32,7 +33,7 @@ async function getFundHoldings(fund: { name: string; cik: number }) {
   const headers = { 'User-Agent': 'AlphaDesk contact@alphadesk.app', Accept: 'application/json' }
 
   try {
-    const subR = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, { headers, next: { revalidate: 86400 } })
+    const subR = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, { headers, next: { revalidate: 3600 } })
     if (!subR.ok) return { ...fund, filingDate: null, topHoldings: [] }
     const sub = await subR.json()
 
@@ -46,7 +47,7 @@ async function getFundHoldings(fund: { name: string; cik: number }) {
     const accNo = accessions[idx].replace(/-/g, '')
     const filingDate = dates[idx]
 
-    const xmlUrl = `https://data.sec.gov/Archives/edgar/data/${fund.cik}/${accNo}/InfoTable.xml`
+    const xmlUrl = `https://www.sec.gov/Archives/edgar/data/${fund.cik}/${accNo}/infotable.xml`
     const xmlR = await fetch(xmlUrl, { headers: { 'User-Agent': 'AlphaDesk contact@alphadesk.app' }, next: { revalidate: 86400 } })
     if (!xmlR.ok) return { ...fund, filingDate, topHoldings: [] }
 
