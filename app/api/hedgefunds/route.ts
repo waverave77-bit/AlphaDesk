@@ -3,19 +3,20 @@ import { NextResponse } from 'next/server'
 const HEDGE_FUNDS = [
   { name: 'Bridgewater Associates', cik: 1350694 },
   { name: 'Renaissance Technologies', cik: 1037389 },
-  { name: 'Citadel Advisors', cik: 1423689 },
+  { name: 'Citadel Advisors', cik: 1423053 },
   { name: 'Two Sigma Investments', cik: 1179392 },
-  { name: 'AQR Capital Management', cik: 1336186 },
-  { name: 'D.E. Shaw & Co.', cik: 1142922 },
-  { name: 'Millennium Management', cik: 1273931 },
+  { name: 'AQR Capital Management', cik: 1167557 },
+  { name: 'D.E. Shaw & Co.', cik: 1009207 },
+  { name: 'Viking Global Investors', cik: 1103804 },
   { name: 'Point72 Asset Management', cik: 1603466 },
   { name: 'Tiger Global Management', cik: 1167483 },
-  { name: 'Baupost Group', cik: 851143 },
+  { name: 'Baupost Group', cik: 1061768 },
 ]
+
+const HEADERS = { 'User-Agent': 'AlphaDesk contact@alphadesk.app', Accept: 'application/json' }
 
 function parseXMLHoldings(xml: string): { name: string; value: number; shares: number }[] {
   const holdings: { name: string; value: number; shares: number }[] = []
-  // Handle both plain and namespaced tags (e.g. ns1:infoTable)
   const infoTableRegex = /<(?:\w+:)?infoTable>([\s\S]*?)<\/(?:\w+:)?infoTable>/gi
   let match
   while ((match = infoTableRegex.exec(xml)) !== null) {
@@ -28,12 +29,30 @@ function parseXMLHoldings(xml: string): { name: string; value: number; shares: n
   return holdings.sort((a, b) => b.value - a.value).slice(0, 10)
 }
 
+async function getHoldingsXmlFilename(cik: number, accNoDash: string): Promise<string | null> {
+  try {
+    const dirUrl = `https://www.sec.gov/Archives/edgar/data/${cik}/${accNoDash}/`
+    const r = await fetch(dirUrl, { headers: { 'User-Agent': HEADERS['User-Agent'] } })
+    if (!r.ok) return null
+    const html = await r.text()
+    // Find XML files that are not the primary doc
+    const matches = [...html.matchAll(/href="([^"]+\.xml)"/gi)]
+      .map(m => m[1].split('/').pop() ?? '')
+      .filter(f => f && f !== 'primary_doc.xml' && !f.includes('xsl'))
+    return matches[0] ?? null
+  } catch {
+    return null
+  }
+}
+
 async function getFundHoldings(fund: { name: string; cik: number }) {
   const padded = String(fund.cik).padStart(10, '0')
-  const headers = { 'User-Agent': 'AlphaDesk contact@alphadesk.app', Accept: 'application/json' }
 
   try {
-    const subR = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, { headers, next: { revalidate: 3600 } })
+    const subR = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, {
+      headers: HEADERS,
+      next: { revalidate: 3600 },
+    })
     if (!subR.ok) return { ...fund, filingDate: null, topHoldings: [] }
     const sub = await subR.json()
 
@@ -44,11 +63,18 @@ async function getFundHoldings(fund: { name: string; cik: number }) {
     const idx = forms.findIndex((f: string) => f === '13F-HR')
     if (idx === -1) return { ...fund, filingDate: null, topHoldings: [] }
 
-    const accNo = accessions[idx].replace(/-/g, '')
+    const accNoDash = accessions[idx].replace(/-/g, '')
     const filingDate = dates[idx]
 
-    const xmlUrl = `https://www.sec.gov/Archives/edgar/data/${fund.cik}/${accNo}/infotable.xml`
-    const xmlR = await fetch(xmlUrl, { headers: { 'User-Agent': 'AlphaDesk contact@alphadesk.app' }, next: { revalidate: 86400 } })
+    // Dynamically find the holdings XML filename
+    const xmlFile = await getHoldingsXmlFilename(fund.cik, accNoDash)
+    if (!xmlFile) return { ...fund, filingDate, topHoldings: [] }
+
+    const xmlUrl = `https://www.sec.gov/Archives/edgar/data/${fund.cik}/${accNoDash}/${xmlFile}`
+    const xmlR = await fetch(xmlUrl, {
+      headers: { 'User-Agent': HEADERS['User-Agent'] },
+      next: { revalidate: 3600 },
+    })
     if (!xmlR.ok) return { ...fund, filingDate, topHoldings: [] }
 
     const xml = await xmlR.text()
