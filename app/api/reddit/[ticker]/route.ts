@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+export const dynamic = 'force-dynamic'
 
 const BULLISH_WORDS = ['buy', 'calls', 'moon', 'bull', 'long', 'squeeze', 'undervalued', 'breakout', 'strong', 'rocket', 'upside', 'growth', 'bullish', 'green']
 const BEARISH_WORDS = ['puts', 'short', 'sell', 'crash', 'bear', 'drop', 'overvalued', 'weak', 'dump', 'avoid', 'downside', 'bearish', 'red', 'falling']

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+export const dynamic = 'force-dynamic'
 
 const HEDGE_FUNDS = [
   { name: 'Bridgewater Associates', cik: 1350694 },
