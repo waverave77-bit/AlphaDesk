@@ -36,9 +36,13 @@ async function getHoldingsXmlFilename(cik: number, accNoDash: string): Promise<s
     if (!r.ok) return null
     const html = await r.text()
     // Find XML files that are not the primary doc
-    const matches = [...html.matchAll(/href="([^"]+\.xml)"/gi)]
-      .map(m => m[1].split('/').pop() ?? '')
-      .filter(f => f && f !== 'primary_doc.xml' && !f.includes('xsl'))
+    const regex = /href="([^"]+\.xml)"/gi
+    const matches: string[] = []
+    let m: RegExpExecArray | null
+    while ((m = regex.exec(html)) !== null) {
+      const fname = m[1].split('/').pop() ?? ''
+      if (fname && fname !== 'primary_doc.xml' && !fname.includes('xsl')) matches.push(fname)
+    }
     return matches[0] ?? null
   } catch {
     return null
