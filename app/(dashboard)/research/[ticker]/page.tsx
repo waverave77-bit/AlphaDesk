@@ -8,6 +8,9 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import StockChart from '@/components/charts/StockChart'
 import AnalystCard from '@/components/research/AnalystCard'
+import RedditSentiment from '@/components/research/RedditSentiment'
+import OptionsPanel from '@/components/research/OptionsPanel'
+import SecFilings from '@/components/research/SecFilings'
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatLargeNumber, gainLossColor, cn } from '@/lib/utils'
@@ -201,6 +204,13 @@ export default function StockDetailPage() {
           ticker={quote.ticker}
         />
       )}
+
+      {/* Reddit Sentiment + Options + SEC Filings */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <RedditSentiment ticker={quote.ticker} />
+        <OptionsPanel ticker={quote.ticker} />
+      </div>
+      <SecFilings ticker={quote.ticker} />
 
       {/* Key Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
