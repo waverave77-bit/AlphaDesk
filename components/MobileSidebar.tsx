@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, Menu, X, FlaskConical, Globe, Building2 } from 'lucide-react'
+import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, Menu, X, FlaskConical, Globe, Building2, Users } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
@@ -13,6 +13,7 @@ const navItems = [
   { href: '/quant', label: 'Quant Strategy', icon: FlaskConical },
   { href: '/macro', label: 'Macro', icon: Globe },
   { href: '/hedgefunds', label: 'Hedge Funds', icon: Building2 },
+  { href: '/insiders', label: 'Smart Money', icon: Users },
   { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
