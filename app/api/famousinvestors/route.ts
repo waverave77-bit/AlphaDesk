@@ -5,7 +5,7 @@ const INVESTORS = [
   { name: 'Warren Buffett (Berkshire)', cik: '1067983' },
   { name: 'Bill Ackman (Pershing Square)', cik: '1336528' },
   { name: 'Michael Burry (Scion)', cik: '1649339' },
-  { name: 'David Tepper (Appaloosa)', cik: '1656081' },
+  { name: 'David Einhorn (Greenlight)', cik: '1079114' },
   { name: 'Stanley Druckenmiller (Duquesne)', cik: '1536411' },
   { name: 'George Soros (Soros Fund)', cik: '1029160' },
 ]

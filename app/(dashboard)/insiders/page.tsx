@@ -10,14 +10,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 interface Trade {
   name: string
-  chamber: 'House' | 'Senate'
-  party: string
+  title: string
+  company: string
   ticker: string
-  assetDescription: string
   type: string
-  amount: string
+  shares: number
+  price: number
+  totalValue: number
   transactionDate: string
-  disclosureDate: string
+  filingDate: string
 }
 
 interface Holding {
@@ -35,27 +36,18 @@ interface Investor {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function partyBadge(party: string) {
-  const p = (party ?? '').trim().toUpperCase()
-  if (p === 'D' || p === 'DEMOCRAT' || p === 'DEMOCRATIC')
-    return <Badge className="text-[10px] px-1.5 py-0 bg-blue-600/20 text-blue-400 border border-blue-600/30 font-medium">D</Badge>
-  if (p === 'R' || p === 'REPUBLICAN')
-    return <Badge className="text-[10px] px-1.5 py-0 bg-red-600/20 text-red-400 border border-red-600/30 font-medium">R</Badge>
-  return <Badge className="text-[10px] px-1.5 py-0 bg-gray-700/40 text-gray-400 border border-gray-700 font-medium">I</Badge>
-}
-
-function chamberBadge(chamber: 'House' | 'Senate') {
-  return chamber === 'Senate'
-    ? <Badge className="text-[10px] px-1.5 py-0 bg-purple-600/20 text-purple-400 border border-purple-600/30">Senate</Badge>
-    : <Badge className="text-[10px] px-1.5 py-0 bg-teal-600/20 text-teal-400 border border-teal-600/30">House</Badge>
-}
-
 function typeBadge(type: string) {
-  const t = (type ?? '').toLowerCase()
-  const isPurchase = t.includes('purchase') || t === 'buy'
+  const isPurchase = type === 'Purchase'
   return isPurchase
-    ? <span className="text-[11px] font-medium text-emerald-400">{type}</span>
-    : <span className="text-[11px] font-medium text-red-400">{type}</span>
+    ? <span className="text-[11px] font-semibold text-emerald-400">▲ Purchase</span>
+    : <span className="text-[11px] font-semibold text-red-400">▼ Sale</span>
+}
+
+function fmtVal(n: number) {
+  if (!n || n === 0) return '—'
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M'
+  if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K'
+  return '$' + n.toFixed(0)
 }
 
 function formatDate(dateStr: string) {
@@ -65,9 +57,9 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-// ─── Congress Trades tab ──────────────────────────────────────────────────────
+// ─── Insider Trades tab ───────────────────────────────────────────────────────
 
-function CongressTrades() {
+function InsiderTrades() {
   const [trades, setTrades] = useState<Trade[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -82,86 +74,69 @@ function CongressTrades() {
     return (
       <div className="space-y-2">
         {[...Array(8)].map((_, i) => (
-          <Card key={i}>
-            <CardContent className="p-3">
-              <div className="flex gap-3 items-center">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-4 w-12" />
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-4 w-24 ml-auto" />
-              </div>
-            </CardContent>
-          </Card>
+          <Card key={i}><CardContent className="p-3">
+            <div className="flex gap-3 items-center">
+              <Skeleton className="h-4 w-32" /><Skeleton className="h-4 w-16" />
+              <Skeleton className="h-4 w-12" /><Skeleton className="h-4 w-24 ml-auto" />
+            </div>
+          </CardContent></Card>
         ))}
       </div>
     )
   }
 
-  if (trades.length === 0) {
-    return <p className="text-sm text-gray-500 text-center py-12">No trade data available.</p>
-  }
+  if (trades.length === 0) return <p className="text-sm text-gray-500 text-center py-12">No insider trade data available.</p>
 
   return (
     <div className="space-y-1.5">
-      {/* Header row */}
       <div className="hidden md:grid grid-cols-12 text-[10px] text-gray-600 uppercase tracking-wide px-4 pb-1 border-b border-gray-800">
-        <span className="col-span-3">Member</span>
-        <span className="col-span-1">Chamber</span>
+        <span className="col-span-2">Insider</span>
+        <span className="col-span-2">Title</span>
+        <span className="col-span-2">Company</span>
         <span className="col-span-1">Ticker</span>
-        <span className="col-span-3">Asset</span>
         <span className="col-span-1">Type</span>
-        <span className="col-span-2 text-right">Amount</span>
+        <span className="col-span-1 text-right">Shares</span>
+        <span className="col-span-1 text-right">Price</span>
+        <span className="col-span-1 text-right">Value</span>
         <span className="col-span-1 text-right">Date</span>
       </div>
-
       {trades.map((trade, i) => (
         <Card key={i} className="hover:bg-gray-800/30 transition-colors">
           <CardContent className="p-3 md:px-4">
-            {/* Mobile layout */}
-            <div className="flex flex-col gap-1.5 md:hidden">
+            <div className="flex flex-col gap-1 md:hidden">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-medium text-white">{trade.name}</span>
-                {partyBadge(trade.party)}
-                {chamberBadge(trade.chamber)}
+                <Badge variant="outline" className="text-[10px] px-1 py-0">{trade.title || 'Director'}</Badge>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Link href={`/research/${trade.ticker}`} className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors">
-                  {trade.ticker}
-                </Link>
-                <span className="text-xs text-gray-400 truncate">{trade.assetDescription}</span>
+              <div className="flex items-center gap-2">
+                <Link href={`/research/${trade.ticker}`} className="text-sm font-bold text-blue-400 hover:text-blue-300">{trade.ticker}</Link>
+                <span className="text-xs text-gray-400">{trade.company}</span>
               </div>
-              <div className="flex items-center gap-3 flex-wrap text-xs text-gray-500">
+              <div className="flex gap-3 text-xs text-gray-500">
                 {typeBadge(trade.type)}
-                <span>{trade.amount}</span>
+                <span>{trade.shares.toLocaleString()} shares</span>
+                <span>{fmtVal(trade.totalValue)}</span>
                 <span>{formatDate(trade.transactionDate)}</span>
               </div>
             </div>
-
-            {/* Desktop layout */}
-            <div className="hidden md:grid grid-cols-12 items-center gap-1">
-              <div className="col-span-3 flex items-center gap-1.5 min-w-0">
-                <span className="text-sm text-white truncate">{trade.name}</span>
-                {partyBadge(trade.party)}
-              </div>
+            <div className="hidden md:grid grid-cols-12 items-center gap-1 text-sm">
+              <div className="col-span-2 text-white truncate text-xs">{trade.name}</div>
+              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.title || 'Director'}</div>
+              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.company}</div>
               <div className="col-span-1">
-                {chamberBadge(trade.chamber)}
+                <Link href={`/research/${trade.ticker}`} className="font-bold text-blue-400 hover:text-blue-300 text-sm">{trade.ticker}</Link>
               </div>
-              <div className="col-span-1">
-                <Link href={`/research/${trade.ticker}`} className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors">
-                  {trade.ticker}
-                </Link>
-              </div>
-              <div className="col-span-3 text-xs text-gray-400 truncate pr-2">{trade.assetDescription}</div>
               <div className="col-span-1">{typeBadge(trade.type)}</div>
-              <div className="col-span-2 text-right text-xs text-gray-400 font-mono">{trade.amount}</div>
+              <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.shares.toLocaleString()}</div>
+              <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.price > 0 ? '$' + trade.price.toFixed(2) : '—'}</div>
+              <div className="col-span-1 text-right text-xs font-mono text-white">{fmtVal(trade.totalValue)}</div>
               <div className="col-span-1 text-right text-xs text-gray-500">{formatDate(trade.transactionDate)}</div>
             </div>
           </CardContent>
         </Card>
       ))}
-
       <p className="text-xs text-gray-600 text-center pt-4 pb-2">
-        Data sourced from House Stock Watcher and Senate Stock Watcher. Reflects mandatory disclosures.
+        SEC Form 4 filings — purchases &amp; sales by corporate executives and directors. Via EDGAR.
       </p>
     </div>
   )
@@ -270,7 +245,7 @@ export default function InsidersPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Smart Money Tracker</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Congress disclosures and top investor 13F filings</p>
+          <p className="text-sm text-gray-400 mt-0.5">SEC insider trades &amp; top investor 13F filings</p>
         </div>
       </div>
 
@@ -284,7 +259,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Congress Trades
+          Insider Trades
         </button>
         <button
           onClick={() => setActiveTab('investors')}
@@ -299,7 +274,7 @@ export default function InsidersPage() {
       </div>
 
       {/* Tab content */}
-      {activeTab === 'congress' ? <CongressTrades /> : <FamousInvestors />}
+      {activeTab === 'congress' ? <InsiderTrades /> : <FamousInvestors />}
     </div>
   )
 }
