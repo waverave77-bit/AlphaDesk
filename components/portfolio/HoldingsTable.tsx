@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Trash2, ExternalLink, TrendingUp, TrendingDown, ChevronDown, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -149,10 +149,9 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
             const hasMultipleLots = g.lots.length > 1
 
             return (
-              <>
+              <React.Fragment key={g.ticker}>
                 {/* ── Main grouped row ── */}
                 <tr
-                  key={g.ticker}
                   className={cn(
                     'border-b border-gray-800/50 transition-colors',
                     hasMultipleLots ? 'hover:bg-gray-800/30 cursor-pointer' : 'hover:bg-gray-800/20',
@@ -273,7 +272,7 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             )
           })}
         </tbody>
