@@ -19,6 +19,7 @@ interface Trade {
   totalValue: number
   transactionDate: string
   filingDate: string
+  chamber?: string
 }
 
 interface Holding {
@@ -88,8 +89,8 @@ function InsiderTrades() {
   if (trades.length === 0) return <p className="text-sm text-gray-500 text-center py-12">No insider trade data available.</p>
 
   const sorted = [...trades].sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
-  const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 5)
-  const sales = sorted.filter(t => t.type === 'Sale').slice(0, 5)
+  const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 10)
+  const sales = sorted.filter(t => t.type === 'Sale').slice(0, 10)
 
   const TradeTable = ({ rows }: { rows: Trade[] }) => (
     <div className="space-y-1.5">
@@ -109,7 +110,7 @@ function InsiderTrades() {
             <div className="flex flex-col gap-1 md:hidden">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-medium text-white">{trade.name}</span>
-                <Badge variant="outline" className="text-[10px] px-1 py-0">{trade.title || 'Director'}</Badge>
+                <Badge variant="outline" className="text-[10px] px-1 py-0">{trade.chamber || trade.title || 'Director'}</Badge>
               </div>
               <div className="flex items-center gap-2">
                 <Link href={`/research/${trade.ticker}`} className="text-sm font-bold text-blue-400 hover:text-blue-300">{trade.ticker}</Link>
@@ -123,7 +124,7 @@ function InsiderTrades() {
             </div>
             <div className="hidden md:grid grid-cols-12 items-center gap-1 text-sm">
               <div className="col-span-2 text-white truncate text-xs">{trade.name}</div>
-              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.title || 'Director'}</div>
+              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.chamber || trade.title || 'Director'}</div>
               <div className="col-span-2 text-gray-400 truncate text-xs">{trade.company}</div>
               <div className="col-span-1">
                 <Link href={`/research/${trade.ticker}`} className="font-bold text-blue-400 hover:text-blue-300 text-sm">{trade.ticker}</Link>
@@ -160,7 +161,7 @@ function InsiderTrades() {
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-2">
-        SEC Form 4 filings — purchases &amp; sales by corporate executives and directors. Via EDGAR.
+        Congressional stock trades — House &amp; Senate financial disclosures. Prioritises Trump-aligned members.
       </p>
     </div>
   )
