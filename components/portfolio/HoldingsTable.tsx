@@ -89,7 +89,7 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
   const toggleExpand = (ticker: string) =>
     setExpanded((prev) => {
       const next = new Set(prev)
-      next.has(ticker) ? next.delete(ticker) : next.add(ticker)
+      if (next.has(ticker)) { next.delete(ticker) } else { next.add(ticker) }
       return next
     })
 
