@@ -87,20 +87,23 @@ function InsiderTrades() {
 
   if (trades.length === 0) return <p className="text-sm text-gray-500 text-center py-12">No insider trade data available.</p>
 
-  return (
+  const sorted = [...trades].sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
+  const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 5)
+  const sales = sorted.filter(t => t.type === 'Sale').slice(0, 5)
+
+  const TradeTable = ({ rows }: { rows: Trade[] }) => (
     <div className="space-y-1.5">
       <div className="hidden md:grid grid-cols-12 text-[10px] text-gray-600 uppercase tracking-wide px-4 pb-1 border-b border-gray-800">
         <span className="col-span-2">Insider</span>
         <span className="col-span-2">Title</span>
         <span className="col-span-2">Company</span>
         <span className="col-span-1">Ticker</span>
-        <span className="col-span-1">Type</span>
         <span className="col-span-1 text-right">Shares</span>
         <span className="col-span-1 text-right">Price</span>
         <span className="col-span-1 text-right">Value</span>
-        <span className="col-span-1 text-right">Date</span>
+        <span className="col-span-2 text-right">Date</span>
       </div>
-      {trades.map((trade, i) => (
+      {rows.map((trade, i) => (
         <Card key={i} className="hover:bg-gray-800/30 transition-colors">
           <CardContent className="p-3 md:px-4">
             <div className="flex flex-col gap-1 md:hidden">
@@ -113,7 +116,6 @@ function InsiderTrades() {
                 <span className="text-xs text-gray-400">{trade.company}</span>
               </div>
               <div className="flex gap-3 text-xs text-gray-500">
-                {typeBadge(trade.type)}
                 <span>{trade.shares.toLocaleString()} shares</span>
                 <span>{fmtVal(trade.totalValue)}</span>
                 <span>{formatDate(trade.transactionDate)}</span>
@@ -126,16 +128,38 @@ function InsiderTrades() {
               <div className="col-span-1">
                 <Link href={`/research/${trade.ticker}`} className="font-bold text-blue-400 hover:text-blue-300 text-sm">{trade.ticker}</Link>
               </div>
-              <div className="col-span-1">{typeBadge(trade.type)}</div>
               <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.shares.toLocaleString()}</div>
               <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.price > 0 ? '$' + trade.price.toFixed(2) : '—'}</div>
               <div className="col-span-1 text-right text-xs font-mono text-white">{fmtVal(trade.totalValue)}</div>
-              <div className="col-span-1 text-right text-xs text-gray-500">{formatDate(trade.transactionDate)}</div>
+              <div className="col-span-2 text-right text-xs text-gray-500">{formatDate(trade.transactionDate)}</div>
             </div>
           </CardContent>
         </Card>
       ))}
-      <p className="text-xs text-gray-600 text-center pt-4 pb-2">
+    </div>
+  )
+
+  return (
+    <div className="space-y-8">
+      {/* Purchases */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-emerald-400" />
+          <h2 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">Recent Purchases</h2>
+        </div>
+        {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-xs text-gray-600">No recent purchases.</p>}
+      </div>
+
+      {/* Sales */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-red-400" />
+          <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider">Recent Sales</h2>
+        </div>
+        {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-xs text-gray-600">No recent sales.</p>}
+      </div>
+
+      <p className="text-xs text-gray-600 text-center pb-2">
         SEC Form 4 filings — purchases &amp; sales by corporate executives and directors. Via EDGAR.
       </p>
     </div>
