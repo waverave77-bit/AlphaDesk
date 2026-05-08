@@ -32,10 +32,14 @@ export default function SettingsPage() {
               <button
                 key={theme.id}
                 onClick={() => setTheme(theme.id)}
+                style={themeId === theme.id ? {
+                  borderColor: `rgb(var(--accent, 59 130 246) / 0.5)`,
+                  backgroundColor: `rgb(var(--accent, 59 130 246) / 0.1)`,
+                } : {}}
                 className={cn(
                   'flex items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all',
                   themeId === theme.id
-                    ? 'border-white/30 bg-white/5 ring-1 ring-white/20'
+                    ? 'border-transparent'
                     : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/40'
                 )}
               >

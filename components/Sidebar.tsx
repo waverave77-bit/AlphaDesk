@@ -24,8 +24,12 @@ export default function Sidebar() {
 
   return (
     <aside className="flex flex-col h-full w-64 bg-gray-950 border-r border-gray-800 px-4 py-6">
+      {/* Logo */}
       <div className="flex items-center gap-2 px-2 mb-8">
-        <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
+        <div
+          className="h-8 w-8 rounded-lg flex items-center justify-center"
+          style={{ backgroundColor: `rgb(var(--accent, 59 130 246))` }}
+        >
           <TrendingUp className="h-4 w-4 text-white" />
         </div>
         <span className="text-xl font-bold text-white tracking-tight">AlphaDesk</span>
@@ -40,10 +44,13 @@ export default function Sidebar() {
               href={href}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                active
-                  ? 'bg-blue-600/15 text-blue-400 border border-blue-600/20'
-                  : 'text-gray-400 hover:text-gray-100 hover:bg-gray-800/50'
+                active ? 'border' : 'text-gray-400 hover:text-gray-100 hover:bg-gray-800/50'
               )}
+              style={active ? {
+                backgroundColor: `rgb(var(--accent, 59 130 246) / 0.15)`,
+                color: `rgb(var(--accent-light, 96 165 250))`,
+                borderColor: `rgb(var(--accent, 59 130 246) / 0.2)`,
+              } : {}}
             >
               <Icon className="h-4 w-4" />
               {label}
