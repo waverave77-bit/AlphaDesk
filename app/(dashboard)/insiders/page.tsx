@@ -270,7 +270,7 @@ export default function InsidersPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Smart Money Tracker</h1>
-          <p className="text-sm text-gray-400 mt-0.5">SEC insider trades &amp; top investor 13F filings</p>
+          <p className="text-sm text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
         </div>
       </div>
 
