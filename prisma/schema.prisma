@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(cuid())
-  email         String     @unique
+  id            String        @id @default(cuid())
+  email         String        @unique
   password      String
   name          String?
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime      @default(now())
   holdings      Holding[]
   watchlistItems WatchlistItem[]
+  alerts        PriceAlert[]
 }
 
 model Holding {
@@ -41,5 +42,20 @@ model WatchlistItem {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, ticker])
+  @@index([userId])
+}
+
+model PriceAlert {
+  id          String   @id @default(cuid())
+  userId      String
+  ticker      String
+  targetPrice Float
+  condition   String   // "above" | "below"
+  type        String   // "alert" | "stop_loss"
+  note        String?
+  triggered   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }

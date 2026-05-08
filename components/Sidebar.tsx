@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, FlaskConical, Globe, Building2, Users } from 'lucide-react'
+import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, FlaskConical, Globe, Building2, Users, Calendar, Activity, Bell } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
@@ -9,8 +9,11 @@ const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/research', label: 'Research', icon: Search },
   { href: '/watchlist', label: 'Watchlist', icon: Star },
+  { href: '/earnings', label: 'Earnings', icon: Calendar },
   { href: '/quant', label: 'Quant Strategy', icon: FlaskConical },
   { href: '/macro', label: 'Macro', icon: Globe },
+  { href: '/markets', label: 'Markets', icon: Activity },
+  { href: '/alerts', label: 'Alerts', icon: Bell },
   { href: '/hedgefunds', label: 'Hedge Funds', icon: Building2 },
   { href: '/insiders', label: 'Smart Money', icon: Users },
   { href: '/settings', label: 'Settings', icon: Settings },
