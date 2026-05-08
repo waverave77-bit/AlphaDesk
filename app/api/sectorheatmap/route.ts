@@ -19,32 +19,28 @@ const SECTOR_MAP: Record<string, string> = {
 export async function GET() {
   try {
     const symbols = Object.keys(SECTOR_MAP).join(',')
-    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`
+    // Use spark endpoint — works without crumb/auth
+    const url = `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${symbols}&range=1d&interval=1d`
 
     const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AlphaDesk/1.0)',
-      },
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' },
+      next: { revalidate: 300 },
     })
 
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Failed to fetch sector data' }, { status: 502 })
-    }
+    if (!res.ok) throw new Error('Yahoo Finance error')
 
     const data = await res.json()
-    const quotes = data?.quoteResponse?.result ?? []
 
-    const sectors = quotes
-      .map((q: { symbol: string; regularMarketChangePercent?: number; regularMarketPrice?: number }) => ({
-        symbol: q.symbol,
-        name: SECTOR_MAP[q.symbol] ?? q.symbol,
-        changePercent: q.regularMarketChangePercent ?? 0,
-        price: q.regularMarketPrice ?? 0,
-      }))
-      .sort(
-        (a: { changePercent: number }, b: { changePercent: number }) =>
-          b.changePercent - a.changePercent
-      )
+    const sectors = Object.entries(SECTOR_MAP).map(([symbol, name]) => {
+      const v = data[symbol] ?? {}
+      const closes: number[] = v.close ?? []
+      const close = closes.length > 0 ? closes[closes.length - 1] : null
+      const prev: number | null = v.chartPreviousClose ?? null
+      const changePercent = close && prev ? parseFloat(((close - prev) / prev * 100).toFixed(2)) : null
+      return { symbol, name, price: close, changePercent }
+    })
+      .filter(s => s.changePercent !== null)
+      .sort((a, b) => (b.changePercent ?? 0) - (a.changePercent ?? 0))
 
     return NextResponse.json(sectors)
   } catch (error) {

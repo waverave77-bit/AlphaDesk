@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import SessionProvider from '@/components/SessionProvider'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -19,8 +20,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className="dark">
       <body className={`${inter.className} bg-gray-950 text-gray-100 antialiased`}>
         <SessionProvider session={session}>
-          {children}
-          <Toaster />
+          <ThemeProvider>
+            {children}
+            <Toaster />
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

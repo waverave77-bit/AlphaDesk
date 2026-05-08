@@ -2,51 +2,53 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 
-const SYMBOLS =
-  'AAPL,MSFT,GOOGL,AMZN,META,NVDA,TSLA,JPM,JNJ,V,XOM,UNH,MA,HD,PG,ABBV,MRK,CVX,LLY,PEP,KO,AVGO,COST,MCD,WMT,BAC,DIS,ADBE,CRM,NFLX,CSCO,ABT,ACN,TMO,NKE,TXN,INTC,AMD,QCOM,PM,BMY,UPS,LIN,NEE,HON,GS,BLK,GE,CAT,IBM'
+// Fetch the next 7 days from Nasdaq earnings calendar
+async function fetchDay(dateStr: string): Promise<any[]> {
+  try {
+    const res = await fetch(
+      `https://api.nasdaq.com/api/calendar/earnings?date=${dateStr}`,
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Accept': 'application/json, text/plain, */*',
+        },
+        next: { revalidate: 3600 },
+      }
+    )
+    if (!res.ok) return []
+    const data = await res.json()
+    return data?.data?.rows ?? []
+  } catch {
+    return []
+  }
+}
 
 export async function GET() {
   try {
-    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${SYMBOLS}&fields=earningsTimestampStart,earningsTimestampEnd,symbol,shortName`
-
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AlphaDesk/1.0)',
-      },
-    })
-
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Failed to fetch earnings data' }, { status: 502 })
+    // Fetch earnings for next 14 days
+    const dates: string[] = []
+    for (let i = 0; i <= 13; i++) {
+      const d = new Date()
+      d.setDate(d.getDate() + i)
+      // Skip weekends
+      if (d.getDay() !== 0 && d.getDay() !== 6) {
+        dates.push(d.toISOString().split('T')[0])
+      }
     }
 
-    const data = await res.json()
-    const quotes = data?.quoteResponse?.result ?? []
+    const results = await Promise.all(dates.map(async (date) => {
+      const rows = await fetchDay(date)
+      return rows.map((r: any) => ({
+        ticker: r.symbol ?? '',
+        companyName: r.name ?? r.symbol ?? '',
+        earningsDate: date,
+        time: r.time ?? '',
+        epsForecast: r.epsForecast ?? '',
+        marketCap: r.marketCap ?? '',
+      }))
+    }))
 
-    const now = Date.now()
-    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000
-
-    const earnings = quotes
-      .filter((q: { earningsTimestampStart?: number }) => {
-        if (!q.earningsTimestampStart) return false
-        const ts = q.earningsTimestampStart * 1000
-        return ts >= now && ts <= now + thirtyDaysMs
-      })
-      .map((q: { symbol: string; shortName?: string; earningsTimestampStart: number }) => {
-        const ts = q.earningsTimestampStart * 1000
-        const daysUntil = Math.ceil((ts - now) / (24 * 60 * 60 * 1000))
-        return {
-          ticker: q.symbol,
-          companyName: q.shortName ?? q.symbol,
-          earningsDate: new Date(ts).toISOString(),
-          daysUntil,
-        }
-      })
-      .sort(
-        (
-          a: { daysUntil: number },
-          b: { daysUntil: number }
-        ) => a.daysUntil - b.daysUntil
-      )
+    const earnings = results.flat().filter(e => e.ticker)
 
     return NextResponse.json(earnings)
   } catch (error) {
