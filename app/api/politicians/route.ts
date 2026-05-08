@@ -2,16 +2,18 @@ import { NextResponse } from 'next/server'
 import https from 'https'
 export const dynamic = 'force-dynamic'
 
-function httpGet(url: string): Promise<string> {
+function httpGet(url: string, timeoutMs = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
-    https.get(url, {
+    const req = https.get(url, {
       headers: { 'User-Agent': 'AlphaDesk/1.0 contact@alphadesk.app', Accept: '*/*' },
-      timeout: 8000,
+      timeout: timeoutMs,
     }, (res) => {
       let data = ''
       res.on('data', (c) => { data += c })
       res.on('end', () => resolve(data))
-    }).on('error', reject).on('timeout', () => reject(new Error('timeout')))
+    })
+    req.on('error', reject)
+    req.on('timeout', () => { req.destroy(); reject(new Error('timeout')) })
   })
 }
 
@@ -79,17 +81,14 @@ export async function GET() {
     start.setDate(start.getDate() - 60)
     const fmt = (d: Date) => d.toISOString().split('T')[0]
 
-    const searchUrl = `https://efts.sec.gov/LATEST/search-index?q=&forms=4&dateRange=custom&startdt=${fmt(start)}&enddt=${fmt(end)}&_source=adsh,ciks,file_date,display_names&from=0&size=300`
-    const raw = await httpGet(searchUrl)
+    const searchUrl = `https://efts.sec.gov/LATEST/search-index?q=&forms=4&dateRange=custom&startdt=${fmt(start)}&enddt=${fmt(end)}&_source=adsh,ciks,file_date,display_names&from=0&size=100`
+    const raw = await httpGet(searchUrl, 8000)
     const results = JSON.parse(raw)
     const hits: any[] = results.hits?.hits ?? []
 
-    // Parse in batches of 30 concurrently
+    // Parse all 100 in parallel — each has a 5s timeout so total stays under 15s
     const parse = (h: any) => parseForm4(h._source.adsh, h._source.ciks ?? [])
-    const chunkSize = 30
-    const chunks: any[][] = []
-    for (let i = 0; i < hits.length; i += chunkSize) chunks.push(hits.slice(i, i + chunkSize))
-    const settled = (await Promise.all(chunks.map(chunk => Promise.allSettled(chunk.map(parse))))).flat()
+    const settled = await Promise.allSettled(hits.map(parse))
 
     const trades: Trade[] = settled
       .filter((r): r is PromiseFulfilledResult<Trade> => r.status === 'fulfilled' && r.value !== null)
