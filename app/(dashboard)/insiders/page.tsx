@@ -89,8 +89,8 @@ function InsiderTrades() {
   if (trades.length === 0) return <p className="text-sm text-gray-500 text-center py-12">No insider trade data available.</p>
 
   const sorted = [...trades].sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
-  const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 10)
-  const sales = sorted.filter(t => t.type === 'Sale').slice(0, 10)
+  const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 20)
+  const sales = sorted.filter(t => t.type === 'Sale').slice(0, 20)
 
   const TradeTable = ({ rows }: { rows: Trade[] }) => (
     <div className="space-y-1.5">

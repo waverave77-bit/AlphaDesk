@@ -79,14 +79,16 @@ export async function GET() {
     start.setDate(start.getDate() - 60)
     const fmt = (d: Date) => d.toISOString().split('T')[0]
 
-    const searchUrl = `https://efts.sec.gov/LATEST/search-index?q=&forms=4&dateRange=custom&startdt=${fmt(start)}&enddt=${fmt(end)}&_source=adsh,ciks,file_date,display_names`
+    const searchUrl = `https://efts.sec.gov/LATEST/search-index?q=&forms=4&dateRange=custom&startdt=${fmt(start)}&enddt=${fmt(end)}&_source=adsh,ciks,file_date,display_names&from=0&size=300`
     const raw = await httpGet(searchUrl)
     const results = JSON.parse(raw)
-    const hits: any[] = results.hits?.hits?.slice(0, 80) ?? []
+    const hits: any[] = results.hits?.hits ?? []
 
-    // Parse in batches of 20 concurrently
+    // Parse in batches of 30 concurrently
     const parse = (h: any) => parseForm4(h._source.adsh, h._source.ciks ?? [])
-    const chunks = [hits.slice(0, 20), hits.slice(20, 40), hits.slice(40, 60), hits.slice(60, 80)]
+    const chunkSize = 30
+    const chunks: any[][] = []
+    for (let i = 0; i < hits.length; i += chunkSize) chunks.push(hits.slice(i, i + chunkSize))
     const settled = (await Promise.all(chunks.map(chunk => Promise.allSettled(chunk.map(parse))))).flat()
 
     const trades: Trade[] = settled
