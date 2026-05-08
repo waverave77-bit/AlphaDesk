@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json({ holding }, { status: 201 })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to add holding' }, { status: 500 })
   }
 }
