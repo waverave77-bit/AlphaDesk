@@ -89,6 +89,7 @@ export default function DashboardPage() {
         companyName: h.companyName,
         shares: h.shares,
         purchasePrice: h.purchasePrice,
+        purchaseDate: h.purchaseDate,
         sector: h.sector,
         currentPrice,
         currentValue,
@@ -116,13 +117,34 @@ export default function DashboardPage() {
     return s
   }, 0)
 
-  const bestPerformer = enrichedHoldings.length ? enrichedHoldings.reduce((b, h) => (h.gainLossPercent ?? -Infinity) > (b.gainLossPercent ?? -Infinity) ? h : b) : null
-  const worstPerformer = enrichedHoldings.length ? enrichedHoldings.reduce((w, h) => (h.gainLossPercent ?? Infinity) < (w.gainLossPercent ?? Infinity) ? h : w) : null
+  // Group by ticker for charts/stats
+  const grouped = Array.from(
+    enrichedHoldings.reduce((map, h) => {
+      const existing = map.get(h.ticker)
+      if (!existing) {
+        map.set(h.ticker, { ticker: h.ticker, companyName: h.companyName, sector: h.sector,
+          totalShares: h.shares, totalCost: h.costBasis,
+          currentValue: h.currentValue ?? h.costBasis,
+          gainLoss: h.gainLoss ?? 0, gainLossPercent: h.gainLossPercent ?? 0 })
+      } else {
+        existing.totalShares += h.shares
+        existing.totalCost += h.costBasis
+        existing.currentValue += h.currentValue ?? h.costBasis
+        existing.gainLoss = existing.currentValue - existing.totalCost
+        existing.gainLossPercent = existing.totalCost ? (existing.gainLoss / existing.totalCost) * 100 : 0
+      }
+      return map
+    }, new Map<string, any>())
+  ).map(([, v]) => v)
 
-  // Allocation data
-  const byHolding = enrichedHoldings.map((h) => ({
+  const uniqueTickers = grouped.length
+  const bestPerformer = grouped.length ? grouped.reduce((b: any, h: any) => h.gainLossPercent > b.gainLossPercent ? h : b) : null
+  const worstPerformer = grouped.length ? grouped.reduce((w: any, h: any) => h.gainLossPercent < w.gainLossPercent ? h : w) : null
+
+  // Allocation data — grouped by ticker
+  const byHolding = grouped.map((h) => ({
     name: h.ticker,
-    value: totalValue ? ((h.currentValue ?? h.costBasis) / totalValue) * 100 : 0,
+    value: totalValue ? (h.currentValue / totalValue) * 100 : 0,
   }))
 
   const bySector = Object.entries(
@@ -132,20 +154,20 @@ export default function DashboardPage() {
     }, {} as Record<string, number>)
   ).map(([name, val]) => ({ name, value: totalValue ? (val / totalValue) * 100 : 0 }))
 
-  // AI portfolio data
+  // AI portfolio data — grouped
   const portfolioAIData = {
     totalValue,
     totalGainLoss,
     totalGainLossPercent,
-    holdings: enrichedHoldings.map((h) => ({
+    holdings: grouped.map((h) => ({
       ticker: h.ticker,
       companyName: h.companyName,
-      shares: h.shares,
-      currentValue: h.currentValue ?? h.costBasis,
-      gainLoss: h.gainLoss ?? 0,
-      gainLossPercent: h.gainLossPercent ?? 0,
+      shares: h.totalShares,
+      currentValue: h.currentValue,
+      gainLoss: h.gainLoss,
+      gainLossPercent: h.gainLossPercent,
       sector: h.sector,
-      weight: totalValue ? ((h.currentValue ?? h.costBasis) / totalValue) * 100 : 0,
+      weight: totalValue ? (h.currentValue / totalValue) * 100 : 0,
     })),
   }
 
@@ -197,8 +219,8 @@ export default function DashboardPage() {
         />
         <StatCard
           title="Holdings"
-          value={`${holdings.length}`}
-          sub={enrichedHoldings.length > 0 && bestPerformer ? `Best: ${bestPerformer.ticker} ${formatPercent(bestPerformer.gainLossPercent ?? 0)}` : undefined}
+          value={`${uniqueTickers}`}
+          sub={bestPerformer ? `Best: ${bestPerformer.ticker} ${formatPercent(bestPerformer.gainLossPercent ?? 0)}` : undefined}
           icon={<TrendingUp className="h-4 w-4 text-yellow-400" />}
           loading={loadingHoldings}
         />
@@ -232,7 +254,7 @@ export default function DashboardPage() {
       )}
 
       {/* Performers Row */}
-      {enrichedHoldings.length > 1 && !loadingPrices && (
+      {grouped.length > 1 && !loadingPrices && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {bestPerformer && (
             <Card className="border-green-800/30">
@@ -245,13 +267,13 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-green-400 font-semibold">{formatPercent(bestPerformer.gainLossPercent ?? 0)}</p>
-                    <p className="text-xs text-green-400/70">{bestPerformer.gainLoss != null ? formatCurrency(bestPerformer.gainLoss) : ''}</p>
+                    <p className="text-xs text-green-400/70">{formatCurrency(bestPerformer.gainLoss ?? 0)}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           )}
-          {worstPerformer && worstPerformer.id !== bestPerformer?.id && (
+          {worstPerformer && worstPerformer.ticker !== bestPerformer?.ticker && (
             <Card className="border-red-800/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-400 mb-1">Worst Performer</p>
@@ -262,7 +284,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-red-400 font-semibold">{formatPercent(worstPerformer.gainLossPercent ?? 0)}</p>
-                    <p className="text-xs text-red-400/70">{worstPerformer.gainLoss != null ? formatCurrency(worstPerformer.gainLoss) : ''}</p>
+                    <p className="text-xs text-red-400/70">{formatCurrency(worstPerformer.gainLoss ?? 0)}</p>
                   </div>
                 </div>
               </CardContent>
