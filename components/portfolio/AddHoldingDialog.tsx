@@ -161,7 +161,7 @@ export default function AddHoldingDialog({ onAdded }: AddHoldingDialogProps) {
             </div>
 
             <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-              {lots.map((lot, idx) => (
+              {lots.map((lot) => (
                 <div key={lot.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
                   <Input
                     type="number"

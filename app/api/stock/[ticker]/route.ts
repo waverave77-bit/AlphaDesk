@@ -29,7 +29,7 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
     }
 
     return NextResponse.json({ quote, news, analyst })
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch stock data' }, { status: 500 })
   }
 }
