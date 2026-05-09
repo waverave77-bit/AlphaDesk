@@ -10,7 +10,7 @@ import { authOptions } from '@/lib/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AlphaDesk — Professional Stock Research & Portfolio Tracker',
+  title: 'Zains Game — Professional Stock Research & Portfolio Tracker',
   description: 'AI-powered stock research and portfolio management',
 }
 

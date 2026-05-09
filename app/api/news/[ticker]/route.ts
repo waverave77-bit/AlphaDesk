@@ -17,7 +17,7 @@ export async function GET(
 
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AlphaDesk/1.0)',
+        'User-Agent': 'Mozilla/5.0 (compatible; Zains Game/1.0)',
       },
     })
 

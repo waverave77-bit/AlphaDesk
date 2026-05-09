@@ -16,7 +16,7 @@ function getSentiment(text: string): 'bullish' | 'bearish' | 'neutral' {
 async function fetchSubreddit(url: string) {
   try {
     const r = await fetch(url, {
-      headers: { 'User-Agent': 'AlphaDesk/1.0' },
+      headers: { 'User-Agent': 'Zains Game/1.0' },
       next: { revalidate: 300 },
     })
     if (!r.ok) return []

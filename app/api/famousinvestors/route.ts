@@ -10,7 +10,7 @@ const INVESTORS = [
   { name: 'George Soros (Soros Fund)', cik: '1029160' },
 ]
 
-const HEADERS = { 'User-Agent': 'AlphaDesk contact@alphadesk.app', Accept: 'application/json' }
+const HEADERS = { 'User-Agent': 'Zains Game contact@alphadesk.app', Accept: 'application/json' }
 
 function parseXMLHoldings(xml: string): { name: string; value: number; shares: number }[] {
   const holdings: { name: string; value: number; shares: number }[] = []

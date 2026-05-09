@@ -99,13 +99,13 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Info className="h-4 w-4 text-yellow-400" />
-            About AlphaDesk
+            About Zains Game
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-gray-400">
           <p>Version 1.1.0</p>
           <p className="text-xs text-gray-600 mt-3 leading-relaxed">
-            AlphaDesk is for informational and educational purposes only. Nothing here constitutes investment advice. Always do your own research before making investment decisions.
+            Zains Game is for informational and educational purposes only. Nothing here constitutes investment advice. Always do your own research before making investment decisions.
           </p>
         </CardContent>
       </Card>
