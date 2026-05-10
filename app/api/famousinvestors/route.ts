@@ -10,7 +10,7 @@ const INVESTORS = [
   { name: 'George Soros (Soros Fund)', cik: '1029160' },
 ]
 
-const HEADERS = { 'User-Agent': 'Zains Game contact@alphadesk.app', Accept: 'application/json' }
+const UA = 'Zains Game contact@zainsgame.app'
 
 function parseXMLHoldings(xml: string): { name: string; value: number; shares: number }[] {
   const holdings: { name: string; value: number; shares: number }[] = []
@@ -23,69 +23,93 @@ function parseXMLHoldings(xml: string): { name: string; value: number; shares: n
     const shares = parseInt(block.match(/<(?:\w+:)?sshPrnamt>(.*?)<\/(?:\w+:)?sshPrnamt>/i)?.[1]?.trim() ?? '0', 10)
     if (name) holdings.push({ name, value, shares })
   }
-  return holdings.sort((a, b) => b.value - a.value).slice(0, 10)
+  return holdings.sort((a, b) => b.value - a.value).slice(0, 5)
 }
 
-async function getHoldingsXmlFilename(cik: string, accNoDash: string): Promise<string | null> {
+async function secFetch(url: string): Promise<string | null> {
   try {
-    const dirUrl = `https://www.sec.gov/Archives/edgar/data/${cik}/${accNoDash}/`
-    const r = await fetch(dirUrl, { headers: { 'User-Agent': HEADERS['User-Agent'] } })
+    const r = await fetch(url, {
+      headers: { 'User-Agent': UA, Accept: '*/*' },
+      signal: AbortSignal.timeout(8000),
+    })
     if (!r.ok) return null
-    const html = await r.text()
-    const regex = /href="([^"]+\.xml)"/gi
-    const matches: string[] = []
-    let m: RegExpExecArray | null
-    while ((m = regex.exec(html)) !== null) {
-      const fname = m[1].split('/').pop() ?? ''
-      if (fname && fname !== 'primary_doc.xml' && !fname.includes('xsl')) matches.push(fname)
-    }
-    return matches[0] ?? null
+    return await r.text()
   } catch {
     return null
   }
 }
 
-async function getFundHoldings(investor: { name: string; cik: string }) {
-  const padded = String(investor.cik).padStart(10, '0')
-
+async function getInvestorHoldings(investor: { name: string; cik: string }) {
+  const empty = { ...investor, filingDate: null, topHoldings: [] }
   try {
-    const subR = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, {
-      headers: HEADERS,
-      next: { revalidate: 3600 },
-    })
-    if (!subR.ok) return { ...investor, filingDate: null, topHoldings: [] }
-    const sub = await subR.json()
+    const padded = investor.cik.padStart(10, '0')
 
-    const forms: string[] = sub.filings?.recent?.form ?? []
-    const accessions: string[] = sub.filings?.recent?.accessionNumber ?? []
-    const dates: string[] = sub.filings?.recent?.filingDate ?? []
+    // Step 1: Get submission metadata
+    const sub = await secFetch(`https://data.sec.gov/submissions/CIK${padded}.json`)
+    if (!sub) return empty
+    const data = JSON.parse(sub)
+
+    const forms: string[] = data.filings?.recent?.form ?? []
+    const accessions: string[] = data.filings?.recent?.accessionNumber ?? []
+    const dates: string[] = data.filings?.recent?.filingDate ?? []
 
     const idx = forms.findIndex((f: string) => f === '13F-HR')
-    if (idx === -1) return { ...investor, filingDate: null, topHoldings: [] }
+    if (idx === -1) return empty
 
-    const accNoDash = accessions[idx].replace(/-/g, '')
+    const accNo = accessions[idx]
+    const accNoDash = accNo.replace(/-/g, '')
     const filingDate = dates[idx]
 
-    const xmlFile = await getHoldingsXmlFilename(investor.cik, accNoDash)
-    if (!xmlFile) return { ...investor, filingDate, topHoldings: [] }
+    // Step 2: Use filing index JSON to locate the holdings XML
+    const indexJson = await secFetch(
+      `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${accNo}-index.json`
+    )
+    if (!indexJson) return { ...investor, filingDate, topHoldings: [] }
 
-    const xmlUrl = `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${xmlFile}`
-    const xmlR = await fetch(xmlUrl, {
-      headers: { 'User-Agent': HEADERS['User-Agent'] },
-      next: { revalidate: 3600 },
-    })
-    if (!xmlR.ok) return { ...investor, filingDate, topHoldings: [] }
+    const indexData = JSON.parse(indexJson)
+    const docs: { name: string; type: string }[] = indexData.directory?.item ?? []
 
-    const xml = await xmlR.text()
+    const xmlDoc = docs.find(
+      d => d.name.endsWith('.xml') &&
+        d.name !== 'primary_doc.xml' &&
+        !d.name.includes('xsl') &&
+        (d.type?.includes('13F') || d.name.includes('infotable') || d.name.includes('form13'))
+    ) ?? docs.find(
+      d => d.name.endsWith('.xml') && d.name !== 'primary_doc.xml' && !d.name.includes('xsl')
+    )
+
+    if (!xmlDoc) return { ...investor, filingDate, topHoldings: [] }
+
+    // Step 3: Fetch and parse
+    const xml = await secFetch(
+      `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${xmlDoc.name}`
+    )
+    if (!xml) return { ...investor, filingDate, topHoldings: [] }
+
     const topHoldings = parseXMLHoldings(xml)
-
     return { ...investor, filingDate, topHoldings }
   } catch {
-    return { ...investor, filingDate: null, topHoldings: [] }
+    return empty
   }
 }
 
+async function withConcurrency<T>(items: (() => Promise<T>)[], limit: number): Promise<T[]> {
+  const results: T[] = []
+  for (let i = 0; i < items.length; i += limit) {
+    const batch = items.slice(i, i + limit)
+    const batchResults = await Promise.all(batch.map(fn => fn()))
+    results.push(...batchResults)
+  }
+  return results
+}
+
 export async function GET() {
-  const investors = await Promise.all(INVESTORS.map(getFundHoldings))
-  return NextResponse.json({ investors })
+  const tasks = INVESTORS.map(inv => () => getInvestorHoldings(inv))
+  const investors = await withConcurrency(tasks, 3)
+
+  return NextResponse.json({ investors }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200',
+    },
+  })
 }
