@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { TrendingUp, Brain, Shield, Zap, BookOpen, Bell, Users, ChevronRight, Check } from 'lucide-react'
+import { TrendingUp, Brain, Shield, Zap, BookOpen, Bell, Users, ChevronRight } from 'lucide-react'
 
 export default function LandingPage() {
   return (
@@ -95,68 +95,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="px-6 pb-24 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-4">Simple pricing</h2>
-        <p className="text-gray-400 text-center mb-12">Start free. Upgrade when you&apos;re ready.</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Free */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
-            <h3 className="text-xl font-bold mb-1">Free</h3>
-            <p className="text-gray-400 text-sm mb-6">Perfect for getting started</p>
-            <div className="text-4xl font-bold mb-8">$0<span className="text-lg text-gray-400 font-normal">/mo</span></div>
-            <ul className="space-y-3 mb-8">
-              {[
-                'Portfolio tracker',
-                'Stock research',
-                'Watchlist',
-                'Earnings calendar',
-                'Investing dictionary',
-                '3 AI analyses per day',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-sm text-gray-300">
-                  <Check className="h-4 w-4 text-emerald-400 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/register" className="block text-center border border-gray-700 hover:border-gray-500 text-gray-300 px-6 py-3 rounded-xl font-medium transition-colors">
-              Get Started Free
-            </Link>
-          </div>
-
-          {/* Pro */}
-          <div className="bg-blue-600/10 border border-blue-600/30 rounded-2xl p-8 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              MOST POPULAR
-            </div>
-            <h3 className="text-xl font-bold mb-1">Pro</h3>
-            <p className="text-gray-400 text-sm mb-6">For serious young investors</p>
-            <div className="text-4xl font-bold mb-8 text-blue-400">$5<span className="text-lg text-gray-400 font-normal">/mo</span></div>
-            <ul className="space-y-3 mb-8">
-              {[
-                'Everything in Free',
-                'Unlimited AI analysis',
-                'Hedge fund holdings',
-                'Smart Money tracker',
-                'Options flow',
-                'Smart alerts (insider buys etc)',
-                'Daily market brief',
-                'Priority support',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-sm text-gray-300">
-                  <Check className="h-4 w-4 text-blue-400 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/register" className="block text-center bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-medium transition-colors">
-              Start Free Trial
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Pricing — hidden until Stripe is set up */}
 
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
