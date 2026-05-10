@@ -1,15 +1,16 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, FlaskConical, Globe, Building2, Users, Calendar, Activity, Bell } from 'lucide-react'
+import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, FlaskConical, Globe, Building2, Users, Calendar, Activity, Bell, BookOpen } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/research', label: 'Research', icon: Search },
   { href: '/watchlist', label: 'Watchlist', icon: Star },
   { href: '/earnings', label: 'Earnings', icon: Calendar },
+  { href: '/learn', label: 'Dictionary', icon: BookOpen },
   { href: '/quant', label: 'Quant Strategy', icon: FlaskConical },
   { href: '/macro', label: 'Macro', icon: Globe },
   { href: '/markets', label: 'Markets', icon: Activity },
@@ -35,9 +36,9 @@ export default function Sidebar() {
         <span className="text-xl font-bold text-white tracking-tight">Zains Game</span>
       </div>
 
-      <nav className="flex-1 space-y-1">
+      <nav className="flex-1 space-y-1 overflow-y-auto">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+          const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
           return (
             <Link
               key={href}
