@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { TrendingUp, TrendingDown, DollarSign, BarChart2, RefreshCw, Brain } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, BarChart2, RefreshCw, Brain, Lightbulb } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -8,6 +8,7 @@ import HoldingsTable, { HoldingWithQuote } from '@/components/portfolio/Holdings
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
 import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
 import AllocationChart from '@/components/charts/AllocationChart'
+import InfoTooltip from '@/components/InfoTooltip'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -17,19 +18,23 @@ interface StatCardProps {
   positive?: boolean | null
   icon: React.ReactNode
   loading?: boolean
+  tooltip?: string
 }
 
-function StatCard({ title, value, sub, positive, icon, loading }: StatCardProps) {
+function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatCardProps) {
   return (
     <Card>
-      <CardContent className="p-5">
+      <CardContent className="p-4 sm:p-5">
         <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs text-gray-400 mb-1">{title}</p>
+          <div className="min-w-0 flex-1">
+            <p className="flex items-center gap-1 text-xs text-gray-400 mb-1">
+              <span className="truncate">{title}</span>
+              {tooltip && <InfoTooltip text={tooltip} />}
+            </p>
             {loading ? (
-              <Skeleton className="h-7 w-28 mb-1" />
+              <Skeleton className="h-7 w-24 mb-1" />
             ) : (
-              <p className="text-2xl font-bold text-white">{value}</p>
+              <p className="text-xl sm:text-2xl font-bold text-white truncate">{value}</p>
             )}
             {sub && !loading && (
               <p className={cn('text-xs mt-0.5', positive === true ? 'text-green-400' : positive === false ? 'text-red-400' : 'text-gray-400')}>
@@ -37,7 +42,7 @@ function StatCard({ title, value, sub, positive, icon, loading }: StatCardProps)
               </p>
             )}
           </div>
-          <div className="rounded-lg bg-gray-800 p-2">{icon}</div>
+          <div className="rounded-lg bg-gray-800 p-2 shrink-0 ml-2">{icon}</div>
         </div>
       </CardContent>
     </Card>
@@ -50,6 +55,19 @@ export default function DashboardPage() {
   const [loadingHoldings, setLoadingHoldings] = useState(true)
   const [loadingPrices, setLoadingPrices] = useState(false)
   const [showAI, setShowAI] = useState(false)
+  const [beginnerMode, setBeginnerMode] = useState(false)
+
+  // Persist beginner mode in localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('zg-beginner-mode')
+    if (saved === 'true') setBeginnerMode(true)
+  }, [])
+  const toggleBeginner = () => {
+    setBeginnerMode(prev => {
+      localStorage.setItem('zg-beginner-mode', String(!prev))
+      return !prev
+    })
+  }
 
   const fetchHoldings = useCallback(async () => {
     setLoadingHoldings(true)
@@ -174,34 +192,59 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Portfolio Dashboard</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Track your investments in real time</p>
+          <h1 className="text-2xl font-bold text-white">
+            {beginnerMode ? 'My Investments 📈' : 'Portfolio Dashboard'}
+          </h1>
+          <p className="text-sm text-gray-400 mt-0.5">
+            {beginnerMode ? 'See how all your stocks are doing, all in one place.' : 'Track your investments in real time'}
+          </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleBeginner}
+            className={beginnerMode ? 'border-yellow-600/40 text-yellow-400' : ''}
+          >
+            <Lightbulb className={cn('h-4 w-4', beginnerMode ? 'text-yellow-400' : 'text-gray-400')} />
+            <span className="hidden sm:inline">{beginnerMode ? 'Beginner On' : 'Beginner Mode'}</span>
+          </Button>
           <Button variant="outline" size="sm" onClick={() => enrichWithPrices(holdings)} disabled={loadingPrices}>
             <RefreshCw className={cn('h-4 w-4', loadingPrices && 'animate-spin')} />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </Button>
           <Button variant="outline" size="sm" onClick={() => setShowAI(!showAI)}>
             <Brain className="h-4 w-4 text-blue-400" />
-            AI Analysis
+            <span className="hidden sm:inline">AI Analysis</span>
+            <span className="sm:hidden">AI</span>
           </Button>
           <AddHoldingDialog onAdded={fetchHoldings} />
         </div>
       </div>
 
+      {/* Beginner banner */}
+      {beginnerMode && (
+        <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4">
+          <p className="text-sm text-yellow-300 font-medium mb-1">👋 Beginner Mode is on</p>
+          <p className="text-xs text-yellow-400/70 leading-relaxed">
+            Hover the <span className="inline-block align-middle mx-0.5"><InfoTooltip text="Like this! Hover the ? icons to get plain-English explanations of anything confusing." /></span> icons next to numbers for simple explanations. Toggle off anytime when you&apos;re comfortable.
+          </p>
+        </div>
+      )}
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
-          title="Total Portfolio Value"
+          title={beginnerMode ? 'Total Value' : 'Total Portfolio Value'}
           value={formatCurrency(totalValue)}
           icon={<DollarSign className="h-4 w-4 text-blue-400" />}
           loading={loadingHoldings}
+          tooltip={beginnerMode ? 'This is the total amount your stocks are worth right now if you sold everything today.' : undefined}
         />
         <StatCard
-          title="Total Gain / Loss"
+          title={beginnerMode ? 'Profit / Loss' : 'Total Gain / Loss'}
           value={`${totalGainLoss >= 0 ? '+' : ''}${formatCurrency(totalGainLoss)}`}
           sub={formatPercent(totalGainLossPercent)}
           positive={totalGainLoss >= 0 ? true : totalGainLoss < 0 ? false : null}
@@ -209,20 +252,23 @@ export default function DashboardPage() {
             ? <TrendingUp className="h-4 w-4 text-green-400" />
             : <TrendingDown className="h-4 w-4 text-red-400" />}
           loading={loadingHoldings || loadingPrices}
+          tooltip={beginnerMode ? 'How much money you\'ve made (or lost) compared to what you originally paid.' : undefined}
         />
         <StatCard
-          title="Today's Change"
+          title={beginnerMode ? "Today's Move" : "Today's Change"}
           value={`${dayChange >= 0 ? '+' : ''}${formatCurrency(dayChange)}`}
           positive={dayChange >= 0 ? true : dayChange < 0 ? false : null}
           icon={<BarChart2 className="h-4 w-4 text-purple-400" />}
           loading={loadingPrices}
+          tooltip={beginnerMode ? 'How much your total portfolio went up or down just today.' : undefined}
         />
         <StatCard
-          title="Holdings"
+          title={beginnerMode ? 'Stocks Owned' : 'Holdings'}
           value={`${uniqueTickers}`}
           sub={bestPerformer ? `Best: ${bestPerformer.ticker} ${formatPercent(bestPerformer.gainLossPercent ?? 0)}` : undefined}
           icon={<TrendingUp className="h-4 w-4 text-yellow-400" />}
           loading={loadingHoldings}
+          tooltip={beginnerMode ? 'The number of different companies you own shares in.' : undefined}
         />
       </div>
 

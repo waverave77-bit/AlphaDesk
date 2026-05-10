@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown } from 'lucide-react'
+import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,6 +12,8 @@ import RedditSentiment from '@/components/research/RedditSentiment'
 import OptionsPanel from '@/components/research/OptionsPanel'
 import SecFilings from '@/components/research/SecFilings'
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
+import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
+import InfoTooltip from '@/components/InfoTooltip'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatLargeNumber, gainLossColor, cn } from '@/lib/utils'
 
@@ -59,10 +61,27 @@ interface NewsItem {
   providerPublishTime: number
 }
 
+const TOOLTIPS: Record<string, string> = {
+  'Market Cap': 'The total value of a company — share price × number of shares. Think of it as the company\'s price tag.',
+  'P/E Ratio': 'Price-to-Earnings. How much investors pay per $1 of profit. A lower number can mean cheaper, but context matters.',
+  'EPS (TTM)': 'Earnings Per Share. How much profit the company made per share in the last 12 months. Positive = making money.',
+  'Dividend Yield': 'The % of the share price paid out to you each year as cash. Like getting rent from a property you own.',
+  'Beta': 'How wild the stock moves vs. the market. Beta > 1 = more volatile. Beta < 1 = calmer than average.',
+  'Volume': 'How many shares were traded today. High volume = lots of interest. Low volume = quieter day.',
+  '52-Week Range': 'The lowest and highest price the stock has traded at in the past year — shows the full swing.',
+  'Previous Close': 'What the stock price was at the end of yesterday\'s trading session.',
+  'Day High': 'The highest price the stock reached today.',
+  'Day Low': 'The lowest price the stock hit today.',
+}
+
 function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
+  const tooltip = TOOLTIPS[label]
   return (
     <div className="flex items-center justify-between py-2 border-b border-gray-800 last:border-0">
-      <span className="text-xs text-gray-400">{label}</span>
+      <span className="flex items-center gap-1 text-xs text-gray-400">
+        {label}
+        {tooltip && <InfoTooltip text={tooltip} />}
+      </span>
       <span className="text-xs font-medium text-gray-200">{value ?? '—'}</span>
     </div>
   )
@@ -79,6 +98,7 @@ export default function StockDetailPage() {
   const [loading, setLoading] = useState(true)
   const [watchlisted, setWatchlisted] = useState(false)
   const [watchlistLoading, setWatchlistLoading] = useState(false)
+  const [showAI, setShowAI] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -138,26 +158,44 @@ export default function StockDetailPage() {
 
   const pricePositive = quote.change >= 0
 
+  const aiData = {
+    ticker: quote.ticker,
+    companyName: quote.companyName,
+    price: quote.price,
+    change: quote.change,
+    changePercent: quote.changePercent,
+    marketCap: quote.marketCap,
+    peRatio: quote.peRatio,
+    eps: quote.eps,
+    beta: quote.beta,
+    dividendYield: quote.dividendYield,
+    week52High: quote.week52High,
+    week52Low: quote.week52Low,
+    sector: quote.sector,
+    industry: quote.industry,
+    recentNews: news.slice(0, 3).map(n => n.title),
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
+        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div>
-          <div className="flex items-center gap-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-xl font-bold text-white">{quote.ticker}</h1>
             {quote.sector && <Badge variant="outline" className="text-xs">{quote.sector}</Badge>}
           </div>
-          <p className="text-sm text-gray-400">{quote.companyName}</p>
+          <p className="text-sm text-gray-400 truncate">{quote.companyName}</p>
         </div>
       </div>
 
       {/* Price Hero */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <CardContent className="p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <p className="text-4xl font-bold text-white">{formatCurrency(quote.price)}</p>
               <div className="flex items-center gap-2 mt-1">
@@ -173,10 +211,20 @@ export default function StockDetailPage() {
               {quote.industry && <p className="text-xs text-gray-500 mt-1">{quote.industry}</p>}
             </div>
             <div className="flex gap-2 flex-wrap">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAI(!showAI)}
+                className={showAI ? 'border-blue-600/40 text-blue-400' : ''}
+              >
+                <Brain className="h-4 w-4 text-blue-400" />
+                <span className="hidden sm:inline">AI Analysis</span>
+                <span className="sm:hidden">AI</span>
+              </Button>
               <Button variant="outline" size="sm" onClick={toggleWatchlist} disabled={watchlistLoading}>
                 {watchlisted
-                  ? <><StarOff className="h-4 w-4 text-yellow-400" /> Remove Watchlist</>
-                  : <><Star className="h-4 w-4" /> Add Watchlist</>
+                  ? <><StarOff className="h-4 w-4 text-yellow-400" /><span className="hidden sm:inline">Remove</span></>
+                  : <><Star className="h-4 w-4" /><span className="hidden sm:inline">Watchlist</span></>
                 }
               </Button>
               <AddHoldingDialog onAdded={() => {}} />
@@ -184,6 +232,11 @@ export default function StockDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* AI Analysis Panel */}
+      {showAI && (
+        <AIAnalysisPanel type="stock" data={aiData} label={`${quote.ticker} — ${quote.companyName}`} />
+      )}
 
       {/* Chart */}
       <Card>
@@ -236,12 +289,21 @@ export default function StockDetailPage() {
             <StatRow label="EPS (TTM)" value={quote.eps ? formatCurrency(quote.eps) : '—'} />
             <StatRow label="Dividend Yield" value={quote.dividendYield ? (quote.dividendYield * 100).toFixed(2) + '%' : '—'} />
             <StatRow label="Beta" value={quote.beta ? quote.beta.toFixed(2) : '—'} />
+            {/* Why it matters */}
+            <div className="mt-3 pt-3 border-t border-gray-800/50">
+              <p className="text-[10px] text-gray-600 leading-relaxed">
+                💡 <span className="text-gray-500">These numbers help you gauge if a stock is expensive, profitable, and risky before you buy.</span>
+              </p>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs text-gray-500 uppercase tracking-wider">52-Week Range</CardTitle>
+            <CardTitle className="flex items-center gap-1.5 text-xs text-gray-500 uppercase tracking-wider">
+              52-Week Range
+              <InfoTooltip text="The lowest and highest price this stock has hit in the last 52 weeks. Shows how much it can swing." />
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-2">
             {quote.week52Low && quote.week52High && (

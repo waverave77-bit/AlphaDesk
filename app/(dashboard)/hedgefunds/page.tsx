@@ -77,6 +77,14 @@ export default function HedgeFundsPage() {
         <p className="text-sm text-gray-400 mt-1">Latest 13F filings from top institutional investors</p>
       </div>
 
+      {/* Why it matters */}
+      <div className="bg-blue-500/5 border border-blue-500/15 rounded-xl p-4">
+        <p className="text-sm font-medium text-blue-300 mb-1">💡 Why does this matter?</p>
+        <p className="text-xs text-gray-400 leading-relaxed">
+          Hedge funds manage billions of dollars and have full-time analysts. When a fund like Bridgewater or Pershing Square takes a big position in a stock, it&apos;s worth paying attention — they&apos;ve done serious research. These filings (called 13Fs) are public and filed every 3 months. Think of it as peeking at the smartest players&apos; cards.
+        </p>
+      </div>
+
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[...Array(6)].map((_, i) => (
