@@ -9,6 +9,7 @@ import HoldingsTable, { HoldingWithQuote } from '@/components/portfolio/Holdings
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
 import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
 import AllocationChart from '@/components/charts/AllocationChart'
+import PortfolioPerformanceChart from '@/components/charts/PortfolioPerformanceChart'
 import InfoTooltip from '@/components/InfoTooltip'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
@@ -338,20 +339,16 @@ export default function DashboardPage() {
         {/* Charts */}
         {enrichedHoldings.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Performance chart */}
+            <PortfolioPerformanceChart />
+
+            {/* Allocation by holding */}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-slate-500 font-medium uppercase tracking-wide">By Holdings</CardTitle>
               </CardHeader>
               <CardContent>
                 <AllocationChart data={byHolding} />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-slate-500 font-medium uppercase tracking-wide">By Sector</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AllocationChart data={bySector} />
               </CardContent>
             </Card>
           </div>
