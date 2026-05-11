@@ -119,8 +119,9 @@ export default function DashboardPage() {
   const totalCost = enrichedHoldings.reduce((s, h) => s + h.costBasis, 0)
   const totalGainLoss = totalValue - totalCost
   const totalGainLossPercent = totalCost ? (totalGainLoss / totalCost) * 100 : 0
+  // dayChange per share × shares owned = total dollar change today
   const dayChange = enrichedHoldings.reduce((s, h) => {
-    if (h.dayChange && h.currentValue) return s + (h.dayChange / (h.currentPrice ?? 1)) * h.currentValue
+    if (h.dayChange != null && h.shares) return s + h.dayChange * h.shares
     return s
   }, 0)
 

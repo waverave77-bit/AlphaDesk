@@ -134,10 +134,12 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
     const meta = chartData?.chart?.result?.[0]?.meta
     if (!meta) return null
 
-    const prev: number = meta.chartPreviousClose ?? meta.regularMarketPrice
     const price: number = meta.regularMarketPrice ?? 0
-    const change = price - prev
-    const changePercent = prev ? (change / prev) * 100 : 0
+    // Use Yahoo's own regularMarketChange field — this is the official today's change
+    // Fallback to manual calc only if the field is missing
+    const change: number = meta.regularMarketChange ?? (price - (meta.chartPreviousClose ?? price))
+    const changePercent: number = meta.regularMarketChangePercent ?? (meta.chartPreviousClose ? (change / meta.chartPreviousClose) * 100 : 0)
+    const prev: number = meta.chartPreviousClose ?? (price - change)
 
     let sector: string | null = null
     let industry: string | null = null

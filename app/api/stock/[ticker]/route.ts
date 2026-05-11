@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getStockQuote, getHistoricalData, getStockNews, getAnalystData } from '@/lib/yahoo-finance'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: Request, { params }: { params: { ticker: string } }) {
   const { ticker } = params
   const url = new URL(req.url)
