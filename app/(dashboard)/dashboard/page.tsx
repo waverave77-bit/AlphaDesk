@@ -61,7 +61,7 @@ export default function DashboardPage() {
   const fetchHoldings = useCallback(async () => {
     setLoadingHoldings(true)
     try {
-      const res = await fetch('/api/portfolio')
+      const res = await fetch('/api/portfolio', { cache: 'no-store' })
       const data = await res.json()
       setHoldings(data.holdings || [])
     } finally {
@@ -77,7 +77,7 @@ export default function DashboardPage() {
     const quoteMap = new Map<string, any>()
     await Promise.allSettled(
       tickers.map(async (ticker) => {
-        const res = await fetch(`/api/stock/${ticker}`)
+        const res = await fetch(`/api/stock/${ticker}`, { cache: 'no-store' })
         const d = await res.json()
         if (d.quote) quoteMap.set(ticker, d.quote)
       })

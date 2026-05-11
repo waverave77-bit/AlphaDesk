@@ -30,7 +30,9 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
       return NextResponse.json({ error: 'Stock not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ quote, news, analyst })
+    return NextResponse.json({ quote, news, analyst }, {
+      headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' },
+    })
   } catch {
     return NextResponse.json({ error: 'Failed to fetch stock data' }, { status: 500 })
   }
