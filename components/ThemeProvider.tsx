@@ -28,11 +28,11 @@ interface ThemeContextType {
   setTheme: (id: ThemeId) => void
 }
 
-const defaultTheme = THEMES[0]
-const ThemeContext = createContext<ThemeContextType>({ themeId: 'default', theme: defaultTheme, setTheme: () => {} })
+const defaultTheme = THEMES.find(t => t.id === 'white') ?? THEMES[0]
+const ThemeContext = createContext<ThemeContextType>({ themeId: 'white', theme: defaultTheme, setTheme: () => {} })
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeId, setThemeId] = useState<ThemeId>('default')
+  const [themeId, setThemeId] = useState<ThemeId>('white')
 
   useEffect(() => {
     const saved = localStorage.getItem('alphadesk-theme') as ThemeId | null

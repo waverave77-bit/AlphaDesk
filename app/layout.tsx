@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-gray-950 text-gray-100 antialiased`}>
+    <html lang="en">
+      <body className={`${inter.className} bg-slate-50 text-slate-900 antialiased`}>
         <SessionProvider session={session}>
           <ThemeProvider>
             {children}
