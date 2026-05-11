@@ -29,7 +29,7 @@ async function secFetch(url: string, timeout = 10000): Promise<string | null> {
   }
 }
 
-function parseHoldings(txt: string): { name: string; value: number; shares: number }[] {
+function parseHoldings(txt: string, limit = 20): { name: string; value: number; shares: number }[] {
   const holdings: { name: string; value: number; shares: number }[] = []
   const regex = /<(?:\w+:)?infoTable>([\s\S]*?)<\/(?:\w+:)?infoTable>/gi
   let match
@@ -40,7 +40,7 @@ function parseHoldings(txt: string): { name: string; value: number; shares: numb
     const shares = parseInt(block.match(/<(?:\w+:)?sshPrnamt>(.*?)<\/(?:\w+:)?sshPrnamt>/i)?.[1]?.trim() ?? '0', 10)
     if (name && value > 0) holdings.push({ name, value, shares })
   }
-  return holdings.sort((a, b) => b.value - a.value).slice(0, 5)
+  return holdings.sort((a, b) => b.value - a.value).slice(0, limit)
 }
 
 async function getFundHoldings(fund: { name: string; cik: string }) {
