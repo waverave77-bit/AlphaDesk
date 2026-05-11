@@ -25,9 +25,9 @@ function formatCurrency(v: number) {
 const CustomTooltip = ({ active, payload, label, range }: any) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs shadow-xl">
+    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs shadow-lg">
       <p className="text-slate-400 mb-1">{formatDate(label, range)}</p>
-      <p className="font-bold text-white text-sm">{formatCurrency(payload[0].value)}</p>
+      <p className="font-bold text-slate-900 text-sm">{formatCurrency(payload[0].value)}</p>
     </div>
   )
 }
@@ -85,45 +85,45 @@ export default function PortfolioPerformanceChart() {
         </div>
       </div>
 
-      {/* Dark chart area */}
-      <div className="h-52 bg-slate-900 rounded-b-xl overflow-hidden">
+      {/* Chart area — light theme */}
+      <div className="h-52 bg-white rounded-b-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : points.length < 2 ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-slate-500 text-sm">Add more holdings to see your chart</p>
+            <p className="text-slate-400 text-sm">Add more holdings to see your chart</p>
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={points} margin={{ top: 16, right: 6, left: 0, bottom: 4 }}>
+            <AreaChart data={points} margin={{ top: 8, right: 6, left: 0, bottom: 4 }}>
               <defs>
                 <linearGradient id="perfGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={lineColor} stopOpacity={0.3} />
+                  <stop offset="0%" stopColor={lineColor} stopOpacity={0.18} />
                   <stop offset="100%" stopColor={lineColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
               <XAxis
                 dataKey="date"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fill: '#64748b', fontSize: 10 }}
+                tick={{ fill: '#94a3b8', fontSize: 10 }}
                 tickFormatter={d => formatDate(d, range)}
                 interval={tickInterval as any}
               />
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                tick={{ fill: '#64748b', fontSize: 10 }}
+                tick={{ fill: '#94a3b8', fontSize: 10 }}
                 tickFormatter={v => formatCurrency(v)}
                 width={62}
                 domain={['auto', 'auto']}
               />
               <Tooltip content={<CustomTooltip range={range} />} />
               {firstValue > 0 && (
-                <ReferenceLine y={firstValue} stroke="#334155" strokeDasharray="4 4" />
+                <ReferenceLine y={firstValue} stroke="#e2e8f0" strokeDasharray="4 4" />
               )}
               <Area
                 type="monotone"
@@ -132,7 +132,7 @@ export default function PortfolioPerformanceChart() {
                 strokeWidth={2}
                 fill="url(#perfGrad)"
                 dot={false}
-                activeDot={{ r: 4, fill: lineColor, stroke: '#0f172a', strokeWidth: 2 }}
+                activeDot={{ r: 4, fill: lineColor, stroke: '#fff', strokeWidth: 2 }}
               />
             </AreaChart>
           </ResponsiveContainer>
