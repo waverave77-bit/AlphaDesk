@@ -129,19 +129,19 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="w-full text-sm xl:text-base">
         <thead>
           <tr className="border-b border-gray-800">
-            <th className="text-left py-3 px-4 text-gray-400 font-medium w-6"></th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium">Stock</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Shares <InfoTooltip text="How many units of this stock you own." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Avg Cost <InfoTooltip text="Your average purchase price per share, accounting for all buy lots." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Price <InfoTooltip text="Current live market price per share." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Day <InfoTooltip text="Today's percentage change in the stock price since yesterday's close." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Value <InfoTooltip text="Current market value of your position — shares × current price." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L <InfoTooltip text="Profit & Loss — how much money you've made or lost on this holding since you bought it." /></span></th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L % <InfoTooltip text="Your gain or loss as a percentage of what you originally paid." /></span></th>
-            <th className="py-3 px-4"></th>
+            <th className="text-left py-3 xl:py-4 px-4 text-gray-400 font-medium w-6"></th>
+            <th className="text-left py-3 xl:py-4 px-4 text-gray-400 font-medium">Stock</th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Shares <InfoTooltip text="How many units of this stock you own." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Avg Cost <InfoTooltip text="Your average purchase price per share, accounting for all buy lots." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Price <InfoTooltip text="Current live market price per share." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Day <InfoTooltip text="Today's percentage change in the stock price since yesterday's close." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Value <InfoTooltip text="Current market value of your position — shares × current price." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L <InfoTooltip text="Profit & Loss — how much money you've made or lost on this holding since you bought it." /></span></th>
+            <th className="text-right py-3 xl:py-4 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L % <InfoTooltip text="Your gain or loss as a percentage of what you originally paid." /></span></th>
+            <th className="py-3 xl:py-4 px-4"></th>
           </tr>
         </thead>
         <tbody>
@@ -161,7 +161,7 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
                   onClick={() => hasMultipleLots && toggleExpand(g.ticker)}
                 >
                   {/* Expand chevron */}
-                  <td className="py-3 pl-4 pr-1 text-gray-600 w-6">
+                  <td className="py-3 xl:py-5 pl-4 pr-1 text-gray-600 w-6">
                     {hasMultipleLots && (
                       isExpanded
                         ? <ChevronDown className="h-3.5 w-3.5 text-blue-400" />
@@ -169,7 +169,7 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
                     )}
                   </td>
 
-                  <td className="py-3 px-4">
+                  <td className="py-3 xl:py-5 px-4">
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/research/${g.ticker}`}
@@ -188,12 +188,12 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
                     <span className="text-xs text-gray-600">{g.sector}</span>
                   </td>
 
-                  <td className="py-3 px-4 text-right text-gray-300">{g.totalShares.toLocaleString(undefined, { maximumFractionDigits: 4 })}</td>
-                  <td className="py-3 px-4 text-right text-gray-300">{formatCurrency(g.avgCost)}</td>
-                  <td className="py-3 px-4 text-right text-white font-medium">
+                  <td className="py-3 xl:py-5 px-4 text-right text-gray-300">{g.totalShares.toLocaleString(undefined, { maximumFractionDigits: 4 })}</td>
+                  <td className="py-3 xl:py-5 px-4 text-right text-gray-300">{formatCurrency(g.avgCost)}</td>
+                  <td className="py-3 xl:py-5 px-4 text-right text-white font-medium">
                     {g.currentPrice != null ? formatCurrency(g.currentPrice) : <Skeleton className="h-4 w-16 ml-auto" />}
                   </td>
-                  <td className="py-3 px-4 text-right">
+                  <td className="py-3 xl:py-5 px-4 text-right">
                     {g.dayChangePercent != null ? (
                       <span className={cn('text-xs', gainLossColor(g.dayChangePercent))}>
                         {g.dayChangePercent >= 0
@@ -203,16 +203,16 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
                       </span>
                     ) : '—'}
                   </td>
-                  <td className="py-3 px-4 text-right text-white font-medium">
+                  <td className="py-3 xl:py-5 px-4 text-right text-white font-medium">
                     {g.currentValue != null ? formatCurrency(g.currentValue) : '—'}
                   </td>
-                  <td className={cn('py-3 px-4 text-right font-medium', gainLossColor(g.gainLoss ?? 0))}>
+                  <td className={cn('py-3 xl:py-5 px-4 text-right font-medium', gainLossColor(g.gainLoss ?? 0))}>
                     {g.gainLoss != null ? (g.gainLoss >= 0 ? '+' : '') + formatCurrency(g.gainLoss) : '—'}
                   </td>
-                  <td className={cn('py-3 px-4 text-right font-medium', gainLossColor(g.gainLossPercent ?? 0))}>
+                  <td className={cn('py-3 xl:py-5 px-4 text-right font-medium', gainLossColor(g.gainLossPercent ?? 0))}>
                     {g.gainLossPercent != null ? formatPercent(g.gainLossPercent) : '—'}
                   </td>
-                  <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                  <td className="py-3 xl:py-5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                     <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
                       <Link href={`/research/${g.ticker}`}>
                         <ExternalLink className="h-3.5 w-3.5" />

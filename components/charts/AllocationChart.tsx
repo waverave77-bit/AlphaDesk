@@ -42,14 +42,14 @@ export default function AllocationChart({ data, title }: AllocationChartProps) {
   return (
     <div>
       {title && <p className="text-sm font-medium text-gray-400 mb-3">{title}</p>}
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={320}>
         <PieChart>
           <Pie
             data={sorted}
             cx="50%"
             cy="50%"
-            outerRadius={110}
-            innerRadius={50}
+            outerRadius={120}
+            innerRadius={55}
             dataKey="value"
             labelLine={false}
             label={CustomLabel}

@@ -86,7 +86,7 @@ export default function PortfolioPerformanceChart() {
       </div>
 
       {/* Chart area — light theme */}
-      <div className="h-52 xl:h-72 bg-white rounded-b-xl overflow-hidden">
+      <div className="h-56 xl:h-80 2xl:h-96 bg-white rounded-b-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
