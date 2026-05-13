@@ -27,24 +27,24 @@ interface StatCardProps {
 function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatCardProps) {
   return (
     <Card className="h-full">
-      <CardContent className="p-5 xl:p-6 h-full flex flex-col justify-between">
+      <CardContent className="p-6 h-full flex flex-col justify-between gap-4">
         <div className="flex items-start justify-between gap-3">
-          <p className="flex items-center gap-1 text-xs xl:text-sm text-slate-500 font-semibold uppercase tracking-wide">
+          <p className="flex items-center gap-1.5 text-sm text-slate-500 font-semibold uppercase tracking-wide leading-snug">
             {title}
             {tooltip && <InfoTooltip text={tooltip} />}
           </p>
-          <div className="rounded-xl bg-slate-100 p-2 xl:p-2.5 shrink-0">
-            <span className="block [&>svg]:h-4 [&>svg]:w-4 xl:[&>svg]:h-5 xl:[&>svg]:w-5">{icon}</span>
+          <div className="rounded-xl bg-slate-100 p-3 shrink-0">
+            <span className="block [&>svg]:h-5 [&>svg]:w-5">{icon}</span>
           </div>
         </div>
-        <div className="mt-3">
+        <div>
           {loading ? (
-            <Skeleton className="h-9 xl:h-11 w-32" />
+            <Skeleton className="h-10 w-36" />
           ) : (
-            <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-slate-900 leading-none">{value}</p>
+            <p className="text-3xl font-bold text-slate-900 leading-none">{value}</p>
           )}
           {sub && !loading && (
-            <p className={cn('text-sm xl:text-base mt-2 font-medium', positive === true ? 'text-green-600' : positive === false ? 'text-red-500' : 'text-slate-500')}>
+            <p className={cn('text-sm mt-2 font-semibold', positive === true ? 'text-green-600' : positive === false ? 'text-red-500' : 'text-slate-500')}>
               {positive === true ? '▲' : positive === false ? '▼' : ''} {sub}
             </p>
           )}
@@ -172,9 +172,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex gap-6 xl:gap-8 min-h-full">
+    <div className="flex gap-7 min-h-full">
       {/* Left watchlist panel */}
-      <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 gap-5 sticky top-4 self-start">
+      <aside className="hidden lg:flex flex-col w-72 shrink-0 gap-5 sticky top-4 self-start">
         {/* Watchlist preview */}
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
@@ -237,23 +237,23 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 min-w-0 space-y-6 xl:space-y-7">
+      <div className="flex-1 min-w-0 space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
           <div>
-            <h1 className="text-2xl xl:text-4xl font-bold text-slate-900">Good morning 👋</h1>
-            <p className="text-sm xl:text-base text-slate-500 mt-1.5">
+            <h1 className="text-3xl font-bold text-slate-900">Good morning 👋</h1>
+            <p className="text-base text-slate-500 mt-1.5">
               Your portfolio is {totalGainLoss >= 0 ? 'up' : 'down'} today · Last updated just now
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 xl:gap-3 items-center">
+          <div className="flex flex-wrap gap-3 items-center">
             <LastUpdated time={lastUpdated} />
-            <Button variant="outline" size="sm" onClick={() => enrichWithPrices(holdings)} disabled={loadingPrices} className="xl:h-10 xl:px-4 xl:text-sm">
-              <RefreshCw className={cn('h-4 w-4', loadingPrices && 'animate-spin')} />
+            <Button variant="outline" onClick={() => enrichWithPrices(holdings)} disabled={loadingPrices} className="h-10 px-4 text-sm">
+              <RefreshCw className={cn('h-4 w-4 mr-1.5', loadingPrices && 'animate-spin')} />
               <span className="hidden sm:inline">Refresh</span>
             </Button>
-            <Button size="sm" variant="outline" onClick={() => setShowAI(!showAI)} className="xl:h-10 xl:px-4 xl:text-sm">
-              <Brain className="h-4 w-4 text-blue-600" />
+            <Button variant="outline" onClick={() => setShowAI(!showAI)} className="h-10 px-4 text-sm">
+              <Brain className="h-4 w-4 text-blue-600 mr-1.5" />
               <span className="hidden sm:inline">AI Analysis</span>
               <span className="sm:hidden">AI</span>
             </Button>
@@ -262,7 +262,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           <StatCard
             title="Total Value"
             value={formatCurrency(totalValue)}

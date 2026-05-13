@@ -46,7 +46,7 @@ export default function TopNav() {
   return (
     <>
       <header className={cn(
-        'h-14 lg:h-16 flex items-center px-6 lg:px-10 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
+        'h-16 flex items-center px-8 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
         isDark
           ? 'bg-gray-900 border-b border-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
           : 'bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
