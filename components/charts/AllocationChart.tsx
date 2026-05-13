@@ -35,21 +35,21 @@ const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: an
 }
 
 export default function AllocationChart({ data, title }: AllocationChartProps) {
-  if (!data.length) return <div className="h-48 flex items-center justify-center text-gray-500 text-sm">No data</div>
+  if (!data.length) return <div className="h-64 flex items-center justify-center text-gray-500 text-sm">No data</div>
 
   const sorted = [...data].sort((a, b) => b.value - a.value)
 
   return (
     <div>
       {title && <p className="text-sm font-medium text-gray-400 mb-3">{title}</p>}
-      <ResponsiveContainer width="100%" height={220}>
+      <ResponsiveContainer width="100%" height={280}>
         <PieChart>
           <Pie
             data={sorted}
             cx="50%"
             cy="50%"
-            outerRadius={90}
-            innerRadius={40}
+            outerRadius={110}
+            innerRadius={50}
             dataKey="value"
             labelLine={false}
             label={CustomLabel}

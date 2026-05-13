@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatPercent, gainLossColor, cn } from '@/lib/utils'
+import InfoTooltip from '@/components/InfoTooltip'
 
 export interface HoldingWithQuote {
   id: string
@@ -133,13 +134,13 @@ export default function HoldingsTable({ holdings, loading, onDelete }: HoldingsT
           <tr className="border-b border-gray-800">
             <th className="text-left py-3 px-4 text-gray-400 font-medium w-6"></th>
             <th className="text-left py-3 px-4 text-gray-400 font-medium">Stock</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">Shares</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">Avg Cost</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">Price</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">Day</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">Value</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">P&amp;L</th>
-            <th className="text-right py-3 px-4 text-gray-400 font-medium">P&amp;L %</th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Shares <InfoTooltip text="How many units of this stock you own." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Avg Cost <InfoTooltip text="Your average purchase price per share, accounting for all buy lots." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Price <InfoTooltip text="Current live market price per share." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Day <InfoTooltip text="Today's percentage change in the stock price since yesterday's close." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">Value <InfoTooltip text="Current market value of your position — shares × current price." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L <InfoTooltip text="Profit & Loss — how much money you've made or lost on this holding since you bought it." /></span></th>
+            <th className="text-right py-3 px-4 text-gray-400 font-medium"><span className="flex items-center justify-end gap-1">P&amp;L % <InfoTooltip text="Your gain or loss as a percentage of what you originally paid." /></span></th>
             <th className="py-3 px-4"></th>
           </tr>
         </thead>

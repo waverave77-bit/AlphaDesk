@@ -2,6 +2,7 @@
 import { TrendingUp, TrendingDown, Minus, Clock, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import InfoTooltip from '@/components/InfoTooltip'
 
 interface AnalystData {
   recommendation: string | null
@@ -150,7 +151,7 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
 
           {/* Section 1: Rating */}
           <div className={cn('p-5 rounded-t-xl border', getRatingBg(rec))}>
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">Analyst Consensus</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very bullish, Hold = neutral, Sell = bearish." /></p>
             <div className="flex items-center gap-4">
               <RatingIcon rec={rec} />
               <div>
@@ -196,13 +197,13 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
 
           {/* Section 2: Reason */}
           <div className="p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">Analysis & Reasoning</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analysis &amp; Reasoning <InfoTooltip text="A summary explaining why analysts have this rating — based on price targets, vote breakdown, and current stock price vs. expected value." /></p>
             <p className="text-sm text-gray-300 leading-relaxed">{reason}</p>
           </div>
 
           {/* Section 3: Price Targets */}
           <div className="p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Price Targets</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium flex items-center gap-1">Price Targets <InfoTooltip text="Where analysts expect the stock to be at 3, 6, and 12 months. Low = pessimistic forecast, Median = middle estimate, High = most optimistic." /></p>
             <p className="text-xs text-gray-600 mb-3">Based on 12-month analyst targets, scaled to each horizon</p>
             {hasTargets ? (
               <div>

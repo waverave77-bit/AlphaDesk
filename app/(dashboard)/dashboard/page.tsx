@@ -11,6 +11,7 @@ import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
 import AllocationChart from '@/components/charts/AllocationChart'
 import PortfolioPerformanceChart from '@/components/charts/PortfolioPerformanceChart'
 import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -26,25 +27,27 @@ interface StatCardProps {
 function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatCardProps) {
   return (
     <Card>
-      <CardContent className="p-4 sm:p-5">
+      <CardContent className="p-4 sm:p-5 xl:p-7">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
-            <p className="flex items-center gap-1 text-xs text-slate-500 mb-1 font-medium">
+            <p className="flex items-center gap-1 text-xs xl:text-sm text-slate-500 mb-1.5 font-medium">
               <span className="truncate uppercase tracking-wide">{title}</span>
               {tooltip && <InfoTooltip text={tooltip} />}
             </p>
             {loading ? (
-              <Skeleton className="h-7 w-24 mb-1" />
+              <Skeleton className="h-8 xl:h-10 w-28 mb-1" />
             ) : (
-              <p className="text-xl sm:text-2xl font-bold text-slate-900 truncate">{value}</p>
+              <p className="text-2xl sm:text-3xl xl:text-4xl font-bold text-slate-900 truncate">{value}</p>
             )}
             {sub && !loading && (
-              <p className={cn('text-xs mt-0.5 font-medium', positive === true ? 'text-green-600' : positive === false ? 'text-red-500' : 'text-slate-500')}>
+              <p className={cn('text-xs xl:text-sm mt-1 font-medium', positive === true ? 'text-green-600' : positive === false ? 'text-red-500' : 'text-slate-500')}>
                 {positive === true ? '▲' : positive === false ? '▼' : ''} {sub}
               </p>
             )}
           </div>
-          <div className="rounded-lg bg-slate-100 p-2 shrink-0 ml-2">{icon}</div>
+          <div className="rounded-xl bg-slate-100 p-2.5 xl:p-3.5 shrink-0 ml-3">
+            <span className="xl:[&>svg]:h-6 xl:[&>svg]:w-6">{icon}</span>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -57,6 +60,7 @@ export default function DashboardPage() {
   const [loadingHoldings, setLoadingHoldings] = useState(true)
   const [loadingPrices, setLoadingPrices] = useState(false)
   const [showAI, setShowAI] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   const fetchHoldings = useCallback(async () => {
     setLoadingHoldings(true)
@@ -110,6 +114,7 @@ export default function DashboardPage() {
 
     setEnrichedHoldings(enriched)
     setLoadingPrices(false)
+    setLastUpdated(new Date())
   }, [])
 
   useEffect(() => { fetchHoldings() }, [fetchHoldings])
@@ -167,32 +172,32 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 xl:gap-8">
       {/* Left watchlist panel */}
-      <aside className="hidden xl:flex flex-col w-64 shrink-0 gap-4">
+      <aside className="hidden xl:flex flex-col w-72 2xl:w-80 shrink-0 gap-5">
         {/* Watchlist preview */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">My Holdings</p>
-            <Link href="/watchlist" className="text-xs text-blue-600 hover:underline">View all</Link>
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">My Holdings</p>
+            <Link href="/watchlist" className="text-sm text-blue-600 hover:underline">View all</Link>
           </div>
           {loadingHoldings ? (
             <div className="space-y-3">
-              {[1,2,3].map(i => <Skeleton key={i} className="h-10 w-full rounded-lg" />)}
+              {[1,2,3].map(i => <Skeleton key={i} className="h-12 w-full rounded-lg" />)}
             </div>
           ) : grouped.length === 0 ? (
-            <p className="text-xs text-slate-400 py-2">No holdings yet — add some stocks!</p>
+            <p className="text-sm text-slate-400 py-2">No holdings yet — add some stocks!</p>
           ) : (
             <div className="space-y-0">
               {grouped.slice(0, 6).map((h) => (
                 <Link
                   key={h.ticker}
                   href={`/research/${h.ticker}`}
-                  className="flex items-center justify-between py-2.5 border-b border-slate-50 last:border-0 hover:bg-slate-50 -mx-1 px-1 rounded-lg transition-colors"
+                  className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50 -mx-1 px-1 rounded-lg transition-colors"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{h.ticker}</p>
-                    <p className="text-xs text-slate-400 truncate max-w-[100px]">{h.companyName}</p>
+                    <p className="text-base font-semibold text-slate-900">{h.ticker}</p>
+                    <p className="text-xs text-slate-400 truncate max-w-[120px]">{h.companyName}</p>
                   </div>
                   <div className="text-right">
                     {h.currentPrice && <p className="text-sm font-medium text-slate-900">${h.currentPrice.toFixed(0)}</p>}
@@ -212,8 +217,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick links */}
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Quick Links</p>
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+          <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Quick Links</p>
           <div className="space-y-1">
             {[
               { label: '📅 Earnings Calendar', href: '/earnings' },
@@ -222,7 +227,7 @@ export default function DashboardPage() {
               { label: '📖 Dictionary', href: '/learn' },
               { label: '⚗️ Quant Strategy', href: '/quant' },
             ].map(({ label, href }) => (
-              <Link key={href} href={href} className="block text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded-lg transition-colors">
+              <Link key={href} href={href} className="block text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2.5 rounded-lg transition-colors">
                 {label}
               </Link>
             ))}
@@ -231,16 +236,17 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 min-w-0 space-y-5">
+      <div className="flex-1 min-w-0 space-y-6 xl:space-y-7">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
           <div>
-            <h1 className="text-xl font-bold text-slate-900">Good morning 👋</h1>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <h1 className="text-2xl xl:text-3xl font-bold text-slate-900">Good morning 👋</h1>
+            <p className="text-sm xl:text-base text-slate-500 mt-1">
               Your portfolio is {totalGainLoss >= 0 ? 'up' : 'down'} today · Last updated just now
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 items-center">
+            <LastUpdated time={lastUpdated} />
             <Button variant="outline" size="sm" onClick={() => enrichWithPrices(holdings)} disabled={loadingPrices}>
               <RefreshCw className={cn('h-4 w-4', loadingPrices && 'animate-spin')} />
               <span className="hidden sm:inline">Refresh</span>
@@ -255,11 +261,11 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-5">
           <StatCard
             title="Total Value"
             value={formatCurrency(totalValue)}
-            icon={<DollarSign className="h-4 w-4 text-blue-500" />}
+            icon={<DollarSign className="h-4 w-4 xl:h-5 xl:w-5 text-blue-500" />}
             loading={loadingHoldings}
             tooltip="The total amount your stocks are worth right now if you sold everything today."
           />
@@ -269,8 +275,8 @@ export default function DashboardPage() {
             sub={formatPercent(totalGainLossPercent)}
             positive={totalGainLoss >= 0 ? true : totalGainLoss < 0 ? false : null}
             icon={totalGainLoss >= 0
-              ? <TrendingUp className="h-4 w-4 text-green-500" />
-              : <TrendingDown className="h-4 w-4 text-red-500" />}
+              ? <TrendingUp className="h-4 w-4 xl:h-5 xl:w-5 text-green-500" />
+              : <TrendingDown className="h-4 w-4 xl:h-5 xl:w-5 text-red-500" />}
             loading={loadingHoldings || loadingPrices}
             tooltip="How much money you've made (or lost) compared to what you originally paid."
           />
@@ -278,7 +284,7 @@ export default function DashboardPage() {
             title="Today's Change"
             value={`${dayChange >= 0 ? '+' : ''}${formatCurrency(dayChange)}`}
             positive={dayChange >= 0 ? true : dayChange < 0 ? false : null}
-            icon={<BarChart2 className="h-4 w-4 text-purple-500" />}
+            icon={<BarChart2 className="h-4 w-4 xl:h-5 xl:w-5 text-purple-500" />}
             loading={loadingPrices}
             tooltip="How much your total portfolio went up or down just today."
           />
@@ -286,7 +292,7 @@ export default function DashboardPage() {
             title="Holdings"
             value={`${uniqueTickers}`}
             sub={bestPerformer ? `Best: ${bestPerformer.ticker} ${formatPercent(bestPerformer.gainLossPercent ?? 0)}` : undefined}
-            icon={<Calendar className="h-4 w-4 text-amber-500" />}
+            icon={<Calendar className="h-4 w-4 xl:h-5 xl:w-5 text-amber-500" />}
             loading={loadingHoldings}
             tooltip="The number of different companies you own shares in."
           />
@@ -299,19 +305,19 @@ export default function DashboardPage() {
 
         {/* Best / Worst performers */}
         {grouped.length > 1 && !loadingPrices && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:gap-5">
             {bestPerformer && (
               <Card className="border-green-100">
-                <CardContent className="p-4">
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Best Performer</p>
+                <CardContent className="p-5 xl:p-6">
+                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Best Performer <InfoTooltip text="The stock in your portfolio with the highest total gain % since you bought it." /></p>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-slate-900">{bestPerformer.ticker}</p>
-                      <p className="text-xs text-slate-400">{bestPerformer.companyName}</p>
+                      <p className="text-lg xl:text-xl font-bold text-slate-900">{bestPerformer.ticker}</p>
+                      <p className="text-sm text-slate-400">{bestPerformer.companyName}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-green-600 font-semibold">{formatPercent(bestPerformer.gainLossPercent ?? 0)}</p>
-                      <p className="text-xs text-green-500">{formatCurrency(bestPerformer.gainLoss ?? 0)}</p>
+                      <p className="text-xl xl:text-2xl text-green-600 font-bold">{formatPercent(bestPerformer.gainLossPercent ?? 0)}</p>
+                      <p className="text-sm text-green-500">{formatCurrency(bestPerformer.gainLoss ?? 0)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -319,16 +325,16 @@ export default function DashboardPage() {
             )}
             {worstPerformer && worstPerformer.ticker !== bestPerformer?.ticker && (
               <Card className="border-red-100">
-                <CardContent className="p-4">
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Watch Out For</p>
+                <CardContent className="p-5 xl:p-6">
+                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Watch Out For <InfoTooltip text="The stock in your portfolio with the biggest loss % since you bought it — worth reviewing." /></p>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-slate-900">{worstPerformer.ticker}</p>
-                      <p className="text-xs text-slate-400">{worstPerformer.companyName}</p>
+                      <p className="text-lg xl:text-xl font-bold text-slate-900">{worstPerformer.ticker}</p>
+                      <p className="text-sm text-slate-400">{worstPerformer.companyName}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-red-500 font-semibold">{formatPercent(worstPerformer.gainLossPercent ?? 0)}</p>
-                      <p className="text-xs text-red-400">{formatCurrency(worstPerformer.gainLoss ?? 0)}</p>
+                      <p className="text-xl xl:text-2xl text-red-500 font-bold">{formatPercent(worstPerformer.gainLossPercent ?? 0)}</p>
+                      <p className="text-sm text-red-400">{formatCurrency(worstPerformer.gainLoss ?? 0)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -339,16 +345,16 @@ export default function DashboardPage() {
 
         {/* Charts */}
         {enrichedHoldings.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:gap-6">
             {/* Performance chart */}
             <PortfolioPerformanceChart />
 
             {/* Allocation by holding */}
             <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-slate-500 font-medium uppercase tracking-wide">By Holdings</CardTitle>
+              <CardHeader className="pb-2 pt-5 px-6">
+                <CardTitle className="text-sm xl:text-base text-slate-500 font-medium uppercase tracking-wide flex items-center gap-1">By Holdings <InfoTooltip text="How your total portfolio value is split across each stock you own. Bigger slice = bigger position." /></CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-6 pb-6">
                 <AllocationChart data={byHolding} />
               </CardContent>
             </Card>
@@ -357,8 +363,8 @@ export default function DashboardPage() {
 
         {/* Holdings Table */}
         <Card>
-          <CardHeader className="flex-row items-center justify-between pb-3">
-            <CardTitle className="text-base">Holdings</CardTitle>
+          <CardHeader className="flex-row items-center justify-between pb-3 pt-5 px-6">
+            <CardTitle className="text-base xl:text-lg">Holdings</CardTitle>
             <AddHoldingDialog onAdded={fetchHoldings} />
           </CardHeader>
           <CardContent className="p-0 pb-2">

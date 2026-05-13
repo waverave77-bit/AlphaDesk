@@ -4,6 +4,8 @@ import { Search, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 const EXAMPLES = ['AAPL', 'MSFT', 'TSLA', 'JPM', 'NVDA', 'META']
 
@@ -22,6 +24,7 @@ export default function QuantPage() {
   const [ticker, setTicker] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [lastAnalyzed, setLastAnalyzed] = useState<Date | null>(null)
 
   async function analyze(t: string) {
     const sym = t.trim().toUpperCase()
@@ -85,6 +88,7 @@ export default function QuantPage() {
         : `Mixed signals across factors. No single dominant theme drives the score strongly in either direction. Maintain market-weight exposure and monitor for catalyst shifts.`
 
       setResult({ ticker: sym, companyName, signal, combined, momentum, value, quality, volRisk, rationale, sector })
+      setLastAnalyzed(new Date())
     } catch {
       setResult({ error: true, ticker: t })
     } finally {
@@ -95,7 +99,7 @@ export default function QuantPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Quant Strategy</h1>
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">Quant Strategy <InfoTooltip text="A quantitative (math-based) approach to picking stocks. Instead of gut feelings, it uses measurable factors like price trends and earnings to generate buy/sell signals." /></h1>
         <p className="text-sm text-gray-400 mt-1">Factor-based over/underweight signals using momentum, value, quality & volatility</p>
       </div>
 
@@ -140,7 +144,7 @@ export default function QuantPage() {
                 <div className="flex items-center gap-4">
                   <SignalIcon className={cn('h-10 w-10', signalColor)} />
                   <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-wider">Quant Signal for {result.ticker}</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider flex items-center gap-1">Quant Signal for {result.ticker} <InfoTooltip text="The overall recommendation based on all 4 factors combined into one score." /><LastUpdated time={lastAnalyzed} className="ml-2" /></p>
                     <p className={cn('text-4xl font-bold', signalColor)}>{result.signal}</p>
                     <p className="text-sm text-gray-400">{result.companyName}{result.sector ? ` · ${result.sector}` : ''}</p>
                   </div>
@@ -154,17 +158,17 @@ export default function QuantPage() {
 
             <Card>
               <CardContent className="p-5">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-4">Factor Scores</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-4 flex items-center gap-1">Factor Scores <InfoTooltip text="Four separate scores (0–100) that measure different aspects of a stock. They're averaged together to produce the overall Quant Signal." /></p>
                 <div className="space-y-4">
                   {[
-                    { label: 'Momentum', score: result.momentum, desc: '52-week price position', color: 'bg-blue-500' },
-                    { label: 'Value', score: result.value, desc: 'P/E vs sector average', color: 'bg-purple-500' },
-                    { label: 'Quality', score: result.quality, desc: 'EPS, beta, market cap', color: 'bg-teal-500' },
-                    { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based risk score', color: 'bg-orange-500' },
-                  ].map(({ label, score, desc, color }) => (
+                    { label: 'Momentum', score: result.momentum, desc: '52-week price position', color: 'bg-blue-500', tip: 'How well the stock has performed over the past year. High momentum means the stock has been trending up — a sign that buyers are in control.' },
+                    { label: 'Value', score: result.value, desc: 'P/E vs sector average', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive? Compares the P/E ratio (what you pay per $1 of earnings) to the average in its sector. Higher score = better value.' },
+                    { label: 'Quality', score: result.quality, desc: 'EPS, beta, market cap', color: 'bg-teal-500', tip: 'How healthy is the business? Looks at whether the company is profitable (EPS), stable (low beta), and large (market cap). Higher = stronger business.' },
+                    { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based risk score', color: 'bg-orange-500', tip: 'How calm or wild is this stock? Lower volatility = fewer scary swings. A high score here means the stock tends to move less than the overall market.' },
+                  ].map(({ label, score, desc, color, tip }) => (
                     <div key={label}>
                       <div className="flex justify-between mb-1">
-                        <span className="text-sm text-gray-300 font-medium">{label}</span>
+                        <span className="text-sm text-gray-300 font-medium flex items-center gap-1">{label} <InfoTooltip text={tip} /></span>
                         <span className="text-xs text-gray-500">{desc}</span>
                       </div>
                       {scoreBar(score, color)}
@@ -176,7 +180,7 @@ export default function QuantPage() {
 
             <Card>
               <CardContent className="p-5">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-2">Quant Rationale</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-2 flex items-center gap-1">Quant Rationale <InfoTooltip text="A plain-English explanation of why the model gave this signal, based on which factors were strongest or weakest." /></p>
                 <p className="text-sm text-gray-300 leading-relaxed">{result.rationale}</p>
               </CardContent>
             </Card>

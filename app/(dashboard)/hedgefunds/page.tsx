@@ -4,6 +4,8 @@ import { Building2, TrendingUp, TrendingDown, PlusCircle, MinusCircle, RefreshCw
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import HoldingsTreemap from '@/components/charts/HoldingsTreemap'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 interface Holding { name: string; value: number; shares: number }
 interface Fund {
@@ -63,6 +65,7 @@ function QoQCard({ icon, label, count, names, color, bg, desc }: {
 export default function HedgeFundsPage() {
   const [funds, setFunds] = useState<Fund[]>([])
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [selectedCik, setSelectedCik] = useState<string | null>(null)
   const [detail, setDetail] = useState<Detail | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
@@ -75,7 +78,7 @@ export default function HedgeFundsPage() {
         setFunds(f)
         if (f.length) setSelectedCik(f[0].cik ?? String(f[0].name))
       })
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setLastUpdated(new Date()) })
   }, [])
 
   // Load detail when a fund is selected
@@ -118,8 +121,9 @@ export default function HedgeFundsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Hedge Fund Tracker</h1>
+        <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">Hedge Fund Tracker <InfoTooltip text="Hedge funds are professional investment firms that manage billions of dollars. By law they must publicly disclose their stock holdings every 3 months — so we can see exactly what they're buying." /></h1>
         <p className="text-sm text-slate-500 mt-0.5">See what the world's smartest money managers are buying</p>
+        <LastUpdated time={lastUpdated} />
       </div>
 
       {/* Explainer */}
@@ -177,8 +181,8 @@ export default function HedgeFundsPage() {
               {/* Treemap */}
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold text-slate-700">
-                    🗺️ What They Own Most
+                  <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    🗺️ What They Own Most <InfoTooltip text="A treemap where each box represents a stock — bigger box = more money invested. Think of it like a visual pie chart of the fund's portfolio." />
                   </CardTitle>
                   <p className="text-xs text-slate-400">Bigger tile = more money invested. Hover to see details.</p>
                 </CardHeader>
@@ -198,7 +202,7 @@ export default function HedgeFundsPage() {
               {/* QoQ Changes */}
               {(detailLoading || detail?.qoq) && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-1">📊 What Changed This Quarter?</h3>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">📊 What Changed This Quarter? <InfoTooltip text="Compares the fund's current holdings to last quarter's — showing which stocks they added, removed, bought more of, or sold some of." /></h3>
                   <p className="text-xs text-slate-400 mb-3">
                     Comparing their top 20 positions this quarter vs last quarter. Tap any card to see examples.
                   </p>
@@ -251,7 +255,7 @@ export default function HedgeFundsPage() {
 
           {/* Divider */}
           <div className="border-t border-slate-100 pt-2">
-            <h3 className="text-sm font-semibold text-slate-700 mb-1">🏆 What Every Hedge Fund Owns</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">🏆 What Every Hedge Fund Owns <InfoTooltip text="Stocks held by 2 or more of the tracked funds — the more funds that own a stock, the stronger the professional consensus behind it." /></h3>
             <p className="text-xs text-slate-400 mb-4">
               Stocks that show up in multiple fund portfolios — the pros all agree on these.
             </p>

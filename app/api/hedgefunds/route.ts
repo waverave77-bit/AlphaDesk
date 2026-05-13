@@ -14,7 +14,7 @@ const HEDGE_FUNDS = [
 
 const UA = 'Zains Game contact@zainsgame.app'
 
-async function secFetch(url: string, timeout = 10000): Promise<string | null> {
+async function secFetch(url: string, timeout = 12000): Promise<string | null> {
   try {
     const r = await fetch(url, {
       headers: { 'User-Agent': UA, Accept: '*/*' },
@@ -43,12 +43,64 @@ function parseHoldings(txt: string, limit = 20): { name: string; value: number; 
   return holdings.sort((a, b) => b.value - a.value).slice(0, limit)
 }
 
+/**
+ * Fetch holdings for a specific accession number.
+ * Strategy:
+ *   1. Fetch the filing index JSON to find the Information Table document
+ *   2. If found, fetch that specific XML file
+ *   3. Fall back to the full submission .txt (works for smaller filers)
+ */
+async function fetchFilingHoldings(cik: string, accNo: string, limit = 20) {
+  const accNoDash = accNo.replace(/-/g, '')
+  const base = `https://www.sec.gov/Archives/edgar/data/${cik}/${accNoDash}`
+
+  // Step 1 — check the filing index for a dedicated holdings XML
+  const indexText = await secFetch(`${base}/${accNo}-index.json`)
+  if (indexText) {
+    try {
+      const index = JSON.parse(indexText)
+      const items: { name: string; type?: string }[] = index.directory?.item ?? []
+      // Priority: type explicitly says "information table", or name contains "informationtable"
+      const infoFile = items.find(item => {
+        const t = (item.type ?? '').toLowerCase()
+        const n = (item.name ?? '').toLowerCase()
+        return (
+          t.includes('information table') ||
+          n.includes('informationtable') ||
+          n.includes('infotable')
+        )
+      })
+      // Also accept any non-primary XML file as a fallback within the index
+      const anyXml = items.find(item => {
+        const n = (item.name ?? '').toLowerCase()
+        const t = (item.type ?? '').toLowerCase()
+        return (
+          n.endsWith('.xml') &&
+          !n.includes('primary') &&
+          !t.includes('13f-hr') &&
+          !t.includes('submission')
+        )
+      })
+      const candidate = infoFile ?? anyXml
+      if (candidate?.name) {
+        const xmlText = await secFetch(`${base}/${candidate.name}`, 15000)
+        if (xmlText) {
+          const holdings = parseHoldings(xmlText, limit)
+          if (holdings.length > 0) return holdings
+        }
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Step 2 — fall back to the full submission .txt
+  const txt = await secFetch(`${base}/${accNo}.txt`, 15000)
+  return txt ? parseHoldings(txt, limit) : []
+}
+
 async function getFundHoldings(fund: { name: string; cik: string }) {
   const empty = { ...fund, filingDate: null, topHoldings: [] }
   try {
     const padded = fund.cik.padStart(10, '0')
-
-    // Step 1: Get most recent 13F accession number
     const subText = await secFetch(`https://data.sec.gov/submissions/CIK${padded}.json`)
     if (!subText) return empty
     const sub = JSON.parse(subText)
@@ -61,17 +113,9 @@ async function getFundHoldings(fund: { name: string; cik: string }) {
     if (idx === -1) return empty
 
     const accNo = accessions[idx]
-    const accNoDash = accNo.replace(/-/g, '')
     const filingDate = dates[idx]
 
-    // Step 2: Fetch the full submission .txt — always exists, contains all XML
-    const txt = await secFetch(
-      `https://www.sec.gov/Archives/edgar/data/${fund.cik}/${accNoDash}/${accNo}.txt`,
-      12000
-    )
-    if (!txt) return { ...fund, filingDate, topHoldings: [] }
-
-    const topHoldings = parseHoldings(txt)
+    const topHoldings = await fetchFilingHoldings(fund.cik, accNo)
     return { ...fund, filingDate, topHoldings }
   } catch {
     return empty

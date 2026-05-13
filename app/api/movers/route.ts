@@ -1,26 +1,28 @@
 import { NextResponse } from 'next/server'
-import https from 'https'
 
 export const dynamic = 'force-dynamic'
 
-function httpGet(url: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    https.get(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-      timeout: 8000,
-    }, (res) => {
-      let data = ''
-      res.on('data', (c) => (data += c))
-      res.on('end', () => { try { resolve(JSON.parse(data)) } catch { reject(new Error('Invalid JSON')) } })
-    }).on('error', reject).on('timeout', () => reject(new Error('Timeout')))
-  })
+interface Mover {
+  ticker: string
+  name: string
+  price: number
+  change: number
+  changePercent: number
 }
 
-async function getMovers(scrId: string) {
+async function getMovers(scrId: string): Promise<Mover[]> {
   try {
-    const data = await httpGet(
-      `https://query1.finance.yahoo.com/v1/finance/screener/predefined/saved?count=5&scrIds=${scrId}`
+    const res = await fetch(
+      `https://query1.finance.yahoo.com/v1/finance/screener/predefined/saved?formatted=false&scrIds=${scrId}&count=10`,
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        },
+        signal: AbortSignal.timeout(8000),
+      }
     )
+    if (!res.ok) return []
+    const data = await res.json()
     const quotes: any[] = data?.finance?.result?.[0]?.quotes ?? []
     return quotes.map((q) => ({
       ticker: q.symbol ?? '',
@@ -39,5 +41,13 @@ export async function GET() {
     getMovers('day_gainers'),
     getMovers('day_losers'),
   ])
-  return NextResponse.json({ gainers, losers })
+
+  return NextResponse.json(
+    { gainers, losers, source: 'Yahoo Finance' },
+    {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      },
+    }
+  )
 }

@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import SessionProvider from '@/components/SessionProvider'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ChartTypeProvider } from '@/components/ChartTypeProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -21,8 +22,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className={`${inter.className} bg-slate-50 text-slate-900 antialiased`}>
         <SessionProvider session={session}>
           <ThemeProvider>
-            {children}
-            <Toaster />
+            <ChartTypeProvider>
+              {children}
+              <Toaster />
+            </ChartTypeProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>

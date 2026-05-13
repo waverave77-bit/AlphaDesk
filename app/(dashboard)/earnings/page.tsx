@@ -5,6 +5,8 @@ import { Calendar } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 interface EarningsItem {
   ticker: string
@@ -15,14 +17,20 @@ interface EarningsItem {
 
 function getDayBadge(daysUntil: number) {
   if (daysUntil === 0) {
-    return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Today</Badge>
+    return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Today 🔔</Badge>
   }
   if (daysUntil === 1) {
     return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Tomorrow</Badge>
   }
+  if (daysUntil <= 7) {
+    return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">In {daysUntil} days</Badge>
+  }
+  if (daysUntil <= 14) {
+    return <Badge className="bg-gray-700/50 text-gray-400 border-gray-600/50">In {daysUntil} days</Badge>
+  }
   return (
-    <Badge className="bg-gray-700/50 text-gray-400 border-gray-600/50">
-      {daysUntil}d
+    <Badge className="bg-gray-700/50 text-gray-500 border-gray-700/50">
+      In {daysUntil} days
     </Badge>
   )
 }
@@ -126,6 +134,7 @@ export default function EarningsPage() {
   const [earnings, setEarnings] = useState<EarningsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     fetch('/api/earnings')
@@ -133,6 +142,7 @@ export default function EarningsPage() {
       .then((data) => {
         if (Array.isArray(data)) {
           setEarnings(data)
+          setLastUpdated(new Date())
         } else {
           setError('Failed to load earnings data.')
         }
@@ -146,12 +156,13 @@ export default function EarningsPage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-8">
-        <div className="h-10 w-10 rounded-lg bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-          <Calendar className="h-5 w-5 text-blue-400" />
+        <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-lg bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
+          <Calendar className="h-5 w-5 lg:h-6 lg:w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Earnings Calendar</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-white flex items-center gap-2">Earnings Calendar <InfoTooltip text="Every quarter, public companies release their financial results (earnings). These announcements often cause big stock price moves — stocks can jump or crash 10%+ in a single day." /></h1>
           <p className="text-sm text-gray-500">Upcoming earnings for major S&amp;P 500 companies</p>
+          <LastUpdated time={lastUpdated} />
         </div>
       </div>
 
@@ -179,11 +190,15 @@ export default function EarningsPage() {
       )}
 
       {!loading && !error && earnings.length > 0 && (
-        <>
-          <EarningsSection title="This Week" items={thisWeek} />
-          <EarningsSection title="Next Week" items={nextWeek} />
-          <EarningsSection title="Later This Month" items={later} />
-        </>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-8 items-start">
+          <div>
+            <EarningsSection title="This Week" items={thisWeek} />
+            <EarningsSection title="Next Week" items={nextWeek} />
+          </div>
+          <div>
+            <EarningsSection title="Later This Month" items={later} />
+          </div>
+        </div>
       )}
     </div>
   )

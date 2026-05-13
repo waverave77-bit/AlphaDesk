@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import StockChart from '@/components/charts/StockChart'
+import SmartChart from '@/components/charts/SmartChart'
 import AnalystCard from '@/components/research/AnalystCard'
 import RedditSentiment from '@/components/research/RedditSentiment'
 import OptionsPanel from '@/components/research/OptionsPanel'
@@ -14,6 +14,7 @@ import SecFilings from '@/components/research/SecFilings'
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
 import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
 import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatLargeNumber, gainLossColor, cn } from '@/lib/utils'
 
@@ -99,6 +100,7 @@ export default function StockDetailPage() {
   const [watchlisted, setWatchlisted] = useState(false)
   const [watchlistLoading, setWatchlistLoading] = useState(false)
   const [showAI, setShowAI] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -112,7 +114,7 @@ export default function StockDetailPage() {
       const isWatched = (watchData.items || []).some((i: any) => i.ticker === ticker.toUpperCase())
       setWatchlisted(isWatched)
     }).catch(console.error)
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setLastUpdated(new Date()) })
   }, [ticker])
 
   const toggleWatchlist = async () => {
@@ -209,6 +211,7 @@ export default function StockDetailPage() {
                 <span className="text-xs text-gray-500">Today</span>
               </div>
               {quote.industry && <p className="text-xs text-gray-500 mt-1">{quote.industry}</p>}
+              <LastUpdated time={lastUpdated} />
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button
@@ -239,12 +242,12 @@ export default function StockDetailPage() {
       )}
 
       {/* Chart */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Price Chart</CardTitle>
+          <CardTitle className="text-sm text-gray-400">Price Chart · Powered by TradingView</CardTitle>
         </CardHeader>
-        <CardContent>
-          <StockChart ticker={quote.ticker} currentPrice={quote.price} previousClose={quote.previousClose} />
+        <CardContent className="p-0">
+          <SmartChart ticker={quote.ticker} />
         </CardContent>
       </Card>
 
@@ -332,7 +335,7 @@ export default function StockDetailPage() {
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-4">
-        For informational purposes only. Not financial advice. Data sourced from Yahoo Finance.
+        For informational purposes only. Not financial advice. Data: Yahoo Finance · TradingView · Reddit · SEC EDGAR · Reuters
       </p>
     </div>
   )

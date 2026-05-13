@@ -58,11 +58,11 @@ export default function PortfolioPerformanceChart() {
   return (
     <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pt-4 pb-2">
+      <div className="flex items-center justify-between px-5 xl:px-6 pt-5 xl:pt-6 pb-2">
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Performance</p>
+          <p className="text-xs xl:text-sm font-semibold text-slate-500 uppercase tracking-wide">Performance</p>
           {!loading && points.length > 0 && (
-            <p className={cn('text-sm font-semibold mt-0.5', isUp ? 'text-green-600' : 'text-red-500')}>
+            <p className={cn('text-sm xl:text-base font-semibold mt-0.5', isUp ? 'text-green-600' : 'text-red-500')}>
               {isUp ? '+' : ''}{formatCurrency(change)} ({isUp ? '+' : ''}{changePct.toFixed(2)}%)
             </p>
           )}
@@ -86,7 +86,7 @@ export default function PortfolioPerformanceChart() {
       </div>
 
       {/* Chart area — light theme */}
-      <div className="h-52 bg-white rounded-b-xl overflow-hidden">
+      <div className="h-52 xl:h-72 bg-white rounded-b-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />

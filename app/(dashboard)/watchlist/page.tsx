@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { formatCurrency, formatPercent, gainLossColor, cn } from '@/lib/utils'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 interface WatchlistItem {
   id: string
@@ -27,6 +29,7 @@ export default function WatchlistPage() {
   const [items, setItems] = useState<WatchlistItemWithQuote[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const { toast } = useToast()
 
   const fetchWatchlist = useCallback(async () => {
@@ -60,6 +63,7 @@ export default function WatchlistPage() {
       setItems(enriched)
     } finally {
       setLoading(false)
+      setLastUpdated(new Date())
     }
   }, [])
 
@@ -89,10 +93,11 @@ export default function WatchlistPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Watchlist</h1>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">Watchlist <InfoTooltip text="A personal list of stocks you want to keep an eye on — without actually owning them. Add any stock to monitor its price and daily changes." /></h1>
           <p className="text-sm text-gray-400 mt-0.5">Track stocks you&apos;re interested in</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          <LastUpdated time={lastUpdated} className="text-slate-400" />
           <Button variant="outline" size="sm" onClick={refresh} disabled={refreshing}>
             <RefreshCw className={cn('h-4 w-4', refreshing && 'animate-spin')} />
             Refresh
@@ -141,7 +146,10 @@ export default function WatchlistPage() {
                       <div className="text-right hidden sm:block">
                         {item.price ? (
                           <>
-                            <p className="text-white font-semibold">{formatCurrency(item.price)}</p>
+                            <p className="text-white font-semibold flex items-center justify-end gap-1">
+                              {formatCurrency(item.price)}
+                              <InfoTooltip text="Current stock price — updates when you refresh." />
+                            </p>
                             <div className="flex items-center justify-end gap-1">
                               {positive
                                 ? <TrendingUp className="h-3 w-3 text-green-400" />
@@ -151,6 +159,7 @@ export default function WatchlistPage() {
                                 {item.change ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}
                                 {' '}({formatPercent(item.changePercent ?? 0)})
                               </span>
+                              <InfoTooltip text="Today's change — how much the stock has moved in price and % since yesterday's market close." />
                             </div>
                           </>
                         ) : <Skeleton className="h-8 w-20" />}

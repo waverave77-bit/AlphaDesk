@@ -7,57 +7,89 @@ export interface Theme {
   id: ThemeId
   name: string
   description: string
-  accent: string        // tailwind class for preview dot
-  accentRgb: string     // "R G B" for CSS variable
+  accent: string
+  accentRgb: string
   accentLightRgb: string
 }
 
 export const THEMES: Theme[] = [
-  { id: 'default',  name: 'Ocean Blue',   description: 'Classic blue — the default', accent: 'bg-blue-500',    accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
-  { id: 'midnight', name: 'Midnight',      description: 'Cool cyan on near-black',    accent: 'bg-cyan-400',    accentRgb: '34 211 238',  accentLightRgb: '103 232 249' },
-  { id: 'emerald',  name: 'Emerald',       description: 'Money green vibes',          accent: 'bg-emerald-500', accentRgb: '16 185 129',  accentLightRgb: '52 211 153' },
-  { id: 'purple',   name: 'Purple Haze',   description: 'Bold violet accent',         accent: 'bg-violet-500',  accentRgb: '139 92 246',  accentLightRgb: '167 139 250' },
-  { id: 'amber',    name: 'Amber',         description: 'Warm gold tones',            accent: 'bg-amber-500',   accentRgb: '245 158 11',  accentLightRgb: '251 191 36' },
-  { id: 'rose',     name: 'Rose',          description: 'Soft red/pink accent',       accent: 'bg-rose-500',    accentRgb: '244 63 94',   accentLightRgb: '251 113 133' },
-  { id: 'white',    name: 'Light Mode',    description: 'Clean white background',     accent: 'bg-slate-800',   accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
+  { id: 'default',  name: 'Ocean Blue',  description: 'Classic blue',      accent: 'bg-blue-500',    accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
+  { id: 'midnight', name: 'Midnight',    description: 'Cool cyan',          accent: 'bg-cyan-400',    accentRgb: '34 211 238',  accentLightRgb: '103 232 249' },
+  { id: 'emerald',  name: 'Emerald',     description: 'Money green',        accent: 'bg-emerald-500', accentRgb: '16 185 129',  accentLightRgb: '52 211 153' },
+  { id: 'purple',   name: 'Purple Haze', description: 'Bold violet',        accent: 'bg-violet-500',  accentRgb: '139 92 246',  accentLightRgb: '167 139 250' },
+  { id: 'amber',    name: 'Amber',       description: 'Warm gold',          accent: 'bg-amber-500',   accentRgb: '245 158 11',  accentLightRgb: '251 191 36' },
+  { id: 'rose',     name: 'Rose',        description: 'Soft red/pink',      accent: 'bg-rose-500',    accentRgb: '244 63 94',   accentLightRgb: '251 113 133' },
+  { id: 'white',    name: 'Light Mode',  description: 'Light background',   accent: 'bg-slate-400',   accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
 ]
 
+const ACCENT_THEMES = THEMES.filter(t => t.id !== 'white')
+
 interface ThemeContextType {
-  themeId: ThemeId
+  themeId: ThemeId       // computed: isDark ? accentId : 'white'
   theme: Theme
-  setTheme: (id: ThemeId) => void
+  isDark: boolean
+  accentId: ThemeId
+  setTheme: (id: ThemeId) => void   // legacy: 'white' = light, anything else = dark+accent
+  setDark: (dark: boolean) => void
+  setAccent: (id: ThemeId) => void
 }
 
-const defaultTheme = THEMES.find(t => t.id === 'white') ?? THEMES[0]
-const ThemeContext = createContext<ThemeContextType>({ themeId: 'white', theme: defaultTheme, setTheme: () => {} })
+const defaultTheme = THEMES[0]
+const ThemeContext = createContext<ThemeContextType>({
+  themeId: 'white', theme: THEMES.find(t => t.id === 'white')!, isDark: false,
+  accentId: 'default', setTheme: () => {}, setDark: () => {}, setAccent: () => {},
+})
+
+function applyToDOM(isDark: boolean, accentId: ThemeId) {
+  const accent = THEMES.find(t => t.id === accentId) ?? THEMES[0]
+  const root = document.documentElement
+  root.style.setProperty('--accent', accent.accentRgb)
+  root.style.setProperty('--accent-light', accent.accentLightRgb)
+  // data-theme controls dark/light CSS overrides in globals.css
+  // In light mode always use 'white'; in dark mode use the accent id
+  root.setAttribute('data-theme', isDark ? accentId : 'white')
+}
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeId, setThemeId] = useState<ThemeId>('white')
+  const [isDark, setIsDarkState] = useState(false)
+  const [accentId, setAccentIdState] = useState<ThemeId>('default')
 
   useEffect(() => {
-    const saved = localStorage.getItem('alphadesk-theme') as ThemeId | null
-    if (saved) applyTheme(saved)
+    const savedDark   = localStorage.getItem('alphadesk-dark') === 'true'
+    const savedAccent = (localStorage.getItem('alphadesk-accent') as ThemeId) || 'default'
+    setIsDarkState(savedDark)
+    setAccentIdState(savedAccent)
+    applyToDOM(savedDark, savedAccent)
   }, [])
 
-  function applyTheme(id: ThemeId) {
-    const theme = THEMES.find(t => t.id === id) ?? THEMES[0]
-    const root = document.documentElement
-
-    // Set CSS variables for accent colors
-    root.style.setProperty('--accent', theme.accentRgb)
-    root.style.setProperty('--accent-light', theme.accentLightRgb)
-
-    // Set data-theme for CSS class overrides (light mode etc)
-    root.setAttribute('data-theme', id)
-
-    setThemeId(id)
-    localStorage.setItem('alphadesk-theme', id)
+  const setDark = (dark: boolean) => {
+    setIsDarkState(dark)
+    localStorage.setItem('alphadesk-dark', String(dark))
+    applyToDOM(dark, accentId)
   }
 
+  const setAccent = (id: ThemeId) => {
+    if (id === 'white') return  // 'white' is not an accent, it's a mode
+    setAccentIdState(id)
+    localStorage.setItem('alphadesk-accent', id)
+    applyToDOM(isDark, id)
+  }
+
+  // Legacy: setTheme('white') = light mode; anything else = dark + set accent
+  const setTheme = (id: ThemeId) => {
+    if (id === 'white') {
+      setDark(false)
+    } else {
+      setAccent(id)
+      setDark(true)
+    }
+  }
+
+  const themeId: ThemeId = isDark ? accentId : 'white'
   const theme = THEMES.find(t => t.id === themeId) ?? THEMES[0]
 
   return (
-    <ThemeContext.Provider value={{ themeId, theme, setTheme: applyTheme }}>
+    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, setTheme, setDark, setAccent }}>
       {children}
     </ThemeContext.Provider>
   )
@@ -66,3 +98,5 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   return useContext(ThemeContext)
 }
+
+export { ACCENT_THEMES }

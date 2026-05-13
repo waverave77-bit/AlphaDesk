@@ -5,6 +5,8 @@ import { Users, Building2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -63,12 +65,13 @@ function formatDate(dateStr: string) {
 function InsiderTrades() {
   const [trades, setTrades] = useState<Trade[]>([])
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     fetch('/api/politicians')
       .then(r => r.json())
       .then(d => setTrades(d.trades ?? []))
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setLastUpdated(new Date()) })
   }, [])
 
   if (loading) {
@@ -146,7 +149,8 @@ function InsiderTrades() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-emerald-400" />
-          <h2 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">Recent Purchases</h2>
+          <h2 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money — often a bullish signal they believe the stock will rise." /></h2>
+          <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-xs text-gray-600">No recent purchases.</p>}
       </div>
@@ -155,7 +159,7 @@ function InsiderTrades() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-red-400" />
-          <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider">Recent Sales</h2>
+          <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares — worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
         </div>
         {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-xs text-gray-600">No recent sales.</p>}
       </div>
@@ -269,7 +273,7 @@ export default function InsidersPage() {
           <Users className="h-4 w-4 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Smart Money Tracker</h1>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling — all publicly reported to the government." /></h1>
           <p className="text-sm text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
         </div>
       </div>
@@ -286,23 +290,23 @@ export default function InsidersPage() {
       <div className="flex gap-1 p-1 bg-gray-900 rounded-lg w-fit border border-gray-800">
         <button
           onClick={() => setActiveTab('congress')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
             activeTab === 'congress'
               ? 'bg-blue-600 text-white shadow'
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Insider Trades
+          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians — required by law to be disclosed publicly within days of the transaction." />
         </button>
         <button
           onClick={() => setActiveTab('investors')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
             activeTab === 'investors'
               ? 'bg-blue-600 text-white shadow'
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Famous Investors
+          Famous Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio — pulled from their quarterly 13F filings with the SEC." />
         </button>
       </div>
 

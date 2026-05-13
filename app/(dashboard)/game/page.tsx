@@ -1,0 +1,416 @@
+'use client'
+import { useState, useEffect, useRef } from 'react'
+import { TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight, Clock, DollarSign, RefreshCw, X } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn, formatCurrency } from '@/lib/utils'
+import { useToast } from '@/hooks/use-toast'
+import SmartChart from '@/components/charts/SmartChart'
+
+interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
+interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
+interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean }
+
+const TABS = ['Portfolio', 'Trade', 'Leaderboard', 'History'] as const
+type Tab = typeof TABS[number]
+
+function gainColor(n: number) { return n >= 0 ? 'text-green-500' : 'text-red-500' }
+function gainBg(n: number) { return n >= 0 ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20' }
+
+export default function GamePage() {
+  const { toast } = useToast()
+  const [tab, setTab] = useState<Tab>('Portfolio')
+  const [portfolio, setPortfolio] = useState<any>(null)
+  const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([])
+  const [loading, setLoading] = useState(true)
+  const [lbLoading, setLbLoading] = useState(false)
+
+  // Trade form
+  const [tradeTicker, setTradeTicker] = useState('')
+  const [tradeShares, setTradeShares] = useState('')
+  const [tradeType, setTradeType] = useState<'BUY' | 'SELL'>('BUY')
+  const [tradeLoading, setTradeLoading] = useState(false)
+  const [preview, setPreview] = useState<{ price: number; total: number; companyName: string } | null>(null)
+  const [previewLoading, setPreviewLoading] = useState(false)
+  // Search
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<{ ticker: string; name: string }[]>([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
+
+  const fetchPortfolio = async () => {
+    setLoading(true)
+    const r = await fetch('/api/virtual')
+    const d = await r.json()
+    setPortfolio(d)
+    setLoading(false)
+  }
+
+  const fetchLeaderboard = async () => {
+    setLbLoading(true)
+    const r = await fetch('/api/virtual/leaderboard')
+    const d = await r.json()
+    setLeaderboard(d.board || [])
+    setLbLoading(false)
+  }
+
+  useEffect(() => { fetchPortfolio() }, [])
+  useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
+
+  // Search debounce
+  useEffect(() => {
+    if (!searchQuery || searchQuery.length < 2) { setSearchResults([]); return }
+    const t = setTimeout(async () => {
+      setSearchLoading(true)
+      try {
+        const r = await fetch(`/api/stock/search?q=${encodeURIComponent(searchQuery)}`)
+        const d = await r.json()
+        setSearchResults((d.results || []).slice(0, 6))
+      } catch { setSearchResults([]) }
+      setSearchLoading(false)
+    }, 350)
+    return () => clearTimeout(t)
+  }, [searchQuery])
+
+  const selectStock = (ticker: string, name: string) => {
+    setTradeTicker(ticker)
+    setSearchQuery('')
+    setSearchResults([])
+    setShowSearch(false)
+  }
+
+  // Live price preview
+  useEffect(() => {
+    if (!tradeTicker || tradeTicker.length < 1) { setPreview(null); return }
+    const t = setTimeout(async () => {
+      setPreviewLoading(true)
+      try {
+        const r = await fetch(`/api/stock/${tradeTicker.toUpperCase()}`)
+        const d = await r.json()
+        if (d?.quote?.price) {
+          setPreview({ price: d.quote.price, total: d.quote.price * (parseFloat(tradeShares) || 1), companyName: d.quote.companyName })
+        } else setPreview(null)
+      } catch { setPreview(null) }
+      setPreviewLoading(false)
+    }, 600)
+    return () => clearTimeout(t)
+  }, [tradeTicker])
+
+  useEffect(() => {
+    if (preview) setPreview(p => p ? { ...p, total: p.price * (parseFloat(tradeShares) || 1) } : null)
+  }, [tradeShares])
+
+  const executeTrade = async () => {
+    if (!tradeTicker || !tradeShares) return
+    setTradeLoading(true)
+    try {
+      const r = await fetch('/api/virtual/trade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker: tradeTicker.toUpperCase(), shares: parseFloat(tradeShares), type: tradeType }),
+      })
+      const d = await r.json()
+      if (!r.ok) throw new Error(d.error)
+      toast({ title: `${tradeType} executed!`, description: `${tradeShares} shares of ${tradeTicker.toUpperCase()} @ ${formatCurrency(d.price)}` })
+      setTradeTicker(''); setTradeShares(''); setPreview(null)
+      await fetchPortfolio()
+      setTab('Portfolio')
+    } catch (e: any) {
+      toast({ title: 'Trade failed', description: e.message, variant: 'destructive' })
+    }
+    setTradeLoading(false)
+  }
+
+  const daysLeft = portfolio?.resetAt ? Math.max(0, Math.ceil((new Date(portfolio.resetAt).getTime() - Date.now()) / 86400000)) : 30
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-yellow-400" />
+          $100K Challenge
+        </h1>
+        <p className="text-sm text-gray-400 mt-1">Trade real stocks with $100,000 of virtual money. Top portfolio wins each month.</p>
+      </div>
+
+      {/* Stats bar */}
+      {loading ? <Skeleton className="h-24 w-full" /> : portfolio && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: 'Portfolio Value', value: formatCurrency(portfolio.totalValue), sub: `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%`, color: gainColor(portfolio.totalGainLoss) },
+            { label: 'Cash Available', value: formatCurrency(portfolio.cash), sub: `${((portfolio.cash / 100000) * 100).toFixed(1)}% of capital`, color: 'text-blue-400' },
+            { label: 'Total P&L', value: `${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)}`, sub: 'vs $100,000 start', color: gainColor(portfolio.totalGainLoss) },
+            { label: 'Season Resets', value: `${daysLeft} days`, sub: `Season ${portfolio.season}`, color: 'text-yellow-400' },
+          ].map(({ label, value, sub, color }) => (
+            <Card key={label}>
+              <CardContent className="p-4">
+                <p className="text-xs text-gray-500 mb-1">{label}</p>
+                <p className={cn('text-lg font-bold', color)}>{value}</p>
+                <p className="text-xs text-gray-500">{sub}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-gray-800">
+        {TABS.map(t => (
+          <button key={t} onClick={() => setTab(t)}
+            className={cn('px-4 py-2 text-sm font-medium border-b-2 transition-colors -mb-px',
+              tab === t ? 'border-blue-500 text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-300')}>
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Portfolio Tab */}
+      {tab === 'Portfolio' && (
+        <div className="space-y-4">
+          {loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.holdings?.length ? (
+            <Card>
+              <CardContent className="p-10 text-center">
+                <DollarSign className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+                <p className="text-gray-400">No positions yet</p>
+                <p className="text-gray-600 text-sm mt-1">Go to Trade tab to buy your first stock</p>
+                <Button className="mt-4 bg-blue-600 hover:bg-blue-700" onClick={() => setTab('Trade')}>Start Trading</Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {portfolio.holdings.map((h: Holding) => (
+                <Card key={h.ticker} className={cn('border', gainBg(h.gainLoss))}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-white">{h.ticker}</span>
+                          <span className="text-xs text-gray-400">{h.companyName}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">{h.shares} shares · avg cost {formatCurrency(h.avgCost)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-white">{formatCurrency(h.currentValue)}</p>
+                        <p className={cn('text-sm font-medium', gainColor(h.gainLoss))}>
+                          {h.gainLoss >= 0 ? '+' : ''}{formatCurrency(h.gainLoss)} ({h.gainLossPct >= 0 ? '+' : ''}{h.gainLossPct.toFixed(2)}%)
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <Button size="sm" variant="outline" className="text-xs h-7" onClick={() => { setTradeTicker(h.ticker); setTradeType('BUY'); setTab('Trade') }}>Buy More</Button>
+                      <Button size="sm" variant="outline" className="text-xs h-7 text-red-400 border-red-500/30" onClick={() => { setTradeTicker(h.ticker); setTradeType('SELL'); setTab('Trade') }}>Sell</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              <Button variant="outline" size="sm" className="w-full" onClick={fetchPortfolio}>
+                <RefreshCw className="h-3 w-3 mr-2" /> Refresh Prices
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Trade Tab */}
+      {tab === 'Trade' && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Left: trade form */}
+            <Card>
+              <CardHeader className="pb-3"><CardTitle className="text-sm text-gray-400">Execute Trade</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                {/* BUY / SELL toggle */}
+                <div className="flex rounded-lg overflow-hidden border border-gray-700">
+                  <button onClick={() => setTradeType('BUY')} className={cn('flex-1 py-2 text-sm font-semibold transition-colors', tradeType === 'BUY' ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800')}>BUY</button>
+                  <button onClick={() => setTradeType('SELL')} className={cn('flex-1 py-2 text-sm font-semibold transition-colors', tradeType === 'SELL' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-800')}>SELL</button>
+                </div>
+
+                {/* Search by name or ticker */}
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Search by company name or ticker</label>
+                  <div className="relative" ref={searchRef}>
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                    <input
+                      value={searchQuery}
+                      onChange={e => { setSearchQuery(e.target.value); setShowSearch(true) }}
+                      onFocus={() => setShowSearch(true)}
+                      placeholder="e.g. Apple or AAPL"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    />
+                    {searchLoading && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 animate-pulse">...</span>}
+                    {showSearch && searchResults.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                        {searchResults.map(r => (
+                          <button key={r.ticker} onClick={() => selectStock(r.ticker, r.name)}
+                            className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-800 transition-colors text-left">
+                            <span className="text-xs font-bold text-blue-400 w-16 shrink-0">{r.ticker}</span>
+                            <span className="text-sm text-gray-300 truncate">{r.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Selected ticker display */}
+                {tradeTicker && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 flex items-center justify-between">
+                      <span className="text-blue-400 font-bold text-sm">{tradeTicker}</span>
+                      {preview && <span className="text-xs text-gray-400">{preview.companyName}</span>}
+                    </div>
+                    <button onClick={() => { setTradeTicker(''); setPreview(null) }} className="text-gray-500 hover:text-gray-300 p-1">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Or type ticker directly */}
+                {!tradeTicker && (
+                  <div>
+                    <label className="text-xs text-gray-500 mb-1 block">Or type ticker directly</label>
+                    <input
+                      value={tradeTicker}
+                      onChange={e => setTradeTicker(e.target.value.toUpperCase())}
+                      placeholder="e.g. MSFT"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                )}
+
+                {/* Live price */}
+                {previewLoading && <p className="text-xs text-gray-500 animate-pulse">Fetching live price...</p>}
+                {preview && !previewLoading && (
+                  <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sm">
+                    <p className="text-blue-400 text-xl font-bold">{formatCurrency(preview.price)} <span className="text-xs text-gray-500">per share</span></p>
+                  </div>
+                )}
+
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Number of Shares</label>
+                  <input
+                    value={tradeShares}
+                    onChange={e => setTradeShares(e.target.value)}
+                    type="number" min="0.01" step="0.01" placeholder="e.g. 10"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                {preview && tradeShares && (
+                  <div className="p-3 rounded-lg bg-gray-800 border border-gray-700 space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Estimated Total</span>
+                      <span className="text-white font-bold">{formatCurrency(preview.price * parseFloat(tradeShares))}</span>
+                    </div>
+                    {tradeType === 'BUY' && portfolio && (
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-500">Cash after trade</span>
+                        <span className={portfolio.cash - (preview.price * parseFloat(tradeShares)) < 0 ? 'text-red-400' : 'text-green-400'}>
+                          {formatCurrency(portfolio.cash - (preview.price * parseFloat(tradeShares)))}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <Button onClick={executeTrade} disabled={tradeLoading || !tradeTicker || !tradeShares}
+                  className={cn('w-full font-semibold', tradeType === 'BUY' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700')}>
+                  {tradeLoading ? 'Processing...' : `${tradeType} ${tradeShares || '0'} shares${preview ? ` · ${formatCurrency(preview.price * (parseFloat(tradeShares) || 0))}` : ''}`}
+                </Button>
+                <p className="text-xs text-gray-600 text-center">Real-time prices · Virtual money only</p>
+              </CardContent>
+            </Card>
+
+            {/* Right: chart */}
+            {tradeTicker ? (
+              <Card className="overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-gray-400">{tradeTicker} — Price Chart</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <SmartChart ticker={tradeTicker} height={420} />
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardContent className="p-8 flex flex-col items-center justify-center h-full text-center">
+                  <TrendingUp className="h-12 w-12 text-gray-700 mb-3" />
+                  <p className="text-gray-500 text-sm">Search for a stock to see its chart</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Leaderboard Tab */}
+      {tab === 'Leaderboard' && (
+        <div className="space-y-2">
+          {lbLoading ? <Skeleton className="h-48 w-full" /> : leaderboard.length === 0 ? (
+            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No players yet — be the first!</p></CardContent></Card>
+          ) : (
+            <>
+              <div className="flex justify-between text-xs text-gray-500 px-4 py-2">
+                <span>Player</span>
+                <span>Portfolio Value</span>
+              </div>
+              {leaderboard.map((p) => (
+                <Card key={p.rank} className={cn('border', p.isMe ? 'border-blue-500/40 bg-blue-500/5' : '')}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <span className={cn('text-lg font-bold w-8 text-center',
+                        p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
+                        {p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`}
+                      </span>
+                      <div className="flex-1">
+                        <p className="font-medium text-white">{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</p>
+                        <p className={cn('text-xs', gainColor(p.gainLoss))}>
+                          {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)} ({p.gainLossPct >= 0 ? '+' : ''}{p.gainLossPct.toFixed(2)}%)
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* History Tab */}
+      {tab === 'History' && (
+        <div className="space-y-2">
+          {loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.trades?.length ? (
+            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No trades yet</p></CardContent></Card>
+          ) : (
+            portfolio.trades.map((t: Trade) => (
+              <Card key={t.id}>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className={cn('h-8 w-8 rounded-full flex items-center justify-center shrink-0', t.type === 'BUY' ? 'bg-green-500/20' : 'bg-red-500/20')}>
+                    {t.type === 'BUY' ? <ArrowUpRight className="h-4 w-4 text-green-400" /> : <ArrowDownRight className="h-4 w-4 text-red-400" />}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-white">{t.type} {t.shares} shares of {t.ticker}</p>
+                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <Clock className="h-3 w-3" />{new Date(t.executedAt).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium text-white">{formatCurrency(t.price * t.shares)}</p>
+                    <p className="text-xs text-gray-500">@ {formatCurrency(t.price)}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

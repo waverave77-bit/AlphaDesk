@@ -4,6 +4,8 @@ import { TrendingUp, TrendingDown, DollarSign, BarChart2, Globe } from 'lucide-r
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
+import InfoTooltip from '@/components/InfoTooltip'
+import LastUpdated from '@/components/LastUpdated'
 
 interface MacroData {
   dxy: { price: number; change: number; changePercent: number; history: { date: string; close: number }[] } | null
@@ -15,9 +17,10 @@ interface MacroData {
 export default function MacroPage() {
   const [data, setData] = useState<MacroData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
-    fetch('/api/macro').then(r => r.json()).then(setData).finally(() => setLoading(false))
+    fetch('/api/macro').then(r => r.json()).then(d => { setData(d); setLastUpdated(new Date()) }).finally(() => setLoading(false))
   }, [])
 
   const dxy = data?.dxy
@@ -26,8 +29,9 @@ export default function MacroPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Macro Dashboard</h1>
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">Macro Dashboard <InfoTooltip text="Macroeconomics looks at the big picture — the dollar, money supply, interest rates — and how they affect the entire stock market." /></h1>
         <p className="text-sm text-gray-400 mt-1">US Dollar Index, money supply, and macro impact on equities</p>
+        <LastUpdated time={lastUpdated} />
       </div>
 
       {/* DXY */}
@@ -36,7 +40,7 @@ export default function MacroPage() {
           <CardContent className="p-5">
             <div className="flex items-center gap-2 mb-3">
               <DollarSign className="h-4 w-4 text-blue-400" />
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">US Dollar Index (DXY)</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">US Dollar Index (DXY) <InfoTooltip text="The DXY measures how strong the US dollar is against 6 major foreign currencies. A rising DXY generally pressures stocks, especially global companies." /></p>
             </div>
             {loading ? <Skeleton className="h-16 w-full" /> : dxy ? (
               <div>
@@ -58,7 +62,7 @@ export default function MacroPage() {
           <CardContent className="p-5">
             <div className="flex items-center gap-2 mb-3">
               <Globe className="h-4 w-4 text-yellow-400" />
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Impact on Stocks</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">Impact on Stocks <InfoTooltip text="How today's dollar movement tends to affect equity markets. A stronger dollar is generally bearish for stocks; a weaker dollar is bullish." /></p>
             </div>
             {loading ? <Skeleton className="h-16 w-full" /> : (
               <div>
@@ -109,7 +113,7 @@ export default function MacroPage() {
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-4">
             <BarChart2 className="h-4 w-4 text-purple-400" />
-            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">M2 Money Supply</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">M2 Money Supply <InfoTooltip text="M2 is the total amount of money in the US economy — cash, bank deposits, and savings. When it grows, more money chases stocks (bullish). When it shrinks, markets often fall." /></p>
           </div>
           {loading ? <Skeleton className="h-40 w-full" /> : data?.m2 && data.m2.length > 0 ? (
             <div>

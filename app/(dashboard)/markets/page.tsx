@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { Activity } from 'lucide-react'
+import LastUpdated from '@/components/LastUpdated'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import InfoTooltip from '@/components/InfoTooltip'
 
 // ─── Fear & Greed ─────────────────────────────────────────────────────────────
 
@@ -57,12 +59,13 @@ function getFngTradeNote(value: number): string {
 function FearGreedSection() {
   const [data, setData] = useState<FngDataPoint[]>([])
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     fetch('/api/feargreed')
       .then((r) => r.json())
       .then((d: FngResponse) => {
-        if (d?.data) setData(d.data)
+        if (d?.data) { setData(d.data); setLastUpdated(new Date()) }
       })
       .catch(() => {})
       .finally(() => setLoading(false))
@@ -73,8 +76,8 @@ function FearGreedSection() {
   const history = data.slice(1)
 
   return (
-    <section className="mb-10">
-      <h2 className="text-lg font-semibold text-white mb-4">Fear &amp; Greed Index</h2>
+    <section>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Fear &amp; Greed Index <InfoTooltip text="A score from 0–100 measuring whether investors are feeling fearful (selling) or greedy (buying). Extreme fear can be a buying opportunity; extreme greed means caution." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-6">
           {loading ? (
@@ -206,20 +209,21 @@ function getSectorTextColor(pct: number): string {
 function SectorHeatmapSection() {
   const [sectors, setSectors] = useState<SectorData[]>([])
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     fetch('/api/sectorheatmap')
       .then((r) => r.json())
       .then((d) => {
-        if (Array.isArray(d)) setSectors(d)
+        if (Array.isArray(d)) { setSectors(d); setLastUpdated(new Date()) }
       })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
   return (
-    <section className="mb-10">
-      <h2 className="text-lg font-semibold text-white mb-4">Sector Heat Map</h2>
+    <section>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Sector Heat Map <InfoTooltip text="Shows how each sector of the stock market performed today. Green = up, Red = down. Darker color = bigger move." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {Array.from({ length: 11 }).map((_, i) => (
@@ -323,7 +327,7 @@ function EconCalendarSection() {
 
   return (
     <section>
-      <h2 className="text-lg font-semibold text-white mb-4">Economic Calendar 2026</h2>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Scheduled events that move markets — like jobs reports, inflation data (CPI), and Fed interest rate decisions. High-impact events can cause big swings in stocks." /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-0">
           {upcoming.length === 0 ? (
@@ -383,26 +387,123 @@ function EconCalendarSection() {
   )
 }
 
+// ─── Market News ──────────────────────────────────────────────────────────────
+
+interface NewsArticle {
+  title: string
+  link: string
+  pubDate: string
+  source: string
+}
+
+function relativeTime(dateStr: string): string {
+  if (!dateStr) return ''
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  return `${days}d ago`
+}
+
+function MarketNewsSection() {
+  const [articles, setArticles] = useState<NewsArticle[]>([])
+  const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+
+  useEffect(() => {
+    fetch('/api/news/market')
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d?.articles)) { setArticles(d.articles.slice(0, 20)); setLastUpdated(new Date()) }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  return (
+    <section>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+        Live Market News{' '}
+        <InfoTooltip text="Latest financial news aggregated from Bloomberg, Reuters, MarketWatch and more — refreshes every 5 minutes." />
+        <LastUpdated time={lastUpdated} className="ml-2" />
+      </h2>
+      <Card className="bg-gray-900 border-gray-800">
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="divide-y divide-gray-800">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="px-5 py-4 flex items-center gap-4">
+                  <Skeleton className="h-4 flex-1 bg-gray-800" />
+                  <Skeleton className="h-4 w-20 bg-gray-800" />
+                </div>
+              ))}
+            </div>
+          ) : articles.length === 0 ? (
+            <div className="py-12 text-center">
+              <p className="text-gray-500 text-sm">Unable to load market news.</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-800">
+              {articles.map((item, i) => (
+                <a
+                  key={i}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start justify-between px-5 py-3.5 hover:bg-gray-800/30 transition-colors gap-4 group"
+                >
+                  <p className="text-sm text-gray-200 group-hover:text-white transition-colors leading-snug line-clamp-2 flex-1 min-w-0">
+                    {item.title}
+                  </p>
+                  <div className="flex-shrink-0 flex flex-col items-end gap-1 pt-0.5">
+                    <Badge className="bg-gray-800 text-gray-400 border-gray-700 text-xs whitespace-nowrap">
+                      {item.source}
+                    </Badge>
+                    <span className="text-xs text-gray-600 whitespace-nowrap">
+                      {relativeTime(item.pubDate)}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </section>
+  )
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function MarketsPage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-8">
-        <div className="h-10 w-10 rounded-lg bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-          <Activity className="h-5 w-5 text-blue-400" />
+        <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-lg bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
+          <Activity className="h-5 w-5 lg:h-6 lg:w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Markets Overview</h1>
+          <h1 className="text-2xl lg:text-3xl font-bold text-white">Markets Overview</h1>
           <p className="text-sm text-gray-500">
             Sentiment, sector performance, and economic events
           </p>
         </div>
       </div>
 
-      <FearGreedSection />
-      <SectorHeatmapSection />
-      <EconCalendarSection />
+      {/* Top row: Fear & Greed + Sector Heatmap side by side on XL */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-10 items-start">
+        <div><FearGreedSection /></div>
+        <div><SectorHeatmapSection /></div>
+      </div>
+
+      {/* Bottom row: Econ Calendar + News side by side on XL */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-10 items-start">
+        <div><EconCalendarSection /></div>
+        <div><MarketNewsSection /></div>
+      </div>
     </div>
   )
 }

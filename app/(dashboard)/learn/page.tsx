@@ -109,7 +109,7 @@ export default function LearnPage() {
   }, [search, activeCategory])
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto">
+    <div className="space-y-6 max-w-3xl lg:max-w-none mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-9 w-9 rounded-lg bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
@@ -154,7 +154,7 @@ export default function LearnPage() {
       <p className="text-sm text-gray-500">{filtered.length} terms</p>
 
       {/* Terms list */}
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
         {filtered.length === 0 && (
           <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
         )}

@@ -150,6 +150,7 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
     let marketCap: number | null = null
 
     let analystResult: any = null
+    const overrides: { change?: number; changePercent?: number } = {}
     try {
       const summaryData = await httpGetSummary(
         upper,
@@ -163,17 +164,34 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
       beta = result.summaryDetail?.beta?.raw ?? null
       dividendYield = result.summaryDetail?.dividendYield?.raw ?? null
       marketCap = result.price?.marketCap?.raw ?? null
+
+      // quoteSummary price module is the most authoritative source for today's change
+      // (same data Yahoo Finance website uses) — override chart-based values if available
+      const qsPrice = result.price ?? {}
+      if (qsPrice.regularMarketChange?.raw != null) {
+        // Use quoteSummary price module values
+        const qsChange: number = qsPrice.regularMarketChange.raw
+        const qsChangePercent: number = qsPrice.regularMarketChangePercent?.raw
+          ? qsPrice.regularMarketChangePercent.raw * 100
+          : (qsChange / (price - qsChange)) * 100
+        // Re-assign the outer variables so return block uses them
+        Object.assign(overrides, { change: qsChange, changePercent: qsChangePercent })
+      }
+
       analystResult = result
     } catch {
       // fundamentals unavailable — continue with chart data only
     }
     _lastAnalystResult.set(upper, analystResult)
 
+    const finalChange = overrides.change ?? change
+    const finalChangePercent = overrides.changePercent ?? changePercent
+
     return {
       ticker: upper,
       price,
-      change,
-      changePercent,
+      change: finalChange,
+      changePercent: finalChangePercent,
       volume: meta.regularMarketVolume ?? 0,
       marketCap,
       peRatio,

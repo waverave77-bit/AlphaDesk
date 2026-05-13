@@ -13,9 +13,11 @@ model User {
   password      String
   name          String?
   createdAt     DateTime      @default(now())
-  holdings      Holding[]
-  watchlistItems WatchlistItem[]
-  alerts        PriceAlert[]
+  holdings            Holding[]
+  watchlistItems      WatchlistItem[]
+  alerts              PriceAlert[]
+  virtualPortfolio    VirtualPortfolio?
+  virtualSeasonRecord VirtualSeasonRecord[]
 }
 
 model Holding {
@@ -58,4 +60,52 @@ model PriceAlert {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model VirtualPortfolio {
+  id         String           @id @default(cuid())
+  userId     String           @unique
+  cash       Float            @default(100000)
+  totalValue Float            @default(100000)
+  season     Int              @default(1)
+  resetAt    DateTime
+  createdAt  DateTime         @default(now())
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  holdings   VirtualHolding[]
+  trades     VirtualTrade[]
+}
+
+model VirtualHolding {
+  id          String           @id @default(cuid())
+  portfolioId String
+  ticker      String
+  companyName String
+  shares      Float
+  avgCost     Float
+  portfolio   VirtualPortfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, ticker])
+}
+
+model VirtualTrade {
+  id          String           @id @default(cuid())
+  portfolioId String
+  ticker      String
+  shares      Float
+  price       Float
+  type        String           // BUY | SELL
+  executedAt  DateTime         @default(now())
+  portfolio   VirtualPortfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model VirtualSeasonRecord {
+  id         String   @id @default(cuid())
+  userId     String
+  season     Int
+  finalValue Float
+  rank       Int?
+  endedAt    DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, season])
 }

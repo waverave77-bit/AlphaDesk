@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { analyzeStock, analyzePortfolio } from '@/lib/claude'
+import { ensembleAnalyzeStock, ensembleAnalyzePortfolio } from '@/lib/ai-ensemble'
+
+// Vercel Pro allows up to 300s — Hobby is capped at 10s regardless
+export const maxDuration = 60
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
@@ -9,16 +12,16 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json()
-    const { type } = body
+    const { type, data } = body
 
     if (type === 'stock') {
-      const analysis = await analyzeStock(body.data)
-      return NextResponse.json({ analysis })
+      const result = await ensembleAnalyzeStock(data)
+      return NextResponse.json(result)
     }
 
     if (type === 'portfolio') {
-      const analysis = await analyzePortfolio(body.data)
-      return NextResponse.json({ analysis })
+      const result = await ensembleAnalyzePortfolio(data)
+      return NextResponse.json(result)
     }
 
     return NextResponse.json({ error: 'Invalid analysis type' }, { status: 400 })

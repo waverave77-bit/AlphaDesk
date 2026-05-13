@@ -2,9 +2,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown } from 'lucide-react'
+import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/components/ThemeProvider'
 
 const primaryNav = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -21,6 +22,7 @@ const moreNav = [
   { href: '/macro',       label: 'Macro' },
   { href: '/hedgefunds',  label: 'Hedge Funds' },
   { href: '/quant',       label: 'Quant Strategy' },
+  { href: '/game',        label: '🏆 $100K Challenge' },
 ]
 
 export default function TopNav() {
@@ -28,6 +30,9 @@ export default function TopNav() {
   const { data: session } = useSession()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
+  const { themeId, setTheme } = useTheme()
+  const isDark = themeId !== 'white'
+  const toggleDark = () => setTheme(isDark ? 'white' : 'default')
 
   const initials = session?.user?.name
     ? session.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
@@ -40,7 +45,12 @@ export default function TopNav() {
 
   return (
     <>
-      <header className="h-14 bg-white border-b border-slate-200 flex items-center px-6 gap-0 flex-shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sticky top-0 z-40">
+      <header className={cn(
+        'h-14 lg:h-16 flex items-center px-6 lg:px-10 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
+        isDark
+          ? 'bg-gray-900 border-b border-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
+          : 'bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
+      )}>
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2 mr-8 shrink-0">
           <div
@@ -49,7 +59,7 @@ export default function TopNav() {
           >
             <TrendingUp className="h-3.5 w-3.5 text-white" />
           </div>
-          <span className="text-[15px] font-700 text-slate-900 tracking-tight font-bold">Zains Game</span>
+          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Zains Game</span>
         </Link>
 
         {/* Primary nav — desktop */}
@@ -63,8 +73,8 @@ export default function TopNav() {
                 className={cn(
                   'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                   active
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    ? 'bg-blue-600/10 text-blue-500'
+                    : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 )}
               >
                 {label}
@@ -85,14 +95,14 @@ export default function TopNav() {
               More <ChevronDown className="h-3 w-3" />
             </button>
             {moreOpen && (
-              <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
+              <div className={cn('absolute top-full left-0 mt-1 w-44 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
                 {moreNav.map(({ href, label }) => (
                   <Link
                     key={href}
                     href={href}
                     className={cn(
                       'block px-4 py-2 text-sm transition-colors',
-                      isActive(href) ? 'text-blue-600 bg-blue-50' : 'text-slate-700 hover:bg-slate-50'
+                      isActive(href) ? 'text-blue-500 bg-blue-600/10' : isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-slate-700 hover:bg-slate-50'
                     )}
                   >
                     {label}
@@ -105,9 +115,18 @@ export default function TopNav() {
 
         {/* Right side */}
         <div className="ml-auto flex items-center gap-3">
+          {/* Dark / Light toggle */}
+          <button
+            onClick={toggleDark}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            className={cn('h-8 w-8 rounded-lg flex items-center justify-center transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700')}
+          >
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+
           <Link
             href="/settings"
-            className="hidden md:flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+            className={cn('hidden md:flex items-center gap-1.5 text-sm transition-colors', isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-700')}
           >
             <Settings className="h-4 w-4" />
             <span>Settings</span>
@@ -135,9 +154,9 @@ export default function TopNav() {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="fixed inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <aside className="fixed right-0 top-0 h-full w-72 bg-white border-l border-slate-200 flex flex-col shadow-xl">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-              <span className="font-semibold text-slate-900">Menu</span>
+          <aside className={cn('fixed right-0 top-0 h-full w-72 flex flex-col shadow-xl border-l', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
+            <div className={cn('flex items-center justify-between px-5 py-4 border-b', isDark ? 'border-gray-800' : 'border-slate-100')}>
+              <span className={cn('font-semibold', isDark ? 'text-white' : 'text-slate-900')}>Menu</span>
               <button onClick={() => setMobileOpen(false)} className="p-1 rounded-lg hover:bg-slate-100">
                 <X className="h-5 w-5 text-slate-500" />
               </button>
@@ -153,7 +172,7 @@ export default function TopNav() {
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                      active ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
                     {label}
@@ -162,17 +181,24 @@ export default function TopNav() {
               })}
             </nav>
 
-            <div className="border-t border-slate-100 p-4 space-y-1">
+            <div className={cn('border-t p-4 space-y-1', isDark ? 'border-gray-800' : 'border-slate-100')}>
+              {[
+                { onClick: toggleDark, icon: isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />, label: isDark ? 'Light Mode' : 'Dark Mode' },
+              ].map(({ onClick, icon, label }) => (
+                <button key={label} onClick={onClick} className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}>
+                  {icon} {label}
+                </button>
+              ))}
               <Link
                 href="/settings"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100"
+                className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
               >
                 <Settings className="h-4 w-4" /> Settings
               </Link>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
-                className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100"
+                className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
               >
                 <LogOut className="h-4 w-4" /> Sign Out
               </button>
