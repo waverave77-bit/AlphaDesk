@@ -11,7 +11,7 @@ interface SearchResult {
   type: string
 }
 
-export default function StockSearch({ placeholder = 'Search ticker or company...' }: { placeholder?: string }) {
+export default function StockSearch({ placeholder = 'Search ticker or company...', className }: { placeholder?: string; className?: string }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
@@ -54,15 +54,15 @@ export default function StockSearch({ placeholder = 'Search ticker or company...
   }
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-xl">
+    <div ref={containerRef} className="relative w-full">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-        {loading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 animate-spin" />}
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+        {loading && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 animate-spin" />}
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="pl-9 pr-9 bg-gray-800 border-gray-700 text-gray-100"
+          className={`pl-12 pr-10 h-14 text-base bg-gray-800 border-gray-700 text-gray-100 ${className ?? ''}`}
           onFocus={() => results.length && setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && query.trim()) {
@@ -77,16 +77,16 @@ export default function StockSearch({ placeholder = 'Search ticker or company...
           {results.map((r) => (
             <button
               key={r.ticker}
-              className="flex items-center justify-between w-full px-4 py-3 hover:bg-gray-800 transition-colors text-left"
+              className="flex items-center justify-between w-full px-5 py-3.5 hover:bg-gray-800 transition-colors text-left"
               onClick={() => navigate(r.ticker)}
             >
               <div>
-                <span className="font-semibold text-white text-sm">{r.ticker}</span>
-                <span className="ml-2 text-gray-400 text-xs truncate max-w-xs">{r.name}</span>
+                <span className="font-bold text-white text-base">{r.ticker}</span>
+                <span className="ml-2 text-gray-400 text-sm truncate max-w-xs">{r.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500">{r.exchange}</span>
-                <span className="text-xs bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded">{r.type}</span>
+                <span className="text-sm text-gray-500">{r.exchange}</span>
+                <span className="text-sm bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{r.type}</span>
               </div>
             </button>
           ))}

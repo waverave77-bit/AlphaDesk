@@ -62,15 +62,15 @@ export default function ResearchPage() {
         <p className="text-base text-gray-400 mt-1">Search any stock or ETF for live data, analyst ratings, and more</p>
       </div>
 
-      <div className="flex flex-col items-center py-12 space-y-5">
-        <div className="flex items-center gap-4 mb-2">
+      <div className="flex flex-col items-center py-12 space-y-5 text-center">
+        <div className="flex items-center gap-4">
           <div className="h-16 w-16 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
             <Search className="h-8 w-8 text-blue-400" />
           </div>
           <h2 className="text-3xl font-bold text-white">Search Any Stock</h2>
         </div>
-        <div className="w-full max-w-3xl">
-          <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" className="h-14 text-base" />
+        <div className="w-full max-w-3xl mx-auto">
+          <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
         </div>
         <p className="text-sm text-gray-500">Press Enter to jump directly to a ticker</p>
       </div>
