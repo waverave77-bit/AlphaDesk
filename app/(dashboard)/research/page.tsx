@@ -43,6 +43,7 @@ function MoverRow({ m }: { m: Mover }) {
 }
 
 export default function ResearchPage() {
+  const router = useRouter()
   const [gainers, setGainers] = useState<Mover[]>([])
   const [losers, setLosers] = useState<Mover[]>([])
   const [loading, setLoading] = useState(true)
@@ -57,22 +58,36 @@ export default function ResearchPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-white">Stock Research</h1>
-        <p className="text-base text-gray-400 mt-1">Search any stock or ETF for live data, analyst ratings, and more</p>
-      </div>
 
-      <div className="flex flex-col items-center py-12 space-y-5 text-center">
-        <div className="flex items-center gap-4">
-          <div className="h-16 w-16 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-            <Search className="h-8 w-8 text-blue-400" />
+      {/* Hero search — fills the viewport */}
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8">
+        {/* Icon + heading */}
+        <div className="space-y-4">
+          <div className="h-24 w-24 rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center mx-auto">
+            <Search className="h-12 w-12 text-blue-400" />
           </div>
-          <h2 className="text-3xl font-bold text-white">Search Any Stock</h2>
+          <h1 className="text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
+          <p className="text-xl text-gray-400">Search any stock or ETF for live data, analyst ratings, and more</p>
         </div>
+
+        {/* Search bar */}
         <div className="w-full max-w-3xl mx-auto">
           <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
         </div>
-        <p className="text-sm text-gray-500">Press Enter to jump directly to a ticker</p>
+
+        {/* Popular tickers */}
+        <div className="flex items-center gap-2 flex-wrap justify-center">
+          <span className="text-sm text-gray-600">Popular:</span>
+          {POPULAR.map(t => (
+            <button
+              key={t}
+              onClick={() => router.push(`/research/${t}`)}
+              className="px-3 py-1.5 rounded-full bg-gray-800 hover:bg-blue-600/20 hover:text-blue-400 text-sm text-gray-400 border border-gray-700 hover:border-blue-500/40 transition-all"
+            >
+              {t}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Top Movers */}

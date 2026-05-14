@@ -56,13 +56,13 @@ export default function StockSearch({ placeholder = 'Search ticker or company...
   return (
     <div ref={containerRef} className="relative w-full">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-        {loading && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 animate-spin" />}
+        <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-500" />
+        {loading && <Loader2 className="absolute right-5 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-500 animate-spin" />}
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className={`pl-12 pr-10 h-14 text-base bg-gray-800 border-gray-700 text-gray-100 ${className ?? ''}`}
+          className={`pl-14 pr-10 h-16 text-lg bg-gray-800 border-gray-700 text-gray-100 rounded-2xl ${className ?? ''}`}
           onFocus={() => results.length && setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && query.trim()) {
