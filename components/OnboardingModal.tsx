@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const STORAGE_KEY = 'zg_onboarded'
+const STORAGE_KEY = 'zg_onboarded_v2'
 
 const EXPERIENCE_LEVELS = [
   { id: 'beginner', label: 'Complete Beginner', desc: "I've never invested before", emoji: '🌱' },
