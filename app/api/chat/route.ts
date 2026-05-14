@@ -3,57 +3,86 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-async function fetchNewsHeadlines(): Promise<string> {
-  const feeds = [
-    'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US',
-    'https://feeds.finance.yahoo.com/rss/2.0/headline?s=AAPL,TSLA,NVDA,MSFT,AMZN&region=US&lang=en-US',
-    'https://feeds.finance.yahoo.com/rss/2.0/headline?s=SPY,QQQ,GLD,USO&region=US&lang=en-US',
-    'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114', // CNBC markets
-    'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664',  // CNBC world economy
-  ]
+function parseTitles(xml: string): string[] {
+  const cdata = [...xml.matchAll(/<title><!\[CDATA\[(.+?)\]\]><\/title>/g)].map((m) => m[1])
+  const plain = [...xml.matchAll(/<title>(?!\s*<!\[CDATA\[)([^<]{15,})<\/title>/g)].map((m) => m[1].trim())
+  return [...cdata, ...plain]
+}
 
-  const results = await Promise.allSettled(
-    feeds.map((url) =>
-      fetch(url, { cache: 'no-store' })
-        .then((r) => r.text())
-        .then((text) => {
-          // Handle both CDATA and plain <title> tags
-          const cdata = [...text.matchAll(/<title><!\[CDATA\[(.+?)\]\]><\/title>/g)].map((m) => m[1])
-          const plain = [...text.matchAll(/<title>(?!\s*<!\[CDATA\[)([^<]{10,})<\/title>/g)].map((m) => m[1].trim())
-          return [...cdata, ...plain]
-        })
-    )
-  )
-
-  const allHeadlines = results
-    .flatMap((r) => (r.status === 'fulfilled' ? r.value : []))
-    .filter(
-      (t) =>
-        t.length > 15 &&
-        !t.toLowerCase().includes('yahoo finance') &&
-        !t.toLowerCase().includes('cnbc') &&
-        !t.toLowerCase().includes('rss') &&
-        !t.toLowerCase().includes('feed')
-    )
-
-  // Deduplicate
+function dedup(arr: string[]): string[] {
   const seen = new Set<string>()
-  const unique = allHeadlines.filter((h) => {
-    const key = h.toLowerCase().slice(0, 40)
+  return arr.filter((h) => {
+    const key = h.toLowerCase().slice(0, 50)
     if (seen.has(key)) return false
     seen.add(key)
     return true
   })
+}
 
-  const top = unique.slice(0, 15)
-  return top.length ? `Today's top financial news:\n` + top.map((t, i) => `${i + 1}. ${t}`).join('\n') : ''
+// General market headlines — always fetched
+async function fetchGeneralNews(): Promise<string[]> {
+  const feeds = [
+    'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US',
+    'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114',
+  ]
+  const results = await Promise.allSettled(
+    feeds.map((url) => fetch(url, { cache: 'no-store' }).then((r) => r.text()).then(parseTitles))
+  )
+  return results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []))
+}
+
+// Targeted search based on what the user is asking about
+async function fetchTopicalNews(query: string): Promise<string[]> {
+  // Extract meaningful search terms (strip common filler words)
+  const stopWords = new Set(['what', 'which', 'should', 'would', 'could', 'i', 'buy', 'sell', 'me', 'tell', 'about', 'the', 'a', 'an', 'is', 'are', 'was', 'were', 'do', 'does', 'did', 'how', 'why', 'when', 'where', 'can', 'will', 'best', 'stocks', 'stock', 'good', 'based', 'on', 'of', 'to', 'for', 'in', 'at', 'with'])
+  const terms = query
+    .toLowerCase()
+    .replace(/[^\w\s]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2 && !stopWords.has(w))
+    .slice(0, 5)
+
+  if (terms.length === 0) return []
+
+  const searchQuery = encodeURIComponent(terms.join(' ') + ' finance market')
+
+  try {
+    const res = await fetch(
+      `https://news.google.com/rss/search?q=${searchQuery}&hl=en-US&gl=US&ceid=US:en`,
+      { cache: 'no-store' }
+    )
+    const text = await res.text()
+    return parseTitles(text).filter((t) => !t.toLowerCase().includes('google'))
+  } catch {
+    return []
+  }
+}
+
+async function fetchNewsHeadlines(userMessage: string): Promise<string> {
+  const [general, topical] = await Promise.all([
+    fetchGeneralNews(),
+    fetchTopicalNews(userMessage),
+  ])
+
+  const all = dedup([...topical, ...general]).filter(
+    (t) =>
+      t.length > 15 &&
+      !t.toLowerCase().includes('yahoo finance') &&
+      !t.toLowerCase().includes('cnbc.com') &&
+      !t.toLowerCase().includes('rss')
+  )
+
+  const top = all.slice(0, 15)
+  return top.length
+    ? `Latest headlines (pulled live for this question):\n` + top.map((t, i) => `${i + 1}. ${t}`).join('\n')
+    : ''
 }
 
 export async function POST(req: NextRequest) {
   try {
     const { message, history = [] } = await req.json()
 
-    const headlines = await fetchNewsHeadlines()
+    const headlines = await fetchNewsHeadlines(message)
     const newsContext = headlines
       ? `\n\n${headlines}\n\nUse these headlines to give specific, current answers. If the user's question relates to any of these stories, reference them directly.`
       : ''
