@@ -21,20 +21,20 @@ function MoverRow({ m }: { m: Mover }) {
   return (
     <div
       onClick={() => router.push(`/research/${m.ticker}`)}
-      className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-colors border border-transparent hover:border-gray-700"
+      className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-gray-800 cursor-pointer transition-colors border border-transparent hover:border-gray-700"
     >
       <div className="flex items-center gap-3">
-        <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0', pos ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400')}>
-          {pos ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0', pos ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400')}>
+          {pos ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
         </div>
         <div>
-          <p className="text-sm font-semibold text-white">{m.ticker}</p>
-          <p className="text-xs text-gray-500 truncate max-w-[140px]">{m.name}</p>
+          <p className="text-base font-bold text-white">{m.ticker}</p>
+          <p className="text-sm text-gray-500 truncate max-w-[180px]">{m.name}</p>
         </div>
       </div>
       <div className="text-right">
-        <p className="text-sm font-medium text-white">${m.price.toFixed(2)}</p>
-        <p className={cn('text-xs font-semibold', pos ? 'text-green-400' : 'text-red-400')}>
+        <p className="text-base font-semibold text-white">${m.price.toFixed(2)}</p>
+        <p className={cn('text-sm font-bold', pos ? 'text-green-400' : 'text-red-400')}>
           {pos ? '+' : ''}{m.changePercent.toFixed(2)}%
         </p>
       </div>
@@ -58,31 +58,31 @@ export default function ResearchPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Stock Research</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Search any stock or ETF for live data, analyst ratings, and more</p>
+        <h1 className="text-3xl font-bold text-white">Stock Research</h1>
+        <p className="text-base text-gray-400 mt-1">Search any stock or ETF for live data, analyst ratings, and more</p>
       </div>
 
-      <div className="flex flex-col items-center py-8 space-y-4">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="h-12 w-12 rounded-xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-            <Search className="h-6 w-6 text-blue-400" />
+      <div className="flex flex-col items-center py-12 space-y-5">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="h-16 w-16 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
+            <Search className="h-8 w-8 text-blue-400" />
           </div>
-          <h2 className="text-xl font-semibold text-white">Search Any Stock</h2>
+          <h2 className="text-3xl font-bold text-white">Search Any Stock</h2>
         </div>
-        <div className="w-full max-w-2xl">
-          <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
+        <div className="w-full max-w-3xl">
+          <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" className="h-14 text-base" />
         </div>
-        <p className="text-xs text-gray-500">Press Enter to jump directly to a ticker</p>
+        <p className="text-sm text-gray-500">Press Enter to jump directly to a ticker</p>
       </div>
 
       {/* Top Movers */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Gainers */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="h-4 w-4 text-green-400" />
-            <p className="text-sm font-semibold text-white">Top Gainers Today</p>
-            <span className="ml-auto text-xs text-gray-600">Yahoo Finance</span>
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="h-5 w-5 text-green-400" />
+            <p className="text-base font-semibold text-white">Top Gainers Today</p>
+            <span className="ml-auto text-sm text-gray-600">Yahoo Finance</span>
           </div>
           {loading ? (
             <div className="space-y-2">
@@ -100,11 +100,11 @@ export default function ResearchPage() {
         </div>
 
         {/* Losers */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingDown className="h-4 w-4 text-red-400" />
-            <p className="text-sm font-semibold text-white">Top Losers Today</p>
-            <span className="ml-auto text-xs text-gray-600">Yahoo Finance</span>
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingDown className="h-5 w-5 text-red-400" />
+            <p className="text-base font-semibold text-white">Top Losers Today</p>
+            <span className="ml-auto text-sm text-gray-600">Yahoo Finance</span>
           </div>
           {loading ? (
             <div className="space-y-2">

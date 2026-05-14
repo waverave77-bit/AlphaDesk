@@ -96,8 +96,8 @@ function InsiderTrades() {
   const sales = sorted.filter(t => t.type === 'Sale').slice(0, 20)
 
   const TradeTable = ({ rows }: { rows: Trade[] }) => (
-    <div className="space-y-1.5">
-      <div className="hidden md:grid grid-cols-12 text-[10px] text-gray-600 uppercase tracking-wide px-4 pb-1 border-b border-gray-800">
+    <div className="space-y-2">
+      <div className="hidden md:grid grid-cols-12 text-xs text-gray-500 uppercase tracking-wide px-5 pb-2 border-b border-gray-800 font-semibold">
         <span className="col-span-2">Insider</span>
         <span className="col-span-2">Title</span>
         <span className="col-span-2">Company</span>
@@ -109,33 +109,33 @@ function InsiderTrades() {
       </div>
       {rows.map((trade, i) => (
         <Card key={i} className="hover:bg-gray-800/30 transition-colors">
-          <CardContent className="p-3 md:px-4">
-            <div className="flex flex-col gap-1 md:hidden">
+          <CardContent className="p-4 md:px-5">
+            <div className="flex flex-col gap-1.5 md:hidden">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-medium text-white">{trade.name}</span>
-                <Badge variant="outline" className="text-[10px] px-1 py-0">{trade.chamber || trade.title || 'Director'}</Badge>
+                <span className="text-base font-semibold text-white">{trade.name}</span>
+                <Badge variant="outline" className="text-xs px-2 py-0.5">{trade.chamber || trade.title || 'Director'}</Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Link href={`/research/${trade.ticker}`} className="text-sm font-bold text-blue-400 hover:text-blue-300">{trade.ticker}</Link>
-                <span className="text-xs text-gray-400">{trade.company}</span>
+                <Link href={`/research/${trade.ticker}`} className="text-base font-bold text-blue-400 hover:text-blue-300">{trade.ticker}</Link>
+                <span className="text-sm text-gray-400">{trade.company}</span>
               </div>
-              <div className="flex gap-3 text-xs text-gray-500">
+              <div className="flex gap-3 text-sm text-gray-500">
                 <span>{trade.shares.toLocaleString()} shares</span>
                 <span>{fmtVal(trade.totalValue)}</span>
                 <span>{formatDate(trade.transactionDate)}</span>
               </div>
             </div>
-            <div className="hidden md:grid grid-cols-12 items-center gap-1 text-sm">
-              <div className="col-span-2 text-white truncate text-xs">{trade.name}</div>
-              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.chamber || trade.title || 'Director'}</div>
-              <div className="col-span-2 text-gray-400 truncate text-xs">{trade.company}</div>
+            <div className="hidden md:grid grid-cols-12 items-center gap-1">
+              <div className="col-span-2 text-white truncate text-sm font-medium">{trade.name}</div>
+              <div className="col-span-2 text-gray-400 truncate text-sm">{trade.chamber || trade.title || 'Director'}</div>
+              <div className="col-span-2 text-gray-400 truncate text-sm">{trade.company}</div>
               <div className="col-span-1">
-                <Link href={`/research/${trade.ticker}`} className="font-bold text-blue-400 hover:text-blue-300 text-sm">{trade.ticker}</Link>
+                <Link href={`/research/${trade.ticker}`} className="font-bold text-blue-400 hover:text-blue-300 text-base">{trade.ticker}</Link>
               </div>
-              <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.shares.toLocaleString()}</div>
-              <div className="col-span-1 text-right text-xs text-gray-400 font-mono">{trade.price > 0 ? '$' + trade.price.toFixed(2) : '—'}</div>
-              <div className="col-span-1 text-right text-xs font-mono text-white">{fmtVal(trade.totalValue)}</div>
-              <div className="col-span-2 text-right text-xs text-gray-500">{formatDate(trade.transactionDate)}</div>
+              <div className="col-span-1 text-right text-sm text-gray-400 font-mono">{trade.shares.toLocaleString()}</div>
+              <div className="col-span-1 text-right text-sm text-gray-400 font-mono">{trade.price > 0 ? '$' + trade.price.toFixed(2) : '—'}</div>
+              <div className="col-span-1 text-right text-sm font-mono font-semibold text-white">{fmtVal(trade.totalValue)}</div>
+              <div className="col-span-2 text-right text-sm text-gray-500">{formatDate(trade.transactionDate)}</div>
             </div>
           </CardContent>
         </Card>
@@ -146,22 +146,22 @@ function InsiderTrades() {
   return (
     <div className="space-y-8">
       {/* Purchases */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-emerald-400" />
-          <h2 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money — often a bullish signal they believe the stock will rise." /></h2>
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="h-3 w-3 rounded-full bg-emerald-400" />
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money — often a bullish signal they believe the stock will rise." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
-        {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-xs text-gray-600">No recent purchases.</p>}
+        {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}
       </div>
 
       {/* Sales */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-red-400" />
-          <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares — worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="h-3 w-3 rounded-full bg-red-400" />
+          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares — worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
         </div>
-        {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-xs text-gray-600">No recent sales.</p>}
+        {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-sm text-gray-600">No recent sales.</p>}
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-2">
@@ -268,20 +268,20 @@ export default function InsidersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-lg bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-          <Users className="h-4 w-4 text-blue-400" />
+      <div className="flex items-center gap-4">
+        <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
+          <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling — all publicly reported to the government." /></h1>
-          <p className="text-sm text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling — all publicly reported to the government." /></h1>
+          <p className="text-base text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
         </div>
       </div>
 
       {/* Why it matters */}
-      <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-4">
-        <p className="text-sm font-medium text-emerald-300 mb-1">💡 Why does this matter?</p>
-        <p className="text-xs text-gray-400 leading-relaxed">
+      <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
+        <p className="text-base font-semibold text-emerald-300 mb-1.5">💡 Why does this matter?</p>
+        <p className="text-sm text-gray-400 leading-relaxed">
           Insiders — like CEOs, CFOs, and board members — know their companies better than anyone. When they buy shares with their own money, it&apos;s often a strong sign they believe the stock will go up. When they sell, it&apos;s worth noting too. These trades are required to be reported to the SEC, so they&apos;re completely public.
         </p>
       </div>

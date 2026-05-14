@@ -111,22 +111,22 @@ export default function LearnPage() {
   return (
     <div className="space-y-6 max-w-3xl lg:max-w-none mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-lg bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-          <BookOpen className="h-4 w-4 text-blue-400" />
+      <div className="flex items-center gap-4">
+        <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
+          <BookOpen className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Investing Dictionary</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
+          <h1 className="text-3xl font-bold text-white">Investing Dictionary</h1>
+          <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
         </div>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
         <Input
           placeholder="Search any term..."
-          className="pl-9 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
+          className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -138,7 +138,7 @@ export default function LearnPage() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
               activeCategory === cat
                 ? 'bg-blue-600 border-blue-600 text-white'
                 : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
@@ -151,10 +151,10 @@ export default function LearnPage() {
       </div>
 
       {/* Count */}
-      <p className="text-sm text-gray-500">{filtered.length} terms</p>
+      <p className="text-base text-gray-500">{filtered.length} terms</p>
 
       {/* Terms list */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
         {filtered.length === 0 && (
           <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
         )}
@@ -164,37 +164,37 @@ export default function LearnPage() {
             className="cursor-pointer hover:bg-gray-800/40 transition-colors"
             onClick={() => setExpanded(expanded === t.term ? null : t.term)}
           >
-            <CardContent className="p-4">
+            <CardContent className="p-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <h3 className="font-semibold text-white">{t.term}</h3>
-                    <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
+                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                    <h3 className="text-base font-bold text-white">{t.term}</h3>
+                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
                       {CATEGORY_ICONS[t.category]}
                       {t.category}
                     </span>
                   </div>
-                  <p className="text-sm text-blue-300 font-medium">{t.simple}</p>
+                  <p className="text-base text-blue-300 font-medium">{t.simple}</p>
 
                   {expanded === t.term && (
-                    <div className="mt-3 space-y-2 border-t border-gray-800 pt-3">
+                    <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
                       <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
                       {t.example && (
-                        <div className="bg-gray-900 rounded-lg px-3 py-2">
-                          <span className="text-xs text-gray-500 font-medium">Example: </span>
-                          <span className="text-xs text-gray-300">{t.example}</span>
+                        <div className="bg-gray-900 rounded-lg px-4 py-3">
+                          <span className="text-sm text-gray-500 font-medium">Example: </span>
+                          <span className="text-sm text-gray-300">{t.example}</span>
                         </div>
                       )}
                       {t.tip && (
-                        <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-3 py-2">
-                          <Lightbulb className="h-3.5 w-3.5 text-yellow-400 shrink-0 mt-0.5" />
-                          <span className="text-xs text-yellow-300">{t.tip}</span>
+                        <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
+                          <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+                          <span className="text-sm text-yellow-300">{t.tip}</span>
                         </div>
                       )}
                     </div>
                   )}
                 </div>
-                <span className="text-gray-600 text-xs mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
+                <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
               </div>
             </CardContent>
           </Card>

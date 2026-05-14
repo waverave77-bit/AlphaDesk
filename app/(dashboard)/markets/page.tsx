@@ -76,7 +76,7 @@ function FearGreedSection() {
   const history = data.slice(1)
 
   return (
-    <section>
+    <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Fear &amp; Greed Index <InfoTooltip text="A score from 0–100 measuring whether investors are feeling fearful (selling) or greedy (buying). Extreme fear can be a buying opportunity; extreme greed means caution." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-6">
@@ -222,7 +222,7 @@ function SectorHeatmapSection() {
   }, [])
 
   return (
-    <section>
+    <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Sector Heat Map <InfoTooltip text="Shows how each sector of the stock market performed today. Green = up, Red = down. Darker color = bigger move." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -326,7 +326,7 @@ function EconCalendarSection() {
   }
 
   return (
-    <section>
+    <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Scheduled events that move markets — like jobs reports, inflation data (CPI), and Fed interest rate decisions. High-impact events can cause big swings in stocks." /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-0">
@@ -424,7 +424,7 @@ function MarketNewsSection() {
   }, [])
 
   return (
-    <section>
+    <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">
         Live Market News{' '}
         <InfoTooltip text="Latest financial news aggregated from Bloomberg, Reuters, MarketWatch and more — refreshes every 5 minutes." />
@@ -493,17 +493,10 @@ export default function MarketsPage() {
         </div>
       </div>
 
-      {/* Top row: Fear & Greed + Sector Heatmap side by side on XL */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-10 items-start">
-        <div><FearGreedSection /></div>
-        <div><SectorHeatmapSection /></div>
-      </div>
-
-      {/* Bottom row: Econ Calendar + News side by side on XL */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-10 items-start">
-        <div><EconCalendarSection /></div>
-        <div><MarketNewsSection /></div>
-      </div>
+      <FearGreedSection />
+      <SectorHeatmapSection />
+      <EconCalendarSection />
+      <MarketNewsSection />
     </div>
   )
 }
