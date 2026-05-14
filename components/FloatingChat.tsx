@@ -9,10 +9,10 @@ interface Message {
 }
 
 const SUGGESTIONS = [
+  'What even is a stock?',
+  'How do I start investing?',
   'What is a P/E ratio?',
-  'Why do stocks go up?',
-  'What is a good portfolio?',
-  'Explain options trading',
+  'Why do stocks go up and down?',
 ]
 
 export default function FloatingChat() {
