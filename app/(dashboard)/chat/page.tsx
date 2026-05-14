@@ -209,7 +209,7 @@ export default function ChatPage() {
               )}
               <div
                 className={cn(
-                  'max-w-[75%] rounded-2xl px-5 py-4 text-base leading-relaxed',
+                  'max-w-[75%] rounded-2xl px-5 py-4 text-lg leading-relaxed',
                   m.role === 'user'
                     ? 'bg-blue-600 text-white rounded-br-sm'
                     : 'bg-gray-800 text-gray-200 rounded-bl-sm'
@@ -245,7 +245,7 @@ export default function ChatPage() {
               onKeyDown={handleKey}
               placeholder="Ask anything about stocks, markets, investing..."
               rows={1}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
               style={{ maxHeight: '120px', overflowY: 'auto' }}
               onInput={(e) => {
                 const t = e.currentTarget
