@@ -15,6 +15,7 @@ const primaryNav = [
   { href: '/learn',     label: 'Learn' },
   { href: '/insiders',  label: 'Smart Money' },
   { href: '/alerts',    label: 'Alerts' },
+  { href: '/chat',      label: '✨ AI Chat' },
 ]
 
 const moreNav = [

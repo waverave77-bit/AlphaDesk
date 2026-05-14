@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Bot, Loader2, Sparkles } from 'lucide-react'
+import { MessageCircle, X, Send, Bot, Loader2, Sparkles, Maximize2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -22,6 +23,7 @@ export default function FloatingChat() {
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (open) {
@@ -68,6 +70,13 @@ export default function FloatingChat() {
               <p className="text-sm font-bold text-white">AI Assistant</p>
               <p className="text-xs text-gray-500">Powered by Claude · For education only</p>
             </div>
+            <button
+              onClick={() => { setOpen(false); router.push('/chat') }}
+              className="h-7 w-7 rounded-lg hover:bg-gray-800 flex items-center justify-center transition-colors"
+              title="Open full chat"
+            >
+              <Maximize2 className="h-3.5 w-3.5 text-gray-400" />
+            </button>
             <button
               onClick={() => setOpen(false)}
               className="h-7 w-7 rounded-lg hover:bg-gray-800 flex items-center justify-center transition-colors"
