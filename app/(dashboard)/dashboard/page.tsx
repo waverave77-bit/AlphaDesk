@@ -15,6 +15,7 @@ import LastUpdated from '@/components/LastUpdated'
 import MarketRecap from '@/components/MarketRecap'
 import OnboardingModal from '@/components/OnboardingModal'
 import { useStreak } from '@/hooks/useStreak'
+import { useFeatureFlags } from '@/hooks/useAdmin'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -59,6 +60,7 @@ function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatC
 
 export default function DashboardPage() {
   const { streak } = useStreak()
+  const { flags } = useFeatureFlags()
   const [holdings, setHoldings] = useState<any[]>([])
   const [enrichedHoldings, setEnrichedHoldings] = useState<HoldingWithQuote[]>([])
   const [loadingHoldings, setLoadingHoldings] = useState(true)
@@ -274,7 +276,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Market Recap */}
-        <MarketRecap />
+        {flags.market_recap !== false && <MarketRecap />}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">

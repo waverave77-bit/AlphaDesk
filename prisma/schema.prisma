@@ -98,6 +98,12 @@ model VirtualTrade {
   portfolio   VirtualPortfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 }
 
+model FeatureFlag {
+  key       String   @id
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
 model OnboardingResponse {
   id         String   @id @default(cuid())
   experience String

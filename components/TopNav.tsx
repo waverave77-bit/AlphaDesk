@@ -2,10 +2,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon } from 'lucide-react'
+import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
+import { useAdmin } from '@/hooks/useAdmin'
 
 const primaryNav = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -32,6 +33,8 @@ export default function TopNav() {
   const { themeId, setTheme } = useTheme()
   const isDark = themeId !== 'white'
   const toggleDark = () => setTheme(isDark ? 'white' : 'default')
+
+  const { isAdmin } = useAdmin()
 
   const initials = session?.user?.name
     ? session.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
@@ -123,6 +126,15 @@ export default function TopNav() {
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn('hidden md:flex items-center gap-1.5 text-sm font-medium transition-colors text-red-400 hover:text-red-300')}
+            >
+              <Shield className="h-4 w-4" />
+              <span>Admin</span>
+            </Link>
+          )}
           <Link
             href="/settings"
             className={cn('hidden md:flex items-center gap-1.5 text-sm transition-colors', isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-700')}

@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { MessageCircle, X, Send, Bot, Loader2, Sparkles, Maximize2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useFeatureFlags } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -17,6 +18,7 @@ const SUGGESTIONS = [
 ]
 
 export default function FloatingChat() {
+  const { flags } = useFeatureFlags()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -55,6 +57,8 @@ export default function FloatingChat() {
     }
     setLoading(false)
   }
+
+  if (flags.floating_chat === false) return null
 
   return (
     <>
