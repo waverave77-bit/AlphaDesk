@@ -72,8 +72,8 @@ export default function ResearchPage() {
           </div>
         </div>
 
-        {/* Search bar — full width */}
-        <div className="w-full">
+        {/* Search bar */}
+        <div className="w-full max-w-5xl mx-auto">
           <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
         </div>
 
