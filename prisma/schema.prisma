@@ -98,6 +98,13 @@ model VirtualTrade {
   portfolio   VirtualPortfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 }
 
+model OnboardingResponse {
+  id         String   @id @default(cuid())
+  experience String
+  goals      String   // JSON array of goal ids
+  createdAt  DateTime @default(now())
+}
+
 model VirtualSeasonRecord {
   id         String   @id @default(cuid())
   userId     String
