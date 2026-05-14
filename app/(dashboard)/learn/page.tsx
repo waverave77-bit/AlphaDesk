@@ -1,13 +1,8 @@
 'use client'
-import { useState, useMemo, useEffect } from 'react'
-import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, DollarSign, ChevronRight, Trophy, Lock } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-
-const LEARNED_KEY = 'zg_learned_terms'
-
-// ─── Dictionary Data ──────────────────────────────────────────────────────────
 
 const CATEGORIES = ['All', 'Basics', 'Charts', 'Company Health', 'Risk', 'Strategies'] as const
 type Category = typeof CATEGORIES[number]
@@ -22,7 +17,6 @@ interface Term {
 }
 
 const TERMS: Term[] = [
-  // BASICS
   { term: 'Stock', category: 'Basics', simple: 'A tiny piece of ownership in a company', explanation: 'When you buy a stock, you own a small slice of that company. If the company does well, your slice is worth more.', example: 'Buy 1 share of Apple = own a tiny piece of Apple Inc.', tip: 'Think of it like buying a slice of a pizza — you own that slice.' },
   { term: 'Share', category: 'Basics', simple: 'One unit of a stock', explanation: 'A share is just one single piece of a company\'s stock. Companies split their ownership into millions of shares so regular people can afford to buy in.', example: 'Apple has about 15 billion shares. You might own 5 of them.' },
   { term: 'Market Cap', category: 'Basics', simple: 'Total value of a company', explanation: 'Multiply the stock price by the number of shares. That\'s how much the entire company is worth according to the market.', example: 'Stock at $100 × 1 billion shares = $100B market cap', tip: 'Under $2B = small-cap. $2B-$10B = mid-cap. Over $10B = large-cap.' },
@@ -35,8 +29,6 @@ const TERMS: Term[] = [
   { term: 'IPO', category: 'Basics', simple: 'When a company goes public for the first time', explanation: 'An Initial Public Offering is when a private company sells shares to regular people for the first time. It\'s the company\'s debut on the stock market.', example: 'Reddit went public in 2024 — that was their IPO.' },
   { term: 'Broker', category: 'Basics', simple: 'The app or platform where you buy stocks', explanation: 'A broker is the middleman between you and the stock market. Apps like Robinhood, Fidelity, and Schwab are all brokers.', tip: 'Always use a regulated, reputable broker — never random websites.' },
   { term: 'Liquidity', category: 'Basics', simple: 'How easy it is to buy or sell something quickly', explanation: 'A liquid stock has lots of buyers and sellers so you can exit fast. An illiquid stock might take days to sell.', example: 'Apple is very liquid. A tiny penny stock might not be.' },
-
-  // CHARTS
   { term: 'Candlestick', category: 'Charts', simple: 'A chart shape that shows a stock\'s price movement in a time period', explanation: 'Each candlestick shows the opening price, closing price, highest price, and lowest price for a specific time period. Green = price went up. Red = price went down.', tip: 'The "wick" (thin line) shows the highest and lowest price. The "body" shows open and close.' },
   { term: 'Support Level', category: 'Charts', simple: 'A price where a stock tends to stop falling', explanation: 'Support is a price level where buyers historically step in and stop the stock from dropping further. Like a floor.', example: 'If AAPL keeps bouncing at $150, that\'s a support level.', tip: 'If a stock breaks below support, it often falls a lot further.' },
   { term: 'Resistance Level', category: 'Charts', simple: 'A price where a stock tends to stop rising', explanation: 'Resistance is a price level where sellers historically push the stock back down. Like a ceiling.', example: 'If TSLA keeps failing to break $300, that\'s resistance.', tip: 'If a stock breaks above resistance, it often shoots up fast.' },
@@ -45,8 +37,6 @@ const TERMS: Term[] = [
   { term: 'Breakout', category: 'Charts', simple: 'When a stock bursts above a resistance level', explanation: 'A breakout happens when a stock pushes through a price it\'s been stuck below. Often leads to a big move upward.', example: 'Stock stuck at $50 for months suddenly surges to $55 on high volume = breakout.' },
   { term: '52-Week High', category: 'Charts', simple: 'The highest price a stock has been in the last year', explanation: 'The 52-week high shows the peak price over the past 52 weeks. Stocks near their 52-week high are often in strong uptrends.', tip: 'Breaking above a 52-week high is often a very bullish signal.' },
   { term: 'RSI', category: 'Charts', simple: 'A score (0-100) showing if a stock is overbought or oversold', explanation: 'RSI (Relative Strength Index) measures how fast a stock is moving. Above 70 = might be overbought (due for a pullback). Below 30 = might be oversold (due for a bounce).', tip: 'RSI is just one tool — never use it alone.' },
-
-  // COMPANY HEALTH
   { term: 'P/E Ratio', category: 'Company Health', simple: 'How expensive a stock is compared to its profits', explanation: 'Price-to-Earnings ratio = stock price ÷ earnings per share. It shows how much investors pay for every $1 of profit. High P/E = expensive. Low P/E = cheap (or struggling).', example: 'Stock at $100, earns $5/share → P/E of 20. Investors pay $20 per $1 of profit.', tip: 'Compare P/E to competitors, not random numbers.' },
   { term: 'EPS', category: 'Company Health', simple: 'How much profit a company makes per share', explanation: 'Earnings Per Share = total profit ÷ number of shares. It\'s the most important number in an earnings report.', example: 'Company makes $1B profit, has 500M shares → EPS of $2.', tip: 'Analysts predict EPS before earnings. Beating estimates = stock usually goes up.' },
   { term: 'Revenue', category: 'Company Health', simple: 'Total money a company brings in', explanation: 'Revenue is the total sales before any expenses are subtracted. Think of it as the top line — it\'s the first number on an income statement.', tip: 'Revenue growing = good sign. Revenue shrinking = warning sign.' },
@@ -56,8 +46,6 @@ const TERMS: Term[] = [
   { term: 'Balance Sheet', category: 'Company Health', simple: 'A snapshot of everything a company owns and owes', explanation: 'The balance sheet shows assets (what they own), liabilities (what they owe), and equity (what\'s left over). Healthy company = more assets than liabilities.' },
   { term: 'Debt-to-Equity', category: 'Company Health', simple: 'How much a company borrowed vs. what it actually owns', explanation: 'High debt-to-equity means the company borrowed a lot. This is risky when interest rates are high. Low D/E = financially conservative.', tip: 'Under 1.0 is generally considered healthy.' },
   { term: 'Free Cash Flow', category: 'Company Health', simple: 'Actual cash left after all expenses', explanation: 'Free cash flow is the real money a company generates after paying for everything. Profitable on paper but negative free cash flow = potential red flag.', tip: 'Warren Buffett focuses heavily on free cash flow.' },
-
-  // RISK
   { term: 'Volatility', category: 'Risk', simple: 'How wildly a stock\'s price swings', explanation: 'High volatility means the stock price jumps up and down a lot. Low volatility means it moves slowly and steadily. More volatile = more risk AND more potential reward.', example: 'Bitcoin is very volatile. A Treasury bond is very low volatility.' },
   { term: 'Diversification', category: 'Risk', simple: 'Not putting all your eggs in one basket', explanation: 'Spreading your money across different stocks, sectors, and asset types so one bad investment doesn\'t destroy your whole portfolio.', tip: 'Owning 20 different tech stocks isn\'t diversification — they all move together.' },
   { term: 'Short Selling', category: 'Risk', simple: 'Betting that a stock will go down', explanation: 'Short sellers borrow shares, sell them, and hope to buy them back cheaper later. Huge risk — stocks can theoretically rise forever, creating unlimited losses.', tip: 'Never short sell as a beginner. The risk is too high.' },
@@ -65,8 +53,6 @@ const TERMS: Term[] = [
   { term: 'Margin', category: 'Risk', simple: 'Borrowing money from your broker to buy more stocks', explanation: 'Trading on margin means you use your broker\'s money to buy more than you could with your own cash. Amplifies gains AND losses. Very risky.', tip: 'Never trade on margin as a beginner. You can lose more than you invest.' },
   { term: 'Short Interest', category: 'Risk', simple: 'How many people are betting a stock will fall', explanation: 'High short interest means lots of investors think the stock will drop. If they\'re wrong and the stock rises, they all rush to buy back = short squeeze.', example: 'GameStop 2021 was a famous short squeeze.' },
   { term: 'Beta', category: 'Risk', simple: 'How much a stock moves compared to the overall market', explanation: 'Beta of 1 = moves with the market. Beta of 2 = moves twice as much as the market. Beta of 0.5 = half as volatile as the market.', tip: 'High beta stocks are riskier but can outperform in bull markets.' },
-
-  // STRATEGIES
   { term: 'Buy and Hold', category: 'Strategies', simple: 'Buy stocks and keep them for years', explanation: 'The simplest and statistically most effective strategy for most people. Buy quality companies and hold through ups and downs. Time in the market beats timing the market.', tip: 'Warren Buffett\'s favorite strategy.' },
   { term: 'Dollar-Cost Averaging', category: 'Strategies', simple: 'Invest a fixed amount every month no matter what', explanation: 'Instead of investing all at once, you invest the same amount every week or month. You automatically buy more shares when prices are low and fewer when high.', example: 'Invest $100 every month in SPY regardless of price.', tip: 'Removes emotion from investing. Great for beginners.' },
   { term: 'Value Investing', category: 'Strategies', simple: 'Buying stocks that are cheaper than they\'re worth', explanation: 'Value investors look for companies whose stock price doesn\'t reflect their true value. Buy undervalued, wait for the market to recognize it.', tip: 'Warren Buffett and Charlie Munger are legendary value investors.' },
@@ -75,41 +61,6 @@ const TERMS: Term[] = [
   { term: 'Insider Trading (Legal)', category: 'Strategies', simple: 'Tracking what company executives are buying', explanation: 'When a CEO or CFO buys their own company\'s stock with their own money, it\'s a strong signal they believe in the company\'s future. This is public info filed with the SEC.', tip: 'Our Smart Money page shows this. Executives selling = sometimes concerning. Executives buying = usually bullish.' },
 ]
 
-// ─── Roadmap config ───────────────────────────────────────────────────────────
-
-const ROADMAP = [
-  {
-    level: 'Beginner',
-    emoji: '🌱',
-    color: 'border-green-500/30 bg-green-500/5',
-    barColor: 'bg-green-500',
-    badgeColor: 'bg-green-500/20 text-green-400',
-    terms: ['Stock', 'Share', 'ETF', 'Index', 'Bull Market', 'Bear Market', 'Broker', 'Portfolio', 'Dividend'],
-    desc: 'Start here — the concepts every investor must know',
-  },
-  {
-    level: 'Intermediate',
-    emoji: '📈',
-    color: 'border-blue-500/30 bg-blue-500/5',
-    barColor: 'bg-blue-500',
-    badgeColor: 'bg-blue-500/20 text-blue-400',
-    terms: ['P/E Ratio', 'EPS', 'Revenue', 'Earnings Report', 'Candlestick', 'Volume', 'RSI', 'Moving Average', 'Market Cap'],
-    desc: 'Read charts and evaluate company performance',
-    requiresLevel: 'Beginner',
-  },
-  {
-    level: 'Advanced',
-    emoji: '🏆',
-    color: 'border-purple-500/30 bg-purple-500/5',
-    barColor: 'bg-purple-500',
-    badgeColor: 'bg-purple-500/20 text-purple-400',
-    terms: ['Volatility', 'Beta', 'Short Selling', 'Margin', 'Stop Loss', 'Breakout', 'Dollar-Cost Averaging', 'Value Investing', 'Growth Investing'],
-    desc: 'Risk management, advanced strategies and trading concepts',
-    requiresLevel: 'Intermediate',
-  },
-]
-
-// ─── Category icons ───────────────────────────────────────────────────────────
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   Basics: <BookOpen className="h-3.5 w-3.5" />,
   Charts: <BarChart2 className="h-3.5 w-3.5" />,
@@ -126,37 +77,10 @@ const CATEGORY_COLORS: Record<string, string> = {
   Strategies: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function LearnPage() {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState<Category>('All')
   const [expanded, setExpanded] = useState<string | null>(null)
-  const [learned, setLearned] = useState<Set<string>>(new Set())
-  const [activeTab, setActiveTab] = useState<'roadmap' | 'dictionary'>('roadmap')
-
-  // Load learned terms from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(LEARNED_KEY)
-      if (stored) setLearned(new Set(JSON.parse(stored)))
-    } catch {}
-  }, [])
-
-  const markLearned = (term: string) => {
-    setLearned((prev) => {
-      const next = new Set(prev)
-      next.add(term)
-      try { localStorage.setItem(LEARNED_KEY, JSON.stringify([...next])) } catch {}
-      return next
-    })
-  }
-
-  const handleExpand = (term: string) => {
-    const newExpanded = expanded === term ? null : term
-    setExpanded(newExpanded)
-    if (newExpanded) markLearned(term)
-  }
 
   const filtered = useMemo(() => {
     return TERMS.filter((t) => {
@@ -166,223 +90,94 @@ export default function LearnPage() {
     }).sort((a, b) => a.term.localeCompare(b.term))
   }, [search, activeCategory])
 
-  // Check if a roadmap level is unlocked
-  const isLevelComplete = (levelName: string) => {
-    const level = ROADMAP.find((r) => r.level === levelName)
-    if (!level) return false
-    return level.terms.every((t) => learned.has(t))
-  }
-
-  const isLevelUnlocked = (level: typeof ROADMAP[0]) => {
-    if (!level.requiresLevel) return true
-    return isLevelComplete(level.requiresLevel)
-  }
-
-  const totalLearned = learned.size
-  const totalTerms = TERMS.length
-
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-            <BookOpen className="h-6 w-6 text-blue-400" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-white">Learn Investing</h1>
-            <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
-          </div>
+      <div className="flex items-center gap-4">
+        <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
+          <BookOpen className="h-6 w-6 text-blue-400" />
         </div>
-        {/* Overall progress */}
-        <div className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3">
-          <Trophy className="h-5 w-5 text-yellow-400" />
-          <div>
-            <p className="text-xs text-gray-500 font-medium">Overall Progress</p>
-            <p className="text-sm font-bold text-white">{totalLearned} / {totalTerms} terms learned</p>
-          </div>
-          <div className="w-24 h-2 bg-gray-800 rounded-full overflow-hidden ml-2">
-            <div className="h-full bg-yellow-500 rounded-full transition-all" style={{ width: `${(totalLearned / totalTerms) * 100}%` }} />
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-white">Investing Dictionary</h1>
+          <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2">
-        {(['roadmap', 'dictionary'] as const).map((tab) => (
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+        <Input
+          placeholder="Search any term..."
+          className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* Category filters */}
+      <div className="flex gap-2 flex-wrap">
+        {CATEGORIES.map((cat) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={cn(
-              'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all capitalize',
-              activeTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-900 border border-gray-800 text-gray-400 hover:text-white'
-            )}
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
+              activeCategory === cat ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
+            }`}
           >
-            {tab === 'roadmap' ? '🗺️ Learning Roadmap' : '📖 Full Dictionary'}
+            {cat !== 'All' && CATEGORY_ICONS[cat]}
+            {cat}
           </button>
         ))}
       </div>
 
-      {/* ── ROADMAP TAB ── */}
-      {activeTab === 'roadmap' && (
-        <div className="space-y-5">
-          {ROADMAP.map((level, li) => {
-            const learnedInLevel = level.terms.filter((t) => learned.has(t)).length
-            const pct = Math.round((learnedInLevel / level.terms.length) * 100)
-            const unlocked = isLevelUnlocked(level)
-            const complete = isLevelComplete(level.level)
+      <p className="text-base text-gray-500">{filtered.length} terms</p>
 
-            return (
-              <div key={level.level} className={cn('rounded-2xl border p-5 transition-all', level.color, !unlocked && 'opacity-50')}>
-                {/* Level header */}
-                <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{level.emoji}</span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-bold text-white">{level.level}</h3>
-                        {complete && <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-semibold">Complete ✓</span>}
-                        {!unlocked && <span className="text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded-full flex items-center gap-1"><Lock className="h-3 w-3" /> Locked</span>}
-                      </div>
-                      <p className="text-sm text-gray-400">{level.desc}</p>
-                    </div>
+      {/* Terms list */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+        {filtered.length === 0 && (
+          <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
+        )}
+        {filtered.map((t) => (
+          <Card
+            key={t.term}
+            className="cursor-pointer hover:bg-gray-800/40 transition-colors"
+            onClick={() => setExpanded(expanded === t.term ? null : t.term)}
+          >
+            <CardContent className="p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                    <h3 className="text-base font-bold text-white">{t.term}</h3>
+                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
+                      {CATEGORY_ICONS[t.category]}
+                      {t.category}
+                    </span>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-white">{learnedInLevel}/{level.terms.length}</p>
-                    <p className="text-xs text-gray-500">{pct}% done</p>
-                  </div>
-                </div>
-
-                {/* Progress bar */}
-                <div className="h-2 bg-gray-800 rounded-full overflow-hidden mb-4">
-                  <div className={cn('h-full rounded-full transition-all duration-700', level.barColor)} style={{ width: `${pct}%` }} />
-                </div>
-
-                {/* Terms grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {level.terms.map((termName) => {
-                    const termData = TERMS.find((t) => t.term === termName)
-                    const isLearned = learned.has(termName)
-                    return (
-                      <button
-                        key={termName}
-                        disabled={!unlocked}
-                        onClick={() => {
-                          if (!unlocked) return
-                          setActiveTab('dictionary')
-                          setSearch(termName)
-                          setTimeout(() => handleExpand(termName), 100)
-                        }}
-                        className={cn(
-                          'flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left text-sm transition-all',
-                          isLearned
-                            ? 'border-green-500/40 bg-green-500/10 text-green-300'
-                            : 'border-gray-700 bg-gray-900/50 text-gray-300 hover:border-gray-500',
-                          !unlocked && 'cursor-not-allowed'
-                        )}
-                      >
-                        <span className="font-medium truncate">{termName}</span>
-                        {isLearned ? (
-                          <span className="text-green-400 shrink-0">✓</span>
-                        ) : (
-                          <ChevronRight className="h-3.5 w-3.5 text-gray-600 shrink-0" />
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-
-          <p className="text-xs text-gray-600 text-center">Click any term to read its definition and mark it as learned. Complete each level to unlock the next.</p>
-        </div>
-      )}
-
-      {/* ── DICTIONARY TAB ── */}
-      {activeTab === 'dictionary' && (
-        <div className="space-y-5">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-            <Input
-              placeholder="Search any term..."
-              className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-
-          {/* Category filters */}
-          <div className="flex gap-2 flex-wrap">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-                  activeCategory === cat ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
-                }`}
-              >
-                {cat !== 'All' && CATEGORY_ICONS[cat]}
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <p className="text-base text-gray-500">{filtered.length} terms</p>
-
-          {/* Terms list */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
-            {filtered.length === 0 && (
-              <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
-            )}
-            {filtered.map((t) => (
-              <Card
-                key={t.term}
-                className="cursor-pointer hover:bg-gray-800/40 transition-colors"
-                onClick={() => handleExpand(t.term)}
-              >
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                        <h3 className="text-base font-bold text-white">{t.term}</h3>
-                        <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
-                          {CATEGORY_ICONS[t.category]}
-                          {t.category}
-                        </span>
-                        {learned.has(t.term) && (
-                          <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-semibold">Learned ✓</span>
-                        )}
-                      </div>
-                      <p className="text-base text-blue-300 font-medium">{t.simple}</p>
-
-                      {expanded === t.term && (
-                        <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
-                          <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
-                          {t.example && (
-                            <div className="bg-gray-900 rounded-lg px-4 py-3">
-                              <span className="text-sm text-gray-500 font-medium">Example: </span>
-                              <span className="text-sm text-gray-300">{t.example}</span>
-                            </div>
-                          )}
-                          {t.tip && (
-                            <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
-                              <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
-                              <span className="text-sm text-yellow-300">{t.tip}</span>
-                            </div>
-                          )}
+                  <p className="text-base text-blue-300 font-medium">{t.simple}</p>
+                  {expanded === t.term && (
+                    <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
+                      <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
+                      {t.example && (
+                        <div className="bg-gray-900 rounded-lg px-4 py-3">
+                          <span className="text-sm text-gray-500 font-medium">Example: </span>
+                          <span className="text-sm text-gray-300">{t.example}</span>
+                        </div>
+                      )}
+                      {t.tip && (
+                        <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
+                          <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+                          <span className="text-sm text-yellow-300">{t.tip}</span>
                         </div>
                       )}
                     </div>
-                    <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+                  )}
+                </div>
+                <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }

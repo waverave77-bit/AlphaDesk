@@ -14,13 +14,11 @@ const primaryNav = [
   { href: '/watchlist', label: 'Watchlist' },
   { href: '/learn',     label: 'Learn' },
   { href: '/insiders',  label: 'Smart Money' },
-  { href: '/alerts',    label: 'Alerts' },
   { href: '/chat',      label: '✨ AI Chat' },
 ]
 
 const moreNav = [
   { href: '/earnings',    label: 'Earnings Calendar' },
-  { href: '/macro',       label: 'Macro' },
   { href: '/hedgefunds',  label: 'Hedge Funds' },
   { href: '/quant',       label: 'Quant Strategy' },
   { href: '/game',        label: '🏆 $100K Challenge' },
