@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import TopNav from '@/components/TopNav'
 import TickerBar from '@/components/TickerBar'
+import FloatingChat from '@/components/FloatingChat'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -17,6 +18,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           {children}
         </div>
       </main>
+      <FloatingChat />
     </div>
   )
 }

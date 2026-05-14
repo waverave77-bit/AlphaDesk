@@ -12,6 +12,7 @@ import AllocationChart from '@/components/charts/AllocationChart'
 import PortfolioPerformanceChart from '@/components/charts/PortfolioPerformanceChart'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
+import MarketRecap from '@/components/MarketRecap'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -260,6 +261,9 @@ export default function DashboardPage() {
             <AddHoldingDialog onAdded={fetchHoldings} />
           </div>
         </div>
+
+        {/* Market Recap */}
+        <MarketRecap />
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
