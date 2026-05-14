@@ -57,27 +57,29 @@ export default function ResearchPage() {
   }, [])
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
 
-      {/* Hero search — fills the viewport */}
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8">
+      {/* Hero search */}
+      <div className="flex flex-col items-center text-center space-y-6 pt-4 pb-8">
         {/* Icon + heading */}
-        <div className="space-y-4">
-          <div className="h-24 w-24 rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center mx-auto">
-            <Search className="h-12 w-12 text-blue-400" />
+        <div className="flex items-center gap-5">
+          <div className="h-20 w-20 rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center shrink-0">
+            <Search className="h-10 w-10 text-blue-400" />
           </div>
-          <h1 className="text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
-          <p className="text-xl text-gray-400">Search any stock or ETF for live data, analyst ratings, and more</p>
+          <div className="text-left">
+            <h1 className="text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
+            <p className="text-lg text-gray-400 mt-1">Search any stock or ETF for live data, analyst ratings, and more</p>
+          </div>
         </div>
 
-        {/* Search bar */}
-        <div className="w-full max-w-3xl mx-auto">
+        {/* Search bar — full width */}
+        <div className="w-full">
           <StockSearch placeholder="Search by ticker or company name (e.g. AAPL, Apple...)" />
         </div>
 
         {/* Popular tickers */}
         <div className="flex items-center gap-2 flex-wrap justify-center">
-          <span className="text-sm text-gray-600">Popular:</span>
+          <span className="text-sm text-gray-500">Popular:</span>
           {POPULAR.map(t => (
             <button
               key={t}
