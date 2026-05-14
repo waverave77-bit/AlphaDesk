@@ -1,9 +1,11 @@
 'use client'
-import { useState, useMemo } from 'react'
-import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, DollarSign } from 'lucide-react'
+import { useState, useMemo, useEffect } from 'react'
+import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, DollarSign, ChevronRight, Trophy, Lock } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+
+const LEARNED_KEY = 'zg_learned_terms'
 
 // ─── Dictionary Data ──────────────────────────────────────────────────────────
 
@@ -73,6 +75,40 @@ const TERMS: Term[] = [
   { term: 'Insider Trading (Legal)', category: 'Strategies', simple: 'Tracking what company executives are buying', explanation: 'When a CEO or CFO buys their own company\'s stock with their own money, it\'s a strong signal they believe in the company\'s future. This is public info filed with the SEC.', tip: 'Our Smart Money page shows this. Executives selling = sometimes concerning. Executives buying = usually bullish.' },
 ]
 
+// ─── Roadmap config ───────────────────────────────────────────────────────────
+
+const ROADMAP = [
+  {
+    level: 'Beginner',
+    emoji: '🌱',
+    color: 'border-green-500/30 bg-green-500/5',
+    barColor: 'bg-green-500',
+    badgeColor: 'bg-green-500/20 text-green-400',
+    terms: ['Stock', 'Share', 'ETF', 'Index', 'Bull Market', 'Bear Market', 'Broker', 'Portfolio', 'Dividend'],
+    desc: 'Start here — the concepts every investor must know',
+  },
+  {
+    level: 'Intermediate',
+    emoji: '📈',
+    color: 'border-blue-500/30 bg-blue-500/5',
+    barColor: 'bg-blue-500',
+    badgeColor: 'bg-blue-500/20 text-blue-400',
+    terms: ['P/E Ratio', 'EPS', 'Revenue', 'Earnings Report', 'Candlestick', 'Volume', 'RSI', 'Moving Average', 'Market Cap'],
+    desc: 'Read charts and evaluate company performance',
+    requiresLevel: 'Beginner',
+  },
+  {
+    level: 'Advanced',
+    emoji: '🏆',
+    color: 'border-purple-500/30 bg-purple-500/5',
+    barColor: 'bg-purple-500',
+    badgeColor: 'bg-purple-500/20 text-purple-400',
+    terms: ['Volatility', 'Beta', 'Short Selling', 'Margin', 'Stop Loss', 'Breakout', 'Dollar-Cost Averaging', 'Value Investing', 'Growth Investing'],
+    desc: 'Risk management, advanced strategies and trading concepts',
+    requiresLevel: 'Intermediate',
+  },
+]
+
 // ─── Category icons ───────────────────────────────────────────────────────────
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   Basics: <BookOpen className="h-3.5 w-3.5" />,
@@ -96,110 +132,257 @@ export default function LearnPage() {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState<Category>('All')
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [learned, setLearned] = useState<Set<string>>(new Set())
+  const [activeTab, setActiveTab] = useState<'roadmap' | 'dictionary'>('roadmap')
+
+  // Load learned terms from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(LEARNED_KEY)
+      if (stored) setLearned(new Set(JSON.parse(stored)))
+    } catch {}
+  }, [])
+
+  const markLearned = (term: string) => {
+    setLearned((prev) => {
+      const next = new Set(prev)
+      next.add(term)
+      try { localStorage.setItem(LEARNED_KEY, JSON.stringify([...next])) } catch {}
+      return next
+    })
+  }
+
+  const handleExpand = (term: string) => {
+    const newExpanded = expanded === term ? null : term
+    setExpanded(newExpanded)
+    if (newExpanded) markLearned(term)
+  }
 
   const filtered = useMemo(() => {
     return TERMS.filter((t) => {
-      const matchesSearch =
-        !search ||
-        t.term.toLowerCase().includes(search.toLowerCase()) ||
-        t.simple.toLowerCase().includes(search.toLowerCase())
+      const matchesSearch = !search || t.term.toLowerCase().includes(search.toLowerCase()) || t.simple.toLowerCase().includes(search.toLowerCase())
       const matchesCategory = activeCategory === 'All' || t.category === activeCategory
       return matchesSearch && matchesCategory
     }).sort((a, b) => a.term.localeCompare(b.term))
   }, [search, activeCategory])
 
+  // Check if a roadmap level is unlocked
+  const isLevelComplete = (levelName: string) => {
+    const level = ROADMAP.find((r) => r.level === levelName)
+    if (!level) return false
+    return level.terms.every((t) => learned.has(t))
+  }
+
+  const isLevelUnlocked = (level: typeof ROADMAP[0]) => {
+    if (!level.requiresLevel) return true
+    return isLevelComplete(level.requiresLevel)
+  }
+
+  const totalLearned = learned.size
+  const totalTerms = TERMS.length
+
   return (
-    <div className="space-y-6 max-w-3xl lg:max-w-none mx-auto">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-          <BookOpen className="h-6 w-6 text-blue-400" />
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
+            <BookOpen className="h-6 w-6 text-blue-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-white">Learn Investing</h1>
+            <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-bold text-white">Investing Dictionary</h1>
-          <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
+        {/* Overall progress */}
+        <div className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3">
+          <Trophy className="h-5 w-5 text-yellow-400" />
+          <div>
+            <p className="text-xs text-gray-500 font-medium">Overall Progress</p>
+            <p className="text-sm font-bold text-white">{totalLearned} / {totalTerms} terms learned</p>
+          </div>
+          <div className="w-24 h-2 bg-gray-800 rounded-full overflow-hidden ml-2">
+            <div className="h-full bg-yellow-500 rounded-full transition-all" style={{ width: `${(totalLearned / totalTerms) * 100}%` }} />
+          </div>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-        <Input
-          placeholder="Search any term..."
-          className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Category filters */}
-      <div className="flex gap-2 flex-wrap">
-        {CATEGORIES.map((cat) => (
+      {/* Tabs */}
+      <div className="flex gap-2">
+        {(['roadmap', 'dictionary'] as const).map((tab) => (
           <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-              activeCategory === cat
-                ? 'bg-blue-600 border-blue-600 text-white'
-                : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
-            }`}
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={cn(
+              'px-5 py-2.5 rounded-xl text-sm font-semibold transition-all capitalize',
+              activeTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-900 border border-gray-800 text-gray-400 hover:text-white'
+            )}
           >
-            {cat !== 'All' && CATEGORY_ICONS[cat]}
-            {cat}
+            {tab === 'roadmap' ? '🗺️ Learning Roadmap' : '📖 Full Dictionary'}
           </button>
         ))}
       </div>
 
-      {/* Count */}
-      <p className="text-base text-gray-500">{filtered.length} terms</p>
+      {/* ── ROADMAP TAB ── */}
+      {activeTab === 'roadmap' && (
+        <div className="space-y-5">
+          {ROADMAP.map((level, li) => {
+            const learnedInLevel = level.terms.filter((t) => learned.has(t)).length
+            const pct = Math.round((learnedInLevel / level.terms.length) * 100)
+            const unlocked = isLevelUnlocked(level)
+            const complete = isLevelComplete(level.level)
 
-      {/* Terms list */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
-        {filtered.length === 0 && (
-          <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
-        )}
-        {filtered.map((t) => (
-          <Card
-            key={t.term}
-            className="cursor-pointer hover:bg-gray-800/40 transition-colors"
-            onClick={() => setExpanded(expanded === t.term ? null : t.term)}
-          >
-            <CardContent className="p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                    <h3 className="text-base font-bold text-white">{t.term}</h3>
-                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
-                      {CATEGORY_ICONS[t.category]}
-                      {t.category}
-                    </span>
+            return (
+              <div key={level.level} className={cn('rounded-2xl border p-5 transition-all', level.color, !unlocked && 'opacity-50')}>
+                {/* Level header */}
+                <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{level.emoji}</span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-white">{level.level}</h3>
+                        {complete && <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-semibold">Complete ✓</span>}
+                        {!unlocked && <span className="text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded-full flex items-center gap-1"><Lock className="h-3 w-3" /> Locked</span>}
+                      </div>
+                      <p className="text-sm text-gray-400">{level.desc}</p>
+                    </div>
                   </div>
-                  <p className="text-base text-blue-300 font-medium">{t.simple}</p>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-white">{learnedInLevel}/{level.terms.length}</p>
+                    <p className="text-xs text-gray-500">{pct}% done</p>
+                  </div>
+                </div>
 
-                  {expanded === t.term && (
-                    <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
-                      <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
-                      {t.example && (
-                        <div className="bg-gray-900 rounded-lg px-4 py-3">
-                          <span className="text-sm text-gray-500 font-medium">Example: </span>
-                          <span className="text-sm text-gray-300">{t.example}</span>
-                        </div>
-                      )}
-                      {t.tip && (
-                        <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
-                          <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
-                          <span className="text-sm text-yellow-300">{t.tip}</span>
+                {/* Progress bar */}
+                <div className="h-2 bg-gray-800 rounded-full overflow-hidden mb-4">
+                  <div className={cn('h-full rounded-full transition-all duration-700', level.barColor)} style={{ width: `${pct}%` }} />
+                </div>
+
+                {/* Terms grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {level.terms.map((termName) => {
+                    const termData = TERMS.find((t) => t.term === termName)
+                    const isLearned = learned.has(termName)
+                    return (
+                      <button
+                        key={termName}
+                        disabled={!unlocked}
+                        onClick={() => {
+                          if (!unlocked) return
+                          setActiveTab('dictionary')
+                          setSearch(termName)
+                          setTimeout(() => handleExpand(termName), 100)
+                        }}
+                        className={cn(
+                          'flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left text-sm transition-all',
+                          isLearned
+                            ? 'border-green-500/40 bg-green-500/10 text-green-300'
+                            : 'border-gray-700 bg-gray-900/50 text-gray-300 hover:border-gray-500',
+                          !unlocked && 'cursor-not-allowed'
+                        )}
+                      >
+                        <span className="font-medium truncate">{termName}</span>
+                        {isLearned ? (
+                          <span className="text-green-400 shrink-0">✓</span>
+                        ) : (
+                          <ChevronRight className="h-3.5 w-3.5 text-gray-600 shrink-0" />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+
+          <p className="text-xs text-gray-600 text-center">Click any term to read its definition and mark it as learned. Complete each level to unlock the next.</p>
+        </div>
+      )}
+
+      {/* ── DICTIONARY TAB ── */}
+      {activeTab === 'dictionary' && (
+        <div className="space-y-5">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+            <Input
+              placeholder="Search any term..."
+              className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          {/* Category filters */}
+          <div className="flex gap-2 flex-wrap">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
+                  activeCategory === cat ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
+                }`}
+              >
+                {cat !== 'All' && CATEGORY_ICONS[cat]}
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-base text-gray-500">{filtered.length} terms</p>
+
+          {/* Terms list */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+            {filtered.length === 0 && (
+              <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
+            )}
+            {filtered.map((t) => (
+              <Card
+                key={t.term}
+                className="cursor-pointer hover:bg-gray-800/40 transition-colors"
+                onClick={() => handleExpand(t.term)}
+              >
+                <CardContent className="p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                        <h3 className="text-base font-bold text-white">{t.term}</h3>
+                        <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
+                          {CATEGORY_ICONS[t.category]}
+                          {t.category}
+                        </span>
+                        {learned.has(t.term) && (
+                          <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-semibold">Learned ✓</span>
+                        )}
+                      </div>
+                      <p className="text-base text-blue-300 font-medium">{t.simple}</p>
+
+                      {expanded === t.term && (
+                        <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
+                          <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
+                          {t.example && (
+                            <div className="bg-gray-900 rounded-lg px-4 py-3">
+                              <span className="text-sm text-gray-500 font-medium">Example: </span>
+                              <span className="text-sm text-gray-300">{t.example}</span>
+                            </div>
+                          )}
+                          {t.tip && (
+                            <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
+                              <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+                              <span className="text-sm text-yellow-300">{t.tip}</span>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
-                <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                    <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

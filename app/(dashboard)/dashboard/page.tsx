@@ -13,6 +13,8 @@ import PortfolioPerformanceChart from '@/components/charts/PortfolioPerformanceC
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
 import MarketRecap from '@/components/MarketRecap'
+import OnboardingModal from '@/components/OnboardingModal'
+import { useStreak } from '@/hooks/useStreak'
 import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
 interface StatCardProps {
@@ -56,6 +58,7 @@ function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatC
 }
 
 export default function DashboardPage() {
+  const { streak } = useStreak()
   const [holdings, setHoldings] = useState<any[]>([])
   const [enrichedHoldings, setEnrichedHoldings] = useState<HoldingWithQuote[]>([])
   const [loadingHoldings, setLoadingHoldings] = useState(true)
@@ -174,6 +177,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex gap-7 min-h-full">
+      <OnboardingModal />
       {/* Left watchlist panel */}
       <aside className="hidden lg:flex flex-col w-72 shrink-0 gap-5 sticky top-4 self-start">
         {/* Watchlist preview */}
@@ -242,7 +246,14 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Good morning 👋</h1>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-3xl font-bold text-slate-900">Good morning 👋</h1>
+              {streak > 0 && (
+                <span className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-sm font-bold px-3 py-1 rounded-full">
+                  🔥 {streak} day{streak !== 1 ? 's' : ''} streak
+                </span>
+              )}
+            </div>
             <p className="text-base text-slate-500 mt-1.5">
               Your portfolio is {totalGainLoss >= 0 ? 'up' : 'down'} today · Last updated just now
             </p>
