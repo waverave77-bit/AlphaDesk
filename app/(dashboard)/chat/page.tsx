@@ -203,13 +203,13 @@ export default function ChatPage() {
           {messages.map((m, i) => (
             <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
               {m.role === 'assistant' && (
-                <div className="h-8 w-8 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <Bot className="h-4 w-4 text-white" />
+                <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <Bot className="h-5 w-5 text-white" />
                 </div>
               )}
               <div
                 className={cn(
-                  'max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
+                  'max-w-[75%] rounded-2xl px-5 py-4 text-base leading-relaxed',
                   m.role === 'user'
                     ? 'bg-blue-600 text-white rounded-br-sm'
                     : 'bg-gray-800 text-gray-200 rounded-bl-sm'
@@ -245,7 +245,7 @@ export default function ChatPage() {
               onKeyDown={handleKey}
               placeholder="Ask anything about stocks, markets, investing..."
               rows={1}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
               style={{ maxHeight: '120px', overflowY: 'auto' }}
               onInput={(e) => {
                 const t = e.currentTarget
