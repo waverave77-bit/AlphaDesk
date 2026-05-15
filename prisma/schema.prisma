@@ -98,6 +98,13 @@ model VirtualTrade {
   portfolio   VirtualPortfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 }
 
+model HedgeFundCache {
+  cik       String   @id
+  name      String
+  data      String   // JSON stringified fund data
+  updatedAt DateTime @updatedAt
+}
+
 model FeatureFlag {
   key       String   @id
   enabled   Boolean  @default(true)
