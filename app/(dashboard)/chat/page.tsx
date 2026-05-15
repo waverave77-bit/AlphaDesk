@@ -4,6 +4,129 @@ import { useSearchParams } from 'next/navigation'
 import { Send, Bot, Loader2, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+// ─── Finn response renderer ───────────────────────────────────────────────────
+
+function renderInline(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
+  return parts.map((p, i) => {
+    if (p.startsWith('**') && p.endsWith('**'))
+      return <strong key={i} className="font-semibold text-white">{p.slice(2, -2)}</strong>
+    if (p.startsWith('*') && p.endsWith('*'))
+      return <em key={i} className="italic text-gray-300">{p.slice(1, -1)}</em>
+    return p
+  })
+}
+
+function FinnMessage({ content }: { content: string }) {
+  const lines = content.split('\n')
+  const nodes: React.ReactNode[] = []
+  let i = 0
+
+  while (i < lines.length) {
+    const line = lines[i]
+    const trimmed = line.trim()
+
+    // Skip empty
+    if (!trimmed) { nodes.push(<div key={i} className="h-1" />); i++; continue }
+
+    // Horizontal rule
+    if (trimmed === '---') {
+      nodes.push(<div key={i} className="border-t border-gray-700/60 my-3" />)
+      i++; continue
+    }
+
+    // ## Section header
+    if (trimmed.startsWith('##')) {
+      const label = trimmed.replace(/^##\s*\*?\*?/, '').replace(/\*?\*?:?\s*$/, '').trim()
+      nodes.push(
+        <p key={i} className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-4 mb-1.5">
+          {label}
+        </p>
+      )
+      i++; continue
+    }
+
+    // Recommendation badge: 🟢 🟡 🔴
+    if (/^(🟢|🟡|🔴)/.test(trimmed)) {
+      const isGreen = trimmed.startsWith('🟢')
+      const isYellow = trimmed.startsWith('🟡')
+      const style = isGreen
+        ? 'bg-green-500/15 border-green-500/30 text-green-300'
+        : isYellow
+          ? 'bg-yellow-500/15 border-yellow-500/30 text-yellow-300'
+          : 'bg-red-500/15 border-red-500/30 text-red-300'
+      nodes.push(
+        <div key={i} className={`flex items-center gap-2 rounded-xl border px-4 py-3 my-1.5 text-sm font-semibold ${style}`}>
+          {renderInline(trimmed)}
+        </div>
+      )
+      i++; continue
+    }
+
+    // ⚠️ disclaimer
+    if (trimmed.startsWith('⚠️')) {
+      nodes.push(
+        <p key={i} className="text-xs text-gray-500 italic mt-3 pt-3 border-t border-gray-700/50">
+          {trimmed}
+        </p>
+      )
+      i++; continue
+    }
+
+    // Numbered list — collect consecutive items
+    if (/^\d+\./.test(trimmed)) {
+      const items: string[] = []
+      while (i < lines.length && /^\d+\./.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+\.\s*/, ''))
+        i++
+      }
+      nodes.push(
+        <ol key={`ol-${i}`} className="space-y-2 my-2">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex gap-3 text-gray-300 text-sm leading-relaxed">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">
+                {idx + 1}
+              </span>
+              <span>{renderInline(item)}</span>
+            </li>
+          ))}
+        </ol>
+      )
+      continue
+    }
+
+    // Bullet list — collect consecutive items
+    if (/^[-•]/.test(trimmed)) {
+      const items: string[] = []
+      while (i < lines.length && /^[-•]/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^[-•]\s*/, ''))
+        i++
+      }
+      nodes.push(
+        <ul key={`ul-${i}`} className="space-y-1.5 my-2">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex gap-2.5 text-gray-300 text-sm leading-relaxed">
+              <span className="text-blue-400 shrink-0 mt-1.5 w-1 h-1 rounded-full bg-blue-400 block" />
+              <span>{renderInline(item)}</span>
+            </li>
+          ))}
+        </ul>
+      )
+      continue
+    }
+
+    // Regular paragraph
+    nodes.push(
+      <p key={i} className="text-gray-200 text-base leading-relaxed">
+        {renderInline(trimmed)}
+      </p>
+    )
+    i++
+  }
+
+  return <div className="space-y-0.5">{nodes}</div>
+}
+
 interface Message {
   role: 'user' | 'assistant'
   content: string
@@ -214,20 +337,19 @@ export default function ChatPage() {
           {messages.map((m, i) => (
             <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
               {m.role === 'assistant' && (
-                <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <Bot className="h-5 w-5 text-white" />
+                <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <Bot className="h-4 w-4 text-white" />
                 </div>
               )}
-              <div
-                className={cn(
-                  'max-w-[75%] rounded-2xl px-5 py-4 text-xl leading-relaxed',
-                  m.role === 'user'
-                    ? 'bg-blue-600 text-white rounded-br-sm'
-                    : 'bg-gray-800 text-gray-200 rounded-bl-sm'
-                )}
-              >
-                {m.content}
-              </div>
+              {m.role === 'user' ? (
+                <div className="max-w-[75%] rounded-2xl px-5 py-3.5 text-base leading-relaxed bg-blue-600 text-white rounded-br-sm">
+                  {m.content}
+                </div>
+              ) : (
+                <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800/80 border border-gray-700/50 px-5 py-4 rounded-bl-sm">
+                  <FinnMessage content={m.content} />
+                </div>
+              )}
             </div>
           ))}
 
