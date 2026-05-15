@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
+import { useRouter } from 'next/navigation'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
 
@@ -14,6 +15,20 @@ interface EarningsItem {
   earningsDate: string
   daysUntil: number
   time?: string
+}
+
+interface CellRect {
+  top: number
+  left: number
+  width: number
+  height: number
+}
+
+interface ExpandState {
+  date: string
+  items: EarningsItem[]
+  rect: CellRect
+  phase: 'entering' | 'open' | 'leaving'
 }
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -57,17 +72,16 @@ function CalendarGrid({
   month: number
   earningsMap: Map<string, EarningsItem[]>
   selectedDate: string | null
-  onSelect: (d: string) => void
+  onSelect: (d: string, rect: CellRect) => void
 }) {
   const today = todayStr()
-  const firstDay = new Date(year, month, 1).getDay() // 0=Sun
+  const firstDay = new Date(year, month, 1).getDay()
   const daysInMonth = new Date(year, month + 1, 0).getDate()
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ]
-  // Pad to complete last row
   while (cells.length % 7 !== 0) cells.push(null)
 
   return (
@@ -75,7 +89,7 @@ function CalendarGrid({
       {/* Day headers */}
       <div className="grid grid-cols-7 mb-1">
         {WEEKDAYS.map((w) => (
-          <div key={w} className="text-center text-[11px] font-semibold text-gray-400 dark:text-gray-500 py-2 uppercase tracking-wider">
+          <div key={w} className="text-center text-[11px] font-semibold text-gray-400 py-2 uppercase tracking-wider">
             {w}
           </div>
         ))}
@@ -97,7 +111,12 @@ function CalendarGrid({
           return (
             <button
               key={dateStr}
-              onClick={() => hasEarnings ? onSelect(isSelected ? '' : dateStr) : undefined}
+              onClick={(e) => {
+                if (!hasEarnings) return
+                const el = e.currentTarget as HTMLButtonElement
+                const r = el.getBoundingClientRect()
+                onSelect(dateStr, { top: r.top, left: r.left, width: r.width, height: r.height })
+              }}
               disabled={!hasEarnings}
               className={[
                 'relative flex flex-col items-center rounded-xl py-2.5 px-1 transition-all select-none',
@@ -120,10 +139,7 @@ function CalendarGrid({
               {/* Earnings dots */}
               {hasEarnings && (
                 <div className="flex items-center gap-0.5 mt-1.5">
-                  {(items!.length <= 3
-                    ? items!
-                    : items!.slice(0, 2)
-                  ).map((item) => (
+                  {(items!.length <= 3 ? items! : items!.slice(0, 2)).map((item) => (
                     <div
                       key={item.ticker}
                       className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white/80' : isToday ? 'bg-amber-500' : 'bg-blue-500'}`}
@@ -139,48 +155,6 @@ function CalendarGrid({
             </button>
           )
         })}
-      </div>
-    </div>
-  )
-}
-
-// ─── detail panel ────────────────────────────────────────────────────────────
-
-function DetailPanel({ date, items, onClose }: { date: string; items: EarningsItem[]; onClose: () => void }) {
-  const d = new Date(date + 'T12:00:00Z')
-  const isToday = date === todayStr()
-  const label = isToday
-    ? 'Today'
-    : d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-
-  return (
-    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
-      {/* Header */}
-      <div className={`flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800 ${isToday ? 'bg-amber-50 dark:bg-amber-500/5' : ''}`}>
-        <div>
-          <p className={`text-xs font-semibold uppercase tracking-wider mb-0.5 ${isToday ? 'text-amber-500' : 'text-gray-400'}`}>
-            {isToday ? 'Earnings Today' : 'Earnings'}
-          </p>
-          <h3 className="text-base font-bold text-gray-900 dark:text-white">{label}</h3>
-          <p className="text-xs text-gray-400 mt-0.5">{items.length} compan{items.length === 1 ? 'y' : 'ies'} reporting</p>
-        </div>
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        >
-          <X size={15} />
-        </button>
-      </div>
-
-      {/* Company list */}
-      <div className="divide-y divide-gray-100 dark:divide-gray-800">
-        {items.map((item) => (
-          <div key={item.ticker} className="flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-            <span className="text-sm font-extrabold text-blue-500 w-14 shrink-0">{item.ticker}</span>
-            <span className="text-sm text-gray-600 dark:text-gray-400 flex-1 truncate">{item.companyName}</span>
-            <div className="shrink-0">{getTimeBadge(item.time)}</div>
-          </div>
-        ))}
       </div>
     </div>
   )
@@ -236,6 +210,113 @@ function SearchResults({ items }: { items: EarningsItem[] }) {
   )
 }
 
+// ─── expanded date overlay ────────────────────────────────────────────────────
+
+function ExpandedDateView({ expandState, onClose }: { expandState: ExpandState; onClose: () => void }) {
+  const router = useRouter()
+  const { date, items, rect, phase } = expandState
+  const isOpen = phase === 'open'
+
+  const d = new Date(date + 'T12:00:00Z')
+  const isToday = date === todayStr()
+  const label = isToday
+    ? 'Today'
+    : d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+
+  // Lock body scroll while overlay is open
+  useEffect(() => {
+    if (phase !== 'leaving') {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [phase])
+
+  return (
+    <div
+      className="bg-gray-900"
+      style={{
+        position: 'fixed',
+        zIndex: 100,
+        top: isOpen ? 0 : rect.top,
+        left: isOpen ? 0 : rect.left,
+        width: isOpen ? '100vw' : rect.width,
+        height: isOpen ? '100vh' : rect.height,
+        borderRadius: isOpen ? '0px' : '12px',
+        transition: [
+          'top 0.45s cubic-bezier(0.4,0,0.2,1)',
+          'left 0.45s cubic-bezier(0.4,0,0.2,1)',
+          'width 0.45s cubic-bezier(0.4,0,0.2,1)',
+          'height 0.45s cubic-bezier(0.4,0,0.2,1)',
+          'border-radius 0.45s cubic-bezier(0.4,0,0.2,1)',
+        ].join(', '),
+        overflow: 'hidden',
+      }}
+    >
+      {/* Inner content — fades in after box expands, fades out before box collapses */}
+      <div
+        style={{
+          opacity: isOpen ? 1 : 0,
+          transition: `opacity ${isOpen ? '220ms' : '160ms'} ease`,
+          transitionDelay: isOpen ? '260ms' : '0ms',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Header */}
+        <div className={`flex items-center gap-4 px-6 pt-6 pb-5 border-b border-gray-800 shrink-0 ${isToday ? 'bg-amber-500/5' : ''}`}>
+          {/* Back button */}
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group shrink-0"
+          >
+            <div className="h-9 w-9 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
+              <ArrowLeft size={16} className="text-white" />
+            </div>
+            <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors hidden sm:block">Back</span>
+          </button>
+
+          {/* Date title */}
+          <div className="flex-1 text-center">
+            <p className={`text-xs font-semibold uppercase tracking-widest mb-0.5 ${isToday ? 'text-amber-400' : 'text-gray-500'}`}>
+              {isToday ? 'Earnings Today' : 'Earnings Report'}
+            </p>
+            <h2 className="text-xl sm:text-2xl font-bold text-white">{label}</h2>
+          </div>
+
+          {/* Count badge */}
+          <div className="shrink-0">
+            <span className="text-xs font-semibold text-gray-400 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5">
+              {items.length} compan{items.length === 1 ? 'y' : 'ies'}
+            </span>
+          </div>
+        </div>
+
+        {/* Company grid — scrollable */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-w-6xl mx-auto">
+            {items.map((item) => (
+              <button
+                key={item.ticker}
+                onClick={() => router.push(`/research/${item.ticker}`)}
+                className="flex items-center gap-3 p-4 rounded-xl bg-gray-800/60 border border-gray-700 hover:bg-gray-800 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all text-left group"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-extrabold text-blue-400 group-hover:text-blue-300 transition-colors">{item.ticker}</p>
+                  <p className="text-xs text-gray-400 mt-0.5 leading-tight truncate">{item.companyName}</p>
+                </div>
+                <div className="shrink-0">{getTimeBadge(item.time)}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── page ─────────────────────────────────────────────────────────────────────
 
 export default function EarningsPage() {
@@ -245,6 +326,7 @@ export default function EarningsPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [search, setSearch] = useState('')
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [expandState, setExpandState] = useState<ExpandState | null>(null)
 
   const now = new Date()
   const [calMonth, setCalMonth] = useState({ year: now.getFullYear(), month: now.getMonth() })
@@ -278,7 +360,27 @@ export default function EarningsPage() {
   }, [earnings, search])
 
   const isSearching = search.trim().length > 0
-  const selectedItems = selectedDate ? (earningsMap.get(selectedDate) ?? []) : []
+
+  function handleDateSelect(dateStr: string, rect: CellRect) {
+    const items = earningsMap.get(dateStr) ?? []
+    if (!items.length) return
+    setSelectedDate(dateStr)
+    // Start at cell position, then animate to fullscreen
+    setExpandState({ date: dateStr, items, rect, phase: 'entering' })
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        setExpandState((prev) => prev ? { ...prev, phase: 'open' } : null)
+      )
+    )
+  }
+
+  function handleClose() {
+    setExpandState((prev) => prev ? { ...prev, phase: 'leaving' } : null)
+    setTimeout(() => {
+      setExpandState(null)
+      setSelectedDate(null)
+    }, 480)
+  }
 
   return (
     <div>
@@ -357,64 +459,57 @@ export default function EarningsPage() {
 
       {/* Calendar */}
       {!isSearching && (
-        <div className={`grid gap-6 ${selectedDate && selectedItems.length > 0 ? 'grid-cols-1 lg:grid-cols-[1fr_320px]' : 'grid-cols-1'}`}>
-          {/* Calendar panel */}
-          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
-            {/* Month nav */}
-            <div className="flex items-center justify-between mb-5">
-              <button
-                onClick={() => setCalMonth((m) => {
-                  const d = new Date(m.year, m.month - 1)
-                  return { year: d.getFullYear(), month: d.getMonth() }
-                })}
-                className="p-2 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">
-                {MONTHS[calMonth.month]} {calMonth.year}
-              </h2>
-              <button
-                onClick={() => setCalMonth((m) => {
-                  const d = new Date(m.year, m.month + 1)
-                  return { year: d.getFullYear(), month: d.getMonth() }
-                })}
-                className="p-2 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-
-            {loading ? (
-              <LoadingSkeleton />
-            ) : error ? (
-              <p className="text-center text-gray-500 py-10">{error}</p>
-            ) : (
-              <CalendarGrid
-                year={calMonth.year}
-                month={calMonth.month}
-                earningsMap={earningsMap}
-                selectedDate={selectedDate}
-                onSelect={(d) => setSelectedDate(d || null)}
-              />
-            )}
-
-            {!loading && !error && (
-              <p className="text-center text-xs text-gray-400 dark:text-gray-600 mt-4">
-                {earningsMap.size} days with earnings in the next 14 trading days
-              </p>
-            )}
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
+          {/* Month nav */}
+          <div className="flex items-center justify-between mb-5">
+            <button
+              onClick={() => setCalMonth((m) => {
+                const d = new Date(m.year, m.month - 1)
+                return { year: d.getFullYear(), month: d.getMonth() }
+              })}
+              className="p-2 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <h2 className="text-base font-bold text-gray-900 dark:text-white">
+              {MONTHS[calMonth.month]} {calMonth.year}
+            </h2>
+            <button
+              onClick={() => setCalMonth((m) => {
+                const d = new Date(m.year, m.month + 1)
+                return { year: d.getFullYear(), month: d.getMonth() }
+              })}
+              className="p-2 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
 
-          {/* Detail panel */}
-          {selectedDate && selectedItems.length > 0 && (
-            <DetailPanel
-              date={selectedDate}
-              items={selectedItems}
-              onClose={() => setSelectedDate(null)}
+          {loading ? (
+            <LoadingSkeleton />
+          ) : error ? (
+            <p className="text-center text-gray-500 py-10">{error}</p>
+          ) : (
+            <CalendarGrid
+              year={calMonth.year}
+              month={calMonth.month}
+              earningsMap={earningsMap}
+              selectedDate={selectedDate}
+              onSelect={handleDateSelect}
             />
           )}
+
+          {!loading && !error && (
+            <p className="text-center text-xs text-gray-400 dark:text-gray-600 mt-4">
+              {earningsMap.size} days with earnings in the next 14 trading days
+            </p>
+          )}
         </div>
+      )}
+
+      {/* Expanded date overlay */}
+      {expandState && (
+        <ExpandedDateView expandState={expandState} onClose={handleClose} />
       )}
     </div>
   )

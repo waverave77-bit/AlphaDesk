@@ -189,8 +189,15 @@ export default function ChatPage() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [experience, setExperience] = useState<string>('beginner')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  // Load experience level from onboarding
+  useEffect(() => {
+    const saved = localStorage.getItem('zg_experience') ?? 'beginner'
+    setExperience(saved)
+  }, [])
 
   // Pre-fill from ?q= param (e.g. from chart spike "Ask AI why" button)
   useEffect(() => {
@@ -216,7 +223,7 @@ export default function ChatPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: messages }),
+        body: JSON.stringify({ message: msg, history: messages, experience }),
       })
       const data = await res.json()
       setMessages([...updated, { role: 'assistant', content: data.reply }])
@@ -300,7 +307,9 @@ export default function ChatPage() {
           </div>
           <div>
             <p className="text-sm font-bold text-white">Finn — Market Analyst</p>
-            <p className="text-xs text-gray-500">Live news · Buy/Hold/Sell reads · Not financial advice</p>
+            <p className="text-xs text-gray-500">
+              Live news · {experience === 'beginner' ? 'Beginner mode — plain English' : experience === 'some' ? 'Intermediate mode' : 'Pro mode — full analysis'} · Not financial advice
+            </p>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />

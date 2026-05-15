@@ -36,6 +36,7 @@ export default function OnboardingModal() {
 
   const complete = async () => {
     localStorage.setItem(STORAGE_KEY, 'true')
+    if (experience) localStorage.setItem('zg_experience', experience)
     // Save to DB in background (fire and forget)
     fetch('/api/onboarding', {
       method: 'POST',
