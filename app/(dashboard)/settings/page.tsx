@@ -3,15 +3,13 @@ import { useSession, signOut } from 'next-auth/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, BarChart2, LogOut, Sun, Moon, Brain } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
-import { useChartType } from '@/components/ChartTypeProvider'
 import { cn } from '@/lib/utils'
 
 export default function SettingsPage() {
   const { data: session } = useSession()
   const { isDark, accentId, setDark, setAccent } = useTheme()
-  const { chartType, setChartType } = useChartType()
 
   return (
     <div className="space-y-6">
@@ -87,37 +85,6 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Chart Style */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
-                <BarChart2 className="h-4 w-4 text-purple-400" />
-                Chart Style
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { id: 'line',        label: 'Line Chart',  desc: 'Clean area chart — fast & simple', icon: '📈' },
-                  { id: 'tradingview', label: 'TradingView', desc: 'Full chart with indicators & tools', icon: '📊' },
-                ].map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setChartType(opt.id as any)}
-                    className={cn(
-                      'flex flex-col gap-1.5 rounded-lg border px-4 py-3 text-left transition-all',
-                      chartType === opt.id ? 'border-blue-500/50 bg-blue-500/10' : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/40'
-                    )}
-                  >
-                    <span className="text-xl">{opt.icon}</span>
-                    <p className="text-sm font-medium text-white">{opt.label}</p>
-                    <p className="text-[10px] text-gray-500">{opt.desc}</p>
-                    {chartType === opt.id && <span className="text-[10px] text-blue-400 font-semibold">Active ✓</span>}
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
 
         </div>
 

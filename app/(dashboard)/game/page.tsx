@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn, formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-import SmartChart from '@/components/charts/SmartChart'
+import StockChart from '@/components/charts/StockChart'
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
@@ -331,7 +331,7 @@ export default function GamePage() {
                   <CardTitle className="text-sm text-gray-400">{tradeTicker} — Price Chart</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <SmartChart ticker={tradeTicker} height={420} />
+                  <StockChart ticker={tradeTicker} currentPrice={preview?.price ?? 0} />
                 </CardContent>
               </Card>
             ) : (

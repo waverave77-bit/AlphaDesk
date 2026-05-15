@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import SmartChart from '@/components/charts/SmartChart'
+import StockChart from '@/components/charts/StockChart'
 import AnalystCard from '@/components/research/AnalystCard'
 import RedditSentiment from '@/components/research/RedditSentiment'
 import OptionsPanel from '@/components/research/OptionsPanel'
@@ -242,12 +242,12 @@ export default function StockDetailPage() {
       )}
 
       {/* Chart */}
-      <Card className="overflow-hidden">
+      <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Price Chart · Powered by TradingView</CardTitle>
+          <CardTitle className="text-sm text-gray-400">Price Chart</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <SmartChart ticker={quote.ticker} />
+        <CardContent>
+          <StockChart ticker={quote.ticker} currentPrice={quote.price} previousClose={quote.previousClose} />
         </CardContent>
       </Card>
 
