@@ -24,14 +24,14 @@ function getTimeBadge(time: string) {
   const t = time.toLowerCase()
   if (t.includes('before') || t === 'bmo') {
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#60a5fa', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '4px', padding: '1px 6px' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#60a5fa', background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: '4px', padding: '2px 7px' }}>
         <Clock size={9} /> BMO
       </span>
     )
   }
   if (t.includes('after') || t === 'amc') {
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#a78bfa', background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '4px', padding: '1px 6px' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#a78bfa', background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', borderRadius: '4px', padding: '2px 7px' }}>
         <Clock size={9} /> AMC
       </span>
     )
@@ -39,80 +39,163 @@ function getTimeBadge(time: string) {
   return null
 }
 
-function getDayBadge(daysUntil: number) {
-  if (daysUntil === 0) return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Today 🔔</Badge>
-  if (daysUntil === 1) return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Tomorrow</Badge>
-  if (daysUntil <= 7) return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">In {daysUntil} days</Badge>
-  return <Badge className="bg-gray-700/50 text-gray-400 border-gray-600/50">In {daysUntil} days</Badge>
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-}
-
-function groupByWeek(items: EarningsItem[]) {
-  const thisWeek: EarningsItem[] = []
-  const nextWeek: EarningsItem[] = []
-  const later: EarningsItem[] = []
-  for (const item of items) {
-    if (item.daysUntil <= 6) thisWeek.push(item)
-    else if (item.daysUntil <= 13) nextWeek.push(item)
-    else later.push(item)
+function formatDayLabel(iso: string, daysUntil: number) {
+  if (daysUntil === 0) return { day: 'Today', date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: true }
+  if (daysUntil === 1) return { day: 'Tomorrow', date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: false }
+  return {
+    day: new Date(iso).toLocaleDateString('en-US', { weekday: 'short' }),
+    date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    isToday: false,
   }
-  return { thisWeek, nextWeek, later }
 }
 
-function EarningsRow({ item }: { item: EarningsItem }) {
+function groupByDate(items: EarningsItem[]) {
+  const map = new Map<string, EarningsItem[]>()
+  for (const item of items) {
+    const key = item.earningsDate
+    if (!map.has(key)) map.set(key, [])
+    map.get(key)!.push(item)
+  }
+  return map
+}
+
+function TimelineRow({ item }: { item: EarningsItem }) {
   return (
-    <div className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-800/40 transition-colors border-b border-gray-800 last:border-0">
-      <div className="flex items-center gap-4 min-w-0">
-        <span className="text-sm font-bold text-blue-400 w-16 shrink-0">{item.ticker}</span>
-        <span className="text-sm text-gray-300 truncate hidden sm:block">{item.companyName}</span>
-      </div>
-      <div className="flex items-center gap-2.5 shrink-0">
+    <div style={{
+      background: '#111827',
+      border: '1px solid #1f2937',
+      borderRadius: '10px',
+      padding: '10px 14px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      transition: 'border-color 0.15s',
+    }}
+      className="hover:border-gray-600"
+    >
+      <span style={{ fontSize: '13px', fontWeight: 800, color: '#60a5fa', width: '52px', flexShrink: 0 }}>
+        {item.ticker}
+      </span>
+      <span style={{ fontSize: '12px', color: '#9ca3af', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="hidden sm:block">
+        {item.companyName}
+      </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
         {item.time && getTimeBadge(item.time)}
-        <span className="text-xs text-gray-500 hidden md:block">{formatDate(item.earningsDate)}</span>
-        {getDayBadge(item.daysUntil)}
       </div>
-    </div>
-  )
-}
-
-function EarningsSection({ title, items }: { title: string; items: EarningsItem[] }) {
-  if (items.length === 0) return null
-  return (
-    <div className="mb-6">
-      <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{title}</h2>
-      <Card className="bg-gray-900 border-gray-800 overflow-hidden">
-        <CardContent className="p-0">
-          {items.map((item) => <EarningsRow key={`${item.ticker}-${item.earningsDate}`} item={item} />)}
-        </CardContent>
-      </Card>
     </div>
   )
 }
 
 function LoadingSkeleton() {
   return (
-    <div className="space-y-6">
-      {[0, 1].map((g) => (
-        <div key={g}>
-          <Skeleton className="h-4 w-24 mb-3 bg-gray-800" />
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-0">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="flex items-center justify-between px-5 py-3.5 border-b border-gray-800 last:border-0">
-                  <div className="flex items-center gap-4">
-                    <Skeleton className="h-4 w-14 bg-gray-800" />
-                    <Skeleton className="h-4 w-36 bg-gray-800" />
-                  </div>
-                  <Skeleton className="h-5 w-20 bg-gray-800" />
+    <div style={{ display: 'flex', gap: 0, maxWidth: '680px' }}>
+      <div style={{ width: '2px', background: '#1f2937', margin: '6px 22px 0 82px', borderRadius: '2px', flexShrink: 0 }} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, marginLeft: '-2px' }}>
+        {[0, 1, 2].map((g) => (
+          <div key={g} style={{ display: 'flex', gap: '16px', marginBottom: '24px', position: 'relative' }}>
+            <div style={{ width: '72px', flexShrink: 0, paddingRight: '12px', paddingTop: '3px', textAlign: 'right' }}>
+              <Skeleton className="h-3 w-10 ml-auto bg-gray-800 mb-1" />
+              <Skeleton className="h-2.5 w-8 ml-auto bg-gray-800" />
+            </div>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1f2937', flexShrink: 0, marginTop: '2px', position: 'relative', left: '-7px' }} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', marginLeft: '-3px' }}>
+              {Array.from({ length: g === 1 ? 2 : 1 }).map((_, i) => (
+                <div key={i} style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '10px', padding: '10px 14px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <Skeleton className="h-3 w-12 bg-gray-800" />
+                  <Skeleton className="h-3 w-36 bg-gray-800" />
+                  <Skeleton className="h-4 w-12 bg-gray-800 ml-auto" />
                 </div>
               ))}
-            </CardContent>
-          </Card>
-        </div>
-      ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Timeline({ items }: { items: EarningsItem[] }) {
+  const grouped = useMemo(() => groupByDate(items), [items])
+  const dates = Array.from(grouped.keys()).sort()
+
+  // Find where "next week" starts (daysUntil > 6)
+  const nextWeekIdx = dates.findIndex((d) => {
+    const dayItems = grouped.get(d)!
+    return dayItems[0].daysUntil > 6
+  })
+  const laterIdx = dates.findIndex((d) => {
+    const dayItems = grouped.get(d)!
+    return dayItems[0].daysUntil > 13
+  })
+
+  return (
+    <div style={{ display: 'flex', gap: 0, maxWidth: '680px' }}>
+      {/* Vertical line */}
+      <div style={{ width: '2px', background: '#1f2937', margin: '6px 22px 0 82px', borderRadius: '2px', flexShrink: 0 }} />
+
+      {/* Days */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, marginLeft: '-2px' }}>
+        {dates.map((dateKey, idx) => {
+          const dayItems = grouped.get(dateKey)!
+          const { day, date, isToday } = formatDayLabel(dateKey, dayItems[0].daysUntil)
+
+          const showNextWeekDivider = idx === nextWeekIdx && nextWeekIdx > 0
+          const showLaterDivider = idx === laterIdx && laterIdx > 0 && laterIdx !== nextWeekIdx
+
+          return (
+            <div key={dateKey}>
+              {showNextWeekDivider && (
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px', paddingLeft: '3px' }}>
+                  — Next Week —
+                </div>
+              )}
+              {showLaterDivider && (
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px', paddingLeft: '3px' }}>
+                  — Later —
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', position: 'relative' }}>
+                {/* Date label */}
+                <div style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: isToday ? '#fbbf24' : '#6b7280',
+                  width: '72px',
+                  flexShrink: 0,
+                  paddingTop: '3px',
+                  textAlign: 'right',
+                  paddingRight: '12px',
+                }}>
+                  {day}
+                  <br />
+                  <span style={{ fontWeight: 500, fontSize: '10px', color: isToday ? '#92400e' : '#4b5563' }}>{date}</span>
+                </div>
+
+                {/* Dot */}
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: isToday ? '#f59e0b' : '#3b82f6',
+                  boxShadow: isToday ? '0 0 0 4px rgba(245,158,11,0.2)' : 'none',
+                  border: '2px solid #0a0a0f',
+                  flexShrink: 0,
+                  marginTop: '2px',
+                  position: 'relative',
+                  left: '-7px',
+                }} />
+
+                {/* Companies */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', marginLeft: '-3px' }}>
+                  {dayItems.map((item) => (
+                    <TimelineRow key={`${item.ticker}-${item.earningsDate}`} item={item} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -143,7 +226,6 @@ export default function EarningsPage() {
     )
   }, [earnings, search])
 
-  const { thisWeek, nextWeek, later } = groupByWeek(filtered)
   const isSearching = search.trim().length > 0
 
   return (
@@ -176,7 +258,7 @@ export default function EarningsPage() {
       </div>
 
       {/* Search */}
-      <div className="relative mb-6">
+      <div className="relative mb-8">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
         <Input
           placeholder="Search by ticker or company name..."
@@ -218,29 +300,17 @@ export default function EarningsPage() {
         </Card>
       )}
 
-      {/* Search results — flat list, no grouping */}
+      {/* Search results — flat timeline */}
       {!loading && !error && isSearching && filtered.length > 0 && (
         <div>
-          <p className="text-xs text-gray-500 mb-3">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</p>
-          <Card className="bg-gray-900 border-gray-800 overflow-hidden">
-            <CardContent className="p-0">
-              {filtered.map((item) => <EarningsRow key={`${item.ticker}-${item.earningsDate}`} item={item} />)}
-            </CardContent>
-          </Card>
+          <p className="text-xs text-gray-500 mb-5">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</p>
+          <Timeline items={filtered} />
         </div>
       )}
 
-      {/* Normal grouped view */}
+      {/* Normal timeline view */}
       {!loading && !error && !isSearching && earnings.length > 0 && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-8 items-start">
-          <div>
-            <EarningsSection title="This Week" items={thisWeek} />
-            <EarningsSection title="Next Week" items={nextWeek} />
-          </div>
-          <div>
-            <EarningsSection title="Later" items={later} />
-          </div>
-        </div>
+        <Timeline items={earnings} />
       )}
 
       {!loading && !error && earnings.length === 0 && !isSearching && (

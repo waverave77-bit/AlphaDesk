@@ -36,12 +36,20 @@ export async function GET() {
       }
     }
 
+    const todayStr = new Date().toISOString().split('T')[0]
+
     const results = await Promise.all(dates.map(async (date) => {
       const rows = await fetchDay(date)
+      // Calculate daysUntil as calendar days from today's date string
+      const msPerDay = 86400000
+      const daysUntil = Math.round(
+        (new Date(date + 'T12:00:00Z').getTime() - new Date(todayStr + 'T12:00:00Z').getTime()) / msPerDay
+      )
       return rows.map((r: any) => ({
         ticker: r.symbol ?? '',
         companyName: r.name ?? r.symbol ?? '',
         earningsDate: date,
+        daysUntil,
         time: r.time ?? '',
         epsForecast: r.epsForecast ?? '',
         marketCap: r.marketCap ?? '',
