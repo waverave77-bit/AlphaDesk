@@ -10,8 +10,21 @@ import { authOptions } from '@/lib/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://zainsgame.vercel.app'),
   title: 'Zains Game — Professional Stock Research & Portfolio Tracker',
-  description: 'AI-powered stock research and portfolio management',
+  description: 'AI-powered stock research, earnings calendar, and portfolio management.',
+  openGraph: {
+    title: 'Zains Game — Professional Stock Research & Portfolio Tracker',
+    description: 'AI-powered stock research, earnings calendar, and portfolio management.',
+    url: 'https://zainsgame.vercel.app',
+    siteName: 'Zains Game',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Zains Game — Stock Research & Portfolio Tracker',
+    description: 'AI-powered stock research, earnings calendar, and portfolio management.',
+  },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
