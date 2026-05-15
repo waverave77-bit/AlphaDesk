@@ -10,9 +10,9 @@ function renderInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
   return parts.map((p, i) => {
     if (p.startsWith('**') && p.endsWith('**'))
-      return <strong key={i} className="font-semibold text-white">{p.slice(2, -2)}</strong>
+      return <strong key={i} className="font-bold">{p.slice(2, -2)}</strong>
     if (p.startsWith('*') && p.endsWith('*'))
-      return <em key={i} className="italic text-gray-200">{p.slice(1, -1)}</em>
+      return <em key={i} className="italic opacity-80">{p.slice(1, -1)}</em>
     return p
   })
 }
@@ -39,7 +39,7 @@ function FinnMessage({ content }: { content: string }) {
     if (trimmed.startsWith('##')) {
       const label = trimmed.replace(/^##\s*\*?\*?/, '').replace(/\*?\*?:?\s*$/, '').trim()
       nodes.push(
-        <p key={i} className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-4 mb-1.5">
+        <p key={i} className="text-[10px] font-bold uppercase tracking-widest text-blue-400/70 mt-5 mb-2">
           {label}
         </p>
       )
@@ -83,7 +83,7 @@ function FinnMessage({ content }: { content: string }) {
       nodes.push(
         <ol key={`ol-${i}`} className="space-y-2 my-2">
           {items.map((item, idx) => (
-            <li key={idx} className="flex gap-3 text-gray-100 text-sm leading-relaxed">
+            <li key={idx} className="flex gap-3 text-white text-sm leading-relaxed">
               <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">
                 {idx + 1}
               </span>
@@ -105,7 +105,7 @@ function FinnMessage({ content }: { content: string }) {
       nodes.push(
         <ul key={`ul-${i}`} className="space-y-1.5 my-2">
           {items.map((item, idx) => (
-            <li key={idx} className="flex gap-2.5 text-gray-100 text-sm leading-relaxed">
+            <li key={idx} className="flex gap-2.5 text-white text-sm leading-relaxed">
               <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-blue-400 block" />
               <span>{renderInline(item)}</span>
             </li>
@@ -117,7 +117,7 @@ function FinnMessage({ content }: { content: string }) {
 
     // Regular paragraph
     nodes.push(
-      <p key={i} className="text-gray-100 text-base leading-relaxed">
+      <p key={i} className="text-white text-base leading-relaxed">
         {renderInline(trimmed)}
       </p>
     )
@@ -346,7 +346,7 @@ export default function ChatPage() {
                   {m.content}
                 </div>
               ) : (
-                <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800/80 border border-gray-700/50 px-5 py-4 rounded-bl-sm">
+                <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800 border border-gray-700 px-5 py-4 rounded-bl-sm text-white">
                   <FinnMessage content={m.content} />
                 </div>
               )}
