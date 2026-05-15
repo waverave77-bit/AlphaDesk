@@ -1,7 +1,6 @@
 'use client'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, signOut, signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -15,17 +14,29 @@ export default function SettingsPage() {
   const { isDark, accentId, setDark, setAccent } = useTheme()
   const { isAdmin } = useAdmin()
   const [demoLoading, setDemoLoading] = useState(false)
+  const [demoError, setDemoError] = useState('')
 
   const enterPreview = async () => {
     setDemoLoading(true)
+    setDemoError('')
     try {
       const res = await fetch('/api/admin/demo', { method: 'POST' })
-      const { demoToken } = await res.json()
-      // Save admin email so we can return after exiting preview
+      const data = await res.json()
+      if (!res.ok || !data.demoToken) {
+        setDemoError(data.error || 'Failed to enter preview. Make sure DEMO_SECRET is set in Vercel env vars.')
+        setDemoLoading(false)
+        return
+      }
       localStorage.setItem('adminReturnEmail', session?.user?.email ?? '')
-      await signIn('credentials', { demoToken, redirect: false })
+      const result = await signIn('credentials', { demoToken: data.demoToken, redirect: false })
+      if (result?.error) {
+        setDemoError('Sign-in as demo user failed. Check DEMO_SECRET matches between .env and Vercel.')
+        setDemoLoading(false)
+        return
+      }
       window.location.href = '/dashboard'
-    } catch {
+    } catch (e) {
+      setDemoError('Something went wrong. Try again.')
       setDemoLoading(false)
     }
   }
@@ -168,6 +179,7 @@ export default function SettingsPage() {
                     Preview as New User
                   </Button>
                   <p className="text-xs text-gray-600 mt-1.5 text-center">See the site as a brand new user. Nothing saves.</p>
+                  {demoError && <p className="text-xs text-red-400 mt-1.5 text-center">{demoError}</p>}
                 </div>
               )}
               <div className="pt-2">
