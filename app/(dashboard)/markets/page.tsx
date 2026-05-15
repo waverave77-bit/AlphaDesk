@@ -46,13 +46,13 @@ function getFngLabel(value: number): string {
 
 function getFngTradeNote(value: number): string {
   if (value <= 25)
-    return 'Markets are in extreme fear. Historically a buying opportunity — investors are overly pessimistic.'
+    return 'Markets are in extreme fear. Historically a buying opportunity, investors are overly pessimistic.'
   if (value <= 45)
     return 'Fear is elevated. Consider dollar-cost averaging into positions. Sentiment may be oversold.'
   if (value <= 55)
-    return 'Markets are neutral. No strong sentiment signal — focus on individual stock fundamentals.'
+    return 'Markets are neutral. No strong sentiment signal, focus on individual stock fundamentals.'
   if (value <= 75)
-    return 'Greed is building. Be selective — valuations may be stretched. Consider trimming winners.'
+    return 'Greed is building. Be selective, valuations may be stretched. Consider trimming winners.'
   return 'Extreme greed. Markets are euphoric. Risk of a pullback is elevated. Caution advised.'
 }
 
@@ -327,7 +327,7 @@ function EconCalendarSection() {
 
   return (
     <section className="mb-10">
-      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Scheduled events that move markets — like jobs reports, inflation data (CPI), and Fed interest rate decisions. High-impact events can cause big swings in stocks." /></h2>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Scheduled events that move markets, like jobs reports, inflation data (CPI), and Fed interest rate decisions. High-impact events can cause big swings in stocks." /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-0">
           {upcoming.length === 0 ? (
@@ -427,7 +427,7 @@ function MarketNewsSection() {
     <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">
         Live Market News{' '}
-        <InfoTooltip text="Latest financial news aggregated from Bloomberg, Reuters, MarketWatch and more — refreshes every 5 minutes." />
+        <InfoTooltip text="Latest financial news aggregated from Bloomberg, Reuters, MarketWatch and more, refreshes every 5 minutes." />
         <LastUpdated time={lastUpdated} className="ml-2" />
       </h2>
       <Card className="bg-gray-900 border-gray-800">

@@ -193,7 +193,7 @@ export default function DashboardPage() {
               {[1,2,3,4].map(i => <Skeleton key={i} className="h-14 w-full rounded-xl" />)}
             </div>
           ) : grouped.length === 0 ? (
-            <p className="text-sm text-slate-400 py-3">No holdings yet — add some stocks!</p>
+            <p className="text-sm text-slate-400 py-3">No holdings yet, add some stocks!</p>
           ) : (
             <div className="space-y-0.5">
               {grouped.slice(0, 8).map((h) => (
@@ -344,7 +344,7 @@ export default function DashboardPage() {
             {worstPerformer && worstPerformer.ticker !== bestPerformer?.ticker && (
               <Card className="border-red-100">
                 <CardContent className="p-5 xl:p-6">
-                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Watch Out For <InfoTooltip text="The stock in your portfolio with the biggest loss % since you bought it — worth reviewing." /></p>
+                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Watch Out For <InfoTooltip text="The stock in your portfolio with the biggest loss % since you bought it, worth reviewing." /></p>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-lg xl:text-xl font-bold text-slate-900">{worstPerformer.ticker}</p>

@@ -128,7 +128,7 @@ export default function HedgeFundsPage() {
       <div>
         <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           Hedge Fund Tracker
-          <InfoTooltip text="Hedge funds are professional investment firms that manage billions of dollars. By law they must publicly disclose their stock holdings every 3 months — so we can see exactly what they're buying." />
+          <InfoTooltip text="Hedge funds are professional investment firms that manage billions of dollars. By law they must publicly disclose their stock holdings every 3 months, so we can see exactly what they're buying." />
         </h1>
         <p className="text-sm text-slate-500 mt-0.5">See what the world's top money managers are buying</p>
         <LastUpdated time={lastUpdated} />
@@ -142,7 +142,7 @@ export default function HedgeFundsPage() {
         <p className="text-sm text-blue-600 leading-relaxed">
           Every 3 months, big investment firms must tell the government every stock they own.
           These reports are called <strong>13F filings</strong>. We pull those reports so you can see exactly what
-          the pros are buying — like looking at a professional investor's portfolio.
+          the pros are buying, like looking at a professional investor's portfolio.
         </p>
       </div>
 
@@ -194,7 +194,7 @@ export default function HedgeFundsPage() {
                   <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                     <LayoutGrid className="h-4 w-4 text-slate-400" />
                     What They Own Most
-                    <InfoTooltip text="Each box represents a stock — bigger box means more money invested. Think of it like a visual breakdown of the fund's portfolio." />
+                    <InfoTooltip text="Each box represents a stock, bigger box means more money invested. Think of it like a visual breakdown of the fund's portfolio." />
                   </CardTitle>
                   <p className="text-xs text-slate-400">Bigger tile = more money invested. Hover to see details.</p>
                 </CardHeader>
@@ -217,7 +217,7 @@ export default function HedgeFundsPage() {
                   <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
                     <BarChart3 className="h-4 w-4 text-slate-400" />
                     What Changed This Quarter?
-                    <InfoTooltip text="Compares the fund's current holdings to last quarter's — showing which stocks they added, removed, bought more of, or sold some of." />
+                    <InfoTooltip text="Compares the fund's current holdings to last quarter's, showing which stocks they added, removed, bought more of, or sold some of." />
                   </h3>
                   <p className="text-xs text-slate-400 mb-3">
                     Comparing their top 20 positions this quarter vs last quarter. Tap any card to see which stocks.
@@ -279,7 +279,7 @@ export default function HedgeFundsPage() {
               <InfoTooltip text="Stocks held by 2 or more of the tracked funds. The more funds that own a stock, the stronger the professional agreement behind it." />
             </h3>
             <p className="text-xs text-slate-400 mb-4">
-              These stocks show up across multiple fund portfolios — the pros all agree on these.
+              These stocks show up across multiple fund portfolios, the pros all agree on these.
             </p>
 
             {crowded.length > 0 ? (

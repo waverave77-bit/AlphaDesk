@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: { params: { term: string } })
       'finance for beginners',
     ],
     openGraph: {
-      title: `What is ${term.term}? — Investing Dictionary`,
+      title: `What is ${term.term}?, Investing Dictionary`,
       description: term.simple,
       type: 'article',
     },
@@ -106,7 +106,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
           What is {term.term}?
         </h1>
 
-        {/* Simple definition — the "answer" Google wants to see near top */}
+        {/* Simple definition, the "answer" Google wants to see near top */}
         <div className="bg-blue-600/10 border border-blue-600/20 rounded-2xl px-6 py-5 mb-8">
           <p className="text-xl text-blue-200 font-medium leading-relaxed">{term.simple}</p>
         </div>
@@ -187,7 +187,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
         <div className="mt-16 bg-blue-600/10 border border-blue-600/20 rounded-2xl p-10 text-center">
           <h2 className="text-2xl font-bold mb-3">Track Real Stocks on Zains Game</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Free portfolio tracker, AI tutor, hedge fund tracker — everything explained in plain English.
+            Free portfolio tracker, AI tutor, hedge fund tracker, everything explained in plain English.
           </p>
           <Link
             href="/register"

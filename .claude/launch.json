@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "earnings-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3334", "--directory", "earnings-preview"],
+      "port": 3334
+    },
+    {
       "name": "designs",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "3333"],

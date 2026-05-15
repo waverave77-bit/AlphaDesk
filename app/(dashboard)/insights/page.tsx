@@ -119,7 +119,7 @@ export default function InsightsPage() {
       {stats?.total === 0 && !loading && (
         <div className="text-center py-16 text-gray-500">
           <Users className="h-12 w-12 mx-auto mb-3 opacity-30" />
-          <p>No responses yet — users will appear here after completing onboarding.</p>
+          <p>No responses yet, users will appear here after completing onboarding.</p>
         </div>
       )}
     </div>

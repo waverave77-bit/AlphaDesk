@@ -43,7 +43,7 @@ export default function LearnPage() {
         </div>
         <div>
           <h1 className="text-3xl font-bold text-white">Investing Dictionary</h1>
-          <p className="text-base text-gray-400 mt-0.5">Every term explained simply — no jargon</p>
+          <p className="text-base text-gray-400 mt-0.5">Every term explained simply, no jargon</p>
         </div>
       </div>
 

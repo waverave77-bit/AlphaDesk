@@ -160,7 +160,7 @@ export default function ResearchPage() {
             <TrendingUp className="h-4 w-4 text-blue-400" />
             <p className="text-sm font-medium text-white">Live Market Data</p>
           </div>
-          <p className="text-xs text-gray-500">Real-time prices, P/E ratios, market cap, 52-week range, and more — powered by Yahoo Finance.</p>
+          <p className="text-xs text-gray-500">Real-time prices, P/E ratios, market cap, 52-week range, and more, powered by Yahoo Finance.</p>
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">

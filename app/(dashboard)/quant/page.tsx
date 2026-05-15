@@ -66,7 +66,7 @@ export default function QuantPage() {
       if (marketCap && marketCap > 10e9) quality += 25
       quality = Math.min(100, quality)
 
-      // Volatility risk (inverted — lower beta = higher score)
+      // Volatility risk (inverted, lower beta = higher score)
       let volRisk = 50
       if (beta) {
         if (beta < 0.8) volRisk = 85
@@ -161,7 +161,7 @@ export default function QuantPage() {
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-4 flex items-center gap-1">Factor Scores <InfoTooltip text="Four separate scores (0–100) that measure different aspects of a stock. They're averaged together to produce the overall Quant Signal." /></p>
                 <div className="space-y-4">
                   {[
-                    { label: 'Momentum', score: result.momentum, desc: '52-week price position', color: 'bg-blue-500', tip: 'How well the stock has performed over the past year. High momentum means the stock has been trending up — a sign that buyers are in control.' },
+                    { label: 'Momentum', score: result.momentum, desc: '52-week price position', color: 'bg-blue-500', tip: 'How well the stock has performed over the past year. High momentum means the stock has been trending up, a sign that buyers are in control.' },
                     { label: 'Value', score: result.value, desc: 'P/E vs sector average', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive? Compares the P/E ratio (what you pay per $1 of earnings) to the average in its sector. Higher score = better value.' },
                     { label: 'Quality', score: result.quality, desc: 'EPS, beta, market cap', color: 'bg-teal-500', tip: 'How healthy is the business? Looks at whether the company is profitable (EPS), stable (low beta), and large (market cap). Higher = stronger business.' },
                     { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based risk score', color: 'bg-orange-500', tip: 'How calm or wild is this stock? Lower volatility = fewer scary swings. A high score here means the stock tends to move less than the overall market.' },

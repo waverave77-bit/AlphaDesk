@@ -149,7 +149,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-emerald-400" />
-          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money — often a bullish signal they believe the stock will rise." /></h2>
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a bullish signal they believe the stock will rise." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}
@@ -159,13 +159,13 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-red-400" />
-          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares — worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
+          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares, worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
         </div>
         {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-sm text-gray-600">No recent sales.</p>}
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-2">
-        Congressional stock trades — House &amp; Senate financial disclosures. Prioritises Trump-aligned members.
+        Congressional stock trades, House &amp; Senate financial disclosures. Prioritises Trump-aligned members.
       </p>
     </div>
   )
@@ -273,7 +273,7 @@ export default function InsidersPage() {
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling — all publicly reported to the government." /></h1>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling, all publicly reported to the government." /></h1>
           <p className="text-base text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
         </div>
       </div>
@@ -282,7 +282,7 @@ export default function InsidersPage() {
       <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
         <p className="text-base font-semibold text-emerald-300 mb-1.5">💡 Why does this matter?</p>
         <p className="text-sm text-gray-400 leading-relaxed">
-          Insiders — like CEOs, CFOs, and board members — know their companies better than anyone. When they buy shares with their own money, it&apos;s often a strong sign they believe the stock will go up. When they sell, it&apos;s worth noting too. These trades are required to be reported to the SEC, so they&apos;re completely public.
+          Insiders, like CEOs, CFOs, and board members, know their companies better than anyone. When they buy shares with their own money, it&apos;s often a strong sign they believe the stock will go up. When they sell, it&apos;s worth noting too. These trades are required to be reported to the SEC, so they&apos;re completely public.
         </p>
       </div>
 
@@ -296,7 +296,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians — required by law to be disclosed publicly within days of the transaction." />
+          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians, required by law to be disclosed publicly within days of the transaction." />
         </button>
         <button
           onClick={() => setActiveTab('investors')}
@@ -306,7 +306,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Famous Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio — pulled from their quarterly 13F filings with the SEC." />
+          Famous Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio, pulled from their quarterly 13F filings with the SEC." />
         </button>
       </div>
 

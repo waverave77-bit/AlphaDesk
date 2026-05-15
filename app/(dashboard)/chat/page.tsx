@@ -73,7 +73,7 @@ function FinnMessage({ content }: { content: string }) {
       i++; continue
     }
 
-    // Numbered list — collect consecutive items
+    // Numbered list, collect consecutive items
     if (/^\d+\./.test(trimmed)) {
       const items: string[] = []
       while (i < lines.length && /^\d+\./.test(lines[i].trim())) {
@@ -95,7 +95,7 @@ function FinnMessage({ content }: { content: string }) {
       continue
     }
 
-    // Bullet list — collect consecutive items
+    // Bullet list, collect consecutive items
     if (/^[-•]/.test(trimmed)) {
       const items: string[] = []
       while (i < lines.length && /^[-•]/.test(lines[i].trim())) {
@@ -306,9 +306,9 @@ export default function ChatPage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white">Finn — Market Analyst</p>
+            <p className="text-sm font-bold text-white">Finn, Market Analyst</p>
             <p className="text-xs text-gray-500">
-              Live news · {experience === 'beginner' ? 'Beginner mode — plain English' : experience === 'some' ? 'Intermediate mode' : 'Pro mode — full analysis'} · Not financial advice
+              Live news · {experience === 'beginner' ? 'Beginner mode, plain English' : experience === 'some' ? 'Intermediate mode' : 'Pro mode, full analysis'} · Not financial advice
             </p>
           </div>
           <div className="ml-auto flex items-center gap-1.5">

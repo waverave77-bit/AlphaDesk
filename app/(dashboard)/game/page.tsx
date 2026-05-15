@@ -328,7 +328,7 @@ export default function GamePage() {
             {tradeTicker ? (
               <Card className="overflow-hidden">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-gray-400">{tradeTicker} — Price Chart</CardTitle>
+                  <CardTitle className="text-sm text-gray-400">{tradeTicker}, Price Chart</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <StockChart ticker={tradeTicker} currentPrice={preview?.price ?? 0} />
@@ -350,7 +350,7 @@ export default function GamePage() {
       {tab === 'Leaderboard' && (
         <div className="space-y-2">
           {lbLoading ? <Skeleton className="h-48 w-full" /> : leaderboard.length === 0 ? (
-            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No players yet — be the first!</p></CardContent></Card>
+            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No players yet, be the first!</p></CardContent></Card>
           ) : (
             <>
               <div className="flex justify-between text-xs text-gray-500 px-4 py-2">

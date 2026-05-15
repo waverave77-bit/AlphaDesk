@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'Zains Game — Stock Research & Portfolio Tracker'
+export const alt = 'Zains Game: Stock Research and Portfolio Tracker'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

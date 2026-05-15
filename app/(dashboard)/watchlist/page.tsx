@@ -93,7 +93,7 @@ export default function WatchlistPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">Watchlist <InfoTooltip text="A personal list of stocks you want to keep an eye on — without actually owning them. Add any stock to monitor its price and daily changes." /></h1>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">Watchlist <InfoTooltip text="A personal list of stocks you want to keep an eye on, without actually owning them. Add any stock to monitor its price and daily changes." /></h1>
           <p className="text-sm text-gray-400 mt-0.5">Track stocks you&apos;re interested in</p>
         </div>
         <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export default function WatchlistPage() {
                           <>
                             <p className="text-white font-semibold flex items-center justify-end gap-1">
                               {formatCurrency(item.price)}
-                              <InfoTooltip text="Current stock price — updates when you refresh." />
+                              <InfoTooltip text="Current stock price, updates when you refresh." />
                             </p>
                             <div className="flex items-center justify-end gap-1">
                               {positive
@@ -159,7 +159,7 @@ export default function WatchlistPage() {
                                 {item.change ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}
                                 {' '}({formatPercent(item.changePercent ?? 0)})
                               </span>
-                              <InfoTooltip text="Today's change — how much the stock has moved in price and % since yesterday's market close." />
+                              <InfoTooltip text="Today's change, how much the stock has moved in price and % since yesterday's market close." />
                             </div>
                           </>
                         ) : <Skeleton className="h-8 w-20" />}

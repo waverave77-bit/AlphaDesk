@@ -63,13 +63,13 @@ interface NewsItem {
 }
 
 const TOOLTIPS: Record<string, string> = {
-  'Market Cap': 'The total value of a company — share price × number of shares. Think of it as the company\'s price tag.',
+  'Market Cap': 'The total value of a company, share price × number of shares. Think of it as the company\'s price tag.',
   'P/E Ratio': 'Price-to-Earnings. How much investors pay per $1 of profit. A lower number can mean cheaper, but context matters.',
   'EPS (TTM)': 'Earnings Per Share. How much profit the company made per share in the last 12 months. Positive = making money.',
   'Dividend Yield': 'The % of the share price paid out to you each year as cash. Like getting rent from a property you own.',
   'Beta': 'How wild the stock moves vs. the market. Beta > 1 = more volatile. Beta < 1 = calmer than average.',
   'Volume': 'How many shares were traded today. High volume = lots of interest. Low volume = quieter day.',
-  '52-Week Range': 'The lowest and highest price the stock has traded at in the past year — shows the full swing.',
+  '52-Week Range': 'The lowest and highest price the stock has traded at in the past year, shows the full swing.',
   'Previous Close': 'What the stock price was at the end of yesterday\'s trading session.',
   'Day High': 'The highest price the stock reached today.',
   'Day Low': 'The lowest price the stock hit today.',
@@ -238,7 +238,7 @@ export default function StockDetailPage() {
 
       {/* AI Analysis Panel */}
       {showAI && (
-        <AIAnalysisPanel type="stock" data={aiData} label={`${quote.ticker} — ${quote.companyName}`} />
+        <AIAnalysisPanel type="stock" data={aiData} label={`${quote.ticker}, ${quote.companyName}`} />
       )}
 
       {/* Chart */}

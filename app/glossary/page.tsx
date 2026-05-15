@@ -4,11 +4,11 @@ import { TERMS, CATEGORIES, termToSlug, type Category } from '@/lib/glossary-ter
 import { BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, ChevronRight, Search } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Investing Dictionary — Every Stock Market Term Explained Simply | Zains Game',
-  description: `Learn ${TERMS.length} investing and stock market terms in plain English. From stocks and ETFs to P/E ratios and technical analysis — everything explained simply for beginners.`,
+  title: 'Investing Dictionary, Every Stock Market Term Explained Simply | Zains Game',
+  description: `Learn ${TERMS.length} investing and stock market terms in plain English. From stocks and ETFs to P/E ratios and technical analysis, everything explained simply for beginners.`,
   keywords: ['investing dictionary', 'stock market terms', 'finance glossary', 'investing for beginners', 'stock market glossary', 'financial terms explained'],
   openGraph: {
-    title: 'Investing Dictionary — Every Term Explained Simply',
+    title: 'Investing Dictionary, Every Term Explained Simply',
     description: 'The beginner-friendly finance glossary. No jargon, no confusion.',
   },
 }
@@ -119,7 +119,7 @@ export default function GlossaryPage() {
       <section className="px-6 pb-24 max-w-2xl mx-auto text-center">
         <div className="bg-blue-600/10 border border-blue-600/20 rounded-2xl p-10">
           <h2 className="text-2xl font-bold mb-3">Put Your Knowledge to Work</h2>
-          <p className="text-gray-400 mb-6">Track your stocks, follow hedge funds, and get AI analysis — all in plain English.</p>
+          <p className="text-gray-400 mb-6">Track your stocks, follow hedge funds, and get AI analysis, all in plain English.</p>
           <Link href="/register" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             Create Free Account <ChevronRight className="h-5 w-5" />
           </Link>

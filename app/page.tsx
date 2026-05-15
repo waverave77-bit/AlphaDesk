@@ -51,14 +51,14 @@ export default function LandingPage() {
       {/* Features */}
       <section className="px-6 pb-24 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-4">Everything you need to invest smarter</h2>
-        <p className="text-gray-400 text-center mb-12">All the tools that pros use — explained so anyone can understand.</p>
+        <p className="text-gray-400 text-center mb-12">All the tools that pros use, explained so anyone can understand.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             {
               icon: <Brain className="h-6 w-6 text-blue-400" />,
               title: 'AI Stock Tutor',
-              desc: 'Ask anything about a stock. Get a straight answer in plain English — no finance degree needed.',
+              desc: 'Ask anything about a stock. Get a straight answer in plain English, no finance degree needed.',
             },
             {
               icon: <Users className="h-6 w-6 text-emerald-400" />,
@@ -73,12 +73,12 @@ export default function LandingPage() {
             {
               icon: <Shield className="h-6 w-6 text-purple-400" />,
               title: 'Portfolio Tracker',
-              desc: 'Add your stocks and see exactly how much you\'re up or down — updated in real time.',
+              desc: 'Add your stocks and see exactly how much you\'re up or down, updated in real time.',
             },
             {
               icon: <BookOpen className="h-6 w-6 text-pink-400" />,
               title: 'Investing Dictionary',
-              desc: 'Every finance term explained simply. P/E ratio, short interest, market cap — all covered.',
+              desc: 'Every finance term explained simply. P/E ratio, short interest, market cap, all covered.',
             },
             {
               icon: <Zap className="h-6 w-6 text-orange-400" />,
@@ -95,7 +95,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing — hidden until Stripe is set up */}
+      {/* Pricing, hidden until Stripe is set up */}
 
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
