@@ -60,6 +60,8 @@ function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatC
 
 export default function DashboardPage() {
   const { streak } = useStreak()
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
   const { flags } = useFeatureFlags()
   const [holdings, setHoldings] = useState<any[]>([])
   const [enrichedHoldings, setEnrichedHoldings] = useState<HoldingWithQuote[]>([])
@@ -249,7 +251,7 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl font-bold text-slate-900">Good morning</h1>
+              <h1 className="text-3xl font-bold text-slate-900">{greeting}</h1>
               {streak > 0 && (
                 <span className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-sm font-bold px-3 py-1 rounded-full">
                   {streak} day{streak !== 1 ? 's' : ''} streak
