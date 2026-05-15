@@ -70,7 +70,7 @@ export default function Image() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <span style={{ fontSize: '16px', color: '#475569', display: 'flex' }}>zainsgame.vercel.app</span>
           <div style={{ display: 'flex', gap: '10px' }}>
-            {['Stocks', 'Options', 'Earnings', 'Portfolio', 'AI'].map(tag => (
+            {['Stocks', 'Easy Learning', 'Pro Analysis', 'Portfolio', 'AI'].map(tag => (
               <div key={tag} style={{ fontSize: '12px', fontWeight: 600, color: '#60a5fa', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '20px', padding: '4px 12px', display: 'flex' }}>
                 {tag}
               </div>
