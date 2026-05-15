@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Send, Bot, Loader2, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -60,12 +61,22 @@ const CATEGORIES = [
 ]
 
 export default function ChatPage() {
+  const searchParams = useSearchParams()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  // Pre-fill from ?q= param (e.g. from chart spike "Ask AI why" button)
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q) {
+      setInput(q)
+      inputRef.current?.focus()
+    }
+  }, [searchParams])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -209,7 +220,7 @@ export default function ChatPage() {
               )}
               <div
                 className={cn(
-                  'max-w-[75%] rounded-2xl px-5 py-4 text-lg leading-relaxed',
+                  'max-w-[75%] rounded-2xl px-5 py-4 text-xl leading-relaxed',
                   m.role === 'user'
                     ? 'bg-blue-600 text-white rounded-br-sm'
                     : 'bg-gray-800 text-gray-200 rounded-bl-sm'
@@ -245,7 +256,7 @@ export default function ChatPage() {
               onKeyDown={handleKey}
               placeholder="Ask anything about stocks, markets, investing..."
               rows={1}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
               style={{ maxHeight: '120px', overflowY: 'auto' }}
               onInput={(e) => {
                 const t = e.currentTarget

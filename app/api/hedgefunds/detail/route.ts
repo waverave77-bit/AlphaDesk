@@ -125,6 +125,8 @@ export async function GET(req: Request) {
         decrease: decreased.length,
         newNames: newPositions.slice(0, 5).map(h => h.name),
         exitNames: exits.slice(0, 5).map(h => h.name),
+        increaseNames: increased.slice(0, 5).map(h => h.name),
+        decreaseNames: decreased.slice(0, 5).map(h => h.name),
       },
     }
 

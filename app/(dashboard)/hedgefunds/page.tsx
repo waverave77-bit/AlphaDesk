@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
-import { Building2, TrendingUp, TrendingDown, PlusCircle, MinusCircle, RefreshCw } from 'lucide-react'
+import { Building2, TrendingUp, TrendingDown, PlusCircle, MinusCircle, RefreshCw, Info, LayoutGrid, BarChart3, Trophy, List } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import HoldingsTreemap from '@/components/charts/HoldingsTreemap'
@@ -14,7 +14,10 @@ interface Fund {
   filingDate: string | null
   topHoldings: Holding[]
 }
-interface QoQ { new: number; exit: number; increase: number; decrease: number; newNames: string[]; exitNames: string[] }
+interface QoQ {
+  new: number; exit: number; increase: number; decrease: number
+  newNames: string[]; exitNames: string[]; increaseNames: string[]; decreaseNames: string[]
+}
 interface Detail {
   currentHoldings: Holding[]
   prevHoldings: Holding[]
@@ -40,8 +43,12 @@ function QoQCard({ icon, label, count, names, color, bg, desc }: {
   icon: React.ReactNode; label: string; count: number; names?: string[]; color: string; bg: string; desc: string
 }) {
   const [open, setOpen] = useState(false)
+  const hasNames = !!names?.length
   return (
-    <div className={`rounded-xl border p-4 ${bg} cursor-pointer`} onClick={() => names?.length && setOpen(!open)}>
+    <div
+      className={`rounded-xl border p-4 ${bg} ${hasNames ? 'cursor-pointer' : ''}`}
+      onClick={() => hasNames && setOpen(!open)}
+    >
       <div className="flex items-center gap-2 mb-1">
         {icon}
         <span className={`text-xs font-semibold uppercase tracking-wide ${color}`}>{label}</span>
@@ -55,7 +62,7 @@ function QoQCard({ icon, label, count, names, color, bg, desc }: {
           ))}
         </div>
       )}
-      {names && names.length > 0 && (
+      {hasNames && (
         <p className="text-[10px] text-slate-400 mt-1">{open ? 'tap to hide' : 'tap to see examples'}</p>
       )}
     </div>
@@ -81,7 +88,6 @@ export default function HedgeFundsPage() {
       .finally(() => { setLoading(false); setLastUpdated(new Date()) })
   }, [])
 
-  // Load detail when a fund is selected
   useEffect(() => {
     if (!selectedCik) return
     setDetail(null)
@@ -94,7 +100,6 @@ export default function HedgeFundsPage() {
 
   const selectedFund = funds.find(f => (f.cik ?? f.name) === selectedCik)
 
-  // Most-crowded names: stocks held by 2+ funds
   const crowded = useMemo(() => {
     const map = new Map<string, { count: number; totalValue: number; funds: string[] }>()
     for (const fund of funds) {
@@ -121,18 +126,23 @@ export default function HedgeFundsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">Hedge Fund Tracker <InfoTooltip text="Hedge funds are professional investment firms that manage billions of dollars. By law they must publicly disclose their stock holdings every 3 months — so we can see exactly what they're buying." /></h1>
-        <p className="text-sm text-slate-500 mt-0.5">See what the world's smartest money managers are buying</p>
+        <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          Hedge Fund Tracker
+          <InfoTooltip text="Hedge funds are professional investment firms that manage billions of dollars. By law they must publicly disclose their stock holdings every 3 months — so we can see exactly what they're buying." />
+        </h1>
+        <p className="text-sm text-slate-500 mt-0.5">See what the world's top money managers are buying</p>
         <LastUpdated time={lastUpdated} />
       </div>
 
       {/* Explainer */}
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-        <p className="text-sm font-semibold text-blue-700 mb-1">💡 What is this?</p>
+        <p className="text-sm font-semibold text-blue-700 mb-1 flex items-center gap-1.5">
+          <Info className="h-3.5 w-3.5" /> What is this?
+        </p>
         <p className="text-sm text-blue-600 leading-relaxed">
-          Every 3 months, big investment firms (hedge funds) must tell the government every stock they own.
+          Every 3 months, big investment firms must tell the government every stock they own.
           These reports are called <strong>13F filings</strong>. We pull those reports so you can see exactly what
-          the pros are betting on — think of it like peeking at the best poker players' hands. 🃏
+          the pros are buying — like looking at a professional investor's portfolio.
         </p>
       </div>
 
@@ -182,7 +192,9 @@ export default function HedgeFundsPage() {
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                    🗺️ What They Own Most <InfoTooltip text="A treemap where each box represents a stock — bigger box = more money invested. Think of it like a visual pie chart of the fund's portfolio." />
+                    <LayoutGrid className="h-4 w-4 text-slate-400" />
+                    What They Own Most
+                    <InfoTooltip text="Each box represents a stock — bigger box means more money invested. Think of it like a visual breakdown of the fund's portfolio." />
                   </CardTitle>
                   <p className="text-xs text-slate-400">Bigger tile = more money invested. Hover to see details.</p>
                 </CardHeader>
@@ -202,9 +214,13 @@ export default function HedgeFundsPage() {
               {/* QoQ Changes */}
               {(detailLoading || detail?.qoq) && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">📊 What Changed This Quarter? <InfoTooltip text="Compares the fund's current holdings to last quarter's — showing which stocks they added, removed, bought more of, or sold some of." /></h3>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4 text-slate-400" />
+                    What Changed This Quarter?
+                    <InfoTooltip text="Compares the fund's current holdings to last quarter's — showing which stocks they added, removed, bought more of, or sold some of." />
+                  </h3>
                   <p className="text-xs text-slate-400 mb-3">
-                    Comparing their top 20 positions this quarter vs last quarter. Tap any card to see examples.
+                    Comparing their top 20 positions this quarter vs last quarter. Tap any card to see which stocks.
                   </p>
                   {detailLoading ? (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -214,37 +230,39 @@ export default function HedgeFundsPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       <QoQCard
                         icon={<PlusCircle className="h-4 w-4 text-green-600" />}
-                        label="Fresh Bets 🆕"
+                        label="New Positions"
                         count={detail.qoq.new}
                         names={detail.qoq.newNames}
                         color="text-green-600"
                         bg="bg-green-50 border-green-100"
-                        desc="New positions they opened"
+                        desc="Stocks they bought for the first time"
                       />
                       <QoQCard
                         icon={<TrendingUp className="h-4 w-4 text-blue-600" />}
-                        label="Doubled Down 📈"
+                        label="Added To"
                         count={detail.qoq.increase}
+                        names={detail.qoq.increaseNames}
                         color="text-blue-600"
                         bg="bg-blue-50 border-blue-100"
-                        desc="Positions they bought more of"
+                        desc="Existing positions they bought more of"
                       />
                       <QoQCard
                         icon={<TrendingDown className="h-4 w-4 text-orange-500" />}
-                        label="Trimmed ✂️"
+                        label="Reduced"
                         count={detail.qoq.decrease}
+                        names={detail.qoq.decreaseNames}
                         color="text-orange-500"
                         bg="bg-orange-50 border-orange-100"
                         desc="Positions they sold some of"
                       />
                       <QoQCard
                         icon={<MinusCircle className="h-4 w-4 text-red-500" />}
-                        label="Bailed On 🚪"
+                        label="Sold Out"
                         count={detail.qoq.exit}
                         names={detail.qoq.exitNames}
                         color="text-red-500"
                         bg="bg-red-50 border-red-100"
-                        desc="Positions they sold completely"
+                        desc="Positions they exited completely"
                       />
                     </div>
                   )}
@@ -255,9 +273,13 @@ export default function HedgeFundsPage() {
 
           {/* Divider */}
           <div className="border-t border-slate-100 pt-2">
-            <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">🏆 What Every Hedge Fund Owns <InfoTooltip text="Stocks held by 2 or more of the tracked funds — the more funds that own a stock, the stronger the professional consensus behind it." /></h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-1 flex items-center gap-2">
+              <Trophy className="h-4 w-4 text-slate-400" />
+              Stocks Every Fund Owns
+              <InfoTooltip text="Stocks held by 2 or more of the tracked funds. The more funds that own a stock, the stronger the professional agreement behind it." />
+            </h3>
             <p className="text-xs text-slate-400 mb-4">
-              Stocks that show up in multiple fund portfolios — the pros all agree on these.
+              These stocks show up across multiple fund portfolios — the pros all agree on these.
             </p>
 
             {crowded.length > 0 ? (
@@ -268,7 +290,7 @@ export default function HedgeFundsPage() {
                       <tr className="border-b border-slate-100">
                         <th className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">#</th>
                         <th className="text-left px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Company</th>
-                        <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Funds that own it</th>
+                        <th className="text-center px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Funds holding it</th>
                         <th className="text-right px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Combined value</th>
                       </tr>
                     </thead>
@@ -293,13 +315,16 @@ export default function HedgeFundsPage() {
                 </div>
               </Card>
             ) : (
-              <p className="text-sm text-slate-400">Loading cross-fund data…</p>
+              <p className="text-sm text-slate-400">Loading cross-fund data...</p>
             )}
           </div>
 
           {/* All funds quick view */}
           <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">📋 All Funds — Top Picks</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+              <List className="h-4 w-4 text-slate-400" />
+              All Funds at a Glance
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {funds.map(fund => (
                 <Card
@@ -331,7 +356,7 @@ export default function HedgeFundsPage() {
                             <span className="text-xs font-medium text-slate-500 shrink-0 ml-2">{formatVal(h.value)}</span>
                           </div>
                         ))}
-                        <p className="text-xs text-blue-500 mt-1">Click to see full treemap →</p>
+                        <p className="text-xs text-blue-500 mt-1">Click to see full breakdown</p>
                       </div>
                     )}
                   </CardContent>
@@ -343,7 +368,7 @@ export default function HedgeFundsPage() {
       )}
 
       <p className="text-xs text-slate-400 text-center pb-4">
-        Data from SEC EDGAR 13F filings. Updated quarterly. Holdings shown are top positions only.
+        Data from SEC EDGAR 13F filings. Updated quarterly. Shows top positions only.
       </p>
     </div>
   )

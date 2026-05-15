@@ -159,7 +159,7 @@ function DetailPanel({ date, items, onClose }: { date: string; items: EarningsIt
       <div className={`flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-800 ${isToday ? 'bg-amber-50 dark:bg-amber-500/5' : ''}`}>
         <div>
           <p className={`text-xs font-semibold uppercase tracking-wider mb-0.5 ${isToday ? 'text-amber-500' : 'text-gray-400'}`}>
-            {isToday ? '🔔 Earnings Today' : 'Earnings'}
+            {isToday ? 'Earnings Today' : 'Earnings'}
           </p>
           <h3 className="text-base font-bold text-gray-900 dark:text-white">{label}</h3>
           <p className="text-xs text-gray-400 mt-0.5">{items.length} compan{items.length === 1 ? 'y' : 'ies'} reporting</p>
