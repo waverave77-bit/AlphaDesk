@@ -232,7 +232,7 @@ export default function DashboardPage() {
               { label: 'Hedge Funds', href: '/hedgefunds' },
               { label: 'Smart Money', href: '/insiders' },
               { label: 'Dictionary', href: '/learn' },
-              { label: '⚗️ Quant Strategy', href: '/quant' },
+              { label: 'Quant Strategy', href: '/quant' },
               { label: '$100K Challenge', href: '/game' },
             ].map(({ label, href }) => (
               <Link key={href} href={href} className="flex items-center text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-3 rounded-xl transition-colors">
@@ -249,10 +249,10 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl font-bold text-slate-900">Good morning 👋</h1>
+              <h1 className="text-3xl font-bold text-slate-900">Good morning</h1>
               {streak > 0 && (
                 <span className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-sm font-bold px-3 py-1 rounded-full">
-                  🔥 {streak} day{streak !== 1 ? 's' : ''} streak
+                  {streak} day{streak !== 1 ? 's' : ''} streak
                 </span>
               )}
             </div>

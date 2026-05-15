@@ -164,7 +164,7 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
               background: spikePercent! > 0 ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)',
               border: `1px solid ${spikePercent! > 0 ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}`,
             }}>
-              <span style={{ fontSize: '13px' }}>{spikePercent! > 0 ? '⚡' : '⚠️'}</span>
+              <span style={{ fontSize: '13px' }}>{spikePercent! > 0 ? '↑' : '↓'}</span>
               <span style={{ fontWeight: 700, fontSize: '12px', color: spikePercent! > 0 ? '#4ade80' : '#f87171' }}>
                 {spikePercent! > 0 ? '+' : ''}{spikePercent!.toFixed(1)}% move
               </span>

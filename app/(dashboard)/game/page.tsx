@@ -363,7 +363,7 @@ export default function GamePage() {
                     <div className="flex items-center gap-3">
                       <span className={cn('text-lg font-bold w-8 text-center',
                         p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
-                        {p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`}
+                        {p.rank === 1 ? '#1' : p.rank === 2 ? '#2' : p.rank === 3 ? '#3' : `#${p.rank}`}
                       </span>
                       <div className="flex-1">
                         <p className="font-medium text-white">{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</p>
