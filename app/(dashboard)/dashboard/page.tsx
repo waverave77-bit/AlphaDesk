@@ -228,12 +228,12 @@ export default function DashboardPage() {
           <p className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4">Quick Links</p>
           <div className="space-y-1">
             {[
-              { label: '📅 Earnings Calendar', href: '/earnings' },
-              { label: '🏦 Hedge Funds', href: '/hedgefunds' },
-              { label: '👥 Smart Money', href: '/insiders' },
-              { label: '📖 Dictionary', href: '/learn' },
+              { label: 'Earnings Calendar', href: '/earnings' },
+              { label: 'Hedge Funds', href: '/hedgefunds' },
+              { label: 'Smart Money', href: '/insiders' },
+              { label: 'Dictionary', href: '/learn' },
               { label: '⚗️ Quant Strategy', href: '/quant' },
-              { label: '🏆 $100K Challenge', href: '/game' },
+              { label: '$100K Challenge', href: '/game' },
             ].map(({ label, href }) => (
               <Link key={href} href={href} className="flex items-center text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-3 rounded-xl transition-colors">
                 {label}

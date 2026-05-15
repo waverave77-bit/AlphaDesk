@@ -295,7 +295,7 @@ export default function StockDetailPage() {
             {/* Why it matters */}
             <div className="mt-3 pt-3 border-t border-gray-800/50">
               <p className="text-[10px] text-gray-600 leading-relaxed">
-                💡 <span className="text-gray-500">These numbers help you gauge if a stock is expensive, profitable, and risky before you buy.</span>
+                <span className="text-gray-500">These numbers help you gauge if a stock is expensive, profitable, and risky before you buy.</span>
               </p>
             </div>
           </CardContent>

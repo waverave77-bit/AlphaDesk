@@ -280,7 +280,7 @@ export default function InsidersPage() {
 
       {/* Why it matters */}
       <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
-        <p className="text-base font-semibold text-emerald-300 mb-1.5">💡 Why does this matter?</p>
+        <p className="text-base font-semibold text-emerald-300 mb-1.5">Why does this matter?</p>
         <p className="text-sm text-gray-400 leading-relaxed">
           Insiders, like CEOs, CFOs, and board members, know their companies better than anyone. When they buy shares with their own money, it&apos;s often a strong sign they believe the stock will go up. When they sell, it&apos;s worth noting too. These trades are required to be reported to the SEC, so they&apos;re completely public.
         </p>
