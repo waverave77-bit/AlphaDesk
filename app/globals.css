@@ -10,6 +10,64 @@
   --accent-light: 59 130 246;    /* blue-500 */
 }
 
+/* ── Accent color overrides — remap all "blue" Tailwind classes to use --accent ──
+   ThemeProvider sets --accent per user preference (RGB triplet, no commas).
+   Default is blue-600 (37 99 235) so nothing breaks on first load.
+   Any component using bg-blue-* / text-blue-* / border-blue-* automatically
+   picks up the user's chosen accent. ── */
+
+/* Solid backgrounds */
+.bg-blue-600   { background-color: rgb(var(--accent)) !important; }
+.bg-blue-700   { background-color: rgb(var(--accent) / 0.85) !important; }
+.bg-blue-500   { background-color: rgb(var(--accent-light)) !important; }
+
+/* Tinted backgrounds */
+.bg-blue-600\/5  { background-color: rgb(var(--accent) / 0.05) !important; }
+.bg-blue-600\/10 { background-color: rgb(var(--accent) / 0.1) !important; }
+.bg-blue-600\/20 { background-color: rgb(var(--accent) / 0.2) !important; }
+.bg-blue-600\/30 { background-color: rgb(var(--accent) / 0.3) !important; }
+.bg-blue-500\/10 { background-color: rgb(var(--accent) / 0.1) !important; }
+.bg-blue-500\/20 { background-color: rgb(var(--accent) / 0.2) !important; }
+.bg-blue-400\/10 { background-color: rgb(var(--accent) / 0.1) !important; }
+
+/* Hover backgrounds */
+.hover\:bg-blue-700:hover { background-color: rgb(var(--accent) / 0.85) !important; }
+.hover\:bg-blue-600:hover { background-color: rgb(var(--accent)) !important; }
+
+/* Text */
+.text-blue-600  { color: rgb(var(--accent)) !important; }
+.text-blue-500  { color: rgb(var(--accent)) !important; }
+.text-blue-400  { color: rgb(var(--accent-light)) !important; }
+.hover\:text-blue-600:hover { color: rgb(var(--accent)) !important; }
+.hover\:text-blue-400:hover { color: rgb(var(--accent-light)) !important; }
+
+/* Borders */
+.border-blue-600   { border-color: rgb(var(--accent)) !important; }
+.border-blue-500   { border-color: rgb(var(--accent)) !important; }
+.border-blue-500\/20 { border-color: rgb(var(--accent) / 0.2) !important; }
+.border-blue-500\/25 { border-color: rgb(var(--accent) / 0.25) !important; }
+.border-blue-500\/30 { border-color: rgb(var(--accent) / 0.3) !important; }
+.border-blue-600\/30 { border-color: rgb(var(--accent) / 0.3) !important; }
+.border-blue-600\/20 { border-color: rgb(var(--accent) / 0.2) !important; }
+.border-blue-300   { border-color: rgb(var(--accent) / 0.5) !important; }
+.hover\:border-blue-300:hover { border-color: rgb(var(--accent) / 0.5) !important; }
+.hover\:border-blue-200:hover { border-color: rgb(var(--accent) / 0.4) !important; }
+
+/* Focus ring */
+.focus\:border-blue-500:focus { border-color: rgb(var(--accent)) !important; }
+.ring-blue-200 { --tw-ring-color: rgb(var(--accent) / 0.3) !important; }
+.ring-1.ring-blue-200 { box-shadow: 0 0 0 1px rgb(var(--accent) / 0.3) !important; }
+
+/* Shadow */
+.shadow-blue-500\/20 { --tw-shadow-color: rgb(var(--accent) / 0.2) !important; }
+
+/* bg-blue-50 (light tint used in explainers) */
+.bg-blue-50     { background-color: rgb(var(--accent) / 0.08) !important; }
+.border-blue-100 { border-color: rgb(var(--accent) / 0.15) !important; }
+.text-blue-700   { color: rgb(var(--accent)) !important; }
+
+/* ── end accent overrides ── */
+
 * { box-sizing: border-box; }
 
 body {
