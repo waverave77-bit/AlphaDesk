@@ -3,40 +3,65 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-// POST: enter demo mode — returns the demo secret so frontend can sign in as demo user
-export async function POST() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+const DEMO_EMAIL = 'demo@preview.internal'
 
-  // Only non-demo users (real admin) can enter demo mode
-  if ((session.user as any).isDemo) return NextResponse.json({ error: 'Already in demo mode' }, { status: 400 })
-
-  // Clear any existing demo user data so it's a fresh experience
-  const demo = await prisma.user.findFirst({ where: { isDemo: true } })
-  if (demo) {
+async function clearDemoData() {
+  try {
+    const demo = await prisma.user.findUnique({ where: { email: DEMO_EMAIL } })
+    if (!demo) return
     await prisma.holding.deleteMany({ where: { userId: demo.id } })
     await prisma.watchlistItem.deleteMany({ where: { userId: demo.id } })
     await prisma.priceAlert.deleteMany({ where: { userId: demo.id } })
     await prisma.virtualPortfolio.deleteMany({ where: { userId: demo.id } })
     await prisma.virtualSeasonRecord.deleteMany({ where: { userId: demo.id } })
-  }
-
-  return NextResponse.json({ demoToken: process.env.DEMO_SECRET })
+  } catch {}
 }
 
-// DELETE: exit demo mode — wipes demo data
-export async function DELETE() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+// POST: enter demo mode
+export async function POST() {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Not logged in' }, { status: 401 })
+    }
+    if (session.user.email === DEMO_EMAIL) {
+      return NextResponse.json({ error: 'Already in demo mode' }, { status: 400 })
+    }
 
-  const demo = await prisma.user.findFirst({ where: { isDemo: true } })
-  if (demo) {
-    await prisma.holding.deleteMany({ where: { userId: demo.id } })
-    await prisma.watchlistItem.deleteMany({ where: { userId: demo.id } })
-    await prisma.priceAlert.deleteMany({ where: { userId: demo.id } })
-    await prisma.virtualPortfolio.deleteMany({ where: { userId: demo.id } })
-    await prisma.virtualSeasonRecord.deleteMany({ where: { userId: demo.id } })
+    // Ensure demo user exists
+    const existing = await prisma.user.findUnique({ where: { email: DEMO_EMAIL } })
+    if (!existing) {
+      await prisma.user.create({
+        data: {
+          email: DEMO_EMAIL,
+          username: 'preview_user',
+          password: '',
+          name: 'Preview User',
+        },
+      })
+    }
+
+    // Wipe any leftover demo data
+    await clearDemoData()
+
+    const secret = process.env.DEMO_SECRET
+    if (!secret) {
+      return NextResponse.json({ error: 'DEMO_SECRET env var not set on Vercel' }, { status: 500 })
+    }
+
+    return NextResponse.json({ demoToken: secret })
+  } catch (err: any) {
+    console.error('Demo POST error:', err)
+    return NextResponse.json({ error: err?.message ?? 'Server error' }, { status: 500 })
   }
+}
 
-  return NextResponse.json({ ok: true })
+// DELETE: exit and wipe demo data
+export async function DELETE() {
+  try {
+    await clearDemoData()
+    return NextResponse.json({ ok: true })
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message ?? 'Server error' }, { status: 500 })
+  }
 }
