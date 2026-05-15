@@ -163,7 +163,7 @@ const CATEGORIES = [
     color: 'text-green-400',
     bg: 'bg-green-600/10 border-green-500/20',
     questions: [
-      'What is a P/E ratio?',
+      'How do I know if a stock is expensive?',
       'How do I read a stock chart?',
       'What does market cap mean?',
       'What is a dividend?',

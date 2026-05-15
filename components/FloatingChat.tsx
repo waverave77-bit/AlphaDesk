@@ -13,7 +13,7 @@ interface Message {
 const SUGGESTIONS = [
   'What even is a stock?',
   'How do I start investing?',
-  'What is a P/E ratio?',
+  'How do I know if a stock is expensive?',
   'Why do stocks go up and down?',
 ]
 

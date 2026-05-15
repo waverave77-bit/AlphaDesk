@@ -63,8 +63,8 @@ function RatingIcon({ rec }: { rec: string | null }) {
 function getReason(analyst: AnalystData, currentPrice: number): string {
   const { recommendation: rec, numberOfAnalysts, targetMedian, targetMean, buyCount, holdCount, sellCount, strongBuyCount, strongSellCount } = analyst
   const total = (strongBuyCount || 0) + (buyCount || 0) + (holdCount || 0) + (sellCount || 0) + (strongSellCount || 0)
-  const bullish = (strongBuyCount || 0) + (buyCount || 0)
-  const bearish = (sellCount || 0) + (strongSellCount || 0)
+  const positive = (strongBuyCount || 0) + (buyCount || 0)
+  const negative = (sellCount || 0) + (strongSellCount || 0)
 
   const target = targetMedian ?? targetMean
   const upside = target ? (((target - currentPrice) / currentPrice) * 100).toFixed(1) : null
@@ -76,7 +76,7 @@ function getReason(analyst: AnalystData, currentPrice: number): string {
   }
 
   if (total > 0) {
-    parts.push(`${bullish} analyst${bullish !== 1 ? 's' : ''} rate it Buy/Strong Buy, ${holdCount} Hold, and ${bearish} Sell`)
+    parts.push(`${positive} analyst${positive !== 1 ? 's' : ''} rate it Buy/Strong Buy, ${holdCount} Hold, and ${negative} Sell`)
   }
 
   if (upside !== null && target) {
@@ -84,7 +84,7 @@ function getReason(analyst: AnalystData, currentPrice: number): string {
     parts.push(`The consensus price target of $${target.toFixed(2)} implies ${Math.abs(parseFloat(upside))}% ${direction} from the current price`)
   }
 
-  if (rec === 'strong_buy') parts.push('Strong conviction from the analyst community reflects robust fundamentals and a favorable risk/reward outlook')
+  if (rec === 'strong_buy') parts.push('Analysts strongly recommend this stock based on solid company performance and a favorable risk/reward outlook')
   else if (rec === 'buy') parts.push('Analysts see meaningful upside potential and favorable risk/reward at current levels')
   else if (rec === 'hold') parts.push('Analysts see limited near-term catalysts but the stock is considered fairly valued at current levels')
   else if (rec === 'sell' || rec === 'underperform') parts.push('Analysts see limited upside or potential downside risk from current price levels')
@@ -151,7 +151,7 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
 
           {/* Section 1: Rating */}
           <div className={cn('p-5 rounded-t-xl border', getRatingBg(rec))}>
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very bullish, Hold = neutral, Sell = bearish." /></p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very positive, Hold = neutral, Sell = negative." /></p>
             <div className="flex items-center gap-4">
               <RatingIcon rec={rec} />
               <div>

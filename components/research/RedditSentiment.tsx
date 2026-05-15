@@ -11,7 +11,7 @@ interface RedditData {
   bullishCount: number
   bearishCount: number
   neutralCount: number
-  sentiment: 'Bullish' | 'Bearish' | 'Neutral'
+  sentiment: 'Positive' | 'Negative' | 'Neutral'
   posts: { title: string; url: string; subreddit: string; score: number; sentiment: 'bullish' | 'bearish' | 'neutral' }[]
 }
 
@@ -47,8 +47,8 @@ export default function RedditSentiment({ ticker }: { ticker: string }) {
   const bearPct = (data.bearishCount / total) * 100
   const neutPct = (data.neutralCount / total) * 100
 
-  const sentimentColor = data.sentiment === 'Bullish' ? 'text-green-400' : data.sentiment === 'Bearish' ? 'text-red-400' : 'text-yellow-400'
-  const SentimentIcon = data.sentiment === 'Bullish' ? TrendingUp : data.sentiment === 'Bearish' ? TrendingDown : Minus
+  const sentimentColor = data.sentiment === 'Positive' ? 'text-green-400' : data.sentiment === 'Negative' ? 'text-red-400' : 'text-yellow-400'
+  const SentimentIcon = data.sentiment === 'Positive' ? TrendingUp : data.sentiment === 'Negative' ? TrendingDown : Minus
 
   return (
     <Card>

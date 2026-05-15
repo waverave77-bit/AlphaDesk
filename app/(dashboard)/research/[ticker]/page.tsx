@@ -65,11 +65,11 @@ interface NewsItem {
 const TOOLTIPS: Record<string, string> = {
   'Market Cap': 'The total value of a company, share price × number of shares. Think of it as the company\'s price tag.',
   'P/E Ratio': 'Price-to-Earnings. How much investors pay per $1 of profit. A lower number can mean cheaper, but context matters.',
-  'EPS (TTM)': 'Earnings Per Share. How much profit the company made per share in the last 12 months. Positive = making money.',
-  'Dividend Yield': 'The % of the share price paid out to you each year as cash. Like getting rent from a property you own.',
-  'Beta': 'How wild the stock moves vs. the market. Beta > 1 = more volatile. Beta < 1 = calmer than average.',
+  'EPS (TTM)': 'How much profit the company made per share over the past year. Positive = making money.',
+  'Dividend Yield': 'The percentage of the share price you receive as cash payments each year. Like getting rent from a property you own.',
+  'Beta': 'How much this stock moves compared to the overall market. Above 1 means it moves more than average.',
   'Volume': 'How many shares were traded today. High volume = lots of interest. Low volume = quieter day.',
-  '52-Week Range': 'The lowest and highest price the stock has traded at in the past year, shows the full swing.',
+  '52-Week Range': 'The lowest and highest price the stock has hit over the past year.',
   'Previous Close': 'What the stock price was at the end of yesterday\'s trading session.',
   'Day High': 'The highest price the stock reached today.',
   'Day Low': 'The lowest price the stock hit today.',
@@ -284,7 +284,7 @@ export default function StockDetailPage() {
 
         <Card>
           <CardHeader className="pb-1">
-            <CardTitle className="text-xs text-gray-500 uppercase tracking-wider">Fundamentals</CardTitle>
+            <CardTitle className="text-xs text-gray-500 uppercase tracking-wider">Key Numbers</CardTitle>
           </CardHeader>
           <CardContent className="pt-1">
             <StatRow label="Market Cap" value={quote.marketCap ? '$' + formatLargeNumber(quote.marketCap) : '—'} />
@@ -295,7 +295,7 @@ export default function StockDetailPage() {
             {/* Why it matters */}
             <div className="mt-3 pt-3 border-t border-gray-800/50">
               <p className="text-[10px] text-gray-600 leading-relaxed">
-                <span className="text-gray-500">These numbers help you gauge if a stock is expensive, profitable, and risky before you buy.</span>
+                <span className="text-gray-500">These numbers help you understand if a stock is a good deal before you buy.</span>
               </p>
             </div>
           </CardContent>

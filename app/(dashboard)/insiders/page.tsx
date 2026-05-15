@@ -149,7 +149,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-emerald-400" />
-          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a bullish signal they believe the stock will rise." /></h2>
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a positive sign they believe the stock will rise." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}
@@ -159,7 +159,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-red-400" />
-          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares, worth noting, though insiders sell for many reasons (taxes, personal expenses) while they only buy for one reason: they think the stock will go up." /></h2>
+          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares is worth paying attention to, though they sell for many reasons (taxes, personal bills) while they usually only buy for one reason: they think the stock is going up." /></h2>
         </div>
         {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-sm text-gray-600">No recent sales.</p>}
       </div>
@@ -171,7 +171,7 @@ function InsiderTrades() {
   )
 }
 
-// ─── Famous Investors tab ─────────────────────────────────────────────────────
+// ─── Top Investors tab ─────────────────────────────────────────────────────
 
 function InvestorCard({ investor }: { investor: Investor }) {
   return (
@@ -252,7 +252,7 @@ function FamousInvestors() {
         ))}
       </div>
       <p className="text-xs text-gray-600 text-center pt-6 pb-2">
-        Data sourced from SEC 13F filings via EDGAR. Updated quarterly. Holdings as of most recent filing date.
+        Data sourced from SEC quarterly government filings via EDGAR. Updated quarterly. Holdings as of most recent filing date.
       </p>
     </>
   )
@@ -273,8 +273,8 @@ export default function InsidersPage() {
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and famous investors are buying and selling, all publicly reported to the government." /></h1>
-          <p className="text-base text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) &amp; top investor 13F filings</p>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and well-known investors are buying and selling. All of this is publicly reported to the government." /></h1>
+          <p className="text-base text-gray-400 mt-0.5">Company insider trades and top investor quarterly disclosures</p>
         </div>
       </div>
 
@@ -296,7 +296,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians, required by law to be disclosed publicly within days of the transaction." />
+          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians, required by law to be reported publicly within a few days of the trade." />
         </button>
         <button
           onClick={() => setActiveTab('investors')}
@@ -306,7 +306,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Famous Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio, pulled from their quarterly 13F filings with the SEC." />
+          Top Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio, pulled from their required quarterly reports filed with the government." />
         </button>
       </div>
 

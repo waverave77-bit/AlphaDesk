@@ -45,7 +45,7 @@ export default function QuantPage() {
         momentum = Math.round(pos)
       }
 
-      // Value: P/E vs sector averages
+      // Value: Price vs. company earningss
       const sectorPE: Record<string, number> = { Technology: 28, Healthcare: 22, Financials: 14, 'Consumer Discretionary': 20, 'Consumer Staples': 18, Energy: 12, Industrials: 18, Materials: 15, 'Real Estate': 25, Utilities: 16, 'Communication Services': 22 }
       const avgPE = sector ? (sectorPE[sector] ?? 20) : 20
       let value = 50
@@ -82,10 +82,10 @@ export default function QuantPage() {
       else if (combined < 40) signal = 'UNDERWEIGHT'
 
       const rationale = signal === 'OVERWEIGHT'
-        ? `Strong factor profile: ${value >= 60 ? 'attractive valuation, ' : ''}${momentum >= 60 ? 'positive price momentum, ' : ''}${quality >= 70 ? 'high quality fundamentals' : 'reasonable fundamentals'}. The combination of factors supports an overweight position.`
+        ? `Strong overall score: ${value >= 60 ? 'attractively priced, ' : ''}${momentum >= 60 ? 'positive price momentum, ' : ''}${quality >= 70 ? 'high quality fundamentals' : 'reasonable fundamentals'}. The combination of factors supports an overweight position.`
         : signal === 'UNDERWEIGHT'
         ? `Weak factor profile: ${value < 40 ? 'stretched valuation, ' : ''}${momentum < 40 ? 'negative price momentum, ' : ''}${quality < 50 ? 'quality concerns' : 'mixed fundamentals'}. Factor signals collectively point to underweight.`
-        : `Mixed signals across factors. No single dominant theme drives the score strongly in either direction. Maintain market-weight exposure and monitor for catalyst shifts.`
+        : `Mixed signals. No single factor is strongly positive or negative right now. Maintain market-weight exposure and monitor for catalyst shifts.`
 
       setResult({ ticker: sym, companyName, signal, combined, momentum, value, quality, volRisk, rationale, sector })
       setLastAnalyzed(new Date())
@@ -161,9 +161,9 @@ export default function QuantPage() {
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-4 flex items-center gap-1">Factor Scores <InfoTooltip text="Four separate scores (0–100) that measure different aspects of a stock. They're averaged together to produce the overall Quant Signal." /></p>
                 <div className="space-y-4">
                   {[
-                    { label: 'Momentum', score: result.momentum, desc: '52-week price position', color: 'bg-blue-500', tip: 'How well the stock has performed over the past year. High momentum means the stock has been trending up, a sign that buyers are in control.' },
-                    { label: 'Value', score: result.value, desc: 'P/E vs sector average', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive? Compares the P/E ratio (what you pay per $1 of earnings) to the average in its sector. Higher score = better value.' },
-                    { label: 'Quality', score: result.quality, desc: 'EPS, beta, market cap', color: 'bg-teal-500', tip: 'How healthy is the business? Looks at whether the company is profitable (EPS), stable (low beta), and large (market cap). Higher = stronger business.' },
+                    { label: 'Momentum', score: result.momentum, desc: 'price vs. past year', color: 'bg-blue-500', tip: 'How well the stock has done over the past year. A high score means the price has been climbing steadily.' },
+                    { label: 'Value', score: result.value, desc: 'Price vs. company earnings', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive? Compares the P/E ratio (what you pay per $1 of earnings) to the average in its sector. Higher score = better value.' },
+                    { label: 'Quality', score: result.quality, desc: 'Profits, price swings, company size', color: 'bg-teal-500', tip: 'How healthy is the business? Looks at whether the company is profitable (EPS), stable (low beta), and large (market cap). Higher = stronger business.' },
                     { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based risk score', color: 'bg-orange-500', tip: 'How calm or wild is this stock? Lower volatility = fewer scary swings. A high score here means the stock tends to move less than the overall market.' },
                   ].map(({ label, score, desc, color, tip }) => (
                     <div key={label}>
