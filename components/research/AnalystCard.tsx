@@ -151,7 +151,7 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
 
           {/* Section 1: Rating */}
           <div className={cn('p-5 rounded-t-xl border', getRatingBg(rec))}>
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very positive, Hold = neutral, Sell = negative." /></p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very bullish, Hold = neutral, Sell = bearish." /></p>
             <div className="flex items-center gap-4">
               <RatingIcon rec={rec} />
               <div>

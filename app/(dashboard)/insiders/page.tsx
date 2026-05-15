@@ -149,7 +149,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-emerald-400" />
-          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a positive sign they believe the stock will rise." /></h2>
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a bullish sign they believe the stock will rise." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}

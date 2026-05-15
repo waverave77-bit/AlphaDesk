@@ -75,7 +75,7 @@ export default function OptionsPanel({ ticker }: { ticker: string }) {
 
   const pcr = data.putCallRatio
   const pcrColor = !pcr ? 'text-gray-400' : pcr < 0.7 ? 'text-green-400' : pcr > 1.0 ? 'text-red-400' : 'text-yellow-400'
-  const pcrLabel = !pcr ? '—' : pcr < 0.7 ? 'Positive' : pcr > 1.0 ? 'Negative' : 'Neutral'
+  const pcrLabel = !pcr ? '—' : pcr < 0.7 ? 'Bullish' : pcr > 1.0 ? 'Bearish' : 'Neutral'
 
   return (
     <Card>

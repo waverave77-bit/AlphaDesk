@@ -82,9 +82,9 @@ export default function QuantPage() {
       else if (combined < 40) signal = 'UNDERWEIGHT'
 
       const rationale = signal === 'OVERWEIGHT'
-        ? `Strong overall score: ${value >= 60 ? 'attractively priced, ' : ''}${momentum >= 60 ? 'positive price momentum, ' : ''}${quality >= 70 ? 'high quality fundamentals' : 'reasonable fundamentals'}. The combination of factors supports an overweight position.`
+        ? `Strong overall score: ${value >= 60 ? 'attractively priced, ' : ''}${momentum >= 60 ? 'strong momentum, ' : ''}${quality >= 70 ? 'high quality fundamentals' : 'reasonable fundamentals'}. The combination of factors supports an overweight position.`
         : signal === 'UNDERWEIGHT'
-        ? `Weak factor profile: ${value < 40 ? 'stretched valuation, ' : ''}${momentum < 40 ? 'negative price momentum, ' : ''}${quality < 50 ? 'quality concerns' : 'mixed fundamentals'}. Factor signals collectively point to underweight.`
+        ? `Weak factor profile: ${value < 40 ? 'stretched valuation, ' : ''}${momentum < 40 ? 'weak momentum, ' : ''}${quality < 50 ? 'quality concerns' : 'mixed fundamentals'}. Factor signals collectively point to underweight.`
         : `Mixed signals. No single factor is strongly positive or negative right now. Maintain market-weight exposure and monitor for catalyst shifts.`
 
       setResult({ ticker: sym, companyName, signal, combined, momentum, value, quality, volRisk, rationale, sector })
@@ -99,7 +99,7 @@ export default function QuantPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">Quant Strategy <InfoTooltip text="A quantitative (math-based) approach to picking stocks. Instead of gut feelings, it uses measurable factors like price trends and earnings to generate buy/sell signals." /></h1>
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">Quant Strategy <InfoTooltip text="A quantitative (math-based) approach to picking stocks. Instead of gut feelings, it uses measurable factors like momentum and earnings to generate buy/sell signals." /></h1>
         <p className="text-sm text-gray-400 mt-1">Factor-based over/underweight signals using momentum, value, quality & volatility</p>
       </div>
 
