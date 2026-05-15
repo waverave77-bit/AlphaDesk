@@ -12,7 +12,7 @@ function renderInline(text: string): React.ReactNode {
     if (p.startsWith('**') && p.endsWith('**'))
       return <strong key={i} className="font-semibold text-white">{p.slice(2, -2)}</strong>
     if (p.startsWith('*') && p.endsWith('*'))
-      return <em key={i} className="italic text-gray-300">{p.slice(1, -1)}</em>
+      return <em key={i} className="italic text-gray-200">{p.slice(1, -1)}</em>
     return p
   })
 }
@@ -83,7 +83,7 @@ function FinnMessage({ content }: { content: string }) {
       nodes.push(
         <ol key={`ol-${i}`} className="space-y-2 my-2">
           {items.map((item, idx) => (
-            <li key={idx} className="flex gap-3 text-gray-300 text-sm leading-relaxed">
+            <li key={idx} className="flex gap-3 text-gray-100 text-sm leading-relaxed">
               <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">
                 {idx + 1}
               </span>
@@ -105,8 +105,8 @@ function FinnMessage({ content }: { content: string }) {
       nodes.push(
         <ul key={`ul-${i}`} className="space-y-1.5 my-2">
           {items.map((item, idx) => (
-            <li key={idx} className="flex gap-2.5 text-gray-300 text-sm leading-relaxed">
-              <span className="text-blue-400 shrink-0 mt-1.5 w-1 h-1 rounded-full bg-blue-400 block" />
+            <li key={idx} className="flex gap-2.5 text-gray-100 text-sm leading-relaxed">
+              <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-blue-400 block" />
               <span>{renderInline(item)}</span>
             </li>
           ))}
@@ -117,7 +117,7 @@ function FinnMessage({ content }: { content: string }) {
 
     // Regular paragraph
     nodes.push(
-      <p key={i} className="text-gray-200 text-base leading-relaxed">
+      <p key={i} className="text-gray-100 text-base leading-relaxed">
         {renderInline(trimmed)}
       </p>
     )
