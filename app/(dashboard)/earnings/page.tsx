@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Calendar, Search, Clock, X } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
 import InfoTooltip from '@/components/InfoTooltip'
@@ -24,14 +23,14 @@ function getTimeBadge(time: string) {
   const t = time.toLowerCase()
   if (t.includes('before') || t === 'bmo') {
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#60a5fa', background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: '4px', padding: '2px 7px' }}>
+      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/25 rounded px-1.5 py-0.5">
         <Clock size={9} /> BMO
       </span>
     )
   }
   if (t.includes('after') || t === 'amc') {
     return (
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '10px', fontWeight: 600, color: '#a78bfa', background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)', borderRadius: '4px', padding: '2px 7px' }}>
+      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-purple-400 bg-purple-500/10 border border-purple-500/25 rounded px-1.5 py-0.5">
         <Clock size={9} /> AMC
       </span>
     )
@@ -40,11 +39,12 @@ function getTimeBadge(time: string) {
 }
 
 function formatDayLabel(iso: string, daysUntil: number) {
-  if (daysUntil === 0) return { day: 'Today', date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: true }
-  if (daysUntil === 1) return { day: 'Tomorrow', date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: false }
+  const d = new Date(iso + 'T12:00:00Z')
+  if (daysUntil === 0) return { day: 'Today', date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: true }
+  if (daysUntil === 1) return { day: 'Tomorrow', date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), isToday: false }
   return {
-    day: new Date(iso).toLocaleDateString('en-US', { weekday: 'short' }),
-    date: new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    day: d.toLocaleDateString('en-US', { weekday: 'short' }),
+    date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     isToday: false,
   }
 }
@@ -52,64 +52,54 @@ function formatDayLabel(iso: string, daysUntil: number) {
 function groupByDate(items: EarningsItem[]) {
   const map = new Map<string, EarningsItem[]>()
   for (const item of items) {
-    const key = item.earningsDate
-    if (!map.has(key)) map.set(key, [])
-    map.get(key)!.push(item)
+    if (!map.has(item.earningsDate)) map.set(item.earningsDate, [])
+    map.get(item.earningsDate)!.push(item)
   }
   return map
 }
 
 function TimelineRow({ item }: { item: EarningsItem }) {
   return (
-    <div style={{
-      background: '#111827',
-      border: '1px solid #1f2937',
-      borderRadius: '10px',
-      padding: '10px 14px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      transition: 'border-color 0.15s',
-    }}
-      className="hover:border-gray-600"
-    >
-      <span style={{ fontSize: '13px', fontWeight: 800, color: '#60a5fa', width: '52px', flexShrink: 0 }}>
-        {item.ticker}
-      </span>
-      <span style={{ fontSize: '12px', color: '#9ca3af', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="hidden sm:block">
-        {item.companyName}
-      </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-        {item.time && getTimeBadge(item.time)}
+    <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+      <span className="text-sm font-extrabold text-blue-500 w-14 shrink-0">{item.ticker}</span>
+      <span className="text-sm text-gray-500 dark:text-gray-400 flex-1 truncate hidden sm:block">{item.companyName}</span>
+      <div className="shrink-0">
+        {item.time ? getTimeBadge(item.time) : null}
       </div>
+    </div>
+  )
+}
+
+function SectionDivider({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-3 my-5">
+      <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
+      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-600">{label}</span>
+      <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
     </div>
   )
 }
 
 function LoadingSkeleton() {
   return (
-    <div style={{ display: 'flex', gap: 0, maxWidth: '680px' }}>
-      <div style={{ width: '2px', background: '#1f2937', margin: '6px 22px 0 82px', borderRadius: '2px', flexShrink: 0 }} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, marginLeft: '-2px' }}>
-        {[0, 1, 2].map((g) => (
-          <div key={g} style={{ display: 'flex', gap: '16px', marginBottom: '24px', position: 'relative' }}>
-            <div style={{ width: '72px', flexShrink: 0, paddingRight: '12px', paddingTop: '3px', textAlign: 'right' }}>
-              <Skeleton className="h-3 w-10 ml-auto bg-gray-800 mb-1" />
-              <Skeleton className="h-2.5 w-8 ml-auto bg-gray-800" />
-            </div>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1f2937', flexShrink: 0, marginTop: '2px', position: 'relative', left: '-7px' }} />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', marginLeft: '-3px' }}>
-              {Array.from({ length: g === 1 ? 2 : 1 }).map((_, i) => (
-                <div key={i} style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: '10px', padding: '10px 14px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <Skeleton className="h-3 w-12 bg-gray-800" />
-                  <Skeleton className="h-3 w-36 bg-gray-800" />
-                  <Skeleton className="h-4 w-12 bg-gray-800 ml-auto" />
-                </div>
-              ))}
-            </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      {[0, 1, 2].map((g) => (
+        <div key={g}>
+          <div className="flex items-center gap-3 mb-3">
+            <Skeleton className="h-3 w-16 bg-gray-200 dark:bg-gray-800" />
+            <Skeleton className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
           </div>
-        ))}
-      </div>
+          <div className="flex flex-col gap-2">
+            {Array.from({ length: g === 0 ? 3 : 2 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                <Skeleton className="h-3 w-12 bg-gray-200 dark:bg-gray-800" />
+                <Skeleton className="h-3 w-40 bg-gray-200 dark:bg-gray-800" />
+                <Skeleton className="h-5 w-12 bg-gray-200 dark:bg-gray-800 ml-auto" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -118,84 +108,48 @@ function Timeline({ items }: { items: EarningsItem[] }) {
   const grouped = useMemo(() => groupByDate(items), [items])
   const dates = Array.from(grouped.keys()).sort()
 
-  // Find where "next week" starts (daysUntil > 6)
-  const nextWeekIdx = dates.findIndex((d) => {
-    const dayItems = grouped.get(d)!
-    return dayItems[0].daysUntil > 6
-  })
-  const laterIdx = dates.findIndex((d) => {
-    const dayItems = grouped.get(d)!
-    return dayItems[0].daysUntil > 13
-  })
+  const nextWeekIdx = dates.findIndex((d) => (grouped.get(d)![0].daysUntil ?? 0) > 6)
+  const laterIdx = dates.findIndex((d) => (grouped.get(d)![0].daysUntil ?? 0) > 13)
 
   return (
-    <div style={{ display: 'flex', gap: 0, maxWidth: '680px' }}>
-      {/* Vertical line */}
-      <div style={{ width: '2px', background: '#1f2937', margin: '6px 22px 0 82px', borderRadius: '2px', flexShrink: 0 }} />
+    <div className="space-y-0">
+      {dates.map((dateKey, idx) => {
+        const dayItems = grouped.get(dateKey)!
+        const daysUntil = dayItems[0].daysUntil ?? 0
+        const { day, date, isToday } = formatDayLabel(dateKey, daysUntil)
+        const showNextWeek = idx === nextWeekIdx && nextWeekIdx > 0
+        const showLater = idx === laterIdx && laterIdx > 0 && laterIdx !== nextWeekIdx
 
-      {/* Days */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0, marginLeft: '-2px' }}>
-        {dates.map((dateKey, idx) => {
-          const dayItems = grouped.get(dateKey)!
-          const { day, date, isToday } = formatDayLabel(dateKey, dayItems[0].daysUntil)
+        return (
+          <div key={dateKey}>
+            {showNextWeek && <SectionDivider label="Next Week" />}
+            {showLater && <SectionDivider label="Later" />}
 
-          const showNextWeekDivider = idx === nextWeekIdx && nextWeekIdx > 0
-          const showLaterDivider = idx === laterIdx && laterIdx > 0 && laterIdx !== nextWeekIdx
-
-          return (
-            <div key={dateKey}>
-              {showNextWeekDivider && (
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px', paddingLeft: '3px' }}>
-                  — Next Week —
-                </div>
-              )}
-              {showLaterDivider && (
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px', paddingLeft: '3px' }}>
-                  — Later —
-                </div>
-              )}
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', position: 'relative' }}>
-                {/* Date label */}
-                <div style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  color: isToday ? '#fbbf24' : '#6b7280',
-                  width: '72px',
-                  flexShrink: 0,
-                  paddingTop: '3px',
-                  textAlign: 'right',
-                  paddingRight: '12px',
-                }}>
+            <div className="grid grid-cols-[88px_1fr] gap-x-4 mb-6">
+              {/* Date label */}
+              <div className="text-right pt-2 shrink-0">
+                <div className={`text-xs font-bold ${isToday ? 'text-amber-500' : 'text-gray-400 dark:text-gray-500'}`}>
                   {day}
-                  <br />
-                  <span style={{ fontWeight: 500, fontSize: '10px', color: isToday ? '#92400e' : '#4b5563' }}>{date}</span>
                 </div>
+                <div className={`text-[10px] mt-0.5 ${isToday ? 'text-amber-400/70' : 'text-gray-400 dark:text-gray-600'}`}>
+                  {date}
+                </div>
+              </div>
 
-                {/* Dot */}
-                <div style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  background: isToday ? '#f59e0b' : '#3b82f6',
-                  boxShadow: isToday ? '0 0 0 4px rgba(245,158,11,0.2)' : 'none',
-                  border: '2px solid #0a0a0f',
-                  flexShrink: 0,
-                  marginTop: '2px',
-                  position: 'relative',
-                  left: '-7px',
-                }} />
-
-                {/* Companies */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', marginLeft: '-3px' }}>
+              {/* Companies */}
+              <div className="relative">
+                {/* Left border accent */}
+                <div className={`absolute left-0 top-0 bottom-0 w-0.5 -ml-4 rounded-full ${isToday ? 'bg-amber-400' : 'bg-gray-200 dark:bg-gray-800'}`} />
+                <div className="flex flex-col gap-2">
                   {dayItems.map((item) => (
                     <TimelineRow key={`${item.ticker}-${item.earningsDate}`} item={item} />
                   ))}
                 </div>
               </div>
             </div>
-          )
-        })}
-      </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -236,7 +190,7 @@ export default function EarningsPage() {
           <Calendar className="h-5 w-5 lg:h-6 lg:w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             Earnings Calendar
             <InfoTooltip text="Every quarter, public companies release their financial results. These announcements often move stocks 10%+ in a single day." />
           </h1>
@@ -249,27 +203,27 @@ export default function EarningsPage() {
       <div className="flex items-center gap-4 mb-5 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
           <Clock size={11} className="text-blue-400" />
-          <span className="text-blue-400 font-medium">BMO</span> = Before Market Open
+          <span className="text-blue-500 font-medium">BMO</span> = Before Market Open
         </span>
         <span className="flex items-center gap-1.5">
           <Clock size={11} className="text-purple-400" />
-          <span className="text-purple-400 font-medium">AMC</span> = After Market Close
+          <span className="text-purple-500 font-medium">AMC</span> = After Market Close
         </span>
       </div>
 
       {/* Search */}
       <div className="relative mb-8">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
         <Input
           placeholder="Search by ticker or company name..."
-          className="pl-11 h-11 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500 text-sm"
+          className="pl-11 h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 text-sm"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         {search && (
           <button
             onClick={() => setSearch('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
           >
             <X size={15} />
           </button>
@@ -279,45 +233,43 @@ export default function EarningsPage() {
       {loading && <LoadingSkeleton />}
 
       {error && !loading && (
-        <Card className="bg-gray-900 border-gray-800">
+        <Card className="border-gray-200 dark:border-gray-800">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <Calendar className="h-10 w-10 text-gray-700 mb-3" />
-            <p className="text-gray-400">{error}</p>
+            <Calendar className="h-10 w-10 text-gray-300 dark:text-gray-700 mb-3" />
+            <p className="text-gray-500">{error}</p>
           </CardContent>
         </Card>
       )}
 
       {/* No search results */}
       {!loading && !error && isSearching && filtered.length === 0 && (
-        <Card className="bg-gray-900 border-gray-800">
+        <Card className="border-gray-200 dark:border-gray-800">
           <CardContent className="flex flex-col items-center justify-center py-14 text-center">
-            <Search className="h-10 w-10 text-gray-700 mb-3" />
-            <p className="text-gray-300 font-medium">No results for &quot;{search}&quot;</p>
-            <p className="text-gray-500 text-sm mt-1">
-              This company may not have earnings in the next 14 days.
-            </p>
+            <Search className="h-10 w-10 text-gray-300 dark:text-gray-700 mb-3" />
+            <p className="text-gray-700 dark:text-gray-300 font-medium">No results for &quot;{search}&quot;</p>
+            <p className="text-gray-500 text-sm mt-1">This company may not have earnings in the next 14 days.</p>
           </CardContent>
         </Card>
       )}
 
-      {/* Search results — flat timeline */}
+      {/* Search results */}
       {!loading && !error && isSearching && filtered.length > 0 && (
         <div>
-          <p className="text-xs text-gray-500 mb-5">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</p>
+          <p className="text-xs text-gray-400 mb-5">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</p>
           <Timeline items={filtered} />
         </div>
       )}
 
-      {/* Normal timeline view */}
+      {/* Normal view */}
       {!loading && !error && !isSearching && earnings.length > 0 && (
         <Timeline items={earnings} />
       )}
 
       {!loading && !error && earnings.length === 0 && !isSearching && (
-        <Card className="bg-gray-900 border-gray-800">
+        <Card className="border-gray-200 dark:border-gray-800">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <Calendar className="h-10 w-10 text-gray-700 mb-3" />
-            <p className="text-gray-300 font-medium">No upcoming earnings</p>
+            <Calendar className="h-10 w-10 text-gray-300 dark:text-gray-700 mb-3" />
+            <p className="text-gray-700 dark:text-gray-300 font-medium">No upcoming earnings</p>
             <p className="text-gray-500 text-sm mt-1">No earnings reported for the next 14 days.</p>
           </CardContent>
         </Card>
