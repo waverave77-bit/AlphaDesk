@@ -105,6 +105,12 @@ model HedgeFundCache {
   updatedAt DateTime @updatedAt
 }
 
+model SpikeSummaryCache {
+  id        String   @id // "{TICKER}-{DATE}" e.g. "AAPL-2025-05-01"
+  summary   String
+  createdAt DateTime @default(now())
+}
+
 model FeatureFlag {
   key       String   @id
   enabled   Boolean  @default(true)

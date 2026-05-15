@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
-// In-memory cache — avoids re-calling Claude for the same spike
-const cache = new Map<string, string>()
 
 async function fetchNewsHeadlines(ticker: string, date: string): Promise<string[]> {
   try {
@@ -16,10 +14,8 @@ async function fetchNewsHeadlines(ticker: string, date: string): Promise<string[
       { cache: 'no-store', signal: AbortSignal.timeout(5000) }
     )
     const text = await res.text()
-
     const targetMs = new Date(date).getTime()
     const headlines: string[] = []
-
     const items = text.match(/<item>([\s\S]*?)<\/item>/gi) ?? []
     for (const item of items.slice(0, 30)) {
       const title = item.match(/<title>(.*?)<\/title>/)?.[1]
@@ -44,9 +40,15 @@ export async function GET(req: Request) {
 
   if (!ticker || !date) return NextResponse.json({ summary: '' }, { status: 400 })
 
-  const cacheKey = `${ticker}-${date}`
-  if (cache.has(cacheKey)) return NextResponse.json({ summary: cache.get(cacheKey) })
+  const id = `${ticker}-${date}`
 
+  // 1. Check DB cache — free, instant, shared across all users
+  try {
+    const cached = await prisma.spikeSummaryCache.findUnique({ where: { id } })
+    if (cached) return NextResponse.json({ summary: cached.summary })
+  } catch {}
+
+  // 2. Not cached — fetch news + call Claude
   const headlines = await fetchNewsHeadlines(ticker, date)
   const direction = pct > 0 ? 'surged' : 'dropped'
   const abs = Math.abs(pct).toFixed(1)
@@ -65,7 +67,12 @@ export async function GET(req: Request) {
       messages: [{ role: 'user', content: prompt }],
     })
     const summary = ((msg.content[0] as any).text ?? '').trim()
-    cache.set(cacheKey, summary)
+
+    // 3. Save to DB so every future user gets it for free
+    try {
+      await prisma.spikeSummaryCache.create({ data: { id, summary } })
+    } catch {}
+
     return NextResponse.json({ summary })
   } catch {
     return NextResponse.json({ summary: '' })
