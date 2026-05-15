@@ -176,8 +176,8 @@ export default function ChatPage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white">AI Investing Coach</p>
-            <p className="text-xs text-gray-500">Live news · Beginner friendly · Not financial advice</p>
+            <p className="text-sm font-bold text-white">Finn — Market Analyst</p>
+            <p className="text-xs text-gray-500">Live news · Buy/Hold/Sell reads · Not financial advice</p>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -193,8 +193,8 @@ export default function ChatPage() {
                 <Sparkles className="h-8 w-8 text-blue-400" />
               </div>
               <div>
-                <p className="text-white font-bold text-lg">Ask me anything about investing</p>
-                <p className="text-gray-500 text-sm mt-1.5 max-w-sm">I read live market news and explain everything in plain English — no experience needed.</p>
+                <p className="text-white font-bold text-lg">Hey, I'm Finn.</p>
+                <p className="text-gray-500 text-sm mt-1.5 max-w-sm">Ask me about any stock, sector, or what's moving the market. I'll give you a straight read with live news.</p>
               </div>
               {/* Mobile quick questions */}
               <div className="grid grid-cols-2 gap-2 w-full max-w-md lg:hidden">
