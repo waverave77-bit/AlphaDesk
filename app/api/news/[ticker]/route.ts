@@ -3,17 +3,19 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: { ticker: string } }
 ) {
   const { ticker } = params
+  const { searchParams } = new URL(req.url)
+  const count = Math.min(parseInt(searchParams.get('count') ?? '25', 10), 40)
 
   if (!ticker) {
     return NextResponse.json({ error: 'Ticker is required' }, { status: 400 })
   }
 
   try {
-    const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(ticker)}&newsCount=8&quotesCount=0`
+    const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(ticker)}&newsCount=${count}&quotesCount=0`
 
     const res = await fetch(url, {
       headers: {
