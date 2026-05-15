@@ -116,28 +116,33 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
     const relatedNews = isSpike ? findNewsForDate(d.date, newsItems) : []
 
     return (
-      <div className="rounded-xl border border-gray-700 bg-gray-900/95 shadow-2xl text-xs backdrop-blur-sm max-w-[260px]">
+      <div style={{ background: '#111827', border: '1px solid #374151', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', fontSize: '12px', maxWidth: '260px', color: '#f9fafb' }}>
         {/* Price section */}
-        <div className="p-3">
-          <p className="text-gray-400 mb-2 font-medium">{label}</p>
-          <p className="text-white font-bold text-sm">Close: ${d.close?.toFixed(2)}</p>
-          <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5">
-            <p className="text-gray-400">Open: <span className="text-gray-300">${d.open?.toFixed(2)}</span></p>
-            <p className="text-gray-400">Vol: <span className="text-gray-300">{(d.volume / 1e6).toFixed(1)}M</span></p>
-            <p className="text-green-400">High: <span className="text-green-300">${d.high?.toFixed(2)}</span></p>
-            <p className="text-red-400">Low: <span className="text-red-300">${d.low?.toFixed(2)}</span></p>
+        <div style={{ padding: '12px' }}>
+          <p style={{ color: '#9ca3af', marginBottom: '8px', fontWeight: 500 }}>{label}</p>
+          <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px' }}>Close: ${d.close?.toFixed(2)}</p>
+          <div style={{ marginTop: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
+            <p style={{ color: '#9ca3af' }}>Open: <span style={{ color: '#e5e7eb' }}>${d.open?.toFixed(2)}</span></p>
+            <p style={{ color: '#9ca3af' }}>Vol: <span style={{ color: '#e5e7eb' }}>{(d.volume / 1e6).toFixed(1)}M</span></p>
+            <p style={{ color: '#4ade80' }}>High: <span style={{ color: '#86efac' }}>${d.high?.toFixed(2)}</span></p>
+            <p style={{ color: '#f87171' }}>Low: <span style={{ color: '#fca5a5' }}>${d.low?.toFixed(2)}</span></p>
           </div>
         </div>
 
         {/* Spike badge */}
         {isSpike && (
-          <div className={`mx-3 mb-2 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 ${
-            spikePercent! > 0
-              ? 'bg-green-500/10 border border-green-500/20'
-              : 'bg-red-500/10 border border-red-500/20'
-          }`}>
-            <span className="text-base leading-none">{spikePercent! > 0 ? '⚡' : '⚠️'}</span>
-            <span className={`font-bold text-xs ${spikePercent! > 0 ? 'text-green-400' : 'text-red-400'}`}>
+          <div style={{
+            margin: '0 12px 8px',
+            padding: '6px 10px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: spikePercent! > 0 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)',
+            border: `1px solid ${spikePercent! > 0 ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)'}`,
+          }}>
+            <span style={{ fontSize: '14px' }}>{spikePercent! > 0 ? '⚡' : '⚠️'}</span>
+            <span style={{ fontWeight: 700, color: spikePercent! > 0 ? '#4ade80' : '#f87171' }}>
               {spikePercent! > 0 ? '+' : ''}{spikePercent!.toFixed(1)}% move
             </span>
           </div>
@@ -145,12 +150,12 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
 
         {/* Related news */}
         {relatedNews.length > 0 && (
-          <div className="border-t border-gray-700/60 px-3 py-2.5 space-y-2">
-            <p className="text-gray-500 text-[10px] font-semibold uppercase tracking-wider">Related News</p>
+          <div style={{ borderTop: '1px solid rgba(55,65,81,0.6)', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <p style={{ color: '#6b7280', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Related News</p>
             {relatedNews.map((item, i) => (
-              <div key={i} className="space-y-0.5">
-                <p className="text-gray-200 leading-snug text-[11px] line-clamp-2">{item.title}</p>
-                <p className="text-gray-500 text-[10px]">{item.publisher}</p>
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <p style={{ color: '#e5e7eb', fontSize: '11px', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.title}</p>
+                <p style={{ color: '#6b7280', fontSize: '10px' }}>{item.publisher}</p>
               </div>
             ))}
           </div>
