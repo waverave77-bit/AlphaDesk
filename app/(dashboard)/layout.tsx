@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import TopNav from '@/components/TopNav'
 import TickerBar from '@/components/TickerBar'
 import FloatingChat from '@/components/FloatingChat'
+import DemoBanner from '@/components/DemoBanner'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -11,6 +12,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="flex flex-col h-screen bg-slate-50">
+      <DemoBanner />
       <TopNav />
       <TickerBar />
       <main className="flex-1 overflow-y-auto scrollbar-thin">

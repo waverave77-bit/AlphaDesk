@@ -3,14 +3,28 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Check, X } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+function UsernameHint({ username }: { username: string }) {
+  if (!username) return null
+  const tooShort = username.length < 3
+  const tooLong = username.length > 20
+  const badChars = !/^[a-zA-Z0-9_]+$/.test(username)
+  const ok = !tooShort && !tooLong && !badChars
+
+  if (ok) return <p className="text-xs text-green-500 flex items-center gap-1 mt-1"><Check className="h-3 w-3" /> Looks good</p>
+  if (tooShort) return <p className="text-xs text-red-400 flex items-center gap-1 mt-1"><X className="h-3 w-3" /> At least 3 characters</p>
+  if (tooLong) return <p className="text-xs text-red-400 flex items-center gap-1 mt-1"><X className="h-3 w-3" /> Max 20 characters</p>
+  if (badChars) return <p className="text-xs text-red-400 flex items-center gap-1 mt-1"><X className="h-3 w-3" /> Letters, numbers, and underscores only</p>
+  return null
+}
+
 export default function RegisterPage() {
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
+  const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -19,6 +33,8 @@ export default function RegisterPage() {
     e.preventDefault()
     if (form.password !== form.confirm) { setError('Passwords do not match'); return }
     if (form.password.length < 6) { setError('Password must be at least 6 characters'); return }
+    if (form.username.length < 3) { setError('Username must be at least 3 characters'); return }
+    if (!/^[a-zA-Z0-9_]+$/.test(form.username)) { setError('Username can only contain letters, numbers, and underscores'); return }
 
     setLoading(true)
     setError('')
@@ -26,7 +42,7 @@ export default function RegisterPage() {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: form.email, password: form.password, name: form.name }),
+      body: JSON.stringify({ email: form.email, password: form.password, username: form.username }),
     })
 
     if (!res.ok) {
@@ -36,7 +52,7 @@ export default function RegisterPage() {
       return
     }
 
-    await signIn('credentials', { email: form.email, password: form.password, redirect: false })
+    await signIn('credentials', { login: form.username, password: form.password, redirect: false })
     router.push('/')
   }
 
@@ -44,18 +60,21 @@ export default function RegisterPage() {
     <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-xl">Create account</CardTitle>
-        <CardDescription>Start tracking your investments for free</CardDescription>
+        <CardDescription>Pick a username and get started for free</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="name">Name (optional)</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
-              id="name"
-              placeholder="John Doe"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              id="username"
+              placeholder="e.g. zain_trades"
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+              required
+              autoComplete="username"
             />
+            <UsernameHint username={form.username} />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
@@ -92,7 +111,7 @@ export default function RegisterPage() {
           </div>
           {error && <p className="text-sm text-red-400">{error}</p>}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Create Account
           </Button>
         </form>

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
+  const searchParams = useSearchParams()
+  const [login, setLogin] = useState(searchParams.get('email') ?? '')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -22,13 +23,13 @@ export default function LoginPage() {
     setError('')
 
     const result = await signIn('credentials', {
-      email,
+      login,
       password,
       redirect: false,
     })
 
     if (result?.error) {
-      setError('Invalid email or password')
+      setError('Invalid username/email or password')
       setLoading(false)
     } else {
       router.push('/dashboard')
@@ -40,20 +41,20 @@ export default function LoginPage() {
     <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-xl">Sign in</CardTitle>
-        <CardDescription>Enter your credentials to access your portfolio</CardDescription>
+        <CardDescription>Enter your username or email to sign in</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="login">Username or Email</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="login"
+              type="text"
+              placeholder="yourname or you@example.com"
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
               required
-              autoComplete="email"
+              autoComplete="username"
             />
           </div>
           <div className="space-y-1.5">
@@ -70,7 +71,7 @@ export default function LoginPage() {
           </div>
           {error && <p className="text-sm text-red-400">{error}</p>}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Sign In
           </Button>
         </form>

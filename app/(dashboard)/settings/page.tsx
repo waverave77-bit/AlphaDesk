@@ -1,15 +1,34 @@
 'use client'
 import { useSession, signOut } from 'next-auth/react'
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2 } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
+import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
 
 export default function SettingsPage() {
   const { data: session } = useSession()
   const { isDark, accentId, setDark, setAccent } = useTheme()
+  const { isAdmin } = useAdmin()
+  const [demoLoading, setDemoLoading] = useState(false)
+
+  const enterPreview = async () => {
+    setDemoLoading(true)
+    try {
+      const res = await fetch('/api/admin/demo', { method: 'POST' })
+      const { demoToken } = await res.json()
+      // Save admin email so we can return after exiting preview
+      localStorage.setItem('adminReturnEmail', session?.user?.email ?? '')
+      await signIn('credentials', { demoToken, redirect: false })
+      window.location.href = '/dashboard'
+    } catch {
+      setDemoLoading(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -136,7 +155,22 @@ export default function SettingsPage() {
                 <span className="text-sm text-gray-400">Status</span>
                 <Badge variant="success">Active</Badge>
               </div>
-              <div className="pt-3">
+              {isAdmin && (
+                <div className="pt-3 pb-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
+                    onClick={enterPreview}
+                    disabled={demoLoading}
+                  >
+                    {demoLoading ? <Loader2 className="h-3.5 w-3.5 mr-2 animate-spin" /> : <FlaskConical className="h-3.5 w-3.5 mr-2" />}
+                    Preview as New User
+                  </Button>
+                  <p className="text-xs text-gray-600 mt-1.5 text-center">See the site as a brand new user. Nothing saves.</p>
+                </div>
+              )}
+              <div className="pt-2">
                 <Button
                   variant="outline"
                   size="sm"
