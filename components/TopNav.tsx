@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield } from 'lucide-react'
+import { Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
@@ -55,13 +55,19 @@ export default function TopNav() {
       )}>
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2 mr-8 shrink-0">
-          <div
-            className="h-7 w-7 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
-          >
-            <TrendingUp className="h-3.5 w-3.5 text-white" />
+          <div className="h-8 w-8 rounded-xl bg-amber-900/60 border border-amber-700/40 flex items-center justify-center overflow-hidden">
+            <svg viewBox="0 0 40 40" width={22} height={22} xmlns="http://www.w3.org/2000/svg">
+              <polygon points="6,28 11,6 16,28"  fill="#2D1209" />
+              <polygon points="14,28 20,2 26,28" fill="#3D1F0A" />
+              <polygon points="24,28 29,8 34,28" fill="#2D1209" />
+              <circle cx="20" cy="30" r="12" fill="#8B5E3C" />
+              <circle cx="15" cy="28" r="2.5" fill="#1A0800" />
+              <circle cx="25" cy="28" r="2.5" fill="#1A0800" />
+              <ellipse cx="20" cy="34" rx="6" ry="4" fill="#A0724E" />
+              <ellipse cx="20" cy="31" rx="3" ry="2" fill="#1A0800" />
+            </svg>
           </div>
-          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Zains Game</span>
+          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Hedgefi</span>
         </Link>
 
         {/* Primary nav — desktop */}

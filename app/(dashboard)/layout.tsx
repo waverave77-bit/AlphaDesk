@@ -5,6 +5,7 @@ import TopNav from '@/components/TopNav'
 import TickerBar from '@/components/TickerBar'
 import FloatingChat from '@/components/FloatingChat'
 import DemoBanner from '@/components/DemoBanner'
+import HedgehogMascot from '@/components/HedgehogMascot'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -21,6 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </div>
       </main>
       <FloatingChat />
+      <HedgehogMascot />
     </div>
   )
 }
