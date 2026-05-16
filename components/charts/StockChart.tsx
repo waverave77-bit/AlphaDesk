@@ -140,9 +140,12 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const formattedData = data.map((d) => {
     let fairValue: number | null = null
     if (hasFairValue) {
-      const ttmEps = earningsHistory.length >= 4
+      // Try trailing-12-month EPS from earnings history first
+      let ttmEps: number | null = earningsHistory.length >= 4
         ? getTrailing12mEps(d.date, earningsHistory)
-        : (currentEps ?? null)
+        : null
+      // Always fall back to currentEps so the line spans the full chart
+      if (ttmEps == null && hasPositiveEps) ttmEps = currentEps!
       fairValue = (ttmEps != null && ttmEps > 0) ? ttmEps * NORMAL_PE : null
     }
     return { ...d, dateLabel: formatXAxis(d.date), fairValue }
@@ -298,7 +301,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
                 </svg>
                 <span className="text-xs text-gray-500">
                   Fair Value <span className="text-amber-400 font-medium">${latestFV.toFixed(0)}</span>
-                  <span className="text-gray-600 ml-1">(EPS × 15)</span>
+                  <span className="text-gray-600 ml-1">(EPS × {NORMAL_PE})</span>
                 </span>
               </div>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -357,7 +360,11 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             {previousClose && (
               <ReferenceLine y={previousClose} stroke="#6b7280" strokeDasharray="4 4" strokeOpacity={0.5} />
             )}
-            {/* Fair value line: EPS × 15 — amber dashed, no fill */}
+            {/* Price area */}
+            <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
+              fill={`url(#gradient-${ticker})`} dot={renderDot}
+              activeDot={{ r: 5, fill: color, stroke: '#111827', strokeWidth: 2 }} />
+            {/* Fair value line — rendered on top of price area so it's always visible */}
             {hasFairValue && (
               <Area
                 type="monotone"
@@ -369,13 +376,9 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
                 dot={false}
                 activeDot={false}
                 isAnimationActive={false}
-                connectNulls={false}
+                connectNulls={true}
               />
             )}
-            {/* Price area — rendered on top */}
-            <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
-              fill={`url(#gradient-${ticker})`} dot={renderDot}
-              activeDot={{ r: 5, fill: color, stroke: '#111827', strokeWidth: 2 }} />
           </AreaChart>
         </ResponsiveContainer>
       )}
