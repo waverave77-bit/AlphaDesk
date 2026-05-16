@@ -66,29 +66,27 @@ function findNewsForDate(date: string, news: ChartNewsItem[]): ChartNewsItem[] {
 
 // ── Fair value helpers ────────────────────────────────────────────────────────
 
-// Given quarterly EPS data points, compute the trailing-12-month EPS for a date
 function getTrailing12mEps(date: string, history: EarningsPoint[]): number | null {
   const target = new Date(date).getTime()
-  // Get all quarters on or before this date
   const past = history.filter(e => new Date(e.date).getTime() <= target)
   if (past.length === 0) return null
-  // Sum the 4 most recent quarters (trailing 12 months)
   const last4 = past.slice(-4)
   if (last4.length < 4) return null
   const ttm = last4.reduce((s, e) => s + e.eps, 0)
-  return ttm > 0 ? ttm : null  // only positive EPS makes sense for a P/E-based valuation
+  return ttm > 0 ? ttm : null
 }
 
 export default function StockChart({ ticker, currentPrice, previousClose, analystTarget, earningsHistory = [], currentEps, sector }: StockChartProps) {
-  // Use sector-appropriate normal P/E so the fair-value line stays in chart range
   const NORMAL_PE = sector ? (SECTOR_NORMAL_PE[sector] ?? DEFAULT_NORMAL_PE) : DEFAULT_NORMAL_PE
   const [range, setRange] = useState<Range>('1M')
   const [data, setData] = useState<DataPoint[]>([])
   const [loading, setLoading] = useState(true)
   const [newsItems, setNewsItems] = useState<ChartNewsItem[]>([])
 
+  // toggle overlays
+  const [showFairValue, setShowFairValue] = useState(true)
+  const [showSpikes, setShowSpikes] = useState(true)
 
-  // spike date → AI summary ('loading' | '' | actual text)
   const [spikeSummaries, setSpikeSummaries] = useState<Record<string, string>>({})
   const lastFetchedSpike = useRef<string | null>(null)
 
@@ -109,7 +107,6 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
 
   const spikeMap = useMemo(() => computeSpikes(data), [data])
 
-  // Fetch AI summary for a spike date (cached — only fetches once per date)
   const fetchSummary = (date: string, pct: number) => {
     if (spikeSummaries[date] !== undefined) return
     setSpikeSummaries(prev => ({ ...prev, [date]: 'loading' }))
@@ -132,19 +129,15 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
     } catch { return '' }
   }
 
-  // Build fair value for each data point using trailing 12-month EPS × NORMAL_PE
-  // Falls back to currentEps if not enough quarterly history exists
   const hasPositiveEps = currentEps != null && currentEps > 0
   const hasFairValue = earningsHistory.length >= 4 || hasPositiveEps
 
   const formattedData = data.map((d) => {
     let fairValue: number | null = null
     if (hasFairValue) {
-      // Try trailing-12-month EPS from earnings history first
       let ttmEps: number | null = earningsHistory.length >= 4
         ? getTrailing12mEps(d.date, earningsHistory)
         : null
-      // Always fall back to currentEps so the line spans the full chart
       if (ttmEps == null && hasPositiveEps) ttmEps = currentEps!
       fairValue = (ttmEps != null && ttmEps > 0) ? ttmEps * NORMAL_PE : null
     }
@@ -155,21 +148,35 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const priceMax = Math.max(...data.map((d) => d.high).filter(Boolean))
   const fairValues = formattedData.map(d => d.fairValue).filter((v): v is number => v != null)
   const fairMin = fairValues.length ? Math.min(...fairValues) : priceMin
-  const fairMax = fairValues.length ? Math.max(...fairValues) : priceMax
-  const minVal = Math.min(priceMin, fairMin) * 0.997
-  const maxVal = Math.max(priceMax, fairMax) * 1.003
 
-  // Tooltip — inline styles so theme can't override text colors
+  // Latest fair value for legend
+  const latestFV = hasFairValue ? formattedData.filter(d => d.fairValue != null).at(-1)?.fairValue ?? null : null
+  const fvDiff = latestFV ? ((latestFV - currentPrice) / currentPrice) * 100 : null
+  const isUnder = fvDiff != null && fvDiff > 0
+
+  // Y-axis domain: pull bottom down so fair value has room above the axis floor
+  const yDomainMin = (dataMin: number) => {
+    const safeMin = isFinite(dataMin) && dataMin > 0 ? dataMin : (priceMin || 0)
+    if (!hasFairValue || !hasPositiveEps || !showFairValue) return safeMin * 0.993
+    // Give the fair value line ~10% of headroom below it
+    const effectiveMin = Math.min(safeMin, fairMin)
+    return effectiveMin * 0.90
+  }
+  const yDomainMax = (dataMax: number) => {
+    const safeMax = isFinite(dataMax) && dataMax > 0 ? dataMax : (priceMax || 100)
+    return safeMax * 1.005
+  }
+
+  // Tooltip
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null
     const d = payload[0]?.payload as DataPoint
 
     const spikePercent = spikeMap.get(d.date)
-    const isSpike = spikePercent !== undefined
+    const isSpike = showSpikes && spikePercent !== undefined
     const summary = isSpike ? (spikeSummaries[d.date] ?? null) : null
     const relatedNews = isSpike ? findNewsForDate(d.date, newsItems) : []
 
-    // Trigger summary fetch when tooltip appears on a spike
     if (isSpike && d.date !== lastFetchedSpike.current) {
       lastFetchedSpike.current = d.date
       setTimeout(() => fetchSummary(d.date, spikePercent!), 0)
@@ -186,7 +193,6 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
         color: '#f9fafb',
         pointerEvents: 'none',
       }}>
-        {/* Price data */}
         <div style={{ padding: '12px 14px 10px' }}>
           <p style={{ color: '#9ca3af', marginBottom: '8px', fontWeight: 500 }}>{label}</p>
           <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px', marginBottom: '6px' }}>
@@ -200,11 +206,8 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
           </div>
         </div>
 
-        {/* Spike section */}
         {isSpike && (
           <div style={{ borderTop: '1px solid #1f2937', padding: '10px 14px 12px' }}>
-
-            {/* % badge */}
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -220,20 +223,12 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
                 {spikePercent! > 0 ? '+' : ''}{spikePercent!.toFixed(1)}% move
               </span>
             </div>
-
-            {/* AI summary */}
             {summary === 'loading' && (
-              <p style={{ color: '#6b7280', fontSize: '11px', fontStyle: 'italic' }}>
-                Analyzing what happened...
-              </p>
+              <p style={{ color: '#6b7280', fontSize: '11px', fontStyle: 'italic' }}>Analyzing what happened...</p>
             )}
             {summary && summary !== 'loading' && (
-              <p style={{ color: '#d1d5db', fontSize: '11.5px', lineHeight: '1.6' }}>
-                {summary}
-              </p>
+              <p style={{ color: '#d1d5db', fontSize: '11.5px', lineHeight: '1.6' }}>{summary}</p>
             )}
-
-            {/* Fallback news headlines if no summary yet */}
             {!summary && relatedNews.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {relatedNews.map((item, i) => (
@@ -252,12 +247,11 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
 
   const renderDot = (dotProps: any) => {
     const { cx, cy, payload } = dotProps
+    if (!showSpikes) return <g key={`dot-${payload.date}`} />
     const spikePercent = spikeMap.get(payload.date)
     if (spikePercent === undefined) return <g key={`dot-${payload.date}`} />
-
     const fill = spikePercent > 0 ? '#22c55e' : '#ef4444'
     const ring = spikePercent > 0 ? '#16a34a' : '#dc2626'
-
     return (
       <g key={`spike-${payload.date}`}>
         <circle cx={cx} cy={cy} r={8} fill={fill} fillOpacity={0.15} />
@@ -269,54 +263,79 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
 
   return (
     <div className="w-full">
-      {/* Range buttons */}
-      <div className="flex gap-1 mb-4">
-        {RANGES.map((r) => (
-          <Button key={r} size="sm" variant={range === r ? 'secondary' : 'ghost'}
-            onClick={() => setRange(r)} className="text-xs h-7 px-2">
-            {r}
-          </Button>
-        ))}
+      {/* Range buttons + toggles row */}
+      <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+        <div className="flex gap-1">
+          {RANGES.map((r) => (
+            <Button key={r} size="sm" variant={range === r ? 'secondary' : 'ghost'}
+              onClick={() => setRange(r)} className="text-xs h-7 px-2">
+              {r}
+            </Button>
+          ))}
+        </div>
+
+        {/* Overlay toggles */}
+        <div className="flex items-center gap-1.5">
+          {hasFairValue && latestFV && (
+            <button
+              onClick={() => setShowFairValue(v => !v)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs border transition-all ${
+                showFairValue
+                  ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                  : 'border-gray-700 bg-transparent text-gray-600 opacity-50'
+              }`}
+            >
+              <svg width="14" height="3" className="shrink-0">
+                <line x1="0" y1="1.5" x2="14" y2="1.5" stroke={showFairValue ? '#f59e0b' : '#6b7280'} strokeWidth="1.5" strokeDasharray="4 2" />
+              </svg>
+              Fair Value
+            </button>
+          )}
+          {spikeMap.size > 0 && (
+            <button
+              onClick={() => setShowSpikes(v => !v)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs border transition-all ${
+                showSpikes
+                  ? 'border-green-500/40 bg-green-500/10 text-green-400'
+                  : 'border-gray-700 bg-transparent text-gray-600 opacity-50'
+              }`}
+            >
+              <div className={`h-2 w-2 rounded-full shrink-0 ${showSpikes ? 'bg-green-500' : 'bg-gray-600'}`} />
+              AI Dots
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Legend + valuation badge */}
+      {/* Legend row */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-3">
-        {/* Market price legend */}
         <div className="flex items-center gap-1.5">
           <div className="h-0.5 w-5 rounded" style={{ background: color }} />
           <span className="text-xs text-gray-500">Market Price</span>
         </div>
 
-        {/* Fair value legend */}
-        {hasFairValue && (() => {
-          const latestFV = formattedData.filter(d => d.fairValue != null).at(-1)?.fairValue
-          if (!latestFV) return null
-          const diff = ((latestFV - currentPrice) / currentPrice) * 100
-          const isUnder = diff > 0
-          return (
-            <>
-              <div className="flex items-center gap-1.5">
-                <svg width="20" height="4" className="shrink-0">
-                  <line x1="0" y1="2" x2="20" y2="2" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 3" />
-                </svg>
-                <span className="text-xs text-gray-500">
-                  Fair Value <span className="text-amber-400 font-medium">${latestFV.toFixed(0)}</span>
-                  <span className="text-gray-600 ml-1">(EPS × {NORMAL_PE})</span>
-                </span>
-              </div>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                isUnder
-                  ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
-              }`}>
-                {isUnder ? '↑ Undervalued' : '↓ Overvalued'} {Math.abs(diff).toFixed(1)}%
+        {hasFairValue && showFairValue && latestFV && fvDiff != null && (
+          <>
+            <div className="flex items-center gap-1.5">
+              <svg width="20" height="4" className="shrink-0">
+                <line x1="0" y1="2" x2="20" y2="2" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 3" />
+              </svg>
+              <span className="text-xs text-gray-500">
+                Fair Value <span className="text-amber-400 font-medium">${latestFV.toFixed(0)}</span>
+                <span className="text-gray-600 ml-1">(EPS × {NORMAL_PE})</span>
               </span>
-            </>
-          )
-        })()}
+            </div>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+              isUnder
+                ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            }`}>
+              {isUnder ? '↑ Undervalued' : '↓ Overvalued'} {Math.abs(fvDiff).toFixed(1)}%
+            </span>
+          </>
+        )}
 
-        {/* Spike legend */}
-        {spikeMap.size > 0 && (
+        {showSpikes && spikeMap.size > 0 && (
           <div className="flex items-center gap-1.5">
             <div className="h-2.5 w-2.5 rounded-full bg-green-500 opacity-80" />
             <span className="text-xs text-gray-500">≥2% move — hover for AI summary</span>
@@ -325,11 +344,11 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       </div>
 
       {loading ? (
-        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-72 w-full" />
       ) : data.length === 0 ? (
-        <div className="h-64 flex items-center justify-center text-gray-500">No chart data available</div>
+        <div className="h-72 flex items-center justify-center text-gray-500">No chart data available</div>
       ) : (
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height={320}>
           <AreaChart data={formattedData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id={`gradient-${ticker}`} x1="0" y1="0" x2="0" y2="1">
@@ -341,18 +360,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             <XAxis dataKey="dateLabel" tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false} interval="preserveStartEnd" />
             <YAxis
-              domain={[
-                (dataMin: number) => {
-                  const safeMin = isFinite(dataMin) && dataMin > 0 ? dataMin : (priceMin || 0)
-                  if (!hasFairValue || !hasPositiveEps) return safeMin * 0.997
-                  const fv = currentEps! * NORMAL_PE
-                  return Math.min(safeMin, fv) * 0.995
-                },
-                (dataMax: number) => {
-                  const safeMax = isFinite(dataMax) && dataMax > 0 ? dataMax : (priceMax || 100)
-                  return safeMax * 1.003
-                },
-              ]}
+              domain={[yDomainMin, yDomainMax]}
               tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false}
               tickFormatter={(v) => `$${v.toFixed(0)}`} width={60} />
@@ -364,8 +372,8 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
               fill={`url(#gradient-${ticker})`} dot={renderDot}
               activeDot={{ r: 5, fill: color, stroke: '#111827', strokeWidth: 2 }} />
-            {/* Fair value line — rendered on top of price area so it's always visible */}
-            {hasFairValue && (
+            {/* Fair value line — on top so it's never obscured */}
+            {hasFairValue && showFairValue && (
               <Area
                 type="monotone"
                 dataKey="fairValue"
