@@ -154,7 +154,7 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
     try {
       const summaryData = await httpGetSummary(
         upper,
-        'price%2CsummaryDetail%2CassetProfile%2CdefaultKeyStatistics%2CfinancialData%2CrecommendationTrend'
+        'price%2CsummaryDetail%2CassetProfile%2CdefaultKeyStatistics%2CfinancialData%2CrecommendationTrend%2CearningsHistory%2CearningsTrend'
       )
       const result = summaryData?.quoteSummary?.result?.[0] ?? {}
       sector = result.assetProfile?.sector ?? null
@@ -324,6 +324,68 @@ export interface AnalystData {
   sellCount: number
   strongBuyCount: number
   strongSellCount: number
+}
+
+// ─── Earnings History ─────────────────────────────────────────────────────────
+
+export interface EarningsPoint {
+  date: string   // ISO date string for the quarter end
+  eps: number    // actual EPS for that quarter
+}
+
+// Sector → typical "normal" P/E multiple used for fair-value calculation.
+// These are long-run medians, not current frothy multiples.
+export const SECTOR_NORMAL_PE: Record<string, number> = {
+  'Technology': 25,
+  'Communication Services': 20,
+  'Consumer Cyclical': 20,
+  'Consumer Defensive': 20,
+  'Healthcare': 20,
+  'Financial Services': 13,
+  'Industrials': 18,
+  'Basic Materials': 15,
+  'Energy': 12,
+  'Utilities': 16,
+  'Real Estate': 20,
+}
+export const DEFAULT_NORMAL_PE = 18
+
+// Returns up to 16 quarters of historical EPS + forward estimates so the chart
+// can build a trailing-12-month EPS line → fair value = EPS × normalPE
+export async function getEarningsHistory(ticker: string): Promise<EarningsPoint[]> {
+  const upper = ticker.toUpperCase()
+  try {
+    // Always reuse the cached result populated by getStockQuote (now includes earningsHistory + earningsTrend)
+    const raw = _lastAnalystResult.get(upper)
+    if (!raw) return []
+
+    const history: EarningsPoint[] = []
+
+    // Quarterly actual EPS from earningsHistory
+    const qHistory: any[] = raw?.earningsHistory?.history ?? []
+    for (const q of qHistory) {
+      const ts: number = q.quarter?.raw
+      const eps: number = q.epsActual?.raw
+      if (ts && eps != null) {
+        history.push({ date: new Date(ts * 1000).toISOString().slice(0, 10), eps })
+      }
+    }
+
+    // Forward quarterly EPS estimates from earningsTrend (+1q, +2q)
+    const trend: any[] = raw?.earningsTrend?.trend ?? []
+    for (const t of trend) {
+      if (!t.period?.startsWith('+')) continue
+      const eps: number = t.earningsEstimate?.avg?.raw
+      const endDate: string = t.endDate?.fmt
+      if (eps != null && endDate) {
+        history.push({ date: endDate, eps })
+      }
+    }
+
+    return history.sort((a, b) => a.date.localeCompare(b.date))
+  } catch {
+    return []
+  }
 }
 
 export async function getAnalystData(ticker: string): Promise<AnalystData> {

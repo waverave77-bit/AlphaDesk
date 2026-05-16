@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getStockQuote, getHistoricalData, getStockNews, getAnalystData } from '@/lib/yahoo-finance'
+import { getStockQuote, getHistoricalData, getStockNews, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,17 +20,23 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
       return NextResponse.json({ news })
     }
 
-    const [quote, news, analyst] = await Promise.all([
+    // getStockQuote must finish first — it populates the internal analyst cache
+    // that getAnalystData reads. Running them in parallel causes a race condition
+    // where getAnalystData finds an empty cache and its fallback fetch gets rate-limited.
+    const [quote, news] = await Promise.all([
       getStockQuote(ticker),
       getStockNews(ticker),
+    ])
+    const [analyst, earningsHistory] = await Promise.all([
       getAnalystData(ticker),
+      getEarningsHistory(ticker),
     ])
 
     if (!quote) {
       return NextResponse.json({ error: 'Stock not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ quote, news, analyst }, {
+    return NextResponse.json({ quote, news, analyst, earningsHistory }, {
       headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' },
     })
   } catch {

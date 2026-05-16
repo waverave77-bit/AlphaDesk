@@ -95,11 +95,15 @@ async function callDeepSeek(prompt: string): Promise<ModelResult> {
       signal: controller.signal,
     })
     clearTimeout(timer)
+    if (!res.ok) return { ...fallback, rationale: `API error (${res.status})` }
     const json = await res.json()
-    const text = json.choices?.[0]?.message?.content ?? ''
+    if (json.error) return { ...fallback, rationale: json.error?.message || 'API error' }
+    const text: string = json.choices?.[0]?.message?.content ?? ''
+    if (!text.trim()) return { ...fallback, rationale: 'Empty response from model' }
     return { model: 'DeepSeek V3', ...parseModelResponse(text), raw: text }
-  } catch {
-    return fallback
+  } catch (e: any) {
+    const msg = e?.name === 'AbortError' ? 'Timed out' : (e?.message || 'Failed')
+    return { ...fallback, rationale: msg }
   }
 }
 
@@ -115,11 +119,22 @@ async function callGrok(prompt: string): Promise<ModelResult> {
       signal: controller.signal,
     })
     clearTimeout(timer)
+    if (!res.ok) {
+      console.error('[Grok] API error', res.status, await res.text().catch(() => ''))
+      return { ...fallback, rationale: `API error (${res.status})` }
+    }
     const json = await res.json()
-    const text = json.choices?.[0]?.message?.content ?? ''
+    // API might return an error object without choices
+    if (json.error) {
+      console.error('[Grok] response error', json.error)
+      return { ...fallback, rationale: json.error?.message || 'API error' }
+    }
+    const text: string = json.choices?.[0]?.message?.content ?? ''
+    if (!text.trim()) return { ...fallback, rationale: 'Empty response from model' }
     return { model: 'Grok-2', ...parseModelResponse(text), raw: text }
-  } catch {
-    return fallback
+  } catch (e: any) {
+    const msg = e?.name === 'AbortError' ? 'Timed out' : (e?.message || 'Failed')
+    return { ...fallback, rationale: msg }
   }
 }
 

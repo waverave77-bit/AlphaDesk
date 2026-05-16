@@ -55,6 +55,11 @@ interface AnalystData {
   strongSellCount: number
 }
 
+interface EarningsPoint {
+  date: string
+  eps: number
+}
+
 interface NewsItem {
   title: string
   link: string
@@ -95,6 +100,7 @@ export default function StockDetailPage() {
 
   const [quote, setQuote] = useState<StockQuote | null>(null)
   const [analyst, setAnalyst] = useState<AnalystData | null>(null)
+  const [earningsHistory, setEarningsHistory] = useState<EarningsPoint[]>([])
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [watchlisted, setWatchlisted] = useState(false)
@@ -110,6 +116,7 @@ export default function StockDetailPage() {
     ]).then(([stockData, watchData]) => {
       setQuote(stockData.quote || null)
       setAnalyst(stockData.analyst || null)
+      setEarningsHistory(stockData.earningsHistory || [])
       setNews(stockData.news || [])
       const isWatched = (watchData.items || []).some((i: any) => i.ticker === ticker.toUpperCase())
       setWatchlisted(isWatched)
@@ -247,7 +254,15 @@ export default function StockDetailPage() {
           <CardTitle className="text-sm text-gray-400">Price Chart</CardTitle>
         </CardHeader>
         <CardContent>
-          <StockChart ticker={quote.ticker} currentPrice={quote.price} previousClose={quote.previousClose} />
+          <StockChart
+            ticker={quote.ticker}
+            currentPrice={quote.price}
+            previousClose={quote.previousClose}
+            analystTarget={analyst?.targetMean ?? null}
+            earningsHistory={earningsHistory}
+            currentEps={quote.eps ?? null}
+            sector={quote.sector ?? null}
+          />
         </CardContent>
       </Card>
 

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts'
+import { SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
 import { format, parseISO } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -28,10 +29,19 @@ interface ChartNewsItem {
   providerPublishTime: number
 }
 
+interface EarningsPoint {
+  date: string
+  eps: number
+}
+
 interface StockChartProps {
   ticker: string
   currentPrice: number
   previousClose?: number | null
+  analystTarget?: number | null
+  earningsHistory?: EarningsPoint[]
+  currentEps?: number | null
+  sector?: string | null
 }
 
 function computeSpikes(data: DataPoint[]): Map<string, number> {
@@ -54,11 +64,29 @@ function findNewsForDate(date: string, news: ChartNewsItem[]): ChartNewsItem[] {
     .slice(0, 2)
 }
 
-export default function StockChart({ ticker, currentPrice, previousClose }: StockChartProps) {
+// ── Fair value helpers ────────────────────────────────────────────────────────
+
+// Given quarterly EPS data points, compute the trailing-12-month EPS for a date
+function getTrailing12mEps(date: string, history: EarningsPoint[]): number | null {
+  const target = new Date(date).getTime()
+  // Get all quarters on or before this date
+  const past = history.filter(e => new Date(e.date).getTime() <= target)
+  if (past.length === 0) return null
+  // Sum the 4 most recent quarters (trailing 12 months)
+  const last4 = past.slice(-4)
+  if (last4.length < 4) return null
+  const ttm = last4.reduce((s, e) => s + e.eps, 0)
+  return ttm > 0 ? ttm : null  // only positive EPS makes sense for a P/E-based valuation
+}
+
+export default function StockChart({ ticker, currentPrice, previousClose, analystTarget, earningsHistory = [], currentEps, sector }: StockChartProps) {
+  // Use sector-appropriate normal P/E so the fair-value line stays in chart range
+  const NORMAL_PE = sector ? (SECTOR_NORMAL_PE[sector] ?? DEFAULT_NORMAL_PE) : DEFAULT_NORMAL_PE
   const [range, setRange] = useState<Range>('1M')
   const [data, setData] = useState<DataPoint[]>([])
   const [loading, setLoading] = useState(true)
   const [newsItems, setNewsItems] = useState<ChartNewsItem[]>([])
+
 
   // spike date → AI summary ('loading' | '' | actual text)
   const [spikeSummaries, setSpikeSummaries] = useState<Record<string, string>>({})
@@ -104,9 +132,29 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
     } catch { return '' }
   }
 
-  const formattedData = data.map((d) => ({ ...d, dateLabel: formatXAxis(d.date) }))
-  const minVal = Math.min(...data.map((d) => d.low).filter(Boolean)) * 0.998
-  const maxVal = Math.max(...data.map((d) => d.high).filter(Boolean)) * 1.002
+  // Build fair value for each data point using trailing 12-month EPS × NORMAL_PE
+  // Falls back to currentEps if not enough quarterly history exists
+  const hasPositiveEps = currentEps != null && currentEps > 0
+  const hasFairValue = earningsHistory.length >= 4 || hasPositiveEps
+
+  const formattedData = data.map((d) => {
+    let fairValue: number | null = null
+    if (hasFairValue) {
+      const ttmEps = earningsHistory.length >= 4
+        ? getTrailing12mEps(d.date, earningsHistory)
+        : (currentEps ?? null)
+      fairValue = (ttmEps != null && ttmEps > 0) ? ttmEps * NORMAL_PE : null
+    }
+    return { ...d, dateLabel: formatXAxis(d.date), fairValue }
+  })
+
+  const priceMin = Math.min(...data.map((d) => d.low).filter(Boolean))
+  const priceMax = Math.max(...data.map((d) => d.high).filter(Boolean))
+  const fairValues = formattedData.map(d => d.fairValue).filter((v): v is number => v != null)
+  const fairMin = fairValues.length ? Math.min(...fairValues) : priceMin
+  const fairMax = fairValues.length ? Math.max(...fairValues) : priceMax
+  const minVal = Math.min(priceMin, fairMin) * 0.997
+  const maxVal = Math.max(priceMax, fairMax) * 1.003
 
   // Tooltip — inline styles so theme can't override text colors
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -228,12 +276,50 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
         ))}
       </div>
 
-      {spikeMap.size > 0 && (
-        <div className="flex items-center gap-1.5 mb-3">
-          <div className="h-2.5 w-2.5 rounded-full bg-green-500 opacity-80" />
-          <span className="text-xs text-gray-500">Significant moves (≥2%) — hover a dot for AI summary</span>
+      {/* Legend + valuation badge */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-3">
+        {/* Market price legend */}
+        <div className="flex items-center gap-1.5">
+          <div className="h-0.5 w-5 rounded" style={{ background: color }} />
+          <span className="text-xs text-gray-500">Market Price</span>
         </div>
-      )}
+
+        {/* Fair value legend */}
+        {hasFairValue && (() => {
+          const latestFV = formattedData.filter(d => d.fairValue != null).at(-1)?.fairValue
+          if (!latestFV) return null
+          const diff = ((latestFV - currentPrice) / currentPrice) * 100
+          const isUnder = diff > 0
+          return (
+            <>
+              <div className="flex items-center gap-1.5">
+                <svg width="20" height="4" className="shrink-0">
+                  <line x1="0" y1="2" x2="20" y2="2" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 3" />
+                </svg>
+                <span className="text-xs text-gray-500">
+                  Fair Value <span className="text-amber-400 font-medium">${latestFV.toFixed(0)}</span>
+                  <span className="text-gray-600 ml-1">(EPS × 15)</span>
+                </span>
+              </div>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                isUnder
+                  ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
+              }`}>
+                {isUnder ? '↑ Undervalued' : '↓ Overvalued'} {Math.abs(diff).toFixed(1)}%
+              </span>
+            </>
+          )
+        })()}
+
+        {/* Spike legend */}
+        {spikeMap.size > 0 && (
+          <div className="flex items-center gap-1.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-green-500 opacity-80" />
+            <span className="text-xs text-gray-500">≥2% move — hover for AI summary</span>
+          </div>
+        )}
+      </div>
 
       {loading ? (
         <Skeleton className="h-64 w-full" />
@@ -241,7 +327,7 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
         <div className="h-64 flex items-center justify-center text-gray-500">No chart data available</div>
       ) : (
         <ResponsiveContainer width="100%" height={280}>
-          <AreaChart data={formattedData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <AreaChart data={formattedData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id={`gradient-${ticker}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={color} stopOpacity={0.25} />
@@ -251,13 +337,42 @@ export default function StockChart({ ticker, currentPrice, previousClose }: Stoc
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
             <XAxis dataKey="dateLabel" tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false} interval="preserveStartEnd" />
-            <YAxis domain={[minVal, maxVal]} tick={{ fill: '#6b7280', fontSize: 11 }}
+            <YAxis
+              domain={[
+                (dataMin: number) => {
+                  const safeMin = isFinite(dataMin) && dataMin > 0 ? dataMin : (priceMin || 0)
+                  if (!hasFairValue || !hasPositiveEps) return safeMin * 0.997
+                  const fv = currentEps! * NORMAL_PE
+                  return Math.min(safeMin, fv) * 0.995
+                },
+                (dataMax: number) => {
+                  const safeMax = isFinite(dataMax) && dataMax > 0 ? dataMax : (priceMax || 100)
+                  return safeMax * 1.003
+                },
+              ]}
+              tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false}
               tickFormatter={(v) => `$${v.toFixed(0)}`} width={60} />
             <Tooltip content={CustomTooltip} />
             {previousClose && (
               <ReferenceLine y={previousClose} stroke="#6b7280" strokeDasharray="4 4" strokeOpacity={0.5} />
             )}
+            {/* Fair value line: EPS × 15 — amber dashed, no fill */}
+            {hasFairValue && (
+              <Area
+                type="monotone"
+                dataKey="fairValue"
+                stroke="#f59e0b"
+                strokeWidth={2}
+                strokeDasharray="8 4"
+                fill="none"
+                dot={false}
+                activeDot={false}
+                isAnimationActive={false}
+                connectNulls={false}
+              />
+            )}
+            {/* Price area — rendered on top */}
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
               fill={`url(#gradient-${ticker})`} dot={renderDot}
               activeDot={{ r: 5, fill: color, stroke: '#111827', strokeWidth: 2 }} />

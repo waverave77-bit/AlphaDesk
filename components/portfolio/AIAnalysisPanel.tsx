@@ -179,16 +179,23 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
                   </span>
                   <SignalBadge signal={m.signal} />
                 </div>
-                {!m.error && m.rationale && (
-                  <p style={{ color: textBody, fontSize: '11px', lineHeight: '1.6' }}>{m.rationale}</p>
-                )}
+                {/* Rationale — show even on error so the reason is visible */}
+                {m.rationale ? (
+                  <p style={{
+                    color: m.error ? textMuted : textBody,
+                    fontSize: '11px',
+                    lineHeight: '1.6',
+                    fontStyle: m.error ? 'italic' : 'normal',
+                  }}>{m.rationale}</p>
+                ) : m.error ? (
+                  <p style={{ color: textMuted, fontSize: '11px', fontStyle: 'italic' }}>Model unavailable</p>
+                ) : null}
                 {!m.error && m.keyStrength && (
                   <p style={{ color: '#16a34a', fontSize: '10px' }}>↑ {m.keyStrength}</p>
                 )}
                 {!m.error && m.keyRisk && (
                   <p style={{ color: '#dc2626', fontSize: '10px' }}>↓ {m.keyRisk}</p>
                 )}
-                {m.error && <p style={{ color: textMuted, fontSize: '11px', fontStyle: 'italic' }}>Model unavailable</p>}
               </div>
             ))}
           </div>

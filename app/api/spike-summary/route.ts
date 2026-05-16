@@ -6,9 +6,18 @@ export const dynamic = 'force-dynamic'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
+// Known company names for tickers where the ticker alone returns poor news results
+const TICKER_NAMES: Record<string, string> = {
+  TTWO: 'Take-Two Interactive', MSFT: 'Microsoft', AAPL: 'Apple', GOOGL: 'Google Alphabet',
+  AMZN: 'Amazon', META: 'Meta Facebook', NVDA: 'Nvidia', TSLA: 'Tesla', NFLX: 'Netflix',
+  AMD: 'AMD chip', INTC: 'Intel', CRM: 'Salesforce', SPOT: 'Spotify', SNAP: 'Snapchat',
+  RBLX: 'Roblox', EA: 'Electronic Arts', ATVI: 'Activision Blizzard', DKNG: 'DraftKings',
+}
+
 async function fetchNewsHeadlines(ticker: string, date: string): Promise<string[]> {
   try {
-    const searchQuery = encodeURIComponent(`${ticker} stock`)
+    const companyHint = TICKER_NAMES[ticker] ?? `${ticker} stock`
+    const searchQuery = encodeURIComponent(companyHint)
     const res = await fetch(
       `https://news.google.com/rss/search?q=${searchQuery}&hl=en-US&gl=US&ceid=US:en`,
       { cache: 'no-store', signal: AbortSignal.timeout(5000) }
@@ -23,7 +32,7 @@ async function fetchNewsHeadlines(ticker: string, date: string): Promise<string[
       const pubDateStr = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1]?.trim()
       if (title && pubDateStr) {
         const diffDays = Math.abs(targetMs - new Date(pubDateStr).getTime()) / 86400000
-        if (diffDays <= 3) headlines.push(title)
+        if (diffDays <= 5) headlines.push(title)
       }
     }
     return headlines
@@ -43,9 +52,10 @@ export async function GET(req: Request) {
   const id = `${ticker}-${date}`
 
   // 1. Check DB cache — free, instant, shared across all users
+  // Skip cache if summary is empty (means a previous call failed/was truncated)
   try {
     const cached = await prisma.spikeSummaryCache.findUnique({ where: { id } })
-    if (cached) return NextResponse.json({ summary: cached.summary })
+    if (cached?.summary) return NextResponse.json({ summary: cached.summary })
   } catch {}
 
   // 2. Not cached — fetch news + call Claude
@@ -55,23 +65,29 @@ export async function GET(req: Request) {
 
   const newsContext = headlines.length > 0
     ? `News headlines from around that date:\n${headlines.map(h => `- ${h}`).join('\n')}`
-    : `No specific news found — use your knowledge of typical drivers for ${ticker}.`
+    : `No specific news was found — draw on your training knowledge of what was happening with ${ticker} around ${date}.`
 
-  const prompt = `${ticker} stock ${direction} ${abs}% on ${date}. ${newsContext}\n\nExplain in exactly 2 short sentences why this likely happened. Plain English, no markdown, no bullet points, no "Note:".`
+  const prompt = `${ticker} stock ${direction} ${abs}% on ${date}.\n\n${newsContext}\n\nIn exactly 2 short sentences, explain why this move most likely happened. Be specific about the catalyst. Plain English only — no markdown, no bullets, no "Note:", never start with "I" or "Based on".`
 
   try {
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5',
-      max_tokens: 100,
-      system: 'You explain stock price moves in 2 plain English sentences. Be specific. No markdown. No bullet points. Never start with "I".',
+      max_tokens: 180,
+      system: 'You are a stock analyst who explains price moves in 2 plain English sentences. Always give a specific, confident reason. No markdown. No bullets. No disclaimers.',
       messages: [{ role: 'user', content: prompt }],
     })
     const summary = ((msg.content[0] as any).text ?? '').trim()
 
     // 3. Save to DB so every future user gets it for free
-    try {
-      await prisma.spikeSummaryCache.create({ data: { id, summary } })
-    } catch {}
+    if (summary) {
+      try {
+        await prisma.spikeSummaryCache.upsert({
+          where: { id },
+          create: { id, summary },
+          update: { summary },
+        })
+      } catch {}
+    }
 
     return NextResponse.json({ summary })
   } catch {
