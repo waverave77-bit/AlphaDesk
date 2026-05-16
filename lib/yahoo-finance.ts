@@ -154,7 +154,7 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
     try {
       const summaryData = await httpGetSummary(
         upper,
-        'price%2CsummaryDetail%2CassetProfile%2CdefaultKeyStatistics%2CfinancialData%2CrecommendationTrend%2CearningsHistory%2CearningsTrend'
+        'price%2CsummaryDetail%2CassetProfile%2CdefaultKeyStatistics%2CfinancialData%2CrecommendationTrend%2CearningsHistory%2CearningsTrend%2CincomeStatementHistoryQuarterly'
       )
       const result = summaryData?.quoteSummary?.result?.[0] ?? {}
       sector = result.assetProfile?.sector ?? null
@@ -350,39 +350,67 @@ export const SECTOR_NORMAL_PE: Record<string, number> = {
 }
 export const DEFAULT_NORMAL_PE = 18
 
-// Returns up to 16 quarters of historical EPS + forward estimates so the chart
+// Returns up to ~20 quarters of historical EPS + forward estimates so the chart
 // can build a trailing-12-month EPS line → fair value = EPS × normalPE
+//
+// Data sources (in priority order):
+//  1. incomeStatementHistoryQuarterly — net income ÷ shares outstanding, goes back ~5 years
+//  2. earningsHistory.history          — actual reported EPS, last 4 quarters (overrides #1 for those dates)
+//  3. earningsTrend                    — forward quarterly estimates (+1q, +2q)
 export async function getEarningsHistory(ticker: string): Promise<EarningsPoint[]> {
   const upper = ticker.toUpperCase()
   try {
-    // Always reuse the cached result populated by getStockQuote (now includes earningsHistory + earningsTrend)
     const raw = _lastAnalystResult.get(upper)
     if (!raw) return []
 
-    const history: EarningsPoint[] = []
+    const byDate = new Map<string, number>()
 
-    // Quarterly actual EPS from earningsHistory
+    // 1. Income statement history — ~5 years of quarterly net income
+    //    EPS ≈ netIncomeApplicableToCommonShares ÷ sharesOutstanding
+    //    Uses current share count (approximate — close enough for a trend line)
+    const sharesOutstanding: number | null =
+      raw?.defaultKeyStatistics?.sharesOutstanding?.raw ?? null
+
+    const incomeQs: any[] = raw?.incomeStatementHistoryQuarterly?.incomeStatementHistory ?? []
+    if (sharesOutstanding && sharesOutstanding > 0) {
+      for (const q of incomeQs) {
+        const ts: number = q.endDate?.raw
+        // prefer net income applicable to common shares (excludes minority interest)
+        const netIncome: number =
+          q.netIncomeApplicableToCommonShares?.raw ?? q.netIncome?.raw
+        if (ts && netIncome != null) {
+          const date = new Date(ts * 1000).toISOString().slice(0, 10)
+          const eps = netIncome / sharesOutstanding
+          byDate.set(date, eps)
+        }
+      }
+    }
+
+    // 2. Actual reported EPS — more accurate, overrides income-statement-derived values
     const qHistory: any[] = raw?.earningsHistory?.history ?? []
     for (const q of qHistory) {
       const ts: number = q.quarter?.raw
       const eps: number = q.epsActual?.raw
       if (ts && eps != null) {
-        history.push({ date: new Date(ts * 1000).toISOString().slice(0, 10), eps })
+        const date = new Date(ts * 1000).toISOString().slice(0, 10)
+        byDate.set(date, eps)  // overrides income statement value for same quarter
       }
     }
 
-    // Forward quarterly EPS estimates from earningsTrend (+1q, +2q)
+    // 3. Forward quarterly EPS estimates (+1q, +2q)
     const trend: any[] = raw?.earningsTrend?.trend ?? []
     for (const t of trend) {
       if (!t.period?.startsWith('+')) continue
       const eps: number = t.earningsEstimate?.avg?.raw
       const endDate: string = t.endDate?.fmt
       if (eps != null && endDate) {
-        history.push({ date: endDate, eps })
+        byDate.set(endDate, eps)
       }
     }
 
-    return history.sort((a, b) => a.date.localeCompare(b.date))
+    return Array.from(byDate.entries())
+      .map(([date, eps]) => ({ date, eps }))
+      .sort((a, b) => a.date.localeCompare(b.date))
   } catch {
     return []
   }
