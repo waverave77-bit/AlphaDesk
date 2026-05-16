@@ -168,9 +168,20 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   }
 
   // Tooltip
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload }: any) => {
     if (!active || !payload?.length) return null
     const d = payload[0]?.payload as DataPoint
+
+    // Always derive the display date from the raw ISO date on the data point —
+    // never from the XAxis label, which can be shared across many points.
+    const displayDate = (() => {
+      try {
+        const dt = parseISO(d.date)
+        if (range === '1D') return format(dt, 'HH:mm')
+        if (range === '1W' || range === '1M') return format(dt, 'MMM d')
+        return format(dt, 'MMM d, yyyy')
+      } catch { return d.date }
+    })()
 
     const spikePercent = spikeMap.get(d.date)
     const isSpike = showSpikes && spikePercent !== undefined
@@ -194,7 +205,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
         pointerEvents: 'none',
       }}>
         <div style={{ padding: '12px 14px 10px' }}>
-          <p style={{ color: '#9ca3af', marginBottom: '8px', fontWeight: 500 }}>{label}</p>
+          <p style={{ color: '#9ca3af', marginBottom: '8px', fontWeight: 500 }}>{displayDate}</p>
           <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px', marginBottom: '6px' }}>
             Close: ${d.close?.toFixed(2)}
           </p>
