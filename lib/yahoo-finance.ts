@@ -94,6 +94,93 @@ async function getYahooCrumb(): Promise<{ cookie: string; crumb: string }> {
 // Cache the last quoteSummary result per ticker so getAnalystData can reuse it without a second HTTP call
 const _lastAnalystResult = new Map<string, any>()
 
+// ─── SEC EDGAR helpers ────────────────────────────────────────────────────────
+// Free, no API key. Source of truth for EPS: straight from 10-Q / 10-K filings.
+
+const EDGAR_UA = 'AlphaDesk contact@alphadesk.app'  // SEC requires an identifying User-Agent
+
+// Ticker → zero-padded 10-digit CIK (e.g. "0000320193" for AAPL)
+const _edgarCikCache = new Map<string, string>()
+let _edgarTickerMap: Record<string, string> | null = null
+
+async function getEdgarCik(ticker: string): Promise<string | null> {
+  const upper = ticker.toUpperCase()
+  if (_edgarCikCache.has(upper)) return _edgarCikCache.get(upper)!
+  try {
+    if (!_edgarTickerMap) {
+      // ~500 KB JSON mapping every public company ticker → CIK. Cached for process lifetime.
+      const data = await httpGetRaw(
+        'https://www.sec.gov/files/company_tickers.json',
+        { 'User-Agent': EDGAR_UA }
+      )
+      _edgarTickerMap = {}
+      for (const entry of Object.values(data) as any[]) {
+        _edgarTickerMap[String(entry.ticker).toUpperCase()] =
+          String(entry.cik_str).padStart(10, '0')
+      }
+    }
+    const cik = _edgarTickerMap[upper] ?? null
+    if (cik) _edgarCikCache.set(upper, cik)
+    return cik
+  } catch {
+    return null
+  }
+}
+
+// Returns quarterly EPS from EDGAR XBRL facts — typically 10-15 years of data.
+// Each entry is a single quarter (~90-day period) from a 10-Q or 10-K filing.
+async function getEpsFromEdgar(ticker: string): Promise<EarningsPoint[]> {
+  try {
+    const cik = await getEdgarCik(ticker)
+    if (!cik) return []
+
+    // companyfacts JSON can be several MB for large-cap companies; allow 12s
+    const data = await new Promise<any>((resolve, reject) => {
+      const options = {
+        headers: { 'User-Agent': EDGAR_UA, 'Accept': 'application/json' },
+        timeout: 12000,
+      }
+      https.get(
+        `https://data.sec.gov/api/xbrl/companyfacts/CIK${cik}.json`,
+        options,
+        (res) => {
+          let raw = ''
+          res.on('data', (c: string) => (raw += c))
+          res.on('end', () => {
+            try { resolve(JSON.parse(raw)) } catch { reject(new Error('JSON parse')) }
+          })
+        }
+      ).on('error', reject).on('timeout', () => reject(new Error('Timeout')))
+    })
+
+    // Try diluted EPS first, fall back to basic EPS
+    const epsEntries: any[] =
+      data?.facts?.['us-gaap']?.EarningsPerShareDiluted?.units?.['USD/shares'] ??
+      data?.facts?.['us-gaap']?.EarningsPerShareBasic?.units?.['USD/shares'] ??
+      []
+
+    // Keep only single-quarter periods (~90 days) from quarterly/annual filings.
+    // Multiple amendments can exist for the same period — keep the most recently filed.
+    const byPeriod = new Map<string, { val: number; filed: string }>()
+    for (const e of epsEntries) {
+      if (!e.start || !e.end || e.val == null) continue
+      const days = (new Date(e.end).getTime() - new Date(e.start).getTime()) / 86400000
+      if (days < 75 || days > 105) continue
+      if (e.form !== '10-Q' && e.form !== '10-K') continue
+      const existing = byPeriod.get(e.end)
+      if (!existing || e.filed > existing.filed) {
+        byPeriod.set(e.end, { val: e.val, filed: e.filed ?? '' })
+      }
+    }
+
+    return Array.from(byPeriod.entries())
+      .map(([date, { val }]) => ({ date, eps: val }))
+      .sort((a, b) => a.date.localeCompare(b.date))
+  } catch {
+    return []
+  }
+}
+
 // Regular httpGet for non-crumb endpoints (chart, search, news)
 async function httpGet(url: string): Promise<any> {
   try {
@@ -350,61 +437,66 @@ export const SECTOR_NORMAL_PE: Record<string, number> = {
 }
 export const DEFAULT_NORMAL_PE = 18
 
-// Returns up to ~20 quarters of historical EPS + forward estimates so the chart
+// Returns up to ~10-15 years of quarterly EPS + forward estimates so the chart
 // can build a trailing-12-month EPS line → fair value = EPS × normalPE
 //
-// Data sources (in priority order):
-//  1. incomeStatementHistoryQuarterly — net income ÷ shares outstanding, goes back ~5 years
-//  2. earningsHistory.history          — actual reported EPS, last 4 quarters (overrides #1 for those dates)
-//  3. earningsTrend                    — forward quarterly estimates (+1q, +2q)
+// Data sources layered in priority order (later layers overwrite earlier ones):
+//  1. SEC EDGAR XBRL (primary)  — diluted EPS from actual 10-Q/10-K filings, 10-15 years
+//  2. Yahoo incomeStatementHistoryQuarterly — net income ÷ shares, ~5 years (fills any EDGAR gaps)
+//  3. Yahoo earningsHistory      — actual reported EPS last 4 quarters (most accurate recent data)
+//  4. Yahoo earningsTrend        — forward quarterly estimates (+1q, +2q)
 export async function getEarningsHistory(ticker: string): Promise<EarningsPoint[]> {
   const upper = ticker.toUpperCase()
   try {
     const raw = _lastAnalystResult.get(upper)
-    if (!raw) return []
 
     const byDate = new Map<string, number>()
 
-    // 1. Income statement history — ~5 years of quarterly net income
-    //    EPS ≈ netIncomeApplicableToCommonShares ÷ sharesOutstanding
-    //    Uses current share count (approximate — close enough for a trend line)
-    const sharesOutstanding: number | null =
-      raw?.defaultKeyStatistics?.sharesOutstanding?.raw ?? null
+    // ── Layer 1: SEC EDGAR — 10-15 years of clean quarterly EPS ──────────────
+    // Run in parallel with the Yahoo layers; if it times out we still have Yahoo data.
+    const edgarPromise = getEpsFromEdgar(upper).catch(() => [] as EarningsPoint[])
 
-    const incomeQs: any[] = raw?.incomeStatementHistoryQuarterly?.incomeStatementHistory ?? []
-    if (sharesOutstanding && sharesOutstanding > 0) {
-      for (const q of incomeQs) {
-        const ts: number = q.endDate?.raw
-        // prefer net income applicable to common shares (excludes minority interest)
-        const netIncome: number =
-          q.netIncomeApplicableToCommonShares?.raw ?? q.netIncome?.raw
-        if (ts && netIncome != null) {
-          const date = new Date(ts * 1000).toISOString().slice(0, 10)
-          const eps = netIncome / sharesOutstanding
-          byDate.set(date, eps)
+    // ── Layer 2: Yahoo income statements — ~5 years (fallback if EDGAR is slow) ─
+    if (raw) {
+      const sharesOutstanding: number | null =
+        raw?.defaultKeyStatistics?.sharesOutstanding?.raw ?? null
+      const incomeQs: any[] = raw?.incomeStatementHistoryQuarterly?.incomeStatementHistory ?? []
+      if (sharesOutstanding && sharesOutstanding > 0) {
+        for (const q of incomeQs) {
+          const ts: number = q.endDate?.raw
+          const netIncome: number =
+            q.netIncomeApplicableToCommonShares?.raw ?? q.netIncome?.raw
+          if (ts && netIncome != null) {
+            byDate.set(new Date(ts * 1000).toISOString().slice(0, 10), netIncome / sharesOutstanding)
+          }
         }
       }
     }
 
-    // 2. Actual reported EPS — more accurate, overrides income-statement-derived values
-    const qHistory: any[] = raw?.earningsHistory?.history ?? []
-    for (const q of qHistory) {
-      const ts: number = q.quarter?.raw
-      const eps: number = q.epsActual?.raw
-      if (ts && eps != null) {
-        const date = new Date(ts * 1000).toISOString().slice(0, 10)
-        byDate.set(date, eps)  // overrides income statement value for same quarter
+    // ── Layer 1 result (EDGAR) overwrites Yahoo income statement estimates ────
+    const edgarPoints = await edgarPromise
+    for (const { date, eps } of edgarPoints) {
+      byDate.set(date, eps)
+    }
+
+    // ── Layer 3: Yahoo actual EPS — most accurate for last 4 quarters ─────────
+    if (raw) {
+      for (const q of (raw?.earningsHistory?.history ?? []) as any[]) {
+        const ts: number = q.quarter?.raw
+        const eps: number = q.epsActual?.raw
+        if (ts && eps != null) {
+          byDate.set(new Date(ts * 1000).toISOString().slice(0, 10), eps)
+        }
       }
     }
 
-    // 3. Forward quarterly EPS estimates (+1q, +2q)
-    const trend: any[] = raw?.earningsTrend?.trend ?? []
-    for (const t of trend) {
-      if (!t.period?.startsWith('+')) continue
-      const eps: number = t.earningsEstimate?.avg?.raw
-      const endDate: string = t.endDate?.fmt
-      if (eps != null && endDate) {
-        byDate.set(endDate, eps)
+    // ── Layer 4: Forward estimates (+1q, +2q) ─────────────────────────────────
+    if (raw) {
+      for (const t of (raw?.earningsTrend?.trend ?? []) as any[]) {
+        if (!t.period?.startsWith('+')) continue
+        const eps: number = t.earningsEstimate?.avg?.raw
+        const endDate: string = t.endDate?.fmt
+        if (eps != null && endDate) byDate.set(endDate, eps)
       }
     }
 
