@@ -1,404 +1,288 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, DollarSign, BarChart2, RefreshCw, Brain, Calendar } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
+import {
+  Search, Star, Calendar, FlaskConical, Globe,
+  Activity, Building2, Users, BookOpen, TrendingUp,
+  TrendingDown, Sparkles, RefreshCw,
+} from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import HoldingsTable, { HoldingWithQuote } from '@/components/portfolio/HoldingsTable'
-import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
-import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
-import AllocationChart from '@/components/charts/AllocationChart'
-import PortfolioPerformanceChart from '@/components/charts/PortfolioPerformanceChart'
-import InfoTooltip from '@/components/InfoTooltip'
-import LastUpdated from '@/components/LastUpdated'
-import MarketRecap from '@/components/MarketRecap'
+import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
-import { useStreak } from '@/hooks/useStreak'
-import { useFeatureFlags } from '@/hooks/useAdmin'
-import { formatCurrency, formatPercent, cn } from '@/lib/utils'
 
-interface StatCardProps {
-  title: string
-  value: string
-  sub?: string
-  positive?: boolean | null
-  icon: React.ReactNode
-  loading?: boolean
-  tooltip?: string
+// ── helpers ──────────────────────────────────────────────────────────────────
+
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return { word: 'Good morning', emoji: '☀️' }
+  if (h < 17) return { word: 'Good afternoon', emoji: '👋' }
+  return { word: 'Good evening', emoji: '🌙' }
 }
 
-function StatCard({ title, value, sub, positive, icon, loading, tooltip }: StatCardProps) {
+function formatPrice(n: number | null) {
+  if (n == null) return '—'
+  return n >= 1000
+    ? n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : n.toFixed(2)
+}
+
+// ── sub-components ────────────────────────────────────────────────────────────
+
+function MarketStatusBadge({ status }: { status: string }) {
+  const cfg: Record<string, { bg: string; dot: string; text: string }> = {
+    'Open':        { bg: 'bg-green-500/10 border-green-500/20',  dot: 'bg-green-400', text: 'text-green-400' },
+    'Pre-Market':  { bg: 'bg-yellow-500/10 border-yellow-500/20', dot: 'bg-yellow-400', text: 'text-yellow-400' },
+    'After Hours': { bg: 'bg-blue-500/10 border-blue-500/20',    dot: 'bg-blue-400',   text: 'text-blue-400' },
+    'Weekend':     { bg: 'bg-gray-500/10 border-gray-600',       dot: 'bg-gray-500',   text: 'text-gray-400' },
+    'Closed':      { bg: 'bg-gray-500/10 border-gray-600',       dot: 'bg-gray-500',   text: 'text-gray-400' },
+  }
+  const c = cfg[status] ?? cfg['Closed']
   return (
-    <Card className="h-full">
-      <CardContent className="p-6 h-full flex flex-col justify-between gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <p className="flex items-center gap-1.5 text-sm text-slate-500 font-semibold uppercase tracking-wide leading-snug">
-            {title}
-            {tooltip && <InfoTooltip text={tooltip} />}
-          </p>
-          <div className="rounded-xl bg-slate-100 p-3 shrink-0">
-            <span className="block [&>svg]:h-5 [&>svg]:w-5">{icon}</span>
-          </div>
-        </div>
-        <div>
-          {loading ? (
-            <Skeleton className="h-10 w-36" />
-          ) : (
-            <p className="text-3xl font-bold text-slate-900 leading-none">{value}</p>
-          )}
-          {sub && !loading && (
-            <p className={cn('text-sm mt-2 font-semibold', positive === true ? 'text-green-600' : positive === false ? 'text-red-500' : 'text-slate-500')}>
-              {positive === true ? '▲' : positive === false ? '▼' : ''} {sub}
-            </p>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+    <span className={cn('inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border', c.bg, c.text)}>
+      <span className={cn('h-1.5 w-1.5 rounded-full', c.dot)} />
+      {status}
+    </span>
   )
 }
 
+function IndexCard({ label, price, change, changePercent }: {
+  label: string; price: number | null; change: number | null; changePercent: number | null
+}) {
+  const pos = (changePercent ?? 0) >= 0
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0">
+      <span className="text-sm text-gray-400 font-medium">{label}</span>
+      <div className="text-right">
+        <p className="text-sm font-semibold text-white">{formatPrice(price)}</p>
+        {changePercent != null && (
+          <p className={cn('text-xs font-medium', pos ? 'text-green-400' : 'text-red-400')}>
+            {pos ? '+' : ''}{changePercent.toFixed(2)}%
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const QUICK_LINKS = [
+  { href: '/research',   label: 'Research',     icon: Search,    desc: 'Deep-dive any stock' },
+  { href: '/watchlist',  label: 'Watchlist',    icon: Star,      desc: 'Stocks you\'re tracking' },
+  { href: '/earnings',   label: 'Earnings',     icon: Calendar,  desc: 'Upcoming earnings dates' },
+  { href: '/hedgefunds', label: 'Hedge Funds',  icon: Building2, desc: 'Where big money is going' },
+  { href: '/insiders',   label: 'Smart Money',  icon: Users,     desc: 'Insider & congress trades' },
+  { href: '/macro',      label: 'Macro',        icon: Globe,     desc: 'Big-picture economics' },
+  { href: '/markets',    label: 'Markets',      icon: Activity,  desc: 'Market overview' },
+  { href: '/quant',      label: 'Quant',        icon: FlaskConical, desc: 'Screen stocks systematically' },
+  { href: '/learn',      label: 'Dictionary',   icon: BookOpen,  desc: 'Plain-English finance terms' },
+]
+
+// ── page ──────────────────────────────────────────────────────────────────────
+
 export default function DashboardPage() {
-  const { streak } = useStreak()
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-  const { flags } = useFeatureFlags()
-  const [holdings, setHoldings] = useState<any[]>([])
-  const [enrichedHoldings, setEnrichedHoldings] = useState<HoldingWithQuote[]>([])
-  const [loadingHoldings, setLoadingHoldings] = useState(true)
-  const [loadingPrices, setLoadingPrices] = useState(false)
-  const [showAI, setShowAI] = useState(false)
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const { data: session } = useSession()
+  const { word: greeting, emoji } = getGreeting()
 
-  const fetchHoldings = useCallback(async () => {
-    setLoadingHoldings(true)
-    try {
-      const res = await fetch('/api/portfolio', { cache: 'no-store' })
-      const data = await res.json()
-      setHoldings(data.holdings || [])
-    } finally {
-      setLoadingHoldings(false)
-    }
-  }, [])
+  // First name only, capitalised
+  const firstName = session?.user?.name
+    ? session.user.name.split(' ')[0]
+    : null
 
-  const enrichWithPrices = useCallback(async (rawHoldings: any[]) => {
-    if (!rawHoldings.length) { setEnrichedHoldings([]); return }
-    setLoadingPrices(true)
-    const tickers = Array.from(new Set(rawHoldings.map((h: any) => h.ticker as string)))
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
-    const quoteMap = new Map<string, any>()
-    await Promise.allSettled(
-      tickers.map(async (ticker) => {
-        const res = await fetch(`/api/stock/${ticker}`, { cache: 'no-store' })
-        const d = await res.json()
-        if (d.quote) quoteMap.set(ticker, d.quote)
+  // Market brief
+  const [brief, setBrief] = useState<{ text: string; status: string } | null>(null)
+  const [briefLoading, setBriefLoading] = useState(true)
+
+  // Watchlist
+  const [watchlist, setWatchlist] = useState<{ ticker: string; price: number | null; changePercent: number | null }[]>([])
+  const [watchLoading, setWatchLoading] = useState(true)
+
+  // Indices
+  const [indices, setIndices] = useState<{ label: string; price: number | null; change: number | null; changePercent: number | null }[]>([])
+  const [indicesLoading, setIndicesLoading] = useState(true)
+
+  // Fetch everything in parallel on mount
+  useEffect(() => {
+    // Market brief
+    fetch('/api/market-brief')
+      .then(r => r.json())
+      .then(d => setBrief({ text: d.text, status: d.status }))
+      .catch(() => setBrief({ text: '', status: 'Closed' }))
+      .finally(() => setBriefLoading(false))
+
+    // Indices
+    fetch('/api/market-indices')
+      .then(r => r.json())
+      .then(d => setIndices(d.indices ?? []))
+      .catch(() => {})
+      .finally(() => setIndicesLoading(false))
+
+    // Watchlist tickers, then prices
+    fetch('/api/watchlist')
+      .then(r => r.json())
+      .then(async (d) => {
+        const items: { ticker: string }[] = d.items ?? []
+        if (!items.length) { setWatchlist([]); setWatchLoading(false); return }
+
+        const quotes = await Promise.allSettled(
+          items.slice(0, 8).map(({ ticker }) =>
+            fetch(`/api/stock/${ticker}?type=quote`).then(r => r.json())
+          )
+        )
+        const enriched = items.slice(0, 8).map((item, i) => {
+          const res = quotes[i]
+          const q = res.status === 'fulfilled' ? res.value?.quote : null
+          return {
+            ticker: item.ticker,
+            price: q?.price ?? null,
+            changePercent: q?.changePercent ?? null,
+          }
+        })
+        setWatchlist(enriched)
+        setWatchLoading(false)
       })
-    )
-
-    const enriched: HoldingWithQuote[] = rawHoldings.map((h) => {
-      const q = quoteMap.get(h.ticker)
-      const currentPrice = q?.price ?? null
-      const costBasis = h.shares * h.purchasePrice
-      const currentValue = currentPrice ? h.shares * currentPrice : null
-      const gainLoss = currentValue !== null ? currentValue - costBasis : null
-      const gainLossPercent = gainLoss !== null && costBasis ? (gainLoss / costBasis) * 100 : null
-      return {
-        id: h.id,
-        ticker: h.ticker,
-        companyName: h.companyName,
-        shares: h.shares,
-        purchasePrice: h.purchasePrice,
-        purchaseDate: h.purchaseDate,
-        sector: h.sector,
-        currentPrice,
-        currentValue,
-        costBasis,
-        gainLoss,
-        gainLossPercent,
-        dayChange: q?.change ?? null,
-        dayChangePercent: q?.changePercent ?? null,
-      }
-    })
-
-    setEnrichedHoldings(enriched)
-    setLoadingPrices(false)
-    setLastUpdated(new Date())
+      .catch(() => setWatchLoading(false))
   }, [])
-
-  useEffect(() => { fetchHoldings() }, [fetchHoldings])
-  useEffect(() => { if (!loadingHoldings) enrichWithPrices(holdings) }, [holdings, loadingHoldings, enrichWithPrices])
-
-  const totalValue = enrichedHoldings.reduce((s, h) => s + (h.currentValue ?? h.costBasis), 0)
-  const totalCost = enrichedHoldings.reduce((s, h) => s + h.costBasis, 0)
-  const totalGainLoss = totalValue - totalCost
-  const totalGainLossPercent = totalCost ? (totalGainLoss / totalCost) * 100 : 0
-  // dayChange per share × shares owned = total dollar change today
-  const dayChange = enrichedHoldings.reduce((s, h) => {
-    if (h.dayChange != null && h.shares) return s + h.dayChange * h.shares
-    return s
-  }, 0)
-
-  const grouped = Array.from(
-    enrichedHoldings.reduce((map, h) => {
-      const existing = map.get(h.ticker)
-      if (!existing) {
-        map.set(h.ticker, { ticker: h.ticker, companyName: h.companyName, sector: h.sector,
-          totalShares: h.shares, totalCost: h.costBasis,
-          currentValue: h.currentValue ?? h.costBasis,
-          gainLoss: h.gainLoss ?? 0, gainLossPercent: h.gainLossPercent ?? 0,
-          currentPrice: h.currentPrice, dayChangePercent: h.dayChangePercent })
-      } else {
-        existing.totalShares += h.shares
-        existing.totalCost += h.costBasis
-        existing.currentValue += h.currentValue ?? h.costBasis
-        existing.gainLoss = existing.currentValue - existing.totalCost
-        existing.gainLossPercent = existing.totalCost ? (existing.gainLoss / existing.totalCost) * 100 : 0
-      }
-      return map
-    }, new Map<string, any>())
-  ).map(([, v]) => v)
-
-  const uniqueTickers = grouped.length
-  const bestPerformer = grouped.length ? grouped.reduce((b: any, h: any) => h.gainLossPercent > b.gainLossPercent ? h : b) : null
-  const worstPerformer = grouped.length ? grouped.reduce((w: any, h: any) => h.gainLossPercent < w.gainLossPercent ? h : w) : null
-
-  const byHolding = grouped.map((h) => ({ name: h.ticker, value: totalValue ? (h.currentValue / totalValue) * 100 : 0 }))
-  const bySector = Object.entries(
-    enrichedHoldings.reduce((acc, h) => {
-      acc[h.sector] = (acc[h.sector] || 0) + (h.currentValue ?? h.costBasis)
-      return acc
-    }, {} as Record<string, number>)
-  ).map(([name, val]) => ({ name, value: totalValue ? (val / totalValue) * 100 : 0 }))
-
-  const portfolioAIData = {
-    totalValue, totalGainLoss, totalGainLossPercent,
-    holdings: grouped.map((h) => ({
-      ticker: h.ticker, companyName: h.companyName, shares: h.totalShares,
-      currentValue: h.currentValue, gainLoss: h.gainLoss, gainLossPercent: h.gainLossPercent,
-      sector: h.sector, weight: totalValue ? (h.currentValue / totalValue) * 100 : 0,
-    })),
-  }
 
   return (
-    <div className="flex gap-7 min-h-full">
+    <div className="space-y-8 max-w-5xl mx-auto pb-10">
       <OnboardingModal />
-      {/* Left watchlist panel */}
-      <aside className="hidden lg:flex flex-col w-72 shrink-0 gap-5 sticky top-4 self-start">
-        {/* Watchlist preview */}
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-5">
-            <p className="text-sm font-bold text-slate-700 uppercase tracking-wide">My Holdings</p>
-            <Link href="/watchlist" className="text-sm font-medium text-blue-600 hover:underline">View all</Link>
+
+      {/* ── Hero greeting ─────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
+        <div>
+          <h1 className="text-4xl font-bold text-white leading-tight">
+            {greeting}{firstName ? `, ${firstName}` : ''} {emoji}
+          </h1>
+          <p className="text-gray-500 mt-1 text-sm">{today}</p>
+        </div>
+        {brief && <MarketStatusBadge status={brief.status} />}
+      </div>
+
+      {/* ── AI Market Brief ───────────────────────────────────────── */}
+      <Card className="border-gray-800 bg-gray-900/60">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="h-4 w-4 text-blue-400" />
+            <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide">
+              {brief?.status === 'Weekend' ? 'Weekend Brief' : "Today's Market Brief"}
+            </span>
           </div>
-          {loadingHoldings ? (
-            <div className="space-y-3">
-              {[1,2,3,4].map(i => <Skeleton key={i} className="h-14 w-full rounded-xl" />)}
+          {briefLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-4/5" />
+              <Skeleton className="h-4 w-3/5" />
             </div>
-          ) : grouped.length === 0 ? (
-            <p className="text-sm text-slate-400 py-3">No holdings yet, add some stocks!</p>
+          ) : brief?.text ? (
+            <p className="text-gray-200 leading-relaxed text-[15px]">{brief.text}</p>
           ) : (
-            <div className="space-y-0.5">
-              {grouped.slice(0, 8).map((h) => (
-                <Link
-                  key={h.ticker}
-                  href={`/research/${h.ticker}`}
-                  className="flex items-center justify-between py-3 px-2 border-b border-slate-100 last:border-0 hover:bg-slate-50 rounded-xl transition-colors"
-                >
-                  <div>
-                    <p className="text-base font-bold text-slate-900">{h.ticker}</p>
-                    <p className="text-xs text-slate-400 truncate max-w-[130px]">{h.companyName}</p>
-                  </div>
-                  <div className="text-right">
-                    {h.currentPrice && <p className="text-sm font-semibold text-slate-800">${h.currentPrice.toFixed(2)}</p>}
-                    {h.dayChangePercent != null && (
-                      <span className={cn(
-                        'text-xs font-bold px-2 py-0.5 rounded-full',
-                        h.dayChangePercent >= 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'
-                      )}>
-                        {h.dayChangePercent >= 0 ? '+' : ''}{h.dayChangePercent.toFixed(2)}%
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <p className="text-gray-500 text-sm">Could not load market brief right now.</p>
           )}
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Quick links */}
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
-          <p className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4">Quick Links</p>
-          <div className="space-y-1">
-            {[
-              { label: 'Earnings Calendar', href: '/earnings' },
-              { label: 'Hedge Funds', href: '/hedgefunds' },
-              { label: 'Smart Money', href: '/insiders' },
-              { label: 'Dictionary', href: '/learn' },
-              { label: 'Quant Strategy', href: '/quant' },
-              { label: '$100K Challenge', href: '/game' },
-            ].map(({ label, href }) => (
-              <Link key={href} href={href} className="flex items-center text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-3 rounded-xl transition-colors">
-                {label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </aside>
+      {/* ── Watchlist + Indices ───────────────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      {/* Main content */}
-      <div className="flex-1 min-w-0 space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
-          <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl font-bold text-slate-900">{greeting}</h1>
-              {streak > 0 && (
-                <span className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-sm font-bold px-3 py-1 rounded-full">
-                  {streak} day{streak !== 1 ? 's' : ''} streak
-                </span>
-              )}
+        {/* Watchlist */}
+        <Card className="border-gray-800">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">My Watchlist</p>
+              <Link href="/watchlist" className="text-xs text-blue-400 hover:underline">View all</Link>
             </div>
-            <p className="text-base text-slate-500 mt-1.5">
-              Your portfolio is {totalGainLoss >= 0 ? 'up' : 'down'} today · Last updated just now
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 items-center">
-            <LastUpdated time={lastUpdated} />
-            <Button variant="outline" onClick={() => enrichWithPrices(holdings)} disabled={loadingPrices} className="h-10 px-4 text-sm">
-              <RefreshCw className={cn('h-4 w-4 mr-1.5', loadingPrices && 'animate-spin')} />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
-            <Button variant="outline" onClick={() => setShowAI(!showAI)} className="h-10 px-4 text-sm">
-              <Brain className="h-4 w-4 text-blue-600 mr-1.5" />
-              <span className="hidden sm:inline">AI Analysis</span>
-              <span className="sm:hidden">AI</span>
-            </Button>
-            <AddHoldingDialog onAdded={fetchHoldings} />
-          </div>
-        </div>
-
-        {/* Market Recap — hidden for now, component kept at components/MarketRecap.tsx */}
-        {/* {flags.market_recap !== false && <MarketRecap />} */}
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatCard
-            title="Total Value"
-            value={formatCurrency(totalValue)}
-            icon={<DollarSign className="h-4 w-4 xl:h-5 xl:w-5 text-blue-500" />}
-            loading={loadingHoldings}
-            tooltip="The total amount your stocks are worth right now if you sold everything today."
-          />
-          <StatCard
-            title="Total Gain / Loss"
-            value={`${totalGainLoss >= 0 ? '+' : ''}${formatCurrency(totalGainLoss)}`}
-            sub={formatPercent(totalGainLossPercent)}
-            positive={totalGainLoss >= 0 ? true : totalGainLoss < 0 ? false : null}
-            icon={totalGainLoss >= 0
-              ? <TrendingUp className="h-4 w-4 xl:h-5 xl:w-5 text-green-500" />
-              : <TrendingDown className="h-4 w-4 xl:h-5 xl:w-5 text-red-500" />}
-            loading={loadingHoldings || loadingPrices}
-            tooltip="How much money you've made (or lost) compared to what you originally paid."
-          />
-          <StatCard
-            title="Today's Change"
-            value={`${dayChange >= 0 ? '+' : ''}${formatCurrency(dayChange)}`}
-            positive={dayChange >= 0 ? true : dayChange < 0 ? false : null}
-            icon={<BarChart2 className="h-4 w-4 xl:h-5 xl:w-5 text-purple-500" />}
-            loading={loadingPrices}
-            tooltip="How much your total portfolio went up or down just today."
-          />
-          <StatCard
-            title="Holdings"
-            value={`${uniqueTickers}`}
-            sub={bestPerformer ? `Best: ${bestPerformer.ticker} ${formatPercent(bestPerformer.gainLossPercent ?? 0)}` : undefined}
-            icon={<Calendar className="h-4 w-4 xl:h-5 xl:w-5 text-amber-500" />}
-            loading={loadingHoldings}
-            tooltip="The number of different companies you own shares in."
-          />
-        </div>
-
-        {/* AI Panel */}
-        {showAI && enrichedHoldings.length > 0 && (
-          <AIAnalysisPanel type="portfolio" data={portfolioAIData} label="Portfolio Health Check" />
-        )}
-
-        {/* Best / Worst performers */}
-        {grouped.length > 1 && !loadingPrices && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:gap-5">
-            {bestPerformer && (
-              <Card className="border-green-100">
-                <CardContent className="p-5 xl:p-6">
-                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Best Performer <InfoTooltip text="The stock in your portfolio with the highest total gain % since you bought it." /></p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg xl:text-xl font-bold text-slate-900">{bestPerformer.ticker}</p>
-                      <p className="text-sm text-slate-400">{bestPerformer.companyName}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl xl:text-2xl text-green-600 font-bold">{formatPercent(bestPerformer.gainLossPercent ?? 0)}</p>
-                      <p className="text-sm text-green-500">{formatCurrency(bestPerformer.gainLoss ?? 0)}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {watchLoading ? (
+              <div className="space-y-3">
+                {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
+              </div>
+            ) : watchlist.length === 0 ? (
+              <div className="py-6 text-center">
+                <p className="text-gray-500 text-sm">No stocks on your watchlist yet.</p>
+                <Link href="/research" className="text-blue-400 text-sm hover:underline mt-1 inline-block">
+                  Search and add some →
+                </Link>
+              </div>
+            ) : (
+              <div>
+                {watchlist.map(({ ticker, price, changePercent }) => {
+                  const pos = (changePercent ?? 0) >= 0
+                  return (
+                    <Link
+                      key={ticker}
+                      href={`/research/${ticker}`}
+                      className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0 hover:bg-gray-800/40 -mx-2 px-2 rounded-lg transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        {pos
+                          ? <TrendingUp className="h-3.5 w-3.5 text-green-400 shrink-0" />
+                          : <TrendingDown className="h-3.5 w-3.5 text-red-400 shrink-0" />
+                        }
+                        <span className="text-sm font-bold text-white">{ticker}</span>
+                      </div>
+                      <div className="text-right">
+                        {price != null && (
+                          <p className="text-sm font-semibold text-white">${formatPrice(price)}</p>
+                        )}
+                        {changePercent != null && (
+                          <p className={cn('text-xs font-medium', pos ? 'text-green-400' : 'text-red-400')}>
+                            {pos ? '+' : ''}{changePercent.toFixed(2)}%
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
             )}
-            {worstPerformer && worstPerformer.ticker !== bestPerformer?.ticker && (
-              <Card className="border-red-100">
-                <CardContent className="p-5 xl:p-6">
-                  <p className="text-xs xl:text-sm text-slate-500 font-medium uppercase tracking-wide mb-2 flex items-center gap-1">Watch Out For <InfoTooltip text="The stock you have lost the most money on since buying it. Worth taking a look." /></p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg xl:text-xl font-bold text-slate-900">{worstPerformer.ticker}</p>
-                      <p className="text-sm text-slate-400">{worstPerformer.companyName}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl xl:text-2xl text-red-500 font-bold">{formatPercent(worstPerformer.gainLossPercent ?? 0)}</p>
-                      <p className="text-sm text-red-400">{formatCurrency(worstPerformer.gainLoss ?? 0)}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+          </CardContent>
+        </Card>
+
+        {/* Market Indices */}
+        <Card className="border-gray-800">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Market Indices</p>
+              <Link href="/markets" className="text-xs text-blue-400 hover:underline">Full view</Link>
+            </div>
+            {indicesLoading ? (
+              <div className="space-y-3">
+                {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
+              </div>
+            ) : (
+              indices.map(idx => <IndexCard key={idx.label} {...idx} />)
             )}
-          </div>
-        )}
-
-        {/* Charts */}
-        {enrichedHoldings.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:gap-6">
-            {/* Performance chart */}
-            <PortfolioPerformanceChart />
-
-            {/* Allocation by holding */}
-            <Card>
-              <CardHeader className="pb-2 pt-5 px-6">
-                <CardTitle className="text-sm xl:text-base text-slate-500 font-medium uppercase tracking-wide flex items-center gap-1">By Holdings <InfoTooltip text="How your total portfolio value is split across each stock you own. Bigger slice = bigger position." /></CardTitle>
-              </CardHeader>
-              <CardContent className="px-6 pb-6">
-                <AllocationChart data={byHolding} />
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Holdings Table */}
-        <Card>
-          <CardHeader className="flex-row items-center justify-between pb-3 pt-5 px-6">
-            <CardTitle className="text-base xl:text-lg">Holdings</CardTitle>
-            <AddHoldingDialog onAdded={fetchHoldings} />
-          </CardHeader>
-          <CardContent className="p-0 pb-2">
-            <HoldingsTable
-              holdings={enrichedHoldings}
-              loading={loadingHoldings}
-              onDelete={(id) => {
-                setHoldings((h) => h.filter((x) => x.id !== id))
-                setEnrichedHoldings((h) => h.filter((x) => x.id !== id))
-              }}
-            />
           </CardContent>
         </Card>
       </div>
+
+      {/* ── Quick Links ───────────────────────────────────────────── */}
+      <div>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Quick Access</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {QUICK_LINKS.map(({ href, label, icon: Icon, desc }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-start gap-3 p-4 rounded-xl border border-gray-800 bg-gray-900/40 hover:bg-gray-800/60 hover:border-gray-700 transition-all group"
+            >
+              <div className="p-2 rounded-lg bg-gray-800 group-hover:bg-gray-700 transition-colors shrink-0">
+                <Icon className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">{label}</p>
+                <p className="text-xs text-gray-500 mt-0.5 leading-snug">{desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-xs text-gray-700 text-center">
+        For informational purposes only. Not financial advice.
+      </p>
     </div>
   )
 }
