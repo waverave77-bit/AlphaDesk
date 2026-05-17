@@ -276,12 +276,14 @@ export default function StockDetailPage() {
         />
       )}
 
-      {/* Reddit Sentiment + Options + SEC Filings */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Reddit Sentiment + Options — hidden for now, components preserved */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <RedditSentiment ticker={quote.ticker} />
         <OptionsPanel ticker={quote.ticker} />
-      </div>
-      <SecFilings ticker={quote.ticker} />
+      </div> */}
+
+      {/* SEC Filings — hidden for now, component preserved at components/research/SecFilings.tsx */}
+      {/* <SecFilings ticker={quote.ticker} /> */}
 
       {/* Key Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
