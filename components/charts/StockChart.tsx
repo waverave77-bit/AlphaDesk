@@ -44,6 +44,27 @@ interface StockChartProps {
   sector?: string | null
 }
 
+// ── Bollinger Bands ───────────────────────────────────────────────────────────
+
+function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
+  const results = data.map((_, i) => {
+    const slice = data.slice(Math.max(0, i - period + 1), i + 1)
+    if (slice.length < 2) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
+    const mean = slice.reduce((s, x) => s + x.close, 0) / slice.length
+    const sd = Math.sqrt(slice.reduce((s, x) => s + Math.pow(x.close - mean, 2), 0) / slice.length)
+    return { bbUpper: mean + k * sd, bbMiddle: mean, bbLower: mean - k * sd }
+  })
+  // Backfill any leading nulls with the first valid value so the line reaches the left edge
+  const firstValid = results.find(r => r.bbUpper !== null)
+  if (firstValid) {
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].bbUpper === null) results[i] = { ...firstValid }
+      else break
+    }
+  }
+  return results
+}
+
 function computeSpikes(data: DataPoint[]): Map<string, number> {
   const map = new Map<string, number>()
   for (let i = 1; i < data.length; i++) {
@@ -86,6 +107,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   // toggle overlays
   const [showFairValue, setShowFairValue] = useState(true)
   const [showSpikes, setShowSpikes] = useState(true)
+  const [showBB, setShowBB] = useState(false)
 
   const [spikeSummaries, setSpikeSummaries] = useState<Record<string, string>>({})
   const lastFetchedSpike = useRef<string | null>(null)
@@ -105,7 +127,11 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       .catch(() => {})
   }, [ticker])
 
+  const BB_PERIOD: Record<Range, number> = { '1D': 12, '1W': 10, '1M': 10, '3M': 14, '1Y': 20, '5Y': 20 }
+  const bbPeriod = BB_PERIOD[range]
+
   const spikeMap = useMemo(() => computeSpikes(data), [data])
+  const bbBands  = useMemo(() => computeBollingerBands(data, bbPeriod), [data, bbPeriod])
 
   const fetchSummary = (date: string, pct: number) => {
     if (spikeSummaries[date] !== undefined) return
@@ -132,7 +158,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const hasPositiveEps = currentEps != null && currentEps > 0
   const hasFairValue = earningsHistory.length >= 4 || hasPositiveEps
 
-  const formattedData = data.map((d) => {
+  const formattedData = data.map((d, i) => {
     let fairValue: number | null = null
     if (hasFairValue) {
       let ttmEps: number | null = earningsHistory.length >= 4
@@ -141,7 +167,15 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       if (ttmEps == null && hasPositiveEps) ttmEps = currentEps!
       fairValue = (ttmEps != null && ttmEps > 0) ? ttmEps * NORMAL_PE : null
     }
-    return { ...d, dateLabel: formatXAxis(d.date), fairValue }
+    const bb = bbBands[i]
+    return {
+      ...d,
+      dateLabel: formatXAxis(d.date),
+      fairValue,
+      bbUpper:  bb?.bbUpper  ?? null,
+      bbMiddle: bb?.bbMiddle ?? null,
+      bbLower:  bb?.bbLower  ?? null,
+    }
   })
 
   const priceMin = Math.min(...data.map((d) => d.low).filter(Boolean))
@@ -149,22 +183,32 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const fairValues = formattedData.map(d => d.fairValue).filter((v): v is number => v != null)
   const fairMin = fairValues.length ? Math.min(...fairValues) : priceMin
 
+  const bbUpperValues = formattedData.map(d => d.bbUpper).filter((v): v is number => v != null)
+  const bbLowerValues = formattedData.map(d => d.bbLower).filter((v): v is number => v != null)
+  const bbMax = bbUpperValues.length ? Math.max(...bbUpperValues) : priceMax
+  const bbMin = bbLowerValues.length ? Math.min(...bbLowerValues) : priceMin
+
   // Latest fair value for legend
   const latestFV = hasFairValue ? formattedData.filter(d => d.fairValue != null).at(-1)?.fairValue ?? null : null
   const fvDiff = latestFV ? ((latestFV - currentPrice) / currentPrice) * 100 : null
   const isUnder = fvDiff != null && fvDiff > 0
 
-  // Y-axis domain: pull bottom down so fair value has room above the axis floor
+  // Latest BB values for legend
+  const latestBB = formattedData.filter(d => d.bbUpper != null).at(-1)
+
+  // Y-axis domain: accommodate fair value + BB bands
   const yDomainMin = (dataMin: number) => {
     const safeMin = isFinite(dataMin) && dataMin > 0 ? dataMin : (priceMin || 0)
-    if (!hasFairValue || !hasPositiveEps || !showFairValue) return safeMin * 0.993
-    // Give the fair value line ~10% of headroom below it
-    const effectiveMin = Math.min(safeMin, fairMin)
-    return effectiveMin * 0.90
+    let effectiveMin = safeMin
+    if (hasFairValue && hasPositiveEps && showFairValue) effectiveMin = Math.min(effectiveMin, fairMin)
+    if (showBB && bbLowerValues.length) effectiveMin = Math.min(effectiveMin, bbMin)
+    return effectiveMin * (effectiveMin < safeMin ? 0.993 : 0.993)
   }
   const yDomainMax = (dataMax: number) => {
     const safeMax = isFinite(dataMax) && dataMax > 0 ? dataMax : (priceMax || 100)
-    return safeMax * 1.005
+    let effectiveMax = safeMax
+    if (showBB && bbUpperValues.length) effectiveMax = Math.max(effectiveMax, bbMax)
+    return effectiveMax * 1.005
   }
 
   // Tooltip
@@ -182,6 +226,9 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
         return format(dt, 'MMM d, yyyy')
       } catch { return d.date }
     })()
+
+    const bbPoint = d as any
+    const hasBBPoint = showBB && bbPoint.bbUpper != null
 
     const spikePercent = spikeMap.get(d.date)
     const isSpike = showSpikes && spikePercent !== undefined
@@ -215,6 +262,13 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             <p style={{ color: '#4ade80' }}>High: <span style={{ color: '#86efac' }}>${d.high?.toFixed(2)}</span></p>
             <p style={{ color: '#f87171' }}>Low: <span style={{ color: '#fca5a5' }}>${d.low?.toFixed(2)}</span></p>
           </div>
+          {hasBBPoint && (
+            <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #1f2937', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2px 8px' }}>
+              <p style={{ color: '#a78bfa', fontSize: '11px' }}>BB↑ <span style={{ color: '#c4b5fd' }}>${bbPoint.bbUpper?.toFixed(2)}</span></p>
+              <p style={{ color: '#a78bfa', fontSize: '11px' }}>SMA <span style={{ color: '#c4b5fd' }}>${bbPoint.bbMiddle?.toFixed(2)}</span></p>
+              <p style={{ color: '#a78bfa', fontSize: '11px' }}>BB↓ <span style={{ color: '#c4b5fd' }}>${bbPoint.bbLower?.toFixed(2)}</span></p>
+            </div>
+          )}
         </div>
 
         {isSpike && (
@@ -315,6 +369,21 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
               AI Dots
             </button>
           )}
+          <button
+            onClick={() => setShowBB(v => !v)}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs border transition-all ${
+              showBB
+                ? 'border-violet-500/40 bg-violet-500/10 text-violet-400'
+                : 'border-gray-700 bg-transparent text-gray-600 opacity-50'
+            }`}
+          >
+            <svg width="14" height="10" className="shrink-0" viewBox="0 0 14 10">
+              <line x1="0" y1="1" x2="14" y2="1" stroke={showBB ? '#a78bfa' : '#6b7280'} strokeWidth="1.5" />
+              <line x1="0" y1="5" x2="14" y2="5" stroke={showBB ? '#a78bfa' : '#6b7280'} strokeWidth="1" strokeDasharray="3 2" />
+              <line x1="0" y1="9" x2="14" y2="9" stroke={showBB ? '#a78bfa' : '#6b7280'} strokeWidth="1.5" />
+            </svg>
+            BB ({bbPeriod},2)
+          </button>
         </div>
       </div>
 
@@ -352,6 +421,20 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             <span className="text-xs text-gray-500">≥2% move — hover for AI summary</span>
           </div>
         )}
+        {showBB && latestBB && (
+          <div className="flex items-center gap-1.5">
+            <svg width="20" height="10" className="shrink-0" viewBox="0 0 20 10">
+              <line x1="0" y1="1" x2="20" y2="1" stroke="#a78bfa" strokeWidth="1.5" />
+              <line x1="0" y1="5" x2="20" y2="5" stroke="#a78bfa" strokeWidth="1" strokeDasharray="4 2" />
+              <line x1="0" y1="9" x2="20" y2="9" stroke="#a78bfa" strokeWidth="1.5" />
+            </svg>
+            <span className="text-xs text-gray-500">
+              Bollinger Bands{' '}
+              <span className="text-violet-400 font-medium">${latestBB.bbLower?.toFixed(2)} – ${latestBB.bbUpper?.toFixed(2)}</span>
+              <span className="text-gray-600 ml-1">({bbPeriod}, 2σ)</span>
+            </span>
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -359,12 +442,16 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       ) : data.length === 0 ? (
         <div className="h-72 flex items-center justify-center text-gray-500">No chart data available</div>
       ) : (
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height={420}>
           <AreaChart data={formattedData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id={`gradient-${ticker}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={color} stopOpacity={0.25} />
                 <stop offset="95%" stopColor={color} stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id={`bb-fill-${ticker}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.10} />
+                <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.01} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
@@ -379,6 +466,18 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             {previousClose && (
               <ReferenceLine y={previousClose} stroke="#6b7280" strokeDasharray="4 4" strokeOpacity={0.5} />
             )}
+            {/* BB bands — drawn before price area so price line stays on top */}
+            {showBB && <>
+              <Area type="monotone" dataKey="bbUpper"
+                stroke="#8b5cf6" strokeWidth={1.5} fill={`url(#bb-fill-${ticker})`}
+                dot={false} activeDot={false} isAnimationActive={false} connectNulls={true} />
+              <Area type="monotone" dataKey="bbMiddle"
+                stroke="#8b5cf6" strokeWidth={1} strokeDasharray="5 3" fill="none"
+                dot={false} activeDot={false} isAnimationActive={false} connectNulls={true} />
+              <Area type="monotone" dataKey="bbLower"
+                stroke="#8b5cf6" strokeWidth={1.5} fill="none"
+                dot={false} activeDot={false} isAnimationActive={false} connectNulls={true} />
+            </>}
             {/* Price area */}
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
               fill={`url(#gradient-${ticker})`} dot={renderDot}
