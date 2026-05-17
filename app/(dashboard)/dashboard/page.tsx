@@ -277,8 +277,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Market Recap */}
-        {flags.market_recap !== false && <MarketRecap />}
+        {/* Market Recap — hidden for now, component kept at components/MarketRecap.tsx */}
+        {/* {flags.market_recap !== false && <MarketRecap />} */}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
