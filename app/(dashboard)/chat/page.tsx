@@ -1,23 +1,154 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Send, Bot, Loader2, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
+import { Send, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ─── Finn response renderer ───────────────────────────────────────────────────
+// ── Mr. Guy pixel head (canvas) ───────────────────────────────────────────────
+const N = null
+const HEAD_PIXELS: Array<Array<string|null>> = [
+  [N,    N,    '#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604',N      ],
+  [N,    '#2b1604','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604','#2b1604'],
+  ['#2b1604','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#5c2e0a','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#f5c49a','#f5c49a','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#111118','#111118','#f5c49a','#f5c49a','#111118','#111118','#111118','#111118','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  [N,    '#f5c49a','#f5c49a','#f5c49a','#c47a50','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N      ],
+  [N,    '#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N,    N      ],
+  [N,    N,    '#f5c49a','#f0f0f0','#f0f0f0','#c01010','#c01010','#f0f0f0','#f0f0f0','#f5c49a',N,    N      ],
+  ['#f0f0f0','#f0f0f0','#f0f0f0','#f0f0f0','#c01010','#c01010','#7a0000','#7a0000','#f0f0f0','#f0f0f0','#f0f0f0','#222236'],
+]
+const HEAD_COLS = 12, HEAD_ROWS = 14
 
+function MrGuyHead({ px = 3, className }: { px?: number; className?: string }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const ctx = c.getContext('2d')!
+    ctx.clearRect(0, 0, c.width, c.height)
+    HEAD_PIXELS.forEach((row, r) => {
+      row.forEach((color, col) => {
+        if (!color) return
+        ctx.fillStyle = color
+        ctx.fillRect(col * px, r * px, px, px)
+      })
+    })
+  }, [px])
+  return (
+    <canvas
+      ref={ref}
+      width={HEAD_COLS * px}
+      height={HEAD_ROWS * px}
+      className={className}
+      style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}
+    />
+  )
+}
+
+// ── Inline CSS for Mr. Guy animations ────────────────────────────────────────
+const MR_GUY_STYLES = `
+@keyframes mrg-idle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes mrg-wake {
+  0% { transform: translateY(0px) scale(1); }
+  30% { transform: translateY(-12px) scale(1.1); }
+  60% { transform: translateY(-6px) scale(1.05); }
+  80% { transform: translateY(-10px) scale(1.08); }
+  100% { transform: translateY(0px) scale(1); }
+}
+@keyframes mrg-think {
+  0%, 100% { transform: translateY(0px) rotate(-2deg); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+@keyframes mrg-talk {
+  0%, 100% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-8px) scale(1.06); }
+  40% { transform: translateY(-2px) scale(1.02); }
+  60% { transform: translateY(-6px) scale(1.04); }
+  80% { transform: translateY(-1px) scale(1.01); }
+}
+@keyframes bubble-pop {
+  0% { opacity: 0; transform: scale(0.5) translateY(8px); }
+  70% { transform: scale(1.05) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes typing-dot {
+  0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-4px); }
+}
+.mrg-idle    { animation: mrg-idle  2.4s ease-in-out infinite; }
+.mrg-wake    { animation: mrg-wake  0.6s ease-out forwards; }
+.mrg-think   { animation: mrg-think 1.1s ease-in-out infinite; }
+.mrg-talk    { animation: mrg-talk  0.7s ease-out forwards; }
+.bubble-pop  { animation: bubble-pop 0.28s cubic-bezier(.34,1.56,.64,1) both; }
+`
+
+// ── Message renderer ──────────────────────────────────────────────────────────
 function renderInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)
   return parts.map((p, i) => {
     if (p.startsWith('**') && p.endsWith('**'))
-      return <strong key={i} className="font-bold">{p.slice(2, -2)}</strong>
+      return <strong key={i} className="font-semibold text-white">{p.slice(2, -2)}</strong>
     if (p.startsWith('*') && p.endsWith('*'))
       return <em key={i} className="italic opacity-80">{p.slice(1, -1)}</em>
     return p
   })
 }
 
-function FinnMessage({ content }: { content: string }) {
+// Renders the body lines of a section (paragraphs, bullets, numbered lists)
+function renderSectionBody(bodyLines: string[], keyPrefix: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = []
+  let i = 0
+  while (i < bodyLines.length) {
+    const trimmed = bodyLines[i].trim()
+    if (!trimmed) { i++; continue }
+    if (/^\d+\./.test(trimmed)) {
+      const items: string[] = []
+      while (i < bodyLines.length && /^\d+\./.test(bodyLines[i].trim())) {
+        items.push(bodyLines[i].trim().replace(/^\d+\.\s*/, '')); i++
+      }
+      nodes.push(
+        <ol key={`${keyPrefix}-ol-${i}`} className="space-y-1.5 my-1">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex gap-2.5 text-gray-200 text-sm leading-relaxed">
+              <span className="shrink-0 w-4 h-4 rounded-full bg-blue-600/30 border border-blue-500/40 text-blue-400 text-[9px] font-bold flex items-center justify-center mt-0.5">{idx + 1}</span>
+              <span>{renderInline(item)}</span>
+            </li>
+          ))}
+        </ol>
+      ); continue
+    }
+    if (/^[-•]/.test(trimmed)) {
+      const items: string[] = []
+      while (i < bodyLines.length && /^[-•]/.test(bodyLines[i].trim())) {
+        items.push(bodyLines[i].trim().replace(/^[-•]\s*/, '')); i++
+      }
+      nodes.push(
+        <ul key={`${keyPrefix}-ul-${i}`} className="space-y-1 my-1">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex gap-2 text-gray-200 text-sm leading-relaxed">
+              <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-orange-400/80 block" />
+              <span>{renderInline(item)}</span>
+            </li>
+          ))}
+        </ul>
+      ); continue
+    }
+    nodes.push(<p key={`${keyPrefix}-p-${i}`} className="text-gray-200 text-sm leading-relaxed">{renderInline(trimmed)}</p>)
+    i++
+  }
+  return nodes
+}
+
+interface H3Section { title: string; bodyLines: string[] }
+
+function MrGuyMessage({ content }: { content: string }) {
   const lines = content.split('\n')
   const nodes: React.ReactNode[] = []
   let i = 0
@@ -26,163 +157,135 @@ function FinnMessage({ content }: { content: string }) {
     const line = lines[i]
     const trimmed = line.trim()
 
-    // Skip empty
+    // Empty line
     if (!trimmed) { nodes.push(<div key={i} className="h-1" />); i++; continue }
 
     // Horizontal rule
-    if (trimmed === '---') {
-      nodes.push(<div key={i} className="border-t border-gray-700/60 my-3" />)
-      i++; continue
+    if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+      nodes.push(<div key={i} className="border-t border-gray-700/60 my-3" />); i++; continue
     }
 
-    // ## Section header
-    if (trimmed.startsWith('##')) {
-      const label = trimmed.replace(/^##\s*\*?\*?/, '').replace(/\*?\*?:?\s*$/, '').trim()
+    // ## H2 — orange pill badge
+    if (/^##\s/.test(trimmed)) {
+      const text = trimmed.replace(/^##\s*/, '').toUpperCase()
       nodes.push(
-        <p key={i} className="text-[10px] font-bold uppercase tracking-widest text-blue-400/70 mt-5 mb-2">
-          {label}
-        </p>
-      )
-      i++; continue
+        <div key={i} className="flex items-center gap-3 mt-4 mb-2">
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-black tracking-widest uppercase">
+            {text}
+          </span>
+          <div className="flex-1 h-px bg-gray-700/60" />
+        </div>
+      ); i++; continue
     }
 
-    // Recommendation badge: 🟢 🟡 🔴
+    // ### H3 — collect consecutive h3 sections into comparison cards
+    if (/^###\s/.test(trimmed)) {
+      const sections: H3Section[] = []
+      while (i < lines.length && /^###\s/.test(lines[i].trim())) {
+        const title = lines[i].trim().replace(/^###\s*/, '')
+        i++
+        const bodyLines: string[] = []
+        while (i < lines.length && !/^##/.test(lines[i].trim()) && lines[i].trim() !== '---') {
+          bodyLines.push(lines[i]); i++
+        }
+        // Trim trailing empty lines
+        while (bodyLines.length > 0 && !bodyLines[bodyLines.length - 1].trim()) bodyLines.pop()
+        sections.push({ title, bodyLines })
+      }
+      // Render as grid of cards
+      const cols = sections.length >= 3 ? 'grid-cols-3' : sections.length === 2 ? 'grid-cols-2' : 'grid-cols-1'
+      nodes.push(
+        <div key={`h3-group-${i}`} className={cn('grid gap-2 my-2', cols)}>
+          {sections.map((sec, si) => (
+            <div key={si} className="rounded-xl border border-gray-700/70 bg-gray-900/60 p-3 space-y-2">
+              <p className="text-xs font-black text-orange-400 uppercase tracking-wider border-b border-gray-700/50 pb-1.5">
+                {sec.title}
+              </p>
+              <div className="space-y-1">
+                {renderSectionBody(sec.bodyLines, `sec-${si}`)}
+              </div>
+            </div>
+          ))}
+        </div>
+      ); continue
+    }
+
+    // 🟢🟡🔴 signal lines
     if (/^(🟢|🟡|🔴)/.test(trimmed)) {
-      const isGreen = trimmed.startsWith('🟢')
-      const isYellow = trimmed.startsWith('🟡')
-      const style = isGreen
-        ? 'bg-green-500/15 border-green-500/30 text-green-300'
-        : isYellow
-          ? 'bg-yellow-500/15 border-yellow-500/30 text-yellow-300'
-          : 'bg-red-500/15 border-red-500/30 text-red-300'
+      const isGreen = trimmed.startsWith('🟢'), isYellow = trimmed.startsWith('🟡')
       nodes.push(
-        <div key={i} className={`flex items-center gap-2 rounded-xl border px-4 py-3 my-1.5 text-sm font-semibold ${style}`}>
+        <div key={i} className={cn(
+          'flex items-center gap-2 rounded-xl border px-4 py-3 my-1.5 text-sm font-semibold',
+          isGreen ? 'bg-green-500/15 border-green-500/30 text-green-300'
+            : isYellow ? 'bg-yellow-500/15 border-yellow-500/30 text-yellow-300'
+            : 'bg-red-500/15 border-red-500/30 text-red-300'
+        )}>
           {renderInline(trimmed)}
         </div>
-      )
-      i++; continue
+      ); i++; continue
     }
 
-    // ⚠️ disclaimer
+    // ⚠️ warning
     if (trimmed.startsWith('⚠️')) {
-      nodes.push(
-        <p key={i} className="text-xs text-gray-500 italic mt-3 pt-3 border-t border-gray-700/50">
-          {trimmed}
-        </p>
-      )
+      nodes.push(<p key={i} className="text-xs text-gray-500 italic mt-3 pt-3 border-t border-gray-700/50">{trimmed}</p>)
       i++; continue
     }
 
-    // Numbered list, collect consecutive items
+    // Numbered list
     if (/^\d+\./.test(trimmed)) {
       const items: string[] = []
-      while (i < lines.length && /^\d+\./.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^\d+\.\s*/, ''))
-        i++
-      }
+      while (i < lines.length && /^\d+\./.test(lines[i].trim())) { items.push(lines[i].trim().replace(/^\d+\.\s*/, '')); i++ }
       nodes.push(
         <ol key={`ol-${i}`} className="space-y-2 my-2">
           {items.map((item, idx) => (
             <li key={idx} className="flex gap-3 text-white text-sm leading-relaxed">
-              <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">
-                {idx + 1}
-              </span>
+              <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">{idx + 1}</span>
               <span>{renderInline(item)}</span>
             </li>
           ))}
         </ol>
-      )
-      continue
+      ); continue
     }
 
-    // Bullet list, collect consecutive items
+    // Bullet list
     if (/^[-•]/.test(trimmed)) {
       const items: string[] = []
-      while (i < lines.length && /^[-•]/.test(lines[i].trim())) {
-        items.push(lines[i].trim().replace(/^[-•]\s*/, ''))
-        i++
-      }
+      while (i < lines.length && /^[-•]/.test(lines[i].trim())) { items.push(lines[i].trim().replace(/^[-•]\s*/, '')); i++ }
       nodes.push(
         <ul key={`ul-${i}`} className="space-y-1.5 my-2">
           {items.map((item, idx) => (
             <li key={idx} className="flex gap-2.5 text-white text-sm leading-relaxed">
-              <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-blue-400 block" />
+              <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-orange-400 block" />
               <span>{renderInline(item)}</span>
             </li>
           ))}
         </ul>
-      )
-      continue
+      ); continue
     }
 
-    // Regular paragraph
-    nodes.push(
-      <p key={i} className="text-white text-base leading-relaxed">
-        {renderInline(trimmed)}
-      </p>
-    )
+    // Plain paragraph
+    nodes.push(<p key={i} className="text-white text-[15px] leading-relaxed">{renderInline(trimmed)}</p>)
     i++
   }
-
-  return <div className="space-y-0.5">{nodes}</div>
+  return <div className="space-y-1">{nodes}</div>
 }
 
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-}
+// ── Types & constants ─────────────────────────────────────────────────────────
+interface Message { role: 'user' | 'assistant'; content: string }
+type CharState = 'idle' | 'wake' | 'think' | 'talk'
 
 const CATEGORIES = [
-  {
-    icon: BookOpen,
-    label: 'Basics',
-    color: 'text-blue-400',
-    bg: 'bg-blue-600/10 border-blue-500/20',
-    questions: [
-      'What even is a stock?',
-      'How do I start investing with $100?',
-      'What is a index fund?',
-      'Difference between stocks and bonds?',
-    ],
-  },
-  {
-    icon: Newspaper,
-    label: 'News & Markets',
-    color: 'text-purple-400',
-    bg: 'bg-purple-600/10 border-purple-500/20',
-    questions: [
-      'What is moving markets today?',
-      'How does inflation affect stocks?',
-      'What happens to stocks when rates rise?',
-      'How do earnings reports affect stock price?',
-    ],
-  },
-  {
-    icon: TrendingUp,
-    label: 'Stocks',
-    color: 'text-green-400',
-    bg: 'bg-green-600/10 border-green-500/20',
-    questions: [
-      'How do I know if a stock is expensive?',
-      'How do I read a stock chart?',
-      'What does market cap mean?',
-      'What is a dividend?',
-    ],
-  },
-  {
-    icon: BarChart2,
-    label: 'Strategy',
-    color: 'text-amber-400',
-    bg: 'bg-amber-600/10 border-amber-500/20',
-    questions: [
-      'What is dollar cost averaging?',
-      'How should a beginner diversify?',
-      'What is a good long-term strategy?',
-      'When should I sell a stock?',
-    ],
-  },
+  { icon: TrendingUp, label: 'Hot Takes', color: 'text-orange-400', bg: 'bg-orange-600/10 border-orange-500/20',
+    questions: ['What stocks are actually worth buying right now?', 'Is NVDA still a buy at this price?', 'What is the market doing today?', 'Give me one trade idea right now'] },
+  { icon: Newspaper, label: 'News & Markets', color: 'text-purple-400', bg: 'bg-purple-600/10 border-purple-500/20',
+    questions: ['What is moving markets today?', 'Is a recession coming?', 'What happens to stocks when rates drop?', 'Why did the market drop today?'] },
+  { icon: BookOpen, label: 'Explain It', color: 'text-blue-400', bg: 'bg-blue-600/10 border-blue-500/20',
+    questions: ['What even is a P/E ratio?', 'Why do stocks go up when news is bad?', 'What does market cap actually mean?', 'What is a short squeeze?'] },
+  { icon: BarChart2, label: 'Strategy', color: 'text-amber-400', bg: 'bg-amber-600/10 border-amber-500/20',
+    questions: ['Should I buy the dip or wait?', 'How do I know when to sell?', 'Is dollar cost averaging actually good?', 'What should a beginner do with $1000?'] },
 ]
 
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function ChatPage() {
   const searchParams = useSearchParams()
   const [messages, setMessages] = useState<Message[]>([])
@@ -190,32 +293,49 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [experience, setExperience] = useState<string>('beginner')
+  const [charState, setCharState] = useState<CharState>('idle')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const charTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Load experience level from onboarding
+  // Scroll to top on mount
+  useEffect(() => { window.scrollTo(0, 0) }, [])
+
   useEffect(() => {
     const saved = localStorage.getItem('zg_experience') ?? 'beginner'
     setExperience(saved)
   }, [])
 
-  // Pre-fill from ?q= param (e.g. from chart spike "Ask AI why" button)
   useEffect(() => {
     const q = searchParams.get('q')
-    if (q) {
-      setInput(q)
-      inputRef.current?.focus()
-    }
+    if (q) { setInput(q); inputRef.current?.focus() }
   }, [searchParams])
 
+  // Only auto-scroll when there are messages
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messages.length > 0 || loading) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }, [messages, loading])
+
+  // Drive Mr. Guy character state
+  useEffect(() => {
+    if (loading) {
+      setCharState('think')
+    }
+  }, [loading])
+
+  const triggerChar = useCallback((state: CharState, duration = 800) => {
+    if (charTimerRef.current) clearTimeout(charTimerRef.current)
+    setCharState(state)
+    charTimerRef.current = setTimeout(() => setCharState('idle'), duration)
+  }, [])
 
   const send = async (text?: string) => {
     const msg = (text ?? input).trim()
     if (!msg || loading) return
     setInput('')
+    triggerChar('wake', 600)
     const updated: Message[] = [...messages, { role: 'user', content: msg }]
     setMessages(updated)
     setLoading(true)
@@ -227,6 +347,7 @@ export default function ChatPage() {
       })
       const data = await res.json()
       setMessages([...updated, { role: 'assistant', content: data.reply }])
+      triggerChar('talk', 1000)
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Something went wrong. Try again!' }])
     }
@@ -234,178 +355,175 @@ export default function ChatPage() {
   }
 
   const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      send()
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() }
   }
 
   const activeCat = CATEGORIES.find((c) => c.label === activeCategory)
 
+  const charCss = charState === 'idle' ? 'mrg-idle'
+    : charState === 'wake' ? 'mrg-wake'
+    : charState === 'think' ? 'mrg-think'
+    : 'mrg-talk'
+
   return (
-    <div className="flex h-[calc(100vh-7rem)] gap-5">
-      {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 gap-3">
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 flex-1 overflow-y-auto">
-          <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Ask about</p>
-          <div className="space-y-1.5">
-            {CATEGORIES.map((cat) => {
-              const Icon = cat.icon
-              const isActive = activeCategory === cat.label
-              return (
-                <button
-                  key={cat.label}
-                  onClick={() => setActiveCategory(isActive ? null : cat.label)}
-                  className={cn(
-                    'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all',
-                    isActive ? 'bg-gray-800 border border-gray-700' : 'hover:bg-gray-800/60'
-                  )}
-                >
-                  <Icon className={cn('h-4 w-4 shrink-0', cat.color)} />
-                  <span className="text-sm font-medium text-gray-300">{cat.label}</span>
-                  <ChevronRight className={cn('h-3.5 w-3.5 text-gray-600 ml-auto transition-transform', isActive && 'rotate-90')} />
-                </button>
-              )
-            })}
-          </div>
+    <>
+      <style>{MR_GUY_STYLES}</style>
+      <div className="flex h-[calc(100vh-7rem)] gap-5">
 
-          {activeCat && (
-            <div className="mt-3 space-y-1.5">
-              <p className="text-xs text-gray-600 px-1 mb-2">Tap to ask</p>
-              {activeCat.questions.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => send(q)}
-                  className={cn(
-                    'w-full text-left text-xs px-3 py-2.5 rounded-xl border transition-all leading-snug',
-                    activeCat.bg,
-                    'hover:brightness-125 text-gray-300'
-                  )}
-                >
-                  {q}
-                </button>
-              ))}
+        {/* Sidebar */}
+        <aside className="hidden lg:flex flex-col w-64 shrink-0 gap-3">
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 flex-1 overflow-y-auto">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Ask about</p>
+            <div className="space-y-1.5">
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon
+                const isActive = activeCategory === cat.label
+                return (
+                  <button key={cat.label}
+                    onClick={() => setActiveCategory(isActive ? null : cat.label)}
+                    className={cn('w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all',
+                      isActive ? 'bg-gray-800 border border-gray-700' : 'hover:bg-gray-800/60')}>
+                    <Icon className={cn('h-4 w-4 shrink-0', cat.color)} />
+                    <span className="text-sm font-medium text-gray-300">{cat.label}</span>
+                    <ChevronRight className={cn('h-3.5 w-3.5 text-gray-600 ml-auto transition-transform', isActive && 'rotate-90')} />
+                  </button>
+                )
+              })}
             </div>
-          )}
-        </div>
-
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-            <p className="text-xs font-bold text-gray-400">Powered by Claude</p>
-          </div>
-          <p className="text-xs text-gray-600 leading-relaxed">Reads live market news to give you up-to-date answers. Always do your own research before investing.</p>
-        </div>
-      </aside>
-
-      {/* Chat area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-800 shrink-0">
-          <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
-            <Bot className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <p className="text-sm font-bold text-white">Finn, Market Analyst</p>
-            <p className="text-xs text-gray-500">
-              Live news · {experience === 'beginner' ? 'Beginner mode, plain English' : experience === 'some' ? 'Intermediate mode' : 'Pro mode, full analysis'} · Not financial advice
-            </p>
-          </div>
-          <div className="ml-auto flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs text-gray-500">Live</span>
-          </div>
-        </div>
-
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
-          {messages.length === 0 && (
-            <div className="h-full flex flex-col items-center justify-center text-center space-y-5 pb-10">
-              <div className="h-16 w-16 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-blue-400" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-lg">Hey, I'm Finn.</p>
-                <p className="text-gray-500 text-sm mt-1.5 max-w-sm">Ask me about any stock, sector, or what's moving the market. I'll give you a straight read with live news.</p>
-              </div>
-              {/* Mobile quick questions */}
-              <div className="grid grid-cols-2 gap-2 w-full max-w-md lg:hidden">
-                {CATEGORIES.flatMap((c) => c.questions.slice(0, 1)).map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => send(q)}
-                    className="text-left text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-xl px-3 py-2.5 transition-all leading-snug"
-                  >
+            {activeCat && (
+              <div className="mt-3 space-y-1.5">
+                <p className="text-xs text-gray-600 px-1 mb-2">Tap to ask</p>
+                {activeCat.questions.map((q) => (
+                  <button key={q} onClick={() => send(q)}
+                    className={cn('w-full text-left text-xs px-3 py-2.5 rounded-xl border transition-all leading-snug',
+                      activeCat.bg, 'hover:brightness-125 text-gray-300')}>
                     {q}
                   </button>
                 ))}
               </div>
-            </div>
-          )}
-
-          {messages.map((m, i) => (
-            <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
-              {m.role === 'assistant' && (
-                <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <Bot className="h-4 w-4 text-white" />
-                </div>
-              )}
-              {m.role === 'user' ? (
-                <div className="max-w-[75%] rounded-2xl px-5 py-3.5 text-base leading-relaxed bg-blue-600 text-white rounded-br-sm">
-                  {m.content}
-                </div>
-              ) : (
-                <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800 border border-gray-700 px-5 py-4 rounded-bl-sm text-white">
-                  <FinnMessage content={m.content} />
-                </div>
-              )}
-            </div>
-          ))}
-
-          {loading && (
-            <div className="flex gap-3 justify-start">
-              <div className="h-8 w-8 rounded-xl bg-blue-600 flex items-center justify-center shrink-0">
-                <Bot className="h-4 w-4 text-white" />
-              </div>
-              <div className="bg-gray-800 rounded-2xl rounded-bl-sm px-4 py-3.5 flex gap-1 items-center">
-                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:0ms]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:150ms]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:300ms]" />
-              </div>
-            </div>
-          )}
-          <div ref={bottomRef} />
-        </div>
-
-        {/* Input */}
-        <div className="p-4 border-t border-gray-800 shrink-0">
-          <div className="flex gap-3 items-end">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKey}
-              placeholder="Ask anything about stocks, markets, investing..."
-              rows={1}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none leading-relaxed"
-              style={{ maxHeight: '120px', overflowY: 'auto' }}
-              onInput={(e) => {
-                const t = e.currentTarget
-                t.style.height = 'auto'
-                t.style.height = Math.min(t.scrollHeight, 120) + 'px'
-              }}
-            />
-            <button
-              onClick={() => send()}
-              disabled={!input.trim() || loading}
-              className="h-11 w-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
-            >
-              {loading ? <Loader2 className="h-4 w-4 text-white animate-spin" /> : <Send className="h-4 w-4 text-white" />}
-            </button>
+            )}
           </div>
-          <p className="text-xs text-gray-600 mt-2 text-center">Not financial advice · Always do your own research</p>
+
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-3.5 w-3.5 text-orange-400" />
+              <p className="text-xs font-bold text-gray-400">Powered by Claude</p>
+            </div>
+            <p className="text-xs text-gray-600 leading-relaxed">Fetches live price, P/E, EPS, analyst targets and news for every stock you ask about. Mr. Guy does the rest.</p>
+          </div>
+        </aside>
+
+        {/* Chat panel */}
+        <div className="flex-1 flex flex-col min-w-0 bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+
+          {/* Header */}
+          <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-800 shrink-0">
+            <div className={cn('shrink-0', charCss)}>
+              <MrGuyHead px={3} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Mr. Guy</p>
+              <p className="text-xs text-gray-500">Live data · real takes · not financial advice (seriously)</p>
+            </div>
+            <div className="ml-auto flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-xs text-gray-500">Live</span>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+
+            {/* Empty state — Mr. Guy centered, large */}
+            {messages.length === 0 && !loading && (
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-5 pb-16">
+                <div className={cn('flex flex-col items-center gap-3', charCss)}>
+                  <MrGuyHead px={6} />
+                </div>
+                <div>
+                  <p className="text-white font-bold text-xl mt-2">Mr. Guy, at your service.</p>
+                  <p className="text-gray-500 text-sm mt-2 max-w-sm leading-relaxed">Ask me about any stock. I pull live data and give you a real take — not the watered-down stuff your broker tells you.</p>
+                </div>
+                {/* Mobile quick questions */}
+                <div className="grid grid-cols-2 gap-2 w-full max-w-md lg:hidden">
+                  {CATEGORIES.flatMap((c) => c.questions.slice(0, 1)).map((q) => (
+                    <button key={q} onClick={() => send(q)}
+                      className="text-left text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-xl px-3 py-2.5 transition-all leading-snug">
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Message list */}
+            {messages.map((m, i) => (
+              <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
+                {m.role === 'assistant' && (
+                  <div className="shrink-0 mt-1">
+                    <MrGuyHead px={3} />
+                  </div>
+                )}
+                {m.role === 'user' ? (
+                  <div className="max-w-[75%] rounded-2xl px-5 py-3.5 text-[15px] leading-relaxed bg-blue-600 text-white rounded-br-sm">
+                    {m.content}
+                  </div>
+                ) : (
+                  <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800 border border-gray-700/60 px-5 py-4 rounded-bl-sm bubble-pop">
+                    <MrGuyMessage content={m.content} />
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Typing indicator — comes from Mr. Guy */}
+            {loading && (
+              <div className="flex gap-3 justify-start">
+                <div className={cn('shrink-0 mt-1', charCss)}>
+                  <MrGuyHead px={3} />
+                </div>
+                <div className="bg-gray-800 border border-gray-700/60 rounded-2xl rounded-bl-sm px-4 py-3.5 flex gap-1.5 items-center">
+                  {[0, 150, 300].map((delay) => (
+                    <span key={delay} className="h-2 w-2 rounded-full bg-orange-400"
+                      style={{ animation: `typing-dot 1.2s ${delay}ms ease-in-out infinite` }} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <div className="p-4 border-t border-gray-800 shrink-0">
+            <div className="flex gap-3 items-end">
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKey}
+                placeholder="Ask anything about stocks, markets, investing..."
+                rows={1}
+                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-500/60 transition-colors resize-none leading-relaxed"
+                style={{ maxHeight: '120px', overflowY: 'auto' }}
+                onInput={(e) => {
+                  const t = e.currentTarget
+                  t.style.height = 'auto'
+                  t.style.height = Math.min(t.scrollHeight, 120) + 'px'
+                }}
+              />
+              <button
+                onClick={() => send()}
+                disabled={!input.trim() || loading}
+                className="h-11 w-11 rounded-xl bg-orange-500 hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
+              >
+                <Send className="h-4 w-4 text-white" />
+              </button>
+            </div>
+            <p className="text-xs text-gray-600 mt-2 text-center">Not financial advice · Always do your own research</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
