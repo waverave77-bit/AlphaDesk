@@ -46,7 +46,7 @@ export async function GET() {
     { gainers, losers, source: 'Yahoo Finance' },
     {
       headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
       },
     }
   )

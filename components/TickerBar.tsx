@@ -75,13 +75,13 @@ export default function TickerBar() {
       .then(d => { setItems(d.items ?? []); setLoading(false) })
       .catch(() => setLoading(false))
 
-    // Refresh every 5 minutes
+    // Refresh every 60 seconds during market hours
     const interval = setInterval(() => {
       fetch('/api/ticker')
         .then(r => r.json())
         .then(d => setItems(d.items ?? []))
         .catch(() => {})
-    }, 300_000)
+    }, 60_000)
 
     return () => clearInterval(interval)
   }, [])

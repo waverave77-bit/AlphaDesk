@@ -48,12 +48,18 @@ export default function ResearchPage() {
   const [losers, setLosers] = useState<Mover[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
+  const fetchMovers = () => {
     fetch('/api/movers')
       .then(r => r.json())
       .then(d => { setGainers(d.gainers || []); setLosers(d.losers || []) })
       .catch(() => {})
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    fetchMovers()
+    const interval = setInterval(fetchMovers, 60_000) // refresh every 60s
+    return () => clearInterval(interval)
   }, [])
 
   return (
