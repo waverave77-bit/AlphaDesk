@@ -723,22 +723,18 @@ function TelescopeSparkles({charX,dir}:{charX:number;dir:number}){
 
 /* ── Perch bubble ──────────────────────────────────────────────────── */
 function PerchBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
+  const bottom=viewH-charY-CHAR_H-30
   return(<>
-    <style>{`@keyframes pbob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}`}</style>
-    <div style={{position:'fixed',left:charX+CHAR_W/2,top:charY-52,
-      transform:'translateX(-50%)',
+    <style>{`@keyframes pbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>
+    <div style={{position:'fixed',left:charX+30,bottom:bottom,
       background:'rgba(255,255,255,.94)',border:'1px solid rgba(0,0,0,.08)',borderRadius:12,
       padding:'5px 10px',fontSize:13,fontWeight:700,color:'#333',whiteSpace:'nowrap',
       animation:'pbob 1.5s ease-in-out infinite',pointerEvents:'none',zIndex:15,
       boxShadow:'0 2px 12px rgba(0,0,0,.12)'}}>
       👀 what's this?
-      {/* Tail pointing down to character's head */}
-      <div style={{position:'absolute',bottom:-8,left:'50%',transform:'translateX(-50%)',width:0,height:0,
+      <div style={{position:'absolute',bottom:-8,left:16,width:0,height:0,
         borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
-        borderTop:'8px solid rgba(0,0,0,.08)'}}/>
-      <div style={{position:'absolute',bottom:-6,left:'50%',transform:'translateX(-50%)',width:0,height:0,
-        borderLeft:'6px solid transparent',borderRight:'6px solid transparent',
-        borderTop:'7px solid rgba(255,255,255,.94)'}}/>
+        borderTop:'8px solid rgba(255,255,255,.94)'}}/>
     </div>
   </>)
 }
@@ -1253,27 +1249,24 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       onClick={handleCharacterClick}
     />
 
-    {/* Speech bubble on click — always above head, centered, tail points down */}
+    {/* Speech bubble on click */}
     {clickBubble && (
       <>
-        <style>{`@keyframes bubblePop{0%{opacity:0;transform:translateX(-50%) scale(.5) translateY(8px)}15%{opacity:1;transform:translateX(-50%) scale(1.1) translateY(-2px)}25%{transform:translateX(-50%) scale(1) translateY(0)}85%{opacity:1;transform:translateX(-50%)}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}`}</style>
-        <div style={{
-          position:'fixed',
-          left: charXDisp + CHAR_W / 2,
-          top: charYDisp - 62,
-          transform:'translateX(-50%)',
-          zIndex:20, pointerEvents:'none',
-          background:'#fff', border:'2px solid #222', borderRadius:12,
-          padding:'6px 14px', fontSize:13, fontWeight:800, color:'#111', whiteSpace:'nowrap',
+        <style>{`@keyframes bubblePop{0%{opacity:0;transform:scale(.5) translateY(8px)}15%{opacity:1;transform:scale(1.1) translateY(-2px)}25%{transform:scale(1) translateY(0)}85%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}`}</style>
+        <div style={{position:'fixed',left:charXDisp+(dirDisp===1?CHAR_W+6:-120),
+          top:charYDisp-10,zIndex:20,pointerEvents:'none',
+          background:'#fff',border:'2px solid #222',borderRadius:12,
+          padding:'6px 12px',fontSize:13,fontWeight:800,color:'#111',whiteSpace:'nowrap',
           boxShadow:'3px 3px 0 #222',
           animation:'bubblePop 2.2s ease forwards'}}>
           {clickBubble}
-          {/* Tail pointing straight down to character's head */}
-          <div style={{position:'absolute',bottom:-10,left:'50%',transform:'translateX(-50%)',
+          <div style={{position:'absolute',bottom:-10,
+            [dirDisp===1?'left':'right']:12,
             width:0,height:0,
             borderLeft:'8px solid transparent',borderRight:'8px solid transparent',
             borderTop:'10px solid #222'}}/>
-          <div style={{position:'absolute',bottom:-7,left:'50%',transform:'translateX(-50%)',
+          <div style={{position:'absolute',bottom:-7,
+            [dirDisp===1?'left':'right']:13,
             width:0,height:0,
             borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
             borderTop:'9px solid #fff'}}/>
