@@ -436,6 +436,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
               axisLine={false} tickLine={false} interval="preserveStartEnd" />
             <YAxis
               domain={[yMin, yMax]}
+              allowDataOverflow={true}
               tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false}
               tickFormatter={(v) => `$${v.toFixed(0)}`} width={60} />
