@@ -188,17 +188,13 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const latestBB = formattedData.filter(d => d.bbUpper != null).at(-1)
 
   // Y-axis domain: tight to actual price range with fixed $5 buffer each side
+  // Use close prices from formattedData as the source of truth (always present)
+  const closes = formattedData.map(d => d.close).filter(v => isFinite(v) && v > 0)
+  const closeMin = closes.length ? Math.min(...closes) : priceMin
+  const closeMax = closes.length ? Math.max(...closes) : priceMax
   const Y_PAD = 5
-  const yDomainMin = (_dataMin: number) => {
-    let lo = priceMin
-    if (showBB && bbLowerValues.length) lo = Math.min(lo, bbMin)
-    return Math.max(0, lo - Y_PAD)
-  }
-  const yDomainMax = (_dataMax: number) => {
-    let hi = priceMax
-    if (showBB && bbUpperValues.length) hi = Math.max(hi, bbMax)
-    return hi + Y_PAD
-  }
+  const yMin = Math.max(0, (showBB && bbLowerValues.length ? Math.min(closeMin, bbMin) : closeMin) - Y_PAD)
+  const yMax = (showBB && bbUpperValues.length ? Math.max(closeMax, bbMax) : closeMax) + Y_PAD
 
   // Tooltip
   const CustomTooltip = ({ active, payload }: any) => {
@@ -439,7 +435,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             <XAxis dataKey="dateLabel" tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false} interval="preserveStartEnd" />
             <YAxis
-              domain={[yDomainMin, yDomainMax]}
+              domain={[yMin, yMax]}
               tick={{ fill: '#6b7280', fontSize: 11 }}
               axisLine={false} tickLine={false}
               tickFormatter={(v) => `$${v.toFixed(0)}`} width={60} />
