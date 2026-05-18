@@ -357,7 +357,7 @@ export default function ChallengePage() {
                         {mrPnl.pct >= 0 ? '+' : ''}{mrPnl.pct.toFixed(2)}%
                       </span>
                       <span className={cn('text-xs ml-2', isDark ? 'text-gray-400' : 'text-slate-500')}>
-                        {mrPnl.winning ? 'winning 🎯' : 'losing rn'}
+                        since pick · {mrPnl.winning ? 'winning 🎯' : 'losing rn'}
                       </span>
                     </div>
                   )}
@@ -499,7 +499,7 @@ export default function ChallengePage() {
                           {userPnl.pct >= 0 ? '+' : ''}{userPnl.pct.toFixed(2)}%
                         </span>
                         <span className={cn('text-xs ml-2', isDark ? 'text-gray-400' : 'text-slate-500')}>
-                          {userPnl.winning ? 'winning 🎯' : 'losing rn'}
+                          since pick · {userPnl.winning ? 'winning 🎯' : 'losing rn'}
                         </span>
                       </div>
                     )}
