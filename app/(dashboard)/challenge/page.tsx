@@ -147,6 +147,22 @@ export default function ChallengePage() {
     try {
       const res = await fetch('/api/weekly-pick')
       const data = await res.json()
+
+      // Lock in Mr. Guy's entry price locally so server cold-starts don't reset it
+      const mrStored = localStorage.getItem('mrGuyWeeklyPick')
+      if (mrStored) {
+        const mrCached = JSON.parse(mrStored)
+        if (mrCached.weekKey === data.weekKey) {
+          // Use the locked-in entry price, not the current server price
+          data.price = mrCached.entryPrice
+        } else {
+          // New week — store fresh entry price
+          localStorage.setItem('mrGuyWeeklyPick', JSON.stringify({ weekKey: data.weekKey, entryPrice: data.price }))
+        }
+      } else {
+        localStorage.setItem('mrGuyWeeklyPick', JSON.stringify({ weekKey: data.weekKey, entryPrice: data.price }))
+      }
+
       setMrGuyPick(data)
 
       // Load existing user pick from localStorage
