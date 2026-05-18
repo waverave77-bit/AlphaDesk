@@ -304,15 +304,17 @@ export async function getStockQuote(ticker: string): Promise<StockQuote | null> 
 
 export async function getHistoricalData(
   ticker: string,
-  range: '1d' | '1w' | '1m' | '3m' | '1y' | '5y'
+  range: '1d' | '1w' | '1m' | '3m' | '6m' | 'ytd' | '1y' | '5y'
 ): Promise<HistoricalDataPoint[]> {
   const rangeMap: Record<string, { range: string; interval: string }> = {
-    '1d': { range: '1d', interval: '5m' },
-    '1w': { range: '5d', interval: '1d' },
-    '1m': { range: '1mo', interval: '1d' },
-    '3m': { range: '3mo', interval: '1d' },
-    '1y': { range: '1y', interval: '1wk' },
-    '5y': { range: '5y', interval: '1mo' },
+    '1d':  { range: '1d',  interval: '5m' },
+    '1w':  { range: '5d',  interval: '1d' },
+    '1m':  { range: '1mo', interval: '1d' },
+    '3m':  { range: '3mo', interval: '1d' },
+    '6m':  { range: '6mo', interval: '1d' },
+    'ytd': { range: 'ytd', interval: '1d' },
+    '1y':  { range: '1y',  interval: '1wk' },
+    '5y':  { range: '5y',  interval: '1mo' },
   }
   const { range: yfRange, interval } = rangeMap[range] ?? rangeMap['1m']
 

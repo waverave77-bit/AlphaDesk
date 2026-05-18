@@ -6,11 +6,11 @@ import { format, parseISO } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const RANGES = ['1D', '1W', '1M', '3M', '1Y', '5Y'] as const
+const RANGES = ['1D', '1W', '1M', '3M', '6M', 'YTD', '1Y', '5Y'] as const
 type Range = (typeof RANGES)[number]
 
 const rangeMap: Record<Range, string> = {
-  '1D': '1d', '1W': '1w', '1M': '1m', '3M': '3m', '1Y': '1y', '5Y': '5y',
+  '1D': '1d', '1W': '1w', '1M': '1m', '3M': '3m', '6M': '6m', 'YTD': 'ytd', '1Y': '1y', '5Y': '5y',
 }
 
 interface DataPoint {
@@ -113,7 +113,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       .catch(() => {})
   }, [ticker])
 
-  const BB_PERIOD: Record<Range, number> = { '1D': 12, '1W': 10, '1M': 10, '3M': 14, '1Y': 20, '5Y': 20 }
+  const BB_PERIOD: Record<Range, number> = { '1D': 12, '1W': 10, '1M': 10, '3M': 14, '6M': 20, 'YTD': 20, '1Y': 20, '5Y': 20 }
   const bbPeriod = BB_PERIOD[range]
 
   const spikeMap = useMemo(() => computeSpikes(data), [data])
@@ -181,8 +181,8 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
     try {
       const d = parseISO(dateStr)
       if (range === '1D') return format(d, 'HH:mm')
-      if (range === '1W' || range === '1M') return format(d, 'MMM d')
-      if (range === '3M') return format(d, 'MMM d')
+      if (range === '1W' || range === '1M' || range === '3M') return format(d, 'MMM d')
+      if (range === '6M' || range === 'YTD') return format(d, 'MMM d')
       return format(d, 'MMM yy')
     } catch { return '' }
   }

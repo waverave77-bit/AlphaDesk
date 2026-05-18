@@ -7,7 +7,7 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
   const { ticker } = params
   const url = new URL(req.url)
   const type = url.searchParams.get('type') || 'quote'
-  const range = (url.searchParams.get('range') || '1m') as '1d' | '1w' | '1m' | '3m' | '1y' | '5y'
+  const range = (url.searchParams.get('range') || '1m') as '1d' | '1w' | '1m' | '3m' | '6m' | 'ytd' | '1y' | '5y'
 
   try {
     if (type === 'historical') {
