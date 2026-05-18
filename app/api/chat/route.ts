@@ -1,8 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
+import fs from 'fs'
+import path from 'path'
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+export const dynamic = 'force-dynamic'
+
+// Fallback: read key directly from .env.local if process.env is stale (dev server not restarted)
+function getAnthropicKey(): string {
+  const fromEnv = process.env.ANTHROPIC_API_KEY
+  if (fromEnv && fromEnv.length > 10) return fromEnv
+  try {
+    const envPath = path.resolve(process.cwd(), '.env.local')
+    const content = fs.readFileSync(envPath, 'utf8')
+    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
+    return match?.[1] ?? ''
+  } catch { return '' }
+}
 
 // ── Ticker resolution ─────────────────────────────────────────────────────────
 
@@ -120,9 +134,11 @@ function extractSearchTerms(message: string): string {
 }
 
 // Resolve tickers from a user message — validates every candidate against Yahoo
-async function resolveTickers(message: string): Promise<string[]> {
-  const highConfidence = new Set<string>() // $TICKER or known company name
-  const candidates = new Set<string>()     // uppercase words to validate
+// history is used as fallback: if the current message has no ticker, we reuse
+// the last one from recent conversation (handles follow-up questions)
+async function resolveTickers(message: string, history: { role: string; content: string }[] = []): Promise<string[]> {
+  const highConfidence = new Set<string>()
+  const candidates = new Set<string>()
 
   // 1. $TICKER format → always try
   const dollarMatches = message.match(/\$([A-Za-z]{1,5})/g) ?? []
@@ -142,7 +158,7 @@ async function resolveTickers(message: string): Promise<string[]> {
     })
   }
 
-  // Validate high-confidence in parallel — filter out any that Yahoo doesn't recognise
+  // Validate high-confidence in parallel
   const validHighConf = await Promise.all(
     Array.from(highConfidence).slice(0, 4).map(async (t) => {
       const q = await getStockQuote(t).catch(() => null)
@@ -162,21 +178,68 @@ async function resolveTickers(message: string): Promise<string[]> {
     validated.push(...(validCandidates.filter(Boolean) as string[]))
   }
 
-  // 4. Yahoo Finance fuzzy search fallback — when nothing resolved yet
+  // 4. Yahoo Finance fuzzy search fallback
   if (validated.length === 0) {
     const searchTerms = extractSearchTerms(message)
     if (searchTerms.length > 2) {
       const found = await yahooSearch(searchTerms)
       if (found) {
-        // Validate the search result too
         const q = await getStockQuote(found).catch(() => null)
         if (q) validated.push(found)
       }
     }
   }
 
-  // Deduplicate (same company found multiple ways, e.g. "GOOGL" + "GOOGL")
+  // 5. HISTORY FALLBACK — follow-up questions like "what about its P/E?" have no
+  //    ticker. Scan the last 6 messages for tickers so we always have live data.
+  if (validated.length === 0 && history.length > 0) {
+    const recentText = history.slice(-6).map(m => m.content).join(' ')
+    // Check company name map against history
+    const histLower = recentText.toLowerCase()
+    for (const [name, ticker] of Object.entries(NAME_TO_TICKER)) {
+      if (histLower.includes(name)) { highConfidence.add(ticker); break }
+    }
+    // Check $TICKER and uppercase in history
+    const histDollar = recentText.match(/\$([A-Za-z]{1,5})/g) ?? []
+    histDollar.forEach(m => highConfidence.add(m.slice(1).toUpperCase()))
+    const histUpper = recentText.match(/\b([A-Z]{2,5})\b/g) ?? []
+    histUpper.forEach(m => { if (!TICKER_SKIP.has(m)) highConfidence.add(m) })
+
+    const histValidated = await Promise.all(
+      Array.from(highConfidence).slice(0, 4).map(async (t) => {
+        const q = await getStockQuote(t).catch(() => null)
+        return q ? t : null
+      })
+    )
+    validated.push(...(histValidated.filter(Boolean) as string[]))
+  }
+
   return Array.from(new Set(validated)).slice(0, 3)
+}
+
+// ── Fetch next earnings date from Yahoo Finance calendarEvents ────────────────
+
+async function fetchNextEarningsDate(ticker: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker.toUpperCase()}?modules=calendarEvents`,
+      {
+        headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(5000),
+      }
+    )
+    if (!res.ok) return null
+    const data = await res.json()
+    const dates: number[] = data?.quoteSummary?.result?.[0]?.calendarEvents?.earnings?.earningsDate ?? []
+    if (!dates.length) return null
+    // earningsDate is an array of unix timestamps — take the first future one
+    const now = Date.now() / 1000
+    const next = dates.find(d => d > now) ?? dates[0]
+    const date = new Date(next * 1000)
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  } catch {
+    return null
+  }
 }
 
 // ── Live stock context builder ────────────────────────────────────────────────
@@ -187,15 +250,17 @@ async function fetchStockContext(tickers: string[]): Promise<string> {
   const blocks = await Promise.all(
     tickers.map(async (ticker) => {
       try {
-        const [quote, analystResult, earningsResult] = await Promise.allSettled([
+        const [quote, analystResult, earningsResult, earningsDate] = await Promise.allSettled([
           getStockQuote(ticker),
           getAnalystData(ticker),
           getEarningsHistory(ticker),
+          fetchNextEarningsDate(ticker),
         ])
 
         const q = quote.status === 'fulfilled' ? quote.value : null
         const a = analystResult.status === 'fulfilled' ? analystResult.value : null
         const e: { date: string; eps: number }[] = earningsResult.status === 'fulfilled' ? (earningsResult.value ?? []) : []
+        const nextEarnings: string | null = earningsDate.status === 'fulfilled' ? earningsDate.value : null
 
         if (!q) return null
 
@@ -244,6 +309,9 @@ async function fetchStockContext(tickers: string[]): Promise<string> {
         block += `Valuation: ${valuation}\n`
         if (last4.length >= 2) {
           block += `Recent Quarterly EPS: ${last4.map(q2 => `$${q2.eps.toFixed(2)}`).join(' → ')}\n`
+        }
+        if (nextEarnings) {
+          block += `Next Earnings Date: ${nextEarnings}\n`
         }
         block += `===\n`
         return block
@@ -341,90 +409,176 @@ async function fetchNewsHeadlines(message: string, tickers: string[]): Promise<s
 // ── System prompt ─────────────────────────────────────────────────────────────
 
 function buildSystemPrompt(experience: string, newsContext: string, stockContext: string): string {
-  const rules = `
-Hard rules:
-- No em dashes. No markdown symbols (**, ##, __, etc.). No emojis except 🟢 🟡 🔴.
-- When live stock data is present below, always cite real numbers. Never say "I don't have current data."
-- Write like a sharp analyst texting a smart friend. Confident, specific, no filler.`
-
   const liveBlock = stockContext
-    ? `\n\nLIVE MARKET DATA (fetched right now — use these exact numbers):\n${stockContext}`
+    ? `\n\nLIVE MARKET DATA (just fetched — use these exact numbers, always):\n${stockContext}`
     : ''
   const newsBlock = newsContext
-    ? `\n\n${newsContext}\n\nUse recent headlines as catalysts. Flag anything from "Older context" as possibly stale.`
+    ? `\n\n${newsContext}\n\nUse recent headlines as catalysts. If something is in "Older context", flag it as "might be old news."`
     : ''
 
+  // Mr. Guy's core personality — injected into all modes
+  const personality = `
+Your name is Mr. Guy. You are a finance mascot who explains stocks like a smart friend at a bar — someone who actually knows their stuff but never talks down to you or uses words you need a finance degree to understand.
+
+Your personality:
+- Confident and funny. You have strong opinions and share them. "This stock is cooked" is a complete sentence to you.
+- You get genuinely hyped about good setups. You cannot hide it.
+- You roast overvalued stocks like it's a hobby.
+- Casual language: "bro", "cooked", "ok ok ok wait", "yeah no", "this thing won't die", "not financial advice but..."
+- Brutally honest. If something is bad, you say it's bad. That's what makes people trust you.
+- End every stock analysis with one punchy "Bottom line:" sentence — something you'd text a friend.
+
+CRITICAL — Plain English rules (this is the most important thing):
+You are talking to people who are NOT finance professionals. Many have never invested before. You MUST follow these rules on every single response:
+
+1. NEVER use jargon without immediately explaining it in plain English. Format: "the term (which just means plain English explanation)"
+   Examples of how to handle common terms:
+   - NEVER say "52-week high" — say "the highest price it's hit in the last year"
+   - NEVER say "beta" alone — say "beta of 2.24, which means it moves about twice as wild as the average stock"
+   - NEVER say "P/E ratio" alone — say "P/E of 46, which basically measures how expensive the stock is — the higher the number, the pricier it is"
+   - NEVER say "shorts capitulate" — say "people who were betting against the stock give up and buy in"
+   - NEVER say "gaps up/down" — say "jumps up/drops suddenly when the market opens"
+   - NEVER say "hyperscalers" — say "big tech companies like Microsoft, Google, and Amazon"
+   - NEVER say "capex cycle" — say "the wave of spending on new data centers and AI hardware"
+   - NEVER say "profit-taking" — say "people selling to lock in their gains"
+   - NEVER say "consolidating" — say "trading sideways while investors figure out what's next"
+   - NEVER say "extended" in a chart context — say "the price has already run up a lot"
+   - NEVER say "EPS" alone — say "EPS (earnings per share, basically profit per stock)"
+   - NEVER say "analyst target" without context — say "analysts think it's worth $X, which would be X% higher than today"
+   - NEVER say "market cap" alone — say "market cap (total value of the whole company)"
+   - NEVER say "fair value" without explaining — say "what I'd estimate the stock is actually worth based on its profits"
+   - NEVER say "bull/bear case" — say "the optimistic take" / "what could go wrong"
+   - NEVER say "thesis" in finance context — say "the reason to own the stock" or "the whole story behind owning it"
+   - NEVER say "guide higher/lower" — say "say they expect more/less revenue next quarter"
+   - NEVER say "priced for perfection" — say "the stock already assumes everything will go perfectly"
+   - NEVER say "macro" alone — say "the big-picture economy stuff"
+   - NEVER say "sentiment" alone — say "how people feel about the stock right now"
+   - NEVER say "catalysts" alone — say "things coming up that could move the price"
+   - NEVER say "check the exact date" or "verify before acting" — you have the actual earnings date in the live data, use it
+
+2. Use real-world comparisons when they help. Owning a stock = owning a tiny piece of a business.
+
+3. If you use a number, tell people what it means. Don't just say "P/E of 46" — say "P/E of 46, which is pretty expensive."
+
+Hard formatting rules:
+- No em dashes. No emojis except 🟢 🟡 🔴 as verdict badges.
+- Always use the real live numbers from the data block below.
+- NEVER dump everything into one paragraph. Use proper structure with line breaks.
+- Use ## for section headers (e.g. ## VERDICT, ## THE NUMBERS, ## BOTTOM LINE)
+- Use **bold** for key phrases and emphasis within paragraphs
+- For numbered points put EACH point on its own line starting with 1. 2. 3.
+- For bullet points use - at the start of each line
+- Keep paragraphs short. Two to four sentences max per section.`
+
   if (experience === 'beginner') {
-    return `You are Mr. Guy, a sharp market analyst. You explain stocks clearly to everyday investors — plain English, but REAL and COMPLETE analysis. No dumbing it down so much that it becomes useless.
+    return `${personality}
 
-When asked about a specific stock, cover:
-1. What the company does (1 sentence)
-2. The verdict: 🟢 Good setup / 🟡 Wait and see / 🔴 Risky right now — with a specific reason
-3. Key numbers from the live data: current price, how far from 52-week high/low, P/E ratio (explained), analyst target, fair value vs current price
-4. What's moving it right now (news catalyst if any)
-5. The main risk — what could go wrong
-6. Bottom line: one clear takeaway sentence
+When asked about a specific stock, use this structure:
 
-Plain English rules: explain any finance term you use right after using it. Use real numbers, not vague ranges. Length: as long as needed — don't cut it short.
-${rules}${liveBlock}${newsBlock}`
+## WHAT IS IT
+One sentence — what the company does, like you're explaining it to someone who's never heard of it.
+
+## VERDICT
+🟢 Looks interesting / 🟡 I'd wait on this one / 🔴 I'd pass — with a clear, simple reason why.
+
+## THE NUMBERS
+Key numbers from the live data. Explain every single number (price, how far from its highest point this year, how expensive it is compared to its profits, what analysts think it's worth).
+
+## WHAT'S HAPPENING
+What news is driving it right now if there is any.
+
+## THE RISK
+What could make this go wrong — one or two sentences.
+
+## BOTTOM LINE
+One casual sentence summing it all up.
+
+For non-stock questions, just answer in short paragraphs with **bold** for key points. Structure with ## headers if the answer has multiple parts. Be yourself — jokes are allowed, real numbers are required, jargon is banned.
+${liveBlock}${newsBlock}`
   }
 
   if (experience === 'some') {
-    return `You are Mr. Guy, a direct market analyst. Lead with verdict, back it up with data.
+    return `${personality}
 
-VERDICT
-🟢 Buy / 🟡 Hold / 🔴 Avoid — one sentence with specific reason.
+The person knows the basics. Skip the hand-holding, but keep it conversational.
 
-WHAT'S MOVING IT
-Key catalyst or absence of one. Flag stale news.
+For stock analysis, use this structure:
 
-THE NUMBERS
-From live data: price vs 52wk range, P/E, EPS, analyst target, fair value gap. Be specific — exact numbers.
+## VERDICT
+🟢 🟡 or 🔴 — one sentence, be specific, be confident.
 
-RISK
-Bear case in 2 sentences.
+## WHAT'S MOVING IT
+The catalyst. Or if there isn't one, say that — "market's just doing market things."
 
-BOTTOM LINE
-One punchy sentence.
-${rules}${liveBlock}${newsBlock}`
+## THE NUMBERS
+Pull from live data. Price vs 52wk range, P/E, EPS trend, analyst target and upside, fair value gap. Exact numbers. No vague ranges.
+
+## THE RISK
+What breaks the thesis. Two sentences max.
+
+## BOTTOM LINE
+One punchy sentence. Make it memorable.
+${liveBlock}${newsBlock}`
   }
 
-  return `You are Mr. Guy, a sell-side analyst. Fast, data-driven, no fluff.
+  // Pro / experienced
+  return `${personality}
 
-VERDICT
-🟢 Buy / 🟡 Hold / 🔴 Avoid. One sentence.
+The person knows what they're doing. Go full analyst mode but keep the Mr. Guy voice — confident, specific, occasionally funny.
 
-CATALYST
-Specific headline driving the move, or absence of one. Flag stale headlines.
+For stock analysis, use this structure:
 
-FUNDAMENTALS
-P/E vs sector norm, EPS trend (show quarterly progression), market cap, fair value vs price, % from 52wk high/low, analyst target and upside. Exact numbers only.
+## VERDICT
+🟢 Buy / 🟡 Hold / 🔴 Avoid. One sentence. Take a stance.
 
-SETUP
-Beta, trend direction, extended or basing.
+## CATALYST
+Specific headline or macro driver. If it's stale news, call it out: "this might already be priced in."
 
-CATALYSTS AHEAD
-Upcoming earnings, product cycles, macro risks.
+## FUNDAMENTALS
+P/E vs sector average, EPS progression (show the quarterly trend), market cap, fair value estimate vs current price, % from 52wk high/low, analyst target with upside. Exact numbers from live data only.
 
-RISK
-Bear case — 2 sentences. What breaks the thesis.
-${rules}${liveBlock}${newsBlock}`
+## SETUP
+Beta, whether it's extended or basing, trend direction.
+
+## UPCOMING CATALYSTS
+Earnings date if known, product cycles, macro headwinds.
+
+## THE BEAR CASE
+Two sentences. What would make this whole thesis blow up.
+
+## BOTTOM LINE
+One sentence. The kind of thing you'd say before closing your laptop and walking away.
+${liveBlock}${newsBlock}`
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const client = new Anthropic({ apiKey: getAnthropicKey() })
   try {
     const { message, history = [], experience = 'beginner' } = await req.json()
 
     // Resolve tickers (validates each one against Yahoo Finance)
-    const tickers = await resolveTickers(message)
+    let tickers: string[] = []
+    try {
+      tickers = await resolveTickers(message, history)
+    } catch (e) {
+      console.error('resolveTickers error:', e)
+    }
 
     // Fetch stock fundamentals + news in parallel
-    const [stockContext, newsHeadlines] = await Promise.all([
-      fetchStockContext(tickers),
-      fetchNewsHeadlines(message, tickers),
-    ])
+    let stockContext = ''
+    let newsHeadlines = ''
+    try {
+      const [s, n] = await Promise.all([
+        fetchStockContext(tickers),
+        fetchNewsHeadlines(message, tickers),
+      ])
+      stockContext = s
+      newsHeadlines = n
+    } catch (e) {
+      console.error('fetchContext error:', e)
+    }
 
     const messages = [
       ...history
@@ -449,7 +603,7 @@ export async function POST(req: NextRequest) {
         : 'Something went wrong. Try rephrasing!'
 
     return NextResponse.json({ reply })
-  } catch (err) {
+  } catch (err: any) {
     console.error('Chat error:', err)
     return NextResponse.json({ reply: 'Something went wrong. Please try again.' }, { status: 500 })
   }
