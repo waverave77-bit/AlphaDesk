@@ -208,49 +208,38 @@ function drawBed(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
 }
 
 function drawSleepingHead(ctx: CanvasRenderingContext2D, headOx: number, headOy: number, bob: number, W: number, H: number) {
-  // Draw head lying sideways using real canvas rotation (-90° / CCW)
-  // Result: hair (row 0) → LEFT toward headboard, collar (row 13) → RIGHT into blanket
-  //         face rows rotate to look UP toward ceiling
-  const rMin=0, rMax=13, cMin=3, cMax=14
-  // Original center of the head region in pixel space
-  const origCX = (cMin + cMax + 1) * PX / 2  // 9 * 5 = 45
-  const origCY = (rMax + 1)        * PX / 2  // 7 * 5 = 35
-  // After -90° rotation the bounding box becomes:
-  //   width  = (rMax+1)*PX = 70   (headOx … headOx+70)
-  //   height = (cMax-cMin+1)*PX = 60  (headOy … headOy+60)
-  const pivotX = headOx + (rMax + 1)        * PX / 2        // headOx + 35
-  const pivotY = headOy + (cMax - cMin + 1) * PX / 2 + bob  // headOy + 30 + bob
-  ctx.save()
-  ctx.translate(pivotX, pivotY)
-  ctx.rotate(-Math.PI / 2)
-  for (let r = rMin; r <= rMax; r++) {
-    for (let c = cMin; c <= cMax; c++) {
-      const color = GRID[r]?.[c]
+  // Rotated 90° CW: hair (r=0) on LEFT pointing toward headboard, neck (r=11) on RIGHT
+  // Original (r, c) → canvas: x = headOx + r*PX,  y = headOy + (c-3)*PX + bob
+  for (let r = 0; r <= 11; r++) {
+    for (let c = 3; c <= 14; c++) {
+      const color = GRID[r][c]
       if (!color) continue
-      ctx.fillStyle = color
-      ctx.fillRect(c * PX - origCX, r * PX - origCY, PX, PX)
+      const px = headOx + r * PX
+      const py = headOy + (c - 3) * PX + bob
+      if (px<0||py<0||px+PX>W||py+PX>H) continue
+      ctx.fillStyle = color; ctx.fillRect(px, py, PX, PX)
     }
   }
-  ctx.restore()
-  // Sleeping cap pointing LEFT from hair side (headOx)
-  const midY = headOy + 30 + bob
+  // Sleeping cap pointing LEFT (from hair side at headOx)
+  const b = bob
+  const capBaseX = headOx - 2
+  const capTopY   = headOy + 1 + b
+  const capBotY   = headOy + 11 * PX - 1 + b
+  const capTipX   = headOx - 52
+  const capTipY   = headOy + 4 * PX + b    // slightly above center
   ctx.fillStyle='#1e40af'; ctx.beginPath()
-  ctx.moveTo(headOx, headOy + bob)
-  ctx.lineTo(headOx, headOy + 60 + bob)
-  ctx.lineTo(headOx - 50, midY)
+  ctx.moveTo(capBaseX, capTopY); ctx.lineTo(capBaseX, capBotY); ctx.lineTo(capTipX, capTipY)
   ctx.closePath(); ctx.fill()
   ctx.fillStyle='rgba(255,255,255,.15)'; ctx.beginPath()
-  ctx.moveTo(headOx, headOy + bob)
-  ctx.lineTo(headOx - 50, midY)
-  ctx.lineTo(headOx - 46, midY)
-  ctx.lineTo(headOx, headOy + 6 + bob)
+  ctx.moveTo(capBaseX, capTopY); ctx.lineTo(capTipX, capTipY)
+  ctx.lineTo(capTipX+4, capTipY); ctx.lineTo(capBaseX, capTopY+4)
   ctx.closePath(); ctx.fill()
-  // Brim
-  ctx.fillStyle='#e2e8f0'; ctx.fillRect(headOx - 5, headOy - 3 + bob, 8, 66)
-  ctx.fillStyle='rgba(150,150,170,.3)'; ctx.fillRect(headOx - 5, headOy - 3 + bob, 3, 66)
-  // Pom
-  ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(headOx - 57, midY, 7, 0, Math.PI*2); ctx.fill()
-  ctx.fillStyle='rgba(180,200,220,.5)'; ctx.beginPath(); ctx.arc(headOx - 59, midY - 2, 3, 0, Math.PI*2); ctx.fill()
+  // White brim (vertical strip at cap base)
+  ctx.fillStyle='#e2e8f0'; ctx.fillRect(capBaseX-4, capTopY-3, 9, capBotY-capTopY+6)
+  ctx.fillStyle='rgba(150,150,170,.3)'; ctx.fillRect(capBaseX-4, capTopY-3, 3, capBotY-capTopY+6)
+  // Pom at tip
+  ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(capTipX-5, capTipY, 7, 0, Math.PI*2); ctx.fill()
+  ctx.fillStyle='rgba(180,200,220,.5)'; ctx.beginPath(); ctx.arc(capTipX-7, capTipY-2, 3, 0, Math.PI*2); ctx.fill()
 }
 
 function drawBeachChair(ctx: CanvasRenderingContext2D, cx: number, W: number, viewH: number) {
@@ -894,17 +883,31 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── SLEEP ────────────────────────────────────────────────────
     if(scene==='sleep'){
       s.charX=W/2; s.faceFlush=0
-      const bob=Math.sin(now*0.0008)*2
-      // 1. Draw bed (includes pillow on left, blue blanket on right)
+      const bob=Math.sin(now*0.0008)*2   // smooth float, no rounding
       drawBed(ctx, W/2, H)
-      // 2. Body bumps ON TOP of the blanket (blanket starts at W/2-52)
-      ctx.fillStyle='#2850b8'; ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+22), Math.round(H-56), 82, 19, 0, 0, Math.PI*2); ctx.fill()
-      ctx.fillStyle='#2244a8'; ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+98), Math.round(H-51), 40, 12, 0, 0, Math.PI*2); ctx.fill()
-      // 3. Head drawn LAST so it sits on top of the pillow
-      const headOx=Math.round(W/2-108), headOy=Math.round(H-85)
+      // Head is rotated 90° CW — hair points LEFT toward headboard
+      // Rotated head: x = headOx + r*PX (0-55px wide), y = headOy + (c-3)*PX (0-55px tall)
+      // Position so chin (c=14, y=headOy+55) is at blanket level (H-75), face fully above
+      const headOx=Math.round(W/2-108), headOy=Math.round(H-133)
       drawSleepingHead(ctx, headOx, headOy, bob, W, H)
+      // Blanket base
+      ctx.fillStyle='#1e3a8a'
+      ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,53)
+      // Big body bump ON TOP of blanket — torso hump
+      ctx.fillStyle='#2850b8'
+      ctx.beginPath()
+      ctx.ellipse(Math.round(W/2+20), Math.round(H-60), 85, 18, 0, 0, Math.PI*2)
+      ctx.fill()
+      // Knee bump
+      ctx.fillStyle='#2244a8'
+      ctx.beginPath()
+      ctx.ellipse(Math.round(W/2+95), Math.round(H-56), 38, 11, 0, 0, Math.PI*2)
+      ctx.fill()
+      // Blanket highlight stripe and texture over everything
+      ctx.fillStyle='#2563eb'
+      ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,14)
+      ctx.fillStyle='rgba(255,255,255,.09)'
+      for(let i=0;i<5;i++) ctx.fillRect(Math.round(W/2-108)+i*30,Math.round(H-69),18,38)
     }
 
     // ── GAMING ───────────────────────────────────────────────────
