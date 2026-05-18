@@ -208,26 +208,38 @@ function drawBed(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
 }
 
 function drawSleepingHead(ctx: CanvasRenderingContext2D, headOx: number, headOy: number, bob: number, W: number, H: number) {
+  // Rotated 90° CW: hair (r=0) on LEFT pointing toward headboard, neck (r=11) on RIGHT
+  // Original (r, c) → canvas: x = headOx + r*PX,  y = headOy + (c-3)*PX + bob
   for (let r = 0; r <= 11; r++) {
     for (let c = 3; c <= 14; c++) {
       const color = GRID[r][c]
       if (!color) continue
-      const px = headOx + (c-3)*PX, py = headOy + r*PX + bob
+      const px = headOx + r * PX
+      const py = headOy + (c - 3) * PX + bob
       if (px<0||py<0||px+PX>W||py+PX>H) continue
-      ctx.fillStyle = color; ctx.fillRect(px,py,PX,PX)
+      ctx.fillStyle = color; ctx.fillRect(px, py, PX, PX)
     }
   }
-  const capBaseY=headOy+bob-5, headW=12*PX
-  const capTipX=headOx+headW*0.45+22, capTipY=capBaseY-50
+  // Sleeping cap pointing LEFT (from hair side at headOx)
+  const b = bob
+  const capBaseX = headOx - 2
+  const capTopY   = headOy + 1 + b
+  const capBotY   = headOy + 11 * PX - 1 + b
+  const capTipX   = headOx - 52
+  const capTipY   = headOy + 4 * PX + b    // slightly above center
   ctx.fillStyle='#1e40af'; ctx.beginPath()
-  ctx.moveTo(headOx-6,capBaseY); ctx.lineTo(headOx+headW+6,capBaseY); ctx.lineTo(capTipX,capTipY); ctx.closePath(); ctx.fill()
+  ctx.moveTo(capBaseX, capTopY); ctx.lineTo(capBaseX, capBotY); ctx.lineTo(capTipX, capTipY)
+  ctx.closePath(); ctx.fill()
   ctx.fillStyle='rgba(255,255,255,.15)'; ctx.beginPath()
-  ctx.moveTo(headOx+headW*.3,capBaseY); ctx.lineTo(capTipX,capTipY)
-  ctx.lineTo(capTipX+4,capTipY); ctx.lineTo(headOx+headW*.3+8,capBaseY); ctx.closePath(); ctx.fill()
-  ctx.fillStyle='#e2e8f0'; ctx.fillRect(headOx-10,capBaseY-5,headW+20,9)
-  ctx.fillStyle='rgba(150,150,170,.3)'; ctx.fillRect(headOx-10,capBaseY-5,headW+20,3)
-  ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(capTipX,capTipY,7,0,Math.PI*2); ctx.fill()
-  ctx.fillStyle='rgba(180,200,220,.5)'; ctx.beginPath(); ctx.arc(capTipX-2,capTipY-2,3,0,Math.PI*2); ctx.fill()
+  ctx.moveTo(capBaseX, capTopY); ctx.lineTo(capTipX, capTipY)
+  ctx.lineTo(capTipX+4, capTipY); ctx.lineTo(capBaseX, capTopY+4)
+  ctx.closePath(); ctx.fill()
+  // White brim (vertical strip at cap base)
+  ctx.fillStyle='#e2e8f0'; ctx.fillRect(capBaseX-4, capTopY-3, 9, capBotY-capTopY+6)
+  ctx.fillStyle='rgba(150,150,170,.3)'; ctx.fillRect(capBaseX-4, capTopY-3, 3, capBotY-capTopY+6)
+  // Pom at tip
+  ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(capTipX-5, capTipY, 7, 0, Math.PI*2); ctx.fill()
+  ctx.fillStyle='rgba(180,200,220,.5)'; ctx.beginPath(); ctx.arc(capTipX-7, capTipY-2, 3, 0, Math.PI*2); ctx.fill()
 }
 
 function drawBeachChair(ctx: CanvasRenderingContext2D, cx: number, W: number, viewH: number) {
@@ -647,11 +659,15 @@ function DustCloud({charX,dir}:{charX:number;dir:number}){
 }
 
 /* ── Sweat drops ─────────────────────────────────────────────────────── */
-function SweatDrops({charX}:{charX:number}){
+function SweatDrops({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
+  // Face is rows 4-9 of character → charY + 20px to charY + 45px from top
+  // Right cheek area: x ≈ charX + 55-70px
+  // From bottom of viewport: viewH - (charY + row*PX)
+  const cheekBottom = viewH - (charY + 9 * PX)  // bottom of face from viewport bottom
   return(<>
-    <style>{`@keyframes sw{0%{opacity:.9;transform:translateY(0)}100%{opacity:0;transform:translateY(36px) scaleY(.6)}}`}</style>
+    <style>{`@keyframes sw{0%{opacity:.9;transform:translateY(0)}100%{opacity:0;transform:translateY(32px) scaleY(.6)}}`}</style>
     {[0,1,2].map(i=>(
-      <div key={i} style={{position:'fixed',left:charX+80+i*11,bottom:`calc(25% + ${i*9}px)`,
+      <div key={i} style={{position:'fixed',left:charX+60+i*9,bottom:cheekBottom - i*10,
         width:5,height:9,borderRadius:'50% 50% 50% 50% / 60% 60% 40% 40%',
         background:'rgba(147,197,253,.95)',
         animation:`sw 1.0s ease-in ${i*.3}s infinite`,
@@ -865,20 +881,23 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       s.charX=W/2; s.faceFlush=0
       const bob=Math.sin(now*0.0008)*2   // smooth float, no rounding
       drawBed(ctx, W/2, H)
-      const headOx=Math.round(W/2-108), headOy=Math.round(H-122)  // moved up so face clears blanket
+      // Head is rotated 90° CW — hair points LEFT toward headboard
+      // Rotated head: x = headOx + r*PX (0-55px wide), y = headOy + (c-3)*PX (0-55px tall)
+      // Position so chin (c=14, y=headOy+55) is at blanket level (H-75), face fully above
+      const headOx=Math.round(W/2-108), headOy=Math.round(H-133)
       drawSleepingHead(ctx, headOx, headOy, bob, W, H)
       // Blanket base
       ctx.fillStyle='#1e3a8a'
       ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,53)
-      // Body bump ON TOP of blanket — raised lump showing body shape under covers
-      ctx.fillStyle='#2547b0'
+      // Big body bump ON TOP of blanket — torso hump
+      ctx.fillStyle='#2850b8'
       ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+28), Math.round(H-68), 62, 11, 0, 0, Math.PI*2)
+      ctx.ellipse(Math.round(W/2+20), Math.round(H-60), 85, 18, 0, 0, Math.PI*2)
       ctx.fill()
-      // Smaller second bump (knees)
-      ctx.fillStyle='#2040a0'
+      // Knee bump
+      ctx.fillStyle='#2244a8'
       ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+78), Math.round(H-65), 30, 8, 0, 0, Math.PI*2)
+      ctx.ellipse(Math.round(W/2+95), Math.round(H-56), 38, 11, 0, 0, Math.PI*2)
       ctx.fill()
       // Blanket highlight stripe and texture over everything
       ctx.fillStyle='#2563eb'
@@ -1267,7 +1286,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {activeScene==='perch'&&showPerchBubble&&<PerchBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {/* rain scene removed — replaced by headbang */}
     {activeScene==='weights'&&<WeightSparkles charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
-    {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp}/>}
+    {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='panicrun'&&<><DustCloud charX={charXDisp} dir={dirDisp}/><PanicExclaim charX={charXDisp}/></>}
     {activeScene==='telescope'&&<TelescopeSparkles charX={charXDisp} dir={dirDisp}/>}
 
