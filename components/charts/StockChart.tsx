@@ -133,7 +133,8 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const color = isPositive ? '#22c55e' : '#ef4444'
 
   const hasPositiveEps = currentEps != null && currentEps > 0
-  const hasFairValue = earningsHistory.length >= 4 || hasPositiveEps
+  // Fair value only makes sense on long timeframes — only show on 5Y
+  const hasFairValue = (earningsHistory.length >= 4 || hasPositiveEps) && range === '5Y'
 
   const formattedData = useMemo(() => data.map((d, i) => {
     let fairValue: number | null = null
@@ -148,9 +149,7 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
     const bbUpper  = bb?.bbUpper  ?? null
     const bbLower  = bb?.bbLower  ?? null
     const bbMiddle = bb?.bbMiddle ?? null
-    // bbBandWidth drives the stacked-fill between lower and upper bands
-    const bbBandWidth = (bbUpper != null && bbLower != null) ? bbUpper - bbLower : null
-    return { ...d, fairValue, bbUpper, bbMiddle, bbLower, bbBandWidth }
+    return { ...d, fairValue, bbUpper, bbMiddle, bbLower }
   }), [data, bbBands, hasFairValue, hasPositiveEps, currentEps, earningsHistory, NORMAL_PE])
 
   // ── Period change ─────────────────────────────────────────────────────────
@@ -167,20 +166,18 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const bbUpperValues = formattedData.map(d => d.bbUpper).filter((v): v is number => v != null && isFinite(v))
   const bbMin = bbLowerValues.length ? Math.min(...bbLowerValues) : closeMin
   const bbMax = bbUpperValues.length ? Math.max(...bbUpperValues) : closeMax
-  // Always include fair value in domain — prevents the line hiding off-screen when FV < chart min
+  // On 5Y include fair value in domain so the line is always visible
   const fairValueNums = formattedData.map(d => d.fairValue).filter((v): v is number => v != null && isFinite(v))
-  const fvDomainMin = fairValueNums.length ? Math.min(...fairValueNums) : null
-  const fvDomainMax = fairValueNums.length ? Math.max(...fairValueNums) : null
   const effectiveMin = (() => {
     let min = closeMin
     if (showBB && bbLowerValues.length) min = Math.min(min, bbMin)
-    if (fvDomainMin != null) min = Math.min(min, fvDomainMin)  // safety net: always include FV
+    if (hasFairValue && fairValueNums.length) min = Math.min(min, Math.min(...fairValueNums))
     return min
   })()
   const effectiveMax = (() => {
     let max = closeMax
     if (showBB && bbUpperValues.length) max = Math.max(max, bbMax)
-    if (fvDomainMax != null) max = Math.max(max, fvDomainMax)  // safety net: always include FV
+    if (hasFairValue && fairValueNums.length) max = Math.max(max, Math.max(...fairValueNums))
     return max
   })()
   const Y_PAD = Math.max(1, (effectiveMax - effectiveMin) * 0.10)
@@ -433,17 +430,14 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
               <ReferenceLine y={previousClose} stroke="#6b7280" strokeDasharray="4 4" strokeOpacity={0.5} />
             )}
             {showBB && <>
-              {/* Lower band — transparent fill, acts as stack baseline */}
-              <Area type="monotone" dataKey="bbLower"
+              <Area type="monotone" dataKey="bbUpper"
                 stroke="#8b5cf6" strokeWidth={1.5} fill="none"
-                stackId="bb" dot={false} activeDot={false} isAnimationActive={false} connectNulls />
-              {/* Band width stacked on lower — fills only the space between lower and upper */}
-              <Area type="monotone" dataKey="bbBandWidth"
-                stroke="#8b5cf6" strokeWidth={1.5} fill="rgba(139,92,246,0.07)"
-                stackId="bb" dot={false} activeDot={false} isAnimationActive={false} connectNulls />
-              {/* Middle SMA dashed — NOT stacked, renders at actual value */}
+                dot={false} activeDot={false} isAnimationActive={false} connectNulls />
               <Area type="monotone" dataKey="bbMiddle"
                 stroke="#8b5cf6" strokeWidth={1} strokeDasharray="5 3" fill="none"
+                dot={false} activeDot={false} isAnimationActive={false} connectNulls />
+              <Area type="monotone" dataKey="bbLower"
+                stroke="#8b5cf6" strokeWidth={1.5} fill="none"
                 dot={false} activeDot={false} isAnimationActive={false} connectNulls />
             </>}
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
