@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
+import MarketCharacter from '@/components/MarketCharacter'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -84,6 +85,7 @@ const QUICK_LINKS = [
 
 export default function DashboardPage() {
   const { data: session } = useSession()
+  const isPreview = !!(session?.user as any)?.isDemo
   const { word: greeting, emoji } = getGreeting()
 
   // First name only, capitalised
@@ -219,7 +221,12 @@ export default function DashboardPage() {
       )}
       <OnboardingModal />
 
-{/* ── Hero greeting ─────────────────────────────────────────── */}
+      {/* ── Character (preview only) ──────────────────────────── */}
+      {isPreview && (
+        <MarketCharacter changePercent={panicMode ? -99 : 2.4} marketState={panicMode ? 'bear' : undefined} />
+      )}
+
+      {/* ── Hero greeting ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
         <div>
           <h1 className="text-4xl font-bold text-white leading-tight">
