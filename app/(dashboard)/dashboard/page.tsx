@@ -1,16 +1,17 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import {
   Search, Star, Calendar, FlaskConical, Globe,
   Activity, Building2, Users, BookOpen, TrendingUp,
-  TrendingDown, Sparkles, RefreshCw,
+  TrendingDown, Sparkles, RefreshCw, ChevronRight,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
+import MarketCharacter from '@/components/MarketCharacter'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -76,6 +77,8 @@ const QUICK_LINKS = [
   { href: '/markets',    label: 'Markets',      icon: Activity,  desc: 'Market overview' },
   { href: '/quant',      label: 'Quant',        icon: FlaskConical, desc: 'Screen stocks systematically' },
   { href: '/learn',      label: 'Dictionary',   icon: BookOpen,  desc: 'Plain-English finance terms' },
+  { href: '/time-machine',     label: 'Time Machine', icon: RefreshCw,    desc: 'Travel to any market date' },
+  { href: '/generate-assets', label: 'Export Assets', icon: Sparkles,     desc: 'Download Mr. Guy logos & icons' },
 ]
 
 // ── page ──────────────────────────────────────────────────────────────────────
@@ -103,6 +106,59 @@ export default function DashboardPage() {
   const [indices, setIndices] = useState<{ label: string; price: number | null; change: number | null; changePercent: number | null }[]>([])
   const [indicesLoading, setIndicesLoading] = useState(true)
 
+  // Fear & Greed
+  const [fearGreed, setFearGreed] = useState<{ score: number; rating: string; vix: number | null; spChange: number | null } | null>(null)
+
+  // Roast
+  const [roast, setRoast] = useState<string|null>(null)
+  const [roasting, setRoasting] = useState(false)
+
+  const getRoast = async () => {
+    if (!watchlist.length || roasting) return
+    setRoasting(true)
+    setRoast(null)
+    const tickers = watchlist
+      .map(w => `${w.ticker} ${w.changePercent != null ? (w.changePercent >= 0 ? '+' : '') + w.changePercent.toFixed(1) + '%' : ''}`)
+      .join(', ')
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `You are Mr. Guy, a sarcastic but loveable pixel-art financial mascot. Roast this watchlist in exactly 2-3 sentences. Be funny and a little brutal but keep it light-hearted. Watchlist: ${tickers}. If it's mostly green say something envious. If mostly red be sympathetic but roast them anyway.`,
+          history: [],
+        }),
+      })
+      const data = await res.json()
+      setRoast(data.reply)
+    } catch {
+      setRoast("I tried to roast your portfolio but even I felt bad about it.")
+    }
+    setRoasting(false)
+  }
+
+  // Panic mode
+  const [panicMode, setPanicMode] = useState(false)
+  const [panicDismissed, setPanicDismissed] = useState(false)
+
+  // Anxiety = inverted fear-greed (fear=high anxiety, greed=low anxiety)
+  // Blended with watchlist performance as a secondary signal
+  const anxietyLevel = (() => {
+    const fgAnxiety = fearGreed ? 100 - fearGreed.score : null
+    const watchlistAnxiety = (() => {
+      if (!watchlist.length) return null
+      const red = watchlist.filter(w => (w.changePercent ?? 0) < 0)
+      const redRatio = red.length / watchlist.length
+      const avgLoss = red.length > 0
+        ? red.reduce((s, w) => s + Math.abs(w.changePercent ?? 0), 0) / red.length
+        : 0
+      return Math.min(100, Math.round(redRatio * 55 + avgLoss * 5))
+    })()
+    if (fgAnxiety !== null && watchlistAnxiety !== null)
+      return Math.round(fgAnxiety * 0.7 + watchlistAnxiety * 0.3)
+    return fgAnxiety ?? watchlistAnxiety ?? 0
+  })()
+
   // Fetch everything in parallel on mount
   useEffect(() => {
     // Market brief
@@ -118,6 +174,12 @@ export default function DashboardPage() {
       .then(d => setIndices(d.indices ?? []))
       .catch(() => {})
       .finally(() => setIndicesLoading(false))
+
+    // Fear & Greed index (VIX + S&P momentum composite)
+    fetch('/api/fear-greed')
+      .then(r => r.json())
+      .then(d => setFearGreed({ score: d.score, rating: d.rating, vix: d.vix, spChange: d.spChange }))
+      .catch(() => {})
 
     // Watchlist tickers, then prices
     fetch('/api/watchlist')
@@ -147,8 +209,19 @@ export default function DashboardPage() {
   }, [])
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-10">
+    <div className="space-y-8 max-w-5xl mx-auto pb-10 relative z-20">
+      {panicMode && !panicDismissed && (
+        <>
+          <style>{`@keyframes pgShake{0%,100%{transform:translate(0,0) rotate(0)}10%{transform:translate(-3px,2px) rotate(-.5deg)}20%{transform:translate(3px,-1px) rotate(.3deg)}30%{transform:translate(-2px,3px) rotate(-.3deg)}40%{transform:translate(2px,-2px) rotate(.5deg)}50%{transform:translate(-1px,1px) rotate(0)}}`}</style>
+          <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:25,
+            background:'radial-gradient(ellipse at center, transparent 30%, rgba(220,38,38,0.25) 100%)',
+            animation:'pgShake .4s ease infinite'}}/>
+        </>
+      )}
       <OnboardingModal />
+
+      {/* ── Character ────────────────────────────────────────────── */}
+      <MarketCharacter changePercent={panicMode ? -99 : 2.4} marketState={panicMode ? 'bear' : undefined} />
 
       {/* ── Hero greeting ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
@@ -159,15 +232,26 @@ export default function DashboardPage() {
           <p className="text-gray-500 mt-1 text-sm">{today}</p>
         </div>
         {brief && <MarketStatusBadge status={brief.status} />}
+        <button
+          onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
+          className={cn(
+            'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
+            panicMode
+              ? 'bg-red-500/20 border-red-500/40 text-red-400 animate-pulse'
+              : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-red-500/40 hover:text-red-400'
+          )}
+        >
+          {panicMode ? '👁️ Take a peek' : '🙈 I Can\'t Look'}
+        </button>
       </div>
 
       {/* ── AI Market Brief ───────────────────────────────────────── */}
       <Card className="border-gray-800 bg-gray-900/60">
         <CardContent className="p-6">
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="h-4 w-4 text-blue-400" />
+            <div className="h-5 w-5 rounded bg-blue-500/20 flex items-center justify-center text-xs">🧑‍💼</div>
             <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide">
-              {brief?.status === 'Weekend' ? 'Weekend Brief' : "Today's Market Brief"}
+              {brief?.status === 'Weekend' ? "Mr. Guy's Weekend Take" : "Mr. Guy's Take"}
             </span>
           </div>
           {briefLoading ? (
@@ -188,11 +272,20 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Watchlist */}
-        <Card className="border-gray-800">
+        <Card data-char-widget className="border-gray-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">My Watchlist</p>
-              <Link href="/watchlist" className="text-xs text-blue-400 hover:underline">View all</Link>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={getRoast}
+                  disabled={roasting || watchlist.length === 0}
+                  className="text-xs text-orange-400 hover:text-orange-300 disabled:opacity-40 font-semibold transition-colors flex items-center gap-1"
+                >
+                  {roasting ? '...' : '🔥 Roast'}
+                </button>
+                <Link href="/watchlist" className="text-xs text-blue-400 hover:underline">View all</Link>
+              </div>
             </div>
             {watchLoading ? (
               <div className="space-y-3">
@@ -224,11 +317,11 @@ export default function DashboardPage() {
                       </div>
                       <div className="text-right">
                         {price != null && (
-                          <p className="text-sm font-semibold text-white">${formatPrice(price)}</p>
+                          <p className={cn('text-sm font-semibold', panicMode ? 'text-red-400 blur-sm select-none' : 'text-white')}>{panicMode ? '$???' : `$${formatPrice(price)}`}</p>
                         )}
                         {changePercent != null && (
-                          <p className={cn('text-xs font-medium', pos ? 'text-green-400' : 'text-red-400')}>
-                            {pos ? '+' : ''}{changePercent.toFixed(2)}%
+                          <p className={cn('text-xs font-medium blur-sm select-none', panicMode ? 'text-gray-500' : pos ? 'text-green-400' : 'text-red-400')}>
+                            {panicMode ? '??%' : `${pos ? '+' : ''}${changePercent.toFixed(2)}%`}
                           </p>
                         )}
                       </div>
@@ -237,11 +330,19 @@ export default function DashboardPage() {
                 })}
               </div>
             )}
+            {roast && (
+              <div className="mt-4 pt-4 border-t border-gray-800">
+                <div className="flex items-start gap-2">
+                  <span className="text-lg shrink-0">🧑‍💼</span>
+                  <p className="text-sm text-orange-300 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
         {/* Market Indices */}
-        <Card className="border-gray-800">
+        <Card data-char-widget className={cn("border-gray-800", panicMode && "blur-sm select-none pointer-events-none")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Market Indices</p>
@@ -257,6 +358,67 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* ── Anxiety Meter ─────────────────────────────────────────── */}
+      {fearGreed && (
+        <Card className={cn('border-gray-800 transition-all duration-700',
+          anxietyLevel > 80 ? 'border-red-500/40 bg-red-950/20' : 'bg-gray-900/40'
+        )}>
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-base">{anxietyLevel < 30 ? '😌' : anxietyLevel < 60 ? '😐' : anxietyLevel < 80 ? '😰' : '🤯'}</span>
+                <span className="text-sm font-semibold text-gray-300">Mr. Guy Anxiety Meter</span>
+              </div>
+              <div className="flex items-center gap-3">
+                {fearGreed.vix && (
+                  <span className="text-xs text-gray-500">VIX <span className={cn('font-semibold', fearGreed.vix > 30 ? 'text-red-400' : fearGreed.vix > 20 ? 'text-yellow-400' : 'text-green-400')}>{fearGreed.vix}</span></span>
+                )}
+                <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full border',
+                  anxietyLevel < 30 ? 'text-green-400 border-green-500/30 bg-green-500/10' :
+                  anxietyLevel < 60 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' :
+                  anxietyLevel < 80 ? 'text-orange-400 border-orange-500/30 bg-orange-500/10' :
+                                      'text-red-400 border-red-500/30 bg-red-500/10'
+                )}>
+                  {fearGreed.rating}
+                </span>
+              </div>
+            </div>
+
+            {/* Bar */}
+            <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
+              <div
+                className={cn('h-full rounded-full transition-all duration-1000',
+                  anxietyLevel < 30 ? 'bg-green-500' : anxietyLevel < 60 ? 'bg-yellow-500' : anxietyLevel < 80 ? 'bg-orange-500' : 'bg-red-500'
+                )}
+                style={{ width: `${anxietyLevel}%`, boxShadow: anxietyLevel > 80 ? '0 0 8px rgba(239,68,68,.6)' : undefined }}
+              />
+            </div>
+
+            {/* Sub-labels */}
+            <div className="flex justify-between mt-1 px-0.5">
+              <span className="text-[10px] text-gray-600">Extreme Fear</span>
+              <span className="text-[10px] text-gray-600">Neutral</span>
+              <span className="text-[10px] text-gray-600">Extreme Greed</span>
+            </div>
+
+            {/* Quote */}
+            <p className="text-xs text-gray-500 mt-2 italic">
+              {anxietyLevel < 30
+                ? '"Everything is fine. I am fine." — Mr. Guy'
+                : anxietyLevel < 60
+                ? '"I\'m watching these numbers very carefully." — Mr. Guy'
+                : anxietyLevel < 80
+                ? '"This is fine. *sweating* This is absolutely fine." — Mr. Guy'
+                : '"SELL EVERYTHING. MOVE TO CASH. BUY BEANS." — Mr. Guy'}
+            </p>
+
+            {anxietyLevel > 80 && (
+              <style>{`@keyframes anxShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-1px)}75%{transform:translateX(1px)}}`}</style>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* ── Quick Links ───────────────────────────────────────────── */}
       <div>
@@ -279,6 +441,31 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* ── Mr. Guy Chat ─────────────────────────────────────────── */}
+      <Link href="/chat">
+        <Card className="border-gray-800 bg-gray-900/60 hover:bg-gray-800/60 hover:border-blue-500/40 transition-all cursor-pointer group">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                🧑‍💼
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-bold text-white">Ask Mr. Guy</p>
+                <p className="text-sm text-gray-400 mt-0.5">Your pixel-art finance buddy — ask anything about stocks, markets, or investing.</p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
+            </div>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {['What even is a stock?', 'Why does the market crash?', 'Is NVDA a buy?', 'What is the VIX?'].map(q => (
+                <span key={q} className="text-xs bg-gray-800 border border-gray-700 text-gray-400 rounded-lg px-2.5 py-1">
+                  {q}
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
 
       <p className="text-xs text-gray-700 text-center">
         For informational purposes only. Not financial advice.
