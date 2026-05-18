@@ -242,7 +242,8 @@ export default function ChallengePage() {
         weekKey: getWeekKey(),
         ticker,
         direction: userDirection,
-        entryPrice: data.quote.price,
+        // Use Friday's close as entry — same as Mr. Guy (market closed when picks are made)
+        entryPrice: data.quote.previousClose ?? data.quote.price,
         companyName: data.quote.companyName ?? ticker,
         submittedAt: new Date().toISOString(),
       }
