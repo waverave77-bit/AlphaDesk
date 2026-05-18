@@ -19,20 +19,27 @@ function getAnthropicKey(): string {
   } catch { return '' }
 }
 
-interface HotTakeResult {
+export interface HotTakeResult {
   ticker: string
   companyName: string
   price: number
   changePercent: number
   hotTake: string
-  verdict: 'bullish' | 'bearish' | 'chaotic'
+  verdict: 'bullish'
 }
 
 function todayStr(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
-interface YahooMover {
+// Pool of stocks that are typically under $100 — filtered at runtime
+const CANDIDATES = [
+  'SOFI', 'HOOD', 'RIVN', 'NIO', 'SNAP', 'PLTR', 'RBLX', 'GME', 'F', 'T',
+  'BAC', 'WFC', 'LYFT', 'VALE', 'SOUN', 'IONQ', 'SQ', 'MARA', 'RIOT', 'AI',
+  'JOBY', 'BBAI', 'CLSK', 'GRAB', 'DKNG', 'LCID', 'SPCE', 'HUT', 'OPEN', 'SMCI',
+]
+
+interface YahooQuote {
   symbol: string
   shortName?: string
   longName?: string
@@ -40,18 +47,16 @@ interface YahooMover {
   regularMarketChangePercent?: number
 }
 
-async function fetchMovers(scrId: string): Promise<YahooMover[]> {
+async function fetchBatchQuotes(symbols: string[]): Promise<YahooQuote[]> {
   try {
-    const res = await fetch(
-      `https://query1.finance.yahoo.com/v1/finance/screener/predefined/saved?formatted=false&scrIds=${scrId}&count=5`,
-      {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-        signal: AbortSignal.timeout(8000),
-      }
-    )
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}&fields=symbol,shortName,longName,regularMarketPrice,regularMarketChangePercent`
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      signal: AbortSignal.timeout(10000),
+    })
     if (!res.ok) return []
     const data = await res.json()
-    return data?.finance?.result?.[0]?.quotes ?? []
+    return data?.quoteResponse?.result ?? []
   } catch {
     return []
   }
@@ -60,40 +65,44 @@ async function fetchMovers(scrId: string): Promise<YahooMover[]> {
 export async function GET() {
   const today = todayStr()
 
-  // Check DB for today's hot take first
+  // Check DB for today's pick first
   try {
     const cached = await prisma.hotTakeCache.findUnique({ where: { date: today } })
     if (cached) return NextResponse.json(JSON.parse(cached.data))
   } catch {}
 
-  const [gainers, losers] = await Promise.all([
-    fetchMovers('day_gainers'),
-    fetchMovers('day_losers'),
-  ])
+  // Fetch live prices for all candidates
+  const quotes = await fetchBatchQuotes(CANDIDATES)
 
-  const allMovers = [...gainers, ...losers]
+  // Filter to stocks actually under $100 with valid data
+  const eligible = quotes.filter(
+    (q) => q.regularMarketPrice != null && q.regularMarketPrice < 100 && q.regularMarketPrice > 0.5
+  )
 
-  if (allMovers.length === 0) {
-    return NextResponse.json({ error: 'Could not fetch market movers' }, { status: 503 })
+  if (eligible.length === 0) {
+    return NextResponse.json({ error: 'Could not fetch stock data' }, { status: 503 })
   }
 
-  const moverSummary = allMovers
+  // Build summary for Mr. Guy — cap at 15 to keep prompt tight
+  const pool = eligible.slice(0, 15)
+  const summary = pool
     .map((q) => {
       const pct = q.regularMarketChangePercent ?? 0
       const sign = pct >= 0 ? '+' : ''
-      return `${q.symbol} (${q.shortName ?? q.longName ?? q.symbol}): $${(q.regularMarketPrice ?? 0).toFixed(2)} ${sign}${pct.toFixed(2)}%`
+      const name = q.shortName ?? q.longName ?? q.symbol
+      return `${q.symbol} (${name}): $${(q.regularMarketPrice ?? 0).toFixed(2)} ${sign}${pct.toFixed(2)}% today`
     })
     .join('\n')
 
   const client = new Anthropic({ apiKey: getAnthropicKey() })
 
-  const prompt = `Here are today's biggest stock movers:\n\n${moverSummary}\n\nPick the single most interesting stock from this list. Give me your hot take on it. Respond ONLY with valid JSON in exactly this format, no extra text:\n{"ticker":"SYMBOL","companyName":"Full Name","price":123.45,"changePercent":4.56,"hotTake":"Your 2-3 sentence casual hot take here.","verdict":"bullish"}\n\nverdict must be exactly one of: bullish, bearish, chaotic`
+  const prompt = `Here are stocks currently trading under $100:\n\n${summary}\n\nYou are Mr. Guy. Pick the ONE stock from this list you are most bullish on for the next 1–2 weeks. Think about momentum, recent news, sector trends, or whatever makes you feel good about it. Give your hot take on why it's about to pop.\n\nRespond ONLY with valid JSON in exactly this format, no extra text:\n{"ticker":"SYMBOL","companyName":"Full Name","price":12.34,"changePercent":1.23,"hotTake":"Your 2-3 sentence casual bullish take on why this stock is about to move up in the next week or two.","verdict":"bullish"}\n\nverdict must always be exactly: bullish`
 
   try {
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 400,
-      system: 'You are Mr. Guy, a funny stock mascot. Give hot takes on stocks in plain casual English. No jargon. No markdown. Be opinionated.',
+      system: 'You are Mr. Guy, a funny stock mascot who is always bullish on under-$100 stocks. Pick your favorite for the next 1-2 weeks. Plain casual English. No jargon. No markdown. Be confident and funny.',
       messages: [{ role: 'user', content: prompt }],
     })
 
@@ -103,23 +112,22 @@ export async function GET() {
 
     const parsed: HotTakeResult = JSON.parse(jsonMatch[0])
 
-    // Sanity-fill price/changePercent from Yahoo data if Claude hallucinated
-    const source = allMovers.find((q) => q.symbol === parsed.ticker)
+    // Sanity-fill from real Yahoo data so price is always accurate
+    const source = eligible.find((q) => q.symbol === parsed.ticker)
     if (source) {
       parsed.price = source.regularMarketPrice ?? parsed.price
       parsed.changePercent = source.regularMarketChangePercent ?? parsed.changePercent
       parsed.companyName = source.shortName ?? source.longName ?? parsed.companyName
     }
 
-    if (!['bullish', 'bearish', 'chaotic'].includes(parsed.verdict)) {
-      parsed.verdict = 'chaotic'
-    }
+    // Always bullish
+    parsed.verdict = 'bullish'
 
-    // Persist to DB so cold starts don't regenerate a different stock
+    // Persist to DB — never overwrite once set for the day
     try {
       await prisma.hotTakeCache.upsert({
         where: { date: today },
-        update: {},  // never overwrite existing hot take for the day
+        update: {},
         create: { date: today, data: JSON.stringify(parsed) },
       })
     } catch {}
