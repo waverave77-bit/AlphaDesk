@@ -49,8 +49,7 @@ interface StockChartProps {
 function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
   return data.map((_, i) => {
     const slice = data.slice(Math.max(0, i - period + 1), i + 1)
-    // Need at least 2 points to compute std dev
-    if (slice.length < 2) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
+    // Always compute — single-point slice gives zero-width band that widens as data accumulates
     const mean = slice.reduce((s, x) => s + x.close, 0) / slice.length
     const sd = Math.sqrt(slice.reduce((s, x) => s + Math.pow(x.close - mean, 2), 0) / slice.length)
     return { bbUpper: mean + k * sd, bbMiddle: mean, bbLower: mean - k * sd }
