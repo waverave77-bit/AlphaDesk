@@ -168,9 +168,12 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   const bbUpperValues = formattedData.map(d => d.bbUpper).filter((v): v is number => v != null)
   const bbMin = bbLowerValues.length ? Math.min(...bbLowerValues) : closeMin
   const bbMax = bbUpperValues.length ? Math.max(...bbUpperValues) : closeMax
-  const Y_PAD = Math.max(1, (closeMax - closeMin) * 0.05)
-  const yMin = Math.max(0, (showBB && bbLowerValues.length ? Math.min(closeMin, bbMin) : closeMin) - Y_PAD)
-  const yMax = (showBB && bbUpperValues.length ? Math.max(closeMax, bbMax) : closeMax) + Y_PAD
+  // When BB is on use a wider range so bands are never clipped at the boundary
+  const effectiveMin = showBB && bbLowerValues.length ? Math.min(closeMin, bbMin) : closeMin
+  const effectiveMax = showBB && bbUpperValues.length ? Math.max(closeMax, bbMax) : closeMax
+  const Y_PAD = Math.max(1, (effectiveMax - effectiveMin) * 0.10)  // 10% padding
+  const yMin = Math.max(0, effectiveMin - Y_PAD)
+  const yMax = effectiveMax + Y_PAD
 
   // ── X-axis: explicit evenly-spaced ticks using raw date strings ───────────
   const xTickCount = 7
