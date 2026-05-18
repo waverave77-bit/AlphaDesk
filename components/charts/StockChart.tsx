@@ -187,19 +187,20 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   // Latest BB values for legend
   const latestBB = formattedData.filter(d => d.bbUpper != null).at(-1)
 
-  // Y-axis domain: accommodate fair value + BB bands
-  const yDomainMin = (dataMin: number) => {
-    const safeMin = isFinite(dataMin) && dataMin > 0 ? dataMin : (priceMin || 0)
-    let effectiveMin = safeMin
-    if (hasFairValue && hasPositiveEps && showFairValue) effectiveMin = Math.min(effectiveMin, fairMin)
-    if (showBB && bbLowerValues.length) effectiveMin = Math.min(effectiveMin, bbMin)
-    return effectiveMin * (effectiveMin < safeMin ? 0.993 : 0.993)
+  // Y-axis domain: fit tightly to price + BB, ignore fair value (avoids huge dead space)
+  const yDomainMin = (_dataMin: number) => {
+    let lo = priceMin
+    if (showBB && bbLowerValues.length) lo = Math.min(lo, bbMin)
+    const hi = showBB && bbUpperValues.length ? Math.max(priceMax, bbMax) : priceMax
+    const pad = (hi - lo) * 0.08   // 8% padding below
+    return Math.max(0, lo - pad)
   }
-  const yDomainMax = (dataMax: number) => {
-    const safeMax = isFinite(dataMax) && dataMax > 0 ? dataMax : (priceMax || 100)
-    let effectiveMax = safeMax
-    if (showBB && bbUpperValues.length) effectiveMax = Math.max(effectiveMax, bbMax)
-    return effectiveMax * 1.005
+  const yDomainMax = (_dataMax: number) => {
+    let hi = priceMax
+    if (showBB && bbUpperValues.length) hi = Math.max(hi, bbMax)
+    const lo = showBB && bbLowerValues.length ? Math.min(priceMin, bbMin) : priceMin
+    const pad = (hi - lo) * 0.08   // 8% padding above
+    return hi + pad
   }
 
   // Tooltip
