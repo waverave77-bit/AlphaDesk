@@ -187,6 +187,13 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   // Latest BB values for legend
   const latestBB = formattedData.filter(d => d.bbUpper != null).at(-1)
 
+  // X-axis: pick ~7 evenly spaced raw date strings as explicit ticks
+  const X_TICKS_TARGET = 7
+  const xTickStep = Math.max(1, Math.floor(formattedData.length / X_TICKS_TARGET))
+  const xTicks = formattedData
+    .filter((_, i) => i % xTickStep === 0)
+    .map(d => d.date)
+
   // Y-axis domain: tight to actual price range with fixed $5 buffer each side
   // Use close prices from formattedData as the source of truth (always present)
   const closes = formattedData.map(d => d.close).filter(v => isFinite(v) && v > 0)
@@ -432,9 +439,9 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
-            <XAxis dataKey="dateLabel" tick={{ fill: '#6b7280', fontSize: 11 }}
-              axisLine={false} tickLine={false}
-              interval={Math.max(0, Math.floor(formattedData.length / 7))} />
+            <XAxis dataKey="date" ticks={xTicks} tickFormatter={formatXAxis}
+              tick={{ fill: '#6b7280', fontSize: 11 }}
+              axisLine={false} tickLine={false} interval={0} />
             <YAxis
               domain={[yMin, yMax]}
               allowDataOverflow={true}
