@@ -187,20 +187,17 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   // Latest BB values for legend
   const latestBB = formattedData.filter(d => d.bbUpper != null).at(-1)
 
-  // Y-axis domain: fit tightly to price + BB, ignore fair value (avoids huge dead space)
+  // Y-axis domain: tight to actual price range with fixed $5 buffer each side
+  const Y_PAD = 5
   const yDomainMin = (_dataMin: number) => {
     let lo = priceMin
     if (showBB && bbLowerValues.length) lo = Math.min(lo, bbMin)
-    const hi = showBB && bbUpperValues.length ? Math.max(priceMax, bbMax) : priceMax
-    const pad = (hi - lo) * 0.08   // 8% padding below
-    return Math.max(0, lo - pad)
+    return Math.max(0, lo - Y_PAD)
   }
   const yDomainMax = (_dataMax: number) => {
     let hi = priceMax
     if (showBB && bbUpperValues.length) hi = Math.max(hi, bbMax)
-    const lo = showBB && bbLowerValues.length ? Math.min(priceMin, bbMin) : priceMin
-    const pad = (hi - lo) * 0.08   // 8% padding above
-    return hi + pad
+    return hi + Y_PAD
   }
 
   // Tooltip
