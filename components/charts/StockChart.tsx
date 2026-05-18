@@ -236,63 +236,55 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
       <div style={{
         background: '#111827',
         border: '1px solid #374151',
-        borderRadius: '12px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
-        fontSize: '12px',
-        maxWidth: '280px',
+        borderRadius: '10px',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        fontSize: '11px',
+        maxWidth: '200px',
         color: '#f9fafb',
         pointerEvents: 'none',
       }}>
-        <div style={{ padding: '12px 14px 10px' }}>
-          <p style={{ color: '#9ca3af', marginBottom: '8px', fontWeight: 500 }}>{displayDate}</p>
-          <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '13px', marginBottom: '6px' }}>
-            Close: ${d.close?.toFixed(2)}
+        <div style={{ padding: '8px 10px 7px' }}>
+          <p style={{ color: '#9ca3af', marginBottom: '4px', fontWeight: 500, fontSize: '10px' }}>{displayDate}</p>
+          <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '12px', marginBottom: '4px' }}>
+            ${d.close?.toFixed(2)}
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
-            <p style={{ color: '#9ca3af' }}>Open: <span style={{ color: '#e5e7eb' }}>${d.open?.toFixed(2)}</span></p>
-            <p style={{ color: '#9ca3af' }}>Vol: <span style={{ color: '#e5e7eb' }}>{(d.volume / 1e6).toFixed(1)}M</span></p>
-            <p style={{ color: '#4ade80' }}>High: <span style={{ color: '#86efac' }}>${d.high?.toFixed(2)}</span></p>
-            <p style={{ color: '#f87171' }}>Low: <span style={{ color: '#fca5a5' }}>${d.low?.toFixed(2)}</span></p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px 10px', fontSize: '10.5px' }}>
+            <p style={{ color: '#9ca3af' }}>O: <span style={{ color: '#e5e7eb' }}>${d.open?.toFixed(2)}</span></p>
+            <p style={{ color: '#9ca3af' }}>V: <span style={{ color: '#e5e7eb' }}>{(d.volume / 1e6).toFixed(1)}M</span></p>
+            <p style={{ color: '#4ade80' }}>H: <span style={{ color: '#86efac' }}>${d.high?.toFixed(2)}</span></p>
+            <p style={{ color: '#f87171' }}>L: <span style={{ color: '#fca5a5' }}>${d.low?.toFixed(2)}</span></p>
           </div>
           {hasBBPoint && (
-            <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #1f2937', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2px 8px' }}>
-              <p style={{ color: '#a78bfa', fontSize: '11px' }}>BB↑ <span style={{ color: '#c4b5fd' }}>${bbPoint.bbUpper?.toFixed(2)}</span></p>
-              <p style={{ color: '#a78bfa', fontSize: '11px' }}>SMA <span style={{ color: '#c4b5fd' }}>${bbPoint.bbMiddle?.toFixed(2)}</span></p>
-              <p style={{ color: '#a78bfa', fontSize: '11px' }}>BB↓ <span style={{ color: '#c4b5fd' }}>${bbPoint.bbLower?.toFixed(2)}</span></p>
+            <div style={{ marginTop: '5px', paddingTop: '5px', borderTop: '1px solid #1f2937', display: 'flex', gap: '6px', fontSize: '10px', flexWrap: 'wrap' }}>
+              <span style={{ color: '#a78bfa' }}>↑<span style={{ color: '#c4b5fd' }}>${bbPoint.bbUpper?.toFixed(2)}</span></span>
+              <span style={{ color: '#a78bfa' }}>SMA <span style={{ color: '#c4b5fd' }}>${bbPoint.bbMiddle?.toFixed(2)}</span></span>
+              <span style={{ color: '#a78bfa' }}>↓<span style={{ color: '#c4b5fd' }}>${bbPoint.bbLower?.toFixed(2)}</span></span>
             </div>
           )}
         </div>
 
         {isSpike && (
-          <div style={{ borderTop: '1px solid #1f2937', padding: '10px 14px 12px' }}>
+          <div style={{ borderTop: '1px solid #1f2937', padding: '6px 10px 8px' }}>
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '5px',
-              padding: '4px 10px',
-              borderRadius: '6px',
-              marginBottom: '10px',
+              display: 'inline-flex', alignItems: 'center', gap: '4px',
+              padding: '2px 7px', borderRadius: '5px', marginBottom: '6px',
               background: spikePercent! > 0 ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)',
               border: `1px solid ${spikePercent! > 0 ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}`,
             }}>
-              <span style={{ fontSize: '13px' }}>{spikePercent! > 0 ? '↑' : '↓'}</span>
-              <span style={{ fontWeight: 700, fontSize: '12px', color: spikePercent! > 0 ? '#4ade80' : '#f87171' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: spikePercent! > 0 ? '#4ade80' : '#f87171' }}>
                 {spikePercent! > 0 ? '+' : ''}{spikePercent!.toFixed(1)}% move
               </span>
             </div>
             {summary === 'loading' && (
-              <p style={{ color: '#6b7280', fontSize: '11px', fontStyle: 'italic' }}>Analyzing what happened...</p>
+              <p style={{ color: '#6b7280', fontSize: '10px', fontStyle: 'italic' }}>Analyzing...</p>
             )}
             {summary && summary !== 'loading' && (
-              <p style={{ color: '#d1d5db', fontSize: '11.5px', lineHeight: '1.6' }}>{summary}</p>
+              <p style={{ color: '#d1d5db', fontSize: '10.5px', lineHeight: '1.5' }}>{summary}</p>
             )}
             {!summary && relatedNews.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {relatedNews.map((item, i) => (
-                  <div key={i}>
-                    <p style={{ color: '#d1d5db', fontSize: '11px', lineHeight: '1.4' }}>{item.title}</p>
-                    <p style={{ color: '#6b7280', fontSize: '10px', marginTop: '2px' }}>{item.publisher}</p>
-                  </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {relatedNews.slice(0, 1).map((item, i) => (
+                  <p key={i} style={{ color: '#d1d5db', fontSize: '10.5px', lineHeight: '1.4' }}>{item.title}</p>
                 ))}
               </div>
             )}
