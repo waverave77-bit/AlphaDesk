@@ -314,7 +314,7 @@ export async function getHistoricalData(
     '6m':  { range: '6mo', interval: '1d' },
     'ytd': { range: 'ytd', interval: '1d' },
     '1y':  { range: '1y',  interval: '1wk' },
-    '5y':  { range: '5y',  interval: '1mo' },
+    '5y':  { range: '5y',  interval: '1wk' },
   }
   const { range: yfRange, interval } = rangeMap[range] ?? rangeMap['1m']
 
