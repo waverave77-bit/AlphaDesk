@@ -294,7 +294,7 @@ export default function ChatPage() {
             <Sparkles className="h-3.5 w-3.5 text-blue-400" />
             <p className="text-xs font-bold text-gray-400">Powered by Claude</p>
           </div>
-          <p className="text-xs text-gray-600 leading-relaxed">Fetches live price, P/E, earnings, analyst targets + real-time news for every stock you ask about.</p>
+          <p className="text-xs text-gray-600 leading-relaxed">Reads live market news to give you up-to-date answers. Always do your own research before investing.</p>
         </div>
       </aside>
 
@@ -306,9 +306,9 @@ export default function ChatPage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white">Mr. Guy, Market Analyst</p>
+            <p className="text-sm font-bold text-white">Finn, Market Analyst</p>
             <p className="text-xs text-gray-500">
-              Live data + news · {experience === 'beginner' ? 'Plain English mode' : experience === 'some' ? 'Intermediate mode' : 'Pro mode, full analysis'} · Not financial advice
+              Live news · {experience === 'beginner' ? 'Beginner mode, plain English' : experience === 'some' ? 'Intermediate mode' : 'Pro mode, full analysis'} · Not financial advice
             </p>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
@@ -325,8 +325,8 @@ export default function ChatPage() {
                 <Sparkles className="h-8 w-8 text-blue-400" />
               </div>
               <div>
-                <p className="text-white font-bold text-lg">Hey, I'm Mr. Guy.</p>
-                <p className="text-gray-500 text-sm mt-1.5 max-w-sm">Ask me about any stock and I'll pull live price data, fundamentals, and news to give you a real take — not a vague non-answer.</p>
+                <p className="text-white font-bold text-lg">Hey, I'm Finn.</p>
+                <p className="text-gray-500 text-sm mt-1.5 max-w-sm">Ask me about any stock, sector, or what's moving the market. I'll give you a straight read with live news.</p>
               </div>
               {/* Mobile quick questions */}
               <div className="grid grid-cols-2 gap-2 w-full max-w-md lg:hidden">

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield } from 'lucide-react'
@@ -15,7 +15,7 @@ const primaryNav = [
   { href: '/watchlist', label: 'Watchlist' },
   { href: '/learn',     label: 'Learn' },
   { href: '/insiders',  label: 'Smart Money' },
-  { href: '/chat',      label: 'Mr. Guy' },
+  { href: '/chat',      label: 'AI Chat' },
 ]
 
 const moreNav = [
@@ -23,53 +23,7 @@ const moreNav = [
   { href: '/hedgefunds',  label: 'Hedge Funds' },
   { href: '/quant',       label: 'Quant Strategy' },
   { href: '/game',        label: '$100K Challenge' },
-  { href: '/time-machine', label: 'Time Machine ⏰' },
 ]
-
-/* ── Mr. Guy pixel head logo — canvas renderer ──────────────────
-   Pixel data = GRID rows 0-13, cols 3-14 (the head + shirt top)  */
-const N = null
-const HEAD_PIXELS: Array<Array<string|null>> = [
-  [N,    N,    '#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604',N      ], // r0
-  [N,    '#2b1604','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604','#2b1604'], // r1
-  ['#2b1604','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#2b1604'], // r2
-  ['#2b1604','#5c2e0a','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604'], // r3
-  ['#2b1604','#5c2e0a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#5c2e0a','#2b1604'], // r4
-  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'], // r5
-  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#f5c49a','#f5c49a','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'], // r6 sunglasses
-  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'], // r7
-  ['#2b1604','#111118','#111118','#111118','#111118','#f5c49a','#f5c49a','#111118','#111118','#111118','#111118','#2b1604'], // r8
-  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'], // r9
-  [N,    '#f5c49a','#f5c49a','#f5c49a','#c47a50','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N      ], // r10 chin
-  [N,    '#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N,    N      ], // r11
-  [N,    N,    '#f5c49a','#f0f0f0','#f0f0f0','#c01010','#c01010','#f0f0f0','#f0f0f0','#f5c49a',N,    N      ], // r12 collar
-  ['#f0f0f0','#f0f0f0','#f0f0f0','#f0f0f0','#c01010','#c01010','#7a0000','#7a0000','#f0f0f0','#f0f0f0','#f0f0f0','#222236'], // r13 shirt
-]
-const COLS = 12, ROWS = 14
-
-function MrGuyPixelHead({ px = 3 }: { px?: number }) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  useEffect(() => {
-    const c = ref.current; if (!c) return
-    const ctx = c.getContext('2d')!
-    ctx.clearRect(0, 0, c.width, c.height)
-    HEAD_PIXELS.forEach((row, r) => {
-      row.forEach((color, col) => {
-        if (!color) return
-        ctx.fillStyle = color
-        ctx.fillRect(col * px, r * px, px, px)
-      })
-    })
-  }, [px])
-  return (
-    <canvas
-      ref={ref}
-      width={COLS * px}
-      height={ROWS * px}
-      style={{ display: 'block', imageRendering: 'pixelated', flexShrink: 0 }}
-    />
-  )
-}
 
 export default function TopNav() {
   const pathname = usePathname()
@@ -101,8 +55,13 @@ export default function TopNav() {
       )}>
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2 mr-8 shrink-0">
-          <MrGuyPixelHead px={3} />
-          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Mr. Guy</span>
+          <div
+            className="h-7 w-7 rounded-lg flex items-center justify-center"
+            style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
+          >
+            <TrendingUp className="h-3.5 w-3.5 text-white" />
+          </div>
+          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Zains Game</span>
         </Link>
 
         {/* Primary nav — desktop */}
