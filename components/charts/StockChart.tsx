@@ -47,22 +47,14 @@ interface StockChartProps {
 // ── Bollinger Bands ───────────────────────────────────────────────────────────
 
 function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
-  const results = data.map((_, i) => {
+  return data.map((_, i) => {
     const slice = data.slice(Math.max(0, i - period + 1), i + 1)
-    if (slice.length < 2) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
+    // Require the full period window before drawing — avoids noisy early values
+    if (slice.length < period) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
     const mean = slice.reduce((s, x) => s + x.close, 0) / slice.length
     const sd = Math.sqrt(slice.reduce((s, x) => s + Math.pow(x.close - mean, 2), 0) / slice.length)
     return { bbUpper: mean + k * sd, bbMiddle: mean, bbLower: mean - k * sd }
   })
-  // Backfill any leading nulls with the first valid value so the line reaches the left edge
-  const firstValid = results.find(r => r.bbUpper !== null)
-  if (firstValid) {
-    for (let i = 0; i < results.length; i++) {
-      if (results[i].bbUpper === null) results[i] = { ...firstValid }
-      else break
-    }
-  }
-  return results
 }
 
 function computeSpikes(data: DataPoint[]): Map<string, number> {

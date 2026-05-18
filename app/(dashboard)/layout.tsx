@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import TopNav from '@/components/TopNav'
 import TickerBar from '@/components/TickerBar'
-import FloatingChat from '@/components/FloatingChat'
 import DemoBanner from '@/components/DemoBanner'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -15,12 +14,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <DemoBanner />
       <TopNav />
       <TickerBar />
-      <main className="flex-1 overflow-y-auto scrollbar-thin">
+      <main className="flex-1 overflow-y-auto scrollbar-thin relative z-20">
         <div className="p-6 w-full">
           {children}
         </div>
       </main>
-      <FloatingChat />
     </div>
   )
 }

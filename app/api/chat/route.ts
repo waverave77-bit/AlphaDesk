@@ -1,33 +1,279 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-interface NewsItem {
-  title: string
-  pubDate: Date | null
+// ── Ticker resolution ─────────────────────────────────────────────────────────
+
+// Common finance/English words that look like tickers but aren't
+const TICKER_SKIP = new Set([
+  'AI','ETF','CEO','IPO','GDP','EPS','PE','BUY','SELL','USD','US','UK','EU',
+  'FED','SEC','NYSE','SP','IRA','YTD','ATH','ATL','QE','QT','VC','MA','PA',
+  'OR','IF','IN','AT','TO','OF','ON','BY','BE','IT','IS','AS','AN','AM',
+  'DO','GO','HI','SO','UP','NO','OK','ALL','AND','THE','FOR','NOT','BUT',
+  'ARE','WAS','HAS','HAD','CAN','DID','GOT','GET','SET','LET','PUT',
+  'NEW','OLD','BIG','LOW','HIGH','TOP','BOT','NOW','HOW','WHY','WHO',
+  'PPT','OTC','AUM','NAV','TTM','LTM','DCF','ROE','ROI','FCF','EV',
+  'MKT','CAP','DIV','CPI','PPI','PMI','NFP','IMF','ECB','BOJ','RBA',
+])
+
+// Company name → ticker for fast lookup (case-insensitive)
+const NAME_TO_TICKER: Record<string, string> = {
+  'apple': 'AAPL', 'microsoft': 'MSFT', 'google': 'GOOGL', 'alphabet': 'GOOGL',
+  'amazon': 'AMZN', 'meta': 'META', 'facebook': 'META', 'netflix': 'NFLX',
+  'nvidia': 'NVDA', 'tesla': 'TSLA', 'amd': 'AMD', 'intel': 'INTC',
+  'salesforce': 'CRM', 'spotify': 'SPOT', 'snapchat': 'SNAP', 'snap': 'SNAP',
+  'roblox': 'RBLX', 'disney': 'DIS', 'nike': 'NKE', 'walmart': 'WMT',
+  'sofi': 'SOFI', 'sofi technologies': 'SOFI',
+  'palantir': 'PLTR', 'coinbase': 'COIN', 'robinhood': 'HOOD',
+  'uber': 'UBER', 'lyft': 'LYFT', 'airbnb': 'ABNB', 'doordash': 'DASH',
+  'shopify': 'SHOP', 'square': 'SQ', 'block': 'SQ', 'paypal': 'PYPL',
+  'visa': 'V', 'mastercard': 'MA', 'jpmorgan': 'JPM', 'jp morgan': 'JPM',
+  'bank of america': 'BAC', 'goldman': 'GS', 'goldman sachs': 'GS',
+  'morgan stanley': 'MS', 'wells fargo': 'WFC', 'citigroup': 'C', 'citi': 'C',
+  'blackrock': 'BLK', 'berkshire': 'BRK-B', 'warren buffett': 'BRK-B',
+  'amc': 'AMC', 'gamestop': 'GME', 'gme': 'GME',
+  'crowdstrike': 'CRWD', 'cloudflare': 'NET', 'datadog': 'DDOG',
+  'snowflake': 'SNOW', 'arm': 'ARM', 'qualcomm': 'QCOM',
+  'broadcom': 'AVGO', 'asml': 'ASML', 'tsmc': 'TSM', 'samsung': '005930.KS',
+  'eli lilly': 'LLY', 'lilly': 'LLY', 'pfizer': 'PFE', 'moderna': 'MRNA',
+  'johnson': 'JNJ', 'johnson and johnson': 'JNJ', 'abbvie': 'ABBV',
+  'unitedhealth': 'UNH', 'cvs': 'CVS',
+  'exxon': 'XOM', 'chevron': 'CVX', 'shell': 'SHEL', 'bp': 'BP',
+  'ford': 'F', 'general motors': 'GM', 'rivian': 'RIVN', 'lucid': 'LCID',
+  'boeing': 'BA', 'lockheed': 'LMT', 'raytheon': 'RTX', 'caterpillar': 'CAT',
+  'deere': 'DE', 'john deere': 'DE',
+  'starbucks': 'SBUX', 'mcdonalds': 'MCD', "mcdonald's": 'MCD',
+  'costco': 'COST', 'target': 'TGT', 'home depot': 'HD', 'lowes': 'LOW',
+  'pepsico': 'PEP', 'pepsi': 'PEP', 'coca cola': 'KO', 'coke': 'KO',
+  'procter': 'PG', 'procter and gamble': 'PG',
+  'att': 'T', 'at&t': 'T', 'verizon': 'VZ', 't-mobile': 'TMUS',
+  'twitter': 'X', 'x corp': 'X',
+  'super micro': 'SMCI', 'supermicro': 'SMCI',
+  'marvell': 'MRVL', 'micron': 'MU', 'western digital': 'WDC', 'seagate': 'STX',
+  'oracle': 'ORCL', 'ibm': 'IBM', 'hp': 'HPQ', 'dell': 'DELL', 'cisco': 'CSCO',
+  'zoom': 'ZM', 'slack': 'CRM', 'docusign': 'DOCU', 'hubspot': 'HUBS',
+  'mongodb': 'MDB', 'elastic': 'ESTC', 'confluent': 'CFLT', 'gitlab': 'GTLB',
+  'twilio': 'TWLO', 'sendgrid': 'TWLO', 'okta': 'OKTA', 'ping': 'PING',
+  'trade desk': 'TTD', 'the trade desk': 'TTD',
+  'draftkings': 'DKNG', 'penn': 'PENN', 'mgm': 'MGM', 'wynn': 'WYNN',
+  'charles schwab': 'SCHW', 'schwab': 'SCHW', 'fidelity': 'FNF',
+  'interactive brokers': 'IBKR',
+  'palo alto': 'PANW', 'palo alto networks': 'PANW',
+  'fortinet': 'FTNT', 'zscaler': 'ZS', 'sentinelone': 'S',
+  'servicenow': 'NOW', 'workday': 'WDAY', 'veeva': 'VEEV',
+  'intuitive surgical': 'ISRG', 'illumina': 'ILMN', 'crispr': 'CRSP',
+  'upstart': 'UPST', 'affirm': 'AFRM', 'klarna': 'KLAR',
+  'samsara': 'IOT',
+  'redfin': 'RDFN', 'zillow': 'Z', 'opendoor': 'OPEN',
+  'nio': 'NIO', 'byd': 'BYDDY',
+  'bitcoin': 'BTC-USD', 'ethereum': 'ETH-USD', 'btc': 'BTC-USD', 'eth': 'ETH-USD',
 }
 
-// Parse items with their publish dates so we can filter stale ones
+// Search Yahoo Finance for a company name → returns best ticker or null
+async function yahooSearch(query: string): Promise<string | null> {
+  try {
+    const q = encodeURIComponent(query.trim())
+    const res = await fetch(
+      `https://query1.finance.yahoo.com/v1/finance/search?q=${q}&quotesCount=3&newsCount=0&listsCount=0`,
+      {
+        headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(4000),
+      }
+    )
+    if (!res.ok) return null
+    const data = await res.json()
+    // Prefer US equities over ADRs/ETFs/etc.
+    const quotes: any[] = data?.quotes ?? []
+    const equity = quotes.find(q =>
+      (q.typeDisp === 'Equity' || q.quoteType === 'EQUITY') &&
+      !q.symbol?.includes('.') // prefer US-listed (no . in symbol)
+    ) ?? quotes.find(q => q.typeDisp === 'Equity' || q.quoteType === 'EQUITY')
+    return equity?.symbol ?? null
+  } catch {
+    return null
+  }
+}
+
+// Extract the most likely company/ticker search term from freeform text
+function extractSearchTerms(message: string): string {
+  const stopWords = new Set([
+    'what', 'which', 'should', 'would', 'could', 'i', 'buy', 'sell', 'me',
+    'tell', 'about', 'the', 'a', 'an', 'is', 'are', 'was', 'were', 'do',
+    'does', 'did', 'how', 'why', 'when', 'where', 'can', 'will', 'best',
+    'stocks', 'stock', 'good', 'based', 'on', 'of', 'to', 'for', 'in', 'at',
+    'with', 'still', 'happening', 'right', 'now', 'gimme', 'give', 'get',
+    'analysis', 'analyze', 'think', 'thoughts', 'take', 'opinion', 'your',
+    'my', 'any', 'some', 'this', 'that', 'then', 'than', 'too', 'also',
+    'just', 'so', 'up', 'down', 'and', 'or', 'but', 'if', 'its', 'it',
+    'hold', 'worth', 'look', 'looks', 'like', 'feel', 'feels', 'seem',
+    'investing', 'investment', 'trade', 'trading', 'position',
+  ])
+  return message
+    .toLowerCase()
+    .replace(/[^\w\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !stopWords.has(w))
+    .slice(0, 4)
+    .join(' ')
+}
+
+// Resolve tickers from a user message — validates every candidate against Yahoo
+async function resolveTickers(message: string): Promise<string[]> {
+  const highConfidence = new Set<string>() // $TICKER or known company name
+  const candidates = new Set<string>()     // uppercase words to validate
+
+  // 1. $TICKER format → always try
+  const dollarMatches = message.match(/\$([A-Za-z]{1,5})/g) ?? []
+  dollarMatches.forEach(m => highConfidence.add(m.slice(1).toUpperCase()))
+
+  // 2. Known company name map → always try
+  const lower = message.toLowerCase()
+  for (const [name, ticker] of Object.entries(NAME_TO_TICKER)) {
+    if (lower.includes(name)) highConfidence.add(ticker)
+  }
+
+  // 3. Bare uppercase 2-5 char words (medium confidence)
+  if (highConfidence.size === 0) {
+    const upperMatches = message.match(/\b([A-Z]{1,5})\b/g) ?? []
+    upperMatches.forEach(m => {
+      if (!TICKER_SKIP.has(m) && m.length >= 1) candidates.add(m)
+    })
+  }
+
+  // Validate high-confidence in parallel — filter out any that Yahoo doesn't recognise
+  const validHighConf = await Promise.all(
+    Array.from(highConfidence).slice(0, 4).map(async (t) => {
+      const q = await getStockQuote(t).catch(() => null)
+      return q ? t : null
+    })
+  )
+  const validated = validHighConf.filter(Boolean) as string[]
+
+  // Validate medium-confidence uppercase words
+  if (validated.length === 0 && candidates.size > 0) {
+    const validCandidates = await Promise.all(
+      Array.from(candidates).slice(0, 5).map(async (t) => {
+        const q = await getStockQuote(t).catch(() => null)
+        return q ? t : null
+      })
+    )
+    validated.push(...(validCandidates.filter(Boolean) as string[]))
+  }
+
+  // 4. Yahoo Finance fuzzy search fallback — when nothing resolved yet
+  if (validated.length === 0) {
+    const searchTerms = extractSearchTerms(message)
+    if (searchTerms.length > 2) {
+      const found = await yahooSearch(searchTerms)
+      if (found) {
+        // Validate the search result too
+        const q = await getStockQuote(found).catch(() => null)
+        if (q) validated.push(found)
+      }
+    }
+  }
+
+  // Deduplicate (same company found multiple ways, e.g. "GOOGL" + "GOOGL")
+  return Array.from(new Set(validated)).slice(0, 3)
+}
+
+// ── Live stock context builder ────────────────────────────────────────────────
+
+async function fetchStockContext(tickers: string[]): Promise<string> {
+  if (tickers.length === 0) return ''
+
+  const blocks = await Promise.all(
+    tickers.map(async (ticker) => {
+      try {
+        const [quote, analystResult, earningsResult] = await Promise.allSettled([
+          getStockQuote(ticker),
+          getAnalystData(ticker),
+          getEarningsHistory(ticker),
+        ])
+
+        const q = quote.status === 'fulfilled' ? quote.value : null
+        const a = analystResult.status === 'fulfilled' ? analystResult.value : null
+        const e: { date: string; eps: number }[] = earningsResult.status === 'fulfilled' ? (earningsResult.value ?? []) : []
+
+        if (!q) return null
+
+        const fmt = (n: number | null | undefined, d = 2) =>
+          n != null && isFinite(n) ? n.toFixed(d) : 'N/A'
+        const fmtBig = (n: number | null | undefined) => {
+          if (n == null || !isFinite(n)) return 'N/A'
+          if (n >= 1e12) return `$${(n / 1e12).toFixed(2)}T`
+          if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`
+          if (n >= 1e6) return `$${(n / 1e6).toFixed(2)}M`
+          return `$${n.toFixed(0)}`
+        }
+
+        // TTM EPS
+        const last4 = e.slice(-4)
+        const ttmEps = last4.length === 4 ? last4.reduce((s, x) => s + x.eps, 0) : null
+
+        // Fair value
+        const normalPe = q.sector ? (SECTOR_NORMAL_PE[q.sector] ?? DEFAULT_NORMAL_PE) : DEFAULT_NORMAL_PE
+        const epsForFV = ttmEps ?? q.eps
+        const fairValue = epsForFV && epsForFV > 0 && q.price ? epsForFV * normalPe : null
+        const fvDiff = fairValue ? ((fairValue - q.price) / q.price) * 100 : null
+        const valuation = fvDiff != null
+          ? fvDiff > 10
+            ? `Undervalued ~${fvDiff.toFixed(1)}% vs fair value estimate $${fairValue?.toFixed(2)} (EPS × ${normalPe} normal P/E)`
+            : fvDiff < -10
+              ? `Overvalued ~${Math.abs(fvDiff).toFixed(1)}% vs fair value estimate $${fairValue?.toFixed(2)} (EPS × ${normalPe} normal P/E)`
+              : `Near fair value (est. $${fairValue?.toFixed(2)}, EPS × ${normalPe} P/E)`
+          : 'Fair value N/A (no positive EPS data)'
+
+        const pctFromHigh = q.week52High && q.price ? ((q.price - q.week52High) / q.week52High) * 100 : null
+        const pctFromLow = q.week52Low && q.price ? ((q.price - q.week52Low) / q.week52Low) * 100 : null
+
+        let block = `\n=== LIVE DATA: ${ticker} — ${q.companyName} ===\n`
+        block += `Price: $${fmt(q.price)} (${q.changePercent >= 0 ? '+' : ''}${fmt(q.changePercent)}% today, prev close $${fmt(q.previousClose)})\n`
+        block += `Market Cap: ${fmtBig(q.marketCap)}  |  Sector: ${q.sector ?? 'N/A'}  |  Industry: ${q.industry ?? 'N/A'}\n`
+        block += `P/E (trailing): ${fmt(q.peRatio, 1)}  |  EPS (TTM): $${fmt(ttmEps ?? q.eps)}  |  Beta: ${fmt(q.beta, 2)}\n`
+        block += `52-Week: $${fmt(q.week52Low)} low → $${fmt(q.week52High)} high`
+        if (pctFromHigh != null) block += `  (${pctFromHigh.toFixed(1)}% from 52wk high  /  +${pctFromLow?.toFixed(1)}% from 52wk low)`
+        block += `\n`
+        if (q.dividendYield && q.dividendYield > 0) block += `Dividend Yield: ${(q.dividendYield * 100).toFixed(2)}%\n`
+        if (a?.targetMean) {
+          const upside = q.price ? ((a.targetMean - q.price) / q.price) * 100 : null
+          block += `Analyst Target: $${fmt(a.targetMean)}  (${upside != null ? (upside >= 0 ? '+' : '') + upside.toFixed(1) + '% upside' : ''})  |  Analyst Rating: ${a.recommendationLabel ?? a.recommendation ?? 'N/A'}\n`
+        }
+        block += `Valuation: ${valuation}\n`
+        if (last4.length >= 2) {
+          block += `Recent Quarterly EPS: ${last4.map(q2 => `$${q2.eps.toFixed(2)}`).join(' → ')}\n`
+        }
+        block += `===\n`
+        return block
+      } catch {
+        return null
+      }
+    })
+  )
+
+  return blocks.filter(Boolean).join('') as string
+}
+
+// ── News fetching ─────────────────────────────────────────────────────────────
+
+interface NewsItem { title: string; pubDate: Date | null }
+
 function parseItems(xml: string): NewsItem[] {
   const items: NewsItem[] = []
-
-  // Split by <item> blocks
   const blocks = xml.split(/<item[\s>]/)
   for (const block of blocks.slice(1)) {
-    // Title
-    const cdataMatch = block.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)
-    const plainMatch = block.match(/<title>(?!\s*<!\[CDATA\[)([^<]{15,})<\/title>/)
-    const title = cdataMatch?.[1] ?? plainMatch?.[1]?.trim() ?? ''
-
-    // Publish date
-    const pubDateMatch = block.match(/<pubDate>([^<]+)<\/pubDate>/)
+    const title = (
+      block.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)?.[1] ??
+      block.match(/<title>(?!\s*<!\[CDATA\[)([^<]{15,})<\/title>/)?.[1]?.trim() ?? ''
+    )
+    const pubDateStr = block.match(/<pubDate>([^<]+)<\/pubDate>/)?.[1]?.trim()
     let pubDate: Date | null = null
-    if (pubDateMatch) {
-      const parsed = new Date(pubDateMatch[1].trim())
-      if (!isNaN(parsed.getTime())) pubDate = parsed
+    if (pubDateStr) {
+      const p = new Date(pubDateStr)
+      if (!isNaN(p.getTime())) pubDate = p
     }
-
     if (title.length > 15) items.push({ title, pubDate })
   }
   return items
@@ -43,162 +289,142 @@ function dedup(arr: NewsItem[]): NewsItem[] {
   })
 }
 
-// Only keep articles published within the last 48 hours
 function isRecent(item: NewsItem): boolean {
-  if (!item.pubDate) return true // if no date, keep it
-  const ageHours = (Date.now() - item.pubDate.getTime()) / (1000 * 60 * 60)
-  return ageHours <= 48
+  if (!item.pubDate) return true
+  return (Date.now() - item.pubDate.getTime()) / 3600000 <= 48
 }
 
-async function fetchGeneralNews(): Promise<NewsItem[]> {
-  const feeds = [
-    'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US',
-    'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114',
-  ]
-  const results = await Promise.allSettled(
-    feeds.map((url) => fetch(url, { cache: 'no-store' }).then((r) => r.text()).then(parseItems))
-  )
-  return results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []))
-}
+async function fetchNewsHeadlines(message: string, tickers: string[]): Promise<string> {
+  const safeGet = (url: string) =>
+    fetch(url, {
+      cache: 'no-store',
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      signal: AbortSignal.timeout(5000),
+    }).then(r => r.text()).then(parseItems).catch(() => [] as NewsItem[])
 
-async function fetchTopicalNews(query: string): Promise<NewsItem[]> {
-  const stopWords = new Set(['what', 'which', 'should', 'would', 'could', 'i', 'buy', 'sell', 'me', 'tell', 'about', 'the', 'a', 'an', 'is', 'are', 'was', 'were', 'do', 'does', 'did', 'how', 'why', 'when', 'where', 'can', 'will', 'best', 'stocks', 'stock', 'good', 'based', 'on', 'of', 'to', 'for', 'in', 'at', 'with', 'still', 'happening', 'right', 'now'])
-  const terms = query
-    .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 2 && !stopWords.has(w))
-    .slice(0, 5)
+  const stopWords = new Set([
+    'what','which','should','would','could','i','buy','sell','me','tell','about',
+    'the','a','an','is','are','was','were','do','does','did','how','why','when',
+    'where','can','will','best','stocks','stock','good','on','of','to','for','in',
+    'at','with','still','now','gimme','give','get','analysis','analyze','think',
+    'thoughts','take','hold','worth','investing','trade','trading',
+  ])
+  const terms = message.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/)
+    .filter(w => w.length > 2 && !stopWords.has(w)).slice(0, 4).join(' ')
 
-  if (terms.length === 0) return []
-
-  const searchQuery = encodeURIComponent(terms.join(' ') + ' finance market')
-
-  try {
-    const res = await fetch(
-      `https://news.google.com/rss/search?q=${searchQuery}&hl=en-US&gl=US&ceid=US:en`,
-      { cache: 'no-store' }
-    )
-    const text = await res.text()
-    return parseItems(text).filter((i) => !i.title.toLowerCase().includes('google'))
-  } catch {
-    return []
-  }
-}
-
-async function fetchNewsHeadlines(userMessage: string): Promise<string> {
-  const [general, topical] = await Promise.all([
-    fetchGeneralNews(),
-    fetchTopicalNews(userMessage),
+  const feeds = await Promise.allSettled([
+    // General market news
+    safeGet('https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US'),
+    safeGet('https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114'),
+    // Topical news from query terms
+    terms.length > 2 ? safeGet(`https://news.google.com/rss/search?q=${encodeURIComponent(terms + ' stock finance')}&hl=en-US&gl=US&ceid=US:en`) : Promise.resolve([] as NewsItem[]),
+    // Per-ticker news
+    ...tickers.slice(0, 2).map(t =>
+      safeGet(`https://news.google.com/rss/search?q=${encodeURIComponent(t + ' stock earnings')}&hl=en-US&gl=US&ceid=US:en`)
+    ),
   ])
 
-  const combined = dedup([...topical, ...general])
+  const all = feeds.flatMap(r => r.status === 'fulfilled' ? r.value : [])
+  const combined = dedup(all).filter(i => !['yahoo finance','cnbc.com','rss','google news'].some(w => i.title.toLowerCase().includes(w)))
 
-  // Split into recent vs older
-  const recent = combined.filter(isRecent)
-  const older = combined.filter((i) => !isRecent(i))
-
-  const badWords = ['yahoo finance', 'cnbc.com', 'rss', 'google news']
-  const clean = (items: NewsItem[]) =>
-    items.filter((i) => !badWords.some((w) => i.title.toLowerCase().includes(w)))
-
-  const recentClean = clean(recent).slice(0, 12)
-  const olderClean = clean(older).slice(0, 3)
+  const recent = combined.filter(isRecent).slice(0, 15)
+  const older = combined.filter(i => !isRecent(i)).slice(0, 3)
+  if (!recent.length && !older.length) return ''
 
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
-
-  let output = `Today is ${today}.\n\n`
-
-  if (recentClean.length > 0) {
-    output += `Recent headlines (last 48 hours):\n`
-    output += recentClean.map((i, idx) => `${idx + 1}. ${i.title}`).join('\n')
-  }
-
-  if (olderClean.length > 0) {
-    output += `\n\nOlder context (may be outdated — use with caution):\n`
-    output += olderClean.map((i, idx) => `${idx + 1}. ${i.title}`).join('\n')
-  }
-
-  return recentClean.length > 0 || olderClean.length > 0 ? output : ''
+  let out = `Today is ${today}.\n\n`
+  if (recent.length) out += `Recent headlines (last 48h):\n` + recent.map((i, n) => `${n + 1}. ${i.title}`).join('\n')
+  if (older.length) out += `\n\nOlder context (flag as possibly stale):\n` + older.map((i, n) => `${n + 1}. ${i.title}`).join('\n')
+  return out
 }
 
-function buildSystemPrompt(experience: string, newsContext: string): string {
-  const sharedRules = `
-Strict formatting rules you must always follow:
-- Never use em dashes (the long dash like this: —). Use a comma or a new sentence instead.
-- Never use asterisks, pound signs, or any markdown symbols in your response.
-- Never use emojis except for 🟢, 🟡, or 🔴 as signal indicators only.
-- Never start a sentence with a hyphen or dash as a bullet. Use plain numbered points or just write in sentences.
-- Write like a real person texting a smart friend, not like a report or a blog post.
-- If you do not have current data on something, say "I do not have a confirmed update on that right now" rather than guessing.`
+// ── System prompt ─────────────────────────────────────────────────────────────
+
+function buildSystemPrompt(experience: string, newsContext: string, stockContext: string): string {
+  const rules = `
+Hard rules:
+- No em dashes. No markdown symbols (**, ##, __, etc.). No emojis except 🟢 🟡 🔴.
+- When live stock data is present below, always cite real numbers. Never say "I don't have current data."
+- Write like a sharp analyst texting a smart friend. Confident, specific, no filler.`
+
+  const liveBlock = stockContext
+    ? `\n\nLIVE MARKET DATA (fetched right now — use these exact numbers):\n${stockContext}`
+    : ''
+  const newsBlock = newsContext
+    ? `\n\n${newsContext}\n\nUse recent headlines as catalysts. Flag anything from "Older context" as possibly stale.`
+    : ''
 
   if (experience === 'beginner') {
-    return `Your name is Finn. You help people who have never invested before understand the stock market. Your job is to make things feel simple and not scary.
+    return `You are Mr. Guy, a sharp market analyst. You explain stocks clearly to everyday investors — plain English, but REAL and COMPLETE analysis. No dumbing it down so much that it becomes useless.
 
-How to talk:
-- Pretend you are explaining to someone who has never heard of a stock before.
-- Every time you use a finance word, explain it right after in plain English. Example: "The P/E ratio, which just means how pricey the stock is compared to its profits, is pretty high right now."
-- Use real-life comparisons. For example: owning a stock is like owning a tiny piece of a pizza shop. If the shop does well, your piece is worth more.
-- Keep answers short. 3 to 5 sentences is usually enough.
-- End every answer with one clear takeaway sentence starting with "Bottom line:"
-- Tone: friendly and encouraging, like an older sibling who knows about money.
-- For buy or sell signals, write: 🟢 Good one to watch, [plain English reason]. 🟡 Wait and see, [reason]. 🔴 Probably skip this one, [reason].
-${sharedRules}${newsContext}`
+When asked about a specific stock, cover:
+1. What the company does (1 sentence)
+2. The verdict: 🟢 Good setup / 🟡 Wait and see / 🔴 Risky right now — with a specific reason
+3. Key numbers from the live data: current price, how far from 52-week high/low, P/E ratio (explained), analyst target, fair value vs current price
+4. What's moving it right now (news catalyst if any)
+5. The main risk — what could go wrong
+6. Bottom line: one clear takeaway sentence
+
+Plain English rules: explain any finance term you use right after using it. Use real numbers, not vague ranges. Length: as long as needed — don't cut it short.
+${rules}${liveBlock}${newsBlock}`
   }
 
   if (experience === 'some') {
-    return `Your name is Finn. You help people who know the basics of investing but want a clearer, faster take on what is happening.
-
-How to talk:
-- Use finance terms when they are the clearest way to say something, but always explain any advanced ones. Example: "forward P/E, which is the valuation based on next year's expected profits."
-- Lead with your main point. Do not bury the conclusion at the end.
-- Cover the key news, one or two important numbers, and your take. That is enough.
-- Length: 4 to 8 sentences, or a short numbered breakdown if there are multiple points.
-- Tone: direct and confident, like a colleague who already did the research.
-- For signals: 🟢 Buy, 🟡 Hold, or 🔴 Avoid, then give 2 to 3 sentences explaining why using the most relevant news and numbers.
-- Be honest if you are uncertain. Say so clearly instead of giving a vague non-answer.
-${sharedRules}${newsContext}`
-  }
-
-  // experienced (default)
-  return `Your name is Finn. You give fast, sharp, data-backed takes on stocks and markets.
-
-Structure your response like this when analyzing a stock or market question:
+    return `You are Mr. Guy, a direct market analyst. Lead with verdict, back it up with data.
 
 VERDICT
-🟢 Buy, 🟡 Hold, or 🔴 Avoid. One sentence saying why.
+🟢 Buy / 🟡 Hold / 🔴 Avoid — one sentence with specific reason.
 
-NEWS CATALYST
-What is moving this right now. Name specific headlines and say whether they are recent or possibly old news.
+WHAT'S MOVING IT
+Key catalyst or absence of one. Flag stale news.
 
-FUNDAMENTALS
-The numbers that matter for this question. Revenue growth, margins, valuation vs peers, debt load. Skip anything not relevant.
-
-SENTIMENT AND TECHNICALS
-What institutions are doing, short interest if it matters, and whether the stock is trending up or breaking down.
-
-CATALYSTS AHEAD
-Upcoming earnings dates, product releases, macro events, regulatory risks.
+THE NUMBERS
+From live data: price vs 52wk range, P/E, EPS, analyst target, fair value gap. Be specific — exact numbers.
 
 RISK
-The bear case in 1 to 2 sentences. What would make this whole thesis wrong.
+Bear case in 2 sentences.
 
-How to talk:
-- Lead with the verdict. Never bury the conclusion.
-- Use real numbers whenever you have them. Vague language is not useful.
-- Write in plain, clear sentences. No corporate-speak or buzzwords.
-- If news might be outdated, say "This headline may be old, verify before acting on it."
-${sharedRules}${newsContext}`
+BOTTOM LINE
+One punchy sentence.
+${rules}${liveBlock}${newsBlock}`
+  }
+
+  return `You are Mr. Guy, a sell-side analyst. Fast, data-driven, no fluff.
+
+VERDICT
+🟢 Buy / 🟡 Hold / 🔴 Avoid. One sentence.
+
+CATALYST
+Specific headline driving the move, or absence of one. Flag stale headlines.
+
+FUNDAMENTALS
+P/E vs sector norm, EPS trend (show quarterly progression), market cap, fair value vs price, % from 52wk high/low, analyst target and upside. Exact numbers only.
+
+SETUP
+Beta, trend direction, extended or basing.
+
+CATALYSTS AHEAD
+Upcoming earnings, product cycles, macro risks.
+
+RISK
+Bear case — 2 sentences. What breaks the thesis.
+${rules}${liveBlock}${newsBlock}`
 }
+
+// ── Handler ───────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
   try {
     const { message, history = [], experience = 'beginner' } = await req.json()
 
-    const headlines = await fetchNewsHeadlines(message)
-    const newsContext = headlines
-      ? `\n\n${headlines}\n\nIMPORTANT: Only reference headlines marked as "recent". If a headline is in the "older context" section, flag it as possibly outdated. If you don't have a current headline confirming the current status of something, say "I don't have a confirmed update on that right now" rather than guessing.`
-      : ''
+    // Resolve tickers (validates each one against Yahoo Finance)
+    const tickers = await resolveTickers(message)
+
+    // Fetch stock fundamentals + news in parallel
+    const [stockContext, newsHeadlines] = await Promise.all([
+      fetchStockContext(tickers),
+      fetchNewsHeadlines(message, tickers),
+    ])
 
     const messages = [
       ...history
@@ -208,11 +434,11 @@ export async function POST(req: NextRequest) {
       { role: 'user' as const, content: message },
     ]
 
-    const systemPrompt = buildSystemPrompt(experience, newsContext)
+    const systemPrompt = buildSystemPrompt(experience, newsHeadlines, stockContext)
 
     const response = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: experience === 'beginner' ? 500 : 800,
+      model: 'claude-sonnet-4-5',
+      max_tokens: experience === 'beginner' ? 900 : 1200,
       system: systemPrompt,
       messages,
     })

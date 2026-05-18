@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Pixel Trader Mockups</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0f; font-family:-apple-system,sans-serif; color:#fff; padding:40px 32px; }
+  h1  { font-size:24px; font-weight:800; margin-bottom:4px; text-align:center; }
+  .sub { text-align:center; color:#4b5563; font-size:13px; margin-bottom:48px; }
+  .row { display:flex; gap:32px; justify-content:center; flex-wrap:wrap; margin-bottom:52px; }
+  .card {
+    background:#13141f; border:1px solid #1f2230; border-radius:16px;
+    padding:24px 20px 18px; display:flex; flex-direction:column; align-items:center; gap:12px;
+    min-width:160px;
+  }
+  .mood-tag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#4b5563; }
+  .bubble {
+    background:#1a1d2e; border:1px solid #2a2d40; border-radius:10px;
+    padding:6px 12px; font-size:11px; color:#9ca3af; font-style:italic; text-align:center;
+    max-width:160px;
+  }
+  .desc { font-size:11px; color:#374151; text-align:center; max-width:140px; line-height:1.4; }
+  .section-title { text-align:center; font-size:10px; letter-spacing:3px; font-weight:700; text-transform:uppercase; color:#374151; margin-bottom:20px; }
+  hr { border:none; border-top:1px solid #1a1d2e; margin:8px 0 44px; }
+  canvas { image-rendering:pixelated; image-rendering:crisp-edges; display:block; }
+
+  @keyframes float  { 0%,100%{transform:translateY(0)}   50%{transform:translateY(-8px)} }
+  @keyframes shake  { 0%,100%{transform:rotate(0)}        20%{transform:rotate(-4deg) translateX(-2px)} 80%{transform:rotate(4deg) translateX(2px)} }
+  @keyframes bob    { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-4px)} }
+  @keyframes bounce { 0%,100%{transform:translateY(0)}    45%{transform:translateY(-14px)} 65%{transform:translateY(-7px)} }
+  .anim-float  { animation: float  2.5s ease-in-out infinite; }
+  .anim-shake  { animation: shake  0.4s ease-in-out infinite; }
+  .anim-bob    { animation: bob    3.5s ease-in-out infinite; }
+  .anim-bounce { animation: bounce 1.1s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<h1>Pixel Trader — v3</h1>
+<p class="sub">Centered body · clean glasses · straight tie</p>
+
+<p class="section-title">— moods —</p>
+<div class="row" id="cards"></div>
+
+<hr/>
+<p class="section-title">— logo / icon sizes —</p>
+<div class="row" id="logos"></div>
+
+<script>
+// ── Palette ────────────────────────────────────────────────────────────────────
+var N  = null;
+var H1 = '#2b1604';
+var H2 = '#5c2e0a';
+var H3 = '#8b4c1a';
+var SK = '#f5c49a';
+var SD = '#c47a50';
+var G1 = '#111118';  // sunglass frame
+var G2 = '#1e3a8a';  // lens blue
+var J1 = '#0f0f1a';
+var J2 = '#181828';
+var J3 = '#222236';
+var WH = '#f0f0f0';
+var WD = '#c0c0c0';
+var TR = '#c01010';
+var TD = '#7a0000';
+var SH = '#0a0a14';
+var SL = '#1c1c30';
+
+// ── Grid 20×32 — everything centered around col 8.5 ────────────────────────────
+// Face (rows 0-11): cols 3-14, center = 8.5
+// Body (rows 12-31): symmetric around col 8.5
+function baseGrid() {
+  return [
+// col: 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19
+/*  0*/[N,  N,  N,  N,  N,  H1, H1, H1, H1, H1, H1, H1, H1, H1, N,  N,  N,  N,  N,  N ],
+/*  1*/[N,  N,  N,  N,  H1, H2, H2, H2, H2, H2, H2, H2, H2, H1, H1, N,  N,  N,  N,  N ],
+/*  2*/[N,  N,  N,  H1, H2, H3, H3, H3, H3, H3, H3, H3, H2, H2, H1, N,  N,  N,  N,  N ],
+/*  3*/[N,  N,  N,  H1, H2, H2, H3, H3, H3, H3, H3, H2, H2, H2, H1, N,  N,  N,  N,  N ],
+/*  4*/[N,  N,  N,  H1, H2, SK, SK, SK, SK, SK, SK, SK, SK, H2, H1, N,  N,  N,  N,  N ],
+/*  5*/[N,  N,  N,  H1, SK, SK, SK, SK, SK, SK, SK, SK, SK, SK, H1, N,  N,  N,  N,  N ],
+// Glasses — temple arms reach face edge (col4 & 13), 2px lenses, bridge only in row 7
+/*  6*/[N,  N,  N,  H1, G1, G1, G2, G2, SK, SK, G2, G2, G1, G1, H1, N,  N,  N,  N,  N ],
+/*  7*/[N,  N,  N,  H1, G1, G1, G2, G2, G1, G1, G2, G2, G1, G1, H1, N,  N,  N,  N,  N ],
+/*  8*/[N,  N,  N,  H1, G1, G1, G1, G1, SK, SK, G1, G1, G1, G1, H1, N,  N,  N,  N,  N ],
+/*  9*/[N,  N,  N,  H1, SK, SK, SK, SK, SK, SK, SK, SK, SK, SK, H1, N,  N,  N,  N,  N ],
+/* 10*/[N,  N,  N,  N,  SK, SK, SK, SD, SK, SK, SK, SK, SK, SK, N,  N,  N,  N,  N,  N ],
+/* 11*/[N,  N,  N,  N,  SK, SK, SK, SK, SK, SK, SK, SK, SK, N,  N,  N,  N,  N,  N,  N ],
+// Collar: neck at 5 & 12, shirt at 6-7 & 10-11, tie at 8-9
+/* 12*/[N,  N,  N,  N,  N,  SK, WH, WH, TR, TR, WH, WH, SK, N,  N,  N,  N,  N,  N,  N ],
+// Knot (4px, cols 7-10): TR left side, TD shadow right side
+/* 13*/[N,  N,  J2, J3, WH, WH, WH, TR, TR, TD, TD, WH, WH, WH, J3, J2, N,  N,  N,  N ],
+// Shirt visible — TR col 8, TD col 9 (shadow depth)
+/* 14*/[N,  J1, J2, J3, WH, WH, WH, WH, TR, TD, WH, WH, WH, WH, J3, J2, J1, N,  N,  N ],
+/* 15*/[J1, J1, J2, J3, WH, WH, WH, WH, TR, TD, WH, WH, WH, WH, J3, J2, J1, J1, N,  N ],
+// Full suit — TR col 8, TD col 9
+/* 16*/[N,  J1, J2, J3, J3, J3, J3, J3, TR, TD, J3, J3, J3, J3, J2, J1, N,  N,  N,  N ],
+/* 17*/[N,  J1, J2, J3, J3, J3, J3, J3, TR, TD, J3, J3, J3, J3, J2, J1, N,  N,  N,  N ],
+/* 18*/[N,  J1, J2, J3, J3, J3, J3, J3, TR, TD, J3, J3, J3, J3, J2, J1, N,  N,  N,  N ],
+/* 19*/[N,  J1, J2, J3, J3, J3, J3, J3, TR, TD, J3, J3, J3, J3, J2, J1, N,  N,  N,  N ],
+// Tie tip at col 8 (single pixel TR)
+/* 20*/[N,  J1, J2, J3, J3, J3, J3, J3, TR, J3, J3, J3, J3, J3, J2, J1, N,  N,  N,  N ],
+// Cuffs
+/* 21*/[WD, WH, J2, J3, J3, J3, J3, J3, J3, J3, J3, J3, J3, J3, J2, WH, WD, N,  N,  N ],
+// Hands
+/* 22*/[SK, SK, J2, J3, J3, J3, J3, J3, J3, J3, J3, J3, J3, J3, J2, SK, SK, N,  N,  N ],
+/* 23*/[SK, SK, J1, J2, J3, J3, J3, J3, J3, J3, J3, J3, J3, J2, J1, SK, SK, N,  N,  N ],
+// Pants (centered: cols 2-14)
+/* 24*/[N,  N,  J1, J2, J2, J3, J3, J3, J3, J3, J3, J3, J2, J2, J1, N,  N,  N,  N,  N ],
+/* 25*/[N,  N,  J1, J2, J2, J2, J3, J3, J3, J3, J3, J2, J2, J2, J1, N,  N,  N,  N,  N ],
+// Legs split — symmetric: left cols 3-5, right cols 11-13
+/* 26*/[N,  N,  N,  J1, J2, J2, N,  N,  N,  N,  N,  J2, J2, J1, N,  N,  N,  N,  N,  N ],
+/* 27*/[N,  N,  N,  J1, J2, J2, N,  N,  N,  N,  N,  J2, J2, J1, N,  N,  N,  N,  N,  N ],
+/* 28*/[N,  N,  N,  J1, J1, J2, N,  N,  N,  N,  N,  J2, J1, J1, N,  N,  N,  N,  N,  N ],
+// Shoes — symmetric: left cols 1-7, right cols 9-15
+/* 29*/[N,  J1, SH, SH, SH, SH, SL, N,  N,  SL, SH, SH, SH, SH, J1, N,  N,  N,  N,  N ],
+/* 30*/[SH, SH, SH, SH, SH, SH, SL, N,  N,  SL, SH, SH, SH, SH, SH, SH, N,  N,  N,  N ],
+/* 31*/[J1, SH, SH, SH, SH, SH, N,  N,  N,  N,  SH, SH, SH, SH, SH, J1, N,  N,  N,  N ],
+  ];
+}
+
+// ── Mood variants ──────────────────────────────────────────────────────────────
+function bullishGrid() {
+  var g = baseGrid();
+  // left arm up: cols 0-1, rows 13-16
+  g[13][0]=J3; g[13][1]=J2;
+  g[14][0]=SK; g[14][1]=SK;
+  g[15][0]=SK; g[15][1]=SK;
+  g[16][0]=SK; g[16][1]=SK;
+  // right arm up: cols 17-18, rows 13-16
+  g[13][17]=J2; g[13][18]=J3;
+  g[14][17]=SK; g[14][18]=SK;
+  g[15][17]=SK; g[15][18]=SK;
+  g[16][17]=SK; g[16][18]=SK;
+  // smile corners
+  g[11][5]=SD; g[11][11]=SD;
+  return g;
+}
+
+function stressedGrid() {
+  var g = baseGrid();
+  // wavy frown
+  g[11][5]=SD; g[11][6]=SK; g[11][7]=SD; g[11][8]=SK; g[11][9]=SD; g[11][10]=SK; g[11][11]=SD;
+  return g;
+}
+
+function weekendGrid() {
+  var g = baseGrid();
+  var PU = '#2d1660';
+  var PL = '#4c1d95';
+  var PM = '#6d28d9';
+  for (var r = 13; r <= 25; r++) {
+    for (var c = 0; c < g[r].length; c++) {
+      if (g[r][c] === J1) g[r][c] = PU;
+      else if (g[r][c] === J2) g[r][c] = PU;
+      else if (g[r][c] === J3) g[r][c] = PL;
+      else if (g[r][c] === TR) g[r][c] = PM;
+      else if (g[r][c] === WH) g[r][c] = PL;
+    }
+  }
+  return g;
+}
+
+function afterHoursGrid() {
+  var g = baseGrid();
+  // droop eyelids: cover top part of glasses with skin
+  for (var c = 4; c <= 13; c++) g[6][c] = SK;
+  g[7][5]=SK; g[7][6]=SK;
+  g[7][11]=SK; g[7][12]=SK;
+  return g;
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────────
+function renderGrid(grid, px) {
+  var rows = grid.length;
+  var cols = grid[0].length;
+  var canvas = document.createElement('canvas');
+  canvas.width  = cols * px;
+  canvas.height = rows * px;
+  canvas.style.width  = (cols * px) + 'px';
+  canvas.style.height = (rows * px) + 'px';
+  var ctx = canvas.getContext('2d');
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < cols; c++) {
+      var col = grid[r][c];
+      if (!col) continue;
+      ctx.fillStyle = col;
+      ctx.fillRect(c * px, r * px, px, px);
+    }
+  }
+  return canvas;
+}
+
+// ── Mood cards ─────────────────────────────────────────────────────────────────
+var MOODS = [
+  { label:'📈 Bull Run',    bubble:'"We\'re so back 🚀"',      anim:'anim-bounce', fn:bullishGrid    },
+  { label:'😎 Neutral',     bubble:'"Watching the charts..."', anim:'anim-float',  fn:baseGrid       },
+  { label:'📉 Meltdown',    bubble:'"This is fine 🔥"',        anim:'anim-shake',  fn:stressedGrid   },
+  { label:'🌙 After Hours', bubble:'"Checking futures..."',    anim:'anim-bob',    fn:afterHoursGrid },
+  { label:'🎮 Weekend',     bubble:'"Respawning Monday"',      anim:'anim-bob',    fn:weekendGrid    },
+];
+
+var cardsEl = document.getElementById('cards');
+for (var i = 0; i < MOODS.length; i++) {
+  var m = MOODS[i];
+  var card = document.createElement('div'); card.className = 'card';
+  var tag  = document.createElement('p');   tag.className  = 'mood-tag'; tag.textContent = m.label;
+  var bub  = document.createElement('div'); bub.className  = 'bubble';   bub.textContent = m.bubble;
+  var wrap = document.createElement('div'); wrap.className = m.anim;
+  wrap.appendChild(renderGrid(m.fn(), 7));
+  card.appendChild(tag);
+  card.appendChild(bub);
+  card.appendChild(wrap);
+  cardsEl.appendChild(card);
+}
+
+// ── Logo sizes ─────────────────────────────────────────────────────────────────
+var SIZES = [
+  { px:14, label:'Full — 280×448px' },
+  { px:6,  label:'Sidebar — 120×192px' },
+  { px:3,  label:'Icon — 60×96px' },
+  { px:1,  label:'Favicon — 20×32px' },
+];
+var logosEl = document.getElementById('logos');
+for (var j = 0; j < SIZES.length; j++) {
+  var s    = SIZES[j];
+  var lc   = document.createElement('div'); lc.className = 'card';
+  var llbl = document.createElement('p');   llbl.className = 'desc'; llbl.textContent = s.label;
+  lc.appendChild(renderGrid(baseGrid(), s.px));
+  lc.appendChild(llbl);
+  logosEl.appendChild(lc);
+}
+</script>
+</body>
+</html>

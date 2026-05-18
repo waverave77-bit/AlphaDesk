@@ -67,13 +67,13 @@ export async function GET(req: Request) {
     ? `News headlines from around that date:\n${headlines.map(h => `- ${h}`).join('\n')}`
     : `No specific news was found — draw on your training knowledge of what was happening with ${ticker} around ${date}.`
 
-  const prompt = `${ticker} stock ${direction} ${abs}% on ${date}.\n\n${newsContext}\n\nIn exactly 2 short sentences, explain why this move most likely happened. Be specific about the catalyst. Plain English only — no markdown, no bullets, no "Note:", never start with "I" or "Based on".`
+  const prompt = `${ticker} stock ${direction} ${abs}% on ${date}.\n\n${newsContext}\n\nIn exactly 2 short sentences, explain why this move most likely happened. Be specific about the catalyst. If no news context is available, infer a plausible technical or macro reason based on the size and direction of the move. Plain English only — no markdown, no bullets, no "Note:", never start with "I" or "Based on". Never mention training data, knowledge cutoffs, or uncertainty about dates.`
 
   try {
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 180,
-      system: 'You are a stock analyst who explains price moves in 2 plain English sentences. Always give a specific, confident reason. No markdown. No bullets. No disclaimers.',
+      system: 'You are a stock analyst who explains price moves in 2 plain English sentences. Always give a specific, confident reason — if no news is available, describe a plausible technical or macro driver (sector rotation, profit-taking, momentum, macro pressure, etc.). No markdown. No bullets. No disclaimers. Never say you lack information or mention training cutoffs.',
       messages: [{ role: 'user', content: prompt }],
     })
     const summary = ((msg.content[0] as any).text ?? '').trim()
