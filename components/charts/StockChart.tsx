@@ -154,6 +154,12 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
     }
   }), [data, bbBands, hasFairValue, hasPositiveEps, currentEps, earningsHistory, NORMAL_PE])
 
+  // ── Period change ─────────────────────────────────────────────────────────
+  const periodStart = formattedData[0]?.close
+  const periodEnd   = formattedData[formattedData.length - 1]?.close
+  const periodDollar = periodStart && periodEnd ? periodEnd - periodStart : null
+  const periodPct    = periodStart && periodDollar != null ? (periodDollar / periodStart) * 100 : null
+
   // ── Y-axis: tight to close prices, $5 pad, locked with allowDataOverflow ────
   const closes = formattedData.map(d => d.close).filter(v => isFinite(v) && v > 0)
   const closeMin = closes.length ? Math.min(...closes) : currentPrice * 0.95
@@ -276,11 +282,22 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
     <div className="w-full">
       {/* Controls */}
       <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
-        <div className="flex gap-1">
-          {RANGES.map((r) => (
-            <Button key={r} size="sm" variant={range === r ? 'secondary' : 'ghost'}
-              onClick={() => setRange(r)} className="text-xs h-7 px-2">{r}</Button>
-          ))}
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1">
+            {RANGES.map((r) => (
+              <Button key={r} size="sm" variant={range === r ? 'secondary' : 'ghost'}
+                onClick={() => setRange(r)} className="text-xs h-7 px-2">{r}</Button>
+            ))}
+          </div>
+          {periodDollar != null && periodPct != null && (
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${
+              periodDollar >= 0
+                ? 'text-green-400 bg-green-500/10 border border-green-500/20'
+                : 'text-red-400 bg-red-500/10 border border-red-500/20'
+            }`}>
+              {periodDollar >= 0 ? '+' : ''}${periodDollar.toFixed(2)} ({periodPct >= 0 ? '+' : ''}{periodPct.toFixed(2)}%)
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-1.5">
           {hasFairValue && latestFV && (
