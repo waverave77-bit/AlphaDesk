@@ -88,7 +88,8 @@ Be opinionated. Pick a direction and commit.`
       weekKey,
       ticker,
       companyName: quote.companyName,
-      price: quote.price,        // locked-in entry price
+      // Use Friday's closing price as entry — market is closed Sunday when pick is made
+      price: quote.previousClose ?? quote.price,
       changePercent: quote.changePercent,
       direction: parsed.direction ?? 'up',
       targetPct: parsed.targetPct ?? 5,
