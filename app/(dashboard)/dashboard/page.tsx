@@ -11,7 +11,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
-import MarketCharacter from '@/components/MarketCharacter'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -220,10 +219,7 @@ export default function DashboardPage() {
       )}
       <OnboardingModal />
 
-      {/* ── Character ────────────────────────────────────────────── */}
-      <MarketCharacter changePercent={panicMode ? -99 : 2.4} marketState={panicMode ? 'bear' : undefined} />
-
-      {/* ── Hero greeting ─────────────────────────────────────────── */}
+{/* ── Hero greeting ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
         <div>
           <h1 className="text-4xl font-bold text-white leading-tight">
