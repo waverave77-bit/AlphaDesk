@@ -125,6 +125,12 @@ model OnboardingResponse {
   createdAt  DateTime @default(now())
 }
 
+model WeeklyPickCache {
+  weekKey   String   @id  // e.g. "2026-05-17"
+  data      String        // JSON stringified pick
+  createdAt DateTime @default(now())
+}
+
 model VirtualSeasonRecord {
   id         String   @id @default(cuid())
   userId     String
