@@ -18,6 +18,7 @@ type Color = string | null
 type MarketState = 'bull' | 'bear' | 'neutral' | 'closed'
 type Scene = 'walk' | 'party' | 'beach' | 'desk' | 'throw' | 'sleep' | 'perch'
            | 'rain' | 'newspaper' | 'weights' | 'gaming' | 'doomscroll' | 'panicrun' | 'telescope'
+           | 'headbang' | 'money'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
 const PX     = 5
@@ -48,9 +49,9 @@ const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
     { scene: 'telescope', ms: 8000  },
   ],
   bear: [
-    { scene: 'rain',       ms: 7000 },
+    { scene: 'headbang',   ms: 7000 },
     { scene: 'desk',       ms: 8000 },
-    { scene: 'rain',       ms: 7000 },
+    { scene: 'headbang',   ms: 7000 },
     { scene: 'throw',      ms: 8000 },
     { scene: 'doomscroll', ms: 7000 },
     { scene: 'panicrun',   ms: 6000 },
@@ -58,7 +59,7 @@ const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
   neutral: [
     { scene: 'walk',      ms: 8000  },
     { scene: 'newspaper', ms: 8000  },
-    { scene: 'walk',      ms: 8000  },
+    { scene: 'money',     ms: 9000  },
     { scene: 'perch',     ms: 9000  },
   ],
   closed:  [
@@ -866,14 +867,20 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       drawBed(ctx, W/2, H)
       const headOx=Math.round(W/2-108), headOy=Math.round(H-122)  // moved up so face clears blanket
       drawSleepingHead(ctx, headOx, headOy, bob, W, H)
-      // Body bump under blanket — makes it obvious there's a person in the bed
-      ctx.fillStyle='#1a2f80'
-      ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+30), Math.round(H-57), 55, 13, 0, 0, Math.PI*2)
-      ctx.fill()
-      // Blanket
+      // Blanket base
       ctx.fillStyle='#1e3a8a'
       ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,53)
+      // Body bump ON TOP of blanket — raised lump showing body shape under covers
+      ctx.fillStyle='#2547b0'
+      ctx.beginPath()
+      ctx.ellipse(Math.round(W/2+28), Math.round(H-68), 62, 11, 0, 0, Math.PI*2)
+      ctx.fill()
+      // Smaller second bump (knees)
+      ctx.fillStyle='#2040a0'
+      ctx.beginPath()
+      ctx.ellipse(Math.round(W/2+78), Math.round(H-65), 30, 8, 0, 0, Math.PI*2)
+      ctx.fill()
+      // Blanket highlight stripe and texture over everything
       ctx.fillStyle='#2563eb'
       ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,14)
       ctx.fillStyle='rgba(255,255,255,.09)'
@@ -908,8 +915,10 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       }
       let extraBounce=0, shakeX=0
       if(ms==='bull'){
-        // Very subtle happy sway
-        extraBounce = Math.sin(now*.003)*-2
+        // Head-bob — visible rhythmic bounce like he's vibing
+        extraBounce = Math.sin(now*.007)*-5
+        pose.leftArmDY  = Math.round(Math.sin(now*.007)*-3)
+        pose.rightArmDY = Math.round(Math.sin(now*.007+Math.PI)*-3)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
       } else if(ms==='bear'){
         // Stressed shake but stays put
@@ -930,16 +939,59 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,Math.round(extraBounce),shakeX,W,H)
     }
 
-    // ── RAIN ─────────────────────────────────────────────────────
+    // ── RAIN (legacy — no longer used) ───────────────────────────
     else if(scene==='rain'){
       if(!s.sceneSnapped){
         s.charX=zone.ok?(zone.min+zone.max)/2:60; s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.min(.6,s.faceFlush+.0015)
-      // Arms hang low, dejected slouch
-      pose.bodyDY=2
-      pose.leftArmDY=3; pose.rightArmDY=3
+      pose.bodyDY=2; pose.leftArmDY=3; pose.rightArmDY=3
       renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H)
+    }
+
+    // ── HEAD BANG ────────────────────────────────────────────────
+    else if(scene==='headbang'){
+      if(!s.sceneSnapped){
+        s.charX=zone.ok?(zone.min+zone.max)/2:60; s.direction=1; s.sceneSnapped=true
+      }
+      s.faceFlush=Math.min(.65,s.faceFlush+.002)
+      // Fast rhythmic head/body bob — 8 bobs per second
+      const bangT=now*.009
+      const headBob=Math.round(Math.sin(bangT)*-5)
+      pose.bodyDY=headBob
+      // Arms flail with opposite phase
+      pose.leftArmDY =Math.round(Math.sin(bangT+Math.PI)*-3)
+      pose.rightArmDY=Math.round(Math.sin(bangT)*-3)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H)
+    }
+
+    // ── MONEY COUNT ──────────────────────────────────────────────
+    else if(scene==='money'){
+      if(!s.sceneSnapped){
+        s.charX=zone.ok?(zone.min+zone.max)/2:W-160; s.direction=-1; s.sceneSnapped=true
+      }
+      s.faceFlush=Math.max(0,s.faceFlush-.01)
+      const flipT=now*.004
+      // Slow deliberate counting arm motion
+      pose.rightArmDY=Math.round(Math.sin(flipT)*-3)-1
+      pose.leftArmDY=Math.round(Math.sin(flipT+0.8)*-1)+1
+      pose.bodyDY=1
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H,26)
+      // Draw a stack of bills in hand
+      const billDir=s.direction
+      const bx=billDir===1?Math.round(s.charX)+CHAR_W-8:Math.round(s.charX)-38
+      const by=Math.round(s.charY)+65+Math.round(Math.sin(flipT)*-3)*PX
+      // Stack of bills (offset layers)
+      for(let i=3;i>=0;i--){
+        ctx.fillStyle=i===0?'#85bb65':i===1?'#6aaa52':'#5a9944'
+        ctx.fillRect(bx-i,by-i,38,22)
+        if(i===0){
+          ctx.fillStyle='rgba(255,255,255,.15)'; ctx.fillRect(bx+3,by+3,32,4)
+          ctx.fillStyle='rgba(0,0,0,.2)'; ctx.fillRect(bx+3,by+10,28,3)
+          ctx.fillStyle='#fff'; ctx.font='bold 8px monospace'
+          ctx.fillText('$',bx+16,by+16)
+        }
+      }
     }
 
     // ── PARTY ────────────────────────────────────────────────────
@@ -1030,7 +1082,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       const micro=Math.sin(now*.0004)*0.8   // very slow transfixed sway
       pose.bodyDY=Math.round(3+micro)
       pose.leftArmDY=4; pose.rightArmDY=-1
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H,26)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H,32)
       drawPhone(ctx, Math.round(s.charX), Math.round(s.charY), s.direction, scrollOffRef.current)
     }
 
@@ -1146,7 +1198,9 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       gaming:     ['ONE MORE GAME','gg no re','I\'m in the zone','shh'],
       doomscroll: ['stonks go down 📉','why do I do this','send help','it\'s fine'],
       panicrun:   ['AHHHHHH','SELL SELL SELL','NOT MY PORTFOLIO','MAYDAY MAYDAY'],
-      rain:       ['I hate this job','it\'s always raining','umbrella gang ☔'],
+      rain:       ['I hate this job','it\'s always raining','ugh'],
+      headbang:   ['AGHHHH','*internal screaming*','WHY IS IT DOWN','my portfolio 💀'],
+      money:      ['counting my gains','hmm...','not bad not bad','where did it all go'],
       newspaper:  ['Interesting...','hm, not great','who writes this stuff'],
       weights:    ['LETS GOOO 💪','gains only','PUSH PUSH PUSH','no pain no gain'],
       telescope:  ['I see it now...','moon soon 🔭','DD complete'],
@@ -1202,7 +1256,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     )}
 
     {activeScene==='party'&&<>
-      <ConfettiRain zoneX={zones.R.ok?zones.R.min:canvasW-260} zoneW={zones.R.ok?zones.R.max-zones.R.min:250}/>
+      <ConfettiRain zoneX={charXDisp-80} zoneW={260}/>
       <MusicNotes charX={charXDisp}/>
     </>}
     {/* beach scene — chair is drawn on canvas, no overlay effects */}
@@ -1211,7 +1265,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {activeScene==='sleep'&&<ZzzParticles charX={Math.round(canvasW/2-130)} charY={viewH-248} viewH={viewH}/>}
     {activeState==='closed'&&<NightSky/>}
     {activeScene==='perch'&&showPerchBubble&&<PerchBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
-    {activeScene==='rain'&&<RainEffect zoneX={zones.L.ok?zones.L.min:0} zoneW={zones.L.ok?zones.L.max-zones.L.min:200}/>}
+    {/* rain scene removed — replaced by headbang */}
     {activeScene==='weights'&&<WeightSparkles charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp}/>}
     {activeScene==='panicrun'&&<><DustCloud charX={charXDisp} dir={dirDisp}/><PanicExclaim charX={charXDisp}/></>}
