@@ -131,6 +131,12 @@ model WeeklyPickCache {
   createdAt DateTime @default(now())
 }
 
+model HotTakeCache {
+  date      String   @id  // e.g. "2026-05-18"
+  data      String        // JSON stringified hot take
+  createdAt DateTime @default(now())
+}
+
 model VirtualSeasonRecord {
   id         String   @id @default(cuid())
   userId     String
