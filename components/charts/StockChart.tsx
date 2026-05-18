@@ -433,7 +433,8 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
             <XAxis dataKey="dateLabel" tick={{ fill: '#6b7280', fontSize: 11 }}
-              axisLine={false} tickLine={false} interval="preserveStartEnd" />
+              axisLine={false} tickLine={false}
+              interval={Math.max(0, Math.floor(formattedData.length / 7))} />
             <YAxis
               domain={[yMin, yMax]}
               allowDataOverflow={true}
