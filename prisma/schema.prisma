@@ -148,3 +148,9 @@ model VirtualSeasonRecord {
 
   @@unique([userId, season])
 }
+
+model BullBearCache {
+  id        String   @id  // "{TICKER}-{DATE}" e.g. "AAPL-2026-05-18"
+  data      String        // JSON stringified BullVsBearResult
+  createdAt DateTime @default(now())
+}

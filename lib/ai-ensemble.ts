@@ -1,9 +1,25 @@
-// 3-model AI ensemble: Claude Haiku + DeepSeek-V3 + Grok-3-mini
+// 3-model AI ensemble: Claude Haiku + DeepSeek-V3 + Grok-2
 // All 3 run in parallel, then Claude synthesizes a final consensus answer
 
 import Anthropic from '@anthropic-ai/sdk'
+import fs from 'fs'
+import path from 'path'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+function getAnthropicKey(): string {
+  const fromEnv = process.env.ANTHROPIC_API_KEY
+  if (fromEnv && fromEnv.length > 10) return fromEnv
+  try {
+    const envPath = path.resolve(process.cwd(), '.env.local')
+    const content = fs.readFileSync(envPath, 'utf8')
+    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
+    return match?.[1] ?? ''
+  } catch { return '' }
+}
+
+// Create client per-call so it always picks up the latest key
+function getAnthropic() {
+  return new Anthropic({ apiKey: getAnthropicKey() })
+}
 
 // ─── Shared prompt builder ───────────────────────────────────────────────────
 
@@ -53,8 +69,9 @@ Be direct. No disclaimers.`
 
 // ─── Individual model callers ─────────────────────────────────────────────────
 
-// Per-model hard timeout — if a model takes longer than this, skip it gracefully
-const MODEL_TIMEOUT_MS = 8000
+// Per-model hard timeouts — reasoning models (Grok 4) need much longer
+const MODEL_TIMEOUT_MS = 12000       // Claude + DeepSeek
+const GROK_TIMEOUT_MS  = 45000       // Grok 4 is a reasoning model, takes ~15-30s
 
 function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([
@@ -67,7 +84,7 @@ async function callClaude(prompt: string): Promise<ModelResult> {
   const fallback: ModelResult = { model: 'Claude Haiku', signal: 'HOLD', rationale: 'Timed out', keyRisk: '', keyStrength: '', raw: '', error: true }
   try {
     const result = await withTimeout(
-      anthropic.messages.create({
+      getAnthropic().messages.create({
         model: 'claude-haiku-4-5',
         max_tokens: 300,
         messages: [{ role: 'user', content: prompt }],
@@ -107,31 +124,41 @@ async function callDeepSeek(prompt: string): Promise<ModelResult> {
   }
 }
 
+function getXaiKey(): string {
+  const fromEnv = process.env.XAI_API_KEY
+  if (fromEnv && fromEnv.length > 10) return fromEnv
+  try {
+    const envPath = path.resolve(process.cwd(), '.env.local')
+    const content = fs.readFileSync(envPath, 'utf8')
+    const match = content.match(/XAI_API_KEY="?([^"\n]+)"?/)
+    return match?.[1] ?? ''
+  } catch { return '' }
+}
+
 async function callGrok(prompt: string): Promise<ModelResult> {
-  const fallback: ModelResult = { model: 'Grok-2', signal: 'HOLD', rationale: 'Timed out', keyRisk: '', keyStrength: '', raw: '', error: true }
+  const fallback: ModelResult = { model: 'Grok 4', signal: 'HOLD', rationale: 'Timed out', keyRisk: '', keyStrength: '', raw: '', error: true }
+  const apiKey = getXaiKey()
+  if (!apiKey || apiKey.length < 10) return { ...fallback, rationale: 'API key not configured' }
   try {
     const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), MODEL_TIMEOUT_MS)
+    const timer = setTimeout(() => controller.abort(), GROK_TIMEOUT_MS)
     const res = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.XAI_API_KEY}` },
-      body: JSON.stringify({ model: 'grok-2-1212', max_tokens: 300, messages: [{ role: 'user', content: prompt }] }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({ model: 'grok-4.3', max_tokens: 300, messages: [{ role: 'user', content: prompt }] }),
       signal: controller.signal,
     })
     clearTimeout(timer)
     if (!res.ok) {
-      console.error('[Grok] API error', res.status, await res.text().catch(() => ''))
+      const errText = await res.text().catch(() => '')
       return { ...fallback, rationale: `API error (${res.status})` }
     }
     const json = await res.json()
-    // API might return an error object without choices
-    if (json.error) {
-      console.error('[Grok] response error', json.error)
-      return { ...fallback, rationale: json.error?.message || 'API error' }
-    }
+    if (json.error) return { ...fallback, rationale: json.error?.message || 'API error' }
+    // grok-4.x returns both content and reasoning_content — use content only
     const text: string = json.choices?.[0]?.message?.content ?? ''
     if (!text.trim()) return { ...fallback, rationale: 'Empty response from model' }
-    return { model: 'Grok-2', ...parseModelResponse(text), raw: text }
+    return { model: 'Grok 4', ...parseModelResponse(text), raw: text }
   } catch (e: any) {
     const msg = e?.name === 'AbortError' ? 'Timed out' : (e?.message || 'Failed')
     return { ...fallback, rationale: msg }
@@ -223,10 +250,10 @@ Write a final analysis in this exact markdown format:
 [2-3 sentences final verdict in plain English — what should an investor actually do?]
 
 ---
-*Powered by Claude Haiku · DeepSeek V3 · Grok-3 Mini*`
+*Powered by Claude Haiku · DeepSeek V3 · Grok 4*`
 
   try {
-    const msg = await anthropic.messages.create({
+    const msg = await getAnthropic().messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 600,
       messages: [{ role: 'user', content: synthesisPrompt }],
@@ -246,7 +273,7 @@ ${results.flatMap(r => r.keyStrength ? [`• ${r.keyStrength}`] : []).slice(0, 3
 ${results.flatMap(r => r.keyRisk ? [`• ${r.keyRisk}`] : []).slice(0, 3).join('\n')}
 
 ---
-*Powered by Claude Haiku · DeepSeek V3 · Grok-3 Mini*`
+*Powered by Claude Haiku · DeepSeek V3 · Grok 4*`
   }
 }
 

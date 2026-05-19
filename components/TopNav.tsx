@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield } from 'lucide-react'
@@ -15,7 +15,7 @@ const primaryNav = [
   { href: '/watchlist', label: 'Watchlist' },
   { href: '/learn',     label: 'Learn' },
   { href: '/insiders',  label: 'Smart Money' },
-  { href: '/chat',      label: 'AI Chat' },
+  { href: '/chat',      label: 'Mr. Guy' },
 ]
 
 const moreNav = [
@@ -23,13 +23,69 @@ const moreNav = [
   { href: '/hedgefunds',  label: 'Hedge Funds' },
   { href: '/quant',       label: 'Quant Strategy' },
   { href: '/game',        label: '$100K Challenge' },
+  { href: '/time-machine', label: 'Time Machine ⏰' },
 ]
+
+const mrGuyNav = [
+  { href: '/hot-take',       label: "Hot Take 🔥" },
+  { href: '/bull-vs-bear',   label: 'Bull vs Bear 🥊' },
+  { href: '/challenge',      label: 'Pick of the Week 🏆' },
+  { href: '/report-card',    label: 'Stock Report Card' },
+  { href: '/reality-check',  label: 'Reality Check 🧪' },
+  { href: '/translator',     label: 'Finance Translator' },
+]
+
+/* ── Mr. Guy pixel head logo — canvas renderer ──────────────────
+   Pixel data = GRID rows 0-13, cols 3-14 (the head + shirt top)  */
+const N = null
+const HEAD_PIXELS: Array<Array<string|null>> = [
+  [N,    N,    '#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604',N      ], // r0
+  [N,    '#2b1604','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604','#2b1604'], // r1
+  ['#2b1604','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#2b1604'], // r2
+  ['#2b1604','#5c2e0a','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604'], // r3
+  ['#2b1604','#5c2e0a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#5c2e0a','#2b1604'], // r4
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'], // r5
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#f5c49a','#f5c49a','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'], // r6 sunglasses
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'], // r7
+  ['#2b1604','#111118','#111118','#111118','#111118','#f5c49a','#f5c49a','#111118','#111118','#111118','#111118','#2b1604'], // r8
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'], // r9
+  [N,    '#f5c49a','#f5c49a','#f5c49a','#c47a50','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N      ], // r10 chin
+  [N,    '#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N,    N      ], // r11
+  [N,    N,    '#f5c49a','#f0f0f0','#f0f0f0','#c01010','#c01010','#f0f0f0','#f0f0f0','#f5c49a',N,    N      ], // r12 collar
+  ['#f0f0f0','#f0f0f0','#f0f0f0','#f0f0f0','#c01010','#c01010','#7a0000','#7a0000','#f0f0f0','#f0f0f0','#f0f0f0','#222236'], // r13 shirt
+]
+const COLS = 12, ROWS = 14
+
+function MrGuyPixelHead({ px = 3 }: { px?: number }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current; if (!c) return
+    const ctx = c.getContext('2d')!
+    ctx.clearRect(0, 0, c.width, c.height)
+    HEAD_PIXELS.forEach((row, r) => {
+      row.forEach((color, col) => {
+        if (!color) return
+        ctx.fillStyle = color
+        ctx.fillRect(col * px, r * px, px, px)
+      })
+    })
+  }, [px])
+  return (
+    <canvas
+      ref={ref}
+      width={COLS * px}
+      height={ROWS * px}
+      style={{ display: 'block', imageRendering: 'pixelated', flexShrink: 0 }}
+    />
+  )
+}
 
 export default function TopNav() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
+  const [mrGuyOpen, setMrGuyOpen] = useState(false)
   const { themeId, setTheme } = useTheme()
   const isDark = themeId !== 'white'
   const toggleDark = () => setTheme(isDark ? 'white' : 'default')
@@ -44,6 +100,7 @@ export default function TopNav() {
     href === '/dashboard' ? pathname === href : pathname.startsWith(href)
 
   const moreActive = moreNav.some(n => isActive(n.href))
+  const mrGuyToolsActive = mrGuyNav.some(n => isActive(n.href))
 
   return (
     <>
@@ -55,13 +112,8 @@ export default function TopNav() {
       )}>
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2 mr-8 shrink-0">
-          <div
-            className="h-7 w-7 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
-          >
-            <TrendingUp className="h-3.5 w-3.5 text-white" />
-          </div>
-          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Zains Game</span>
+          <MrGuyPixelHead px={3} />
+          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Mr. Guy</span>
         </Link>
 
         {/* Primary nav — desktop */}
@@ -91,13 +143,13 @@ export default function TopNav() {
               onBlur={() => setTimeout(() => setMoreOpen(false), 150)}
               className={cn(
                 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                moreActive ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                moreActive ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               )}
             >
               More <ChevronDown className="h-3 w-3" />
             </button>
             {moreOpen && (
-              <div className={cn('absolute top-full left-0 mt-1 w-44 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
+              <div className={cn('absolute top-full left-0 mt-1 w-48 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
                 {moreNav.map(({ href, label }) => (
                   <Link
                     key={href}
@@ -105,6 +157,39 @@ export default function TopNav() {
                     className={cn(
                       'block px-4 py-2 text-sm transition-colors',
                       isActive(href) ? 'text-blue-500 bg-blue-600/10' : isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-slate-700 hover:bg-slate-50'
+                    )}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Mr. Guy Tools dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setMrGuyOpen(!mrGuyOpen)}
+              onBlur={() => setTimeout(() => setMrGuyOpen(false), 150)}
+              className={cn(
+                'flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                mrGuyToolsActive ? 'bg-orange-500/10 text-orange-400' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              )}
+            >
+              Mr. Guy Tools <ChevronDown className="h-3 w-3" />
+            </button>
+            {mrGuyOpen && (
+              <div className={cn('absolute top-full left-0 mt-1 w-52 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
+                <div className={cn('px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-slate-400')}>
+                  Mr. Guy Features
+                </div>
+                {mrGuyNav.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={cn(
+                      'block px-4 py-2 text-sm transition-colors',
+                      isActive(href) ? 'text-orange-400 bg-orange-500/10' : isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-slate-700 hover:bg-slate-50'
                     )}
                   >
                     {label}
@@ -184,6 +269,25 @@ export default function TopNav() {
                     className={cn(
                       'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                       active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    )}
+                  >
+                    {label}
+                  </Link>
+                )
+              })}
+              <div className={cn('px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-slate-400')}>
+                Mr. Guy Tools
+              </div>
+              {mrGuyNav.map(({ href, label }) => {
+                const active = isActive(href)
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      active ? 'bg-orange-500/10 text-orange-400' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
                     {label}

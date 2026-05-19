@@ -17,8 +17,9 @@ const NC  = '#f0f8ff'
 type Color = string | null
 type MarketState = 'bull' | 'bear' | 'neutral' | 'closed'
 type Scene = 'walk' | 'party' | 'beach' | 'desk' | 'throw' | 'sleep' | 'perch'
-           | 'rain' | 'newspaper' | 'weights' | 'gaming' | 'doomscroll' | 'panicrun' | 'telescope'
-           | 'headbang' | 'money'
+           | 'newspaper' | 'weights' | 'gaming' | 'doomscroll' | 'panicrun'
+           | 'money' | 'defeat'
+           | 'wakeup' | 'peek' | 'coffee' | 'phone' | 'bubblebath'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
 const PX     = 5
@@ -37,34 +38,35 @@ function sideZones(W: number) {
 }
 
 /* ─── Scene cycles ─────────────────────────────────────────────────── */
+const MIN = 60_000  // 1 minute in ms
 const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
   bull:    [
-    { scene: 'walk',      ms: 4000  },
-    { scene: 'party',     ms: 8000  },
-    { scene: 'walk',      ms: 4000  },
-    { scene: 'beach',     ms: 9000  },
-    { scene: 'walk',      ms: 4000  },
-    { scene: 'weights',   ms: 8000  },
-    { scene: 'walk',      ms: 4000  },
-    { scene: 'telescope', ms: 8000  },
+    { scene: 'walk',       ms: 15_000   },  // short transition ~15s
+    { scene: 'party',      ms:  8 * MIN },
+    { scene: 'walk',       ms: 15_000   },
+    { scene: 'beach',      ms:  9 * MIN },
+    { scene: 'walk',       ms: 15_000   },
+    { scene: 'weights',    ms:  8 * MIN },
+    { scene: 'walk',       ms: 15_000   },
+    { scene: 'bubblebath', ms:  8 * MIN },
   ],
   bear: [
-    { scene: 'headbang',   ms: 7000 },
-    { scene: 'desk',       ms: 8000 },
-    { scene: 'headbang',   ms: 7000 },
-    { scene: 'throw',      ms: 8000 },
-    { scene: 'doomscroll', ms: 7000 },
-    { scene: 'panicrun',   ms: 6000 },
+    { scene: 'defeat',     ms:  8 * MIN },
+    { scene: 'desk',       ms:  8 * MIN },
+    { scene: 'defeat',     ms:  8 * MIN },
+    { scene: 'throw',      ms:  8 * MIN },
+    { scene: 'doomscroll', ms:  7 * MIN },
+    { scene: 'panicrun',   ms:  6 * MIN },
   ],
   neutral: [
-    { scene: 'walk',      ms: 8000  },
-    { scene: 'newspaper', ms: 8000  },
-    { scene: 'money',     ms: 9000  },
-    { scene: 'perch',     ms: 9000  },
+    { scene: 'walk',      ms:  8 * MIN },
+    { scene: 'newspaper', ms:  8 * MIN },
+    { scene: 'money',     ms:  9 * MIN },
+    { scene: 'perch',     ms:  9 * MIN },
   ],
   closed:  [
-    { scene: 'sleep',  ms: 18000 },
-    { scene: 'gaming', ms: 15000 },
+    { scene: 'sleep',  ms: 18 * MIN },
+    { scene: 'gaming', ms: 15 * MIN },
   ],
 }
 
@@ -109,6 +111,14 @@ const NIGHTGOWN_MAP: Record<string, string> = {
   [WH]: NC,  [WD]: NC,
   [TR]: '#a0c4e8', [TD]: '#80a8d0',
   [SH]: NG1, [SL]: NG2,
+}
+
+// Shirtless — replace jacket/shirt/tie with skin tones
+const SHIRTLESS_MAP: Record<string, string> = {
+  [J1]: SK, [J2]: SK, [J3]: SK,
+  [WH]: SK, [WD]: SK,
+  [TR]: SK, [TD]: SD,
+  [SH]: SK, [SL]: SK,
 }
 
 /* ─── Walk frames ──────────────────────────────────────────────────── */
@@ -164,10 +174,10 @@ function renderCharacter(
       if (isLA) cy += pose.leftArmDY * PX
       if (isRA) cy += pose.rightArmDY * PX
 
-      const isLL = r >= 24 && c >= 3 && c <= 6
-      const isRL = r >= 24 && c >= 10 && c <= 13
-      const isLS = r >= 29 && c >= 0 && c <= 6
-      const isRS = r >= 29 && c >= 10 && c <= 15
+      const isLL = r >= 24 && r <= 27 && c >= 3 && c <= 5
+      const isRL = r >= 24 && r <= 27 && c >= 11 && c <= 13
+      const isLS = r >= 28 && c >= 0 && c <= 6
+      const isRS = r >= 28 && c >= 9 && c <= 15
       if (isLL||isLS) cx += pose.leftLegDX * PX
       if (isRL||isRS) cx += pose.rightLegDX * PX
 
@@ -208,20 +218,20 @@ function drawBed(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
 }
 
 function drawSleepingHead(ctx: CanvasRenderingContext2D, headOx: number, headOy: number, bob: number, W: number, H: number) {
+  // bob must be integer to avoid sub-pixel seam lines between 5px blocks
+  const b = Math.round(bob)
   // Rotated 90° CW: hair (r=0) on LEFT pointing toward headboard, neck (r=11) on RIGHT
-  // Original (r, c) → canvas: x = headOx + r*PX,  y = headOy + (c-3)*PX + bob
+  // Original (r, c) → canvas: x = headOx + r*PX,  y = headOy + (c-3)*PX + b
   for (let r = 0; r <= 11; r++) {
     for (let c = 3; c <= 14; c++) {
       const color = GRID[r][c]
       if (!color) continue
       const px = headOx + r * PX
-      const py = headOy + (c - 3) * PX + bob
+      const py = headOy + (c - 3) * PX + b
       if (px<0||py<0||px+PX>W||py+PX>H) continue
       ctx.fillStyle = color; ctx.fillRect(px, py, PX, PX)
     }
   }
-  // Sleeping cap pointing LEFT (from hair side at headOx)
-  const b = bob
   const capBaseX = headOx - 2
   const capTopY   = headOy + 1 + b
   const capBotY   = headOy + 11 * PX - 1 + b
@@ -242,18 +252,25 @@ function drawSleepingHead(ctx: CanvasRenderingContext2D, headOx: number, headOy:
   ctx.fillStyle='rgba(180,200,220,.5)'; ctx.beginPath(); ctx.arc(capTipX-7, capTipY-2, 3, 0, Math.PI*2); ctx.fill()
 }
 
-function drawBeachChair(ctx: CanvasRenderingContext2D, cx: number, W: number, viewH: number) {
-  const base=viewH-20, backX=W-18, seatY=base-55
-  const seatW=Math.min(130,backX-cx+CHAR_W+10), seatX=backX-seatW
-  ctx.fillStyle='#C8A96B'; ctx.fillRect(backX-14,seatY-90,14,100)
-  for(let i=0;i<5;i++){ctx.fillStyle='#A0785A';ctx.fillRect(backX-12,seatY-84+i*17,10,3)}
+function drawBeachChair(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
+  // All positions relative to cx (character's left edge)
+  const base=viewH-20, seatY=base-55
+  const seatX=cx-10, seatW=150
+  const backX=seatX+seatW  // chair back on the right (feet left, head right)
+
+  // Chair back (right side — character reclines with head on right)
+  ctx.fillStyle='#C8A96B'; ctx.fillRect(backX,seatY-90,14,100)
+  for(let i=0;i<5;i++){ctx.fillStyle='#A0785A';ctx.fillRect(backX+2,seatY-84+i*17,10,3)}
+  // Seat
   ctx.fillStyle='#D4B06A'; ctx.fillRect(seatX,seatY,seatW,13)
   for(let i=0;i<4;i++){ctx.fillStyle='#C19A6B';ctx.fillRect(seatX+i*(seatW/4)+3,seatY+2,seatW/4-5,9)}
-  ctx.fillStyle='#8B5E3C'; ctx.fillRect(seatX+4,seatY-26,9,36); ctx.fillRect(backX-13,seatY-26,9,36)
+  // Legs
+  ctx.fillStyle='#8B5E3C'; ctx.fillRect(seatX+4,seatY-26,9,36); ctx.fillRect(backX-4,seatY-26,9,36)
   ctx.fillStyle='#6B4226'
-  ctx.fillRect(seatX+6,seatY+13,6,base-seatY-13); ctx.fillRect(backX-12,seatY+13,6,base-seatY-13)
-  ctx.fillRect(seatX+6,seatY+40,backX-seatX-18,5)
-  const umX=backX-4
+  ctx.fillRect(seatX+6,seatY+13,6,base-seatY-13); ctx.fillRect(backX-3,seatY+13,6,base-seatY-13)
+  ctx.fillRect(seatX+6,seatY+40,seatW-12,5)
+  // Umbrella pole — centered above seat
+  const umX=Math.round(seatX+seatW/2)
   ctx.fillStyle='#5C3A1E'; ctx.fillRect(umX,seatY-115,5,120)
   const cols=['#E74C3C','#F39C12','#2ECC71','#3498DB','#9B59B6','#E74C3C']
   for(let i=0;i<6;i++){
@@ -262,6 +279,7 @@ function drawBeachChair(ctx: CanvasRenderingContext2D, cx: number, W: number, vi
   }
   ctx.strokeStyle='#333'; ctx.lineWidth=1.5
   ctx.beginPath(); ctx.arc(umX+2,seatY-115,48,Math.PI,2*Math.PI); ctx.stroke()
+  // Cocktail on the left armrest
   ctx.fillStyle='#8B5E3C'; ctx.fillRect(seatX-22,seatY,20,14)
   ctx.fillStyle='#FF7043'; ctx.fillRect(seatX-18,seatY-18,12,20)
   ctx.fillStyle='#FFF9C4'; ctx.fillRect(seatX-16,seatY-16,8,8)
@@ -330,7 +348,7 @@ function drawUmbrella(ctx: CanvasRenderingContext2D, charX: number, charY: numbe
 /* ── Newspaper ──────────────────────────────────────────────────────── */
 function drawNewspaper(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number, wave: number) {
   const nx = dir===1 ? charX+CHAR_W-5 : charX-52
-  const ny = charY+55+wave
+  const ny = Math.round(charY+55+wave)
   ctx.fillStyle='#f5f0e0'; ctx.fillRect(nx,ny,55,48)
   ctx.fillStyle='#e8e0cc'; ctx.fillRect(nx+1,ny+1,53,46)
   ctx.fillStyle='#ccc'; ctx.fillRect(nx+26,ny,2,48)
@@ -477,13 +495,98 @@ function drawTelescope(ctx: CanvasRenderingContext2D, charX: number, charY: numb
   ctx.fillStyle='rgba(200,230,255,.3)'; ctx.beginPath(); ctx.arc(endX-2,endY-2,3,0,Math.PI*2); ctx.fill()
 }
 
+function drawCoffeeCup(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number) {
+  // Position cup at hand level — arm rows 21-23 are at charY+105, raised by armDY=-2*PX=10 → charY+95
+  const cx = dir===1 ? charX+CHAR_W-20 : charX-16
+  const cy = charY+92
+  // Cup body
+  ctx.fillStyle='#f5f0e8'; ctx.fillRect(cx,cy,18,22)
+  ctx.fillStyle='#e8e0cc'; ctx.fillRect(cx+1,cy+1,16,20)
+  // Steam
+  ctx.strokeStyle='rgba(200,200,200,.7)'; ctx.lineWidth=1.5; ctx.lineCap='round'
+  for(let i=0;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(cx+4+i*5,cy-4)
+    ctx.quadraticCurveTo(cx+2+i*5,cy-10,cx+6+i*5,cy-16); ctx.stroke()
+  }
+  // Coffee liquid
+  ctx.fillStyle='#6f4e37'; ctx.fillRect(cx+2,cy+2,14,10)
+  ctx.fillStyle='rgba(255,255,255,.2)'; ctx.fillRect(cx+3,cy+3,5,3)
+  // Handle
+  ctx.strokeStyle='#d4c9b0'; ctx.lineWidth=2.5
+  ctx.beginPath(); ctx.arc(cx+(dir===1?20:-4),cy+10,7,Math.PI*0.6,Math.PI*1.4); ctx.stroke()
+  // Saucer
+  ctx.fillStyle='#e8e0cc'; ctx.fillRect(cx-2,cy+22,22,4)
+  ctx.fillStyle='rgba(0,0,0,.1)'; ctx.fillRect(cx-2,cy+26,22,2)
+}
+
+function drawDartboard(ctx: CanvasRenderingContext2D, bx: number, by: number) {
+  const cx=bx, cy=by
+  const rings=[{r:52,c:'#1a1a1a'},{r:46,c:'#22c55e'},{r:38,c:'#1a1a1a'},{r:30,c:'#ef4444'},
+               {r:22,c:'#1a1a1a'},{r:14,c:'#22c55e'},{r:8,c:'#1a1a1a'},{r:4,c:'#ef4444'}]
+  rings.forEach(({r,c})=>{ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill() })
+  // Sector lines
+  ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=1
+  for(let i=0;i<20;i++){
+    const a=i*Math.PI/10
+    ctx.beginPath(); ctx.moveTo(cx+8*Math.cos(a),cy+8*Math.sin(a))
+    ctx.lineTo(cx+46*Math.cos(a),cy+46*Math.sin(a)); ctx.stroke()
+  }
+  // Bull's-eye glow
+  ctx.fillStyle='rgba(255,220,0,.15)'; ctx.beginPath(); ctx.arc(cx,cy,6,0,Math.PI*2); ctx.fill()
+  // Wood backing
+  ctx.strokeStyle='#5C3A1E'; ctx.lineWidth=6
+  ctx.beginPath(); ctx.arc(cx,cy,54,0,Math.PI*2); ctx.stroke()
+}
+
+function drawBathtub(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
+  const bx=cx-85, by=viewH-95, bw=170, bh=70
+  // Tub shadow
+  ctx.fillStyle='rgba(0,0,0,.15)'; ctx.fillRect(bx+6,by+bh+2,bw-4,8)
+  // Tub outer
+  ctx.fillStyle='#e8e4dc'; ctx.fillRect(bx,by,bw,bh)
+  // Tub inner (water)
+  ctx.fillStyle='#7dd3fc'; ctx.fillRect(bx+6,by+8,bw-12,bh-14)
+  // Water shimmer
+  ctx.fillStyle='rgba(255,255,255,.35)'
+  ctx.fillRect(bx+12,by+14,40,4); ctx.fillRect(bx+70,by+20,30,3)
+  // Tub rim highlight
+  ctx.fillStyle='#f5f2ee'; ctx.fillRect(bx,by,bw,8)
+  ctx.fillStyle='rgba(255,255,255,.6)'; ctx.fillRect(bx+2,by,bw-4,3)
+  // Legs
+  ctx.fillStyle='#c4b9a8'
+  ctx.fillRect(bx+8,by+bh,10,14); ctx.fillRect(bx+bw-18,by+bh,10,14)
+  // Faucet
+  ctx.fillStyle='#94a3b8'; ctx.fillRect(bx+bw-14,by-10,8,14)
+  ctx.fillStyle='#cbd5e1'; ctx.fillRect(bx+bw-16,by-12,12,5)
+}
+
+function drawDart(ctx: CanvasRenderingContext2D, tx: number, ty: number, progress: number, startX: number, startY: number) {
+  const x = startX + (tx-startX)*progress
+  const y = startY + (ty-startY)*progress - Math.sin(progress*Math.PI)*30
+  const angle = Math.atan2(ty-startY+(Math.cos(progress*Math.PI)*30*Math.PI/1), tx-startX)
+  ctx.save()
+  ctx.translate(x,y); ctx.rotate(angle)
+  ctx.fillStyle='#888'; ctx.fillRect(-14,- 1.5,14,3)
+  ctx.fillStyle='#e53e3e'; ctx.fillRect(-20,-3,8,6)
+  ctx.fillStyle='#c0c0c0'; ctx.fillRect(0,-1,6,2)
+  ctx.fillStyle='#ffd700'
+  ctx.beginPath(); ctx.moveTo(6,0); ctx.lineTo(3,-4); ctx.lineTo(3,4); ctx.closePath(); ctx.fill()
+  ctx.restore()
+}
+
 /* ═══ CSS Particle Systems ══════════════════════════════════════════ */
 
-const CONFETTI_DATA = Array.from({length:32},(_,i)=>({
-  pct:(i*3.125)%100, delay:(i*0.22)%3.2, dur:2.3+(i*0.2)%2,
-  color:['#FF6B6B','#4ECDC4','#45B7D1','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F','#82E0AA','#FF9FF3','#54A0FF'][i%10],
-  size:6+(i*1.7)%8, rect:i%3!==0,
-}))
+const CONFETTI_DATA = Array.from({length:32},(_,i)=>{
+  const dur=2.3+(i*0.2)%2
+  // initDelay is negative — makes this particle start mid-animation so they're
+  // all at different heights immediately (no "all in a line" at t=0)
+  const initDelay = -dur * ((i * 0.618) % 1)
+  return {
+    pct:(i*3.125)%100, delay:(i*0.22)%3.2 + initDelay, dur,
+    color:['#FF6B6B','#4ECDC4','#45B7D1','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F','#82E0AA','#FF9FF3','#54A0FF'][i%10],
+    size:6+(i*1.7)%8, rect:i%3!==0,
+  }
+})
 const NOTE_DATA=[
   {ox:-30,d:0,s:'♪',c:'#FFD700'},{ox:-8,d:.4,s:'♫',c:'#FF69B4'},
   {ox:16,d:.8,s:'♩',c:'#00CED1'},{ox:38,d:1.2,s:'♬',c:'#FF6347'},
@@ -721,20 +824,114 @@ function TelescopeSparkles({charX,dir}:{charX:number;dir:number}){
   </>)
 }
 
+/* ── Defeat stars (spiral above knocked-out head) ───────────────────── */
+function DefeatStars({headX, viewH}:{headX:number; viewH:number}){
+  // lyingOy = viewH - 20 - 16*PX = viewH - 100  (mirrors canvas formula exactly)
+  // head face rows (c=4..13) span lyingOy+20 .. lyingOy+65
+  // head face TOP in canvas = viewH - 100 + 20 = viewH - 80
+  // CSS bottom of that point = viewH - (viewH - 80) = 80
+  // Stars float upward from ~10px above head top → bottom = 90
+  const headTop = 90   // px from viewport bottom, = face top + small gap
+  return(<>
+    <style>{`
+      @keyframes dfS{0%{opacity:0;transform:translateY(0) rotate(0deg) scale(.4)}40%{opacity:1;transform:translateY(-22px) rotate(180deg) scale(1.1)}100%{opacity:0;transform:translateY(-52px) rotate(360deg) scale(.6)}}
+      @keyframes dfSpin{0%{opacity:.9;transform:rotate(0deg)}100%{opacity:0;transform:rotate(360deg) translateY(-30px)}}
+    `}</style>
+    {(['⭐','💫','✨','⭐','💫'] as string[]).map((s,i)=>(
+      <div key={i} style={{position:'fixed',left:headX+4+i*14,bottom:headTop+i%2*12,
+        fontSize:12+i%2*4,
+        animation:`dfS ${1.6+i*.25}s ease-out ${i*.35}s infinite`,
+        pointerEvents:'none',zIndex:13}}>{s}</div>
+    ))}
+    {/* Orbit ring above head */}
+    <div style={{position:'fixed',left:headX+8,bottom:headTop+28,
+      width:30,height:10,borderRadius:'50%',
+      border:'2px solid rgba(255,220,50,.65)',
+      animation:'dfSpin 1.1s linear infinite',
+      pointerEvents:'none',zIndex:12}}/>
+  </>)
+}
+
+function ZenParticles({charX, charY, viewH}:{charX:number;charY:number;viewH:number}){
+  const bottom=viewH-charY+10
+  return(<>
+    <style>{`@keyframes zenF{0%{opacity:0;transform:translateY(0) scale(.5) rotate(0deg)}50%{opacity:.9;transform:translateY(-35px) scale(1) rotate(180deg)}100%{opacity:0;transform:translateY(-80px) scale(.4) rotate(360deg)}}`}</style>
+    {(['✨','🌸','💫','✨','🌸','💫'] as string[]).map((s,i)=>(
+      <div key={i} style={{position:'fixed',left:charX-30+i*22,bottom:bottom+i%2*20,fontSize:10+i%3*4,
+        animation:`zenF ${2.5+i*.4}s ease-in-out ${i*.5}s infinite`,pointerEvents:'none',zIndex:12}}>{s}</div>
+    ))}
+    <div style={{position:'fixed',left:charX+CHAR_W/2-20,bottom:bottom+30,
+      width:40,height:40,borderRadius:'50%',
+      border:'1.5px solid rgba(167,243,208,.4)',
+      boxShadow:'0 0 18px rgba(167,243,208,.2)',
+      animation:'zenF 3s ease-in-out infinite',
+      pointerEvents:'none',zIndex:11}}/>
+  </>)
+}
+
+function BathBubbles({charX}:{charX:number}){
+  return(<>
+    <style>{`@keyframes bbl{0%{opacity:.8;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(.3)}}`}</style>
+    {Array.from({length:10},(_,i)=>(
+      <div key={i} style={{position:'fixed',left:charX-60+i*16,bottom:90+i%3*12,
+        width:6+(i%3)*4,height:6+(i%3)*4,borderRadius:'50%',
+        background:'rgba(255,255,255,.25)',border:'1px solid rgba(255,255,255,.5)',
+        animation:`bbl ${1.4+i*.18}s ease-out ${i*.22}s infinite`,
+        pointerEvents:'none',zIndex:12}}/>
+    ))}
+  </>)
+}
+
+function WakeupEffect({charX,charY,viewH,phase}:{charX:number;charY:number;viewH:number;phase:number}){
+  if(phase<1) return null
+  const bottom=viewH-charY-20
+  return(<>
+    <style>{`@keyframes wkE{0%{opacity:0;transform:scale(.2) rotate(-20deg)}30%{opacity:1;transform:scale(1.4) rotate(5deg)}100%{opacity:0;transform:scale(.8) translateY(-20px)}}`}</style>
+    <div style={{position:'fixed',left:charX+60,bottom:bottom+40,fontSize:28,fontWeight:900,
+      color:'#FFD700',textShadow:'2px 2px 0 #000',
+      animation:'wkE .6s ease-out forwards',pointerEvents:'none',zIndex:14}}>!</div>
+    {phase>=2&&<div style={{position:'fixed',left:charX+30,bottom:bottom+20,fontSize:18,
+      animation:'wkE .5s ease-out .1s forwards',pointerEvents:'none',zIndex:13}}>☕💦</div>}
+  </>)
+}
+
+function PhoneBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
+  const bottom=viewH-charY+30
+  return(<>
+    <style>{`@keyframes phB{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}`}</style>
+    <div style={{position:'fixed',left:charX+CHAR_W+8,bottom:bottom,
+      background:'rgba(255,255,255,.9)',border:'1px solid rgba(0,0,0,.1)',borderRadius:12,
+      padding:'4px 10px',fontSize:11,fontWeight:700,color:'#333',whiteSpace:'nowrap',
+      animation:'phB 1.2s ease-in-out infinite',pointerEvents:'none',zIndex:13,
+      boxShadow:'0 2px 8px rgba(0,0,0,.1)'}}>
+      <span style={{letterSpacing:3}}>• • •</span>
+    </div>
+  </>)
+}
+
+function PeekEffect({side, progress}:{side:'left'|'right'; progress:number}){
+  return(<>
+    <style>{`@keyframes eyeB{0%,100%{transform:scaleY(1)}45%,55%{transform:scaleY(.1)}}`}</style>
+  </>)
+}
+
 /* ── Perch bubble ──────────────────────────────────────────────────── */
 function PerchBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
-  const bottom=viewH-charY-CHAR_H-30
   return(<>
-    <style>{`@keyframes pbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>
-    <div style={{position:'fixed',left:charX+30,bottom:bottom,
+    <style>{`@keyframes pbob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}`}</style>
+    <div style={{position:'fixed',left:charX+CHAR_W/2,top:charY-52,
+      transform:'translateX(-50%)',
       background:'rgba(255,255,255,.94)',border:'1px solid rgba(0,0,0,.08)',borderRadius:12,
       padding:'5px 10px',fontSize:13,fontWeight:700,color:'#333',whiteSpace:'nowrap',
       animation:'pbob 1.5s ease-in-out infinite',pointerEvents:'none',zIndex:15,
       boxShadow:'0 2px 12px rgba(0,0,0,.12)'}}>
       👀 what's this?
-      <div style={{position:'absolute',bottom:-8,left:16,width:0,height:0,
+      <div style={{position:'absolute',bottom:-8,left:'50%',transform:'translateX(-50%)',width:0,height:0,
         borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
-        borderTop:'8px solid rgba(255,255,255,.94)'}}/>
+        borderTop:'8px solid rgba(0,0,0,.08)'}}/>
+      <div style={{position:'absolute',bottom:-6,left:'50%',transform:'translateX(-50%)',width:0,height:0,
+        borderLeft:'6px solid transparent',borderRight:'6px solid transparent',
+        borderTop:'7px solid rgba(255,255,255,.94)'}}/>
     </div>
   </>)
 }
@@ -785,6 +982,8 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
   const [charYDisp, setCharYDisp] = useState(740)
   const [dirDisp,   setDirDisp]   = useState<1|-1>(1)
   const [banging,   setBanging]   = useState(false)
+  const [forcedScene, setForcedScene] = useState<Scene|null>(null)
+  const forcedSceneRef = useRef<Scene|null>(null)
   const [showPerchBubble, setShowPerchBubble] = useState(false)
   const [clickBubble, setClickBubble] = useState<string|null>(null)
   const clickBubbleTimer = useRef<ReturnType<typeof setTimeout>|null>(null)
@@ -842,6 +1041,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     const canvas = canvasRef.current
     if(!canvas){ rafRef.current=requestAnimationFrame(draw); return }
     const ctx = canvas.getContext('2d')!
+    ctx.imageSmoothingEnabled = false
     const ms  = msRef.current
     const s   = anim.current
     const W   = canvas.width
@@ -854,6 +1054,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     const zones   = sideZones(W)
     const zKey: 'L'|'R' = ms==='bear' ? 'L' : 'R'
     const zone = zones[zKey]
+    const zL = zones.L   // always the left side zone
 
     // ── Scene management ─────────────────────────────────────────
     if(s.prevState !== ms){
@@ -866,11 +1067,11 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     if(cfg.ms<9999999 && now-s.sceneStartMs>cfg.ms){
       s.sceneIdx=(s.sceneIdx+1)%cycle.length; s.sceneStartMs=now; s.sceneSnapped=false; s.atPerchTarget=false
     }
-    const scene=cycle[s.sceneIdx].scene
+    const scene = forcedSceneRef.current ?? cycle[s.sceneIdx].scene
     if(scene!==s.currentScene){ s.currentScene=scene; setActiveScene(scene) }
 
     // ── Y lerp ───────────────────────────────────────────────────
-    if(scene!=='perch'&&scene!=='sleep'&&scene!=='gaming') s.targetY=groundY
+    if(scene!=='perch'&&scene!=='sleep'&&scene!=='gaming'&&scene!=='bubblebath'&&scene!=='wakeup') s.targetY=groundY
     if(Math.abs(s.charY-s.targetY)>0.5) s.charY+=(s.targetY-s.charY)*0.055
     else s.charY=s.targetY
 
@@ -879,37 +1080,71 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── SLEEP ────────────────────────────────────────────────────
     if(scene==='sleep'){
       s.charX=W/2; s.faceFlush=0
-      const bob=Math.sin(now*0.0008)*2   // smooth float, no rounding
+      const bob=Math.round(Math.sin(now*0.0008)*2)
       drawBed(ctx, W/2, H)
-      // Head is rotated 90° CW — hair points LEFT toward headboard
-      // Rotated head: x = headOx + r*PX (0-55px wide), y = headOy + (c-3)*PX (0-55px tall)
-      // Position so chin (c=14, y=headOy+55) is at blanket level (H-75), face fully above
-      const headOx=Math.round(W/2-108), headOy=Math.round(H-133)
-      drawSleepingHead(ctx, headOx, headOy, bob, W, H)
-      // Blanket base
+
+      // ── Blanket: shaped path with raised body profile ─────────────
+      // head right (neck) = headOx + 11*PX = W/2-108+55 = W/2-53
+      // Start blanket a bit left of neck so it tucks under the chin — no gap
+      const neckX  = Math.round(W/2-62)
+      const bedBot = Math.round(H-8)
+      // Blanket left edge goes up to chin height (same y as head center)
+      const chinY  = Math.round(H-110)
+      const shoulderY = Math.round(H-82)
+
+      // Drop shadow behind blanket for depth
+      ctx.fillStyle='#121f52'
+      ctx.beginPath()
+      ctx.moveTo(neckX+3, chinY+5)
+      ctx.quadraticCurveTo(Math.round(W/2+8),  Math.round(H-140+5), Math.round(W/2+60), Math.round(H-120+5))
+      ctx.quadraticCurveTo(Math.round(W/2+88), Math.round(H-94+5),  Math.round(W/2+108),Math.round(H-106+5))
+      ctx.quadraticCurveTo(Math.round(W/2+128),Math.round(H-112+5), Math.round(W/2+130),Math.round(H-75+5))
+      ctx.lineTo(Math.round(W/2+130), bedBot)
+      ctx.lineTo(neckX+3, bedBot)
+      ctx.closePath(); ctx.fill()
+
+      // Main blanket — big torso hump + knee hump
       ctx.fillStyle='#1e3a8a'
-      ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,53)
-      // Big body bump ON TOP of blanket — torso hump
+      ctx.beginPath()
+      ctx.moveTo(neckX, chinY)
+      // Steep rise for large torso hump
+      ctx.quadraticCurveTo(Math.round(W/2+8),  Math.round(H-145), Math.round(W/2+58), Math.round(H-122))
+      // Dip between torso and knees
+      ctx.quadraticCurveTo(Math.round(W/2+85), Math.round(H-92),  Math.round(W/2+106),Math.round(H-108))
+      // Knee bump
+      ctx.quadraticCurveTo(Math.round(W/2+126),Math.round(H-114), Math.round(W/2+128),Math.round(H-76))
+      // Taper to footboard
+      ctx.quadraticCurveTo(Math.round(W/2+130),Math.round(H-60),  Math.round(W/2+122), bedBot)
+      ctx.lineTo(neckX, bedBot)
+      ctx.closePath(); ctx.fill()
+
+      // Top-face highlight on torso hump (catches the light)
       ctx.fillStyle='#2850b8'
       ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+20), Math.round(H-60), 85, 18, 0, 0, Math.PI*2)
-      ctx.fill()
-      // Knee bump
-      ctx.fillStyle='#2244a8'
-      ctx.beginPath()
-      ctx.ellipse(Math.round(W/2+95), Math.round(H-56), 38, 11, 0, 0, Math.PI*2)
-      ctx.fill()
-      // Blanket highlight stripe and texture over everything
-      ctx.fillStyle='#2563eb'
-      ctx.fillRect(Math.round(W/2-117),Math.round(H-73),248,14)
-      ctx.fillStyle='rgba(255,255,255,.09)'
-      for(let i=0;i<5;i++) ctx.fillRect(Math.round(W/2-108)+i*30,Math.round(H-69),18,38)
+      ctx.moveTo(neckX, chinY)
+      ctx.quadraticCurveTo(Math.round(W/2+8),  Math.round(H-145), Math.round(W/2+48), Math.round(H-124))
+      ctx.quadraticCurveTo(Math.round(W/2+28), Math.round(H-106), neckX, Math.round(H-94))
+      ctx.closePath(); ctx.fill()
+
+      // Chin-fold edge — bright vertical strip right at neck
+      ctx.fillStyle='#2d63d4'
+      ctx.fillRect(neckX, chinY, 10, shoulderY - chinY + 18)
+      ctx.fillStyle='#4a80f0'
+      ctx.fillRect(neckX+2, chinY, 5, 14)
+
+      // Subtle vertical stripe texture
+      ctx.fillStyle='rgba(255,255,255,.06)'
+      for(let i=0;i<4;i++) ctx.fillRect(neckX+16+i*30, Math.round(H-105), 16, 80)
+
+      // ── Head drawn LAST — overlaps blanket left edge, no visible gap ─
+      const headOx=Math.round(W/2-108), headOy=Math.round(H-133)
+      drawSleepingHead(ctx, headOx, headOy, bob, W, H)
     }
 
     // ── GAMING ───────────────────────────────────────────────────
     else if(scene==='gaming'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:W/2
+        s.charX=zL.ok?zL.min+20:60
         s.direction=1; s.sceneSnapped=true
         s.targetY=groundY   // sit at ground level, legs spread via pose
       }
@@ -928,14 +1163,14 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     else if(scene==='walk'){
       // Snap to a fixed position once
       if(!s.sceneSnapped){
-        s.charX = zone.ok ? (zone.min+zone.max)/2 : W/2
+        s.charX = zL.ok ? (zL.min+zL.max)/2 : 70
         s.direction = 1
         s.sceneSnapped = true
       }
       let extraBounce=0, shakeX=0
       if(ms==='bull'){
         // Head-bob — visible rhythmic bounce like he's vibing
-        extraBounce = Math.sin(now*.007)*-5
+        extraBounce = Math.round(Math.sin(now*.007)*-5)
         pose.leftArmDY  = Math.round(Math.sin(now*.007)*-3)
         pose.rightArmDY = Math.round(Math.sin(now*.007+Math.PI)*-3)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
@@ -946,48 +1181,210 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         pose.bodyDY += 1
       } else {
         // Neutral: very slow idle float
-        extraBounce = Math.sin(now*.0018)*-1
+        extraBounce = Math.round(Math.sin(now*.0018)*-2)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
         pose.bodyDY += 1
         if(!s.paused){if(++s.pauseTimer>280){s.paused=true;s.scratchTimer=50;s.pauseTimer=0}}
         else{if(--s.scratchTimer<=0)s.paused=false}
       }
-      // Very subtle arm micro-movement
-      pose.rightArmDY += Math.round(Math.sin(now*.002)*0.5)
-      pose.leftArmDY  += Math.round(Math.sin(now*.002+1)*0.5)
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,Math.round(extraBounce),shakeX,W,H)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,extraBounce,shakeX,W,H)
     }
 
-    // ── RAIN (legacy — no longer used) ───────────────────────────
-    else if(scene==='rain'){
-      if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:60; s.direction=1; s.sceneSnapped=true
+    // ── DEFEAT (lying flat on ground) ───────────────────────────
+    else if(scene==='defeat'){
+      s.faceFlush=0
+      // Character lying on their side: GRID row r → x axis, col c → y axis
+      // This gives a top-down side-lying view: head on left, feet on right
+      const lyingOx = Math.round(W/2 - 31*PX/2 - 20)   // slightly left of center
+      const lyingOy = Math.round(H - 20 - 16*PX)        // bottom of figure at ground
+
+      // Ground shadow ellipse
+      ctx.fillStyle='rgba(0,0,0,.18)'
+      ctx.beginPath()
+      ctx.ellipse(lyingOx+80, Math.round(H-14), 90, 7, 0, 0, Math.PI*2)
+      ctx.fill()
+
+      // Draw full body lying flat (r→x, c→y)
+      for(let r=0;r<32;r++){
+        for(let c=0;c<20;c++){
+          const raw=GRID[r][c]
+          if(!raw) continue
+          const px=lyingOx+r*PX
+          const py=lyingOy+c*PX
+          if(px<0||py<0||px+PX>W||py+PX>H) continue
+          // Slight red flush on the face rows/cols
+          let col=raw
+          if(raw===SK && r>=4 && r<=11 && c>=4 && c<=13)
+            col=lerpColor(SK,'#ff7070',.35)
+          ctx.fillStyle=col
+          ctx.fillRect(px,py,PX,PX)
+        }
       }
-      s.faceFlush=Math.min(.6,s.faceFlush+.0015)
-      pose.bodyDY=2; pose.leftArmDY=3; pose.rightArmDY=3
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H)
+
+      // Small "KO" indicator above head — X pupils over glasses area
+      // Glasses lenses (G2) are at r=6-7, c=6-7 (left) and c=10-11 (right)
+      // In lying coords: x=lyingOx+30, y1=lyingOy+30 / y2=lyingOy+50
+      ctx.fillStyle='#ff2222'
+      // Left lens X
+      ctx.fillRect(lyingOx+30, lyingOy+28, PX, PX)
+      ctx.fillRect(lyingOx+30, lyingOy+38, PX, PX)
+      ctx.fillRect(lyingOx+35, lyingOy+33, PX, PX)  // center of X
+      ctx.fillRect(lyingOx+25, lyingOy+33, PX, PX)
+      // Right lens X
+      ctx.fillRect(lyingOx+30, lyingOy+48, PX, PX)
+      ctx.fillRect(lyingOx+30, lyingOy+58, PX, PX)
+      ctx.fillRect(lyingOx+35, lyingOy+53, PX, PX)
+      ctx.fillRect(lyingOx+25, lyingOy+53, PX, PX)
+
+      // Sync charX/charY for overlay positioning (head is at lyingOx, lyingOy+40 center)
+      s.charX=lyingOx; s.charY=Math.round(H-20-CHAR_H)
     }
 
-    // ── HEAD BANG ────────────────────────────────────────────────
-    else if(scene==='headbang'){
-      if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:60; s.direction=1; s.sceneSnapped=true
+    // ── WAKE-UP (jolt awake from sleep) ─────────────────────────
+    else if(scene==='wakeup'){
+      s.charX=W/2; s.faceFlush=0
+      const elapsed=now-s.sceneStartMs
+      if(elapsed<2200){
+        // Phase 1: sleeping
+        const bob=Math.round(Math.sin(now*0.0008)*2)
+        drawBed(ctx,W/2,H)
+        const neckX=Math.round(W/2-62)
+        const bedBot=Math.round(H-8)
+        ctx.fillStyle='#1e3a8a'
+        ctx.beginPath()
+        ctx.moveTo(neckX,Math.round(H-110))
+        ctx.quadraticCurveTo(Math.round(W/2+8),Math.round(H-145),Math.round(W/2+58),Math.round(H-122))
+        ctx.quadraticCurveTo(Math.round(W/2+85),Math.round(H-92),Math.round(W/2+106),Math.round(H-108))
+        ctx.quadraticCurveTo(Math.round(W/2+126),Math.round(H-114),Math.round(W/2+128),Math.round(H-76))
+        ctx.quadraticCurveTo(Math.round(W/2+130),Math.round(H-60),Math.round(W/2+122),bedBot)
+        ctx.lineTo(neckX,bedBot); ctx.closePath(); ctx.fill()
+        drawSleepingHead(ctx,Math.round(W/2-108),Math.round(H-133),bob,W,H)
+      } else {
+        // Phase 2: standing up, disoriented
+        const joltT=(elapsed-2200)/1000
+        const joltBob=Math.round(Math.sin(joltT*12)*Math.max(0,1-joltT)*-8)
+        pose.leftArmDY=Math.round(Math.sin(joltT*8)*-6)
+        pose.rightArmDY=Math.round(Math.sin(joltT*8+Math.PI)*-6)
+        renderCharacter(ctx,pose,Math.round(s.charX-50),Math.round(s.charY),1,0,joltBob,Math.round(Math.sin(joltT*15)*3),W,H,32,NIGHTGOWN_MAP)
       }
-      s.faceFlush=Math.min(.65,s.faceFlush+.002)
-      // Fast rhythmic head/body bob — 8 bobs per second
-      const bangT=now*.009
-      const headBob=Math.round(Math.sin(bangT)*-5)
-      pose.bodyDY=headBob
-      // Arms flail with opposite phase
-      pose.leftArmDY =Math.round(Math.sin(bangT+Math.PI)*-3)
-      pose.rightArmDY=Math.round(Math.sin(bangT)*-3)
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H)
+    }
+
+    // ── PEEK (slide in from edge, look around, slide back) ──────
+    else if(scene==='peek'){
+      s.faceFlush=0
+      const elapsed=now-s.sceneStartMs
+      const peekSide: 1|-1 = 1  // always from right
+      const hiddenX = W+CHAR_W+10
+      const peekX   = W-CHAR_W-18
+      // Timeline: 0-1200ms slide in, 1200-4000ms hold, 4000-5200ms slide out
+      let charX: number
+      if(elapsed<1200){
+        const t=elapsed/1200
+        const ease=1-Math.pow(1-t,3)
+        charX=hiddenX+(peekX-hiddenX)*ease
+      } else if(elapsed<4000){
+        charX=peekX
+      } else {
+        const t=Math.min(1,(elapsed-4000)/1200)
+        const ease=t*t*t
+        charX=peekX+(hiddenX-peekX)*ease
+      }
+      s.charX=charX
+      const lookDir: 1|-1 = -1  // always looking inward
+      const bob=Math.round(Math.sin(now*0.0015)*2)
+      pose.bodyDY=bob
+      renderCharacter(ctx,pose,Math.round(charX),Math.round(s.charY),lookDir,0,0,0,W,H)
+    }
+
+    // ── COFFEE (slow walk holding coffee cup) ───────────────────
+    else if(scene==='coffee'){
+      if(!s.sceneSnapped){ s.direction=1; s.sceneSnapped=true; s.charX=zL.ok?zL.min+20:50 }
+      s.faceFlush=0
+      // Glacially slow drift — sleepy zombie walk
+      s.charX+=s.direction*0.18
+      const coffeeMin=zL.ok?zL.min+10:40
+      const coffeeMax=zL.ok?Math.min(zL.max,coffeeMin+180):220
+      if(s.charX<coffeeMin){s.direction=1}
+      if(s.charX>coffeeMax){s.direction=-1}
+      // Smooth sin sway — no discrete frames, no pixel jumps
+      const st=now*0.0009
+      pose={
+        leftArmDY:  0,
+        rightArmDY: -2,
+        leftLegDX:  Math.round(Math.sin(st)*1.6),
+        rightLegDX: Math.round(Math.sin(st)*-1.6),
+        bodyDY:     Math.round(Math.abs(Math.sin(st))*1.5),
+      }
+      drawCoffeeCup(ctx, Math.round(s.charX), Math.round(s.charY), s.direction)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
+    }
+
+    // ── PHONE (pace back and forth on a call) ───────────────────
+    else if(scene==='phone'){
+      if(!s.sceneSnapped){
+        s.charX=zL.ok?zL.min+30:70; s.direction=1; s.sceneSnapped=true
+      }
+      s.faceFlush=0
+      const paceRange=60
+      const paceCenter=zL.ok?(zL.min+zL.max)/2+20:100
+      s.charX+=s.direction*0.55
+      if(s.charX<paceCenter-paceRange){s.direction=1}
+      if(s.charX>paceCenter+paceRange){s.direction=-1}
+      // Smooth sin — no discrete walk frames, no pixel-jump jitter
+      const pt=now*0.001
+      pose={
+        leftArmDY:  -14,                                        // locked at ear
+        rightArmDY: Math.round(Math.sin(pt)*1.4),              // free arm sways gently
+        leftLegDX:  Math.round(Math.sin(pt)*1.6),
+        rightLegDX: Math.round(Math.sin(pt)*-1.6),
+        bodyDY:     Math.round(Math.abs(Math.sin(pt))*1.5),
+      }
+      // Phone pressed to whichever side the left arm appears on (left when dir=1, right when dir=-1)
+      const phoneEarX=s.direction===1
+        ? Math.round(s.charX)+2                  // dir=1: left arm at charX+0..10
+        : Math.round(s.charX)+CHAR_W-18          // dir=-1: left arm flips to charX+90..95
+      const phoneEarY=Math.round(s.charY)+22     // ear level ~row 5
+      ctx.fillStyle='#0f0f1a'; ctx.fillRect(phoneEarX,phoneEarY,9,16)
+      ctx.fillStyle='#4a90d9'; ctx.fillRect(phoneEarX+1,phoneEarY+1,7,4)  // screen glow
+      ctx.fillStyle='#1e3a8a'; ctx.fillRect(phoneEarX+1,phoneEarY+5,7,9)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
+    }
+
+    // ── MEDITATION (float, zen pose) ─────────────────────────────
+    // ── DARTBOARD (throw darts at a chart on the wall) ───────────
+
+    // ── BUBBLE BATH (sitting in tub, bubbles floating) ───────────
+    else if(scene==='bubblebath'){
+      if(!s.sceneSnapped){ s.charX=W/2; s.direction=1; s.sceneSnapped=true }
+      s.faceFlush=0
+      const bob=Math.round(Math.sin(now*0.0007)*2)
+      drawBathtub(ctx, Math.round(s.charX), H)
+      // Only render top half of character (head + torso, cut off at waist)
+      // Draw clipped to tub area
+      ctx.save()
+      ctx.beginPath(); ctx.rect(Math.round(s.charX)-100, H-200, 200, 200); ctx.clip()
+      pose.bodyDY=4; pose.leftArmDY=3; pose.rightArmDY=3
+      renderCharacter(ctx,pose,Math.round(s.charX)-CHAR_W/2,Math.round(s.charY+bob),s.direction,0,0,0,W,H,16,SHIRTLESS_MAP)
+      ctx.restore()
+      // Rubber duck
+      const duckX=Math.round(s.charX)+55
+      const duckY=H-52+bob
+      ctx.fillStyle='#FFD700'
+      ctx.beginPath(); ctx.ellipse(duckX,duckY,12,8,0,0,Math.PI*2); ctx.fill()
+      ctx.fillStyle='#FFD700'
+      ctx.beginPath(); ctx.ellipse(duckX-8,duckY-8,7,6,-0.3,0,Math.PI*2); ctx.fill()
+      ctx.fillStyle='#FF6B35'
+      ctx.beginPath(); ctx.moveTo(duckX-14,duckY-8); ctx.lineTo(duckX-10,duckY-6); ctx.lineTo(duckX-14,duckY-4); ctx.closePath(); ctx.fill()
+      ctx.fillStyle='#1a1a1a'; ctx.beginPath(); ctx.arc(duckX-11,duckY-10,1.5,0,Math.PI*2); ctx.fill()
+      // Water foam line
+      ctx.fillStyle='rgba(255,255,255,.4)'; ctx.fillRect(Math.round(s.charX)-82,H-52,164,5)
+      s.charY=Math.round(H-CHAR_H-20)
     }
 
     // ── MONEY COUNT ──────────────────────────────────────────────
     else if(scene==='money'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:W-160; s.direction=-1; s.sceneSnapped=true
+        s.charX=zL.ok?zL.min+30:70; s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.max(0,s.faceFlush-.01)
       const flipT=now*.004
@@ -995,7 +1392,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       pose.rightArmDY=Math.round(Math.sin(flipT)*-3)-1
       pose.leftArmDY=Math.round(Math.sin(flipT+0.8)*-1)+1
       pose.bodyDY=1
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H,26)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
       // Draw a stack of bills in hand
       const billDir=s.direction
       const bx=billDir===1?Math.round(s.charX)+CHAR_W-8:Math.round(s.charX)-38
@@ -1016,7 +1413,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── PARTY ────────────────────────────────────────────────────
     else if(scene==='party'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:W-160; s.direction=-1; s.sceneSnapped=true
+        s.charX=zL.ok?zL.min+30:70; s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.max(0,s.faceFlush-.01)
       const t=now*.004
@@ -1029,15 +1426,15 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── BEACH ────────────────────────────────────────────────────
     else if(scene==='beach'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?Math.max(zone.min,W-CHAR_W-70):W-CHAR_W-70
-        s.direction=-1; s.sceneSnapped=true
+        s.charX=zL.ok?zL.min+20:60
+        s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.max(0,s.faceFlush-.01)
-      drawBeachChair(ctx, Math.round(s.charX), W, H)
-      const chairSeatY=H-62, seatedY=chairSeatY-15*PX
-      // Smooth breathe — no integer rounding so no 1px flicker
+      const seatY=H-75  // must match drawBeachChair: base-55 = H-20-55
+      drawBeachChair(ctx, Math.round(s.charX), H)
+      const seatedY=seatY-CHAR_H+55  // sit character so torso rests on seat
       const breathe=Math.sin(now*.0008)
-      pose.bodyDY=0  // keep static, use breathe offset below
+      pose.bodyDY=0
       pose.leftArmDY=3; pose.rightArmDY=2; pose.leftLegDX=-2; pose.rightLegDX=2
       renderCharacter(ctx,pose,Math.round(s.charX),Math.round(seatedY+breathe),s.direction,0,0,0,W,H,21)
     }
@@ -1045,11 +1442,11 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── WEIGHTS ──────────────────────────────────────────────────
     else if(scene==='weights'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:W-160; s.direction=-1; s.sceneSnapped=true
+        s.charX=zL.ok?zL.min+30:70; s.direction=1; s.sceneSnapped=true
       }
       const liftCycle=(Math.sin(now*.0028)+1)/2   // 0→1→0, smooth press
-      pose.leftArmDY =liftCycle*-9
-      pose.rightArmDY=liftCycle*-9
+      pose.leftArmDY =Math.round(liftCycle*-9)
+      pose.rightArmDY=Math.round(liftCycle*-9)
       pose.bodyDY=Math.round(liftCycle*-1)
       s.faceFlush=Math.min(.35,s.faceFlush+.001)
       renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,s.faceFlush,0,0,W,H)
@@ -1059,26 +1456,26 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── NEWSPAPER ────────────────────────────────────────────────
     else if(scene==='newspaper'){
       if(!s.sceneSnapped){
-        s.charX=zone.ok?(zone.min+zone.max)/2:W-160; s.direction=-1; s.sceneSnapped=true
+        s.charX=zL.ok?zL.min+30:70; s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.max(0,s.faceFlush-.01)
-      const wave=Math.sin(now*.0009)*1.8   // gentle paper sway, no rounding
+      const wave=Math.round(Math.sin(now*.0009)*2)  // integer wave for clean fillRect
       pose.bodyDY=1; pose.leftArmDY=2; pose.rightArmDY=2
       pose.leftLegDX=-1; pose.rightLegDX=1
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H,26)
+      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
       drawNewspaper(ctx, Math.round(s.charX), Math.round(s.charY), s.direction, wave)
     }
 
     // ── DESK ─────────────────────────────────────────────────────
     else if(scene==='desk'){
       if(!s.sceneSnapped){
-        const deskW=135; s.charX=Math.max(zone.ok?zone.min:10, deskW-CHAR_W+20)
+        s.charX=55  // desk is always drawn at x=4, character stands at x=55 behind it
         s.direction=1; s.sceneSnapped=true
       }
       s.faceFlush=Math.min(1,s.faceFlush+.004)
       // Smooth arm cycle — sin curve replaces binary snap
       const bangT=now*.007
-      const armPos=Math.sin(bangT)*-3.5         // -3.5 to +3.5, smooth
+      const armPos=Math.round(Math.sin(bangT)*-4)   // integer, clean pixel movement
       const isBang=Math.sin(bangT)>.55
       // Body dips slightly on downstroke
       const bodyDip=Math.round((1-Math.abs(Math.sin(bangT)))*.5*-1)
@@ -1131,7 +1528,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── THROW ────────────────────────────────────────────────────
     else if(scene==='throw'){
-      if(!s.sceneSnapped){s.charX=zone.ok?zone.max-10:60;s.direction=1;s.sceneSnapped=true}
+      if(!s.sceneSnapped){s.charX=zL.ok?zL.min+20:60;s.direction=1;s.sceneSnapped=true}
       const throwT=now*.005; const windup=Math.sin(throwT)>0
       pose.rightArmDY=windup?-5:2; pose.leftArmDY=windup?1:-1; pose.bodyDY=windup?-1:0
       s.faceFlush=Math.min(1,s.faceFlush+.003)
@@ -1141,20 +1538,6 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     }
 
     // ── TELESCOPE ────────────────────────────────────────────────
-    else if(scene==='telescope'){
-      if(!s.sceneSnapped){
-        // Face INWARD toward content — left side for right zone, right side for left zone
-        s.charX=zone.ok?zone.min+10:W-160
-        s.direction=-1   // always face toward the content
-        s.sceneSnapped=true
-        s.faceFlush=0
-      }
-      pose.bodyDY=-1; pose.leftArmDY=2
-      pose.rightArmDY=Math.round(Math.sin(now*.0012)*1)-2   // tiny scope adjustment
-      renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
-      drawTelescope(ctx, Math.round(s.charX), Math.round(s.charY), s.direction)
-    }
-
     // ── PERCH ────────────────────────────────────────────────────
     else if(scene==='perch'){
       if(!s.sceneSnapped){
@@ -1217,12 +1600,14 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       gaming:     ['ONE MORE GAME','gg no re','I\'m in the zone','shh'],
       doomscroll: ['stonks go down 📉','why do I do this','send help','it\'s fine'],
       panicrun:   ['AHHHHHH','SELL SELL SELL','NOT MY PORTFOLIO','MAYDAY MAYDAY'],
-      rain:       ['I hate this job','it\'s always raining','ugh'],
-      headbang:   ['AGHHHH','*internal screaming*','WHY IS IT DOWN','my portfolio 💀'],
+      wakeup:     ['WHAT TIME IS IT','THE MARKET IS OPEN?!','where\'s my coffee','*screams internally*'],
+      peek:       ['...just checking','nothing to see here','👀','hi','I wasn\'t here'],
+      coffee:     ['just need one more cup','don\'t talk to me','coffee = gains','...sipping'],
+      phone:      ['hold on I\'m on a call','not now','yes...yes...WHAT?!','talking to my broker'],
+      bubblebath: ['finally some me-time','no charts in the tub','squeaky clean gains','leave me alone'],
       money:      ['counting my gains','hmm...','not bad not bad','where did it all go'],
       newspaper:  ['Interesting...','hm, not great','who writes this stuff'],
       weights:    ['LETS GOOO 💪','gains only','PUSH PUSH PUSH','no pain no gain'],
-      telescope:  ['I see it now...','moon soon 🔭','DD complete'],
       perch:      ['👀 observing','sus.','noted.'],
     }
     const pool = quips[ms] ?? ['Hey!', 'What?', 'Ow!']
@@ -1239,7 +1624,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
   return (<>
     <div style={{position:'fixed',top:0,left:0,width:'100%',height:'100vh',zIndex:10,pointerEvents:'none'}}>
       <canvas ref={canvasRef} width={canvasW} height={viewH}
-        style={{display:'block',width:'100%',height:'100vh'}}/>
+        style={{display:'block',width:'100%',height:'100vh',imageRendering:'pixelated'}}/>
     </div>
 
     {/* Clickable zone over character */}
@@ -1252,23 +1637,20 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {/* Speech bubble on click */}
     {clickBubble && (
       <>
-        <style>{`@keyframes bubblePop{0%{opacity:0;transform:scale(.5) translateY(8px)}15%{opacity:1;transform:scale(1.1) translateY(-2px)}25%{transform:scale(1) translateY(0)}85%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}`}</style>
-        <div style={{position:'fixed',left:charXDisp+(dirDisp===1?CHAR_W+6:-120),
-          top:charYDisp-10,zIndex:20,pointerEvents:'none',
+        <style>{`@keyframes bubblePop{0%{opacity:0;transform:translateX(-50%) scale(.5) translateY(8px)}15%{opacity:1;transform:translateX(-50%) scale(1.1) translateY(-2px)}25%{transform:translateX(-50%) scale(1) translateY(0)}85%{opacity:1;transform:translateX(-50%)}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}`}</style>
+        <div style={{position:'fixed',left:charXDisp+CHAR_W/2,top:charYDisp-62,
+          transform:'translateX(-50%)',
+          zIndex:20,pointerEvents:'none',
           background:'#fff',border:'2px solid #222',borderRadius:12,
-          padding:'6px 12px',fontSize:13,fontWeight:800,color:'#111',whiteSpace:'nowrap',
+          padding:'6px 14px',fontSize:13,fontWeight:800,color:'#111',whiteSpace:'nowrap',
           boxShadow:'3px 3px 0 #222',
           animation:'bubblePop 2.2s ease forwards'}}>
           {clickBubble}
-          <div style={{position:'absolute',bottom:-10,
-            [dirDisp===1?'left':'right']:12,
-            width:0,height:0,
-            borderLeft:'8px solid transparent',borderRight:'8px solid transparent',
+          <div style={{position:'absolute',bottom:-10,left:'50%',transform:'translateX(-50%)',
+            width:0,height:0,borderLeft:'8px solid transparent',borderRight:'8px solid transparent',
             borderTop:'10px solid #222'}}/>
-          <div style={{position:'absolute',bottom:-7,
-            [dirDisp===1?'left':'right']:13,
-            width:0,height:0,
-            borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
+          <div style={{position:'absolute',bottom:-7,left:'50%',transform:'translateX(-50%)',
+            width:0,height:0,borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
             borderTop:'9px solid #fff'}}/>
         </div>
       </>
@@ -1284,12 +1666,14 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {activeScene==='sleep'&&<ZzzParticles charX={Math.round(canvasW/2-130)} charY={viewH-248} viewH={viewH}/>}
     {activeState==='closed'&&<NightSky/>}
     {activeScene==='perch'&&showPerchBubble&&<PerchBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
-    {/* rain scene removed — replaced by headbang */}
     {activeScene==='weights'&&<WeightSparkles charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='panicrun'&&<><DustCloud charX={charXDisp} dir={dirDisp}/><PanicExclaim charX={charXDisp}/></>}
-    {activeScene==='telescope'&&<TelescopeSparkles charX={charXDisp} dir={dirDisp}/>}
 
+    {activeScene==='defeat'&&<DefeatStars headX={Math.round(canvasW/2-31*PX/2-20)} viewH={viewH}/>}
+    {activeScene==='wakeup'&&<ZzzParticles charX={Math.round(canvasW/2-130)} charY={viewH-248} viewH={viewH}/>}
+    {activeScene==='bubblebath'&&<BathBubbles charX={charXDisp}/>}
+    {activeScene==='phone'&&<PhoneBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='walk'&&activeState==='bear'&&<>
       <style>{`@keyframes stm{0%{opacity:.75;transform:translateY(0)}100%{opacity:0;transform:translateY(-55px)}}`}</style>
       {[0,1,2].map(i=>(
@@ -1312,16 +1696,38 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       <div style={{position:'fixed',inset:0,background:'rgba(5,5,20,0.45)',pointerEvents:'none',zIndex:9}}/>
     )}
 
-    <div style={{position:'fixed',bottom:24,right:16,display:'flex',gap:6,zIndex:30,pointerEvents:'all'}}>
-      {(['bull','bear','neutral','closed'] as MarketState[]).map(st=>(
-        <button key={st} onClick={()=>setActiveState(st)} style={{
-          padding:'4px 10px',borderRadius:20,fontSize:11,fontWeight:700,
-          border:`1px solid ${activeState===st?STATE_COLOR[st]:'rgba(255,255,255,.15)'}`,
-          background:activeState===st?STATE_COLOR[st]+'22':'rgba(10,10,20,.75)',
-          color:activeState===st?STATE_COLOR[st]:'rgba(255,255,255,.4)',
-          cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .2s',
-        }}>{STATE_LABEL[st]}</button>
-      ))}
+    {/* Debug scene buttons — all scenes listed for quick switching */}
+    <div style={{position:'fixed',bottom:16,left:'50%',transform:'translateX(-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:5,zIndex:30,pointerEvents:'all'}}>
+      {/* Market state row */}
+      <div style={{display:'flex',gap:4}}>
+        {(['bull','bear','neutral','closed'] as MarketState[]).map(st=>(
+          <button key={st} onClick={()=>{setActiveState(st);setForcedScene(null);forcedSceneRef.current=null}} style={{
+            padding:'3px 9px',borderRadius:16,fontSize:10,fontWeight:700,
+            border:`1px solid ${activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.15)'}`,
+            background:activeState===st&&!forcedScene?STATE_COLOR[st]+'22':'rgba(10,10,20,.75)',
+            color:activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.4)',
+            cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .15s',
+          }}>{STATE_LABEL[st]}</button>
+        ))}
+      </div>
+      {/* All scenes grid */}
+      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',gap:3,maxWidth:420}}>
+        {(['walk','party','beach','weights','desk','throw','doomscroll','panicrun','defeat','newspaper','money','perch','sleep','gaming','wakeup','peek','coffee','phone','bubblebath'] as Scene[]).map(sc=>(
+          <button key={sc} onClick={()=>{
+            forcedSceneRef.current=sc
+            setForcedScene(sc)
+            setActiveScene(sc)
+            anim.current.sceneSnapped=false
+            anim.current.sceneStartMs=performance.now()
+          }} style={{
+            padding:'2px 7px',borderRadius:12,fontSize:9,fontWeight:700,
+            border:`1px solid ${forcedScene===sc?'#f97316':'rgba(255,255,255,.12)'}`,
+            background:forcedScene===sc?'rgba(249,115,22,.2)':'rgba(10,10,20,.7)',
+            color:forcedScene===sc?'#f97316':'rgba(255,255,255,.38)',
+            cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .12s',whiteSpace:'nowrap',
+          }}>{sc}</button>
+        ))}
+      </div>
     </div>
   </>)
 }

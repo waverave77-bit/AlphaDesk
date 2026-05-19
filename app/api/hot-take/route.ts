@@ -3,6 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs'
 import path from 'path'
+import { getYahooCrumb, getMultipleQuotes } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,6 +46,8 @@ interface YahooQuote {
 // Sorted by % change so the most interesting ones bubble up
 async function fetchScreenerStocks(): Promise<YahooQuote[]> {
   try {
+    const { cookie, crumb } = await getYahooCrumb()
+
     const body = {
       offset: 0,
       size: 200,
@@ -56,19 +59,20 @@ async function fetchScreenerStocks(): Promise<YahooQuote[]> {
         operator: 'AND',
         operands: [
           { operator: 'lt', operands: ['regularMarketPrice', 100] },
-          { operator: 'gt', operands: ['regularMarketPrice', 2] },        // skip penny stocks
-          { operator: 'gt', operands: ['averageDailyVolume3Month', 500000] }, // decent liquidity
+          { operator: 'gt', operands: ['regularMarketPrice', 2] },
+          { operator: 'gt', operands: ['averageDailyVolume3Month', 500000] },
         ],
       },
     }
 
     const res = await fetch(
-      'https://query1.finance.yahoo.com/v1/finance/screener?formatted=false&lang=en-US&region=US',
+      `https://query1.finance.yahoo.com/v1/finance/screener?formatted=false&lang=en-US&region=US&crumb=${encodeURIComponent(crumb)}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Cookie': cookie,
         },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(12000),
@@ -83,30 +87,35 @@ async function fetchScreenerStocks(): Promise<YahooQuote[]> {
   }
 }
 
-// Fallback: batch-fetch a larger hardcoded list if screener fails
+// Fallback: use the lib's getMultipleQuotes (uses v8/chart which works without crumb)
 const FALLBACK_TICKERS = [
   'SOFI','HOOD','RIVN','NIO','SNAP','PLTR','RBLX','GME','F','T','BAC','WFC',
   'LYFT','VALE','SOUN','IONQ','SQ','MARA','RIOT','AI','JOBY','BBAI','CLSK',
   'GRAB','DKNG','LCID','SPCE','HUT','OPEN','SMCI','UBER','DASH','COIN','DDOG',
-  'CRWD','NET','AFRM','UPST','LMND','WISH','CLOV','WKHS','NKLA','BLNK','CHPT',
-  'PLUG','FCEL','BLDP','HYZN','NNOX','SKLZ','GENI','MTTR','BIRD','CRTX','SEER',
-  'OZON','LIZI','TIGR','FUTU','BEKE','VNET','KC','DOYU','HUYA','IQ','BILI',
-  'SE','GRAB','GOTO','BABA','JD','PDD','NTES','BIDU','TME','WB','MOMO',
-  'VALE','ITUB','BBD','SID','PBR','CIG','ABEV','ERJ','AZUL','TUPY',
-  'NOK','ERIC','TEF','KB','SAN','ING','AEG','PHG','ASML','STM',
-  'BB','BBRY','SIRI','VUZI','KTOS','AVAV','RCAT','AEYE','AIOT','BZFD',
+  'CRWD','NET','AFRM','UPST','LMND','CLOV','WKHS','NKLA','BLNK','CHPT',
+  'PLUG','FCEL','BLDP','NNOX','SKLZ','GENI','MTTR',
+  'SE','BABA','JD','PDD','BIDU','TME','WB','BILI',
+  'VALE','ITUB','BBD','PBR','CIG','ABEV','ERJ','AZUL',
+  'NOK','ERIC','TEF','KB','SAN','ING','AEG','PHG','STM',
+  'BB','SIRI','VUZI','KTOS','AVAV','RCAT','AEYE',
 ]
 
-async function fetchBatchQuotes(symbols: string[]): Promise<YahooQuote[]> {
+async function fetchFallbackStocks(): Promise<YahooQuote[]> {
   try {
-    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}&fields=symbol,shortName,longName,regularMarketPrice,regularMarketChangePercent,averageDailyVolume3Month`
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-      signal: AbortSignal.timeout(12000),
-    })
-    if (!res.ok) return []
-    const data = await res.json()
-    return data?.quoteResponse?.result ?? []
+    const quotesMap = await getMultipleQuotes(FALLBACK_TICKERS)
+    const results: YahooQuote[] = []
+    for (const [symbol, q] of quotesMap) {
+      if (q.price >= 2 && q.price < 100) {
+        results.push({
+          symbol,
+          shortName: q.companyName,
+          regularMarketPrice: q.price,
+          regularMarketChangePercent: q.changePercent,
+          averageDailyVolume3Month: q.volume,
+        })
+      }
+    }
+    return results
   } catch {
     return []
   }
@@ -121,15 +130,11 @@ export async function GET() {
     if (cached) return NextResponse.json(JSON.parse(cached.data))
   } catch {}
 
-  // Try live screener first (hundreds of stocks), fallback to hardcoded list
+  // Try live screener first (with crumb auth), fallback to lib's getMultipleQuotes
   let allQuotes = await fetchScreenerStocks()
 
   if (allQuotes.length < 10) {
-    // Screener failed — use fallback batch fetch
-    const fallback = await fetchBatchQuotes(FALLBACK_TICKERS)
-    allQuotes = fallback.filter(
-      (q) => q.regularMarketPrice != null && q.regularMarketPrice < 100 && q.regularMarketPrice > 2
-    )
+    allQuotes = await fetchFallbackStocks()
   }
 
   if (allQuotes.length === 0) {
@@ -137,7 +142,6 @@ export async function GET() {
   }
 
   // Randomly sample 20 from the pool so Mr. Guy sees different stocks each day
-  // (screener is already sorted by % change so shuffle gives variety)
   const shuffled = allQuotes
     .filter((q) => q.regularMarketPrice != null && q.regularMarketPrice < 100 && q.regularMarketPrice > 2)
     .sort(() => Math.random() - 0.5)
@@ -170,7 +174,7 @@ export async function GET() {
 
     const parsed: HotTakeResult = JSON.parse(jsonMatch[0])
 
-    // Sanity-fill from real Yahoo data so price is always accurate
+    // Sanity-fill from real data so price is always accurate
     const source = allQuotes.find((q) => q.symbol === parsed.ticker)
     if (source) {
       parsed.price = source.regularMarketPrice ?? parsed.price

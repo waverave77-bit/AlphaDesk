@@ -223,7 +223,22 @@ export default function DashboardPage() {
 
       {/* ── Character (preview only) ──────────────────────────── */}
       {isPreview && (
-        <MarketCharacter changePercent={panicMode ? -99 : 2.4} marketState={panicMode ? 'bear' : undefined} />
+        <MarketCharacter
+          changePercent={panicMode ? -99 : (fearGreed?.spChange ?? indices[0]?.changePercent ?? 0)}
+          marketState={(() => {
+            if (panicMode) return 'bear'
+            const status = brief?.status ?? ''
+            // Weekends → sleep/gaming
+            if (status === 'Weekend') return 'closed'
+            // Weekday but market not open → neutral (newspaper, money, perch, walk)
+            if (status !== 'Open') return 'neutral'
+            // Market is open — follow S&P mood
+            const spx = fearGreed?.spChange ?? indices[0]?.changePercent ?? 0
+            if (spx >= 0.5)  return 'bull'
+            if (spx <= -0.5) return 'bear'
+            return 'neutral'
+          })()}
+        />
       )}
 
       {/* ── Hero greeting ─────────────────────────────────────────── */}

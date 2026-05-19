@@ -79,7 +79,7 @@ function httpGetRawText(url: string, extraHeaders: Record<string, string> = {}):
 // Crumb + cookie cache for Yahoo Finance quoteSummary (valid ~24h)
 let _yahooSession: { cookie: string; crumb: string; fetchedAt: number } | null = null
 
-async function getYahooCrumb(): Promise<{ cookie: string; crumb: string }> {
+export async function getYahooCrumb(): Promise<{ cookie: string; crumb: string }> {
   if (_yahooSession && Date.now() - _yahooSession.fetchedAt < 23 * 60 * 60 * 1000) {
     return _yahooSession
   }
