@@ -1059,7 +1059,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── Scene management ─────────────────────────────────────────
     if(s.prevState !== ms){
       s.sceneIdx=0; s.sceneStartMs=now; s.prevState=ms; s.sceneSnapped=false; s.atPerchTarget=false
-      s.charX=zone.ok?(zone.min+zone.max)/2:(ms==='bear'?60:W-160)
+      // Don't teleport charX — let the walk-snap lerp to the new zone naturally
       s.targetY=groundY; s.charY=groundY; s.faceFlush=0
     }
     const cycle=SCENE_CYCLES[ms]
@@ -1180,10 +1180,11 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         s.faceFlush = Math.min(1, s.faceFlush+.003)
         pose.bodyDY += 1
       } else {
-        // Neutral: very slow idle float
-        extraBounce = Math.round(Math.sin(now*.0018)*-2)
+        // Neutral: visible idle bob so animation is apparent from frame 1
+        extraBounce = Math.round(Math.sin(now*.005)*-4)
+        pose.leftArmDY  = Math.round(Math.sin(now*.005)*-2)
+        pose.rightArmDY = Math.round(Math.sin(now*.005+Math.PI)*-2)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
-        pose.bodyDY += 1
         if(!s.paused){if(++s.pauseTimer>280){s.paused=true;s.scratchTimer=50;s.pauseTimer=0}}
         else{if(--s.scratchTimer<=0)s.paused=false}
       }
