@@ -122,6 +122,10 @@ export default function LearnPage() {
           </Card>
         ))}
       </div>
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Definitions and explanations are for educational purposes only. Not financial advice. Finance concepts can have nuances beyond what is shown here — always consult authoritative sources and qualified professionals for decisions.
+      </p>
     </div>
   )
 }

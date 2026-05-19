@@ -257,6 +257,10 @@ export default function RoastPage() {
             </div>
           </div>
         )}
+
+        <p className="text-xs text-gray-500 text-center mt-6 px-4">
+          Portfolio roasts are AI-generated for entertainment purposes only. They are not financial advice and should not influence any investment decision. Mr. Guy is not a licensed financial advisor. Always do your own research and consult a qualified professional before making any investment decisions.
+        </p>
       </div>
     </div>
   )

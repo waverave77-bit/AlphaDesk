@@ -188,6 +188,10 @@ export default function WatchlistPage() {
           })}
         </div>
       )}
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Prices shown are sourced from Yahoo Finance and may be delayed. For informational purposes only. Not financial advice.
+      </p>
     </div>
   )
 }

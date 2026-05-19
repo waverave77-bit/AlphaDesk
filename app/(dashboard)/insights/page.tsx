@@ -122,6 +122,10 @@ export default function InsightsPage() {
           <p>No responses yet, users will appear here after completing onboarding.</p>
         </div>
       )}
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Community data reflects anonymous onboarding responses only. For informational purposes only. Not financial advice.
+      </p>
     </div>
   )
 }

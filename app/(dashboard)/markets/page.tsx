@@ -498,6 +498,10 @@ export default function MarketsPage() {
       <SectorHeatmapSection />
       <EconCalendarSection />
       <MarketNewsSection />
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Market data, sentiment indicators, and news are sourced from third-party providers and are for informational purposes only. Fear &amp; Greed and sector data may be delayed. Not financial advice. Do not make investment decisions based solely on this data.
+      </p>
     </div>
   )
 }

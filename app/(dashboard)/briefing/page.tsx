@@ -273,6 +273,10 @@ export default function BriefingPage() {
         </div>
 
       </div>
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Market briefings are AI-generated summaries of publicly available news and market data. They are for informational purposes only — not financial advice. Always verify information independently and consult a qualified professional before making investment decisions.
+      </p>
     </>
   )
 }

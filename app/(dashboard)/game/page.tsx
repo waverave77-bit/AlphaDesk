@@ -411,6 +411,10 @@ export default function GamePage() {
           )}
         </div>
       )}
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        The $100K Challenge is a simulated game using virtual money only. No real funds are involved. Simulated trading performance does not reflect or predict real-world investment results. For educational and entertainment purposes only. Not financial advice.
+      </p>
     </div>
   )
 }

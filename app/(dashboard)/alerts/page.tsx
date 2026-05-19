@@ -442,6 +442,10 @@ export default function AlertsPage() {
           </Card>
         </div>
       </div>
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Price alerts are for informational and notification purposes only. Reaching a price target is not a signal to buy or sell. Not financial advice. Always do your own research before making any investment decision.
+      </p>
     </div>
   )
 }

@@ -27,7 +27,7 @@ export default function LandingPage() {
       <section className="text-center px-6 pt-20 pb-24 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-600/20 rounded-full px-4 py-1.5 text-sm text-blue-400 mb-6">
           <Zap className="h-3.5 w-3.5" />
-          Built for teens & young investors
+          Built for young investors who want to understand their money
         </div>
         <h1 className="text-5xl sm:text-6xl font-bold leading-tight mb-6">
           Investing made{' '}
@@ -63,7 +63,7 @@ export default function LandingPage() {
             {
               icon: <Users className="h-6 w-6 text-emerald-400" />,
               title: 'Smart Money Tracker',
-              desc: 'See what hedge funds and corporate insiders are buying and selling before it makes the news.',
+              desc: 'See what hedge funds and corporate insiders have recently reported buying and selling, sourced from public SEC filings.',
             },
             {
               icon: <Bell className="h-6 w-6 text-yellow-400" />,
@@ -99,8 +99,8 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">Ready to start investing smarter?</h2>
-        <p className="text-gray-400 mb-8">Join thousands of young investors who actually understand their stocks.</p>
+        <h2 className="text-3xl font-bold mb-4">Ready to actually understand your investments?</h2>
+        <p className="text-gray-400 mb-8">Join young investors who use data and AI to learn — not to gamble.</p>
         <Link href="/register" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
           Create Free Account <ChevronRight className="h-5 w-5" />
         </Link>
@@ -116,6 +116,10 @@ export default function LandingPage() {
             <span className="font-semibold">Zains Game</span>
           </div>
           <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>
+          <div className="flex gap-4 text-xs text-gray-600">
+            <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </footer>
 

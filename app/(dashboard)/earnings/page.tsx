@@ -511,6 +511,10 @@ export default function EarningsPage() {
       {expandState && (
         <ExpandedDateView expandState={expandState} onClose={handleClose} />
       )}
+
+      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
+        Earnings dates are sourced from Yahoo Finance and may be estimates. Dates can change — always verify with the company&apos;s investor relations page before trading around earnings. For informational purposes only. Not financial advice.
+      </p>
     </div>
   )
 }

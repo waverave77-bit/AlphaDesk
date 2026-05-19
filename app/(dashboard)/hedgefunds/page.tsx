@@ -368,7 +368,7 @@ export default function HedgeFundsPage() {
       )}
 
       <p className="text-xs text-slate-400 text-center pb-4">
-        Data from SEC EDGAR quarterly government filings. Updated quarterly. Shows top positions only.
+        Data from SEC EDGAR quarterly 13F filings. Holdings may be 3–6 months old and may no longer reflect current positions. For informational purposes only. Not financial advice. Do not make investment decisions based solely on fund holdings data.
       </p>
     </div>
   )
