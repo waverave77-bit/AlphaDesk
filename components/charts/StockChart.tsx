@@ -47,18 +47,18 @@ interface StockChartProps {
 // ── Bollinger Bands ───────────────────────────────────────────────────────────
 
 function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
-  // Need at least period + a few extra bars for bands to be meaningful
-  const minBars = period + 3
-  if (data.length < minBars) {
+  // Need enough total bars for BB to be meaningful (guards 1W with only 5 bars)
+  if (data.length < period + 3) {
     return data.map(() => ({ bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }))
   }
   return data.map((_, i) => {
     const slice = data.slice(Math.max(0, i - period + 1), i + 1)
-    // Require a full window — partial windows produce misleading bands
-    if (slice.length < period) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
+    // Allow partial windows (< period) so bands start early and widen naturally
+    // — same behaviour as TradingView. Require at least 2 pts for a std dev.
+    if (slice.length < 2) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
     const mean = slice.reduce((s, x) => s + x.close, 0) / slice.length
-    // Sample std dev (n-1) for correct BB calculation
-    const sd = Math.sqrt(slice.reduce((s, x) => s + Math.pow(x.close - mean, 2), 0) / (slice.length - 1))
+    // Population std dev — what John Bollinger specifies
+    const sd = Math.sqrt(slice.reduce((s, x) => s + Math.pow(x.close - mean, 2), 0) / slice.length)
     return { bbUpper: mean + k * sd, bbMiddle: mean, bbLower: mean - k * sd }
   })
 }
@@ -442,13 +442,13 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
             {showBB && <>
               <Area type="monotone" dataKey="bbUpper"
                 stroke="#8b5cf6" strokeWidth={1.5} fill="none"
-                dot={false} activeDot={false} isAnimationActive={false} connectNulls />
+                dot={false} activeDot={false} isAnimationActive={false} />
               <Area type="monotone" dataKey="bbMiddle"
                 stroke="#8b5cf6" strokeWidth={1} strokeDasharray="5 3" fill="none"
-                dot={false} activeDot={false} isAnimationActive={false} connectNulls />
+                dot={false} activeDot={false} isAnimationActive={false} />
               <Area type="monotone" dataKey="bbLower"
                 stroke="#8b5cf6" strokeWidth={1.5} fill="none"
-                dot={false} activeDot={false} isAnimationActive={false} connectNulls />
+                dot={false} activeDot={false} isAnimationActive={false} />
             </>}
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
               fill={`url(#gradient-${ticker})`} dot={renderDot}
