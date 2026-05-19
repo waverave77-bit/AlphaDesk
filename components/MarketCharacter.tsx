@@ -1696,38 +1696,38 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       <div style={{position:'fixed',inset:0,background:'rgba(5,5,20,0.45)',pointerEvents:'none',zIndex:9}}/>
     )}
 
-    {/* Debug scene buttons — all scenes listed for quick switching */}
-    <div style={{position:'fixed',bottom:16,left:'50%',transform:'translateX(-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:5,zIndex:30,pointerEvents:'all'}}>
-      {/* Market state row */}
-      <div style={{display:'flex',gap:4}}>
-        {(['bull','bear','neutral','closed'] as MarketState[]).map(st=>(
-          <button key={st} onClick={()=>{setActiveState(st);setForcedScene(null);forcedSceneRef.current=null}} style={{
-            padding:'3px 9px',borderRadius:16,fontSize:10,fontWeight:700,
-            border:`1px solid ${activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.15)'}`,
-            background:activeState===st&&!forcedScene?STATE_COLOR[st]+'22':'rgba(10,10,20,.75)',
-            color:activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.4)',
-            cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .15s',
-          }}>{STATE_LABEL[st]}</button>
-        ))}
+    {/* Debug scene buttons — dev only */}
+    {process.env.NODE_ENV === 'development' && (
+      <div style={{position:'fixed',bottom:16,left:'50%',transform:'translateX(-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:5,zIndex:30,pointerEvents:'all'}}>
+        <div style={{display:'flex',gap:4}}>
+          {(['bull','bear','neutral','closed'] as MarketState[]).map(st=>(
+            <button key={st} onClick={()=>{setActiveState(st);setForcedScene(null);forcedSceneRef.current=null}} style={{
+              padding:'3px 9px',borderRadius:16,fontSize:10,fontWeight:700,
+              border:`1px solid ${activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.15)'}`,
+              background:activeState===st&&!forcedScene?STATE_COLOR[st]+'22':'rgba(10,10,20,.75)',
+              color:activeState===st&&!forcedScene?STATE_COLOR[st]:'rgba(255,255,255,.4)',
+              cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .15s',
+            }}>{STATE_LABEL[st]}</button>
+          ))}
+        </div>
+        <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',gap:3,maxWidth:420}}>
+          {(['walk','party','beach','weights','desk','throw','doomscroll','panicrun','defeat','newspaper','money','perch','sleep','gaming','wakeup','peek','coffee','phone','bubblebath'] as Scene[]).map(sc=>(
+            <button key={sc} onClick={()=>{
+              forcedSceneRef.current=sc
+              setForcedScene(sc)
+              setActiveScene(sc)
+              anim.current.sceneSnapped=false
+              anim.current.sceneStartMs=performance.now()
+            }} style={{
+              padding:'2px 7px',borderRadius:12,fontSize:9,fontWeight:700,
+              border:`1px solid ${forcedScene===sc?'#f97316':'rgba(255,255,255,.12)'}`,
+              background:forcedScene===sc?'rgba(249,115,22,.2)':'rgba(10,10,20,.7)',
+              color:forcedScene===sc?'#f97316':'rgba(255,255,255,.38)',
+              cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .12s',whiteSpace:'nowrap',
+            }}>{sc}</button>
+          ))}
+        </div>
       </div>
-      {/* All scenes grid */}
-      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',gap:3,maxWidth:420}}>
-        {(['walk','party','beach','weights','desk','throw','doomscroll','panicrun','defeat','newspaper','money','perch','sleep','gaming','wakeup','peek','coffee','phone','bubblebath'] as Scene[]).map(sc=>(
-          <button key={sc} onClick={()=>{
-            forcedSceneRef.current=sc
-            setForcedScene(sc)
-            setActiveScene(sc)
-            anim.current.sceneSnapped=false
-            anim.current.sceneStartMs=performance.now()
-          }} style={{
-            padding:'2px 7px',borderRadius:12,fontSize:9,fontWeight:700,
-            border:`1px solid ${forcedScene===sc?'#f97316':'rgba(255,255,255,.12)'}`,
-            background:forcedScene===sc?'rgba(249,115,22,.2)':'rgba(10,10,20,.7)',
-            color:forcedScene===sc?'#f97316':'rgba(255,255,255,.38)',
-            cursor:'pointer',backdropFilter:'blur(8px)',transition:'all .12s',whiteSpace:'nowrap',
-          }}>{sc}</button>
-        ))}
-      </div>
-    </div>
+    )}
   </>)
 }
