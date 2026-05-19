@@ -59,10 +59,11 @@ const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
     { scene: 'panicrun',   ms:  6 * MIN },
   ],
   neutral: [
-    { scene: 'walk',      ms:  8 * MIN },
+    { scene: 'walk',      ms: 10_000   },  // short transition ~10s, then into real scenes
     { scene: 'newspaper', ms:  8 * MIN },
     { scene: 'money',     ms:  9 * MIN },
     { scene: 'perch',     ms:  9 * MIN },
+    { scene: 'walk',      ms: 10_000   },  // brief walk between loops
   ],
   closed:  [
     { scene: 'sleep',  ms: 18 * MIN },
