@@ -68,16 +68,15 @@ function IndexCard({ label, price, change, changePercent }: {
 }
 
 const QUICK_LINKS = [
-  { href: '/research',   label: 'Research',     icon: Search,    desc: 'Deep-dive any stock' },
-  { href: '/watchlist',  label: 'Watchlist',    icon: Star,      desc: 'Stocks you\'re tracking' },
-  { href: '/earnings',   label: 'Earnings',     icon: Calendar,  desc: 'Upcoming earnings dates' },
-  { href: '/hedgefunds', label: 'Hedge Funds',  icon: Building2, desc: 'Where big money is going' },
-  { href: '/insiders',   label: 'Smart Money',  icon: Users,     desc: 'Insider & congress trades' },
-  { href: '/macro',      label: 'Macro',        icon: Globe,     desc: 'Big-picture economics' },
-  { href: '/markets',    label: 'Markets',      icon: Activity,  desc: 'Market overview' },
-  { href: '/quant',      label: 'Quant',        icon: FlaskConical, desc: 'Screen stocks systematically' },
-  { href: '/learn',      label: 'Dictionary',   icon: BookOpen,  desc: 'Plain-English finance terms' },
-  { href: '/time-machine',     label: 'Time Machine', icon: RefreshCw,    desc: 'Travel to any market date' },
+  { href: '/research',        label: 'Research',      icon: Search,       desc: 'Deep-dive any stock' },
+  { href: '/watchlist',       label: 'Watchlist',     icon: Star,         desc: 'Stocks you\'re tracking' },
+  { href: '/earnings',        label: 'Earnings',      icon: Calendar,     desc: 'Upcoming earnings dates' },
+  { href: '/hedgefunds',      label: 'Hedge Funds',   icon: Building2,    desc: 'Where big money is going' },
+  { href: '/insiders',        label: 'Smart Money',   icon: Users,        desc: 'Insider & congress trades' },
+  { href: '/macro',           label: 'Macro',         icon: Globe,        desc: 'Big-picture economics' },
+  { href: '/markets',         label: 'Markets',       icon: Activity,     desc: 'Market overview' },
+  { href: '/quant',           label: 'Quant',         icon: FlaskConical, desc: 'Screen stocks systematically' },
+  { href: '/learn',           label: 'Dictionary',    icon: BookOpen,     desc: 'Plain-English finance terms' },
   { href: '/generate-assets', label: 'Export Assets', icon: Sparkles,     desc: 'Download Mr. Guy logos & icons' },
 ]
 
@@ -435,20 +434,20 @@ export default function DashboardPage() {
 
       {/* ── Quick Links ───────────────────────────────────────────── */}
       <div>
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Quick Access</p>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Quick Access</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {QUICK_LINKS.map(({ href, label, icon: Icon, desc }) => (
             <Link
               key={href}
               href={href}
-              className="flex items-start gap-3 p-4 rounded-xl border border-gray-800 bg-gray-900/40 hover:bg-gray-800/60 hover:border-gray-700 transition-all group"
+              className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group"
             >
-              <div className="p-2 rounded-lg bg-gray-800 group-hover:bg-gray-700 transition-colors shrink-0">
-                <Icon className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
+              <div className="p-2 rounded-lg bg-slate-100 group-hover:bg-blue-50 transition-colors shrink-0">
+                <Icon className="h-4 w-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">{label}</p>
-                <p className="text-xs text-gray-500 mt-0.5 leading-snug">{desc}</p>
+                <p className="text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">{label}</p>
+                <p className="text-xs text-slate-400 mt-0.5 leading-snug">{desc}</p>
               </div>
             </Link>
           ))}
