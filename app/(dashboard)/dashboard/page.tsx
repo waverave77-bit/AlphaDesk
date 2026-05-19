@@ -53,10 +53,10 @@ function IndexCard({ label, price, change, changePercent }: {
 }) {
   const pos = (changePercent ?? 0) >= 0
   return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0">
-      <span className="text-sm text-gray-400 font-medium">{label}</span>
+    <div className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
+      <span className="text-sm text-slate-500 font-medium">{label}</span>
       <div className="text-right">
-        <p className="text-sm font-semibold text-white">{formatPrice(price)}</p>
+        <p className="text-sm font-semibold text-slate-900">{formatPrice(price)}</p>
         {changePercent != null && (
           <p className={cn('text-xs font-medium', pos ? 'text-green-400' : 'text-red-400')}>
             {pos ? '+' : ''}{changePercent.toFixed(2)}%
@@ -238,31 +238,33 @@ export default function DashboardPage() {
       {/* ── Hero greeting ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
         <div>
-          <h1 className="text-4xl font-bold text-white leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 leading-tight">
             {greeting}{firstName ? `, ${firstName}` : ''} {emoji}
           </h1>
-          <p className="text-gray-500 mt-1 text-sm">{today}</p>
+          <p className="text-slate-500 mt-1 text-sm">{today}</p>
         </div>
-        {brief && <MarketStatusBadge status={brief.status} />}
-        <button
-          onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
-          className={cn(
-            'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
-            panicMode
-              ? 'bg-red-500/20 border-red-500/40 text-red-400 animate-pulse'
-              : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-red-500/40 hover:text-red-400'
-          )}
-        >
-          {panicMode ? '👁️ Take a peek' : '🙈 I Can\'t Look'}
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          {brief && <MarketStatusBadge status={brief.status} />}
+          <button
+            onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
+            className={cn(
+              'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
+              panicMode
+                ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
+                : 'bg-slate-100 border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-500'
+            )}
+          >
+            {panicMode ? '👁️ Take a peek' : '🙈 I Can\'t Look'}
+          </button>
+        </div>
       </div>
 
       {/* ── AI Market Brief ───────────────────────────────────────── */}
-      <Card className="border-gray-800 bg-gray-900/60">
-        <CardContent className="p-6">
+      <Card className="border-slate-200 bg-white">
+        <CardContent className="p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-3">
-            <div className="h-5 w-5 rounded bg-blue-500/20 flex items-center justify-center text-xs">🧑‍💼</div>
-            <span className="text-sm font-semibold text-blue-400 uppercase tracking-wide">
+            <div className="h-5 w-5 rounded bg-blue-50 flex items-center justify-center text-xs">🧑‍💼</div>
+            <span className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
               {brief?.status === 'Weekend' ? "Mr. Guy's Weekend Take" : "Mr. Guy's Take"}
             </span>
           </div>
@@ -273,30 +275,30 @@ export default function DashboardPage() {
               <Skeleton className="h-4 w-3/5" />
             </div>
           ) : brief?.text ? (
-            <p className="text-gray-200 leading-relaxed text-[15px]">{brief.text}</p>
+            <p className="text-slate-700 leading-relaxed text-[15px]">{brief.text}</p>
           ) : (
-            <p className="text-gray-500 text-sm">Could not load market brief right now.</p>
+            <p className="text-slate-400 text-sm">Could not load market brief right now.</p>
           )}
         </CardContent>
       </Card>
 
       {/* ── Watchlist + Indices ───────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
 
         {/* Watchlist */}
-        <Card data-char-widget className="border-gray-800">
-          <CardContent className="p-6">
+        <Card data-char-widget className="border-slate-200 bg-white">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">My Watchlist</p>
+              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">My Watchlist</p>
               <div className="flex items-center gap-3">
                 <button
                   onClick={getRoast}
                   disabled={roasting || watchlist.length === 0}
-                  className="text-xs text-orange-400 hover:text-orange-300 disabled:opacity-40 font-semibold transition-colors flex items-center gap-1"
+                  className="text-xs text-orange-500 hover:text-orange-600 disabled:opacity-40 font-semibold transition-colors flex items-center gap-1"
                 >
                   {roasting ? '...' : '🔥 Roast'}
                 </button>
-                <Link href="/watchlist" className="text-xs text-blue-400 hover:underline">View all</Link>
+                <Link href="/watchlist" className="text-xs text-blue-500 hover:underline">View all</Link>
               </div>
             </div>
             {watchLoading ? (
@@ -305,8 +307,8 @@ export default function DashboardPage() {
               </div>
             ) : watchlist.length === 0 ? (
               <div className="py-6 text-center">
-                <p className="text-gray-500 text-sm">No stocks on your watchlist yet.</p>
-                <Link href="/research" className="text-blue-400 text-sm hover:underline mt-1 inline-block">
+                <p className="text-slate-400 text-sm">No stocks on your watchlist yet.</p>
+                <Link href="/research" className="text-blue-500 text-sm hover:underline mt-1 inline-block">
                   Search and add some →
                 </Link>
               </div>
@@ -318,21 +320,21 @@ export default function DashboardPage() {
                     <Link
                       key={ticker}
                       href={`/research/${ticker}`}
-                      className="flex items-center justify-between py-3 border-b border-gray-800 last:border-0 hover:bg-gray-800/40 -mx-2 px-2 rounded-lg transition-colors"
+                      className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         {pos
-                          ? <TrendingUp className="h-3.5 w-3.5 text-green-400 shrink-0" />
-                          : <TrendingDown className="h-3.5 w-3.5 text-red-400 shrink-0" />
+                          ? <TrendingUp className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                          : <TrendingDown className="h-3.5 w-3.5 text-red-500 shrink-0" />
                         }
-                        <span className="text-sm font-bold text-white">{ticker}</span>
+                        <span className="text-sm font-bold text-slate-900">{ticker}</span>
                       </div>
                       <div className="text-right">
                         {price != null && (
-                          <p className={cn('text-sm font-semibold', panicMode ? 'text-red-400 blur-sm select-none' : 'text-white')}>{panicMode ? '$???' : `$${formatPrice(price)}`}</p>
+                          <p className={cn('text-sm font-semibold', panicMode ? 'text-red-400 blur-sm select-none' : 'text-slate-900')}>{panicMode ? '$???' : `$${formatPrice(price)}`}</p>
                         )}
                         {changePercent != null && (
-                          <p className={cn('text-xs font-medium blur-sm select-none', panicMode ? 'text-gray-500' : pos ? 'text-green-400' : 'text-red-400')}>
+                          <p className={cn('text-xs font-medium', panicMode ? 'text-slate-400 blur-sm select-none' : pos ? 'text-green-600' : 'text-red-500')}>
                             {panicMode ? '??%' : `${pos ? '+' : ''}${changePercent.toFixed(2)}%`}
                           </p>
                         )}
@@ -343,10 +345,10 @@ export default function DashboardPage() {
               </div>
             )}
             {roast && (
-              <div className="mt-4 pt-4 border-t border-gray-800">
+              <div className="mt-4 pt-4 border-t border-slate-100">
                 <div className="flex items-start gap-2">
                   <span className="text-lg shrink-0">🧑‍💼</span>
-                  <p className="text-sm text-orange-300 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
+                  <p className="text-sm text-orange-600 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
                 </div>
               </div>
             )}
@@ -354,11 +356,11 @@ export default function DashboardPage() {
         </Card>
 
         {/* Market Indices */}
-        <Card data-char-widget className={cn("border-gray-800", panicMode && "blur-sm select-none pointer-events-none")}>
-          <CardContent className="p-6">
+        <Card data-char-widget className={cn("border-slate-200 bg-white", panicMode && "blur-sm select-none pointer-events-none")}>
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Market Indices</p>
-              <Link href="/markets" className="text-xs text-blue-400 hover:underline">Full view</Link>
+              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Market Indices</p>
+              <Link href="/markets" className="text-xs text-blue-500 hover:underline">Full view</Link>
             </div>
             {indicesLoading ? (
               <div className="space-y-3">
@@ -373,24 +375,24 @@ export default function DashboardPage() {
 
       {/* ── Anxiety Meter ─────────────────────────────────────────── */}
       {fearGreed && (
-        <Card className={cn('border-gray-800 transition-all duration-700',
-          anxietyLevel > 80 ? 'border-red-500/40 bg-red-950/20' : 'bg-gray-900/40'
+        <Card className={cn('transition-all duration-700',
+          anxietyLevel > 80 ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
         )}>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-3">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-base">{anxietyLevel < 30 ? '😌' : anxietyLevel < 60 ? '😐' : anxietyLevel < 80 ? '😰' : '🤯'}</span>
-                <span className="text-sm font-semibold text-gray-300">Mr. Guy Anxiety Meter</span>
+                <span className="text-sm font-semibold text-slate-800">Mr. Guy Anxiety Meter</span>
               </div>
               <div className="flex items-center gap-3">
                 {fearGreed.vix && (
-                  <span className="text-xs text-gray-500">VIX <span className={cn('font-semibold', fearGreed.vix > 30 ? 'text-red-400' : fearGreed.vix > 20 ? 'text-yellow-400' : 'text-green-400')}>{fearGreed.vix}</span></span>
+                  <span className="text-xs text-slate-500">VIX <span className={cn('font-semibold', fearGreed.vix > 30 ? 'text-red-500' : fearGreed.vix > 20 ? 'text-amber-500' : 'text-green-600')}>{fearGreed.vix}</span></span>
                 )}
                 <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full border',
-                  anxietyLevel < 30 ? 'text-green-400 border-green-500/30 bg-green-500/10' :
-                  anxietyLevel < 60 ? 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10' :
-                  anxietyLevel < 80 ? 'text-orange-400 border-orange-500/30 bg-orange-500/10' :
-                                      'text-red-400 border-red-500/30 bg-red-500/10'
+                  anxietyLevel < 30 ? 'text-green-700 border-green-300 bg-green-50' :
+                  anxietyLevel < 60 ? 'text-amber-700 border-amber-300 bg-amber-50' :
+                  anxietyLevel < 80 ? 'text-orange-700 border-orange-300 bg-orange-50' :
+                                      'text-red-700 border-red-300 bg-red-50'
                 )}>
                   {fearGreed.rating}
                 </span>
@@ -398,24 +400,24 @@ export default function DashboardPage() {
             </div>
 
             {/* Bar */}
-            <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
               <div
                 className={cn('h-full rounded-full transition-all duration-1000',
-                  anxietyLevel < 30 ? 'bg-green-500' : anxietyLevel < 60 ? 'bg-yellow-500' : anxietyLevel < 80 ? 'bg-orange-500' : 'bg-red-500'
+                  anxietyLevel < 30 ? 'bg-green-500' : anxietyLevel < 60 ? 'bg-amber-400' : anxietyLevel < 80 ? 'bg-orange-500' : 'bg-red-500'
                 )}
-                style={{ width: `${anxietyLevel}%`, boxShadow: anxietyLevel > 80 ? '0 0 8px rgba(239,68,68,.6)' : undefined }}
+                style={{ width: `${anxietyLevel}%`, boxShadow: anxietyLevel > 80 ? '0 0 8px rgba(239,68,68,.4)' : undefined }}
               />
             </div>
 
             {/* Sub-labels */}
             <div className="flex justify-between mt-1 px-0.5">
-              <span className="text-[10px] text-gray-600">Extreme Fear</span>
-              <span className="text-[10px] text-gray-600">Neutral</span>
-              <span className="text-[10px] text-gray-600">Extreme Greed</span>
+              <span className="text-[10px] text-slate-400">Extreme Fear</span>
+              <span className="text-[10px] text-slate-400">Neutral</span>
+              <span className="text-[10px] text-slate-400">Extreme Greed</span>
             </div>
 
             {/* Quote */}
-            <p className="text-xs text-gray-500 mt-2 italic">
+            <p className="text-xs text-slate-400 mt-2 italic">
               {anxietyLevel < 30
                 ? '"Everything is fine. I am fine." — Mr. Guy'
                 : anxietyLevel < 60
@@ -456,21 +458,21 @@ export default function DashboardPage() {
 
       {/* ── Mr. Guy Chat ─────────────────────────────────────────── */}
       <Link href="/chat">
-        <Card className="border-gray-800 bg-gray-900/60 hover:bg-gray-800/60 hover:border-blue-500/40 transition-all cursor-pointer group">
+        <Card className="border-slate-200 bg-white hover:bg-slate-50 hover:border-blue-300 transition-all cursor-pointer group">
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+              <div className="h-12 w-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
                 🧑‍💼
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-base font-bold text-white">Ask Mr. Guy</p>
-                <p className="text-sm text-gray-400 mt-0.5">Your pixel-art finance buddy — ask anything about stocks, markets, or investing.</p>
+                <p className="text-base font-bold text-slate-900">Ask Mr. Guy</p>
+                <p className="text-sm text-slate-500 mt-0.5">Your pixel-art finance buddy — ask anything about stocks, markets, or investing.</p>
               </div>
-              <ChevronRight className="h-5 w-5 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
+              <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all shrink-0" />
             </div>
             <div className="flex flex-wrap gap-2 mt-4">
               {['What even is a stock?', 'Why does the market crash?', 'Is NVDA a buy?', 'What is the VIX?'].map(q => (
-                <span key={q} className="text-xs bg-gray-800 border border-gray-700 text-gray-400 rounded-lg px-2.5 py-1">
+                <span key={q} className="text-xs bg-slate-100 border border-slate-200 text-slate-500 rounded-lg px-2.5 py-1">
                   {q}
                 </span>
               ))}
@@ -479,7 +481,7 @@ export default function DashboardPage() {
         </Card>
       </Link>
 
-      <p className="text-xs text-gray-700 text-center">
+      <p className="text-xs text-slate-400 text-center">
         For informational purposes only. Not financial advice.
       </p>
     </div>

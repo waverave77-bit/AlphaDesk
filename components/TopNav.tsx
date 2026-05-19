@@ -19,20 +19,19 @@ const primaryNav = [
 ]
 
 const moreNav = [
-  { href: '/earnings',    label: 'Earnings Calendar' },
-  { href: '/hedgefunds',  label: 'Hedge Funds' },
-  { href: '/quant',       label: 'Quant Strategy' },
-  { href: '/game',        label: '$100K Challenge' },
-  { href: '/time-machine', label: 'Time Machine ⏰' },
+  { href: '/earnings',   label: 'Earnings Calendar' },
+  { href: '/hedgefunds', label: 'Hedge Funds' },
+  { href: '/quant',      label: 'Quant Strategy' },
+  { href: '/game',       label: '$100K Challenge' },
 ]
 
 const mrGuyNav = [
-  { href: '/hot-take',       label: "Hot Take 🔥" },
-  { href: '/bull-vs-bear',   label: 'Bull vs Bear 🥊' },
-  { href: '/challenge',      label: 'Pick of the Week 🏆' },
-  { href: '/report-card',    label: 'Stock Report Card' },
-  { href: '/reality-check',  label: 'Reality Check 🧪' },
-  { href: '/translator',     label: 'Finance Translator' },
+  { href: '/hot-take',      label: 'Hot Take' },
+  { href: '/bull-vs-bear',  label: 'Bull vs Bear' },
+  { href: '/challenge',     label: 'Pick of the Week' },
+  { href: '/report-card',   label: 'Stock Report Card' },
+  { href: '/reality-check', label: 'Reality Check' },
+  { href: '/translator',    label: 'Finance Translator' },
 ]
 
 /* ── Mr. Guy pixel head logo — canvas renderer ──────────────────
