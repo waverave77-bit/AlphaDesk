@@ -77,6 +77,9 @@ const QUICK_LINKS = [
   { href: '/markets',         label: 'Markets',       icon: Activity,     desc: 'Market overview' },
   { href: '/quant',           label: 'Quant',         icon: FlaskConical, desc: 'Screen stocks systematically' },
   { href: '/learn',           label: 'Dictionary',    icon: BookOpen,     desc: 'Plain-English finance terms' },
+]
+
+const ADMIN_LINKS = [
   { href: '/generate-assets', label: 'Export Assets', icon: Sparkles,     desc: 'Download Mr. Guy logos & icons' },
 ]
 
@@ -85,6 +88,7 @@ const QUICK_LINKS = [
 export default function DashboardPage() {
   const { data: session } = useSession()
   const isPreview = !!(session?.user as any)?.isDemo
+  const isAdmin = session?.user?.email === 'waverave77@gmail.com'
   const { word: greeting, emoji } = getGreeting()
 
   // First name only, capitalised
@@ -378,7 +382,7 @@ export default function DashboardPage() {
       <div>
         <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Quick Access</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {QUICK_LINKS.map(({ href, label, icon: Icon, desc }) => (
+          {[...QUICK_LINKS, ...(isAdmin ? ADMIN_LINKS : [])].map(({ href, label, icon: Icon, desc }) => (
             <Link
               key={href}
               href={href}
