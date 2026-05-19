@@ -47,6 +47,11 @@ interface StockChartProps {
 // ── Bollinger Bands ───────────────────────────────────────────────────────────
 
 function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
+  // Need at least period + a few extra bars for bands to be meaningful
+  const minBars = period + 3
+  if (data.length < minBars) {
+    return data.map(() => ({ bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }))
+  }
   return data.map((_, i) => {
     const slice = data.slice(Math.max(0, i - period + 1), i + 1)
     // Require a full window — partial windows produce misleading bands
@@ -116,8 +121,9 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   }, [ticker])
 
   // Periods tuned to actual data-point counts per range:
-  // 1D ~78 bars, 1W ~5 bars, 1M ~21 bars, 3M ~63 bars, 6M+ ~120+ bars
-  const BB_PERIOD: Record<Range, number> = { '1D': 14, '1W': 3, '1M': 10, '3M': 14, '6M': 20, 'YTD': 20, '1Y': 20, '5Y': 20 }
+  // 1D ~78 bars (5m), 1W ~5 bars (1d) → too few to show, 1M ~21 (1d),
+  // 3M ~63 (1d), 6M ~126 (1d), YTD ~100 (1d), 1Y ~52 (1wk), 5Y ~260 (1wk)
+  const BB_PERIOD: Record<Range, number> = { '1D': 14, '1W': 20, '1M': 10, '3M': 14, '6M': 20, 'YTD': 20, '1Y': 10, '5Y': 20 }
   const bbPeriod = BB_PERIOD[range]
 
   const spikeMap = useMemo(() => computeSpikes(data), [data])
