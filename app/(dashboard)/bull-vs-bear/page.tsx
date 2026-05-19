@@ -313,6 +313,7 @@ export default function BullVsBearPage() {
           </div>
         )}
       </div>
+      <p className="text-xs text-gray-500 text-center mt-6 px-4">Bull vs. Bear analysis is AI-generated based on publicly available financial data. It presents multiple perspectives for informational purposes only — not financial advice. Past performance and sentiment indicators are not reliable predictors of future results. Do your own research before making any investment decisions.</p>
     </div>
   )
 }

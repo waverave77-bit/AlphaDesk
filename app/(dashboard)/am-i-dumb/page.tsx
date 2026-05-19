@@ -217,6 +217,7 @@ export default function AmIDumbPage() {
           </div>
         )}
       </div>
+      <p className="text-xs text-gray-500 text-center mt-6 px-4">This analysis is AI-generated using publicly available financial data for informational purposes only. It is not financial advice, and should not be the sole basis for any investment decision. Always consult a qualified financial professional before acting on any analysis.</p>
     </div>
   )
 }

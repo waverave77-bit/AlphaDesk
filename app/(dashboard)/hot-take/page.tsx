@@ -160,7 +160,7 @@ export default function HotTakePage() {
               Mr. Guy's Hot Take
             </h1>
             <p className={cn('text-base mt-0.5', isDark ? 'text-gray-400' : 'text-slate-500')}>
-              One under-$100 stock Mr. Guy thinks is about to pop. 🚀
+              One under-$100 stock Mr. Guy is watching closely. This is speculative commentary, not a recommendation. 🚀
             </p>
           </div>
         </div>
@@ -295,6 +295,8 @@ export default function HotTakePage() {
         </div>
 
       </div>
+
+      <p className="text-xs text-gray-600 text-center mt-6 max-w-2xl mx-auto">Hot takes are AI-generated commentary based on recent price and sentiment data. They are for entertainment and informational purposes only — not financial advice. Always do your own research before making investment decisions.</p>
     </>
   )
 }

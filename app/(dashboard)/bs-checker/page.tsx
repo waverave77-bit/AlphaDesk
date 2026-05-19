@@ -200,6 +200,7 @@ export default function BSCheckerPage() {
           </div>
         )}
       </div>
+      <p className="text-xs text-gray-500 text-center mt-6 px-4">The BS Checker uses AI and publicly available data to evaluate financial claims. Results are for informational and educational purposes only — not financial advice. AI analysis can be incorrect or incomplete. Verify claims independently before making any investment decisions.</p>
     </div>
   )
 }

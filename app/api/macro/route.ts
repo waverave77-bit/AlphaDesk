@@ -47,18 +47,18 @@ async function getM2() {
 export async function GET() {
   const [dxy, m2] = await Promise.all([getDXY(), getM2()])
 
-  let stockImpact = 'Dollar relatively stable: neutral impact on equities.'
+  let stockImpact = 'Dollar relatively stable today — no strong directional signal from currency moves alone.'
   if (dxy) {
-    if (dxy.changePercent > 0.4) stockImpact = 'Dollar strengthening: generally bearish for stocks, especially multinationals and commodities exporters. Strong dollar reduces overseas earnings when converted back to USD.'
-    else if (dxy.changePercent < -0.4) stockImpact = 'Dollar weakening: generally bullish for stocks, commodities, and companies with international revenue. Weaker dollar boosts overseas earnings in USD terms.'
+    if (dxy.changePercent > 0.4) stockImpact = 'Dollar strengthening today. Historically, a rising dollar can pressure multinationals and commodity exporters by reducing the USD value of overseas earnings — but the magnitude and direction can be offset by earnings, rates, and other macro factors.'
+    else if (dxy.changePercent < -0.4) stockImpact = 'Dollar weakening today. Historically, a softer dollar has been a tailwind for stocks, commodities, and companies with large international revenue — though overall market direction depends on many factors beyond currency moves.'
   }
 
   const m2Recent = m2.slice(-2)
   let m2Impact = 'Monitoring money supply trends.'
   if (m2Recent.length === 2) {
     const m2Change = m2Recent[1].value - m2Recent[0].value
-    if (m2Change > 0) m2Impact = 'M2 expanding: increased liquidity in the system is historically supportive of risk assets and equities.'
-    else m2Impact = 'M2 contracting: reduced liquidity may weigh on risk assets. Monitor Fed policy for shifts.'
+    if (m2Change > 0) m2Impact = 'M2 is expanding. Historically, rising money supply has coincided with supportive conditions for risk assets — but this correlation is not always consistent and can lag by months.'
+    else m2Impact = 'M2 is contracting. Historically, declining money supply has sometimes weighed on risk assets — but the relationship is not linear, and market direction depends on many factors including Fed guidance and earnings.'
   }
 
   return NextResponse.json({ dxy, m2, stockImpact, m2Impact })

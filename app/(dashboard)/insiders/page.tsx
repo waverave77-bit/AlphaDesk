@@ -149,7 +149,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-emerald-400" />
-          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Insiders buying shares with their own money, often a bullish sign they believe the stock will rise." /></h2>
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Congressional members buying shares of a stock. Some analysts watch this data, but purchasing activity can reflect many motivations and is not a reliable buy signal." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}
@@ -159,13 +159,13 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-red-400" />
-          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Insiders selling shares is worth paying attention to, though they sell for many reasons (taxes, personal bills) while they usually only buy for one reason: they think the stock is going up." /></h2>
+          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Congressional members selling shares. Sales can happen for many reasons — diversification, personal expenses, tax planning — and are not necessarily a bearish signal on their own." /></h2>
         </div>
         {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-sm text-gray-600">No recent sales.</p>}
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-2">
-        Congressional stock trades, House &amp; Senate financial disclosures. Prioritises Trump-aligned members.
+        Congressional stock trades from House &amp; Senate financial disclosures filed under the STOCK Act. Disclosures may be up to 45 days after the trade date. Not financial advice.
       </p>
     </div>
   )
@@ -252,7 +252,7 @@ function FamousInvestors() {
         ))}
       </div>
       <p className="text-xs text-gray-600 text-center pt-6 pb-2">
-        Data sourced from SEC quarterly government filings via EDGAR. Updated quarterly. Holdings as of most recent filing date.
+        Data from SEC 13F filings via EDGAR. Filed quarterly, up to 45 days after quarter-end — holdings shown may be 3–6 months old and may no longer reflect current positions. Not financial advice.
       </p>
     </>
   )
@@ -273,8 +273,8 @@ export default function InsidersPage() {
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks what company insiders (CEOs, board members) and well-known investors are buying and selling. All of this is publicly reported to the government." /></h1>
-          <p className="text-base text-gray-400 mt-0.5">Company insider trades and top investor quarterly disclosures</p>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks congressional stock trades (STOCK Act disclosures) and top fund manager holdings (SEC 13F filings). All data is publicly reported. This is informational only — not a buy or sell signal." /></h1>
+          <p className="text-base text-gray-400 mt-0.5">Congressional stock trades and top investor quarterly 13F disclosures</p>
         </div>
       </div>
 
@@ -282,7 +282,7 @@ export default function InsidersPage() {
       <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
         <p className="text-base font-semibold text-emerald-300 mb-1.5">Why does this matter?</p>
         <p className="text-sm text-gray-400 leading-relaxed">
-          Insiders, like CEOs, CFOs, and board members, know their companies better than anyone. When they buy shares with their own money, it&apos;s often a strong sign they believe the stock will go up. When they sell, it&apos;s worth noting too. These trades are required to be reported to the SEC, so they&apos;re completely public.
+          The &quot;Insider Trades&quot; tab shows <strong className="text-gray-300">congressional stock trades</strong> — members of Congress are required to disclose trades within 45 days. The &quot;Top Investors&quot; tab shows quarterly 13F filings from well-known fund managers. Neither tab shows traditional corporate insider (CEO/CFO) trades. This data is for informational purposes only — it is not a buy or sell signal, and should not be the basis for any investment decision.
         </p>
       </div>
 
@@ -296,7 +296,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Insider Trades <InfoTooltip text="Trades made by company executives, directors, and politicians, required by law to be reported publicly within a few days of the trade." />
+          Congressional Trades <InfoTooltip text="Stock trades disclosed by members of Congress under the STOCK Act. Disclosures can be up to 45 days after the trade — data may not reflect the most current positions." />
         </button>
         <button
           onClick={() => setActiveTab('investors')}
@@ -306,7 +306,7 @@ export default function InsidersPage() {
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Top Investors <InfoTooltip text="Top holdings from legendary investors like Buffett, Ackman, and Dalio, pulled from their required quarterly reports filed with the government." />
+          Top Investors <InfoTooltip text="Top holdings from notable fund managers, sourced from 13F filings with the SEC. 13Fs are filed quarterly and can be up to 45 days after quarter-end — holdings may be months old and may no longer reflect current positions." />
         </button>
       </div>
 

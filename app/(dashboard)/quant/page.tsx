@@ -67,15 +67,23 @@ export default function QuantPage() {
 
       const { price, peRatio, beta, week52High, week52Low, dividendYield, eps, marketCap, sector, companyName } = quote
 
-      // Momentum: 52-week position
-      let momentum = 50
+      // 52-Week Price Position: where the current price sits within the year's range
+      // Note: this measures relative price positioning, not momentum in the academic sense
+      let pricePosition = 50
       if (week52High && week52Low && week52High !== week52Low) {
         const pos = ((price - week52Low) / (week52High - week52Low)) * 100
-        momentum = Math.round(pos)
+        pricePosition = Math.round(pos)
       }
 
-      // Value: Price vs. company earningss
-      const sectorPE: Record<string, number> = { Technology: 28, Healthcare: 22, Financials: 14, 'Consumer Discretionary': 20, 'Consumer Staples': 18, Energy: 12, Industrials: 18, Materials: 15, 'Real Estate': 25, Utilities: 16, 'Communication Services': 22 }
+      // Value: P/E vs sector median
+      // Sector medians below are approximate long-run averages — they shift with earnings cycles.
+      // Energy and cyclicals are especially volatile; treat these as rough benchmarks only.
+      const sectorPE: Record<string, number> = {
+        Technology: 28, Healthcare: 22, Financials: 14,
+        'Consumer Discretionary': 20, 'Consumer Staples': 18,
+        Energy: 15, Industrials: 18, Materials: 16,
+        'Real Estate': 28, Utilities: 18, 'Communication Services': 22,
+      }
       const avgPE = sector ? (sectorPE[sector] ?? 20) : 20
       let value = 50
       if (peRatio && peRatio > 0) {
@@ -85,36 +93,43 @@ export default function QuantPage() {
         else if (peRatio < avgPE * 1.3) value = 45
         else if (peRatio < avgPE * 1.6) value = 30
         else value = 15
-        if (dividendYield && dividendYield > 0.02) value = Math.min(100, value + 10)
+        // Dividend yield adds a small value bonus only if EPS coverage is confirmed
+        // (a high yield from a collapsing stock price is a "value trap" — we can't fully guard
+        // against that here, so apply only a modest adjustment)
+        if (dividendYield && dividendYield > 0.02 && dividendYield < 0.10) value = Math.min(100, value + 5)
       }
 
-      // Quality
+      // Fundamentals: profitability, size — NOT volatility (beta is a volatility measure, not quality)
       let quality = 40
-      if (eps && eps > 0) quality += 30
-      if (beta && beta < 1.2) quality += 25
-      if (marketCap && marketCap > 10e9) quality += 25
+      if (eps && eps > 0) quality += 40           // profitable
+      if (marketCap && marketCap > 10e9) quality += 30  // large-cap stability
+      if (marketCap && marketCap > 100e9) quality += 10 // mega-cap bonus
       quality = Math.min(100, quality)
 
-      // Volatility risk (inverted, lower beta = higher score)
+      // Low Volatility: inverted beta — lower price swings relative to market = higher score
       let volRisk = 50
       if (beta) {
-        if (beta < 0.8) volRisk = 85
-        else if (beta < 1.0) volRisk = 70
-        else if (beta < 1.3) volRisk = 50
+        if (beta < 0.6) volRisk = 90
+        else if (beta < 0.8) volRisk = 75
+        else if (beta < 1.0) volRisk = 60
+        else if (beta < 1.3) volRisk = 45
         else if (beta < 1.6) volRisk = 30
         else volRisk = 15
       }
 
-      const combined = Math.round((momentum + value + quality) / 3)
+      // Combined uses all 4 factors equally
+      const combined = Math.round((pricePosition + value + quality + volRisk) / 4)
       let signal: 'OVERWEIGHT' | 'NEUTRAL' | 'UNDERWEIGHT' = 'NEUTRAL'
-      if (combined >= 65) signal = 'OVERWEIGHT'
-      else if (combined < 40) signal = 'UNDERWEIGHT'
+      if (combined >= 62) signal = 'OVERWEIGHT'
+      else if (combined < 38) signal = 'UNDERWEIGHT'
 
       const rationale = signal === 'OVERWEIGHT'
-        ? `Strong overall score: ${value >= 60 ? 'attractively priced, ' : ''}${momentum >= 60 ? 'strong momentum, ' : ''}${quality >= 70 ? 'high quality fundamentals' : 'reasonable fundamentals'}. The combination of factors supports an overweight position.`
+        ? `Factor model favors this stock: ${value >= 60 ? 'valuation looks attractive vs. sector, ' : ''}${pricePosition >= 60 ? 'price near yearly high, ' : ''}${quality >= 70 ? 'strong fundamentals' : 'reasonable fundamentals'}. Not a buy recommendation — do your own research.`
         : signal === 'UNDERWEIGHT'
-        ? `Weak factor profile: ${value < 40 ? 'stretched valuation, ' : ''}${momentum < 40 ? 'weak momentum, ' : ''}${quality < 50 ? 'quality concerns' : 'mixed fundamentals'}. Factor signals collectively point to underweight.`
-        : `Mixed signals. No single factor is strongly positive or negative right now. Maintain market-weight exposure and monitor for catalyst shifts.`
+        ? `Factor model flags concerns: ${value < 40 ? 'stretched valuation vs. sector, ' : ''}${pricePosition < 40 ? 'price near yearly low, ' : ''}${quality < 50 ? 'weak fundamentals' : 'mixed signals'}. Not a sell recommendation — factors alone don't capture the full picture.`
+        : `Mixed signals across factors. No strong directional edge right now. This is a quantitative screen only — not a recommendation to buy or sell.`
+
+      const momentum = pricePosition // keep for display compatibility
 
       setResult({ ticker: sym, companyName, signal, combined, momentum, value, quality, volRisk, rationale, sector })
       setLastAnalyzed(new Date())
@@ -207,12 +222,12 @@ export default function QuantPage() {
                 <div className="flex items-center gap-4">
                   <SignalIcon className={cn('h-10 w-10', signalColor)} />
                   <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-wider flex items-center gap-1">Quant Signal for {result.ticker} <InfoTooltip text="The overall recommendation based on all 4 factors combined into one score." /><LastUpdated time={lastAnalyzed} className="ml-2" /></p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider flex items-center gap-1">Quant Signal for {result.ticker} <InfoTooltip text="A factor model signal based on 4 equally-weighted scores: price position, value, fundamentals, and volatility. This is a quantitative screen — not a buy or sell recommendation." /><LastUpdated time={lastAnalyzed} className="ml-2" /></p>
                     <p className={cn('text-4xl font-bold', signalColor)}>{result.signal}</p>
                     <p className="text-sm text-gray-400">{result.companyName}{result.sector ? ` · ${result.sector}` : ''}</p>
                   </div>
                   <div className="ml-auto text-right">
-                    <p className="text-xs text-gray-500">Combined Score</p>
+                    <p className="text-xs text-gray-500">Factor Score</p>
                     <p className={cn('text-3xl font-bold', signalColor)}>{result.combined}<span className="text-base text-gray-500">/100</span></p>
                   </div>
                 </div>
@@ -224,10 +239,10 @@ export default function QuantPage() {
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-4 flex items-center gap-1">Factor Scores <InfoTooltip text="Four separate scores (0–100) that measure different aspects of a stock. They're averaged together to produce the overall Quant Signal." /></p>
                 <div className="space-y-4">
                   {[
-                    { label: 'Momentum', score: result.momentum, desc: 'price vs. past year', color: 'bg-blue-500', tip: 'How well the stock has done over the past year. A high score means the price has been climbing steadily.' },
-                    { label: 'Value', score: result.value, desc: 'Price vs. company earnings', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive? Compares the P/E ratio (what you pay per $1 of earnings) to the average in its sector. Higher score = better value.' },
-                    { label: 'Quality', score: result.quality, desc: 'Profits, price swings, company size', color: 'bg-teal-500', tip: 'How healthy is the business? Looks at whether the company is profitable (EPS), stable (low beta), and large (market cap). Higher = stronger business.' },
-                    { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based risk score', color: 'bg-orange-500', tip: 'How calm or wild is this stock? Lower volatility = fewer scary swings. A high score here means the stock tends to move less than the overall market.' },
+                    { label: '52-Week Position', score: result.momentum, desc: 'Where price sits in yearly range', color: 'bg-blue-500', tip: 'Where the current price sits within the stock\'s 52-week range. A score near 100 means the price is close to its yearly high; near 0 means close to its yearly low. This is a price-positioning measure — not a prediction of future direction.' },
+                    { label: 'Value', score: result.value, desc: 'P/E vs. sector median', color: 'bg-purple-500', tip: 'Is the stock cheap or expensive relative to its sector? Compares the P/E ratio (price per $1 of earnings) to an approximate sector median. Higher score = lower relative valuation. Sector medians are long-run averages and shift with earnings cycles — use as a rough benchmark only.' },
+                    { label: 'Quality', score: result.quality, desc: 'Profitability & company size', color: 'bg-teal-500', tip: 'A simple proxy for business quality: is the company profitable (positive EPS) and how large is it (market cap)? Larger, profitable companies tend to be more stable. This is a rough screen — it does not capture debt levels, margins, or growth.' },
+                    { label: 'Low Volatility', score: result.volRisk, desc: 'Beta-based price stability', color: 'bg-orange-500', tip: 'How much does this stock move relative to the overall market? Beta < 1 means it tends to swing less than the market (higher score here). Beta > 1 means it swings more. Lower volatility can mean lower risk — but also lower upside.' },
                   ].map(({ label, score, desc, color, tip }) => (
                     <div key={label}>
                       <div className="flex justify-between mb-1">

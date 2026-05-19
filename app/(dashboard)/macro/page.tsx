@@ -40,7 +40,7 @@ export default function MacroPage() {
           <CardContent className="p-5">
             <div className="flex items-center gap-2 mb-3">
               <DollarSign className="h-4 w-4 text-blue-400" />
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">US Dollar Index (DXY) <InfoTooltip text="The DXY measures how strong the US dollar is against 6 major foreign currencies. A rising DXY generally pressures stocks, especially global companies." /></p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">US Dollar Index (DXY) <InfoTooltip text="The DXY measures how strong the US dollar is against 6 major foreign currencies. A rising DXY has historically been a headwind for stocks — especially multinationals — but this relationship is not consistent across all market environments." /></p>
             </div>
             {loading ? <Skeleton className="h-16 w-full" /> : dxy ? (
               <div>
@@ -69,9 +69,10 @@ export default function MacroPage() {
                 <div className={cn('inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium mb-3',
                   dxyPositive ? 'bg-red-400/10 text-red-400' : 'bg-green-400/10 text-green-400')}>
                   {dxyPositive ? <TrendingDown className="h-3.5 w-3.5" /> : <TrendingUp className="h-3.5 w-3.5" />}
-                  {dxyPositive ? 'Negative for equities' : 'Positive for equities'}
+                  {dxyPositive ? 'Historically a headwind for equities' : 'Historically a tailwind for equities'}
                 </div>
                 <p className="text-xs text-gray-400 leading-relaxed">{data?.stockImpact}</p>
+                <p className="text-xs text-gray-600 mt-2">The DXY–equity relationship is a general tendency, not a rule. Other macro factors (earnings, rates, sentiment) often dominate on any given day.</p>
               </div>
             )}
           </CardContent>
@@ -113,7 +114,7 @@ export default function MacroPage() {
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-4">
             <BarChart2 className="h-4 w-4 text-purple-400" />
-            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">M2 Money Supply <InfoTooltip text="M2 is the total amount of money in the US economy, cash, bank deposits, and savings. When it grows, more money chases stocks (bullish). When it shrinks, markets often fall." /></p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">M2 Money Supply <InfoTooltip text="M2 is the total amount of money in the US economy — cash, bank deposits, and savings. Expanding M2 has historically coincided with rising asset prices; contracting M2 has sometimes preceded market weakness. This relationship is observational, not a reliable predictor." /></p>
           </div>
           {loading ? <Skeleton className="h-40 w-full" /> : data?.m2 && data.m2.length > 0 ? (
             <div>
@@ -152,9 +153,9 @@ export default function MacroPage() {
       {/* Key Relationships */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { icon: DollarSign, color: 'text-blue-400', title: 'DXY vs Stocks', body: 'A rising dollar typically hurts US multinationals by reducing the USD value of foreign earnings. Emerging markets and commodities are especially sensitive to dollar strength.' },
-          { icon: BarChart2, color: 'text-purple-400', title: 'M2 vs Markets', body: 'Expanding money supply (QE, rate cuts) historically inflates asset prices. Contracting M2 (QT, rate hikes) creates headwinds for equities and risk assets.' },
-          { icon: Globe, color: 'text-yellow-400', title: 'Dollar vs Commodities', body: 'Commodities are priced in USD globally. A weaker dollar makes oil, gold, and food cheaper for other countries, which usually pushes those prices up.' },
+          { icon: DollarSign, color: 'text-blue-400', title: 'DXY vs Stocks', body: 'A rising dollar can pressure US multinationals by reducing the USD value of foreign earnings. This relationship holds on average but not always — other factors like earnings growth and risk appetite can outweigh currency effects.' },
+          { icon: BarChart2, color: 'text-purple-400', title: 'M2 vs Markets', body: 'Expanding money supply (QE, rate cuts) has historically coincided with rising asset prices, and contracting M2 with headwinds. This correlation is observed but not guaranteed — the timing and magnitude vary significantly cycle to cycle.' },
+          { icon: Globe, color: 'text-yellow-400', title: 'Dollar vs Commodities', body: 'Commodities are priced in USD globally. A weaker dollar tends to make them more affordable for foreign buyers, which can push prices up — but supply, demand, and geopolitical factors also play major roles.' },
         ].map(({ icon: Icon, color, title, body }) => (
           <Card key={title}>
             <CardContent className="p-4">

@@ -617,6 +617,7 @@ export default function ChallengePage() {
           </>
         )}
       </div>
+      <p className="text-xs text-gray-500 text-center mt-6 px-4">The $100K Challenge is a simulated game for educational and entertainment purposes only. It does not involve real money and is not financial advice. Stock selections shown are examples only — not recommendations to buy or sell any security.</p>
     </div>
   )
 }

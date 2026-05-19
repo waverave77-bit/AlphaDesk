@@ -43,7 +43,8 @@ export async function GET(req: NextRequest) {
     }
 
     const last4 = earnings.slice(-4)
-    const ttmEps = last4.length >= 2 ? last4.reduce((s, x) => s + x.eps, 0) : null
+    // TTM EPS requires a full 4 quarters for accuracy; fewer quarters understates or overstates annualised earnings
+    const ttmEps = last4.length >= 4 ? last4.reduce((s, x) => s + x.eps, 0) : null
     const epsTrend = last4.length >= 2 ? last4.map(e => `$${e.eps.toFixed(2)}`).join(' -> ') : 'N/A'
 
     const pctFromHigh = q.week52High && q.price ? ((q.price - q.week52High) / q.week52High) * 100 : null

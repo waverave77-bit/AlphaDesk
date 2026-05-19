@@ -352,7 +352,7 @@ export default function StockDetailPage() {
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-4">
-        For informational purposes only. Not financial advice. Data: Yahoo Finance · TradingView · Reddit · SEC EDGAR · Reuters
+        For informational purposes only. Not financial advice. Data: Yahoo Finance · TradingView · SEC EDGAR · Reuters
       </p>
     </div>
   )

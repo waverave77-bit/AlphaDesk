@@ -46,14 +46,14 @@ function getFngLabel(value: number): string {
 
 function getFngTradeNote(value: number): string {
   if (value <= 25)
-    return 'Markets are in extreme fear. Historically a buying opportunity, investors are overly pessimistic.'
+    return 'Markets are in extreme fear — investors are broadly pessimistic. Historically, extreme fear has sometimes preceded recoveries, but it has also coincided with prolonged downturns. This is not a buy signal.'
   if (value <= 45)
-    return 'Fear is elevated. Consider buying small amounts regularly. The market may have dropped too much too fast.'
+    return 'Fear is elevated. Investors are cautious and selling pressure has been notable. Sentiment alone is not a reliable timing tool — market conditions can stay fearful for extended periods.'
   if (value <= 55)
-    return 'Markets are neutral. No clear direction right now, look at individual companies instead.'
+    return 'Sentiment is roughly neutral. No strong directional signal from the crowd. This is a quantitative sentiment gauge, not a forecast.'
   if (value <= 75)
-    return 'Greed is building. Be selective, stocks may be getting too expensive. Think about taking some profits.'
-  return 'Extreme greed. Markets are euphoric. Risk of a pullback is elevated. Caution advised.'
+    return 'Greed is building. Investors are generally optimistic. Elevated greed has historically been associated with higher valuations and sometimes increased pullback risk, though timing any move based on sentiment is unreliable.'
+  return 'Extreme greed. Market sentiment is highly euphoric. Historically, extreme greed has sometimes preceded corrections, but markets can remain in greed territory for extended periods. This is a sentiment gauge only — not a recommendation to buy or sell.'
 }
 
 function FearGreedSection() {
@@ -77,7 +77,7 @@ function FearGreedSection() {
 
   return (
     <section className="mb-10">
-      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Fear &amp; Greed Index <InfoTooltip text="A score from 0–100 measuring whether investors are feeling fearful (selling) or greedy (buying). Extreme fear can be a buying opportunity; extreme greed means caution." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Fear &amp; Greed Index <InfoTooltip text="A score from 0–100 measuring overall investor sentiment — whether the crowd is fearful (selling) or greedy (buying). It is a sentiment gauge only, not a buy or sell signal. Extreme readings have sometimes preceded reversals, but timing the market based on sentiment alone is unreliable." /><LastUpdated time={lastUpdated} className="ml-2" /></h2>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-6">
           {loading ? (
@@ -327,7 +327,8 @@ function EconCalendarSection() {
 
   return (
     <section className="mb-10">
-      <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Upcoming events that can move stock prices, like jobs reports, inflation data, and interest rate decisions by the Federal Reserve." /></h2>
+      <h2 className="text-lg lg:text-xl font-semibold text-white mb-2 flex items-center gap-2">Economic Calendar 2026 <InfoTooltip text="Upcoming events that can move stock prices, like jobs reports, inflation data, and interest rate decisions by the Federal Reserve. Dates are estimates based on historical scheduling and may shift — verify exact dates at federalreserve.gov or bls.gov before trading around them." /></h2>
+      <p className="text-xs text-gray-600 mb-4">Dates are approximate. Verify at <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-400">federalreserve.gov</a> · <a href="https://www.bls.gov/schedule/2026/home.htm" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-400">bls.gov</a></p>
       <Card className="bg-gray-900 border-gray-800">
         <CardContent className="p-0">
           {upcoming.length === 0 ? (
