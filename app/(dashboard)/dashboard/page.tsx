@@ -394,7 +394,7 @@ export default function DashboardPage() {
                   anxietyLevel < 80 ? 'text-orange-700 border-orange-300 bg-orange-50' :
                                       'text-red-700 border-red-300 bg-red-50'
                 )}>
-                  {fearGreed.rating}
+                  {anxietyLevel < 30 ? 'Chill' : anxietyLevel < 60 ? 'Cautious' : anxietyLevel < 80 ? 'Anxious' : 'Full Panic'}
                 </span>
               </div>
             </div>
@@ -411,9 +411,9 @@ export default function DashboardPage() {
 
             {/* Sub-labels */}
             <div className="flex justify-between mt-1 px-0.5">
-              <span className="text-[10px] text-slate-400">Extreme Fear</span>
-              <span className="text-[10px] text-slate-400">Neutral</span>
-              <span className="text-[10px] text-slate-400">Extreme Greed</span>
+              <span className="text-[10px] text-slate-400">Chill</span>
+              <span className="text-[10px] text-slate-400">Nervous</span>
+              <span className="text-[10px] text-slate-400">Full Panic</span>
             </div>
 
             {/* Quote */}
