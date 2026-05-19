@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Search, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,6 +25,35 @@ export default function QuantPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [lastAnalyzed, setLastAnalyzed] = useState<Date | null>(null)
+  const [suggestions, setSuggestions] = useState<{ ticker: string; name: string }[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(-1)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  const fetchSuggestions = useCallback((q: string) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (q.length < 1) { setSuggestions([]); setShowSuggestions(false); return }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/stock/search?q=${encodeURIComponent(q)}`)
+        const data = await res.json()
+        setSuggestions(data.results?.slice(0, 6) ?? [])
+        setShowSuggestions(true)
+        setActiveIdx(-1)
+      } catch { setSuggestions([]) }
+    }, 200)
+  }, [])
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
 
   async function analyze(t: string) {
     const sym = t.trim().toUpperCase()
@@ -105,21 +134,55 @@ export default function QuantPage() {
 
       <Card>
         <CardContent className="p-5">
-          <div className="flex gap-3">
-            <input
-              value={ticker}
-              onChange={e => setTicker(e.target.value.toUpperCase())}
-              onKeyDown={e => e.key === 'Enter' && analyze(ticker)}
-              placeholder="Enter ticker (e.g. AAPL)"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-            />
-            <Button onClick={() => analyze(ticker)} disabled={loading} className="bg-blue-600 hover:bg-blue-700">
+          <div className="flex gap-3" ref={wrapperRef}>
+            <div className="flex-1 relative">
+              <input
+                value={ticker}
+                onChange={e => {
+                  setTicker(e.target.value)
+                  fetchSuggestions(e.target.value)
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, suggestions.length - 1)) }
+                  else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, -1)) }
+                  else if (e.key === 'Enter') {
+                    if (activeIdx >= 0 && suggestions[activeIdx]) {
+                      const s = suggestions[activeIdx]
+                      setTicker(s.ticker); setShowSuggestions(false); analyze(s.ticker)
+                    } else {
+                      setShowSuggestions(false); analyze(ticker)
+                    }
+                  } else if (e.key === 'Escape') { setShowSuggestions(false) }
+                }}
+                onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+                placeholder="Enter ticker or company name (e.g. Apple, AAPL)"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-lg overflow-hidden shadow-xl">
+                  {suggestions.map((s, i) => (
+                    <button
+                      key={s.ticker}
+                      onMouseDown={e => { e.preventDefault(); setTicker(s.ticker); setShowSuggestions(false); analyze(s.ticker) }}
+                      className={cn(
+                        'w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors',
+                        i === activeIdx ? 'bg-blue-600/20' : 'hover:bg-gray-800'
+                      )}
+                    >
+                      <span className="text-xs font-bold text-blue-400 w-14 shrink-0">{s.ticker}</span>
+                      <span className="text-sm text-gray-300 truncate">{s.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Button onClick={() => { setShowSuggestions(false); analyze(ticker) }} disabled={loading} className="bg-blue-600 hover:bg-blue-700">
               <Search className="h-4 w-4 mr-2" />{loading ? 'Analyzing...' : 'Analyze'}
             </Button>
           </div>
           <div className="flex flex-wrap gap-2 mt-3">
             {EXAMPLES.map(e => (
-              <button key={e} onClick={() => { setTicker(e); analyze(e) }}
+              <button key={e} onClick={() => { setTicker(e); setShowSuggestions(false); analyze(e) }}
                 className="text-xs px-3 py-1 rounded-full bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors border border-gray-700">
                 {e}
               </button>
