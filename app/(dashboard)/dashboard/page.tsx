@@ -228,7 +228,7 @@ export default function DashboardPage() {
           const status = brief?.status ?? ''
           if (status === 'Weekend') return 'closed'
           if (status !== 'Open') return 'neutral'
-          const spx = fearGreed?.spChange ?? indices[0]?.changePercent ?? 0
+          const spx = indices[0]?.changePercent ?? fearGreed?.spChange ?? 0
           if (spx >= 0.5)  return 'bull'
           if (spx <= -0.5) return 'bear'
           return 'neutral'

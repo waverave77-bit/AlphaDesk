@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 async function fetchYahoo(ticker: string) {
   const res = await fetch(
     `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=30d`,
-    { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) }
+    { headers: { 'User-Agent': 'Mozilla/5.0' }, cache: 'no-store', signal: AbortSignal.timeout(5000) }
   )
   if (!res.ok) throw new Error('HTTP ' + res.status)
   return res.json()
@@ -57,7 +57,7 @@ export async function GET() {
 
     return NextResponse.json(
       { score, rating, vix: Math.round(vix * 10) / 10, spChange: Math.round(spChange * 100) / 100 },
-      { headers: { 'Cache-Control': 'public, s-maxage=300' } }
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
     )
   } catch {
     return NextResponse.json({ score: 50, rating: 'Neutral', vix: null, spChange: null, error: true })
