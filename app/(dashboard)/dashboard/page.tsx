@@ -373,66 +373,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* ── Anxiety Meter ─────────────────────────────────────────── */}
-      {fearGreed && (
-        <Card className={cn('transition-all duration-700',
-          anxietyLevel > 80 ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
-        )}>
-          <CardContent className="p-4 sm:p-5">
-            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-base">{anxietyLevel < 30 ? '😌' : anxietyLevel < 60 ? '😐' : anxietyLevel < 80 ? '😰' : '🤯'}</span>
-                <span className="text-sm font-semibold text-slate-800">Mr. Guy Anxiety Meter</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {fearGreed.vix && (
-                  <span className="text-xs text-slate-500">VIX <span className={cn('font-semibold', fearGreed.vix > 30 ? 'text-red-500' : fearGreed.vix > 20 ? 'text-amber-500' : 'text-green-600')}>{fearGreed.vix}</span></span>
-                )}
-                <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full border',
-                  anxietyLevel < 30 ? 'text-green-700 border-green-300 bg-green-50' :
-                  anxietyLevel < 60 ? 'text-amber-700 border-amber-300 bg-amber-50' :
-                  anxietyLevel < 80 ? 'text-orange-700 border-orange-300 bg-orange-50' :
-                                      'text-red-700 border-red-300 bg-red-50'
-                )}>
-                  {anxietyLevel < 30 ? 'Chill' : anxietyLevel < 60 ? 'Cautious' : anxietyLevel < 80 ? 'Anxious' : 'Full Panic'}
-                </span>
-              </div>
-            </div>
-
-            {/* Bar */}
-            <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
-              <div
-                className={cn('h-full rounded-full transition-all duration-1000',
-                  anxietyLevel < 30 ? 'bg-green-500' : anxietyLevel < 60 ? 'bg-amber-400' : anxietyLevel < 80 ? 'bg-orange-500' : 'bg-red-500'
-                )}
-                style={{ width: `${anxietyLevel}%`, boxShadow: anxietyLevel > 80 ? '0 0 8px rgba(239,68,68,.4)' : undefined }}
-              />
-            </div>
-
-            {/* Sub-labels */}
-            <div className="flex justify-between mt-1 px-0.5">
-              <span className="text-[10px] text-slate-400">Chill</span>
-              <span className="text-[10px] text-slate-400">Nervous</span>
-              <span className="text-[10px] text-slate-400">Full Panic</span>
-            </div>
-
-            {/* Quote */}
-            <p className="text-xs text-slate-400 mt-2 italic">
-              {anxietyLevel < 30
-                ? '"Everything is fine. I am fine." — Mr. Guy'
-                : anxietyLevel < 60
-                ? '"I\'m watching these numbers very carefully." — Mr. Guy'
-                : anxietyLevel < 80
-                ? '"This is fine. *sweating* This is absolutely fine." — Mr. Guy'
-                : '"SELL EVERYTHING. MOVE TO CASH. BUY BEANS." — Mr. Guy'}
-            </p>
-
-            {anxietyLevel > 80 && (
-              <style>{`@keyframes anxShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-1px)}75%{transform:translateX(1px)}}`}</style>
-            )}
-          </CardContent>
-        </Card>
-      )}
 
       {/* ── Quick Links ───────────────────────────────────────────── */}
       <div>
