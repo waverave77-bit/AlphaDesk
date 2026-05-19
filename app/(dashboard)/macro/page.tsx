@@ -24,7 +24,7 @@ export default function MacroPage() {
   }, [])
 
   const dxy = data?.dxy
-  const dxyPositive = (dxy?.changePercent ?? 0) >= 0
+  const dxyPositive = dxy ? dxy.changePercent >= 0 : null
 
   return (
     <div className="space-y-6">
@@ -64,7 +64,9 @@ export default function MacroPage() {
               <Globe className="h-4 w-4 text-yellow-400" />
               <p className="text-xs text-gray-500 uppercase tracking-wider font-medium flex items-center gap-1">Impact on Stocks <InfoTooltip text="How today's dollar movement tends to affect equity markets. A stronger dollar is generally bearish for stocks; a weaker dollar is bullish." /></p>
             </div>
-            {loading ? <Skeleton className="h-16 w-full" /> : (
+            {loading ? <Skeleton className="h-16 w-full" /> : dxyPositive === null ? (
+              <p className="text-sm text-gray-500">DXY data unavailable — impact signal cannot be determined.</p>
+            ) : (
               <div>
                 <div className={cn('inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium mb-3',
                   dxyPositive ? 'bg-red-400/10 text-red-400' : 'bg-green-400/10 text-green-400')}>

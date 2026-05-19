@@ -85,8 +85,8 @@ export default function StockSearch({ placeholder = 'Search ticker or company...
                 <span className="ml-2 text-gray-400 text-sm truncate max-w-xs">{r.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">{r.exchange}</span>
-                <span className="text-sm bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{r.type}</span>
+                {r.exchange && <span className="text-sm text-gray-500">{r.exchange}</span>}
+                {r.type && <span className="text-sm bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{r.type}</span>}
               </div>
             </button>
           ))}

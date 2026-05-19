@@ -215,6 +215,10 @@ export default function TranslatorPage() {
             )}
           </div>
         )}
+
+        <p className="text-xs text-gray-500 text-center mt-6 px-4">
+          Translations are AI-generated for informational and educational purposes only. They are not financial advice. Always verify the original source and consult a qualified professional before making investment decisions.
+        </p>
       </div>
     </div>
   )

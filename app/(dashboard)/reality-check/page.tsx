@@ -267,6 +267,10 @@ export default function RealityCheckPage() {
             </div>
           </div>
         )}
+
+        <p className="text-xs text-gray-500 text-center mt-6 px-4">
+          Reality Check uses AI and publicly available data to evaluate financial claims. Results are for informational and educational purposes only — not financial advice. AI analysis can be incorrect or incomplete. Always verify claims independently before making any investment decisions.
+        </p>
       </div>
     </div>
   )

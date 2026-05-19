@@ -284,6 +284,10 @@ export default function ReportCardPage() {
             </div>
           </div>
         )}
+
+        <p className="text-xs text-gray-500 text-center mt-6 px-4">
+          Grades are AI-generated using publicly available financial data for informational purposes only. They are not financial advice and should not be the sole basis for any investment decision. Always do your own research.
+        </p>
       </div>
     </div>
   )

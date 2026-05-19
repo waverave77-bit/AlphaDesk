@@ -149,7 +149,7 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-emerald-400" />
-          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Congressional members buying shares of a stock. Some analysts watch this data, but purchasing activity can reflect many motivations and is not a reliable buy signal." /></h2>
+          <h2 className="text-base font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">Recent Purchases <InfoTooltip text="Corporate insiders (executives, directors) buying shares of their own company. Some analysts watch this as a potential signal of confidence, but insider purchases can reflect many motivations and are not a reliable buy signal." /></h2>
           <LastUpdated time={lastUpdated} />
         </div>
         {purchases.length > 0 ? <TradeTable rows={purchases} /> : <p className="text-sm text-gray-600">No recent purchases.</p>}
@@ -159,13 +159,13 @@ function InsiderTrades() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-red-400" />
-          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Congressional members selling shares. Sales can happen for many reasons — diversification, personal expenses, tax planning — and are not necessarily a bearish signal on their own." /></h2>
+          <h2 className="text-base font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">Recent Sales <InfoTooltip text="Corporate insiders selling shares. Sales can happen for many reasons — diversification, personal expenses, tax planning, option exercises — and are not necessarily a bearish signal on their own." /></h2>
         </div>
         {sales.length > 0 ? <TradeTable rows={sales} /> : <p className="text-sm text-gray-600">No recent sales.</p>}
       </div>
 
       <p className="text-xs text-gray-600 text-center pb-2">
-        Congressional stock trades from House &amp; Senate financial disclosures filed under the STOCK Act. Disclosures may be up to 45 days after the trade date. Not financial advice.
+        Corporate insider trades sourced from SEC Form 4 filings via EDGAR. Insiders must report trades within 2 business days of the transaction. Not financial advice.
       </p>
     </div>
   )
@@ -260,10 +260,10 @@ function FamousInvestors() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-type Tab = 'congress' | 'investors'
+type Tab = 'insiders' | 'investors'
 
 export default function InsidersPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('congress')
+  const [activeTab, setActiveTab] = useState<Tab>('insiders')
 
   return (
     <div className="space-y-6">
@@ -273,8 +273,8 @@ export default function InsidersPage() {
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks congressional stock trades (STOCK Act disclosures) and top fund manager holdings (SEC 13F filings). All data is publicly reported. This is informational only — not a buy or sell signal." /></h1>
-          <p className="text-base text-gray-400 mt-0.5">Congressional stock trades and top investor quarterly 13F disclosures</p>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-2">Smart Money Tracker <InfoTooltip text="Tracks corporate insider trades (SEC Form 4 filings from executives and directors) and top fund manager holdings (SEC 13F filings). All data is publicly reported. This is informational only — not a buy or sell signal." /></h1>
+          <p className="text-base text-gray-400 mt-0.5">Corporate insider trades (SEC Form 4) and top investor quarterly 13F disclosures</p>
         </div>
       </div>
 
@@ -282,21 +282,21 @@ export default function InsidersPage() {
       <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
         <p className="text-base font-semibold text-emerald-300 mb-1.5">Why does this matter?</p>
         <p className="text-sm text-gray-400 leading-relaxed">
-          The &quot;Insider Trades&quot; tab shows <strong className="text-gray-300">congressional stock trades</strong> — members of Congress are required to disclose trades within 45 days. The &quot;Top Investors&quot; tab shows quarterly 13F filings from well-known fund managers. Neither tab shows traditional corporate insider (CEO/CFO) trades. This data is for informational purposes only — it is not a buy or sell signal, and should not be the basis for any investment decision.
+          The &quot;Insider Trades&quot; tab shows <strong className="text-gray-300">corporate insider trades</strong> — purchases and sales by executives, directors, and major shareholders disclosed via SEC Form 4 filings. The &quot;Top Investors&quot; tab shows quarterly 13F filings from well-known fund managers. This data is for informational purposes only — it is not a buy or sell signal, and should not be the basis for any investment decision.
         </p>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-1 p-1 bg-gray-900 rounded-lg w-fit border border-gray-800">
         <button
-          onClick={() => setActiveTab('congress')}
+          onClick={() => setActiveTab('insiders')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
-            activeTab === 'congress'
+            activeTab === 'insiders'
               ? 'bg-blue-600 text-white shadow'
               : 'text-gray-400 hover:text-gray-200'
           }`}
         >
-          Congressional Trades <InfoTooltip text="Stock trades disclosed by members of Congress under the STOCK Act. Disclosures can be up to 45 days after the trade — data may not reflect the most current positions." />
+          Insider Trades <InfoTooltip text="Stock purchases and sales by corporate executives, directors, and major shareholders, disclosed via SEC Form 4 filings. Insiders must report trades within 2 business days." />
         </button>
         <button
           onClick={() => setActiveTab('investors')}
@@ -311,7 +311,7 @@ export default function InsidersPage() {
       </div>
 
       {/* Tab content */}
-      {activeTab === 'congress' ? <InsiderTrades /> : <FamousInvestors />}
+      {activeTab === 'insiders' ? <InsiderTrades /> : <FamousInvestors />}
     </div>
   )
 }
