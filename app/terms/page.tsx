@@ -83,8 +83,8 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">4. Data Accuracy</h2>
           <p className="text-gray-400 leading-relaxed">
-            Financial data displayed on this site is sourced from third parties including Yahoo Finance,
-            SEC EDGAR, TradingView, and others. We make no warranty that data is accurate, complete,
+            Financial data displayed on this site is sourced from third-party market data providers,
+            SEC EDGAR, and other public sources. We make no warranty that data is accurate, complete,
             up-to-date, or suitable for any particular purpose. Market data may be delayed. AI-generated
             analysis may contain errors or omissions. Always verify data independently before relying on it.
           </p>

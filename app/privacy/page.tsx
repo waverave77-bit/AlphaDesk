@@ -75,7 +75,7 @@ export default function PrivacyPage() {
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-400 leading-relaxed">
             <li><strong className="text-gray-300">Vercel</strong> — hosting and deployment</li>
-            <li><strong className="text-gray-300">Yahoo Finance API</strong> — stock price and financial data</li>
+            <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data</li>
             <li><strong className="text-gray-300">SEC EDGAR</strong> — public regulatory filings (Form 4, 13F)</li>
             <li><strong className="text-gray-300">Anthropic Claude API</strong> — AI-generated analysis and responses</li>
             <li><strong className="text-gray-300">TradingView</strong> — embedded price charts</li>

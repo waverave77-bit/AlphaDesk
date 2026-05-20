@@ -205,7 +205,7 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-1.5 text-xs text-gray-500">
               <p>• Portfolio data stored securely in PostgreSQL</p>
-              <p>• Stock data from Yahoo Finance, SEC EDGAR, Reddit, Reuters</p>
+              <p>• Stock data from third-party market data providers and public regulatory filings (SEC EDGAR)</p>
               <p>• AI analysis via Claude (Anthropic), DeepSeek, and xAI APIs</p>
               <p>• No data is sold or shared with third parties</p>
               <p className="pt-2 text-gray-600">For informational purposes only. Not financial advice.</p>

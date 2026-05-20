@@ -105,7 +105,7 @@ export default function ResearchPage() {
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="h-5 w-5 text-green-400" />
             <p className="text-base font-semibold text-white">Top Gainers Today</p>
-            <span className="ml-auto text-sm text-gray-600">Yahoo Finance</span>
+            <span className="ml-auto text-sm text-gray-600">Market data</span>
           </div>
           {loading ? (
             <div className="space-y-2">
@@ -127,7 +127,7 @@ export default function ResearchPage() {
           <div className="flex items-center gap-2 mb-4">
             <TrendingDown className="h-5 w-5 text-red-400" />
             <p className="text-base font-semibold text-white">Top Losers Today</p>
-            <span className="ml-auto text-sm text-gray-600">Yahoo Finance</span>
+            <span className="ml-auto text-sm text-gray-600">Market data</span>
           </div>
           {loading ? (
             <div className="space-y-2">
@@ -166,7 +166,7 @@ export default function ResearchPage() {
             <TrendingUp className="h-4 w-4 text-blue-400" />
             <p className="text-sm font-medium text-white">Live Market Data</p>
           </div>
-          <p className="text-xs text-gray-500">Real-time prices, valuation data, company size, yearly price range, and more, powered by Yahoo Finance.</p>
+          <p className="text-xs text-gray-500">Real-time prices, valuation data, company size, yearly price range, and more from third-party market data providers.</p>
         </div>
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
