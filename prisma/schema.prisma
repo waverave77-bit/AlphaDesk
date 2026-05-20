@@ -14,6 +14,16 @@ model User {
   password      String
   name          String?
   createdAt     DateTime      @default(now())
+
+  // ─── Pro subscription fields (Stripe) ──────────────────────────────
+  // TO PUBLISH: run `npx prisma migrate dev --name add-pro-fields`
+  isPro                Boolean   @default(false)
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  proSince             DateTime?
+  proCancelledAt       DateTime?
+  // ───────────────────────────────────────────────────────────────────
+
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]
