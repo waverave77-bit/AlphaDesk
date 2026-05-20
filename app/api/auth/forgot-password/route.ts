@@ -33,11 +33,13 @@ export async function POST(req: Request) {
       data: { email: normalised, token, expiresAt },
     })
 
-    const baseUrl = process.env.NEXTAUTH_URL?.replace('localhost:3001', 'zainsgame.vercel.app') ?? 'https://zainsgame.vercel.app'
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : (process.env.NEXTAUTH_URL ?? 'http://localhost:3001')
     const resetUrl = `${baseUrl}/reset-password?token=${token}`
 
     await resend.emails.send({
-      from: 'Zains Game <noreply@zainsgame.vercel.app>',
+      from: 'Zains Game <onboarding@resend.dev>',
       to: normalised,
       subject: 'Reset your password',
       html: `
