@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { TrendingUp, Brain, Shield, Zap, BookOpen, Bell, Users, ChevronRight } from 'lucide-react'
+import { TrendingUp, Brain, Shield, Zap, BookOpen, Bell, Users, ChevronRight, Check } from 'lucide-react'
 
 export default function LandingPage() {
   return (
@@ -95,7 +95,75 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing, hidden until Stripe is set up */}
+      {/* Pricing */}
+      <section className="px-6 pb-24 max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-3">Simple pricing</h2>
+        <p className="text-gray-400 text-center mb-12">Start free. Upgrade when you want more.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+          {/* Free */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Free</p>
+            <div className="flex items-end gap-1 mb-1">
+              <span className="text-4xl font-bold">$0</span>
+              <span className="text-gray-500 mb-1">/month</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-6">No credit card needed</p>
+            <ul className="space-y-3 mb-8">
+              {[
+                'Stock research & live prices',
+                'Earnings calendar & markets',
+                'Watchlist & price alerts',
+                'Finance dictionary',
+                '3 Mr. Guy chats/day',
+                '2 AI stock analyses/day',
+                'Smart Money preview',
+              ].map(f => (
+                <li key={f} className="flex items-center gap-2.5 text-sm text-gray-400">
+                  <Check className="h-4 w-4 text-gray-600 shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/register" className="block w-full py-3 rounded-xl border border-gray-700 text-center text-sm font-semibold text-gray-400 hover:border-gray-500 hover:text-white transition-colors">
+              Get Started Free
+            </Link>
+          </div>
+
+          {/* Pro */}
+          <div className="bg-gray-900 border-2 border-blue-500 rounded-2xl p-8 relative overflow-hidden">
+            <div className="absolute -top-px left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-4 py-1 rounded-b-lg tracking-wide">
+              MOST POPULAR
+            </div>
+            <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2 mt-2">Pro</p>
+            <div className="flex items-end gap-1 mb-1">
+              <span className="text-4xl font-bold">$6.99</span>
+              <span className="text-gray-400 mb-1">/month</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-6">Cancel anytime</p>
+            <ul className="space-y-3 mb-8">
+              {[
+                'Everything in Free',
+                'Unlimited Mr. Guy chat',
+                'Unlimited AI stock analysis',
+                'Unlimited all AI tools',
+                'Full Smart Money access',
+                'Full Hedge Fund tracker',
+              ].map(f => (
+                <li key={f} className="flex items-center gap-2.5 text-sm text-gray-300">
+                  <Check className="h-4 w-4 text-blue-400 shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/register" className="block w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-center text-sm font-bold text-white transition-colors shadow-lg shadow-blue-600/20">
+              Get Pro — $6.99/month
+            </Link>
+          </div>
+
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
