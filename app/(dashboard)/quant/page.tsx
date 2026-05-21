@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Search, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { Search, TrendingUp, TrendingDown, Minus, Info } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -145,6 +145,16 @@ export default function QuantPage() {
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">Quant Strategy <InfoTooltip text="A quantitative (math-based) approach to picking stocks. Instead of gut feelings, it uses measurable factors like momentum and earnings to generate buy/sell signals." /></h1>
         <p className="text-sm text-gray-400 mt-1">Factor-based over/underweight signals using momentum, value, quality & volatility</p>
+      </div>
+
+      {/* Explainer */}
+      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+        <p className="text-sm font-semibold text-blue-700 mb-1 flex items-center gap-1.5">
+          <Info className="h-3.5 w-3.5" /> What is this?
+        </p>
+        <p className="text-sm text-blue-600 leading-relaxed">
+          Instead of gut feelings, quant strategy uses math to score stocks. We measure <strong>momentum</strong> (is it trending up?), <strong>value</strong> (is it cheap?), <strong>quality</strong> (is the business healthy?), and <strong>volatility</strong> (how risky is it?) to generate a buy, hold, or sell signal.
+        </p>
       </div>
 
       <Card>

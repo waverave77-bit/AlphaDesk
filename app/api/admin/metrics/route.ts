@@ -54,7 +54,7 @@ export async function GET() {
     }),
   ])
 
-  const mrr = proUsers * 6.99
+  const mrr = proUsers * 4.99
   const freeUsers = totalUsers - proUsers
   const conversionRate = totalUsers > 0 ? ((proUsers / totalUsers) * 100).toFixed(1) : '0'
 

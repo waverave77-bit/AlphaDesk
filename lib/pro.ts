@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 /** Monthly price in USD cents (used on the upgrade page) */
-export const PRO_PRICE_CENTS = 699  // $6.99
+export const PRO_PRICE_CENTS = 499  // $4.99
 
 /** Per-feature daily limits for free users. Pro & admin = unlimited. */
 export const FREE_LIMITS: Record<string, number> = {

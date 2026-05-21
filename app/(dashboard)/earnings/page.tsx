@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
+import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft, Info } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
@@ -397,6 +397,16 @@ export default function EarningsPage() {
           <p className="text-sm text-gray-500">Click any highlighted date to see who's reporting</p>
           <LastUpdated time={lastUpdated} />
         </div>
+      </div>
+
+      {/* Explainer */}
+      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
+        <p className="text-sm font-semibold text-blue-700 mb-1 flex items-center gap-1.5">
+          <Info className="h-3.5 w-3.5" /> What is this?
+        </p>
+        <p className="text-sm text-blue-600 leading-relaxed">
+          Every 3 months, public companies release their financial results — these are called <strong>earnings reports</strong>. Stocks can move 10%+ on the day they report. This calendar shows when companies are reporting so you're never caught off guard.
+        </p>
       </div>
 
       {/* Legend */}

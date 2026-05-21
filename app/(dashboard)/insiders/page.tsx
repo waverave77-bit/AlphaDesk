@@ -71,7 +71,7 @@ function ProOverlay({ lockedCount, label = 'trades' }: { lockedCount: number; la
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors shadow-lg"
         >
           <Zap className="h-4 w-4" />
-          Unlock with Pro — $6.99/mo
+          Unlock with Pro — $4.99/mo
         </Link>
       </div>
     </div>
@@ -214,7 +214,7 @@ function InsiderTrades({ isPro }: { isPro: boolean }) {
 
 // ─── Top Investors tab ─────────────────────────────────────────────────────
 
-const FREE_INVESTOR_CARDS = 3
+const FREE_INVESTOR_CARDS = 2
 
 function InvestorCard({ investor }: { investor: Investor }) {
   return (
@@ -315,7 +315,7 @@ function FamousInvestors({ isPro }: { isPro: boolean }) {
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors shadow-lg"
             >
               <Zap className="h-4 w-4" />
-              Unlock with Pro — $6.99/mo
+              Unlock with Pro — $4.99/mo
             </Link>
           </div>
         </div>

@@ -73,7 +73,7 @@ export async function sendProUpgradeEmail(email: string) {
           Questions? Just reply to this email. Mr. Guy's got your back.
         </p>
         <hr style="border:none;border-top:1px solid #eee;margin:32px 0 16px;" />
-        <p style="color:#ccc;font-size:11px;margin:0;">Mr. Guy Invests · mrguyinvests.com · $6.99/month, cancel anytime</p>
+        <p style="color:#ccc;font-size:11px;margin:0;">Mr. Guy Invests · mrguyinvests.com · $4.99/month, cancel anytime</p>
       </div>
     `,
   })

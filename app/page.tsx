@@ -138,7 +138,7 @@ export default function LandingPage() {
             </div>
             <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2 mt-2">Pro</p>
             <div className="flex items-end gap-1 mb-1">
-              <span className="text-4xl font-bold">$6.99</span>
+              <span className="text-4xl font-bold">$4.99</span>
               <span className="text-gray-400 mb-1">/month</span>
             </div>
             <p className="text-sm text-gray-500 mb-6">Cancel anytime</p>
@@ -158,7 +158,7 @@ export default function LandingPage() {
               ))}
             </ul>
             <Link href="/register" className="block w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-center text-sm font-bold text-white transition-colors shadow-lg shadow-blue-600/20">
-              Get Pro — $6.99/month
+              Get Pro — $4.99/month
             </Link>
           </div>
 
