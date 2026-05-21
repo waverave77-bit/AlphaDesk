@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
+import ProLimitBanner from '@/components/ProLimitBanner'
 
 const EXAMPLES = ['AAPL', 'MSFT', 'TSLA', 'JPM', 'NVDA', 'META']
 
@@ -61,8 +62,10 @@ export default function QuantPage() {
     setLoading(true)
     setResult(null)
     try {
-      const r = await fetch(`/api/stock/${sym}`)
-      const { quote } = await r.json()
+      const r = await fetch(`/api/quant?ticker=${sym}`)
+      const data = await r.json()
+      if (r.status === 429) { setResult({ error: true, ticker: sym, limitReached: true }); return }
+      const { quote } = data
       if (!quote) { setResult({ error: true, ticker: sym }); return }
 
       const { price, peRatio, beta, week52High, week52Low, dividendYield, eps, marketCap, sector, companyName } = quote
@@ -216,8 +219,14 @@ export default function QuantPage() {
         </CardContent>
       </Card>
 
-      {result?.error && (
+      {result?.error && !result.limitReached && (
         <Card><CardContent className="p-5"><p className="text-sm text-red-400">Could not analyze {result.ticker}. Try a valid US ticker.</p></CardContent></Card>
+      )}
+
+      {result?.limitReached && (
+        <Card><CardContent className="p-5">
+          <ProLimitBanner feature="quant" isDark={true} />
+        </CardContent></Card>
       )}
 
       {result && !result.error && (() => {

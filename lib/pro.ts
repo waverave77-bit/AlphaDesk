@@ -18,6 +18,7 @@ export const FREE_LIMITS: Record<string, number> = {
   'am-i-dumb':     5,
   'bs-checker':    5,
   'translator':    999, // effectively unlimited — simple educational tool
+  'quant':         3,
 }
 
 /**
