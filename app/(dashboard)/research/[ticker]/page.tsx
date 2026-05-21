@@ -312,7 +312,7 @@ export default function StockDetailPage() {
             {/* Why it matters */}
             <div className="mt-3 pt-3 border-t border-gray-800/50">
               <p className="text-[10px] text-gray-600 leading-relaxed">
-                <span className="text-gray-500">These numbers help you understand if a stock is a good deal before you buy.</span>
+                <span className="text-gray-500">These numbers help you understand the stock's financial profile. Not financial advice.</span>
               </p>
             </div>
           </CardContent>

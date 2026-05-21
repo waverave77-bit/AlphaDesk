@@ -276,7 +276,7 @@ type CharState = 'idle' | 'wake' | 'think' | 'talk'
 
 const CATEGORIES = [
   { icon: TrendingUp, label: 'Hot Takes', color: 'text-orange-400', bg: 'bg-orange-600/10 border-orange-500/20',
-    questions: ['What stocks are actually worth buying right now?', 'Is NVDA still a buy at this price?', 'What is the market doing today?', 'Give me one trade idea right now'] },
+    questions: ['How do I evaluate a stock right now?', 'What metrics matter most for NVDA?', 'What is the market doing today?', 'Walk me through how to analyze a trade idea'] },
   { icon: Newspaper, label: 'News & Markets', color: 'text-purple-400', bg: 'bg-purple-600/10 border-purple-500/20',
     questions: ['What is moving markets today?', 'Is a recession coming?', 'What happens to stocks when rates drop?', 'Why did the market drop today?'] },
   { icon: BookOpen, label: 'Explain It', color: 'text-blue-400', bg: 'bg-blue-600/10 border-blue-500/20',
@@ -442,7 +442,7 @@ export default function ChatPage() {
                 </div>
                 <div>
                   <p className="text-white font-bold text-xl mt-2">Mr. Guy, at your service.</p>
-                  <p className="text-gray-500 text-sm mt-2 max-w-sm leading-relaxed">Ask me about any stock. I pull live data and give you a real take — not the watered-down stuff your broker tells you.</p>
+                  <p className="text-gray-500 text-sm mt-2 max-w-sm leading-relaxed">Ask me about any stock. I pull live data and explain things in plain English — ask me anything about stocks, markets, or investing.</p>
                 </div>
                 {/* Mobile quick questions */}
                 <div className="grid grid-cols-2 gap-2 w-full max-w-md lg:hidden">

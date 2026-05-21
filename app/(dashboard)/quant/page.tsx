@@ -122,13 +122,13 @@ export default function QuantPage() {
 
       // Combined uses all 4 factors equally
       const combined = Math.round((pricePosition + value + quality + volRisk) / 4)
-      let signal: 'OVERWEIGHT' | 'NEUTRAL' | 'UNDERWEIGHT' = 'NEUTRAL'
-      if (combined >= 62) signal = 'OVERWEIGHT'
-      else if (combined < 38) signal = 'UNDERWEIGHT'
+      let signal: 'FAVORABLE' | 'NEUTRAL' | 'UNFAVORABLE' = 'NEUTRAL'
+      if (combined >= 62) signal = 'FAVORABLE'
+      else if (combined < 38) signal = 'UNFAVORABLE'
 
-      const rationale = signal === 'OVERWEIGHT'
+      const rationale = signal === 'FAVORABLE'
         ? `Factor model favors this stock: ${value >= 60 ? 'valuation looks attractive vs. sector, ' : ''}${pricePosition >= 60 ? 'price near yearly high, ' : ''}${quality >= 70 ? 'strong fundamentals' : 'reasonable fundamentals'}. Not a buy recommendation — do your own research.`
-        : signal === 'UNDERWEIGHT'
+        : signal === 'UNFAVORABLE'
         ? `Factor model flags concerns: ${value < 40 ? 'stretched valuation vs. sector, ' : ''}${pricePosition < 40 ? 'price near yearly low, ' : ''}${quality < 50 ? 'weak fundamentals' : 'mixed signals'}. Not a sell recommendation — factors alone don't capture the full picture.`
         : `Mixed signals across factors. No strong directional edge right now. This is a quantitative screen only — not a recommendation to buy or sell.`
 
@@ -230,9 +230,9 @@ export default function QuantPage() {
       )}
 
       {result && !result.error && (() => {
-        const signalColor = result.signal === 'OVERWEIGHT' ? 'text-green-400' : result.signal === 'UNDERWEIGHT' ? 'text-red-400' : 'text-yellow-400'
-        const signalBg = result.signal === 'OVERWEIGHT' ? 'bg-green-400/10 border-green-400/20' : result.signal === 'UNDERWEIGHT' ? 'bg-red-400/10 border-red-400/20' : 'bg-yellow-400/10 border-yellow-400/20'
-        const SignalIcon = result.signal === 'OVERWEIGHT' ? TrendingUp : result.signal === 'UNDERWEIGHT' ? TrendingDown : Minus
+        const signalColor = result.signal === 'FAVORABLE' ? 'text-green-400' : result.signal === 'UNFAVORABLE' ? 'text-red-400' : 'text-yellow-400'
+        const signalBg = result.signal === 'FAVORABLE' ? 'bg-green-400/10 border-green-400/20' : result.signal === 'UNFAVORABLE' ? 'bg-red-400/10 border-red-400/20' : 'bg-yellow-400/10 border-yellow-400/20'
+        const SignalIcon = result.signal === 'FAVORABLE' ? TrendingUp : result.signal === 'UNFAVORABLE' ? TrendingDown : Minus
 
         return (
           <div className="space-y-4">
@@ -282,7 +282,7 @@ export default function QuantPage() {
               </CardContent>
             </Card>
 
-            <p className="text-xs text-gray-600 text-center">Based on quantitative factor analysis using public market data. Not financial advice.</p>
+            <p className="text-xs text-gray-600 text-center">Based on quantitative factor analysis using public market data. Sector P/E benchmarks are long-run historical averages and may not reflect current market conditions. Not financial advice.</p>
           </div>
         )
       })()}

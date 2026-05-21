@@ -254,7 +254,7 @@ export default function HotTakePage() {
         {/* More hot stocks section */}
         <div>
           <h2 className={cn('text-lg font-bold mb-4', isDark ? 'text-white' : 'text-slate-900')}>
-            More Hot Stocks
+            Tracked Stocks
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {WATCH_TICKERS.map((ticker) => {

@@ -73,7 +73,7 @@ export default function LandingPage() {
             {
               icon: <Shield className="h-6 w-6 text-purple-400" />,
               title: 'Portfolio Tracker',
-              desc: 'Add your stocks and see exactly how much you\'re up or down, updated in real time.',
+              desc: 'Add your stocks and see exactly how much you\'re up or down, refreshed every time you visit.',
             },
             {
               icon: <BookOpen className="h-6 w-6 text-pink-400" />,
@@ -168,7 +168,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
         <h2 className="text-3xl font-bold mb-4">Ready to actually understand your investments?</h2>
-        <p className="text-gray-400 mb-8">Join young investors who use data and AI to learn — not to gamble.</p>
+        <p className="text-gray-400 mb-8">Join young investors learning about markets with real data and AI-powered tools.</p>
         <Link href="/register" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
           Create Free Account <ChevronRight className="h-5 w-5" />
         </Link>

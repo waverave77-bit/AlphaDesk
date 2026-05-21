@@ -271,34 +271,42 @@ interface EconEvent {
 }
 
 const ECON_EVENTS: EconEvent[] = [
-  { date: '2026-05-02', name: 'Jobs Report (April)', importance: 'High', impact: 'Non-Farm Payrolls; key labor market indicator affecting Fed policy.' },
-  { date: '2026-05-06', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
-  { date: '2026-05-07', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'Fed rate decision and press conference. Markets move sharply on surprises.' },
-  { date: '2026-05-13', name: 'CPI (April)', importance: 'High', impact: 'Consumer Price Index; primary inflation gauge influencing Fed rate path.' },
-  { date: '2026-06-03', name: 'Jobs Report (May)', importance: 'High', impact: 'Non-Farm Payrolls; labor market health indicator.' },
-  { date: '2026-06-10', name: 'CPI (May)', importance: 'High', impact: 'Inflation data; heavily watched by the Fed and bond markets.' },
-  { date: '2026-06-17', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
-  { date: '2026-06-18', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'Fed rate decision and updated dot plot projections.' },
-  { date: '2026-07-02', name: 'Jobs Report (June)', importance: 'High', impact: 'Non-Farm Payrolls; labor market data.' },
-  { date: '2026-07-15', name: 'CPI (June)', importance: 'High', impact: 'Mid-year inflation check; critical for second-half rate expectations.' },
-  { date: '2026-07-29', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
-  { date: '2026-07-30', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'Fed rate decision. Mid-year inflection point for markets.' },
-  { date: '2026-08-07', name: 'Jobs Report (July)', importance: 'High', impact: 'Non-Farm Payrolls; summer labor market reading.' },
-  { date: '2026-08-12', name: 'CPI (July)', importance: 'High', impact: 'Inflation data ahead of Jackson Hole symposium.' },
-  { date: '2026-09-02', name: 'Jobs Report (August)', importance: 'High', impact: 'Non-Farm Payrolls; pre-September FOMC data.' },
-  { date: '2026-09-10', name: 'CPI (August)', importance: 'High', impact: 'Final inflation print before September FOMC meeting.' },
-  { date: '2026-09-16', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
-  { date: '2026-09-17', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'September rate decision; new economic projections released.' },
-  { date: '2026-10-02', name: 'Jobs Report (September)', importance: 'High', impact: 'Non-Farm Payrolls; Q3 labor market summary.' },
-  { date: '2026-10-14', name: 'CPI (September)', importance: 'High', impact: 'Q3 inflation summary; shapes Q4 rate expectations.' },
-  { date: '2026-10-28', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
-  { date: '2026-10-29', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'October rate decision heading into year-end.' },
-  { date: '2026-11-06', name: 'Jobs Report (October)', importance: 'High', impact: 'Non-Farm Payrolls; early Q4 labor market data.' },
-  { date: '2026-11-12', name: 'CPI (October)', importance: 'High', impact: 'Inflation data; sets tone for December FOMC.' },
-  { date: '2026-12-04', name: 'Jobs Report (November)', importance: 'High', impact: 'Non-Farm Payrolls; final major labor print of 2026.' },
-  { date: '2026-12-09', name: 'FOMC Meeting (Day 1)', importance: 'High', impact: 'Federal Reserve begins final two-day meeting of the year.' },
-  { date: '2026-12-10', name: 'FOMC Meeting (Day 2 + Decision)', importance: 'High', impact: 'Final rate decision of 2026; year-end dot plot and projections.' },
-  { date: '2026-12-11', name: 'CPI (November)', importance: 'High', impact: 'Final CPI print of 2026; follows December FOMC decision.' },
+  // May events (already past — filtered out by date logic)
+  { date: '2026-05-01', name: 'Jobs Report (April) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; key labor market indicator affecting Fed policy.' },
+  { date: '2026-05-05', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
+  { date: '2026-05-06', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'Fed rate decision and press conference. Markets move sharply on surprises.' },
+  { date: '2026-05-13', name: 'CPI (April) · Est.', importance: 'High', impact: 'Consumer Price Index; primary inflation gauge influencing Fed rate path.' },
+  // June
+  { date: '2026-06-05', name: 'Jobs Report (May) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; labor market health indicator.' },
+  { date: '2026-06-10', name: 'CPI (May) · Est.', importance: 'High', impact: 'Inflation data; heavily watched by the Fed and bond markets.' },
+  { date: '2026-06-16', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
+  { date: '2026-06-17', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'Fed rate decision and updated dot plot projections.' },
+  // July
+  { date: '2026-07-03', name: 'Jobs Report (June) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; labor market data.' },
+  { date: '2026-07-15', name: 'CPI (June) · Est.', importance: 'High', impact: 'Mid-year inflation check; critical for second-half rate expectations.' },
+  { date: '2026-07-28', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
+  { date: '2026-07-29', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'Fed rate decision. Mid-year inflection point for markets.' },
+  // August
+  { date: '2026-08-07', name: 'Jobs Report (July) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; summer labor market reading.' },
+  { date: '2026-08-12', name: 'CPI (July) · Est.', importance: 'High', impact: 'Inflation data ahead of Jackson Hole symposium.' },
+  // September
+  { date: '2026-09-04', name: 'Jobs Report (August) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; pre-September FOMC data.' },
+  { date: '2026-09-10', name: 'CPI (August) · Est.', importance: 'High', impact: 'Final inflation print before September FOMC meeting.' },
+  { date: '2026-09-15', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
+  { date: '2026-09-16', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'September rate decision; new economic projections released.' },
+  // October
+  { date: '2026-10-02', name: 'Jobs Report (September) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; Q3 labor market summary.' },
+  { date: '2026-10-14', name: 'CPI (September) · Est.', importance: 'High', impact: 'Q3 inflation summary; shapes Q4 rate expectations.' },
+  { date: '2026-10-27', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins two-day policy meeting.' },
+  { date: '2026-10-28', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'October rate decision heading into year-end.' },
+  // November
+  { date: '2026-11-06', name: 'Jobs Report (October) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; early Q4 labor market data.' },
+  { date: '2026-11-12', name: 'CPI (October) · Est.', importance: 'High', impact: 'Inflation data; sets tone for December FOMC.' },
+  // December
+  { date: '2026-12-04', name: 'Jobs Report (November) · Est.', importance: 'High', impact: 'Non-Farm Payrolls; final major labor print of 2026.' },
+  { date: '2026-12-08', name: 'FOMC Meeting (Day 1) · Est.', importance: 'High', impact: 'Federal Reserve begins final two-day meeting of the year.' },
+  { date: '2026-12-09', name: 'FOMC Meeting (Day 2 + Decision) · Est.', importance: 'High', impact: 'Final rate decision of 2026; year-end dot plot and projections.' },
+  { date: '2026-12-11', name: 'CPI (November) · Est.', importance: 'High', impact: 'Final CPI print of 2026; follows December FOMC decision.' },
 ]
 
 function EconCalendarSection() {
@@ -428,7 +436,7 @@ function MarketNewsSection() {
     <section className="mb-10">
       <h2 className="text-lg lg:text-xl font-semibold text-white mb-4 flex items-center gap-2">
         Live Market News{' '}
-        <InfoTooltip text="Latest financial news from major sources, refreshes every 5 minutes." />
+        <InfoTooltip text="Latest financial news from major sources. May be cached for a few minutes." />
         <LastUpdated time={lastUpdated} className="ml-2" />
       </h2>
       <Card className="bg-gray-900 border-gray-800">

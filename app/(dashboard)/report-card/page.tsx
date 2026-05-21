@@ -251,7 +251,7 @@ export default function ReportCardPage() {
                 <p className={cn('text-base font-medium mt-1', isDark ? 'text-gray-200' : 'text-slate-700')}>
                   {result.overallGrade.startsWith('A') ? 'Strong stock overall' :
                    result.overallGrade.startsWith('B') ? 'Decent but not perfect' :
-                   result.overallGrade.startsWith('C') ? 'Mediocre, tread carefully' :
+                   result.overallGrade.startsWith('C') ? 'Mixed signals across factors' :
                    'Needs serious work'}
                 </p>
               </div>

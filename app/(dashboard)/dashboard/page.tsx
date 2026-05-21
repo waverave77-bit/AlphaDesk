@@ -413,7 +413,7 @@ export default function DashboardPage() {
               <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all shrink-0" />
             </div>
             <div className="flex flex-wrap gap-2 mt-4">
-              {['What even is a stock?', 'Why does the market crash?', 'Is NVDA a buy?', 'What is the VIX?'].map(q => (
+              {['What even is a stock?', 'Why does the market crash?', 'How do I evaluate NVDA?', 'What is the VIX?'].map(q => (
                 <span key={q} className="text-xs bg-slate-100 border border-slate-200 text-slate-500 rounded-lg px-2.5 py-1">
                   {q}
                 </span>

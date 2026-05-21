@@ -392,7 +392,7 @@ export default function EarningsPage() {
         <div>
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             Earnings Calendar
-            <InfoTooltip text="Every quarter, public companies release their financial results. These announcements often move stocks 10%+ in a single day." />
+            <InfoTooltip text="Every quarter, public companies release their financial results. Some stocks move significantly on the day they report — though the actual move varies widely and can go in either direction." />
           </h1>
           <p className="text-sm text-gray-500">Click any highlighted date to see who's reporting</p>
           <LastUpdated time={lastUpdated} />
@@ -405,7 +405,7 @@ export default function EarningsPage() {
           <Info className="h-3.5 w-3.5" /> What is this?
         </p>
         <p className="text-sm text-blue-600 leading-relaxed">
-          Every 3 months, public companies release their financial results — these are called <strong>earnings reports</strong>. Stocks can move 10%+ on the day they report. This calendar shows when companies are reporting so you're never caught off guard.
+          Every 3 months, public companies release their financial results — these are called <strong>earnings reports</strong>. Some stocks move significantly on the day they report, though moves vary widely by company. This calendar shows when companies are reporting so you're never caught off guard.
         </p>
       </div>
 

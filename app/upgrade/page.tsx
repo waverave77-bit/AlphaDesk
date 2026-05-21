@@ -167,7 +167,7 @@ export default function UpgradePage() {
             {[
               {
                 q: 'What counts as an AI request?',
-                a: 'Any time you generate an AI response — Mr. Guy chat message, Stock Report Card, Bull vs Bear, Reality Check, Finance Translator, Am I Dumb, Hot Take, or Portfolio Roast. Free users get 10 per day. Pro users get unlimited.',
+                a: 'Any time you generate an AI response. Limits vary by feature: 3 Mr. Guy chats/day, 2 AI stock analyses/day, 5 Spike Summaries/day, 3 Report Cards/day, 5 Bull vs Bear/day, and more. Pro users get unlimited everything.',
               },
               {
                 q: 'Can I cancel anytime?',

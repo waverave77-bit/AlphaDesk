@@ -145,7 +145,7 @@ export default function HedgeFundsPage() {
         <p className="text-sm text-blue-600 leading-relaxed">
           Every 3 months, big investment firms must tell the government every stock they own.
           These reports are called <strong>quarterly government filings</strong>. We pull those reports so you can see exactly what
-          the pros are buying, like looking at a professional investor's portfolio.
+          the pros owned as of their last quarterly filing — like peeking at a professional investor's most recent portfolio snapshot.
         </p>
       </div>
 
@@ -300,7 +300,7 @@ export default function HedgeFundsPage() {
               <InfoTooltip text="Stocks held by 2 or more of the tracked funds. The more funds that own a stock, the stronger the professional agreement behind it." />
             </h3>
             <p className="text-xs text-slate-400 mb-4">
-              These stocks show up across multiple fund portfolios, the pros all agree on these.
+              These stocks appeared across multiple fund portfolios in their latest 13F filings. This reflects past holdings, not current positions or recommendations.
             </p>
 
             {crowded.length > 0 ? (
