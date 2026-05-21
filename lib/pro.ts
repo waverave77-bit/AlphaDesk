@@ -64,7 +64,8 @@ export async function checkAILimit(feature: string): Promise<NextResponse | null
   if (user.isPro) return null
 
   const limit = FREE_LIMITS[feature] ?? 5
-  const today = new Date().toISOString().slice(0, 10) // "YYYY-MM-DD"
+  // Use Eastern Time so limits reset at midnight ET (matches the trading day)
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) // "YYYY-MM-DD"
 
   const usage = await prisma.dailyAIUsage.upsert({
     where: { userId_date_feature: { userId: user.id, date: today, feature } },

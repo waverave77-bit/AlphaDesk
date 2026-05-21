@@ -47,8 +47,6 @@ const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
     { scene: 'beach',      ms:  9 * MIN },
     { scene: 'walk',       ms: 15_000   },
     { scene: 'weights',    ms:  8 * MIN },
-    { scene: 'walk',       ms: 15_000   },
-    { scene: 'bubblebath', ms:  8 * MIN },
   ],
   bear: [
     { scene: 'defeat',     ms:  8 * MIN },
@@ -59,11 +57,14 @@ const SCENE_CYCLES: Record<MarketState, Array<{ scene: Scene; ms: number }>> = {
     { scene: 'panicrun',   ms:  6 * MIN },
   ],
   neutral: [
-    { scene: 'walk',      ms: 10_000   },  // short transition ~10s, then into real scenes
-    { scene: 'newspaper', ms:  8 * MIN },
-    { scene: 'money',     ms:  9 * MIN },
-    { scene: 'perch',     ms:  9 * MIN },
-    { scene: 'walk',      ms: 10_000   },  // brief walk between loops
+    { scene: 'walk',       ms: 10_000   },  // short transition ~10s, then into real scenes
+    { scene: 'newspaper',  ms:  8 * MIN },
+    { scene: 'coffee',     ms:  7 * MIN },
+    { scene: 'money',      ms:  9 * MIN },
+    { scene: 'phone',      ms:  7 * MIN },
+    { scene: 'perch',      ms: 10_000   },
+    { scene: 'bubblebath', ms:  8 * MIN },
+    { scene: 'walk',       ms: 10_000   },  // brief walk between loops
   ],
   closed:  [
     { scene: 'sleep',  ms: 18 * MIN },

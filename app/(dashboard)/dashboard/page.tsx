@@ -397,10 +397,9 @@ export default function DashboardPage() {
             </Link>
           ))}
         </div>
-      </div>
 
-      {/* ── Mr. Guy Chat ─────────────────────────────────────────── */}
-      <Link href="/chat">
+        {/* ── Mr. Guy Chat ─────────────────────────────────────────── */}
+        <Link href="/chat" className="mt-3 block">
         <Card className="border-slate-200 bg-white hover:bg-slate-50 hover:border-blue-300 transition-all cursor-pointer group">
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
@@ -422,7 +421,8 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </Link>
+        </Link>
+      </div>
 
       <p className="text-xs text-slate-400 text-center">
         For informational purposes only. Not financial advice.

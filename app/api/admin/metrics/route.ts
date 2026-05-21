@@ -34,14 +34,14 @@ export async function GET() {
 
     // Total AI calls today across all features
     prisma.dailyAIUsage.aggregate({
-      where: { date: now.toISOString().slice(0, 10) },
+      where: { date: now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) },
       _sum: { count: true },
     }),
 
     // AI calls by feature today
     prisma.dailyAIUsage.groupBy({
       by: ['feature'],
-      where: { date: now.toISOString().slice(0, 10) },
+      where: { date: now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) },
       _sum: { count: true },
       orderBy: { _sum: { count: 'desc' } },
     }),
