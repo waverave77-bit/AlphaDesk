@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
+import ProLimitBanner from '@/components/ProLimitBanner'
 
 const N = null
 const HEAD_PIXELS: Array<Array<string|null>> = [
@@ -83,6 +84,7 @@ export default function ReportCardPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ReportCardResult | null>(null)
   const [error, setError] = useState('')
+  const [limitReached, setLimitReached] = useState(false)
   const [searchResults, setSearchResults] = useState<{ symbol: string; name: string }[]>([])
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -104,10 +106,12 @@ export default function ReportCardPage() {
     setLoading(true)
     setResult(null)
     setError('')
+    setLimitReached(false)
     setSearchResults([])
     try {
       const res = await fetch(`/api/report-card?ticker=${encodeURIComponent(t)}`)
       const data = await res.json()
+      if (data.limitReached) { setLimitReached(true); setLoading(false); return }
       if (data.error) { setError(data.error); return }
       setResult(data)
     } catch {
@@ -213,6 +217,7 @@ export default function ReportCardPage() {
         )}
 
         {/* Error */}
+        {limitReached && <ProLimitBanner feature="report-card" isDark={isDark} />}
         {error && (
           <div className={cn('rounded-xl border p-4 text-sm', isDark ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-red-50 border-red-200 text-red-600')}>
             {error}

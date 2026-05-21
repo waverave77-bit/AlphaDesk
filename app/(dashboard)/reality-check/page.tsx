@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import ProLimitBanner from '@/components/ProLimitBanner'
 import { useTheme } from '@/components/ThemeProvider'
 import { Send } from 'lucide-react'
 
@@ -94,6 +95,7 @@ export default function RealityCheckPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState('')
+  const [limitReached, setLimitReached] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -102,6 +104,7 @@ export default function RealityCheckPage() {
     setLoading(true)
     setResult(null)
     setError('')
+    setLimitReached(false)
     try {
       const res = await fetch('/api/reality-check', {
         method: 'POST',
@@ -109,6 +112,7 @@ export default function RealityCheckPage() {
         body: JSON.stringify({ input }),
       })
       const data = await res.json()
+      if (data.limitReached) { setLimitReached(true); setLoading(false); return }
       if (data.error) { setError('Something went wrong — try again'); return }
       setResult(data)
     } catch {
@@ -179,6 +183,7 @@ export default function RealityCheckPage() {
         )}
 
         {/* Error */}
+        {limitReached && <ProLimitBanner feature="reality-check" isDark={isDark} />}
         {error && (
           <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
             {error}

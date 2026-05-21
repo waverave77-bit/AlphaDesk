@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
+import ProLimitBanner from '@/components/ProLimitBanner'
 
 // ─── Mr. Guy pixel head ───────────────────────────────────────────────────────
 
@@ -93,6 +94,7 @@ export default function HotTakePage() {
   const [hotTake, setHotTake] = useState<HotTake | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [limitReached, setLimitReached] = useState(false)
   const [miniQuotes, setMiniQuotes] = useState<Record<string, MiniQuote>>({})
 
   useEffect(() => {
@@ -103,6 +105,7 @@ export default function HotTakePage() {
     fetch('/api/hot-take')
       .then((r) => r.json())
       .then((d) => {
+        if (d.limitReached) { setLimitReached(true); return }
         if (d.error) { setError(d.error); return }
         setHotTake(d)
       })
@@ -179,6 +182,9 @@ export default function HotTakePage() {
             </p>
           </div>
         )}
+
+        {/* Limit reached */}
+        {limitReached && !loading && <ProLimitBanner feature="hot-take" isDark={isDark} />}
 
         {/* Error state */}
         {error && !loading && (

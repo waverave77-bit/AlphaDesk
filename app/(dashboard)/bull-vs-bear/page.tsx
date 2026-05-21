@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 import type { BullVsBearResult } from '@/app/api/bull-vs-bear/route'
+import ProLimitBanner from '@/components/ProLimitBanner'
 
 const N = null
 const HEAD_PIXELS: Array<Array<string | null>> = [
@@ -63,6 +64,7 @@ export default function BullVsBearPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<BullVsBearResult | null>(null)
   const [error, setError] = useState('')
+  const [limitReached, setLimitReached] = useState(false)
   const [suggestions, setSuggestions] = useState<{ symbol: string; name: string }[]>([])
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -85,6 +87,7 @@ export default function BullVsBearPage() {
     setLoading(true)
     setResult(null)
     setError('')
+    setLimitReached(false)
     setSuggestions([])
 
     try {
@@ -94,6 +97,7 @@ export default function BullVsBearPage() {
         body: JSON.stringify({ ticker: t }),
       })
       const data = await res.json()
+      if (data.limitReached) { setLimitReached(true); return }
       if (data.error) {
         setError(data.error)
       } else {
@@ -205,6 +209,9 @@ export default function BullVsBearPage() {
             </p>
           </div>
         )}
+
+        {/* Limit reached */}
+        {limitReached && <ProLimitBanner feature="bull-vs-bear" isDark={isDark} />}
 
         {/* Error */}
         {error && (

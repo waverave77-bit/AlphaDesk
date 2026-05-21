@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
+import ProLimitBanner from '@/components/ProLimitBanner'
 
 interface ModelResult {
   model: string
@@ -64,6 +65,7 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
   const [result, setResult] = useState<EnsembleResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [limitReached, setLimitReached] = useState(false)
   const [expanded, setExpanded] = useState(true)
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
@@ -78,6 +80,7 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
     setLoading(true)
     setError(null)
     setResult(null)
+    setLimitReached(false)
     try {
       const res = await fetch('/api/ai-analysis', {
         method: 'POST',
@@ -85,6 +88,7 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
         body: JSON.stringify({ type, data }),
       })
       const json = await res.json()
+      if (json.limitReached) { setLimitReached(true); return }
       if (!res.ok) throw new Error(json.error || 'Analysis failed')
       setResult(json)
     } catch (e: any) {
@@ -135,7 +139,13 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
         </CardContent>
       )}
 
-      {error && (
+      {limitReached && (
+        <CardContent>
+          <ProLimitBanner feature="ai-analysis" isDark={isDark} />
+        </CardContent>
+      )}
+
+      {error && !limitReached && (
         <CardContent>
           <p style={{ color: '#f87171', fontSize: '13px' }}>{error}</p>
         </CardContent>
