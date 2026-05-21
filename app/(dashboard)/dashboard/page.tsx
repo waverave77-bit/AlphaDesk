@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import {
-  Search, Star, Calendar, FlaskConical, Globe,
+  Search, Star, Calendar, FlaskConical,
   Activity, Building2, Users, BookOpen, TrendingUp,
   TrendingDown, Sparkles, RefreshCw, ChevronRight,
 } from 'lucide-react'
@@ -72,8 +72,7 @@ const QUICK_LINKS = [
   { href: '/watchlist',       label: 'Watchlist',     icon: Star,         desc: 'Stocks you\'re tracking' },
   { href: '/earnings',        label: 'Earnings',      icon: Calendar,     desc: 'Upcoming earnings dates' },
   { href: '/hedgefunds',      label: 'Hedge Funds',   icon: Building2,    desc: 'Where big money is going' },
-  { href: '/insiders',        label: 'Smart Money',   icon: Users,        desc: 'Insider & congress trades' },
-  { href: '/macro',           label: 'Macro',         icon: Globe,        desc: 'Big-picture economics' },
+  { href: '/insiders',        label: 'Smart Money',   icon: Users,        desc: 'Corporate insider & fund trades' },
   { href: '/markets',         label: 'Markets',       icon: Activity,     desc: 'Market overview' },
   { href: '/quant',           label: 'Quant',         icon: FlaskConical, desc: 'Screen stocks systematically' },
   { href: '/learn',           label: 'Dictionary',    icon: BookOpen,     desc: 'Plain-English finance terms' },
