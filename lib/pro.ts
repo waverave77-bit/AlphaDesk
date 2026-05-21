@@ -13,7 +13,7 @@ export const FREE_LIMITS: Record<string, number> = {
   'spike-summary': 5,
   'report-card':   3,
   'bull-vs-bear':  5,
-  'hot-take':      5,
+  'hot-take':      999, // one cached take per day — no meaningful limit
   'reality-check': 5,
   'am-i-dumb':     5,
   'bs-checker':    5,
