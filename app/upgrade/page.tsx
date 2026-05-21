@@ -23,20 +23,23 @@ import { cn } from '@/lib/utils'
 const FREE_FEATURES = [
   'Stock research & live prices',
   'Earnings calendar',
-  'Watchlist (up to 10 stocks)',
+  'Watchlist',
   'Markets overview',
   'Finance dictionary',
-  'Insider & hedge fund tracker',
-  '10 AI requests per day',
+  '3 Mr. Guy chats per day',
+  '2 AI stock analyses per day',
+  '5 Spike Summaries per day',
+  'Smart Money — preview (3 trades)',
+  'Hedge Funds — 1 fund preview',
 ]
 
 const PRO_FEATURES = [
-  { icon: Brain,          text: 'Unlimited AI requests — Mr. Guy chat, Report Card, Bull vs Bear, everything' },
-  { icon: MessageSquare,  text: 'Priority AI responses — faster, more detailed analysis' },
-  { icon: BarChart2,      text: 'Portfolio Roast — unlimited portfolio roasts' },
-  { icon: Zap,            text: 'Reality Check & Finance Translator — unlimited' },
-  { icon: Star,           text: 'Hot Takes & Am I Dumb — unlimited' },
-  { icon: Shield,         text: 'Unlimited watchlist stocks' },
+  { icon: Brain,          text: 'Unlimited Mr. Guy chat — no 3/day cap' },
+  { icon: BarChart2,      text: 'Unlimited AI stock analysis on every research page' },
+  { icon: Zap,            text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear' },
+  { icon: MessageSquare,  text: 'Unlimited Hot Takes, Reality Check, Am I Dumb, BS Checker' },
+  { icon: Star,           text: 'Full Smart Money access — all insider trades & top investors' },
+  { icon: Shield,         text: 'Full Hedge Fund tracker — all funds unlocked' },
 ]
 
 export default function UpgradePage() {
