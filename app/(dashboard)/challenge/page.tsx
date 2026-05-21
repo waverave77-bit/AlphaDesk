@@ -243,7 +243,7 @@ export default function ChallengePage() {
         ticker,
         direction: userDirection,
         // Use Friday's close as entry — same as Mr. Guy (market closed when picks are made)
-        entryPrice: data.quote.previousClose ?? data.quote.price,
+        entryPrice: data.quote.price,
         companyName: data.quote.companyName ?? ticker,
         submittedAt: new Date().toISOString(),
       }
@@ -601,7 +601,7 @@ export default function ChallengePage() {
               <h3 className={cn('text-sm font-semibold mb-3', isDark ? 'text-white' : 'text-slate-900')}>How it works</h3>
               <div className="space-y-2">
                 {[
-                  'Every Monday, Mr. Guy picks a stock and a direction.',
+                  'Every Sunday, Mr. Guy picks a stock and a direction.',
                   'You pick any stock and call it up or down for the week.',
                   'Check back Friday to see who was right.',
                   'Your pick resets each week. New week, new chance.',

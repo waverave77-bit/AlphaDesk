@@ -44,7 +44,26 @@ export async function GET() {
   // Check DB for existing pick this week
   try {
     const cached = await prisma.weeklyPickCache.findUnique({ where: { weekKey } })
-    if (cached) return NextResponse.json(JSON.parse(cached.data))
+    if (cached) {
+      const parsed = JSON.parse(cached.data)
+      // One-time fix: if price was stored as previousClose (differs from live), refresh it with live price
+      // We detect this by checking if price looks stale (no way to tell directly, so we re-fetch live price once
+      // if the stored data lacks a "priceFixed" flag)
+      if (!parsed.priceFixed) {
+        try {
+          const liveQuote = await getStockQuote(parsed.ticker).catch(() => null)
+          if (liveQuote?.price) {
+            parsed.price = liveQuote.price
+            parsed.priceFixed = true
+            await prisma.weeklyPickCache.update({
+              where: { weekKey },
+              data: { data: JSON.stringify(parsed) },
+            })
+          }
+        } catch {}
+      }
+      return NextResponse.json(parsed)
+    }
   } catch {}
 
   // Pick a ticker based on week hash (deterministic per week)
@@ -88,8 +107,8 @@ Be opinionated. Pick a direction and commit.`
       weekKey,
       ticker,
       companyName: quote.companyName,
-      // Use Friday's closing price as entry — market is closed Sunday when pick is made
-      price: quote.previousClose ?? quote.price,
+      // Use current price as entry — locked in at first view, persisted in DB so it never drifts
+      price: quote.price,
       changePercent: quote.changePercent,
       direction: parsed.direction ?? 'up',
       targetPct: parsed.targetPct ?? 5,
