@@ -68,7 +68,7 @@ export default function UpgradePage() {
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">
           ← Back to Dashboard

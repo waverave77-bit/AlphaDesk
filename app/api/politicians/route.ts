@@ -11,7 +11,7 @@ function httpGet(url: string, timeoutMs = 5000): Promise<string> {
       hostname: u.hostname,
       path: u.pathname + u.search,
       headers: {
-        'User-Agent': 'Zains Game/1.0 contact@alphadesk.app',
+        'User-Agent': 'Mr. Guy Invests/1.0 contact@alphadesk.app',
         'Accept': '*/*',
       },
       timeout: timeoutMs,

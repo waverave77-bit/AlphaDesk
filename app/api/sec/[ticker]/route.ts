@@ -7,7 +7,7 @@ export async function GET(_req: Request, { params }: { params: { ticker: string 
   try {
     const url = `https://efts.sec.gov/LATEST/search-index?q=%22${encodeURIComponent(ticker)}%22&forms=10-K%2C10-Q%2C8-K&dateRange=custom&startdt=2023-01-01`
     const r = await fetch(url, {
-      headers: { 'User-Agent': 'Zains Game contact@alphadesk.app', Accept: 'application/json' },
+      headers: { 'User-Agent': 'Mr. Guy Invests contact@alphadesk.app', Accept: 'application/json' },
       next: { revalidate: 3600 },
     })
 

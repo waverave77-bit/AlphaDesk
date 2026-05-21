@@ -11,7 +11,7 @@ export default function LandingPage() {
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-4 py-2">
@@ -113,7 +113,7 @@ export default function LandingPage() {
             <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
               <TrendingUp className="h-3 w-3 text-white" />
             </div>
-            <span className="font-semibold">Zains Game</span>
+            <span className="font-semibold">Mr. Guy Invests</span>
           </div>
           <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>
           <div className="flex gap-4 text-xs text-gray-600">

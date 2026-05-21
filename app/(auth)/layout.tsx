@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center">
           <TrendingUp className="h-5 w-5 text-white" />
         </div>
-        <span className="text-2xl font-bold text-white tracking-tight">Zains Game</span>
+        <span className="text-2xl font-bold text-white tracking-tight">Mr. Guy Invests</span>
       </div>
       <div className="w-full max-w-sm">{children}</div>
     </div>

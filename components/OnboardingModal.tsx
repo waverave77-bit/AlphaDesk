@@ -77,7 +77,7 @@ export default function OnboardingModal() {
                 <TrendingUp className="h-12 w-12 text-white" />
               </div>
               <div>
-                <h2 className="text-4xl font-extrabold text-white">Welcome to Zains Game</h2>
+                <h2 className="text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
                 <p className="text-gray-400 mt-3 text-lg leading-relaxed max-w-lg mx-auto">Your personal stock market research and learning platform, built for everyday investors.</p>
               </div>
               <div className="grid grid-cols-3 gap-4">

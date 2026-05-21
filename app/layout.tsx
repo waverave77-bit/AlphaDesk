@@ -10,19 +10,19 @@ import { authOptions } from '@/lib/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://zainsgame.vercel.app'),
-  title: 'Zains Game — Stock Research & Portfolio Tracker',
+  metadataBase: new URL('https://mrguyinvests.com'),
+  title: 'Mr. Guy Invests — Stock Research & Portfolio Tracker',
   description: 'AI-powered stock research, earnings calendar, and portfolio management.',
   openGraph: {
-    title: 'Zains Game — Stock Research & Portfolio Tracker',
+    title: 'Mr. Guy Invests — Stock Research & Portfolio Tracker',
     description: 'AI-powered stock research, earnings calendar, and portfolio management.',
-    url: 'https://zainsgame.vercel.app',
-    siteName: 'Zains Game',
+    url: 'https://mrguyinvests.com',
+    siteName: 'Mr. Guy Invests',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Zains Game, Stock Research & Portfolio Tracker',
+    title: 'Mr. Guy Invests, Stock Research & Portfolio Tracker',
     description: 'AI-powered stock research, earnings calendar, and portfolio management.',
   },
 }

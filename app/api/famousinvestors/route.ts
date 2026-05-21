@@ -10,7 +10,7 @@ const INVESTORS = [
   { name: 'George Soros (Soros Fund)', cik: '1029160' },
 ]
 
-const UA = 'Zains Game contact@zainsgame.app'
+const UA = 'Mr. Guy Invests contact@mrguyinvests.com'
 
 async function secFetch(url: string, timeout = 10000): Promise<string | null> {
   try {

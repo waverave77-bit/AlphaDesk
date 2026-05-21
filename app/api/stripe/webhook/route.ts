@@ -7,7 +7,7 @@
  *      STRIPE_SECRET_KEY=sk_live_...
  *      STRIPE_WEBHOOK_SECRET=whsec_...
  * 3. In Stripe dashboard → Webhooks → add endpoint:
- *      https://zainsgame.vercel.app/api/stripe/webhook
+ *      https://mrguyinvests.com/api/stripe/webhook
  *    Events to listen for:
  *      - checkout.session.completed
  *      - customer.subscription.updated

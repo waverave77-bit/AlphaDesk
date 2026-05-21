@@ -38,6 +38,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://zainsgame.vercel.app/sitemap.xml',
+    sitemap: 'https://mrguyinvests.com/sitemap.xml',
   }
 }

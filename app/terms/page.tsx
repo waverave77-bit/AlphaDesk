@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { TrendingUp } from 'lucide-react'
 
 export const metadata = {
-  title: 'Terms of Service — Zains Game',
-  description: 'Terms and conditions for using Zains Game.',
+  title: 'Terms of Service — Mr. Guy Invests',
+  description: 'Terms and conditions for using Mr. Guy Invests.',
 }
 
 export default function TermsPage() {
@@ -15,7 +15,7 @@ export default function TermsPage() {
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
           Sign In
@@ -31,7 +31,7 @@ export default function TermsPage() {
         <section className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-5">
           <p className="text-yellow-300 font-semibold mb-2">Important Notice</p>
           <p className="text-gray-300 text-sm leading-relaxed">
-            Zains Game is an educational and informational platform only.{' '}
+            Mr. Guy Invests is an educational and informational platform only.{' '}
             <strong>Nothing on this site constitutes financial advice, investment advice, or a
             recommendation to buy, sell, or hold any security.</strong> All data, AI-generated analysis,
             grades, translations, and commentary are for informational purposes only. You should always
@@ -42,7 +42,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">1. Acceptance of Terms</h2>
           <p className="text-gray-400 leading-relaxed">
-            By accessing or using Zains Game (&ldquo;the Service&rdquo;), you agree to be bound by these
+            By accessing or using Mr. Guy Invests (&ldquo;the Service&rdquo;), you agree to be bound by these
             Terms of Service. If you do not agree, do not use the Service. These terms apply to all visitors,
             registered users, and anyone who accesses the Service.
           </p>
@@ -60,7 +60,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">3. Not Financial Advice</h2>
           <p className="text-gray-400 leading-relaxed">
-            The content on Zains Game — including but not limited to AI-generated stock grades, market
+            The content on Mr. Guy Invests — including but not limited to AI-generated stock grades, market
             commentary, portfolio analysis, bull/bear arguments, earnings summaries, macro data, insider
             trade data, and financial translations — is provided <strong className="text-gray-300">for
             informational and educational purposes only</strong>.
@@ -112,7 +112,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">7. Limitation of Liability</h2>
           <p className="text-gray-400 leading-relaxed">
-            To the maximum extent permitted by applicable law, Zains Game and its operators shall not be
+            To the maximum extent permitted by applicable law, Mr. Guy Invests and its operators shall not be
             liable for any direct, indirect, incidental, special, or consequential damages arising from your
             use of the Service, including but not limited to financial losses resulting from investment
             decisions made based on content from this site.
@@ -135,7 +135,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">9. Intellectual Property</h2>
           <p className="text-gray-400 leading-relaxed">
-            The Zains Game name, logo, and original content are owned by us. Financial data displayed on
+            The Mr. Guy Invests name, logo, and original content are owned by us. Financial data displayed on
             the site belongs to its respective data providers. You may not reproduce or redistribute content
             from this site without permission.
           </p>

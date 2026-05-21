@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic'
 
 const CACHE_TTL_HOURS = 24
-const UA = 'Zains Game contact@zainsgame.app'
+const UA = 'Mr. Guy Invests contact@mrguyinvests.com'
 
 async function secFetch(url: string, timeout = 12000): Promise<string | null> {
   try {

@@ -84,7 +84,7 @@ export default async function Image({ params }: { params: { ticker: string } }) 
                 <polyline points="16,7 22,7 22,13" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <span style={{ fontSize: '17px', fontWeight: 600, color: '#94a3b8' }}>Zains Game</span>
+            <span style={{ fontSize: '17px', fontWeight: 600, color: '#94a3b8' }}>Mr. Guy Invests</span>
           </div>
           <div style={{ fontSize: '13px', color: '#475569', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px', padding: '6px 14px', display: 'flex' }}>
             Stock Research
@@ -133,7 +133,7 @@ export default async function Image({ params }: { params: { ticker: string } }) 
 
         {/* Bottom */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '36px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <span style={{ fontSize: '15px', color: '#334155', display: 'flex' }}>zainsgame.vercel.app</span>
+          <span style={{ fontSize: '15px', color: '#334155', display: 'flex' }}>mrguyinvests.com</span>
           <div style={{ display: 'flex', gap: '8px' }}>
             {['Charts', 'News', 'Financials', 'Options', 'AI Analysis'].map(tag => (
               <div key={tag} style={{ fontSize: '11px', fontWeight: 600, color: '#475569', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '4px 10px', display: 'flex' }}>

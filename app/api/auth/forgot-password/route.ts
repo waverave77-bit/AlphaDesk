@@ -39,14 +39,14 @@ export async function POST(req: Request) {
     const resetUrl = `${baseUrl}/reset-password?token=${token}`
 
     await resend.emails.send({
-      from: 'Zains Game <onboarding@resend.dev>',
+      from: 'Mr. Guy Invests <onboarding@resend.dev>',
       to: normalised,
       subject: 'Reset your password',
       html: `
         <div style="font-family: -apple-system, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #fff;">
           <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #111;">Reset your password</h2>
           <p style="color: #555; font-size: 15px; line-height: 1.6; margin-bottom: 32px;">
-            Someone requested a password reset for your Zains Game account. If that was you, click the button below. This link expires in 1 hour.
+            Someone requested a password reset for your Mr. Guy Invests account. If that was you, click the button below. This link expires in 1 hour.
           </p>
           <a href="${resetUrl}" style="display:inline-block; background:#2563eb; color:#fff; font-weight:600; font-size:15px; padding:14px 28px; border-radius:10px; text-decoration:none;">
             Reset Password

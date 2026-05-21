@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { TrendingUp } from 'lucide-react'
 
 export const metadata = {
-  title: 'Privacy Policy — Zains Game',
-  description: 'How Zains Game collects, uses, and protects your personal information.',
+  title: 'Privacy Policy — Mr. Guy Invests',
+  description: 'How Mr. Guy Invests collects, uses, and protects your personal information.',
 }
 
 export default function PrivacyPage() {
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
           Sign In
@@ -31,8 +31,8 @@ export default function PrivacyPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">1. Who We Are</h2>
           <p className="text-gray-400 leading-relaxed">
-            Zains Game (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the website at{' '}
-            <span className="text-blue-400">zainsgame.vercel.app</span>. This Privacy Policy explains what personal
+            Mr. Guy Invests (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the website at{' '}
+            <span className="text-blue-400">mrguyinvests.com</span>. This Privacy Policy explains what personal
             information we collect, how we use it, and your rights regarding that information.
           </p>
           <p className="text-gray-400 leading-relaxed">

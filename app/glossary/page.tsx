@@ -4,7 +4,7 @@ import { TERMS, CATEGORIES, termToSlug, type Category } from '@/lib/glossary-ter
 import { BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, ChevronRight, Search } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Investing Dictionary, Every Stock Market Term Explained Simply | Zains Game',
+  title: 'Investing Dictionary, Every Stock Market Term Explained Simply | Mr. Guy Invests',
   description: `Learn ${TERMS.length} investing and stock market terms in plain English. From stocks and ETFs to P/E ratios and technical analysis, everything explained simply for beginners.`,
   keywords: ['investing dictionary', 'stock market terms', 'finance glossary', 'investing for beginners', 'stock market glossary', 'financial terms explained'],
   openGraph: {
@@ -41,7 +41,7 @@ export default function GlossaryPage() {
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <div className="flex items-center gap-3">
           <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-4 py-2">
@@ -133,7 +133,7 @@ export default function GlossaryPage() {
             <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
               <TrendingUp className="h-3 w-3 text-white" />
             </div>
-            <span className="font-semibold text-sm">Zains Game</span>
+            <span className="font-semibold text-sm">Mr. Guy Invests</span>
           </Link>
           <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>
         </div>

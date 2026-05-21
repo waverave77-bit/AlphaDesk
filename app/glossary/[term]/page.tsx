@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: { term: string } })
   const desc = `${term.simple}. ${term.explanation.slice(0, 140)}${term.explanation.length > 140 ? '...' : ''}`
 
   return {
-    title: `What is ${term.term}? Simple Definition & Meaning | Zains Game`,
+    title: `What is ${term.term}? Simple Definition & Meaning | Mr. Guy Invests`,
     description: desc,
     keywords: [
       term.term,
@@ -72,7 +72,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
           <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-white" />
           </div>
-          <span className="text-xl font-bold">Zains Game</span>
+          <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <div className="flex items-center gap-3">
           <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-4 py-2 hidden sm:block">
@@ -147,8 +147,8 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
               description: term.simple,
               inDefinedTermSet: {
                 '@type': 'DefinedTermSet',
-                name: 'Zains Game Investing Dictionary',
-                url: 'https://zainsgame.vercel.app/glossary',
+                name: 'Mr. Guy Invests Investing Dictionary',
+                url: 'https://mrguyinvests.com/glossary',
               },
             }),
           }}
@@ -185,7 +185,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
 
         {/* CTA */}
         <div className="mt-16 bg-blue-600/10 border border-blue-600/20 rounded-2xl p-10 text-center">
-          <h2 className="text-2xl font-bold mb-3">Track Real Stocks on Zains Game</h2>
+          <h2 className="text-2xl font-bold mb-3">Track Real Stocks on Mr. Guy Invests</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
             Free portfolio tracker, AI tutor, hedge fund tracker, everything explained in plain English.
           </p>
@@ -206,7 +206,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
             <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
               <TrendingUp className="h-3 w-3 text-white" />
             </div>
-            <span className="font-semibold text-sm">Zains Game</span>
+            <span className="font-semibold text-sm">Mr. Guy Invests</span>
           </Link>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <Link href="/glossary" className="hover:text-gray-400 transition-colors">Dictionary</Link>

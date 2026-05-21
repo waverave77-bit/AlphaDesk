@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'Zains Game: Stock Research and Portfolio Tracker'
+export const alt = 'Mr. Guy Invests: Stock Research and Portfolio Tracker'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -47,7 +47,7 @@ export default function Image() {
             </svg>
           </div>
           <span style={{ fontSize: '20px', fontWeight: 700, color: '#e2e8f0', letterSpacing: '-0.3px' }}>
-            Zains Game
+            Mr. Guy Invests
           </span>
         </div>
 
@@ -68,7 +68,7 @@ export default function Image() {
 
         {/* Bottom bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <span style={{ fontSize: '16px', color: '#475569', display: 'flex' }}>zainsgame.vercel.app</span>
+          <span style={{ fontSize: '16px', color: '#475569', display: 'flex' }}>mrguyinvests.com</span>
           <div style={{ display: 'flex', gap: '10px' }}>
             {['Stocks', 'Easy Learning', 'Pro Analysis', 'Portfolio', 'AI'].map(tag => (
               <div key={tag} style={{ fontSize: '12px', fontWeight: 600, color: '#60a5fa', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '20px', padding: '4px 12px', display: 'flex' }}>

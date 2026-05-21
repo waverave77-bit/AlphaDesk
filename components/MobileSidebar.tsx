@@ -42,7 +42,7 @@ export default function MobileSidebar() {
                 <div className="h-8 w-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `rgb(var(--accent, 59 130 246))` }}>
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
-                <span className="text-xl font-bold text-white">Zains Game</span>
+                <span className="text-xl font-bold text-white">Mr. Guy Invests</span>
               </div>
               <button onClick={() => setOpen(false)}>
                 <X className="h-5 w-5 text-gray-400" />

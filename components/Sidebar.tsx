@@ -32,7 +32,7 @@ export default function Sidebar() {
         >
           <TrendingUp className="h-4 w-4 text-white" />
         </div>
-        <span className="text-xl font-bold text-white tracking-tight">Zains Game</span>
+        <span className="text-xl font-bold text-white tracking-tight">Mr. Guy Invests</span>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto">
