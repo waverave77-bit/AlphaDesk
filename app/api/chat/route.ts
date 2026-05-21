@@ -1,22 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
-import fs from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
-
-// Fallback: read key directly from .env.local if process.env is stale (dev server not restarted)
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
-}
 
 // ── Ticker resolution ─────────────────────────────────────────────────────────
 
@@ -554,7 +540,7 @@ ${liveBlock}${newsBlock}`
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  const client = new Anthropic({ apiKey: getAnthropicKey() })
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
     const { message, history = [], experience = 'beginner' } = await req.json()
 

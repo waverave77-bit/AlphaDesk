@@ -14,7 +14,7 @@ const RSS_FEEDS = [
   { url: 'https://feeds.reuters.com/reuters/businessNews', source: 'Reuters Business' },
   { url: 'https://feeds.reuters.com/reuters/technologyNews', source: 'Reuters Tech' },
   { url: 'https://feeds.marketwatch.com/marketwatch/topstories/', source: 'MarketWatch' },
-  { url: 'https://finance.yahoo.com/rss/topfinstories', source: 'Yahoo Finance' },
+  { url: 'https://finance.yahoo.com/rss/topfinstories', source: 'Financial News' },
 ]
 
 function stripCdata(str: string): string {

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
-import { Loader2, Check, X } from 'lucide-react'
+import { Loader2, Check, X, Eye, EyeOff } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,6 +25,8 @@ function UsernameHint({ username }: { username: string }) {
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -32,7 +34,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (form.password !== form.confirm) { setError('Passwords do not match'); return }
-    if (form.password.length < 6) { setError('Password must be at least 6 characters'); return }
+    if (form.password.length < 8) { setError('Password must be at least 8 characters'); return }
     if (form.username.length < 3) { setError('Username must be at least 3 characters'); return }
     if (!/^[a-zA-Z0-9_]+$/.test(form.username)) { setError('Username can only contain letters, numbers, and underscores'); return }
 
@@ -89,31 +91,63 @@ export default function RegisterPage() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Min. 6 characters"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Min. 8 characters"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required
+                autoComplete="new-password"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="confirm">Confirm Password</Label>
-            <Input
-              id="confirm"
-              type="password"
-              placeholder="••••••••"
-              value={form.confirm}
-              onChange={(e) => setForm({ ...form, confirm: e.target.value })}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="confirm"
+                type={showConfirm ? 'text' : 'password'}
+                placeholder="Repeat password"
+                value={form.confirm}
+                onChange={(e) => setForm({ ...form, confirm: e.target.value })}
+                required
+                autoComplete="new-password"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(v => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                tabIndex={-1}
+                aria-label={showConfirm ? 'Hide password' : 'Show password'}
+              >
+                {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           {error && <p className="text-sm text-red-400">{error}</p>}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Create Account
           </Button>
+          <p className="text-xs text-gray-500 text-center leading-relaxed">
+            By creating an account you agree to our{' '}
+            <Link href="/terms" className="text-blue-400 hover:underline">Terms of Service</Link>
+            {' '}and{' '}
+            <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link>.
+          </p>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{' '}

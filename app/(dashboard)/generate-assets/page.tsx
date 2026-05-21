@@ -1,5 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 // ── Palette ──────────────────────────────────────────────────────
 const H1='#2b1604',H2='#5c2e0a',H3='#8b4c1a'
@@ -351,7 +353,15 @@ const BADGE_COLORS: Record<string, string> = {
 
 // ── Component ─────────────────────────────────────────────────────
 export default function GenerateAssetsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const refs = useRef<Map<string, HTMLCanvasElement>>(new Map())
+
+  // Admin-only page — redirect anyone else
+  useEffect(() => {
+    if (status === 'loading') return
+    if (session?.user?.email !== 'waverave77@gmail.com') router.replace('/dashboard')
+  }, [session, status, router])
 
   useEffect(() => {
     // Use a fixed seed for sparkles/rain so renders are deterministic

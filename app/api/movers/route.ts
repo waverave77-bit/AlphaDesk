@@ -44,7 +44,7 @@ export async function GET() {
   ])
 
   return NextResponse.json(
-    { gainers, losers, source: 'Yahoo Finance' },
+    { gainers, losers },
     {
       headers: {
         'Cache-Control': 'no-store, no-cache, must-revalidate',
