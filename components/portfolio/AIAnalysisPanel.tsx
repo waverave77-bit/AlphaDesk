@@ -33,13 +33,15 @@ interface AIAnalysisPanelProps {
 const MODEL_COLORS: Record<string, string> = {
   'Claude Haiku':  'border-purple-500/40 bg-purple-500/5',
   'DeepSeek V3':   'border-blue-500/40 bg-blue-500/5',
-  'Grok-2':   'border-green-500/40 bg-green-500/5',
+  'Grok-2':        'border-green-500/40 bg-green-500/5',
+  'Grok 4':        'border-green-500/40 bg-green-500/5',
 }
 
 const MODEL_BADGE: Record<string, string> = {
   'Claude Haiku':  'bg-purple-500/20 text-purple-300',
   'DeepSeek V3':   'bg-blue-500/20 text-blue-300',
-  'Grok-2':   'bg-green-500/20 text-green-300',
+  'Grok-2':        'bg-green-500/20 text-green-300',
+  'Grok 4':        'bg-green-500/20 text-green-300',
 }
 
 function SignalBadge({ signal }: { signal: string }) {
