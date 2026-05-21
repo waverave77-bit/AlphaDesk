@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
@@ -540,6 +541,9 @@ ${liveBlock}${newsBlock}`
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const limited = await checkAILimit('chat')
+  if (limited) return limited
+
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
     const { message, history = [], experience = 'beginner' } = await req.json()

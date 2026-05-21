@@ -30,7 +30,7 @@ export default function LoginPage() {
     })
 
     if (result?.error) {
-      setError('Invalid username/email or password')
+      setError('Invalid email or password')
       setLoading(false)
     } else {
       router.push('/dashboard')
@@ -42,16 +42,16 @@ export default function LoginPage() {
     <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-xl">Sign in</CardTitle>
-        <CardDescription>Enter your username or email to sign in</CardDescription>
+        <CardDescription>Enter your email to sign in</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="login">Username or Email</Label>
+            <Label htmlFor="login">Email</Label>
             <Input
               id="login"
               type="text"
-              placeholder="yourname or you@example.com"
+              placeholder="you@example.com"
               value={login}
               onChange={(e) => setLogin(e.target.value)}
               required
@@ -62,7 +62,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="/forgot-password"
+                href={login.trim() ? `/forgot-password?email=${encodeURIComponent(login.trim())}` : '/forgot-password'}
                 className="text-xs text-blue-400 hover:text-blue-300 hover:underline transition-colors"
               >
                 Forgot password?

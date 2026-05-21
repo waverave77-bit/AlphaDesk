@@ -1,28 +1,27 @@
-/**
- * Pro subscription helpers
- *
- * TO PUBLISH:
- * 1. Run prisma migrate to add isPro/stripe fields to User
- * 2. Set STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET in Vercel env
- * 3. Wire /api/stripe/checkout route to create a Stripe checkout session
- * 4. Enable the Stripe webhook at /api/stripe/webhook
- * 5. Replace FREE_LIMIT with whatever you decide on
- * 6. Uncomment the isPro check in each gated API route
- */
-
 import { getServerSession } from 'next-auth'
+import { NextResponse } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-/** How many AI requests a free user gets per day */
-export const FREE_DAILY_AI_LIMIT = 10
-
 /** Monthly price in USD cents (used on the upgrade page) */
-export const PRO_PRICE_CENTS = 500  // $5.00
+export const PRO_PRICE_CENTS = 699  // $6.99
+
+/** Per-feature daily limits for free users. Pro & admin = unlimited. */
+export const FREE_LIMITS: Record<string, number> = {
+  'chat':          3,
+  'ai-analysis':   2,
+  'spike-summary': 5,
+  'report-card':   3,
+  'bull-vs-bear':  5,
+  'hot-take':      5,
+  'reality-check': 5,
+  'am-i-dumb':     5,
+  'bs-checker':    5,
+  'translator':    999, // effectively unlimited — simple educational tool
+}
 
 /**
  * Returns true if the current session user has an active Pro subscription.
- * Safe to call from any server component or API route.
  */
 export async function currentUserIsPro(): Promise<boolean> {
   const session = await getServerSession(authOptions)
@@ -35,8 +34,62 @@ export async function currentUserIsPro(): Promise<boolean> {
 }
 
 /**
+ * Call at the start of any AI API route to enforce per-feature free-tier limits.
+ *
+ * Pass the feature name (must match a key in FREE_LIMITS).
+ * Returns a 429 NextResponse if over limit, or null if allowed.
+ *
+ * Usage:
+ *   const limited = await checkAILimit('chat')
+ *   if (limited) return limited
+ */
+export async function checkAILimit(feature: string): Promise<NextResponse | null> {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  }
+
+  // Admin account always gets unlimited access
+  if (session.user.email === process.env.ADMIN_EMAIL) return null
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true, isPro: true },
+  })
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 401 })
+  }
+
+  // Pro users have unlimited AI requests
+  if (user.isPro) return null
+
+  const limit = FREE_LIMITS[feature] ?? 5
+  const today = new Date().toISOString().slice(0, 10) // "YYYY-MM-DD"
+
+  const usage = await prisma.dailyAIUsage.upsert({
+    where: { userId_date_feature: { userId: user.id, date: today, feature } },
+    update: { count: { increment: 1 } },
+    create: { userId: user.id, date: today, feature, count: 1 },
+  })
+
+  if (usage.count > limit) {
+    return NextResponse.json(
+      {
+        error: 'Daily AI limit reached',
+        limitReached: true,
+        feature,
+        limit,
+        upgradeUrl: '/upgrade',
+      },
+      { status: 429 }
+    )
+  }
+
+  return null
+}
+
+/**
  * Returns the full user row including pro status.
- * Use this when you need more than just isPro.
  */
 export async function getCurrentUser() {
   const session = await getServerSession(authOptions)

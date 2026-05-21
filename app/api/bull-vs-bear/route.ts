@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
-import fs from 'fs'
-import path from 'path'
 import { PrismaClient } from '@prisma/client'
+import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, searchStocks } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
@@ -11,17 +10,6 @@ const prisma = new PrismaClient()
 
 function todayStr(): string {
   return new Date().toISOString().slice(0, 10)
-}
-
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
 }
 
 export interface BullVsBearResult {
@@ -36,6 +24,9 @@ export interface BullVsBearResult {
 }
 
 export async function POST(req: Request) {
+  const limited = await checkAILimit('bull-vs-bear')
+  if (limited) return limited
+
   let rawQuery: string
   try {
     const body = await req.json()
@@ -123,7 +114,7 @@ Respond ONLY in this exact JSON format:
 
 verdict must be exactly "bull" or "bear".`
 
-  const client = new Anthropic({ apiKey: getAnthropicKey() })
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
   try {
     const msg = await client.messages.create({

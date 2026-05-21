@@ -1,36 +1,16 @@
-/**
- * Stripe webhook handler
- *
- * TO PUBLISH:
- * 1. Install stripe: `npm install stripe`
- * 2. Add to Vercel env:
- *      STRIPE_SECRET_KEY=sk_live_...
- *      STRIPE_WEBHOOK_SECRET=whsec_...
- * 3. In Stripe dashboard → Webhooks → add endpoint:
- *      https://mrguyinvests.com/api/stripe/webhook
- *    Events to listen for:
- *      - checkout.session.completed
- *      - customer.subscription.updated
- *      - customer.subscription.deleted
- * 4. Uncomment the Stripe import and remove the TODO comment below
- */
-
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import Stripe from 'stripe'
 
 export const dynamic = 'force-dynamic'
 
-// TODO: uncomment when stripe package is installed
-// import Stripe from 'stripe'
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
 
 export async function POST(req: Request) {
-  // ── GUARD: block until Stripe env vars are set ──────────────────────
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
   }
 
-  /* ── UNCOMMENT THIS BLOCK WHEN GOING LIVE ──────────────────────────
   const sig = req.headers.get('stripe-signature')
   if (!sig) return NextResponse.json({ error: 'No signature' }, { status: 400 })
 
@@ -79,7 +59,6 @@ export async function POST(req: Request) {
       break
     }
   }
-  ── END UNCOMMENT BLOCK ─────────────────────────────────────────── */
 
   return NextResponse.json({ received: true })
 }

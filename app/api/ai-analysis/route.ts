@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { checkAILimit } from '@/lib/pro'
 import { ensembleAnalyzeStock, ensembleAnalyzePortfolio } from '@/lib/ai-ensemble'
 
 // Vercel Pro allows up to 300s — Hobby is capped at 10s regardless
 export const maxDuration = 60
 
 export async function POST(req: Request) {
+  const limited = await checkAILimit('ai-analysis')
+  if (limited) return limited
+
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 

@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, Menu, X, FlaskConical, Building2, Users, Calendar, Activity, Bell, BookOpen } from 'lucide-react'
+import { LayoutDashboard, Search, Star, Settings, TrendingUp, LogOut, Menu, X, FlaskConical, Building2, Users, Calendar, Activity, Bell, BookOpen, Zap } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
@@ -73,6 +73,14 @@ export default function MobileSidebar() {
               })}
             </nav>
 
+            <Link
+              href="/upgrade"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-bold mb-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+            >
+              <Zap className="h-4 w-4" />
+              Upgrade to Pro
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: '/login' })}
               className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:text-gray-100"

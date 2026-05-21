@@ -27,13 +27,12 @@ export const authOptions: NextAuthOptions = {
           return { id: demo.id, email: demo.email, name: demo.name ?? 'Preview User' }
         }
 
-        // ── Normal login: accept username OR email ──────────────────────
+        // ── Normal login: email only ────────────────────────────────────
         if (!credentials?.login || !credentials?.password) return null
 
-        const isEmail = credentials.login.includes('@')
-        const user = isEmail
-          ? await prisma.user.findUnique({ where: { email: credentials.login } })
-          : await prisma.user.findFirst({ where: { username: credentials.login } })
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.login.trim().toLowerCase() },
+        })
 
         if (!user || !user.password) return null
 

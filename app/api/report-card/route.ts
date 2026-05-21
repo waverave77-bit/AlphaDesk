@@ -1,26 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
-import fs from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
-
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
-}
 
 const MR_GUY_SYSTEM = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
 
 export async function GET(req: NextRequest) {
-  const client = new Anthropic({ apiKey: getAnthropicKey() })
+  const limited = await checkAILimit('report-card')
+  if (limited) return limited
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
     const { searchParams } = new URL(req.url)
     const ticker = searchParams.get('ticker')?.toUpperCase()

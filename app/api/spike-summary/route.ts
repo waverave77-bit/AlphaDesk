@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkAILimit } from '@/lib/pro'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -42,6 +43,9 @@ async function fetchNewsHeadlines(ticker: string, date: string): Promise<string[
 }
 
 export async function GET(req: Request) {
+  const limited = await checkAILimit('spike-summary')
+  if (limited) return limited
+
   const { searchParams } = new URL(req.url)
   const ticker = (searchParams.get('ticker') ?? '').toUpperCase()
   const date   = searchParams.get('date') ?? ''

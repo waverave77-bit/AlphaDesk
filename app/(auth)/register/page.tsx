@@ -54,8 +54,8 @@ export default function RegisterPage() {
       return
     }
 
-    await signIn('credentials', { login: form.username, password: form.password, redirect: false })
-    router.push('/')
+    await signIn('credentials', { login: form.email, password: form.password, redirect: false })
+    router.push('/dashboard')
   }
 
   return (

@@ -1,21 +1,9 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData } from '@/lib/yahoo-finance'
-import fs from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
-
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
-}
 
 // Extract tickers from text
 function extractTickers(text: string): string[] {
@@ -31,6 +19,9 @@ function extractTickers(text: string): string[] {
 }
 
 export async function POST(req: Request) {
+  const limited = await checkAILimit('reality-check')
+  if (limited) return limited
+
   try {
     const { input } = await req.json()
     if (!input?.trim()) return NextResponse.json({ error: 'No input' }, { status: 400 })
@@ -63,7 +54,7 @@ export async function POST(req: Request) {
       if (valid.length > 0) liveContext = `\n\nLive data:\n${valid.join('\n')}`
     }
 
-    const client = new Anthropic({ apiKey: getAnthropicKey() })
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
     const prompt = `Someone said this: "${input}"${liveContext}
 

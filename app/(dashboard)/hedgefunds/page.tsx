@@ -1,11 +1,13 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
-import { Building2, TrendingUp, TrendingDown, PlusCircle, MinusCircle, RefreshCw, Info, LayoutGrid, BarChart3, Trophy, List } from 'lucide-react'
+import Link from 'next/link'
+import { Building2, TrendingUp, TrendingDown, PlusCircle, MinusCircle, RefreshCw, Info, LayoutGrid, BarChart3, Trophy, List, Lock, Zap } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import HoldingsTreemap from '@/components/charts/HoldingsTreemap'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
+import { useIsPro } from '@/hooks/useIsPro'
 
 interface Holding { name: string; value: number; shares: number }
 interface Fund {
@@ -70,6 +72,7 @@ function QoQCard({ icon, label, count, names, color, bg, desc }: {
 }
 
 export default function HedgeFundsPage() {
+  const { isPro } = useIsPro()
   const [funds, setFunds] = useState<Fund[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
@@ -155,20 +158,38 @@ export default function HedgeFundsPage() {
         <>
           {/* Fund selector tabs */}
           <div className="flex flex-wrap gap-2">
-            {funds.map(f => (
-              <button
-                key={f.cik ?? f.name}
-                onClick={() => setSelectedCik(f.cik ?? f.name)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all border ${
-                  selectedCik === (f.cik ?? f.name)
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'
-                }`}
-              >
-                {f.name.replace(' Associates', '').replace(' Technologies', '').replace(' Advisors', '')
-                  .replace(' Capital Management', '').replace(' Asset Management', '').replace(' Global Investors', '')}
-              </button>
-            ))}
+            {funds.map((f, idx) => {
+              const locked = !isPro && idx > 0
+              const key = f.cik ?? f.name
+              const shortName = f.name.replace(' Associates', '').replace(' Technologies', '').replace(' Advisors', '')
+                .replace(' Capital Management', '').replace(' Asset Management', '').replace(' Global Investors', '')
+              if (locked) {
+                return (
+                  <Link
+                    key={key}
+                    href="/upgrade"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border bg-white text-slate-400 border-slate-200 cursor-pointer hover:border-yellow-400 hover:text-yellow-600 transition-colors"
+                    title="Upgrade to Pro to unlock"
+                  >
+                    <Lock className="h-3 w-3" />
+                    {shortName}
+                  </Link>
+                )
+              }
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedCik(key)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all border ${
+                    selectedCik === key
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'
+                  }`}
+                >
+                  {shortName}
+                </button>
+              )
+            })}
           </div>
 
           {/* Selected fund detail */}
@@ -325,43 +346,83 @@ export default function HedgeFundsPage() {
               <List className="h-4 w-4 text-slate-400" />
               All Funds at a Glance
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {funds.map(fund => (
-                <Card
-                  key={fund.cik ?? fund.name}
-                  className={`cursor-pointer transition-all hover:border-blue-200 ${selectedCik === (fund.cik ?? fund.name) ? 'border-blue-300 ring-1 ring-blue-200' : ''}`}
-                  onClick={() => { setSelectedCik(fund.cik ?? fund.name); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-blue-500 shrink-0" />
-                        <p className="text-sm font-semibold text-slate-900 leading-tight">{fund.name}</p>
+            {/* Free: show 1, blur rest. Pro: show all. */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(isPro ? funds : funds.slice(0, 1)).map(fund => (
+                  <Card
+                    key={fund.cik ?? fund.name}
+                    className={`cursor-pointer transition-all hover:border-blue-200 ${selectedCik === (fund.cik ?? fund.name) ? 'border-blue-300 ring-1 ring-blue-200' : ''}`}
+                    onClick={() => { setSelectedCik(fund.cik ?? fund.name); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Building2 className="h-4 w-4 text-blue-500 shrink-0" />
+                          <p className="text-sm font-semibold text-slate-900 leading-tight">{fund.name}</p>
+                        </div>
+                        {fund.filingDate && (
+                          <span className="text-[10px] text-slate-400 shrink-0 ml-2">Filed {fund.filingDate}</span>
+                        )}
                       </div>
-                      {fund.filingDate && (
-                        <span className="text-[10px] text-slate-400 shrink-0 ml-2">Filed {fund.filingDate}</span>
-                      )}
-                    </div>
-
-                    {fund.topHoldings.length === 0 ? (
-                      <p className="text-xs text-slate-400">Holdings data unavailable</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {fund.topHoldings.slice(0, 3).map((h, i) => (
-                          <div key={i} className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 text-[10px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
-                              <span className="text-sm text-slate-700 truncate">{cleanName(h.name)}</span>
+                      {fund.topHoldings.length === 0 ? (
+                        <p className="text-xs text-slate-400">Holdings data unavailable</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {fund.topHoldings.slice(0, 3).map((h, i) => (
+                            <div key={i} className="flex items-center justify-between">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-600 text-[10px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                                <span className="text-sm text-slate-700 truncate">{cleanName(h.name)}</span>
+                              </div>
+                              <span className="text-xs font-medium text-slate-500 shrink-0 ml-2">{formatVal(h.value)}</span>
                             </div>
-                            <span className="text-xs font-medium text-slate-500 shrink-0 ml-2">{formatVal(h.value)}</span>
+                          ))}
+                          <p className="text-xs text-blue-500 mt-1">Click to see full breakdown</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Locked preview for free users */}
+              {!isPro && funds.length > 1 && (
+                <div className="relative">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 blur-sm pointer-events-none select-none" aria-hidden>
+                    {funds.slice(1, 3).map(fund => (
+                      <Card key={fund.cik ?? fund.name}>
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Building2 className="h-4 w-4 text-blue-500 shrink-0" />
+                            <p className="text-sm font-semibold text-slate-900">{fund.name}</p>
                           </div>
-                        ))}
-                        <p className="text-xs text-blue-500 mt-1">Click to see full breakdown</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+                          {fund.topHoldings.slice(0, 3).map((h, i) => (
+                            <div key={i} className="flex items-center justify-between mb-1">
+                              <span className="text-sm text-slate-700 truncate">{cleanName(h.name)}</span>
+                              <span className="text-xs text-slate-500">{formatVal(h.value)}</span>
+                            </div>
+                          ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl"
+                    style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(248,250,252,0.9) 40%)' }}>
+                    <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-full px-4 py-1.5 shadow-sm">
+                      <Lock className="h-3.5 w-3.5 text-yellow-500" />
+                      <span className="text-sm text-slate-600 font-medium">{funds.length - 1} more funds locked</span>
+                    </div>
+                    <Link
+                      href="/upgrade"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors shadow-lg"
+                    >
+                      <Zap className="h-4 w-4" />
+                      Unlock with Pro — $6.99/mo
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>

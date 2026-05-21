@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkAILimit } from '@/lib/pro'
 import { PrismaClient } from '@prisma/client'
 import fs from 'fs'
 import path from 'path'
@@ -122,6 +123,9 @@ async function fetchFallbackStocks(): Promise<YahooQuote[]> {
 }
 
 export async function GET() {
+  const limited = await checkAILimit('hot-take')
+  if (limited) return limited
+
   const today = todayStr()
 
   // Check DB for today's pick first

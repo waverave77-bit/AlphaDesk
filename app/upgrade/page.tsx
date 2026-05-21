@@ -26,7 +26,6 @@ const FREE_FEATURES = [
   'Watchlist (up to 10 stocks)',
   'Markets overview',
   'Finance dictionary',
-  'Macro dashboard',
   'Insider & hedge fund tracker',
   '10 AI requests per day',
 ]
@@ -127,7 +126,7 @@ export default function UpgradePage() {
             <div className="mb-6 mt-3">
               <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Pro</p>
               <div className="flex items-end gap-1">
-                <span className="text-4xl font-bold">$5</span>
+                <span className="text-4xl font-bold">$6.99</span>
                 <span className="text-gray-400 mb-1">/month</span>
               </div>
               <p className="text-sm text-gray-500 mt-2">Cancel anytime</p>
@@ -153,7 +152,7 @@ export default function UpgradePage() {
                   : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30'
               )}
             >
-              {loading ? 'Redirecting…' : 'Get Pro — $5/month'}
+              {loading ? 'Redirecting…' : 'Get Pro — $6.99/month'}
             </button>
           </div>
         </div>
