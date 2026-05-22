@@ -79,13 +79,13 @@ export default function QuantPage() {
       }
 
       // Value: P/E vs sector median
-      // Sector medians below are approximate long-run averages — they shift with earnings cycles.
-      // Energy and cyclicals are especially volatile; treat these as rough benchmarks only.
+      // Approximate 2025-2026 trailing P/E medians based on S&P 500 sector data.
+      // These shift with earnings cycles — treat as rough benchmarks only.
       const sectorPE: Record<string, number> = {
-        Technology: 28, Healthcare: 22, Financials: 14,
-        'Consumer Discretionary': 20, 'Consumer Staples': 18,
-        Energy: 15, Industrials: 18, Materials: 16,
-        'Real Estate': 28, Utilities: 18, 'Communication Services': 22,
+        Technology: 38, Healthcare: 24, Financials: 16,
+        'Consumer Discretionary': 26, 'Consumer Staples': 20,
+        Energy: 14, Industrials: 22, Materials: 18,
+        'Real Estate': 32, Utilities: 20, 'Communication Services': 20,
       }
       const avgPE = sector ? (sectorPE[sector] ?? 20) : 20
       let value = 50
