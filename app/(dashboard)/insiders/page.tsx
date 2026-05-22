@@ -86,11 +86,17 @@ function InsiderTrades({ isPro }: { isPro: boolean }) {
   const [trades, setTrades] = useState<Trade[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [fromCache, setFromCache] = useState(false)
+  const [cachedAt, setCachedAt] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/politicians')
       .then(r => r.json())
-      .then(d => setTrades(d.trades ?? []))
+      .then(d => {
+        setTrades(d.trades ?? [])
+        setFromCache(d.fromCache ?? false)
+        setCachedAt(d.cachedAt ?? null)
+      })
       .finally(() => { setLoading(false); setLastUpdated(new Date()) })
   }, [])
 
@@ -109,11 +115,23 @@ function InsiderTrades({ isPro }: { isPro: boolean }) {
     )
   }
 
-  if (trades.length === 0) return <p className="text-sm text-gray-500 text-center py-12">No insider trade data available.</p>
+  if (trades.length === 0) return (
+    <div className="text-center py-12 space-y-2">
+      <p className="text-sm text-gray-500">Insider trade data is temporarily unavailable.</p>
+      <p className="text-xs text-gray-600">SEC EDGAR may be rate-limiting requests. Check back in a few minutes.</p>
+    </div>
+  )
 
   const sorted = [...trades].sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
   const purchases = sorted.filter(t => t.type === 'Purchase').slice(0, 20)
   const sales = sorted.filter(t => t.type === 'Sale').slice(0, 20)
+
+  const staleBanner = fromCache && cachedAt ? (
+    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-xs text-yellow-400 mb-3">
+      <span>⚠️</span>
+      <span>Live SEC data temporarily unavailable — showing last saved data from {new Date(cachedAt).toLocaleString()}.</span>
+    </div>
+  ) : null
 
   const TradeRow = ({ trade }: { trade: Trade }) => (
     <Card className="hover:bg-gray-800/30 transition-colors">
@@ -203,6 +221,7 @@ function InsiderTrades({ isPro }: { isPro: boolean }) {
 
   return (
     <div className="space-y-8">
+      {staleBanner}
       <TradeSection rows={purchases} label="Recent Purchases" color="text-emerald-400" dotColor="bg-emerald-400" />
       <TradeSection rows={sales} label="Recent Sales" color="text-red-400" dotColor="bg-red-400" />
       <p className="text-xs text-gray-600 text-center pb-2">

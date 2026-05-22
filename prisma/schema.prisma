@@ -165,6 +165,12 @@ model BullBearCache {
   createdAt DateTime @default(now())
 }
 
+model InsiderTradeCache {
+  id        String   @id @default("singleton") // one row, always overwritten
+  trades    String   // JSON stringified Trade[]
+  updatedAt DateTime @updatedAt
+}
+
 model PasswordResetToken {
   id        String   @id @default(cuid())
   email     String
