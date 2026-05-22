@@ -13,10 +13,13 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mrguyinvests.com'),
-  title: 'Mr. Guy Invests — Stock Research & Portfolio Tracker',
+  title: {
+    default: 'Mr. Guy Invests',
+    template: '%s | Mr. Guy Invests',
+  },
   description: 'AI-powered stock research, earnings calendar, and portfolio management.',
   openGraph: {
-    title: 'Mr. Guy Invests — Stock Research & Portfolio Tracker',
+    title: 'Mr. Guy Invests',
     description: 'AI-powered stock research, earnings calendar, and portfolio management.',
     url: 'https://mrguyinvests.com',
     siteName: 'Mr. Guy Invests',
@@ -24,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mr. Guy Invests, Stock Research & Portfolio Tracker',
+    title: 'Mr. Guy Invests',
     description: 'AI-powered stock research, earnings calendar, and portfolio management.',
   },
 }
