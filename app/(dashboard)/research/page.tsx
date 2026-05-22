@@ -74,7 +74,7 @@ export default function ResearchPage() {
           </div>
           <div className="text-left">
             <h1 className="text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
-            <p className="text-lg text-gray-400 mt-1">Search any stock or ETF for live data, analyst ratings, and more</p>
+            <p className="text-lg text-gray-400 mt-1">Search any stock or ETF for price data, analyst ratings, and more. Prices may be delayed up to 15 minutes.</p>
           </div>
         </div>
 

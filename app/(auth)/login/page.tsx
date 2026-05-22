@@ -20,6 +20,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Client-side validation before hitting the server
+    if (!login.trim()) { setError('Please enter your email'); return }
+    if (!password) { setError('Please enter your password'); return }
     setLoading(true)
     setError('')
 

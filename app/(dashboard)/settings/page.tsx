@@ -135,7 +135,7 @@ export default function SettingsPage() {
                 {[
                   { name: 'Claude Haiku', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
                   { name: 'DeepSeek V3',  color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
-                  { name: 'Grok-2',       color: 'bg-green-500/20 text-green-300 border-green-500/30' },
+                  { name: 'Grok 4',        color: 'bg-green-500/20 text-green-300 border-green-500/30' },
                 ].map(m => (
                   <div key={m.name} className={cn('rounded-lg border px-3 py-2 text-center text-xs font-medium', m.color)}>{m.name}</div>
                 ))}

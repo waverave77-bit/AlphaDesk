@@ -1,5 +1,40 @@
 import Link from 'next/link'
-import { TrendingUp, Brain, Shield, Zap, BookOpen, Bell, Users, ChevronRight, Check } from 'lucide-react'
+import { Brain, Zap, BookOpen, Users, ChevronRight, Check, FlaskConical, TrendingUp } from 'lucide-react'
+
+// ── Mr. Guy pixel head — SVG version (works in server components) ─────────────
+const N = null
+const HEAD_PIXELS: Array<Array<string | null>> = [
+  [N,N,'#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604',N],
+  [N,'#2b1604','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604','#2b1604'],
+  ['#2b1604','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#5c2e0a','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#f5c49a','#f5c49a','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#111118','#111118','#f5c49a','#f5c49a','#111118','#111118','#111118','#111118','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  [N,'#f5c49a','#f5c49a','#f5c49a','#c47a50','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N],
+  [N,'#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',N,N],
+  [N,N,'#f5c49a','#f0f0f0','#f0f0f0','#c01010','#c01010','#f0f0f0','#f0f0f0','#f5c49a',N,N],
+  ['#f0f0f0','#f0f0f0','#f0f0f0','#f0f0f0','#c01010','#c01010','#7a0000','#7a0000','#f0f0f0','#f0f0f0','#f0f0f0','#222236'],
+]
+
+function MrGuyLogoSvg({ px = 3 }: { px?: number }) {
+  return (
+    <svg
+      width={12 * px}
+      height={14 * px}
+      style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}
+    >
+      {HEAD_PIXELS.flatMap((row, r) =>
+        row.map((color, c) =>
+          color ? <rect key={`${r}-${c}`} x={c * px} y={r * px} width={px} height={px} fill={color} /> : null
+        )
+      )}
+    </svg>
+  )
+}
 
 export default function LandingPage() {
   return (
@@ -8,9 +43,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
+          <MrGuyLogoSvg px={3} />
           <span className="text-xl font-bold">Mr. Guy Invests</span>
         </div>
         <div className="flex items-center gap-3">
@@ -46,6 +79,11 @@ export default function LandingPage() {
           </Link>
         </div>
         <p className="text-sm text-gray-600 mt-4">Free forever. No credit card needed.</p>
+
+        {/* Social proof */}
+        <p className="text-sm text-gray-500 mt-3">
+          Join investors already using Mr. Guy Invests to research smarter.
+        </p>
       </section>
 
       {/* Features */}
@@ -59,38 +97,98 @@ export default function LandingPage() {
               icon: <Brain className="h-6 w-6 text-blue-400" />,
               title: 'AI Stock Tutor',
               desc: 'Ask anything about a stock. Get a straight answer in plain English, no finance degree needed.',
+              disclaimer: true,
             },
             {
               icon: <Users className="h-6 w-6 text-emerald-400" />,
               title: 'Smart Money Tracker',
-              desc: 'See what hedge funds and corporate insiders have recently reported buying and selling, sourced from public SEC filings.',
-            },
-            {
-              icon: <Bell className="h-6 w-6 text-yellow-400" />,
-              title: 'Daily Market Brief',
-              desc: 'Wake up to a quick summary of what moved your stocks overnight. Takes 10 seconds to read.',
-            },
-            {
-              icon: <Shield className="h-6 w-6 text-purple-400" />,
-              title: 'Portfolio Tracker',
-              desc: 'Add your stocks and see exactly how much you\'re up or down, refreshed every time you visit.',
+              desc: 'See what hedge funds and corporate insiders have recently reported buying and selling, sourced from public SEC filings (Form 13F & Form 4).',
+              disclaimer: true,
             },
             {
               icon: <BookOpen className="h-6 w-6 text-pink-400" />,
               title: 'Investing Dictionary',
               desc: 'Every finance term explained simply. P/E ratio, short interest, market cap, all covered.',
+              disclaimer: false,
             },
             {
-              icon: <Zap className="h-6 w-6 text-orange-400" />,
-              title: 'Smart Alerts',
-              desc: 'Get notified when a stock hits your price target or when an insider makes a big move.',
+              icon: <Zap className="h-6 w-6 text-yellow-400" />,
+              title: 'Daily Market Brief',
+              desc: 'Wake up to a quick summary of what moved markets overnight. Takes 10 seconds to read.',
+              disclaimer: false,
+            },
+            {
+              icon: <TrendingUp className="h-6 w-6 text-orange-400" />,
+              title: 'Earnings Calendar',
+              desc: 'Never miss an earnings report. See upcoming dates for every stock on your watchlist.',
+              disclaimer: false,
+            },
+            {
+              icon: <FlaskConical className="h-6 w-6 text-violet-400" />,
+              title: 'Quant Strategy',
+              desc: 'Screen stocks using quantitative factors — momentum, valuation, and more. Data-driven, no guesswork.',
+              disclaimer: false,
             },
           ].map((f) => (
-            <div key={f.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-colors">
+            <div key={f.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-colors flex flex-col">
               <div className="mb-4">{f.icon}</div>
               <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+              <p className="text-gray-400 text-sm leading-relaxed flex-1">{f.desc}</p>
+              {f.disclaimer && (
+                <p className="text-gray-600 text-xs mt-3 leading-relaxed">
+                  For informational purposes only. Not financial advice. Always do your own research before making investment decisions.
+                </p>
+              )}
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-6 pb-24 max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-3">Frequently asked questions</h2>
+        <p className="text-gray-400 text-center mb-10">Everything you need to know before getting started.</p>
+
+        <div className="space-y-3">
+          {[
+            {
+              q: 'Is this financial advice?',
+              a: 'No. Mr. Guy Invests is a research and educational tool. Nothing on this site should be taken as financial advice. Always consult a professional before making investment decisions.',
+            },
+            {
+              q: 'Where does the Smart Money / hedge fund data come from?',
+              a: 'All data is sourced from public SEC filings (Form 13F and Form 4). This is the same data professionals use, just made easier to read.',
+            },
+            {
+              q: 'Are stock prices real-time?',
+              a: 'Stock prices may be delayed up to 15 minutes. Always verify with your broker before making a trade.',
+            },
+            {
+              q: "What's the difference between Free and Pro?",
+              a: 'Free gives you access to core research tools with daily limits. Pro removes all limits and gives full access to Smart Money and AI tools for $4.99/month.',
+            },
+            {
+              q: 'Can I cancel Pro anytime?',
+              a: 'Yes. Cancel anytime with no fees or penalties.',
+            },
+          ].map(({ q, a }) => (
+            <details
+              key={q}
+              className="bg-gray-900 border border-gray-800 rounded-2xl group"
+            >
+              <summary className="flex items-center justify-between px-6 py-4 cursor-pointer list-none select-none">
+                <span className="font-semibold text-white text-sm sm:text-base">{q}</span>
+                <svg
+                  className="h-4 w-4 text-gray-500 shrink-0 ml-3 transition-transform group-open:rotate-180"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-6 pb-5">
+                <p className="text-gray-400 text-sm leading-relaxed">{a}</p>
+              </div>
+            </details>
           ))}
         </div>
       </section>
@@ -112,9 +210,9 @@ export default function LandingPage() {
             <p className="text-sm text-gray-600 mb-6">No credit card needed</p>
             <ul className="space-y-3 mb-8">
               {[
-                'Stock research & live prices',
+                'Stock research (prices may be 15 min delayed)',
                 'Earnings calendar & markets',
-                'Watchlist & price alerts',
+                'Watchlist',
                 'Finance dictionary',
                 '3 Mr. Guy chats/day',
                 '2 AI stock analyses/day',
@@ -178,9 +276,7 @@ export default function LandingPage() {
       <footer className="border-t border-gray-800 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
-              <TrendingUp className="h-3 w-3 text-white" />
-            </div>
+            <MrGuyLogoSvg px={2} />
             <span className="font-semibold">Mr. Guy Invests</span>
           </div>
           <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>

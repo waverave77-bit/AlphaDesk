@@ -88,14 +88,19 @@ export default function DashboardPage() {
   const { data: session } = useSession()
   const isPreview = !!(session?.user as any)?.isDemo
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
-  const { word: greeting, emoji } = getGreeting()
+
+  // Defer greeting + date to client to avoid hydration mismatch
+  const [{ word: greeting, emoji }, setGreeting] = useState<{ word: string; emoji: string }>({ word: 'Good morning', emoji: '☀️' })
+  const [today, setToday] = useState('')
+  useEffect(() => {
+    setGreeting(getGreeting())
+    setToday(new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }))
+  }, [])
 
   // First name only, capitalised
   const firstName = session?.user?.name
     ? session.user.name.split(' ')[0]
     : null
-
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   // Market brief
   const [brief, setBrief] = useState<{ text: string; status: string } | null>(null)

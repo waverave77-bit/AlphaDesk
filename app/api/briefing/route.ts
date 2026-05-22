@@ -156,6 +156,7 @@ export async function GET() {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'America/New_York',
   })
 
   cache = {

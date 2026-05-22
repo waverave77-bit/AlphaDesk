@@ -95,6 +95,7 @@ export default function WatchlistPage() {
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">Watchlist <InfoTooltip text="A personal list of stocks you want to watch. Add any stock to track its price without actually buying it." /></h1>
           <p className="text-sm text-gray-400 mt-0.5">Track stocks you&apos;re interested in</p>
+          <p className="text-xs text-gray-600 mt-1">Prices may be delayed up to 15 minutes. Not a reflection of real-time value.</p>
         </div>
         <div className="flex items-center gap-2">
           <LastUpdated time={lastUpdated} className="text-slate-400" />

@@ -17,11 +17,41 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { TrendingUp, Check, Zap, Brain, BarChart2, MessageSquare, Shield, Star } from 'lucide-react'
+import { Check, Zap, Brain, BarChart2, MessageSquare, Shield, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+// Mr. Guy pixel head — SVG (works in client components too)
+const _N = null
+const _PIXELS: Array<Array<string | null>> = [
+  [_N,_N,'#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604','#2b1604',_N],
+  [_N,'#2b1604','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604','#2b1604'],
+  ['#2b1604','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#5c2e0a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#8b4c1a','#5c2e0a','#5c2e0a','#5c2e0a','#2b1604'],
+  ['#2b1604','#5c2e0a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#5c2e0a','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#f5c49a','#f5c49a','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#1e3a8a','#1e3a8a','#111118','#111118','#2b1604'],
+  ['#2b1604','#111118','#111118','#111118','#111118','#f5c49a','#f5c49a','#111118','#111118','#111118','#111118','#2b1604'],
+  ['#2b1604','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#2b1604'],
+  [_N,'#f5c49a','#f5c49a','#f5c49a','#c47a50','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',_N],
+  [_N,'#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a','#f5c49a',_N,_N],
+  [_N,_N,'#f5c49a','#f0f0f0','#f0f0f0','#c01010','#c01010','#f0f0f0','#f0f0f0','#f5c49a',_N,_N],
+  ['#f0f0f0','#f0f0f0','#f0f0f0','#f0f0f0','#c01010','#c01010','#7a0000','#7a0000','#f0f0f0','#f0f0f0','#f0f0f0','#222236'],
+]
+function MrGuyLogoSvg({ px = 3 }: { px?: number }) {
+  return (
+    <svg width={12 * px} height={14 * px} style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}>
+      {_PIXELS.flatMap((row, r) =>
+        row.map((color, c) =>
+          color ? <rect key={`${r}-${c}`} x={c * px} y={r * px} width={px} height={px} fill={color} /> : null
+        )
+      )}
+    </svg>
+  )
+}
+
 const FREE_FEATURES = [
-  'Stock research & live prices',
+  'Stock research (prices may be 15 min delayed)',
   'Earnings calendar',
   'Watchlist',
   'Markets overview',
@@ -67,9 +97,7 @@ export default function UpgradePage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto border-b border-gray-800">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
+          <MrGuyLogoSvg px={3} />
           <span className="text-xl font-bold">Mr. Guy Invests</span>
         </Link>
         <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">

@@ -33,10 +33,14 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (form.password !== form.confirm) { setError('Passwords do not match'); return }
-    if (form.password.length < 8) { setError('Password must be at least 8 characters'); return }
+    if (!form.username.trim()) { setError('Please enter a username'); return }
+    if (!form.email.trim()) { setError('Please enter your email'); return }
+    if (!form.password) { setError('Please enter a password'); return }
+    if (!form.confirm) { setError('Please confirm your password'); return }
     if (form.username.length < 3) { setError('Username must be at least 3 characters'); return }
     if (!/^[a-zA-Z0-9_]+$/.test(form.username)) { setError('Username can only contain letters, numbers, and underscores'); return }
+    if (form.password.length < 8) { setError('Password must be at least 8 characters'); return }
+    if (form.password !== form.confirm) { setError('Passwords do not match'); return }
 
     setLoading(true)
     setError('')

@@ -32,6 +32,8 @@ const mrGuyNav = [
   { href: '/report-card',   label: 'Stock Report Card' },
   { href: '/reality-check', label: 'Reality Check' },
   { href: '/translator',    label: 'Finance Translator' },
+  { href: '/am-i-dumb',     label: 'Am I Dumb?' },
+  { href: '/bs-checker',    label: 'BS Checker' },
 ]
 
 /* ── Mr. Guy pixel head logo — canvas renderer ──────────────────
