@@ -210,16 +210,36 @@ export default function GamePage() {
         <p className="text-xs text-gray-600 mt-1 text-center">Live market data · 27 tickers</p>
       </div>
 
-      {/* Stats bar */}
-      {session && (loading ? <Skeleton className="h-24 w-full" /> : portfolio && (
+      {/* Stats bar — always visible; guests see locked placeholders */}
+      {loading && session ? <Skeleton className="h-24 w-full" /> : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { label: 'Portfolio Value', value: formatCurrency(portfolio.totalValue), sub: `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%`, color: gainColor(portfolio.totalGainLoss) },
-            { label: 'Cash Available', value: formatCurrency(portfolio.cash), sub: `${((portfolio.cash / 100000) * 100).toFixed(1)}% of capital`, color: 'text-blue-400' },
-            { label: 'Total P&L', value: `${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)}`, sub: 'vs $100,000 start', color: gainColor(portfolio.totalGainLoss) },
-            { label: 'Season Resets', value: `${daysLeft} days`, sub: `Season ${portfolio.season}`, color: 'text-yellow-400' },
+            {
+              label: 'Portfolio Value',
+              value: session && portfolio ? formatCurrency(portfolio.totalValue) : '$100,000.00',
+              sub: session && portfolio ? `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%` : 'Your starting balance',
+              color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-400',
+            },
+            {
+              label: 'Cash Available',
+              value: session && portfolio ? formatCurrency(portfolio.cash) : '——',
+              sub: session && portfolio ? `${((portfolio.cash / 100000) * 100).toFixed(1)}% of capital` : 'Sign up to trade',
+              color: session && portfolio ? 'text-blue-400' : 'text-gray-600',
+            },
+            {
+              label: 'Total P&L',
+              value: session && portfolio ? `${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)}` : '——',
+              sub: session && portfolio ? 'vs $100,000 start' : 'Sign up to track',
+              color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-600',
+            },
+            {
+              label: 'Season Resets',
+              value: session && portfolio ? `${daysLeft} days` : `${daysLeft} days`,
+              sub: session && portfolio ? `Season ${portfolio.season}` : 'Current season',
+              color: 'text-yellow-400',
+            },
           ].map(({ label, value, sub, color }) => (
-            <Card key={label}>
+            <Card key={label} className={cn(!session && label !== 'Season Resets' && label !== 'Portfolio Value' ? 'opacity-60' : '')}>
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 mb-1">{label}</p>
                 <p className={cn('text-lg font-bold', color)}>{value}</p>
@@ -228,7 +248,7 @@ export default function GamePage() {
             </Card>
           ))}
         </div>
-      ))}
+      )}
 
       {/* Portfolio sparkline + vs market (only for logged-in users with portfolio) */}
       {session && portfolio && (
