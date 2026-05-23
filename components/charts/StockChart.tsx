@@ -121,9 +121,9 @@ export default function StockChart({ ticker, currentPrice, previousClose, analys
   }, [ticker])
 
   // Periods tuned to actual data-point counts per range:
-  // 1D ~78 bars (5m), 1W ~5 bars (1d) → too few to show, 1M ~21 (1d),
+  // 1D ~78 bars (5m), 1W ~33 bars (1h), 1M ~21 (1d),
   // 3M ~63 (1d), 6M ~126 (1d), YTD ~100 (1d), 1Y ~52 (1wk), 5Y ~260 (1wk)
-  const BB_PERIOD: Record<Range, number> = { '1D': 14, '1W': 20, '1M': 10, '3M': 14, '6M': 20, 'YTD': 20, '1Y': 10, '5Y': 20 }
+  const BB_PERIOD: Record<Range, number> = { '1D': 14, '1W': 14, '1M': 10, '3M': 14, '6M': 20, 'YTD': 20, '1Y': 10, '5Y': 20 }
   const bbPeriod = BB_PERIOD[range]
 
   const spikeMap = useMemo(() => computeSpikes(data), [data])

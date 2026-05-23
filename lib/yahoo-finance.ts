@@ -308,7 +308,7 @@ export async function getHistoricalData(
 ): Promise<HistoricalDataPoint[]> {
   const rangeMap: Record<string, { range: string; interval: string }> = {
     '1d':  { range: '1d',  interval: '5m' },
-    '1w':  { range: '5d',  interval: '1d' },
+    '1w':  { range: '5d',  interval: '1h' },
     '1m':  { range: '1mo', interval: '1d' },
     '3m':  { range: '3mo', interval: '1d' },
     '6m':  { range: '6mo', interval: '1d' },
