@@ -23,10 +23,11 @@ export default function MrGuyLogoSvg({ px = 3 }: { px?: number }) {
       width={12 * px}
       height={14 * px}
       style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}
+      shapeRendering="crispEdges"
     >
       {HEAD_PIXELS.flatMap((row, r) =>
         row.map((color, c) =>
-          color ? <rect key={`${r}-${c}`} x={c * px} y={r * px} width={px} height={px} fill={color} /> : null
+          color ? <rect key={`${r}-${c}`} x={c * px} y={r * px} width={px + 0.5} height={px + 0.5} fill={color} /> : null
         )
       )}
     </svg>
