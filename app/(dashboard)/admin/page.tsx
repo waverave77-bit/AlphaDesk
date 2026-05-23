@@ -39,8 +39,6 @@ const FEATURE_LABELS: Record<string, string> = {
   'report-card': '📋 Report Card',
   'spike-summary': '📈 Spike Summary',
   'reality-check': '🔍 Reality Check',
-  'am-i-dumb': '🤔 Am I Dumb',
-  'bs-checker': '🚨 BS Checker',
   'translator': '📖 Translator',
   'general': '⚡ General',
 }

@@ -15,8 +15,6 @@ export const FREE_LIMITS: Record<string, number> = {
   'bull-vs-bear':  5,
   'hot-take':      999, // one cached take per day — no meaningful limit
   'reality-check': 5,
-  'am-i-dumb':     5,
-  'bs-checker':    5,
   'translator':    999, // effectively unlimited — simple educational tool
   'quant':         3,
 }
