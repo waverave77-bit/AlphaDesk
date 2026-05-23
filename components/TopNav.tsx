@@ -11,18 +11,18 @@ import { useAdmin } from '@/hooks/useAdmin'
 const primaryNav = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/research',  label: 'Research' },
-  { href: '/markets',   label: 'Markets' },
-  { href: '/watchlist', label: 'Watchlist' },
   { href: '/learn',     label: 'Learn' },
-  { href: '/insiders',  label: 'Smart Money' },
+  { href: '/game',      label: '$100K Challenge' },
   { href: '/chat',      label: 'Mr. Guy' },
+  { href: '/markets',   label: 'Markets' },
 ]
 
 const moreNav = [
+  { href: '/watchlist',  label: 'Watchlist' },
+  { href: '/insiders',   label: 'Smart Money' },
   { href: '/earnings',   label: 'Earnings Calendar' },
   { href: '/hedgefunds', label: 'Hedge Funds' },
   { href: '/quant',      label: 'Quant Strategy' },
-  { href: '/game',       label: '$100K Challenge' },
 ]
 
 const mrGuyNav = [

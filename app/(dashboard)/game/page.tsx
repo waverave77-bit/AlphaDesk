@@ -21,7 +21,7 @@ function gainColor(n: number) { return n >= 0 ? 'text-green-500' : 'text-red-500
 function gainBg(n: number) { return n >= 0 ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20' }
 
 export default function GamePage() {
-  const { data: session } = useSession()
+  const { data: session, status: sessionStatus } = useSession()
   const { toast } = useToast()
   const [tab, setTab] = useState<Tab>('Portfolio')
   const [portfolio, setPortfolio] = useState<any>(null)
@@ -44,7 +44,6 @@ export default function GamePage() {
   const searchRef = useRef<HTMLDivElement>(null)
 
   const fetchPortfolio = async () => {
-    if (!session) { setLoading(false); return }
     setLoading(true)
     const r = await fetch('/api/virtual')
     const d = await r.json()
@@ -60,7 +59,12 @@ export default function GamePage() {
     setLbLoading(false)
   }
 
-  useEffect(() => { fetchPortfolio() }, [])
+  // Wait for session to resolve before fetching — avoids NaN for guests
+  useEffect(() => {
+    if (sessionStatus === 'loading') return
+    if (sessionStatus === 'unauthenticated') { setLoading(false); return }
+    fetchPortfolio()
+  }, [sessionStatus])
   useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
 
   // Search debounce
