@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 // POST — save a new onboarding response
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
     const { experience, goals } = await req.json()
     if (!experience) return NextResponse.json({ error: 'Missing experience' }, { status: 400 })
 
@@ -18,9 +23,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET — return aggregate stats
+// GET — return aggregate stats (admin only)
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions)
+    if (session?.user?.email !== process.env.ADMIN_EMAIL) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
     const all = await prisma.onboardingResponse.findMany()
     const total = all.length
 
