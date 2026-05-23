@@ -115,7 +115,7 @@ export async function GET() {
       }
       return NextResponse.json(
         { score, rating: ratingMap[rating.toLowerCase()] ?? rating, vix, spChange, source: 'cnn' },
-        { headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' } }
+        { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' } }
       )
     }
 
@@ -124,7 +124,7 @@ export async function GET() {
     const fallback = await fetchFallback()
     return NextResponse.json(
       { ...fallback, vix: fallback.vix ?? vix, spChange: fallback.spChange ?? spChange, source: 'vix_approx' },
-      { headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' } }
+      { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' } }
     )
   } catch (e: any) {
     return NextResponse.json({ score: 50, rating: 'Neutral', vix: null, spChange: null, error: true })
