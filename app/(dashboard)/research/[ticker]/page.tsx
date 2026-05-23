@@ -82,6 +82,62 @@ const TOOLTIPS: Record<string, string> = {
   'Day Low': 'The lowest price the stock hit today.',
 }
 
+function DividendCard({ ticker, price, dividendYield }: { ticker: string; price: number; dividendYield: number }) {
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`/api/dividends/ticker?symbol=${ticker}`)
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [ticker])
+
+  const annualDiv = data?.dividendRate ?? data?.trailingDividendRate ?? (price * dividendYield)
+  const quarterlyDiv = annualDiv / 4
+
+  return (
+    <Card className="border-green-500/20 bg-green-950/10">
+      <CardHeader className="pb-1">
+        <CardTitle className="text-xs text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+          💰 Dividend Info
+          {data?.isAristocrat && (
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">👑 Aristocrat</span>
+          )}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-2">
+        {loading ? (
+          <div className="space-y-2"><div className="h-4 bg-gray-800 rounded animate-pulse" /><div className="h-4 bg-gray-800 rounded animate-pulse w-3/4" /></div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <div className="bg-gray-900 rounded-lg p-2.5 text-center">
+                <p className="text-xs text-gray-500">Annual Yield</p>
+                <p className="text-base font-bold text-green-400">{(dividendYield * 100).toFixed(2)}%</p>
+              </div>
+              <div className="bg-gray-900 rounded-lg p-2.5 text-center">
+                <p className="text-xs text-gray-500">Per Share / yr</p>
+                <p className="text-base font-bold text-white">${annualDiv.toFixed(4)}</p>
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              {quarterlyDiv > 0 && <div className="flex justify-between text-xs"><span className="text-gray-500">Quarterly payout</span><span className="text-gray-300">${quarterlyDiv.toFixed(4)}</span></div>}
+              {data?.payoutRatio != null && <div className="flex justify-between text-xs"><span className="text-gray-500">Payout ratio</span><span className="text-gray-300">{(data.payoutRatio * 100).toFixed(1)}%</span></div>}
+              {data?.exDividendDate && <div className="flex justify-between text-xs"><span className="text-gray-500">Ex-dividend date</span><span className="text-gray-300">{data.exDividendDate}</span></div>}
+              {data?.paymentDate && <div className="flex justify-between text-xs"><span className="text-gray-500">Payment date</span><span className="text-gray-300">{data.paymentDate}</span></div>}
+              {data?.fiveYearAvgYield && <div className="flex justify-between text-xs"><span className="text-gray-500">5-year avg yield</span><span className="text-gray-300">{data.fiveYearAvgYield.toFixed(2)}%</span></div>}
+            </div>
+            <p className="text-[10px] text-gray-600 mt-3 pt-2 border-t border-gray-800/50">
+              $10,000 invested → ${((10000 / price) * annualDiv).toFixed(2)}/yr in dividends · Not financial advice
+            </p>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
 function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
   const tooltip = TOOLTIPS[label]
   return (
@@ -328,7 +384,6 @@ export default function StockDetailPage() {
             <StatRow label="EPS (TTM)" value={quote.eps ? formatCurrency(quote.eps) : '—'} />
             <StatRow label="Dividend Yield" value={quote.dividendYield ? (quote.dividendYield * 100).toFixed(2) + '%' : '—'} />
             <StatRow label="Beta" value={quote.beta ? quote.beta.toFixed(2) : '—'} />
-            {/* Why it matters */}
             <div className="mt-3 pt-3 border-t border-gray-800/50">
               <p className="text-[10px] text-gray-600 leading-relaxed">
                 <span className="text-gray-500">These numbers help you understand the stock's financial profile. Not financial advice.</span>
@@ -336,6 +391,11 @@ export default function StockDetailPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Dividend Card — only shown if stock pays a dividend */}
+        {quote.dividendYield && quote.dividendYield > 0 && (
+          <DividendCard ticker={quote.ticker} price={quote.price} dividendYield={quote.dividendYield} />
+        )}
 
         <Card>
           <CardHeader className="pb-1">
