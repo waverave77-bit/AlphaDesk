@@ -22,7 +22,8 @@ const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { s
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
-interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
+interface LbHolding { ticker: string; companyName: string; shares: number; avgCost: number }
+interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean; holdings?: LbHolding[] }
 interface MrGuyPick { ticker: string; currentPrice: number; currentValue: number; gainLoss: number }
 
 // Mr. Guy's season portfolio — 5 equal-weight positions, $20k each
@@ -107,27 +108,23 @@ export default function GamePage() {
     fetchHistory()
   }, [sessionStatus])
 
-  // Fetch Mr. Guy's live prices for leaderboard injection
+  // Fetch Mr. Guy's portfolio from API (driven by Hot Take history)
   useEffect(() => {
-    const fetchMrGuyPrices = async () => {
-      const results = await Promise.allSettled(
-        MR_GUY_PICKS.map(p => fetch(`/api/stock/${p.ticker}`).then(r => r.json()))
-      )
-      let totalValue = 0
-      const enriched: MrGuyPick[] = MR_GUY_PICKS.map((p, i) => {
-        const res = results[i]
-        const price = res.status === 'fulfilled' && res.value?.quote?.price
-          ? res.value.quote.price
-          : p.costBasis
-        const currentValue = price * p.shares
-        totalValue += currentValue
-        return { ticker: p.ticker, currentPrice: price, currentValue, gainLoss: currentValue - p.costBasis * p.shares }
+    fetch('/api/mr-guy/portfolio')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.holdings) {
+          setMrGuyPickResults(d.holdings.map((h: any) => ({
+            ticker: h.ticker,
+            currentPrice: h.currentPrice,
+            currentValue: h.currentValue,
+            gainLoss: h.gainLoss,
+          })))
+          setMrGuyValue(d.totalValue)
+          setMrGuyPct(d.gainLossPct)
+        }
       })
-      setMrGuyPickResults(enriched)
-      setMrGuyValue(totalValue)
-      setMrGuyPct(((totalValue - MR_GUY_START) / MR_GUY_START) * 100)
-    }
-    fetchMrGuyPrices()
+      .catch(() => {})
   }, [])
 
   useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
@@ -663,7 +660,7 @@ export default function GamePage() {
                         {/* Expanded: Mr. Guy's picks */}
                         {isExpanded && p.isMrGuy && mrGuyPickResults.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-purple-500/20 space-y-1.5">
-                            <p className="text-xs text-purple-300 font-semibold uppercase tracking-wide mb-2">Mr. Guy&apos;s Season Portfolio</p>
+                            <p className="text-xs text-purple-300 font-semibold uppercase tracking-wide mb-2">🤖 Mr. Guy&apos;s Portfolio</p>
                             {mrGuyPickResults.map(pick => (
                               <div key={pick.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/50 last:border-0">
                                 <span className="font-bold text-white w-16">{pick.ticker}</span>
@@ -679,6 +676,25 @@ export default function GamePage() {
                                 {formatCurrency(mrGuyValue)}
                               </span>
                             </div>
+                          </div>
+                        )}
+
+                        {/* Expanded: real player's holdings */}
+                        {isExpanded && !p.isMrGuy && p.holdings && p.holdings.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-gray-800 space-y-1.5">
+                            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-2">{p.name}&apos;s Holdings</p>
+                            {p.holdings.map(h => (
+                              <div key={h.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/50 last:border-0">
+                                <span className="font-bold text-white w-16">{h.ticker}</span>
+                                <span className="text-gray-500 flex-1 px-2 truncate">{h.companyName}</span>
+                                <span className="text-gray-400">{h.shares.toFixed(2)} shares</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {isExpanded && !p.isMrGuy && (!p.holdings || p.holdings.length === 0) && (
+                          <div className="mt-3 pt-3 border-t border-gray-800">
+                            <p className="text-xs text-gray-600 text-center">No holdings yet</p>
                           </div>
                         )}
                       </CardContent>

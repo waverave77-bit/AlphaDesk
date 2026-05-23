@@ -3,67 +3,27 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn, formatCurrency } from '@/lib/utils'
-import { TrendingUp, TrendingDown, Bot } from 'lucide-react'
-
-// Mr. Guy's hardcoded portfolio — 5 equal-weight positions, $20k each
-const MR_GUY_PICKS = [
-  { ticker: 'NVDA', shares: 22.86, costBasis: 875 },  // $20k @ $875
-  { ticker: 'AAPL', shares: 105.82, costBasis: 189 },  // $20k @ $189
-  { ticker: 'META', shares: 37.95, costBasis: 527 },   // $20k @ $527
-  { ticker: 'BRK-B', shares: 54.05, costBasis: 370 },  // $20k @ $370
-  { ticker: 'SPY', shares: 36.56, costBasis: 547 },    // $20k @ $547
-]
-const MR_GUY_START = 100_000
+import { Bot } from 'lucide-react'
+import type { MrGuyPortfolioResult } from '@/app/api/mr-guy/portfolio/route'
 
 interface Props {
   userGainLossPct: number | null
 }
 
-interface PickResult {
-  ticker: string
-  currentPrice: number | null
-  currentValue: number
-  gainLoss: number
-}
-
 function gainColor(n: number) { return n >= 0 ? 'text-green-500' : 'text-red-500' }
 
 export default function BeatMrGuy({ userGainLossPct }: Props) {
-  const [picks, setPicks] = useState<PickResult[]>([])
+  const [data, setData] = useState<MrGuyPortfolioResult | null>(null)
   const [loading, setLoading] = useState(true)
-  const [mrGuyPct, setMrGuyPct] = useState<number | null>(null)
 
   useEffect(() => {
-    const fetchPicks = async () => {
-      setLoading(true)
-      const results = await Promise.allSettled(
-        MR_GUY_PICKS.map(p => fetch(`/api/stock/${p.ticker}`).then(r => r.json()))
-      )
-
-      const enriched: PickResult[] = MR_GUY_PICKS.map((p, i) => {
-        const res = results[i]
-        const price = res.status === 'fulfilled' && res.value?.quote?.price
-          ? res.value.quote.price
-          : p.costBasis // fallback to cost basis so P&L = 0
-        const currentValue = price * p.shares
-        const costValue = p.costBasis * p.shares
-        return {
-          ticker: p.ticker,
-          currentPrice: price,
-          currentValue,
-          gainLoss: currentValue - costValue,
-        }
-      })
-
-      const totalValue = enriched.reduce((s, p) => s + p.currentValue, 0)
-      const pct = ((totalValue - MR_GUY_START) / MR_GUY_START) * 100
-      setPicks(enriched)
-      setMrGuyPct(pct)
-      setLoading(false)
-    }
-    fetchPicks()
+    fetch('/api/mr-guy/portfolio')
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false) })
+      .catch(() => setLoading(false))
   }, [])
 
+  const mrGuyPct = data?.gainLossPct ?? null
   const userWinning = userGainLossPct !== null && mrGuyPct !== null && userGainLossPct > mrGuyPct
   const userLosing = userGainLossPct !== null && mrGuyPct !== null && userGainLossPct < mrGuyPct
 
@@ -79,6 +39,11 @@ export default function BeatMrGuy({ userGainLossPct }: Props) {
         <CardTitle className="text-sm font-semibold text-white flex items-center gap-2">
           <Bot className="h-4 w-4 text-purple-400" />
           Beat Mr. Guy 🤖
+          {data?.source === 'hot-takes' && (
+            <span className="text-xs text-purple-400 font-normal ml-auto">
+              {data.pickCount} AI picks
+            </span>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -102,25 +67,32 @@ export default function BeatMrGuy({ userGainLossPct }: Props) {
               </div>
             </div>
 
-            {/* Taunt message */}
+            {/* Taunt */}
             <p className={cn('text-xs text-center px-2 py-1.5 rounded-lg',
               userWinning ? 'text-green-400 bg-green-500/10' : userLosing ? 'text-purple-300 bg-purple-500/10' : 'text-gray-400 bg-gray-800')}>
               {taunt}
             </p>
 
-            {/* Mr. Guy's picks */}
-            <div className="space-y-1.5">
-              <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Mr. Guy&apos;s Season Picks</p>
-              {picks.map(p => (
-                <div key={p.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/60 last:border-0">
-                  <span className="font-bold text-white w-16">{p.ticker}</span>
-                  <span className="text-gray-400">{formatCurrency(p.currentPrice ?? 0)}</span>
-                  <span className={gainColor(p.gainLoss)}>
-                    {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {/* Mr. Guy's holdings */}
+            {data?.holdings && data.holdings.length > 0 && (
+              <div className="space-y-1.5">
+                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                  Mr. Guy&apos;s {data.source === 'hot-takes' ? 'AI-Picked' : 'Season'} Portfolio
+                </p>
+                {data.holdings.map(h => (
+                  <div key={h.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/60 last:border-0">
+                    <span className="font-bold text-white w-16">{h.ticker}</span>
+                    <span className="text-gray-400">{formatCurrency(h.currentPrice)}</span>
+                    <span className={gainColor(h.gainLoss)}>
+                      {h.gainLoss >= 0 ? '+' : ''}{formatCurrency(h.gainLoss)}
+                    </span>
+                    {data.source === 'hot-takes' && h.timesPickedByMrGuy > 1 && (
+                      <span className="text-purple-400">×{h.timesPickedByMrGuy}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </CardContent>

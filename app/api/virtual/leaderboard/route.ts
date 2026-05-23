@@ -10,7 +10,10 @@ export async function GET() {
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const portfolios = await prisma.virtualPortfolio.findMany({
-    include: { user: { select: { name: true, email: true } } },
+    include: {
+      user: { select: { name: true, email: true } },
+      holdings: { select: { ticker: true, companyName: true, shares: true, avgCost: true } },
+    },
     orderBy: { totalValue: 'desc' },
     take: 50,
   })
@@ -23,6 +26,12 @@ export async function GET() {
     gainLoss: p.totalValue - STARTING_CASH,
     gainLossPct: ((p.totalValue - STARTING_CASH) / STARTING_CASH) * 100,
     isMe: p.userId === session!.user!.id,
+    holdings: p.holdings.map(h => ({
+      ticker: h.ticker,
+      companyName: h.companyName,
+      shares: h.shares,
+      avgCost: h.avgCost,
+    })),
   }))
 
   return NextResponse.json({ board })
