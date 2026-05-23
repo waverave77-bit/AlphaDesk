@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getStockQuote } from '@/lib/yahoo-finance'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import fs from 'fs'
 import path from 'path'
-
-const prisma = new PrismaClient()
 
 export const dynamic = 'force-dynamic'
 
@@ -74,7 +72,7 @@ export async function GET() {
     const quote = await getStockQuote(ticker).catch(() => null)
     if (!quote) return NextResponse.json({ error: 'No data' }, { status: 500 })
 
-    const client = new Anthropic({ apiKey: getAnthropicKey() })
+    const client = new Anthropic({ apiKey: getAnthropicKey() }) // lazy — only runs on request, not at build time
 
     const prompt = `This week's stock pick challenge is ${ticker} (${quote.companyName}). Current price: $${quote.price?.toFixed(2)}, P/E: ${quote.peRatio?.toFixed(1) ?? 'N/A'}, this year change: approx ${quote.changePercent?.toFixed(1)}% today.
 
