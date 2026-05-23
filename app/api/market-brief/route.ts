@@ -3,7 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 
 export const dynamic = 'force-dynamic'
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const getClient = () => new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 // Simple in-memory cache — refreshes every 30 minutes
 let _cache: { text: string; status: string; cachedAt: number } | null = null
@@ -86,7 +86,7 @@ export async function GET() {
     `Markets just closed today (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence end-of-day market recap. Cover: how markets closed and why, and what investors should watch tonight or heading into tomorrow.`
 
   try {
-    const msg = await client.messages.create({
+    const msg = await getClient().messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 200,
       system: systemPrompt,

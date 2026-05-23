@@ -3,7 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 
 export const revalidate = 3600 // cache for 1 hour
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const getClient = () => new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 async function fetchFearGreed() {
   try {
@@ -53,7 +53,7 @@ export async function GET() {
     .join('. ')
 
   try {
-    const response = await client.messages.create({
+    const response = await getClient().messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 200,
       system: `You write brief, sharp daily market recaps for retail investors.
