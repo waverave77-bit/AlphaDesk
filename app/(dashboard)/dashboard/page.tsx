@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
 import MarketCharacter from '@/components/MarketCharacter'
+import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -271,9 +272,11 @@ export default function DashboardPage() {
       <Card className="border-slate-200 bg-white">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-3">
-            <div className="h-5 w-5 rounded bg-blue-50 flex items-center justify-center text-xs">🧑‍💼</div>
+            <div className="h-6 w-6 flex items-center justify-center shrink-0">
+              <MrGuyLogoSvg px={2} />
+            </div>
             <span className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
-              {brief?.status === 'Weekend' ? "Mr. Guy's Weekend Take" : "Mr. Guy's Take"}
+              Mr. Guy Market Recap
             </span>
           </div>
           {briefLoading ? (

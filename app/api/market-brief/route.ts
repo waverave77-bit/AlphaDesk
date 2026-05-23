@@ -72,18 +72,18 @@ export async function GET() {
     ? `Recent headlines:\n${headlines.map(h => `- ${h}`).join('\n')}`
     : 'No specific headlines found — use your training knowledge of current market conditions.'
 
-  const systemPrompt = status === 'weekend'
-    ? `You write a short, engaging weekend market note for an investor app. Friendly, conversational, a bit fun. No markdown, no bullets, no "Note:", never start with "I". Plain English only.`
-    : `You write a short, engaging daily market brief for an investor app. Friendly, conversational, a bit fun — like a smart friend who follows markets. No markdown, no bullets, no "Note:", never start with "I". Plain English only.`
+  const systemPrompt = `You write short, sharp daily market recaps for retail investors. Friendly and conversational — like a smart friend who follows markets. No markdown, no bullet points, no "Note:", never start with "I". Plain English only. Be specific and confident.`
+
+  const nextOpen = dayName === 'Friday' ? 'Monday' : dayName === 'Saturday' ? 'Monday' : 'Monday'
 
   const userPrompt = status === 'weekend'
-    ? `Today is ${dayName}. Markets are closed for the weekend.\n\n${newsBlock}\n\nIn 2-3 sentences: what's the most interesting thing happening right now, and what could move markets when they open Monday? Be specific and confident.`
+    ? `Today is ${dayName}. Markets are closed for the weekend.\n\n${newsBlock}\n\nWrite a 2-3 sentence weekend market recap. Cover: what happened in markets this past week, and what specific events, data releases, or storylines investors should watch that could move markets when they open ${nextOpen}. Be concrete — name actual catalysts (Fed speakers, earnings, economic data, geopolitical events, etc.).`
     : status === 'pre'
-    ? `Markets open in a few hours today (${dayName}).\n\n${newsBlock}\n\nIn 2-3 sentences: what should investors be watching when the market opens today? Be specific.`
+    ? `Today is ${dayName} and markets open in a few hours.\n\n${newsBlock}\n\nWrite a 2-3 sentence pre-market recap. Cover: what the overnight/futures action looks like and the key things investors should watch when the market opens today.`
     : status === 'open'
-    ? `Markets are open right now (${dayName}).\n\n${newsBlock}\n\nIn 2-3 sentences: what's driving the market today? Be specific and direct.`
+    ? `Markets are open right now (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence market recap. Cover: what's driving the market today — which sectors are moving, what's the sentiment, and what's the main story.`
     : /* after/closed */
-    `Markets just closed today (${dayName}).\n\n${newsBlock}\n\nIn 2-3 sentences: how did the market do today and what should investors watch tonight or tomorrow? Be specific.`
+    `Markets just closed today (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence end-of-day market recap. Cover: how markets closed and why, and what investors should watch tonight or heading into tomorrow.`
 
   try {
     const msg = await client.messages.create({
