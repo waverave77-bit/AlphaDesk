@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Star, Trash2, Plus, RefreshCw, TrendingUp, TrendingDown, ExternalLink } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -26,6 +28,9 @@ interface WatchlistItemWithQuote extends WatchlistItem {
 }
 
 export default function WatchlistPage() {
+  const { data: session, status } = useSession()
+  if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
+
   const [items, setItems] = useState<WatchlistItemWithQuote[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)

@@ -1,5 +1,7 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 import { Search, TrendingUp, TrendingDown, Minus, Info } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

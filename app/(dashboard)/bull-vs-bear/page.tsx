@@ -1,5 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 import type { BullVsBearResult } from '@/app/api/bull-vs-bear/route'

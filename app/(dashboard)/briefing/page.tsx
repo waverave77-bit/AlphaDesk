@@ -1,5 +1,7 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'

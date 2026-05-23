@@ -3,6 +3,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Send, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 
 // ── Mr. Guy pixel head (canvas) ───────────────────────────────────────────────
 const N = null
@@ -364,6 +366,10 @@ export default function ChatPage() {
     : charState === 'wake' ? 'mrg-wake'
     : charState === 'think' ? 'mrg-think'
     : 'mrg-talk'
+
+  const { data: session, status } = useSession()
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Mr. Guy Chat" />
 
   return (
     <>

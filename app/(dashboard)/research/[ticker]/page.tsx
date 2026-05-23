@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { GuestLock } from '@/components/GuestGate'
 import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -97,6 +99,21 @@ export default function StockDetailPage() {
   const { ticker } = useParams<{ ticker: string }>()
   const router = useRouter()
   const { toast } = useToast()
+  const { data: session, status } = useSession()
+
+  // Guests get 1 free research — track in localStorage
+  const [guestBlocked, setGuestBlocked] = useState(false)
+  useEffect(() => {
+    if (status === 'loading') return
+    if (session) return // logged in, no limit
+    const key = 'mrg_guest_researched'
+    const done = localStorage.getItem(key)
+    if (done) {
+      setGuestBlocked(true)
+    } else {
+      localStorage.setItem(key, '1')
+    }
+  }, [session, status, ticker])
 
   const [quote, setQuote] = useState<StockQuote | null>(null)
   const [analyst, setAnalyst] = useState<AnalystData | null>(null)
@@ -144,6 +161,8 @@ export default function StockDetailPage() {
       setWatchlistLoading(false)
     }
   }
+
+  if (guestBlocked) return <GuestLock feature="stock research" />
 
   if (loading) {
     return (
