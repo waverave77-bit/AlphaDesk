@@ -22,7 +22,18 @@ const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { s
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
-interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean }
+interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
+interface MrGuyPick { ticker: string; currentPrice: number; currentValue: number; gainLoss: number }
+
+// Mr. Guy's season portfolio — 5 equal-weight positions, $20k each
+const MR_GUY_PICKS = [
+  { ticker: 'NVDA', shares: 22.86, costBasis: 875 },
+  { ticker: 'AAPL', shares: 105.82, costBasis: 189 },
+  { ticker: 'META', shares: 37.95, costBasis: 527 },
+  { ticker: 'BRK-B', shares: 54.05, costBasis: 370 },
+  { ticker: 'SPY', shares: 36.56, costBasis: 547 },
+]
+const MR_GUY_START = 100_000
 
 const TABS = ['Portfolio', 'Trade', 'Leaderboard', 'History'] as const
 type Tab = typeof TABS[number]
@@ -38,12 +49,17 @@ export default function GamePage() {
   const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [lbLoading, setLbLoading] = useState(false)
-  const [expandedLbRow, setExpandedLbRow] = useState<number | null>(null)
+  const [expandedLbRow, setExpandedLbRow] = useState<string | null>(null)
   const [roast, setRoast] = useState<string | null>(null)
   const [roastLoading, setRoastLoading] = useState(false)
 
   // Portfolio history for mini chart
   const [historyPoints, setHistoryPoints] = useState<{ date: string; value: number }[]>([])
+
+  // Mr. Guy's portfolio P&L (fetched for leaderboard injection)
+  const [mrGuyPct, setMrGuyPct] = useState<number | null>(null)
+  const [mrGuyValue, setMrGuyValue] = useState<number>(100000)
+  const [mrGuyPickResults, setMrGuyPickResults] = useState<MrGuyPick[]>([])
 
   // Trade form
   const [tradeTicker, setTradeTicker] = useState('')
@@ -90,6 +106,29 @@ export default function GamePage() {
     fetchPortfolio()
     fetchHistory()
   }, [sessionStatus])
+
+  // Fetch Mr. Guy's live prices for leaderboard injection
+  useEffect(() => {
+    const fetchMrGuyPrices = async () => {
+      const results = await Promise.allSettled(
+        MR_GUY_PICKS.map(p => fetch(`/api/stock/${p.ticker}`).then(r => r.json()))
+      )
+      let totalValue = 0
+      const enriched: MrGuyPick[] = MR_GUY_PICKS.map((p, i) => {
+        const res = results[i]
+        const price = res.status === 'fulfilled' && res.value?.quote?.price
+          ? res.value.quote.price
+          : p.costBasis
+        const currentValue = price * p.shares
+        totalValue += currentValue
+        return { ticker: p.ticker, currentPrice: price, currentValue, gainLoss: currentValue - p.costBasis * p.shares }
+      })
+      setMrGuyPickResults(enriched)
+      setMrGuyValue(totalValue)
+      setMrGuyPct(((totalValue - MR_GUY_START) / MR_GUY_START) * 100)
+    }
+    fetchMrGuyPrices()
+  }, [])
 
   useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
 
@@ -555,44 +594,100 @@ export default function GamePage() {
       {/* Leaderboard Tab */}
       {tab === 'Leaderboard' && (
         <div className="space-y-2">
-          {lbLoading ? <Skeleton className="h-48 w-full" /> : leaderboard.length === 0 ? (
-            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No players yet, be the first!</p></CardContent></Card>
-          ) : (
-            <>
-              <div className="flex justify-between text-xs text-gray-500 px-4 py-2">
-                <span>Player</span>
-                <span>Portfolio Value</span>
-              </div>
-              {leaderboard.map((p) => (
-                <Card key={p.rank} className={cn('border', p.isMe ? 'border-blue-500/40 bg-blue-500/5' : '')}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <span className={cn('text-lg font-bold w-8 text-center',
-                        p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
-                        {p.rank <= 3 ? `#${p.rank}` : `#${p.rank}`}
-                      </span>
-                      <div className="flex-1">
-                        <p className="font-medium text-white">{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</p>
-                        <p className={cn('text-xs', p.gainLoss >= 0 ? 'text-green-500' : 'text-red-500')}>
-                          {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)} ({p.gainLossPct >= 0 ? '+' : ''}{p.gainLossPct.toFixed(2)}%)
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>
+          {lbLoading ? <Skeleton className="h-48 w-full" /> : (() => {
+            // Inject Mr. Guy as a synthetic entry, sorted by totalValue
+            const mrGuyEntry: LeaderEntry = {
+              rank: 0,
+              name: 'Mr. Guy',
+              totalValue: mrGuyValue,
+              gainLoss: mrGuyValue - MR_GUY_START,
+              gainLossPct: mrGuyPct ?? 0,
+              isMe: false,
+              isMrGuy: true,
+            }
+            const combined = [...leaderboard, mrGuyEntry]
+              .sort((a, b) => b.totalValue - a.totalValue)
+              .map((e, i) => ({ ...e, rank: i + 1 }))
+
+            return (
+              <>
+                <div className="flex justify-between text-xs text-gray-500 px-4 py-2">
+                  <span>Player</span>
+                  <span>Portfolio Value</span>
+                </div>
+                {combined.map((p) => {
+                  const rowKey = p.isMrGuy ? 'mr-guy' : `${p.rank}-${p.name}`
+                  const isExpanded = expandedLbRow === rowKey
+                  return (
+                    <Card key={rowKey} className={cn('border transition-colors',
+                      p.isMe ? 'border-blue-500/40 bg-blue-500/5'
+                      : p.isMrGuy ? 'border-purple-500/30 bg-purple-950/10'
+                      : '')}>
+                      <CardContent className="p-4">
                         <button
-                          onClick={() => shareRank(p)}
-                          title="Share your rank"
-                          className="p-1.5 rounded-md text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"
+                          className="w-full text-left"
+                          onClick={() => setExpandedLbRow(isExpanded ? null : rowKey)}
                         >
-                          <Share2 className="h-3.5 w-3.5" />
+                          <div className="flex items-center gap-3">
+                            <span className={cn('text-lg font-bold w-8 text-center',
+                              p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
+                              #{p.rank}
+                            </span>
+                            <div className="flex-1">
+                              <p className="font-medium text-white flex items-center gap-2">
+                                {p.isMrGuy ? (
+                                  <><span>🤖 Mr. Guy</span><span className="text-xs text-purple-400">AI player</span></>
+                                ) : (
+                                  <>{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</>
+                                )}
+                              </p>
+                              <p className={cn('text-xs', p.gainLoss >= 0 ? 'text-green-500' : 'text-red-500')}>
+                                {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)} ({p.gainLossPct >= 0 ? '+' : ''}{p.gainLossPct.toFixed(2)}%)
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>
+                              {!p.isMrGuy && (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); shareRank(p) }}
+                                  title="Share your rank"
+                                  className="p-1.5 rounded-md text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"
+                                >
+                                  <Share2 className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </>
-          )}
+
+                        {/* Expanded: Mr. Guy's picks */}
+                        {isExpanded && p.isMrGuy && mrGuyPickResults.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-purple-500/20 space-y-1.5">
+                            <p className="text-xs text-purple-300 font-semibold uppercase tracking-wide mb-2">Mr. Guy&apos;s Season Portfolio</p>
+                            {mrGuyPickResults.map(pick => (
+                              <div key={pick.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/50 last:border-0">
+                                <span className="font-bold text-white w-16">{pick.ticker}</span>
+                                <span className="text-gray-400">{formatCurrency(pick.currentPrice)}</span>
+                                <span className={pick.gainLoss >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                  {pick.gainLoss >= 0 ? '+' : ''}{formatCurrency(pick.gainLoss)}
+                                </span>
+                              </div>
+                            ))}
+                            <div className="flex justify-between text-xs pt-1 font-semibold">
+                              <span className="text-gray-400">Total Value</span>
+                              <span className={mrGuyPct !== null && mrGuyPct >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                {formatCurrency(mrGuyValue)}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </>
+            )
+          })()}
         </div>
       )}
 

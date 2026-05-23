@@ -1,6 +1,25 @@
 'use client'
 import { useEffect, useState } from 'react'
 
+function getMarketStatus(): { open: boolean; label: string } {
+  const now = new Date()
+  // Convert to ET
+  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  const day = et.getDay() // 0=Sun, 6=Sat
+  const h = et.getHours()
+  const m = et.getMinutes()
+  const mins = h * 60 + m
+  const isWeekday = day >= 1 && day <= 5
+  const isOpen = isWeekday && mins >= 570 && mins < 960 // 9:30am–4:00pm ET
+  const isPreMarket = isWeekday && mins >= 240 && mins < 570 // 4am–9:30am
+  const isAfterHours = isWeekday && mins >= 960 && mins < 1200 // 4pm–8pm
+  const label = isOpen ? 'Markets Open · Live prices'
+    : isPreMarket ? 'Pre-Market · Prices as of last close'
+    : isAfterHours ? 'After Hours · Prices as of market close'
+    : 'Markets Closed · Prices as of last close'
+  return { open: isOpen, label }
+}
+
 interface TickerData {
   symbol: string
   price: number | null
@@ -82,6 +101,7 @@ export default function TickerWall() {
   const [row1, setRow1] = useState<TickerData[]>(ROW1.map(s => ({ symbol: s, price: FALLBACK[s]?.price ?? null, change: FALLBACK[s]?.change ?? null })))
   const [row2, setRow2] = useState<TickerData[]>(ROW2.map(s => ({ symbol: s, price: FALLBACK[s]?.price ?? null, change: FALLBACK[s]?.change ?? null })))
   const [row3, setRow3] = useState<TickerData[]>(ROW3.map(s => ({ symbol: s, price: FALLBACK[s]?.price ?? null, change: FALLBACK[s]?.change ?? null })))
+  const marketStatus = getMarketStatus()
 
   useEffect(() => {
     // Fetch a handful of real prices in the background
@@ -122,6 +142,10 @@ export default function TickerWall() {
       <TickerRow tickers={row1} direction="left" speed={40} />
       <TickerRow tickers={row2} direction="right" speed={50} />
       <TickerRow tickers={row3} direction="left" speed={35} />
+      <div className="flex items-center justify-center gap-1.5 pt-0.5">
+        <span className={`h-1.5 w-1.5 rounded-full ${marketStatus.open ? 'bg-green-400 animate-pulse' : 'bg-gray-600'}`} />
+        <span className="text-[10px] text-gray-600">{marketStatus.label}</span>
+      </div>
     </div>
   )
 }
