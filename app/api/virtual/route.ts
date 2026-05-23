@@ -5,13 +5,16 @@ import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-const SEASON_DAYS = 30
 const STARTING_CASH = 100_000
 
-function nextResetDate() {
+function startOfNextMonth() {
   const d = new Date()
-  d.setDate(d.getDate() + SEASON_DAYS)
-  return d
+  return new Date(d.getFullYear(), d.getMonth() + 1, 1)
+}
+
+function isNewMonth(date: Date) {
+  const now = new Date()
+  return date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()
 }
 
 export async function GET() {
@@ -31,24 +34,11 @@ export async function GET() {
         cash: STARTING_CASH,
         totalValue: STARTING_CASH,
         season: 1,
-        resetAt: nextResetDate(),
+        resetAt: startOfNextMonth(),
+        monthlyBaseline: STARTING_CASH,
+        monthlyResetAt: new Date(),
       },
       include: { holdings: true, trades: true },
-    })
-  }
-
-  // Season reset if expired
-  if (new Date() > portfolio.resetAt) {
-    await prisma.virtualSeasonRecord.upsert({
-      where: { userId_season: { userId: session.user.id, season: portfolio.season } },
-      create: { userId: session.user.id, season: portfolio.season, finalValue: portfolio.totalValue },
-      update: { finalValue: portfolio.totalValue },
-    })
-    await prisma.virtualHolding.deleteMany({ where: { portfolioId: portfolio.id } })
-    portfolio = await prisma.virtualPortfolio.update({
-      where: { id: portfolio.id },
-      data: { cash: STARTING_CASH, totalValue: STARTING_CASH, season: portfolio.season + 1, resetAt: nextResetDate() },
-      include: { holdings: true, trades: { orderBy: { executedAt: 'desc' }, take: 20 } },
     })
   }
 
@@ -60,11 +50,23 @@ export async function GET() {
         const r = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/api/stock/${h.ticker}`, { cache: 'no-store' })
         const data = await r.json()
         const price = data?.quote?.price ?? h.avgCost
-        return { ...h, currentPrice: price, currentValue: price * h.shares, gainLoss: (price - h.avgCost) * h.shares, gainLossPct: ((price - h.avgCost) / h.avgCost) * 100 }
+        return {
+          ...h,
+          currentPrice: price,
+          currentValue: price * h.shares,
+          gainLoss: (price - h.avgCost) * h.shares,
+          gainLossPct: ((price - h.avgCost) / h.avgCost) * 100,
+        }
       })
     )
     holdingsWithPrices = priceResults.map((r, i) =>
-      r.status === 'fulfilled' ? r.value : { ...portfolio!.holdings[i], currentPrice: portfolio!.holdings[i].avgCost, currentValue: portfolio!.holdings[i].avgCost * portfolio!.holdings[i].shares, gainLoss: 0, gainLossPct: 0 }
+      r.status === 'fulfilled' ? r.value : {
+        ...portfolio!.holdings[i],
+        currentPrice: portfolio!.holdings[i].avgCost,
+        currentValue: portfolio!.holdings[i].avgCost * portfolio!.holdings[i].shares,
+        gainLoss: 0,
+        gainLossPct: 0,
+      }
     )
   }
 
@@ -73,16 +75,30 @@ export async function GET() {
   const totalGainLoss = totalValue - STARTING_CASH
   const totalGainLossPct = (totalGainLoss / STARTING_CASH) * 100
 
-  // Update stored totalValue
-  await prisma.virtualPortfolio.update({ where: { id: portfolio.id }, data: { totalValue } })
+  // Roll over monthly baseline if it's a new month
+  const monthlyResetAt = portfolio.monthlyResetAt ?? new Date(0)
+  const needsMonthlyReset = isNewMonth(monthlyResetAt)
+  const monthlyBaseline = needsMonthlyReset ? totalValue : (portfolio.monthlyBaseline ?? STARTING_CASH)
+
+  const monthlyGainLoss = totalValue - monthlyBaseline
+  const monthlyGainLossPct = monthlyBaseline > 0 ? (monthlyGainLoss / monthlyBaseline) * 100 : 0
+
+  // Persist updated totalValue and monthly baseline if needed
+  await prisma.virtualPortfolio.update({
+    where: { id: portfolio.id },
+    data: {
+      totalValue,
+      ...(needsMonthlyReset ? { monthlyBaseline: totalValue, monthlyResetAt: new Date() } : {}),
+    },
+  })
 
   return NextResponse.json({
     cash: portfolio.cash,
     totalValue,
     totalGainLoss,
     totalGainLossPct,
-    season: portfolio.season,
-    resetAt: portfolio.resetAt,
+    monthlyGainLoss,
+    monthlyGainLossPct,
     holdings: holdingsWithPrices,
     trades: portfolio.trades,
   })

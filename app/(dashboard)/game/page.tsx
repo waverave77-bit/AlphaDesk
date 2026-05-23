@@ -23,7 +23,7 @@ const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { s
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
 interface LbHolding { ticker: string; companyName: string; shares: number; avgCost: number }
-interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean; holdings?: LbHolding[] }
+interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; monthlyGainLoss?: number; monthlyGainLossPct?: number; isMe: boolean; isMrGuy?: boolean; holdings?: LbHolding[] }
 interface MrGuyPick { ticker: string; currentPrice: number; currentValue: number; gainLoss: number }
 
 // Mr. Guy's season portfolio — 5 equal-weight positions, $20k each
@@ -48,6 +48,7 @@ export default function GamePage() {
   const [tab, setTab] = useState<Tab>('Portfolio')
   const [portfolio, setPortfolio] = useState<any>(null)
   const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([])
+  const [lbMode, setLbMode] = useState<'alltime' | 'monthly'>('alltime')
   const [loading, setLoading] = useState(true)
   const [lbLoading, setLbLoading] = useState(false)
   const [expandedLbRow, setExpandedLbRow] = useState<string | null>(null)
@@ -84,9 +85,9 @@ export default function GamePage() {
     setLoading(false)
   }
 
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = async (mode: 'alltime' | 'monthly' = lbMode) => {
     setLbLoading(true)
-    const r = await fetch('/api/virtual/leaderboard')
+    const r = await fetch(`/api/virtual/leaderboard?mode=${mode}`)
     const d = await r.json()
     setLeaderboard(d.board || [])
     setLbLoading(false)
@@ -127,7 +128,7 @@ export default function GamePage() {
       .catch(() => {})
   }, [])
 
-  useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
+  useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard(lbMode) }, [tab, lbMode])
 
   // Search debounce
   useEffect(() => {
@@ -225,8 +226,6 @@ export default function GamePage() {
     })
   }
 
-  const daysLeft = portfolio?.resetAt ? Math.max(0, Math.ceil((new Date(portfolio.resetAt).getTime() - Date.now()) / 86400000)) : 30
-
   // Simple SVG sparkline for portfolio history
   const renderSparkline = () => {
     if (historyPoints.length < 2) {
@@ -293,10 +292,14 @@ export default function GamePage() {
               color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-600',
             },
             {
-              label: 'Season Resets',
-              value: session && portfolio ? `${daysLeft} days` : `${daysLeft} days`,
-              sub: session && portfolio ? `Season ${portfolio.season}` : 'Current season',
-              color: 'text-yellow-400',
+              label: 'This Month',
+              value: session && portfolio
+                ? `${(portfolio.monthlyGainLoss ?? 0) >= 0 ? '+' : ''}${formatCurrency(portfolio.monthlyGainLoss ?? 0)}`
+                : '——',
+              sub: session && portfolio
+                ? `${(portfolio.monthlyGainLossPct ?? 0) >= 0 ? '+' : ''}${(portfolio.monthlyGainLossPct ?? 0).toFixed(2)}% vs last month`
+                : 'Sign up to track',
+              color: session && portfolio ? gainColor(portfolio.monthlyGainLoss ?? 0) : 'text-gray-600',
             },
           ].map(({ label, value, sub, color }) => (
             <Card key={label} className={cn(!session && label !== 'Season Resets' && label !== 'Portfolio Value' ? 'opacity-60' : '')}>
@@ -591,6 +594,24 @@ export default function GamePage() {
       {/* Leaderboard Tab */}
       {tab === 'Leaderboard' && (
         <div className="space-y-2">
+          {/* Mode toggle */}
+          <div className="flex rounded-lg overflow-hidden border border-gray-800 w-fit">
+            <button
+              onClick={() => setLbMode('alltime')}
+              className={cn('px-4 py-1.5 text-sm font-medium transition-colors',
+                lbMode === 'alltime' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white')}
+            >
+              All-Time
+            </button>
+            <button
+              onClick={() => setLbMode('monthly')}
+              className={cn('px-4 py-1.5 text-sm font-medium transition-colors',
+                lbMode === 'monthly' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white')}
+            >
+              This Month
+            </button>
+          </div>
+
           {lbLoading ? <Skeleton className="h-48 w-full" /> : (() => {
             // Inject Mr. Guy as a synthetic entry, sorted by totalValue
             const mrGuyEntry: LeaderEntry = {
@@ -638,9 +659,20 @@ export default function GamePage() {
                                   <>{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</>
                                 )}
                               </p>
-                              <p className={cn('text-xs', p.gainLoss >= 0 ? 'text-green-500' : 'text-red-500')}>
-                                {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)} ({p.gainLossPct >= 0 ? '+' : ''}{p.gainLossPct.toFixed(2)}%)
-                              </p>
+                              {(() => {
+                                const gl = lbMode === 'monthly' && !p.isMrGuy
+                                  ? (p.monthlyGainLoss ?? p.gainLoss)
+                                  : p.gainLoss
+                                const glPct = lbMode === 'monthly' && !p.isMrGuy
+                                  ? (p.monthlyGainLossPct ?? p.gainLossPct)
+                                  : p.gainLossPct
+                                return (
+                                  <p className={cn('text-xs', gl >= 0 ? 'text-green-500' : 'text-red-500')}>
+                                    {gl >= 0 ? '+' : ''}{formatCurrency(gl)} ({glPct >= 0 ? '+' : ''}{glPct.toFixed(2)}%)
+                                    {lbMode === 'monthly' && !p.isMrGuy && <span className="text-gray-600 ml-1">this month</span>}
+                                  </p>
+                                )
+                              })()}
                             </div>
                             <div className="flex items-center gap-2">
                               <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>

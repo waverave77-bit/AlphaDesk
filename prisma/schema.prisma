@@ -74,16 +74,18 @@ model PriceAlert {
 }
 
 model VirtualPortfolio {
-  id         String           @id @default(cuid())
-  userId     String           @unique
-  cash       Float            @default(100000)
-  totalValue Float            @default(100000)
-  season     Int              @default(1)
-  resetAt    DateTime
-  createdAt  DateTime         @default(now())
-  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  holdings   VirtualHolding[]
-  trades     VirtualTrade[]
+  id               String           @id @default(cuid())
+  userId           String           @unique
+  cash             Float            @default(100000)
+  totalValue       Float            @default(100000)
+  season           Int              @default(1)
+  resetAt          DateTime
+  monthlyBaseline  Float            @default(100000)
+  monthlyResetAt   DateTime         @default(now())
+  createdAt        DateTime         @default(now())
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  holdings         VirtualHolding[]
+  trades           VirtualTrade[]
 }
 
 model VirtualHolding {
