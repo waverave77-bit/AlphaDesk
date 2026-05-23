@@ -162,18 +162,18 @@ export default function GamePage() {
     if (!portfolio?.holdings?.length) return
     setRoastLoading(true)
     setRoast(null)
-    const holdingsSummary = portfolio.holdings.map((h: Holding) =>
-      `${h.ticker}: ${h.shares} shares at $${h.avgCost.toFixed(2)} avg (now $${h.currentPrice.toFixed(2)}, ${h.gainLossPct >= 0 ? '+' : ''}${h.gainLossPct.toFixed(2)}%)`
-    ).join(', ')
-    const message = `Roast my $100K Challenge virtual portfolio. Here are my holdings: ${holdingsSummary}. My total P&L is ${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)} (${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%). For each stock give me one brutal honest line (funny is ok). Then give me an overall portfolio grade and one big thing I should change.`
     try {
-      const r = await fetch('/api/chat', {
+      const r = await fetch('/api/virtual/roast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, experience: 'some', history: [] }),
+        body: JSON.stringify({
+          holdings: portfolio.holdings,
+          totalGainLoss: portfolio.totalGainLoss,
+          totalGainLossPct: portfolio.totalGainLossPct,
+        }),
       })
       const d = await r.json()
-      setRoast(d.reply ?? 'Mr. Guy has nothing to say. That might be worse.')
+      setRoast(d.roast ?? 'Mr. Guy has nothing to say. That might be worse.')
     } catch {
       setRoast('Mr. Guy tried to roast you but something went wrong. Try again.')
     }
