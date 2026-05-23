@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2 } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
@@ -15,6 +15,26 @@ export default function SettingsPage() {
   const { isAdmin } = useAdmin()
   const [demoLoading, setDemoLoading] = useState(false)
   const [demoError, setDemoError] = useState('')
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState('')
+
+  const openBillingPortal = async () => {
+    setPortalLoading(true)
+    setPortalError('')
+    try {
+      const res = await fetch('/api/stripe/portal', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok || !data.url) {
+        setPortalError(data.error || 'Could not open billing portal. Try again.')
+        setPortalLoading(false)
+        return
+      }
+      window.location.href = data.url
+    } catch {
+      setPortalError('Something went wrong. Try again.')
+      setPortalLoading(false)
+    }
+  }
 
   const enterPreview = async () => {
     setDemoLoading(true)
@@ -192,6 +212,37 @@ export default function SettingsPage() {
                   <LogOut className="h-3.5 w-3.5 mr-2" /> Sign Out
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Subscription */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
+                <CreditCard className="h-4 w-4 text-blue-400" />
+                Subscription
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-gray-500">
+                Manage your billing, update your payment method, or cancel your subscription through the Stripe portal.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                onClick={openBillingPortal}
+                disabled={portalLoading}
+              >
+                {portalLoading
+                  ? <Loader2 className="h-3.5 w-3.5 mr-2 animate-spin" />
+                  : <CreditCard className="h-3.5 w-3.5 mr-2" />
+                }
+                Manage Subscription
+              </Button>
+              {portalError && (
+                <p className="text-xs text-red-400 text-center">{portalError}</p>
+              )}
             </CardContent>
           </Card>
 
