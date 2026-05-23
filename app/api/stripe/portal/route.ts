@@ -6,7 +6,7 @@ import Stripe from 'stripe'
 
 export const dynamic = 'force-dynamic'
 
-const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
 
 export async function POST() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -27,7 +27,7 @@ export async function POST() {
     return NextResponse.json({ error: 'No active subscription found.' }, { status: 404 })
   }
 
-  const portalSession = await getStripe().billingPortal.sessions.create({
+  const portalSession = await stripe.billingPortal.sessions.create({
     customer: user.stripeCustomerId,
     return_url: `${process.env.NEXTAUTH_URL}/settings`,
   })
