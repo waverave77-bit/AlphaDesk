@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Brain, Zap, BookOpen, Users, ChevronRight, Check, FlaskConical, TrendingUp, Trophy, Play } from 'lucide-react'
+import { Brain, Zap, BookOpen, Users, ChevronRight, Check, TrendingUp, Trophy } from 'lucide-react'
 
 // ── Mr. Guy pixel head — SVG version (works in server components) ─────────────
 const N = null
@@ -34,116 +34,6 @@ function MrGuyLogoSvg({ px = 3 }: { px?: number }) {
         )
       )}
     </svg>
-  )
-}
-
-// ── Dashboard preview mockup ───────────────────────────────────────────────────
-function DashboardPreview() {
-  return (
-    <div className="relative mx-auto max-w-4xl px-6 pb-4">
-      {/* Glow */}
-      <div className="absolute inset-0 bg-blue-600/10 blur-3xl rounded-full pointer-events-none" />
-
-      {/* Browser chrome */}
-      <div className="relative rounded-2xl overflow-hidden border border-gray-700/60 shadow-2xl shadow-black/60 bg-gray-900">
-        {/* Top bar */}
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-950 border-b border-gray-800">
-          <div className="flex gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-500/70" />
-            <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
-            <div className="h-3 w-3 rounded-full bg-green-500/70" />
-          </div>
-          <div className="flex-1 mx-3 bg-gray-800 rounded-md text-gray-500 text-xs px-3 py-1 text-center">
-            mrguyinvests.com/dashboard
-          </div>
-        </div>
-
-        {/* Nav bar */}
-        <div className="flex items-center gap-6 px-5 py-2.5 bg-gray-950 border-b border-gray-800/50 text-xs text-gray-500">
-          <div className="flex items-center gap-1.5">
-            <MrGuyLogoSvg px={2} />
-            <span className="font-bold text-white text-sm">Mr. Guy</span>
-          </div>
-          {['Dashboard','Research','Markets','Watchlist','Learn'].map(t => (
-            <span key={t} className={t === 'Dashboard' ? 'text-blue-400 font-medium' : ''}>{t}</span>
-          ))}
-          <div className="ml-auto flex items-center gap-2">
-            <div className="bg-yellow-500/20 text-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-yellow-500/30">⚡ Upgrade</div>
-          </div>
-        </div>
-
-        {/* Ticker bar */}
-        <div className="flex gap-5 px-5 py-1.5 bg-gray-900 border-b border-gray-800/50 text-[10px] text-gray-400 overflow-hidden">
-          {[
-            { l: 'S&P 500', v: '7,473', c: '+0.54%', up: true },
-            { l: 'NASDAQ', v: '26,344', c: '+0.28%', up: true },
-            { l: 'VIX', v: '16.70', c: '-0.36%', up: false },
-            { l: 'Fear & Greed', v: '59 · Greed', c: '', up: true },
-            { l: 'BTC', v: '$75.4k', c: '-0.07%', up: false },
-          ].map(item => (
-            <span key={item.l} className="whitespace-nowrap flex gap-1.5">
-              <span className="text-gray-600">{item.l}</span>
-              <span className="text-white font-medium">{item.v}</span>
-              {item.c && <span className={item.up ? 'text-green-400' : 'text-red-400'}>{item.c}</span>}
-            </span>
-          ))}
-        </div>
-
-        {/* Main content */}
-        <div className="p-5 bg-white">
-          <p className="text-xl font-bold text-gray-900 mb-0.5">Good morning, Alex ☀️</p>
-          <p className="text-xs text-gray-400 mb-4">Saturday, May 23</p>
-
-          {/* Market recap */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-2">
-              <MrGuyLogoSvg px={2} />
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">MR. GUY MARKET RECAP</span>
-            </div>
-            <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
-              Stocks closed the week at record highs, buoyed by optimism around Fed leadership. The big thing to watch Monday is how treasury yields hold up — Goldman flagged rising bond yields as a real vulnerability for stocks...
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            {/* Watchlist */}
-            <div className="border border-gray-200 rounded-xl p-3 shadow-sm">
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">My Watchlist</p>
-              {[
-                { t: 'AAPL', p: '$308.82', c: '+1.26%', up: true },
-                { t: 'NVDA', p: '$142.50', c: '+2.41%', up: true },
-                { t: 'TSLA', p: '$248.10', c: '-0.83%', up: false },
-              ].map(s => (
-                <div key={s.t} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
-                  <span className="text-xs font-bold text-gray-800">{s.t}</span>
-                  <div className="text-right">
-                    <p className="text-xs font-semibold text-gray-800">{s.p}</p>
-                    <p className={`text-[10px] font-medium ${s.up ? 'text-green-600' : 'text-red-500'}`}>{s.c}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* Market indices */}
-            <div className="border border-gray-200 rounded-xl p-3 shadow-sm">
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Market Indices</p>
-              {[
-                { t: 'S&P 500', p: '7,473.47', c: '+0.54%', up: true },
-                { t: 'NASDAQ', p: '26,343.97', c: '+0.28%', up: true },
-                { t: 'DOW', p: '50,579.70', c: '+1.14%', up: true },
-              ].map(s => (
-                <div key={s.t} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
-                  <span className="text-xs font-bold text-gray-800">{s.t}</span>
-                  <div className="text-right">
-                    <p className="text-xs font-semibold text-gray-800">{s.p}</p>
-                    <p className={`text-[10px] font-medium ${s.up ? 'text-green-600' : 'text-red-500'}`}>{s.c}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   )
 }
 
@@ -190,8 +80,8 @@ export default function LandingPage() {
           <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2">
             Start for Free <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="#demo" className="border border-gray-700 hover:border-blue-500/50 hover:bg-blue-600/5 text-gray-300 hover:text-blue-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
-            <Play className="h-4 w-4" /> Preview Demo
+          <Link href="/dashboard" className="border border-gray-700 hover:border-blue-500/50 hover:bg-blue-600/5 text-gray-300 hover:text-blue-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+            Try It Now →
           </Link>
         </div>
 
@@ -212,11 +102,6 @@ export default function LandingPage() {
             </p>
           </div>
         )}
-      </section>
-
-      {/* Dashboard screenshot mockup */}
-      <section id="demo" className="pb-20">
-        <DashboardPreview />
       </section>
 
       {/* Features */}
@@ -439,8 +324,8 @@ export default function LandingPage() {
           <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             Create Free Account <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="#demo" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
-            <Play className="h-4 w-4" /> Preview Demo
+          <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
+            Try It Now →
           </Link>
         </div>
       </section>
