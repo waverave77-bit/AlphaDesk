@@ -41,12 +41,28 @@ async function fetchQuote(symbol: string) {
 
 async function fetchFearGreed() {
   try {
-    const r = await fetch('https://api.alternative.me/fng/?limit=1', { next: { revalidate: 3600 } })
+    const r = await fetch(
+      'https://production.dataviz.cnn.io/index/fearandgreed/graphdata',
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Referer': 'https://www.cnn.com/markets/fear-and-greed',
+          'Accept': 'application/json',
+        },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(6000),
+      }
+    )
     if (!r.ok) return null
     const data = await r.json()
-    const entry = data?.data?.[0]
-    if (!entry) return null
-    return { value: parseInt(entry.value), label: entry.value_classification as string }
+    const score: number = data?.fear_and_greed?.score
+    const rating: string = data?.fear_and_greed?.rating
+    if (typeof score !== 'number') return null
+    const RATING_MAP: Record<string, string> = {
+      'extreme fear': 'Extreme Fear', 'fear': 'Fear', 'neutral': 'Neutral',
+      'greed': 'Greed', 'extreme greed': 'Extreme Greed',
+    }
+    return { value: Math.round(score), label: RATING_MAP[rating?.toLowerCase()] ?? rating }
   } catch {
     return null
   }
