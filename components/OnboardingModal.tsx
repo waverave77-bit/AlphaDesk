@@ -40,7 +40,7 @@ export default function OnboardingModal() {
     fetch('/api/onboarding', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ experience, goals: [...goals] }),
+      body: JSON.stringify({ experience, goals: Array.from(goals) }),
     }).catch(() => {})
     setVisible(false)
   }

@@ -70,7 +70,7 @@ export default function LineChart({ ticker, height = 400 }: Props) {
             <Tooltip
               contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '8px', fontSize: '12px' }}
               labelStyle={{ color: '#9ca3af' }}
-              formatter={(v: number) => [`$${v.toFixed(2)}`, 'Price']}
+              formatter={(v: unknown) => [`$${(v as number).toFixed(2)}`, 'Price']}
             />
             <Area type="monotone" dataKey="close" stroke={color} strokeWidth={2}
               fill={`url(#grad-${ticker})`} dot={false} activeDot={{ r: 4, fill: color }} />

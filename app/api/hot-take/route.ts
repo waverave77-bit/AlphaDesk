@@ -104,7 +104,7 @@ async function fetchFallbackStocks(): Promise<YahooQuote[]> {
   try {
     const quotesMap = await getMultipleQuotes(FALLBACK_TICKERS)
     const results: YahooQuote[] = []
-    for (const [symbol, q] of quotesMap) {
+    for (const [symbol, q] of Array.from(quotesMap.entries())) {
       if (q.price >= 2 && q.price < 100) {
         results.push({
           symbol,

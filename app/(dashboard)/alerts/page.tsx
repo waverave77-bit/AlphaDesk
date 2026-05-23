@@ -158,7 +158,7 @@ export default function AlertsPage() {
       const data: PriceAlert[] = await res.json()
       setAlerts(data)
       // Fetch prices for unique tickers
-      const unique = [...new Set(data.map((a) => a.ticker))]
+      const unique = Array.from(new Set(data.map((a) => a.ticker)))
       await fetchPrices(unique)
     } finally {
       setLoading(false)
