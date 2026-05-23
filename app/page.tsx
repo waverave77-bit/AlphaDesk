@@ -190,7 +190,7 @@ export default function LandingPage() {
           <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2">
             Start for Free <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="/dashboard" className="border border-gray-700 hover:border-blue-500/50 hover:bg-blue-600/5 text-gray-300 hover:text-blue-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+          <Link href="#demo" className="border border-gray-700 hover:border-blue-500/50 hover:bg-blue-600/5 text-gray-300 hover:text-blue-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
             <Play className="h-4 w-4" /> Preview Demo
           </Link>
         </div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
       </section>
 
       {/* Dashboard screenshot mockup */}
-      <section className="pb-20">
+      <section id="demo" className="pb-20">
         <DashboardPreview />
       </section>
 
@@ -439,7 +439,7 @@ export default function LandingPage() {
           <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             Create Free Account <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
+          <Link href="#demo" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             <Play className="h-4 w-4" /> Preview Demo
           </Link>
         </div>
