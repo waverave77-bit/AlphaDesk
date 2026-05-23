@@ -29,13 +29,13 @@ interface WatchlistItemWithQuote extends WatchlistItem {
 
 export default function WatchlistPage() {
   const { data: session, status } = useSession()
-  if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
-
   const [items, setItems] = useState<WatchlistItemWithQuote[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const { toast } = useToast()
+
+  if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
 
   const fetchWatchlist = useCallback(async () => {
     setLoading(true)
