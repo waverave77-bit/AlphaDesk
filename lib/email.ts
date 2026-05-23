@@ -1,13 +1,17 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy — only instantiated when actually sending an email so missing
+// RESEND_API_KEY in preview/test environments doesn't crash the build.
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 const FROM = 'Mr. Guy Invests <noreply@mrguyinvests.com>'
 
 // ─── Password Reset ───────────────────────────────────────────────────────────
 
 export async function sendPasswordResetEmail(email: string, resetUrl: string) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: email,
     subject: 'Reset your Mr. Guy Invests password',
@@ -40,7 +44,7 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string) {
 // ─── Pro Upgrade ──────────────────────────────────────────────────────────────
 
 export async function sendProUpgradeEmail(email: string) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to: email,
     subject: "You're now a Pro member 🚀",
