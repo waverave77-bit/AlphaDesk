@@ -51,7 +51,7 @@ export default function OnboardingModal() {
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-xl">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xl">
       <div className="w-full max-w-3xl mx-4 bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl overflow-hidden">
 
         {/* Progress bar */}
@@ -199,7 +199,6 @@ export default function OnboardingModal() {
               <button onClick={complete} className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors">
                 Start Exploring <ChevronRight className="h-5 w-5" />
               </button>
-              <button onClick={complete} className="w-full text-sm text-gray-600 hover:text-gray-400 transition-colors">Skip for now</button>
             </div>
           )}
         </div>
