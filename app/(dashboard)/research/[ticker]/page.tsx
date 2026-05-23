@@ -93,7 +93,8 @@ function DividendCard({ ticker, price, dividendYield }: { ticker: string; price:
       .catch(() => setLoading(false))
   }, [ticker])
 
-  const annualDiv = data?.dividendRate ?? data?.trailingDividendRate ?? (price * dividendYield)
+  const annualDiv = data?.dividendRate ?? data?.trailingDividendRate
+    ?? ((data?.dividendYield ?? data?.trailingDividendYield ?? dividendYield) * price)
   const quarterlyDiv = annualDiv / 4
 
   return (

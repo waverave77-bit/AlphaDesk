@@ -56,7 +56,12 @@ function Calculator() {
 
   const investAmount = parseFloat(amount) || 0
   const shares = divData?.price ? investAmount / divData.price : 0
-  const annualIncome = divData?.dividendRate ? divData.dividendRate * shares : (divData?.trailingDividendRate ? divData.trailingDividendRate * shares : 0)
+
+  // Use the best available annual dividend rate: forward rate > trailing rate > yield * price
+  const bestAnnualRate: number = divData
+    ? (divData.dividendRate ?? divData.trailingDividendRate ?? ((divData.dividendYield ?? divData.trailingDividendYield ?? 0) * (divData.price ?? 0)))
+    : 0
+  const annualIncome = bestAnnualRate * shares
   const monthlyIncome = annualIncome / 12
   const quarterlyIncome = annualIncome / 4
   const yieldOnCost = investAmount > 0 ? (annualIncome / investAmount) * 100 : 0
@@ -187,7 +192,7 @@ function Calculator() {
                       { label: 'Investment', value: formatCurrency(investAmount) },
                       { label: 'Shares Owned', value: shares.toFixed(4) },
                       { label: 'Price Per Share', value: formatCurrency(divData.price ?? 0) },
-                      { label: 'Annual Div / Share', value: divData.dividendRate ? `$${divData.dividendRate.toFixed(4)}` : divData.trailingDividendRate ? `$${divData.trailingDividendRate.toFixed(4)}` : '—' },
+                      { label: 'Annual Div / Share', value: bestAnnualRate > 0 ? `$${bestAnnualRate.toFixed(4)}` : '—' },
                       { label: 'Payout Ratio', value: divData.payoutRatio ? pct(divData.payoutRatio) : '—' },
                       { label: '5-Year Avg Yield', value: divData.fiveYearAvgYield ? `${divData.fiveYearAvgYield.toFixed(2)}%` : '—' },
                     ].map(row => (
