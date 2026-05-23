@@ -104,9 +104,9 @@ function SharePickButton({
     const mrLine = `Mr. Guy: $${mrGuyPick.ticker} ${dirEmoji(mrGuyPick.direction)} ${mrGuyPick.direction.toUpperCase()}${mrPnl ? ` (${mrPnl.pct >= 0 ? '+' : ''}${mrPnl.pct.toFixed(1)}% so far)` : ''}`
     const myLine = `Me: $${userPick.ticker} ${dirEmoji(userPick.direction)} ${userPick.direction.toUpperCase()}${userPnl ? ` (${userPnl.pct >= 0 ? '+' : ''}${userPnl.pct.toFixed(1)}% so far)` : ''}`
     const winner = mrPnl && userPnl
-      ? userPnl.winning && !mrPnl.winning ? '🏆 I'm beating Mr. Guy this week!'
-        : mrPnl.winning && !userPnl.winning ? '😤 Mr. Guy is winning this week...'
-        : '📊 Both picks in the green!'
+      ? userPnl.winning && !mrPnl.winning ? "🏆 I'm beating Mr. Guy this week!"
+        : mrPnl.winning && !userPnl.winning ? "😤 Mr. Guy is winning this week..."
+        : "📊 Both picks in the green!"
       : ''
     return `Pick of the Week on Mr. Guy Invests\n\n${mrLine}\n${myLine}\n${winner ? '\n' + winner + '\n' : ''}\nmrguyinvests.com/challenge`
   }
