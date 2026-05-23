@@ -1695,9 +1695,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       ))}
     </>}
 
-    {activeState==='closed'&&(
-      <div style={{position:'fixed',inset:0,background:'rgba(5,5,20,0.45)',pointerEvents:'none',zIndex:9}}/>
-    )}
+    {/* closed-state overlay removed — no page dimming */}
 
     {/* Debug scene buttons — dev only */}
     {process.env.NODE_ENV === 'development' && (
