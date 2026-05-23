@@ -411,8 +411,8 @@ export default function DashboardPage() {
         <Card className="border-slate-200 bg-white hover:bg-slate-50 hover:border-blue-300 transition-all cursor-pointer group">
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
-                🧑‍💼
+              <div className="h-12 w-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <MrGuyLogoSvg px={4} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-base font-bold text-slate-900">Ask Mr. Guy</p>
