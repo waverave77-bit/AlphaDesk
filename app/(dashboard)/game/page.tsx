@@ -39,6 +39,8 @@ export default function GamePage() {
   const [loading, setLoading] = useState(true)
   const [lbLoading, setLbLoading] = useState(false)
   const [expandedLbRow, setExpandedLbRow] = useState<number | null>(null)
+  const [roast, setRoast] = useState<string | null>(null)
+  const [roastLoading, setRoastLoading] = useState(false)
 
   // Portfolio history for mini chart
   const [historyPoints, setHistoryPoints] = useState<{ date: string; value: number }[]>([])
@@ -154,6 +156,28 @@ export default function GamePage() {
       toast({ title: 'Trade failed', description: e.message, variant: 'destructive' })
     }
     setTradeLoading(false)
+  }
+
+  const getRoasted = async () => {
+    if (!portfolio?.holdings?.length) return
+    setRoastLoading(true)
+    setRoast(null)
+    const holdingsSummary = portfolio.holdings.map((h: Holding) =>
+      `${h.ticker}: ${h.shares} shares at $${h.avgCost.toFixed(2)} avg (now $${h.currentPrice.toFixed(2)}, ${h.gainLossPct >= 0 ? '+' : ''}${h.gainLossPct.toFixed(2)}%)`
+    ).join(', ')
+    const message = `Roast my $100K Challenge virtual portfolio. Here are my holdings: ${holdingsSummary}. My total P&L is ${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)} (${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%). For each stock give me one brutal honest line (funny is ok). Then give me an overall portfolio grade and one big thing I should change.`
+    try {
+      const r = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, experience: 'some', history: [] }),
+      })
+      const d = await r.json()
+      setRoast(d.reply ?? 'Mr. Guy has nothing to say. That might be worse.')
+    } catch {
+      setRoast('Mr. Guy tried to roast you but something went wrong. Try again.')
+    }
+    setRoastLoading(false)
   }
 
   const shareRank = (entry: LeaderEntry) => {
@@ -344,13 +368,30 @@ export default function GamePage() {
                 <Button variant="outline" size="sm" className="flex-1" onClick={fetchPortfolio}>
                   <RefreshCw className="h-3 w-3 mr-2" /> Refresh Prices
                 </Button>
-                {/* 🔥 Get Roasted */}
-                <Button variant="outline" size="sm" className="text-orange-400 border-orange-500/30 hover:bg-orange-500/10" asChild>
-                  <Link href="/roast">
-                    <Flame className="h-3 w-3 mr-1.5" /> Get Roasted
-                  </Link>
+                <Button
+                  variant="outline" size="sm"
+                  className="text-orange-400 border-orange-500/30 hover:bg-orange-500/10"
+                  onClick={getRoasted}
+                  disabled={roastLoading}
+                >
+                  <Flame className="h-3 w-3 mr-1.5" />
+                  {roastLoading ? 'Roasting...' : 'Get Roasted'}
                 </Button>
               </div>
+
+              {/* Roast result */}
+              {roast && (
+                <Card className="border-orange-500/20 bg-orange-500/5">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Flame className="h-4 w-4 text-orange-400" />
+                      <span className="text-sm font-semibold text-orange-400">Mr. Guy's Verdict</span>
+                    </div>
+                    <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{roast}</p>
+                    <button onClick={() => setRoast(null)} className="text-xs text-gray-600 hover:text-gray-400 mt-3 transition-colors">Dismiss</button>
+                  </CardContent>
+                </Card>
+              )}
             </>
           )}
         </div>
