@@ -10,14 +10,12 @@ import InfoTooltip from '@/components/InfoTooltip'
 
 // ─── Fear & Greed ─────────────────────────────────────────────────────────────
 
-interface FngDataPoint {
-  value: string
-  value_classification: string
-  timestamp: string
-}
+interface HistoryPoint { value: number; rating: string; timestamp: number }
 
 interface FngResponse {
-  data?: FngDataPoint[]
+  score?: number
+  rating?: string
+  history?: HistoryPoint[]
 }
 
 function getFngColor(value: number): string {
@@ -57,23 +55,24 @@ function getFngTradeNote(value: number): string {
 }
 
 function FearGreedSection() {
-  const [data, setData] = useState<FngDataPoint[]>([])
+  const [latestValue, setLatestValue] = useState<number | null>(null)
+  const [history, setHistory] = useState<HistoryPoint[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
-    fetch('/api/feargreed')
+    fetch('/api/fear-greed')
       .then((r) => r.json())
       .then((d: FngResponse) => {
-        if (d?.data) { setData(d.data); setLastUpdated(new Date()) }
+        if (typeof d?.score === 'number') {
+          setLatestValue(Math.round(d.score))
+          setHistory(d.history ?? [])
+          setLastUpdated(new Date())
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
-
-  const latest = data[0]
-  const latestValue = latest ? parseInt(latest.value) : null
-  const history = data.slice(1)
 
   return (
     <section className="mb-10">
@@ -131,9 +130,8 @@ function FearGreedSection() {
                       Last 7 days
                     </p>
                     <div className="flex gap-2 flex-wrap">
-                      {history.map((d, i) => {
-                        const v = parseInt(d.value)
-                        const date = new Date(parseInt(d.timestamp) * 1000).toLocaleDateString(
+                      {history.map((p, i) => {
+                        const date = new Date(p.timestamp * 1000).toLocaleDateString(
                           'en-US',
                           { month: 'short', day: 'numeric' }
                         )
@@ -141,10 +139,10 @@ function FearGreedSection() {
                           <div
                             key={i}
                             className="flex flex-col items-center"
-                            title={`${date}: ${d.value_classification}`}
+                            title={`${date}: ${p.rating}`}
                           >
-                            <span className={`text-sm font-semibold ${getFngColor(v)}`}>
-                              {v}
+                            <span className={`text-sm font-semibold ${getFngColor(p.value)}`}>
+                              {p.value}
                             </span>
                             <span className="text-xs text-gray-600">{date}</span>
                           </div>

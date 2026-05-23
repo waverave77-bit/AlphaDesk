@@ -2,8 +2,14 @@ import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
+interface HistoryPoint { value: number; rating: string; timestamp: number }
+
 // ── Primary: CNN Fear & Greed Index (real score, 7 indicators) ─────────────────
-async function fetchCNNFearGreed(): Promise<{ score: number; rating: string } | null> {
+async function fetchCNNFearGreed(): Promise<{
+  score: number
+  rating: string
+  history: HistoryPoint[]
+} | null> {
   try {
     const res = await fetch(
       'https://production.dataviz.cnn.io/index/fearandgreed/graphdata',
@@ -22,7 +28,20 @@ async function fetchCNNFearGreed(): Promise<{ score: number; rating: string } | 
     const score: number = data?.fear_and_greed?.score
     const rating: string = data?.fear_and_greed?.rating
     if (typeof score !== 'number') return null
-    return { score: Math.round(score * 10) / 10, rating }
+
+    // Historical data: array of {x: timestamp_ms, y: score, rating: string}
+    // sorted oldest→newest; take last 7 entries before today for the trend
+    const rawHist: { x: number; y: number; rating: string }[] =
+      data?.fear_and_greed_historical?.data ?? []
+    const history: HistoryPoint[] = rawHist
+      .slice(-7)
+      .map((p) => ({
+        value: Math.round(p.y),
+        rating: p.rating,
+        timestamp: Math.round(p.x / 1000), // convert ms → seconds
+      }))
+
+    return { score: Math.round(score * 10) / 10, rating, history }
   } catch {
     return null
   }
@@ -80,15 +99,23 @@ async function fetchFallback(): Promise<{ score: number; rating: string; vix: nu
 
 // ── Route handler ─────────────────────────────────────────────────────────────
 
+const RATING_MAP: Record<string, string> = {
+  'extreme fear': 'Extreme Fear',
+  'fear': 'Fear',
+  'neutral': 'Neutral',
+  'greed': 'Greed',
+  'extreme greed': 'Extreme Greed',
+}
+
 export async function GET() {
   try {
-    // Also fetch VIX + S&P change for display alongside the score
+    // Fetch CNN + VIX/S&P in parallel
     const [cnn, vixSp] = await Promise.allSettled([
       fetchCNNFearGreed(),
       Promise.allSettled([fetchYahoo('%5EVIX'), fetchYahoo('%5EGSPC')]),
     ])
 
-    // Extract VIX and S&P change for the ticker bar regardless of which score we use
+    // Extract VIX and S&P change for the ticker bar
     let vix: number | null = null
     let spChange: number | null = null
     if (vixSp.status === 'fulfilled') {
@@ -104,29 +131,21 @@ export async function GET() {
 
     // Use CNN real score if available
     if (cnn.status === 'fulfilled' && cnn.value) {
-      const { score, rating } = cnn.value
-      // Normalise CNN's lowercase rating to title case
-      const ratingMap: Record<string, string> = {
-        'extreme fear': 'Extreme Fear',
-        'fear': 'Fear',
-        'neutral': 'Neutral',
-        'greed': 'Greed',
-        'extreme greed': 'Extreme Greed',
-      }
+      const { score, rating, history } = cnn.value
       return NextResponse.json(
-        { score, rating: ratingMap[rating.toLowerCase()] ?? rating, vix, spChange, source: 'cnn' },
+        { score, rating: RATING_MAP[rating.toLowerCase()] ?? rating, vix, spChange, history, source: 'cnn' },
         { headers: { 'Cache-Control': 'no-store' } }
       )
     }
 
-    // Fallback to VIX approximation
+    // Fallback to VIX approximation (no history available)
     console.warn('[fear-greed] CNN API unavailable, using VIX fallback')
     const fallback = await fetchFallback()
     return NextResponse.json(
-      { ...fallback, vix: fallback.vix ?? vix, spChange: fallback.spChange ?? spChange, source: 'vix_approx' },
+      { ...fallback, vix: fallback.vix ?? vix, spChange: fallback.spChange ?? spChange, history: [], source: 'vix_approx' },
       { headers: { 'Cache-Control': 'no-store' } }
     )
   } catch (e: any) {
-    return NextResponse.json({ score: 50, rating: 'Neutral', vix: null, spChange: null, error: true })
+    return NextResponse.json({ score: 50, rating: 'Neutral', vix: null, spChange: null, history: [], error: true })
   }
 }
