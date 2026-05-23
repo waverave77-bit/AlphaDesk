@@ -159,6 +159,7 @@ function BriefingText({ text, isDark }: { text: string; isDark: boolean }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function BriefingPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
 
@@ -176,6 +177,9 @@ export default function BriefingPage() {
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Morning Briefing" />
 
   return (
     <>

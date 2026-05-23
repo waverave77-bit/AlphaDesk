@@ -106,12 +106,12 @@ export default function StockDetailPage() {
   useEffect(() => {
     if (status === 'loading') return
     if (session) return // logged in, no limit
-    const key = 'mrg_guest_researched'
-    const done = localStorage.getItem(key)
-    if (done) {
+    const key = 'mrg_guest_research_count'
+    const count = parseInt(localStorage.getItem(key) || '0', 10)
+    if (count >= 2) {
       setGuestBlocked(true)
     } else {
-      localStorage.setItem(key, '1')
+      localStorage.setItem(key, String(count + 1))
     }
   }, [session, status, ticker])
 

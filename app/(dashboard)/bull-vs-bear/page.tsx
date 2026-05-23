@@ -59,6 +59,7 @@ function formatMarketCap(mc: number): string {
 }
 
 export default function BullVsBearPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
 
@@ -124,6 +125,9 @@ export default function BullVsBearPage() {
     : ''
 
   const changeSign = result && result.changePercent >= 0 ? '+' : ''
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Bull vs Bear" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>

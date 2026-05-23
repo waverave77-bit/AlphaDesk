@@ -147,7 +147,16 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
 
       {error && !limitReached && (
         <CardContent>
-          <p style={{ color: '#f87171', fontSize: '13px' }}>{error}</p>
+          {error.toLowerCase().includes('unauthorized') || error.toLowerCase().includes('authenticated') ? (
+            <div className="flex flex-col items-center gap-3 py-4 text-center">
+              <p style={{ color: textMuted, fontSize: '13px' }}>Sign up free to unlock AI Consensus analysis.</p>
+              <a href="/register" className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors">
+                Sign Up Free
+              </a>
+            </div>
+          ) : (
+            <p style={{ color: '#f87171', fontSize: '13px' }}>{error}</p>
+          )}
         </CardContent>
       )}
 

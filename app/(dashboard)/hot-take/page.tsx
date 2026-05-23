@@ -89,6 +89,7 @@ const VERDICT_CONFIG = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function HotTakePage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
 
@@ -134,6 +135,9 @@ export default function HotTakePage() {
   }, [])
 
   const verdict = hotTake ? VERDICT_CONFIG[hotTake.verdict] : null
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Hot Take" />
 
   return (
     <>

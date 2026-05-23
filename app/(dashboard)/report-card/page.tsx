@@ -80,6 +80,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 export default function ReportCardPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
   const [query, setQuery] = useState('')
@@ -128,6 +129,9 @@ export default function ReportCardPage() {
   }
 
   const overallStyle = result ? gradeColor(result.overallGrade) : null
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Report Card" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>

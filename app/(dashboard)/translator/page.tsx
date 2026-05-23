@@ -53,6 +53,7 @@ const PLACEHOLDERS = {
 }
 
 export default function TranslatorPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
   const [mode, setMode] = useState<'jargon' | 'earnings'>('jargon')
@@ -93,6 +94,9 @@ export default function TranslatorPage() {
       setLoading(false)
     }
   }
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Jargon Translator" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>

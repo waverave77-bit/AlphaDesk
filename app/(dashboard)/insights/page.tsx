@@ -9,7 +9,7 @@ const EXPERIENCE_LABELS: Record<string, string> = {
 }
 
 const GOAL_LABELS: Record<string, string> = {
-  portfolio: '💼 Track my portfolio',
+  portfolio: '🤖 Use Mr. Guy AI tools',
   learn: '📖 Learn investing basics',
   markets: '📰 Follow market news',
   research: '🔍 Research stocks',

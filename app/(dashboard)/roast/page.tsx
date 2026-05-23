@@ -52,6 +52,7 @@ function emptyHolding(): Holding {
 }
 
 export default function RoastPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
   const [holdings, setHoldings] = useState<Holding[]>([emptyHolding(), emptyHolding(), emptyHolding()])
@@ -114,6 +115,9 @@ export default function RoastPage() {
       ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500'
       : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400'
   )
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Portfolio Roast" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>

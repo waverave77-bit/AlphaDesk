@@ -58,6 +58,7 @@ interface SpikeWithSummary extends Spike {
 }
 
 export default function SpikeSummaryPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
 
@@ -136,6 +137,9 @@ export default function SpikeSummaryPage() {
   const card = isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-slate-200'
   const text = isDark ? 'text-white' : 'text-slate-900'
   const sub  = isDark ? 'text-gray-400' : 'text-slate-500'
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Spike Summary" />
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

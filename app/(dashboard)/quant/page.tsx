@@ -24,6 +24,7 @@ function scoreBar(score: number, color: string) {
 }
 
 export default function QuantPage() {
+  const { data: session, status } = useSession()
   const [ticker, setTicker] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
@@ -144,6 +145,9 @@ export default function QuantPage() {
       setLoading(false)
     }
   }
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Quant Strategy" />
 
   return (
     <div className="space-y-6">

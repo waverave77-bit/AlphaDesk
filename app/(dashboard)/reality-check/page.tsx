@@ -90,6 +90,7 @@ function verdictStyle(v: string): { bg: string; text: string; border: string; em
 }
 
 export default function RealityCheckPage() {
+  const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
 
@@ -125,6 +126,9 @@ export default function RealityCheckPage() {
   }
 
   const style = result ? verdictStyle(result.verdict) : null
+
+  if (status === 'loading') return null
+  if (!session) return <GuestLock feature="Reality Check" />
 
   return (
     <div className={cn('min-h-screen', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
