@@ -68,6 +68,16 @@
 
 /* ── end accent overrides ── */
 
+/* ── Ticker wall scroll animations ── */
+@keyframes ticker-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+@keyframes ticker-right {
+  0%   { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
+
 * { box-sizing: border-box; }
 
 body {

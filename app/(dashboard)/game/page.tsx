@@ -2,13 +2,23 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight, Clock, DollarSign, RefreshCw, X, Lock } from 'lucide-react'
+import {
+  TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight,
+  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart,
+} from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn, formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 import StockChart from '@/components/charts/StockChart'
+import dynamic from 'next/dynamic'
+
+// Lazy-load heavy game components
+const TickerWall = dynamic(() => import('@/components/game/TickerWall'), { ssr: false })
+const BeatMrGuy = dynamic(() => import('@/components/game/BeatMrGuy'), { ssr: false })
+const AchievementBadges = dynamic(() => import('@/components/game/AchievementBadges'), { ssr: false })
+const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { ssr: false })
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
@@ -28,6 +38,10 @@ export default function GamePage() {
   const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [lbLoading, setLbLoading] = useState(false)
+  const [expandedLbRow, setExpandedLbRow] = useState<number | null>(null)
+
+  // Portfolio history for mini chart
+  const [historyPoints, setHistoryPoints] = useState<{ date: string; value: number }[]>([])
 
   // Trade form
   const [tradeTicker, setTradeTicker] = useState('')
@@ -59,12 +73,22 @@ export default function GamePage() {
     setLbLoading(false)
   }
 
+  const fetchHistory = async () => {
+    try {
+      const r = await fetch('/api/virtual/history')
+      const d = await r.json()
+      setHistoryPoints(d.points || [])
+    } catch { }
+  }
+
   // Wait for session to resolve before fetching — avoids NaN for guests
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (sessionStatus === 'unauthenticated') { setLoading(false); return }
     fetchPortfolio()
+    fetchHistory()
   }, [sessionStatus])
+
   useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard() }, [tab])
 
   // Search debounce
@@ -124,6 +148,7 @@ export default function GamePage() {
       toast({ title: `${tradeType} executed!`, description: `${tradeShares} shares of ${tradeTicker.toUpperCase()} @ ${formatCurrency(d.price)}` })
       setTradeTicker(''); setTradeShares(''); setPreview(null)
       await fetchPortfolio()
+      await fetchHistory()
       setTab('Portfolio')
     } catch (e: any) {
       toast({ title: 'Trade failed', description: e.message, variant: 'destructive' })
@@ -131,17 +156,58 @@ export default function GamePage() {
     setTradeLoading(false)
   }
 
+  const shareRank = (entry: LeaderEntry) => {
+    const text = `I'm ranked #${entry.rank} on Mr. Guy Invests $100K Challenge with ${entry.gainLossPct >= 0 ? '+' : ''}${entry.gainLossPct.toFixed(2)}% return! 🏆 mrguyinvests.com`
+    navigator.clipboard.writeText(text).then(() => {
+      toast({ title: 'Copied to clipboard!', description: 'Share your rank with friends.' })
+    }).catch(() => {
+      toast({ title: 'Could not copy', description: text, variant: 'destructive' })
+    })
+  }
+
   const daysLeft = portfolio?.resetAt ? Math.max(0, Math.ceil((new Date(portfolio.resetAt).getTime() - Date.now()) / 86400000)) : 30
 
+  // Simple SVG sparkline for portfolio history
+  const renderSparkline = () => {
+    if (historyPoints.length < 2) {
+      return (
+        <div className="flex items-center justify-center h-full text-center px-4">
+          <div>
+            <LineChart className="h-8 w-8 text-gray-700 mx-auto mb-2" />
+            <p className="text-xs text-gray-500">Chart will appear as you trade and your value changes over time</p>
+          </div>
+        </div>
+      )
+    }
+    const values = historyPoints.map(p => p.value)
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+    const range = max - min || 1
+    const W = 300, H = 60
+    const pts = values.map((v, i) => {
+      const x = (i / (values.length - 1)) * W
+      const y = H - ((v - min) / range) * H
+      return `${x},${y}`
+    }).join(' ')
+    const isUp = values[values.length - 1] >= values[0]
+    const color = isUp ? '#22c55e' : '#ef4444'
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-full" preserveAspectRatio="none">
+        <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-5">
+      {/* Ticker Wall Hero */}
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2 mb-3">
           <Trophy className="h-6 w-6 text-yellow-400" />
           $100K Challenge
         </h1>
-        <p className="text-sm text-gray-400 mt-1">Trade real stocks with $100,000 of virtual money. Top portfolio wins each month.</p>
+        <TickerWall />
+        <p className="text-xs text-gray-600 mt-1 text-center">Live market data · 27 tickers</p>
       </div>
 
       {/* Stats bar */}
@@ -163,6 +229,34 @@ export default function GamePage() {
           ))}
         </div>
       ))}
+
+      {/* Portfolio sparkline + vs market (only for logged-in users with portfolio) */}
+      {session && portfolio && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {/* Mini portfolio chart */}
+          <Card>
+            <CardHeader className="pb-1 pt-3 px-4">
+              <CardTitle className="text-xs font-semibold text-gray-400 flex items-center gap-2">
+                <LineChart className="h-3.5 w-3.5" /> Portfolio Value Over Time
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-3">
+              <div className="h-16">
+                {renderSparkline()}
+              </div>
+              {historyPoints.length >= 2 && (
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
+                  <span>{historyPoints[0].date}</span>
+                  <span>{historyPoints[historyPoints.length - 1].date}</span>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* vs S&P 500 */}
+          <VsMarketCard userGainLossPct={portfolio.totalGainLossPct ?? null} />
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-gray-800">
@@ -226,9 +320,17 @@ export default function GamePage() {
                   </CardContent>
                 </Card>
               ))}
-              <Button variant="outline" size="sm" className="w-full" onClick={fetchPortfolio}>
-                <RefreshCw className="h-3 w-3 mr-2" /> Refresh Prices
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="flex-1" onClick={fetchPortfolio}>
+                  <RefreshCw className="h-3 w-3 mr-2" /> Refresh Prices
+                </Button>
+                {/* 🔥 Get Roasted */}
+                <Button variant="outline" size="sm" className="text-orange-400 border-orange-500/30 hover:bg-orange-500/10" asChild>
+                  <Link href="/roast">
+                    <Flame className="h-3 w-3 mr-1.5" /> Get Roasted
+                  </Link>
+                </Button>
+              </div>
             </>
           )}
         </div>
@@ -406,16 +508,23 @@ export default function GamePage() {
                     <div className="flex items-center gap-3">
                       <span className={cn('text-lg font-bold w-8 text-center',
                         p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
-                        {p.rank === 1 ? '#1' : p.rank === 2 ? '#2' : p.rank === 3 ? '#3' : `#${p.rank}`}
+                        {p.rank <= 3 ? `#${p.rank}` : `#${p.rank}`}
                       </span>
                       <div className="flex-1">
                         <p className="font-medium text-white">{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</p>
-                        <p className={cn('text-xs', gainColor(p.gainLoss))}>
+                        <p className={cn('text-xs', p.gainLoss >= 0 ? 'text-green-500' : 'text-red-500')}>
                           {p.gainLoss >= 0 ? '+' : ''}{formatCurrency(p.gainLoss)} ({p.gainLossPct >= 0 ? '+' : ''}{p.gainLossPct.toFixed(2)}%)
                         </p>
                       </div>
-                      <div className="text-right">
+                      <div className="flex items-center gap-2">
                         <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>
+                        <button
+                          onClick={() => shareRank(p)}
+                          title="Share your rank"
+                          className="p-1.5 rounded-md text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"
+                        >
+                          <Share2 className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                     </div>
                   </CardContent>
@@ -452,6 +561,16 @@ export default function GamePage() {
               </Card>
             ))
           )}
+        </div>
+      )}
+
+      {/* Beat Mr. Guy + Achievements — shown below tabs for authenticated users */}
+      {session && portfolio && (
+        <div className="space-y-4 pt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <BeatMrGuy userGainLossPct={portfolio.totalGainLossPct ?? null} />
+            <AchievementBadges portfolio={portfolio} />
+          </div>
         </div>
       )}
 
