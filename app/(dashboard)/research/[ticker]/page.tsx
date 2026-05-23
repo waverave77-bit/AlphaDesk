@@ -82,60 +82,40 @@ const TOOLTIPS: Record<string, string> = {
   'Day Low': 'The lowest price the stock hit today.',
 }
 
-function DividendCard({ ticker, price, dividendYield }: { ticker: string; price: number; dividendYield: number }) {
+// Compact dividend strip shown inside the price hero card
+function DividendStrip({ ticker, price, dividendYield }: { ticker: string; price: number; dividendYield: number }) {
   const [data, setData] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(`/api/dividends/ticker?symbol=${ticker}`)
       .then(r => r.json())
-      .then(d => { setData(d); setLoading(false) })
-      .catch(() => setLoading(false))
+      .then(d => setData(d))
+      .catch(() => {})
   }, [ticker])
 
   const annualDiv = data?.dividendRate ?? data?.trailingDividendRate
     ?? ((data?.dividendYield ?? data?.trailingDividendYield ?? dividendYield) * price)
   const quarterlyDiv = annualDiv / 4
+  const yieldPct = (dividendYield * 100).toFixed(2)
 
   return (
-    <Card className="border-green-500/20 bg-green-950/10">
-      <CardHeader className="pb-1">
-        <CardTitle className="text-xs text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-          💰 Dividend Info
-          {data?.isAristocrat && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">👑 Aristocrat</span>
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="pt-2">
-        {loading ? (
-          <div className="space-y-2"><div className="h-4 bg-gray-800 rounded animate-pulse" /><div className="h-4 bg-gray-800 rounded animate-pulse w-3/4" /></div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              <div className="bg-gray-900 rounded-lg p-2.5 text-center">
-                <p className="text-xs text-gray-500">Annual Yield</p>
-                <p className="text-base font-bold text-green-400">{(dividendYield * 100).toFixed(2)}%</p>
-              </div>
-              <div className="bg-gray-900 rounded-lg p-2.5 text-center">
-                <p className="text-xs text-gray-500">Per Share / yr</p>
-                <p className="text-base font-bold text-white">${annualDiv.toFixed(4)}</p>
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              {quarterlyDiv > 0 && <div className="flex justify-between text-xs"><span className="text-gray-500">Quarterly payout</span><span className="text-gray-300">${quarterlyDiv.toFixed(4)}</span></div>}
-              {data?.payoutRatio != null && <div className="flex justify-between text-xs"><span className="text-gray-500">Payout ratio</span><span className="text-gray-300">{(data.payoutRatio * 100).toFixed(1)}%</span></div>}
-              {data?.exDividendDate && <div className="flex justify-between text-xs"><span className="text-gray-500">Ex-dividend date</span><span className="text-gray-300">{data.exDividendDate}</span></div>}
-              {data?.paymentDate && <div className="flex justify-between text-xs"><span className="text-gray-500">Payment date</span><span className="text-gray-300">{data.paymentDate}</span></div>}
-              {data?.fiveYearAvgYield && <div className="flex justify-between text-xs"><span className="text-gray-500">5-year avg yield</span><span className="text-gray-300">{data.fiveYearAvgYield.toFixed(2)}%</span></div>}
-            </div>
-            <p className="text-[10px] text-gray-600 mt-3 pt-2 border-t border-gray-800/50">
-              $10,000 invested → ${((10000 / price) * annualDiv).toFixed(2)}/yr in dividends · Not financial advice
-            </p>
-          </>
-        )}
-      </CardContent>
-    </Card>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 pt-2 border-t border-gray-800/60">
+      <span className="flex items-center gap-1 text-xs text-green-400 font-semibold">
+        💰 {yieldPct}% yield
+      </span>
+      {annualDiv > 0 && (
+        <span className="text-xs text-gray-400">${annualDiv.toFixed(4)}/yr · ${quarterlyDiv.toFixed(4)}/qtr</span>
+      )}
+      {data?.exDividendDate && (
+        <span className="text-xs text-gray-500">Ex-div: <span className="text-gray-300">{data.exDividendDate}</span></span>
+      )}
+      {data?.paymentDate && (
+        <span className="text-xs text-gray-500">Pays: <span className="text-gray-300">{data.paymentDate}</span></span>
+      )}
+      {data?.isAristocrat && (
+        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">👑 Aristocrat</span>
+      )}
+    </div>
   )
 }
 
@@ -295,6 +275,9 @@ export default function StockDetailPage() {
               </div>
               {quote.industry && <p className="text-xs text-gray-500 mt-1">{quote.industry}</p>}
               <LastUpdated time={lastUpdated} />
+              {quote.dividendYield && quote.dividendYield > 0 && (
+                <DividendStrip ticker={quote.ticker} price={quote.price} dividendYield={quote.dividendYield} />
+              )}
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button
@@ -393,10 +376,6 @@ export default function StockDetailPage() {
           </CardContent>
         </Card>
 
-        {/* Dividend Card — only shown if stock pays a dividend */}
-        {quote.dividendYield && quote.dividendYield > 0 && (
-          <DividendCard ticker={quote.ticker} price={quote.price} dividendYield={quote.dividendYield} />
-        )}
 
         <Card>
           <CardHeader className="pb-1">
