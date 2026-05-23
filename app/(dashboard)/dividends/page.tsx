@@ -516,13 +516,13 @@ function TopStocks() {
 
 // ─── Calendar Tab ────────────────────────────────────────────────────────────
 
-type CalFilter = 'This Week' | 'Next 2 Weeks' | 'This Month'
-const CAL_FILTERS: CalFilter[] = ['This Week', 'Next 2 Weeks', 'This Month']
+type CalFilter = 'Upcoming' | 'Next Month' | 'Next 3 Months'
+const CAL_FILTERS: CalFilter[] = ['Upcoming', 'Next Month', 'Next 3 Months']
 
 function DividendCalendar() {
   const [upcoming, setUpcoming] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [calFilter, setCalFilter] = useState<CalFilter>('Next 2 Weeks')
+  const [calFilter, setCalFilter] = useState<CalFilter>('Next Month')
 
   useEffect(() => {
     fetch('/api/dividends/calendar')
@@ -533,9 +533,9 @@ function DividendCalendar() {
 
   const filtered = upcoming.filter(e => {
     const days = e.daysUntilExDate
-    if (calFilter === 'This Week') return days <= 7
-    if (calFilter === 'Next 2 Weeks') return days <= 14
-    return days <= 31
+    if (calFilter === 'Upcoming') return days >= 0 && days <= 14
+    if (calFilter === 'Next Month') return days >= -7 && days <= 31
+    return days >= -7 && days <= 90
   })
 
   return (
@@ -594,22 +594,31 @@ function DividendCalendar() {
             <span className="text-right">Div / Share</span>
           </div>
           {filtered.map(e => (
-            <Card key={`${e.ticker}-${e.exDate}`} className={cn('border', e.daysUntilExDate <= 3 ? 'border-orange-500/30 bg-orange-500/5' : '')}>
+            <Card key={`${e.ticker}-${e.exDate}`} className={cn('border transition-colors',
+              e.alreadyPassed ? 'opacity-50 border-gray-800' :
+              e.daysUntilExDate <= 3 ? 'border-orange-500/30 bg-orange-500/5' : '')}>
               <CardContent className="p-4">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-2 items-center">
                   <div className="col-span-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-white">{e.ticker}</span>
-                      {e.daysUntilExDate <= 3 && (
+                      <span className={cn('font-bold', e.alreadyPassed ? 'text-gray-500' : 'text-white')}>{e.ticker}</span>
+                      {e.alreadyPassed && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-800 border border-gray-700 text-gray-500">Passed</span>
+                      )}
+                      {!e.alreadyPassed && e.daysUntilExDate <= 3 && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400">Act soon!</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-500 truncate max-w-[180px]">{e.companyName}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">{e.exDateFormatted}</p>
-                    <p className="text-xs text-orange-400/80">
-                      {e.daysUntilExDate === 0 ? 'Today — last chance!' : e.daysUntilExDate === 1 ? 'Tomorrow — buy today!' : `In ${e.daysUntilExDate} days`}
+                    <p className={cn('text-sm font-semibold', e.alreadyPassed ? 'text-gray-500' : 'text-white')}>{e.exDateFormatted}</p>
+                    <p className={cn('text-xs', e.alreadyPassed ? 'text-gray-600' : 'text-orange-400/80')}>
+                      {e.alreadyPassed
+                        ? `${Math.abs(e.daysUntilExDate)} days ago`
+                        : e.daysUntilExDate === 0 ? 'Today — last chance!'
+                        : e.daysUntilExDate === 1 ? 'Tomorrow — buy today!'
+                        : `In ${e.daysUntilExDate} days`}
                     </p>
                   </div>
                   <div>
