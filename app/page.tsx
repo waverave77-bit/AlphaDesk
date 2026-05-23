@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Brain, Zap, BookOpen, Users, ChevronRight, Check, FlaskConical, TrendingUp, Trophy, Play } from 'lucide-react'
-import { prisma } from '@/lib/prisma'
 
 // ── Mr. Guy pixel head — SVG version (works in server components) ─────────────
 const N = null
@@ -149,11 +148,8 @@ function DashboardPreview() {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function LandingPage() {
-  // Live user count from DB
-  const userCount = await prisma.user.count().catch(() => 0)
-  // Round down to nearest 50 for social proof (e.g. 183 → "150+")
-  const displayCount = userCount >= 50 ? `${Math.floor(userCount / 50) * 50}+` : null
+export default function LandingPage() {
+  const displayCount = null // will show live count when merged to production
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
