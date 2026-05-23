@@ -68,13 +68,12 @@ export default function SettingsPage() {
         <p className="text-sm text-gray-400 mt-0.5">Manage your account and preferences</p>
       </div>
 
-      {/* Two-column grid on large screens */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start">
 
-        {/* LEFT COLUMN */}
+        {/* LEFT COLUMN — Appearance · AI Analysis · Support */}
         <div className="space-y-5 lg:space-y-6">
 
-          {/* Appearance — theme + dark mode in one card */}
+          {/* Appearance */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
@@ -112,34 +111,37 @@ export default function SettingsPage() {
               <div>
                 <p className="text-sm font-medium text-white mb-3">Accent Colour</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {ACCENT_THEMES.map((theme) => (
-                    <button
-                      key={theme.id}
-                      onClick={() => setAccent(theme.id)}
-                      style={accentId === theme.id ? {
-                        borderColor: `rgb(${theme.accentRgb} / 0.6)`,
-                        backgroundColor: `rgb(${theme.accentRgb} / 0.1)`,
-                      } : {}}
-                      className={cn(
-                        'flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-all',
-                        accentId === theme.id ? 'border-transparent' : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/40'
-                      )}
-                    >
-                      <div className={cn('h-4 w-4 rounded-full flex-shrink-0', theme.accent)} />
-                      <span className="text-sm text-white">{theme.name}</span>
-                      {accentId === theme.id && <span className="ml-auto text-[10px]" style={{ color: `rgb(${theme.accentRgb})` }}>✓</span>}
-                    </button>
-                  ))}
+                  {ACCENT_THEMES.map((theme) => {
+                    const isSelected = accentId === theme.id
+                    return (
+                      <button
+                        key={theme.id}
+                        onClick={() => setAccent(theme.id)}
+                        style={isSelected ? {
+                          borderColor: `rgb(${theme.accentRgb} / 0.6)`,
+                          backgroundColor: `rgb(${theme.accentRgb} / 0.1)`,
+                        } : {}}
+                        className={cn(
+                          'flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-all',
+                          isSelected ? 'border-transparent' : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/40'
+                        )}
+                      >
+                        {/* Always use inline style so the dot colour never changes with the theme */}
+                        <div
+                          className="h-4 w-4 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: `rgb(${theme.accentRgb})` }}
+                        />
+                        <span className="text-sm text-white">{theme.name}</span>
+                        {isSelected && (
+                          <span className="ml-auto text-[10px]" style={{ color: `rgb(${theme.accentRgb})` }}>✓</span>
+                        )}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </CardContent>
           </Card>
-
-
-        </div>
-
-        {/* RIGHT COLUMN */}
-        <div className="space-y-5 lg:space-y-6">
 
           {/* AI Analysis */}
           <Card>
@@ -155,7 +157,7 @@ export default function SettingsPage() {
                 {[
                   { name: 'Claude Haiku', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
                   { name: 'DeepSeek V3',  color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
-                  { name: 'Grok 4',        color: 'bg-green-500/20 text-green-300 border-green-500/30' },
+                  { name: 'Grok 4',       color: 'bg-green-500/20 text-green-300 border-green-500/30' },
                 ].map(m => (
                   <div key={m.name} className={cn('rounded-lg border px-3 py-2 text-center text-xs font-medium', m.color)}>{m.name}</div>
                 ))}
@@ -163,6 +165,31 @@ export default function SettingsPage() {
               <p className="text-xs text-gray-600 mt-2">All 3 run in parallel and a 4th Claude call synthesizes a consensus answer.</p>
             </CardContent>
           </Card>
+
+          {/* Support */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
+                <Mail className="h-4 w-4 text-blue-400" />
+                Support
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-xs text-gray-500">Questions, concerns, or feedback? We&apos;d love to hear from you.</p>
+              <a
+                href="mailto:support@mrguyinvests.com"
+                className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                support@mrguyinvests.com
+              </a>
+            </CardContent>
+          </Card>
+
+        </div>
+
+        {/* RIGHT COLUMN — Account · Subscription · Data & Privacy */}
+        <div className="space-y-5 lg:space-y-6">
 
           {/* Account */}
           <Card>
@@ -246,27 +273,7 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Support */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
-                <Mail className="h-4 w-4 text-blue-400" />
-                Support
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <p className="text-xs text-gray-500">Questions, concerns, or feedback? We&apos;d love to hear from you.</p>
-              <a
-                href="mailto:support@mrguyinvests.com"
-                className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
-              >
-                <Mail className="h-3.5 w-3.5" />
-                support@mrguyinvests.com
-              </a>
-            </CardContent>
-          </Card>
-
-          {/* Privacy */}
+          {/* Data & Privacy */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
@@ -275,7 +282,7 @@ export default function SettingsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1.5 text-xs text-gray-500">
-              <p>• Portfolio data stored securely in PostgreSQL</p>
+              <p>• Account data stored securely in PostgreSQL</p>
               <p>• Stock data from third-party market data providers and public regulatory filings (SEC EDGAR)</p>
               <p>• AI analysis via Claude (Anthropic), DeepSeek, and xAI APIs</p>
               <p>• No data is sold or shared with third parties</p>
