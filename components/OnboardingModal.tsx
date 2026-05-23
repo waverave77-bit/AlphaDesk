@@ -12,7 +12,7 @@ const EXPERIENCE_LEVELS = [
 ]
 
 const GOALS = [
-  { id: 'portfolio', label: 'Track my portfolio', Icon: Briefcase },
+  { id: 'portfolio', label: 'Try Mr. Guy AI tools', Icon: Bot },
   { id: 'learn', label: 'Learn investing basics', Icon: BookOpen },
   { id: 'markets', label: 'Follow market news', Icon: Newspaper },
   { id: 'research', label: 'Research stocks', Icon: Search },

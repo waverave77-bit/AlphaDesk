@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight, Clock, DollarSign, RefreshCw, X } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight, Clock, DollarSign, RefreshCw, X, Lock } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -19,6 +21,7 @@ function gainColor(n: number) { return n >= 0 ? 'text-green-500' : 'text-red-500
 function gainBg(n: number) { return n >= 0 ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20' }
 
 export default function GamePage() {
+  const { data: session } = useSession()
   const { toast } = useToast()
   const [tab, setTab] = useState<Tab>('Portfolio')
   const [portfolio, setPortfolio] = useState<any>(null)
@@ -215,7 +218,30 @@ export default function GamePage() {
       )}
 
       {/* Trade Tab */}
-      {tab === 'Trade' && (
+      {tab === 'Trade' && !session && (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-16 text-center gap-4">
+            <div className="h-14 w-14 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center">
+              <Lock className="h-7 w-7 text-blue-400" />
+            </div>
+            <div>
+              <h3 className="text-white font-semibold text-lg">Sign up to start trading</h3>
+              <p className="text-gray-400 text-sm mt-1">Create a free account to trade with your $100,000 in virtual cash and join the leaderboard.</p>
+            </div>
+            <div className="flex gap-3">
+              <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                <Link href="/register">Sign Up Free</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/login">Sign In</Link>
+              </Button>
+            </div>
+            <p className="text-xs text-gray-600">Free forever · No credit card needed</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {tab === 'Trade' && session && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Left: trade form */}
