@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
-import { TrendingUp, TrendingDown, Trophy, Search, Check, RefreshCw } from 'lucide-react'
+import { TrendingUp, TrendingDown, Trophy, Search, Check, RefreshCw, Share2, Copy, CheckCheck } from 'lucide-react'
 
 // ── Mr. Guy pixel head ────────────────────────────────────────────────────────
 const N = null
@@ -84,6 +84,88 @@ interface LivePrice {
   price: number
   changePercent: number
   companyName: string
+}
+
+// ── Share Pick Button ─────────────────────────────────────────────────────────
+function SharePickButton({
+  mrGuyPick, userPick, mrPnl, userPnl, isDark,
+}: {
+  mrGuyPick: WeeklyPick
+  userPick: UserPick
+  mrPnl: { pct: number; winning: boolean } | null
+  userPnl: { pct: number; winning: boolean } | null
+  isDark: boolean
+}) {
+  const [copied, setCopied] = useState(false)
+
+  const dirEmoji = (d: 'up' | 'down') => d === 'up' ? '📈' : '📉'
+
+  const buildText = () => {
+    const mrLine = `Mr. Guy: $${mrGuyPick.ticker} ${dirEmoji(mrGuyPick.direction)} ${mrGuyPick.direction.toUpperCase()}${mrPnl ? ` (${mrPnl.pct >= 0 ? '+' : ''}${mrPnl.pct.toFixed(1)}% so far)` : ''}`
+    const myLine = `Me: $${userPick.ticker} ${dirEmoji(userPick.direction)} ${userPick.direction.toUpperCase()}${userPnl ? ` (${userPnl.pct >= 0 ? '+' : ''}${userPnl.pct.toFixed(1)}% so far)` : ''}`
+    const winner = mrPnl && userPnl
+      ? userPnl.winning && !mrPnl.winning ? '🏆 I'm beating Mr. Guy this week!'
+        : mrPnl.winning && !userPnl.winning ? '😤 Mr. Guy is winning this week...'
+        : '📊 Both picks in the green!'
+      : ''
+    return `Pick of the Week on Mr. Guy Invests\n\n${mrLine}\n${myLine}\n${winner ? '\n' + winner + '\n' : ''}\nmrguyinvests.com/challenge`
+  }
+
+  const handleShare = async () => {
+    const text = buildText()
+    if (navigator.share) {
+      try { await navigator.share({ text }) } catch {}
+    } else {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    }
+  }
+
+  const handleTwitter = () => {
+    const text = buildText()
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+    window.open(url, '_blank', 'noopener')
+  }
+
+  return (
+    <div className={cn(
+      'rounded-2xl border p-5 bubble-pop',
+      isDark ? 'bg-gray-800/60 border-gray-700' : 'bg-white border-slate-200'
+    )}>
+      <div className="flex items-center gap-2 mb-3">
+        <Share2 className="h-4 w-4 text-blue-400" />
+        <span className={cn('text-sm font-semibold', isDark ? 'text-white' : 'text-slate-900')}>Share this pick</span>
+      </div>
+      <p className={cn('text-xs mb-4', isDark ? 'text-gray-400' : 'text-slate-500')}>
+        Show off your picks on Twitter/X or copy the text to share anywhere.
+      </p>
+      {/* Preview card */}
+      <div className={cn('rounded-xl p-4 text-xs font-mono mb-4 whitespace-pre-wrap leading-relaxed', isDark ? 'bg-gray-900 border border-gray-700 text-gray-300' : 'bg-slate-50 border border-slate-200 text-slate-700')}>
+        {buildText()}
+      </div>
+      <div className="flex gap-2">
+        <button
+          onClick={handleTwitter}
+          className="flex-1 flex items-center justify-center gap-2 bg-black hover:bg-gray-900 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Post on X
+        </button>
+        <button
+          onClick={handleShare}
+          className={cn(
+            'flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-colors',
+            copied
+              ? isDark ? 'bg-green-500/15 border-green-500/30 text-green-400' : 'bg-green-50 border-green-300 text-green-600'
+              : isDark ? 'border-gray-600 text-gray-300 hover:border-gray-400 hover:text-white' : 'border-slate-300 text-slate-600 hover:border-slate-400'
+          )}
+        >
+          {copied ? <><CheckCheck className="h-4 w-4" /> Copied!</> : <><Copy className="h-4 w-4" /> Copy</>}
+        </button>
+      </div>
+    </div>
+  )
 }
 
 function getWeekKey(): string {
@@ -591,6 +673,11 @@ export default function ChallengePage() {
                   </p>
                 )}
               </div>
+            )}
+
+            {/* Share this pick */}
+            {submitted && mrGuyPick && userPick && (
+              <SharePickButton mrGuyPick={mrGuyPick} userPick={userPick} mrPnl={mrPnl} userPnl={userPnl} isDark={isDark} />
             )}
 
             {/* How it works */}
