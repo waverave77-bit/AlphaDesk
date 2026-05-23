@@ -44,10 +44,11 @@ export default function GamePage() {
   const searchRef = useRef<HTMLDivElement>(null)
 
   const fetchPortfolio = async () => {
+    if (!session) { setLoading(false); return }
     setLoading(true)
     const r = await fetch('/api/virtual')
     const d = await r.json()
-    setPortfolio(d)
+    setPortfolio(d?.error ? null : d)
     setLoading(false)
   }
 
@@ -140,7 +141,7 @@ export default function GamePage() {
       </div>
 
       {/* Stats bar */}
-      {loading ? <Skeleton className="h-24 w-full" /> : portfolio && (
+      {session && (loading ? <Skeleton className="h-24 w-full" /> : portfolio && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'Portfolio Value', value: formatCurrency(portfolio.totalValue), sub: `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%`, color: gainColor(portfolio.totalGainLoss) },
@@ -157,7 +158,7 @@ export default function GamePage() {
             </Card>
           ))}
         </div>
-      )}
+      ))}
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-gray-800">
@@ -173,7 +174,19 @@ export default function GamePage() {
       {/* Portfolio Tab */}
       {tab === 'Portfolio' && (
         <div className="space-y-4">
-          {loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.holdings?.length ? (
+          {!session ? (
+            <Card>
+              <CardContent className="p-10 text-center">
+                <DollarSign className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+                <p className="text-white font-semibold">Sign up to get your $100,000</p>
+                <p className="text-gray-500 text-sm mt-1">Create a free account to start trading and appear on the leaderboard.</p>
+                <div className="flex gap-3 justify-center mt-4">
+                  <Button asChild className="bg-blue-600 hover:bg-blue-700"><Link href="/register">Sign Up Free</Link></Button>
+                  <Button asChild variant="outline"><Link href="/login">Sign In</Link></Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.holdings?.length ? (
             <Card>
               <CardContent className="p-10 text-center">
                 <DollarSign className="h-12 w-12 text-gray-700 mx-auto mb-3" />
