@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
@@ -243,6 +243,26 @@ export default function SettingsPage() {
               {portalError && (
                 <p className="text-xs text-red-400 text-center">{portalError}</p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Support */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
+                <Mail className="h-4 w-4 text-blue-400" />
+                Support
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-xs text-gray-500">Questions, concerns, or feedback? We&apos;d love to hear from you.</p>
+              <a
+                href="mailto:support@mrguyinvests.com"
+                className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                support@mrguyinvests.com
+              </a>
             </CardContent>
           </Card>
 
