@@ -28,6 +28,10 @@ model User {
   experienceLevel      String    @default("beginner")
   // ───────────────────────────────────────────────────────────────────
 
+  // ─── Activity tracking ──────────────────────────────────────────────
+  lastActiveAt         DateTime?
+  // ───────────────────────────────────────────────────────────────────
+
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]
@@ -175,6 +179,16 @@ model InsiderTradeCache {
   id        String   @id @default("singleton") // one row, always overwritten
   trades    String   // JSON stringified Trade[]
   updatedAt DateTime @updatedAt
+}
+
+model PageView {
+  id    String @id @default(cuid())
+  page  String // e.g. "/dashboard", "/research", "/chat"
+  date  String // "YYYY-MM-DD"
+  count Int    @default(1)
+
+  @@unique([page, date])
+  @@index([date])
 }
 
 model PasswordResetToken {
