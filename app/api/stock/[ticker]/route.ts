@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getStockQuote, getHistoricalData, getStockNews, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
+import { checkAILimit } from '@/lib/pro'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,10 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
       const news = await getStockNews(ticker)
       return NextResponse.json({ news })
     }
+
+    // Enforce daily research limit for free users (guests get a 401)
+    const limited = await checkAILimit('research')
+    if (limited) return limited
 
     // getStockQuote must finish first — it populates the internal analyst cache
     // that getAnalystData reads. Running them in parallel causes a race condition

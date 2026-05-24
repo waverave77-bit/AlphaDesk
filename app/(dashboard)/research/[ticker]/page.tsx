@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { GuestLock } from '@/components/GuestGate'
+import ProLimitBanner from '@/components/ProLimitBanner'
 import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -198,6 +199,7 @@ export default function StockDetailPage() {
   const [earningsHistory, setEarningsHistory] = useState<EarningsPoint[]>([])
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [limitReached, setLimitReached] = useState(false)
   const [watchlisted, setWatchlisted] = useState(false)
   const [watchlistLoading, setWatchlistLoading] = useState(false)
   const [showAI, setShowAI] = useState(false)
@@ -205,8 +207,12 @@ export default function StockDetailPage() {
 
   useEffect(() => {
     setLoading(true)
+    setLimitReached(false)
     Promise.all([
-      fetch(`/api/stock/${ticker}`).then((r) => r.json()),
+      fetch(`/api/stock/${ticker}`).then(async (r) => {
+        if (r.status === 429) { setLimitReached(true); return {} }
+        return r.json()
+      }),
       fetch(`/api/watchlist`).then((r) => r.json()),
     ]).then(([stockData, watchData]) => {
       setQuote(stockData.quote || null)
@@ -241,6 +247,17 @@ export default function StockDetailPage() {
   }
 
   if (guestBlocked) return <GuestLock feature="stock research" />
+
+  if (limitReached) {
+    return (
+      <div className="space-y-4 py-8 max-w-xl mx-auto">
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <ProLimitBanner feature="research" />
+      </div>
+    )
+  }
 
   if (loading) {
     return (

@@ -17,6 +17,7 @@ export const FREE_LIMITS: Record<string, number> = {
   'reality-check': 5,
   'translator':    999, // effectively unlimited — simple educational tool
   'quant':         3,
+  'research':      4,
 }
 
 /**
