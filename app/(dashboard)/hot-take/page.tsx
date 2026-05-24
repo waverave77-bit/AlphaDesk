@@ -302,7 +302,7 @@ export default function HotTakePage() {
 
       </div>
 
-      <p className="text-xs text-gray-600 text-center mt-6 max-w-2xl mx-auto">Hot takes are AI-generated commentary based on recent price and sentiment data. They are for entertainment and informational purposes only — not financial advice. Always do your own research before making investment decisions.</p>
+      <p className="text-xs text-gray-600 text-center mt-6 max-w-2xl mx-auto">Hot takes are AI-generated commentary based on recent price and sentiment data. Prices may be delayed up to 15 minutes. They are for entertainment and informational purposes only — not financial advice. Always do your own research before making investment decisions.</p>
     </>
   )
 }

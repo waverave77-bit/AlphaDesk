@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2 } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,27 @@ export default function SettingsPage() {
   const [demoError, setDemoError] = useState('')
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState('')
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true)
+    setDeleteError('')
+    try {
+      const res = await fetch('/api/user/delete', { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json()
+        setDeleteError(d.error || 'Failed to delete account. Try again or contact support.')
+        setDeleteLoading(false)
+        return
+      }
+      await signOut({ callbackUrl: '/' })
+    } catch {
+      setDeleteError('Something went wrong. Contact support@mrguyinvests.com')
+      setDeleteLoading(false)
+    }
+  }
 
   const openBillingPortal = async () => {
     setPortalLoading(true)
@@ -286,7 +307,61 @@ export default function SettingsPage() {
               <p>• Stock data from third-party market data providers and public regulatory filings (SEC EDGAR)</p>
               <p>• AI analysis via Claude (Anthropic), DeepSeek, and xAI APIs</p>
               <p>• No data is sold or shared with third parties</p>
-              <p className="pt-2 text-gray-600">For informational purposes only. Not financial advice.</p>
+              <div className="flex gap-3 pt-2">
+                <a href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</a>
+                <a href="/terms" className="text-blue-400 hover:underline">Terms of Service</a>
+              </div>
+              <p className="pt-1 text-gray-600">For informational purposes only. Not financial advice.</p>
+            </CardContent>
+          </Card>
+
+          {/* Delete Account */}
+          <Card className="border-red-500/20">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm text-red-400 uppercase tracking-wider font-semibold">
+                <Trash2 className="h-4 w-4" />
+                Delete Account
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-gray-500">
+                Permanently delete your account and all associated data — watchlist, portfolio, trade history, and alerts. This cannot be undone. Stripe billing records are retained as required by law.
+              </p>
+              {!deleteConfirm ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
+                  onClick={() => setDeleteConfirm(true)}
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-2" />
+                  Delete My Account
+                </Button>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-red-400">Are you sure? This is permanent.</p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 text-gray-400"
+                      onClick={() => { setDeleteConfirm(false); setDeleteError('') }}
+                      disabled={deleteLoading}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white border-0"
+                      onClick={handleDeleteAccount}
+                      disabled={deleteLoading}
+                    >
+                      {deleteLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Yes, delete everything'}
+                    </Button>
+                  </div>
+                  {deleteError && <p className="text-xs text-red-400">{deleteError}</p>}
+                </div>
+              )}
             </CardContent>
           </Card>
 

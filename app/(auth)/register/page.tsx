@@ -27,6 +27,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -37,6 +38,7 @@ export default function RegisterPage() {
     if (!form.email.trim()) { setError('Please enter your email'); return }
     if (!form.password) { setError('Please enter a password'); return }
     if (!form.confirm) { setError('Please confirm your password'); return }
+    if (!agreedToTerms) { setError('Please agree to the Terms of Service and Privacy Policy'); return }
     if (form.username.length < 3) { setError('Username must be at least 3 characters'); return }
     if (!/^[a-zA-Z0-9_]+$/.test(form.username)) { setError('Username can only contain letters, numbers, and underscores'); return }
     if (form.password.length < 8) { setError('Password must be at least 8 characters'); return }
@@ -141,17 +143,26 @@ export default function RegisterPage() {
               </button>
             </div>
           </div>
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={e => setAgreedToTerms(e.target.checked)}
+              className="mt-0.5 h-4 w-4 rounded border-gray-600 accent-blue-500 cursor-pointer shrink-0"
+            />
+            <span className="text-xs text-gray-500 leading-relaxed">
+              I agree to the{' '}
+              <Link href="/terms" className="text-blue-400 hover:underline">Terms of Service</Link>
+              {' '}and{' '}
+              <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link>.
+              I confirm I am 13 years of age or older.
+            </span>
+          </label>
           {error && <p className="text-sm text-red-400">{error}</p>}
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading || !agreedToTerms}>
             {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
             Create Account
           </Button>
-          <p className="text-xs text-gray-500 text-center leading-relaxed">
-            By creating an account you agree to our{' '}
-            <Link href="/terms" className="text-blue-400 hover:underline">Terms of Service</Link>
-            {' '}and{' '}
-            <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link>.
-          </p>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{' '}

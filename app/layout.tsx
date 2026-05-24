@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import CookieNotice from '@/components/CookieNotice'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ThemeProvider>
             {children}
             <Toaster />
+            <CookieNotice />
             <Analytics />
             <SpeedInsights />
           </ThemeProvider>

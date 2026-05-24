@@ -173,8 +173,10 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">12. Governing Law</h2>
           <p className="text-gray-400 leading-relaxed">
-            These Terms are governed by the laws of the United States. Any disputes arising from these
-            Terms or your use of the Service shall be resolved in accordance with applicable law.
+            These Terms are governed by the laws of the State of California, United States, without
+            regard to its conflict of law provisions. Any disputes arising from these Terms or your use
+            of the Service shall be resolved in the state or federal courts located in California, and
+            you consent to the personal jurisdiction of such courts.
           </p>
         </section>
 

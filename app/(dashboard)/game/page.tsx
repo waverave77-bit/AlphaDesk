@@ -270,6 +270,7 @@ export default function GamePage() {
       </div>
 
       {/* Stats bar — always visible; guests see locked placeholders */}
+      <p className="text-[10px] text-gray-600 -mt-2">Portfolio prices may be delayed up to 15 minutes. Virtual money only — not a reflection of real investment performance.</p>
       {loading && session ? <Skeleton className="h-24 w-full" /> : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[

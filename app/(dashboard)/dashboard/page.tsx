@@ -381,6 +381,7 @@ export default function DashboardPage() {
               <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Market Indices</p>
               <Link href="/markets" className="text-xs text-blue-500 hover:underline">Full view</Link>
             </div>
+            <p className="text-[10px] text-slate-400 mb-3">Prices may be delayed up to 15 minutes.</p>
             {indicesLoading ? (
               <div className="space-y-3">
                 {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
