@@ -6,7 +6,7 @@ import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
-const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
+const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no complicated finance terms. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
 
 export async function GET(req: NextRequest) {
   const limited = await checkAILimit('report-card')

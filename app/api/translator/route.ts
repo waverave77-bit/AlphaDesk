@@ -5,7 +5,7 @@ import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
-const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
+const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no complicated finance terms. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
 
 export async function POST(req: NextRequest) {
   const limited = await checkAILimit('translator')
@@ -17,14 +17,14 @@ export async function POST(req: NextRequest) {
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: 'Missing text' }, { status: 400 })
     }
-    if (mode !== 'jargon' && mode !== 'earnings') {
+    if (mode !== 'finance' && mode !== 'earnings') {
       return NextResponse.json({ error: 'Invalid mode' }, { status: 400 })
     }
 
     let userPrompt: string
 
-    if (mode === 'jargon') {
-      userPrompt = `Rewrite this finance text in plain English that anyone can understand. Keep the same information, just make it normal. No jargon. Here's the text: ${text}`
+    if (mode === 'finance') {
+      userPrompt = `Rewrite this finance text in plain English that anyone can understand. Keep the same information, just make it normal. No complicated terms. Here's the text: ${text}`
     } else {
       userPrompt = `Here's an earnings call excerpt: ${text}
 
@@ -49,7 +49,7 @@ RED FLAGS:
 
     const responseText = response.content[0].type === 'text' ? response.content[0].text : ''
 
-    if (mode === 'jargon') {
+    if (mode === 'finance') {
       return NextResponse.json({ translated: responseText })
     }
 

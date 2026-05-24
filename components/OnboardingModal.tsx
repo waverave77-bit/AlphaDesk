@@ -129,7 +129,7 @@ export default function OnboardingModal() {
               <div className="flex items-start gap-3 bg-blue-600/10 border border-blue-500/20 rounded-2xl px-4 py-3">
                 <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
                 <p className="text-sm text-blue-300 leading-relaxed">
-                  <strong>This changes how Mr. Guy explains things to you.</strong> Beginners get plain English and no jargon. Experienced investors get the full technical breakdown. You can change this anytime in Settings.
+                  <strong>This changes how Mr. Guy explains things to you.</strong> Beginners get everything in plain English. Experienced investors get the full technical breakdown. You can change this anytime in Settings.
                 </p>
               </div>
 

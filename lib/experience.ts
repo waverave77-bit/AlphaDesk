@@ -7,11 +7,11 @@ export type ExperienceLevel = 'beginner' | 'some' | 'experienced'
 export function getExperienceContext(level?: string | null): string {
   switch (level) {
     case 'experienced':
-      return '\n\nAUDIENCE: This user is an experienced investor. Use proper financial terminology freely (P/E, EPS, beta, 52-week range, margin compression, etc.). Be concise and analytical — no hand-holding or jargon definitions needed.'
+      return '\n\nAUDIENCE: This user is an experienced investor. Use proper financial terminology freely (P/E, EPS, beta, 52-week range, margin compression, etc.). Be concise and analytical — no hand-holding or term definitions needed.'
     case 'some':
-      return '\n\nAUDIENCE: This user knows the basics of investing. Light jargon is fine but briefly explain anything more complex in parentheses. Keep it conversational, not academic.'
+      return '\n\nAUDIENCE: This user knows the basics of investing. Finance terms are fine but briefly explain anything more complex in parentheses. Keep it conversational, not academic.'
     default: // beginner
-      return '\n\nAUDIENCE: This user is a complete beginner. Avoid all jargon. If you must use a finance term, immediately explain it in plain English in parentheses like this: "P/E ratio (basically how expensive the stock is compared to its profits)". Short sentences. Friendly and encouraging tone.'
+      return '\n\nAUDIENCE: This user is a complete beginner. Keep everything simple. If you use a finance term, immediately explain it in plain English in parentheses like this: "P/E ratio (basically how expensive the stock is compared to its profits)". Short sentences. Friendly and encouraging tone.'
   }
 }
 

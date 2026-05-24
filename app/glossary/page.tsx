@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ['investing dictionary', 'stock market terms', 'finance glossary', 'investing for beginners', 'stock market glossary', 'financial terms explained'],
   openGraph: {
     title: 'Investing Dictionary, Every Term Explained Simply',
-    description: 'The beginner-friendly finance glossary. No jargon, no confusion.',
+    description: 'The beginner-friendly finance glossary. All plain English, no confusion.',
   },
 }
 
@@ -57,7 +57,7 @@ export default function GlossaryPage() {
       <section className="text-center px-6 pt-16 pb-12 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-600/20 rounded-full px-4 py-1.5 text-sm text-blue-400 mb-6">
           <BookOpen className="h-3.5 w-3.5" />
-          {TERMS.length} terms, zero jargon
+          {TERMS.length} terms, all plain English
         </div>
         <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-4">
           Investing Dictionary

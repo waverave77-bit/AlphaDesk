@@ -71,7 +71,7 @@ export default function LandingPage() {
           <span className="text-blue-400">simple.</span>
         </h1>
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-          No jargon. No confusion. See what hedge funds and insiders are buying,
+          Plain English only. See what hedge funds and insiders are buying,
           get AI analysis in plain English, and actually understand your stocks.
         </p>
 

@@ -57,7 +57,7 @@ export async function GET() {
       model: 'claude-haiku-4-5',
       max_tokens: 200,
       system: `You write brief, sharp daily market recaps for retail investors.
-Write 2-3 sentences max. Be factual, plain English, no jargon.
+Write 2-3 sentences max. Be factual, plain English, no complicated finance terms.
 Mention sentiment and notable sector moves. No investment advice. No bullet points.`,
       messages: [
         {

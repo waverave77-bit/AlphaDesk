@@ -48,7 +48,7 @@ interface TranslatorResult {
 }
 
 const PLACEHOLDERS = {
-  jargon: "Paste any confusing finance text here... e.g. 'The stock is trading at a forward P/E of 42x on consensus FY26 EBITDA estimates with a 15% FCF yield, implying significant multiple compression risk given the current macro headwinds.'",
+  finance: "Paste any confusing finance text here... e.g. 'The stock is trading at a forward P/E of 42x on consensus FY26 EBITDA estimates with a 15% FCF yield, implying significant multiple compression risk given the current macro headwinds.'",
   earnings: "Paste an earnings call excerpt here... e.g. CEO saying 'We're seeing some normalization in demand dynamics while we continue to optimize our go-to-market motion to drive sustainable top-line growth...'",
 }
 
@@ -56,7 +56,7 @@ export default function TranslatorPage() {
   const { data: session, status } = useSession()
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
-  const [mode, setMode] = useState<'jargon' | 'earnings'>('jargon')
+  const [mode, setMode] = useState<'finance' | 'earnings'>('finance')
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<TranslatorResult | null>(null)
@@ -65,7 +65,7 @@ export default function TranslatorPage() {
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
-  function handleModeSwitch(newMode: 'jargon' | 'earnings') {
+  function handleModeSwitch(newMode: 'finance' | 'earnings') {
     setMode(newMode)
     setResult(null)
     setError('')
@@ -96,7 +96,7 @@ export default function TranslatorPage() {
   }
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Jargon Translator" />
+  if (!session) return <GuestLock feature="Finance Translator" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
@@ -127,7 +127,7 @@ export default function TranslatorPage() {
 
         {/* Mode toggle */}
         <div className={cn('flex rounded-xl p-1 gap-1', isDark ? 'bg-gray-800' : 'bg-slate-200')}>
-          {(['jargon', 'earnings'] as const).map(m => (
+          {(['finance', 'earnings'] as const).map(m => (
             <button
               key={m}
               onClick={() => handleModeSwitch(m)}
@@ -138,7 +138,7 @@ export default function TranslatorPage() {
                   : isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-700'
               )}
             >
-              {m === 'jargon' ? 'Jargon Translator' : 'Earnings Call Decoder'}
+              {m === 'finance' ? 'Finance Translator' : 'Earnings Call Decoder'}
             </button>
           ))}
         </div>

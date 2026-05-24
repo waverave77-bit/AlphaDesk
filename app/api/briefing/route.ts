@@ -143,7 +143,7 @@ export async function GET() {
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 400,
-      system: 'You are Mr. Guy. Write a morning market briefing in plain English. Casual, funny, confident. No markdown. No jargon.',
+      system: 'You are Mr. Guy. Write a morning market briefing in plain English. Casual, funny, confident. No markdown. No complicated finance terms.',
       messages: [{ role: 'user', content: userPrompt }],
     })
     briefingText = ((msg.content[0] as any).text ?? '').trim()
