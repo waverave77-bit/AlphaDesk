@@ -167,8 +167,8 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
             </div>
             {duration && (
               <div className="flex items-center gap-2 mt-3 bg-gray-800/60 rounded-lg px-3 py-2">
-                <Clock className="h-3.5 w-3.5 text-green-400 flex-shrink-0" />
-                <p className="text-xs text-green-300">{duration}</p>
+                <Clock className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
+                <p className="text-xs text-gray-300">{duration}</p>
               </div>
             )}
 
