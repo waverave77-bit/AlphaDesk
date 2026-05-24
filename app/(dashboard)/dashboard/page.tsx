@@ -138,8 +138,16 @@ export default function DashboardPage() {
           history: [],
         }),
       })
-      const data = await res.json()
-      setRoast(data.reply)
+      if (!res.ok || !res.body) { setRoast("I tried to roast your portfolio but even I felt bad about it."); setRoasting(false); return }
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let fullText = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fullText += decoder.decode(value, { stream: true })
+        setRoast(fullText)
+      }
     } catch {
       setRoast("I tried to roast your portfolio but even I felt bad about it.")
     }

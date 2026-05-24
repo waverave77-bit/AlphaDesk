@@ -99,9 +99,16 @@ export default function RoastPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, experience: 'some', history: [] }),
       })
-      const data = await res.json()
-      if (data.error) { setError(data.error); return }
-      setRoast(data.reply ?? '')
+      if (!res.ok || !res.body) { setError('Something went wrong. Try again.'); return }
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let fullText = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fullText += decoder.decode(value, { stream: true })
+        setRoast(fullText)
+      }
     } catch {
       setError('Something went wrong. Try again.')
     } finally {

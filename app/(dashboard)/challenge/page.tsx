@@ -43,6 +43,7 @@ function MrGuyHead({ px = 3, className }: { px?: number; className?: string }) {
 
 const STYLES = `
 @keyframes mrg-idle  { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+@keyframes mrg-think { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
 @keyframes mrg-run {
   0%   { transform: translateX(-8px) rotate(-6deg) translateY(0px); }
   25%  { transform: translateX(0px) rotate(0deg) translateY(-5px); }
@@ -54,6 +55,7 @@ const STYLES = `
 @keyframes bubble-pop { 0% { opacity: 0; transform: scale(0.5) translateY(8px); } 70% { transform: scale(1.05) translateY(-2px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 @keyframes winner-glow { 0%, 100% { box-shadow: 0 0 0 rgba(234,179,8,0); } 50% { box-shadow: 0 0 24px rgba(234,179,8,0.4); } }
 .mrg-idle    { animation: mrg-idle  2.4s ease-in-out infinite; }
+.mrg-think   { animation: mrg-think 1.1s ease-in-out infinite; }
 .mrg-run     { animation: mrg-run 0.55s ease-in-out infinite; }
 .briefcase   { animation: briefcase-swing 0.55s ease-in-out infinite; display: inline-block; }
 .bubble-pop  { animation: bubble-pop 0.28s cubic-bezier(.34,1.56,.64,1) both; }
