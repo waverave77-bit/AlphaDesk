@@ -357,14 +357,37 @@ function ChatPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg, history: messages, experience }),
       })
-      const data = await res.json()
-      if (res.status === 429 || data.limitReached) {
+
+      if (res.status === 429) {
         setLimitReached(true)
         setLoading(false)
         return
       }
-      setMessages([...updated, { role: 'assistant', content: data.reply }])
+
+      if (!res.ok || !res.body) {
+        setMessages([...updated, { role: 'assistant', content: 'Something went wrong. Try again!' }])
+        setLoading(false)
+        return
+      }
+
+      // Start streaming — add an empty assistant message and fill it in
+      setMessages([...updated, { role: 'assistant', content: '' }])
       triggerChar('talk', 1000)
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let fullText = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fullText += decoder.decode(value, { stream: true })
+        setMessages(prev => {
+          const next = [...prev]
+          next[next.length - 1] = { role: 'assistant', content: fullText }
+          return next
+        })
+      }
     } catch {
       setMessages([...updated, { role: 'assistant', content: 'Something went wrong. Try again!' }])
     }

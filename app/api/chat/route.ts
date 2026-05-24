@@ -580,19 +580,40 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = buildSystemPrompt(experience, newsHeadlines, stockContext)
 
-    const response = await client.messages.create({
+    const encoder = new TextEncoder()
+    const anthropicStream = client.messages.stream({
       model: 'claude-sonnet-4-5',
       max_tokens: experience === 'beginner' ? 900 : 1200,
       system: systemPrompt,
       messages,
     })
 
-    const reply =
-      response.content[0].type === 'text'
-        ? response.content[0].text
-        : 'Something went wrong. Try rephrasing!'
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of anthropicStream) {
+            if (
+              chunk.type === 'content_block_delta' &&
+              chunk.delta.type === 'text_delta'
+            ) {
+              controller.enqueue(encoder.encode(chunk.delta.text))
+            }
+          }
+        } catch (e) {
+          console.error('Stream error:', e)
+        } finally {
+          controller.close()
+        }
+      },
+    })
 
-    return NextResponse.json({ reply })
+    return new Response(readable, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'X-Accel-Buffering': 'no', // disable nginx buffering on Vercel/proxies
+        'Cache-Control': 'no-cache',
+      },
+    })
   } catch (err: any) {
     console.error('Chat error:', err)
     return NextResponse.json({ reply: 'Something went wrong. Please try again.' }, { status: 500 })
