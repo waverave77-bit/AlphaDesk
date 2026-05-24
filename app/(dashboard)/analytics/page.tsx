@@ -5,8 +5,18 @@ import { useAdmin } from '@/hooks/useAdmin'
 import {
   Users, DollarSign, Crown, Activity, UserPlus, Brain,
   BarChart3, Globe, TrendingUp, Target, RefreshCw, Wifi,
-  GraduationCap, Award, MousePointerClick, Zap,
+  GraduationCap, Zap, Shield, ToggleLeft, ToggleRight,
 } from 'lucide-react'
+
+// ─── Feature flag metadata ─────────────────────────────────────────────────────
+
+const FLAG_META: Record<string, { label: string; desc: string }> = {
+  market_recap:    { label: 'Market Recap Card',    desc: 'Daily AI-generated market summary on the dashboard' },
+  floating_chat:   { label: 'Floating Chat Button', desc: 'AI chat bubble fixed to bottom-right of every page' },
+  ai_chat_nav:     { label: 'AI Chat Nav Link',     desc: '"✨ AI Chat" item in the top navigation bar' },
+  smart_money_nav: { label: 'Smart Money Nav Link', desc: 'Smart Money / Insiders page in the top navigation' },
+  game_nav:        { label: '$100K Challenge Nav',  desc: 'The virtual trading game link in the nav' },
+}
 
 // ─── Labels ───────────────────────────────────────────────────────────────────
 
@@ -101,7 +111,6 @@ function MiniBarChart({ data }: { data: { date: string; count: number }[] }) {
               className={`w-full rounded-sm transition-all ${isToday ? 'bg-blue-500' : 'bg-gray-700 group-hover:bg-gray-500'}`}
               style={{ height: `${pct}%` }}
             />
-            {/* Tooltip */}
             <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
               {d.date.slice(5)}: {d.count}
             </div>
@@ -133,10 +142,12 @@ interface AnalyticsData {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function AnalyticsPage() {
+export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdmin()
   const router = useRouter()
   const [data, setData] = useState<AnalyticsData | null>(null)
+  const [flags, setFlags] = useState<Record<string, boolean>>({})
+  const [toggling, setToggling] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastRefresh, setLastRefresh] = useState(new Date())
 
@@ -146,9 +157,15 @@ export default function AnalyticsPage() {
 
   const load = useCallback(() => {
     setLoading(true)
-    fetch('/api/admin/analytics')
-      .then(r => r.json())
-      .then(d => { setData(d); setLastRefresh(new Date()) })
+    Promise.all([
+      fetch('/api/admin/analytics').then(r => r.json()),
+      fetch('/api/admin/flags').then(r => r.json()),
+    ])
+      .then(([analytics, flagData]) => {
+        setData(analytics)
+        setFlags(flagData)
+        setLastRefresh(new Date())
+      })
       .finally(() => setLoading(false))
   }, [])
 
@@ -165,6 +182,18 @@ export default function AnalyticsPage() {
     return () => clearInterval(id)
   }, [])
 
+  const toggleFlag = async (key: string) => {
+    const newVal = !flags[key]
+    setToggling(key)
+    setFlags(prev => ({ ...prev, [key]: newVal }))
+    await fetch('/api/admin/flags', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, enabled: newVal }),
+    })
+    setToggling(null)
+  }
+
   if (adminLoading) return <div className="flex items-center justify-center h-64"><RefreshCw className="h-6 w-6 text-gray-500 animate-spin" /></div>
   if (!isAdmin) return null
 
@@ -180,11 +209,11 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-            <BarChart3 className="h-6 w-6 text-blue-400" />
+          <div className="h-12 w-12 rounded-xl bg-red-600/15 border border-red-600/20 flex items-center justify-center">
+            <Shield className="h-6 w-6 text-red-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Analytics</h1>
+            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
             <p className="text-gray-500 text-sm mt-0.5">Last updated: {lastRefresh.toLocaleTimeString()}</p>
           </div>
         </div>
@@ -202,7 +231,7 @@ export default function AnalyticsPage() {
         <>
           {/* ── Row 1: Live + User Stats ── */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Live Now — featured card */}
+            {/* Live Now */}
             <div className="col-span-2 lg:col-span-1 bg-gray-900 border border-green-500/30 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-3 text-sm font-medium text-gray-400">
                 <Wifi className="h-4 w-4 text-green-400" />
@@ -257,17 +286,11 @@ export default function AnalyticsPage() {
               </h2>
               <div className="space-y-4">
                 {[
-                  { key: 'beginner', label: '🌱 Complete Beginner', color: 'bg-green-500' },
-                  { key: 'some',     label: '📈 Some Experience',   color: 'bg-blue-500' },
-                  { key: 'experienced', label: '🏆 Experienced',    color: 'bg-purple-500' },
+                  { key: 'beginner',    label: '🌱 Complete Beginner', color: 'bg-green-500' },
+                  { key: 'some',        label: '📈 Some Experience',   color: 'bg-blue-500' },
+                  { key: 'experienced', label: '🏆 Experienced',       color: 'bg-purple-500' },
                 ].map(({ key, label, color }) => (
-                  <Bar
-                    key={key}
-                    label={label}
-                    count={data.experienceLevels[key as keyof typeof data.experienceLevels]}
-                    max={totalExp}
-                    color={color}
-                  />
+                  <Bar key={key} label={label} count={data.experienceLevels[key as keyof typeof data.experienceLevels]} max={totalExp} color={color} />
                 ))}
               </div>
             </div>
@@ -298,13 +321,7 @@ export default function AnalyticsPage() {
             {data.topPagesToday.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                 {data.topPagesToday.map(({ page, count }) => (
-                  <Bar
-                    key={page}
-                    label={PAGE_LABELS[page] ?? page}
-                    count={count}
-                    max={maxPage}
-                    color="bg-cyan-500"
-                  />
+                  <Bar key={page} label={PAGE_LABELS[page] ?? page} count={count} max={maxPage} color="bg-cyan-500" />
                 ))}
               </div>
             ) : (
@@ -349,7 +366,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* ── Row 6: Recent Users ── */}
+          {/* ── Row 6: Recent Signups ── */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <Users className="h-5 w-5 text-emerald-400" />
@@ -391,6 +408,35 @@ export default function AnalyticsPage() {
           </div>
         </>
       )}
+
+      {/* ── Feature Flags ── */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
+        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+          <ToggleRight className="h-5 w-5 text-blue-400" />
+          Feature Flags
+        </h2>
+        <p className="text-sm text-gray-500">Toggle features on/off for all users instantly.</p>
+        <div className="space-y-3 pt-1">
+          {Object.entries(FLAG_META).map(([key, meta]) => {
+            const enabled = flags[key] ?? true
+            return (
+              <div key={key} className="flex items-center justify-between gap-4 p-4 rounded-xl bg-gray-800/50 border border-gray-700/50">
+                <div>
+                  <p className="text-white font-semibold text-sm">{meta.label}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">{meta.desc}</p>
+                </div>
+                <button onClick={() => toggleFlag(key)} disabled={toggling === key} className="shrink-0 transition-colors">
+                  {enabled
+                    ? <ToggleRight className="h-8 w-8 text-blue-500 hover:text-blue-400" />
+                    : <ToggleLeft  className="h-8 w-8 text-gray-600 hover:text-gray-400" />
+                  }
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
     </div>
   )
 }

@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield, Zap, BarChart3, UserCircle, LogIn } from 'lucide-react'
+import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield, Zap, UserCircle, LogIn } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
@@ -212,22 +212,13 @@ export default function TopNav() {
           </button>
 
           {isAdmin && (
-            <>
-              <Link
-                href="/analytics"
-                className={cn('hidden md:flex items-center gap-1.5 text-sm font-medium transition-colors text-blue-400 hover:text-blue-300')}
-              >
-                <BarChart3 className="h-4 w-4" />
-                <span>Analytics</span>
-              </Link>
-              <Link
-                href="/admin"
-                className={cn('hidden md:flex items-center gap-1.5 text-sm font-medium transition-colors text-red-400 hover:text-red-300')}
-              >
-                <Shield className="h-4 w-4" />
-                <span>Admin</span>
-              </Link>
-            </>
+            <Link
+              href="/analytics"
+              className={cn('hidden md:flex items-center gap-1.5 text-sm font-medium transition-colors text-red-400 hover:text-red-300')}
+            >
+              <Shield className="h-4 w-4" />
+              <span>Admin</span>
+            </Link>
           )}
           {session && (
             <Link
