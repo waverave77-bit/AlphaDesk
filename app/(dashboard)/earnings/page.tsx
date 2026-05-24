@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft, Info, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -233,12 +234,12 @@ function ExpandedDateView({ expandState, onClose }: { expandState: ExpandState; 
     return () => { document.body.style.overflow = '' }
   }, [phase])
 
-  return (
+  const content = (
     <div
       className="bg-gray-900"
       style={{
         position: 'fixed',
-        zIndex: 100,
+        zIndex: 9999,
         top: isOpen ? 0 : rect.top,
         left: isOpen ? 0 : rect.left,
         width: isOpen ? '100vw' : rect.width,
@@ -265,8 +266,8 @@ function ExpandedDateView({ expandState, onClose }: { expandState: ExpandState; 
           flexDirection: 'column',
         }}
       >
-        {/* Header */}
-        <div className={`flex items-center gap-4 px-6 pt-6 pb-5 border-b border-gray-800 shrink-0 ${isToday ? 'bg-amber-500/5' : ''}`}>
+        {/* Header — pt accounts for the sticky nav bar height */}
+        <div className={`flex items-center gap-4 px-6 pt-[72px] pb-5 border-b border-gray-800 shrink-0 ${isToday ? 'bg-amber-500/5' : ''}`}>
           {/* Back button */}
           <button
             onClick={onClose}
@@ -315,6 +316,10 @@ function ExpandedDateView({ expandState, onClose }: { expandState: ExpandState; 
       </div>
     </div>
   )
+
+  // Portal to document.body so the overlay escapes the <main z-20> stacking context
+  // and renders above the sticky nav bar (z-40)
+  return typeof document !== 'undefined' ? createPortal(content, document.body) : null
 }
 
 // ─── page ─────────────────────────────────────────────────────────────────────

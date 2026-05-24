@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
-import { TrendingUp, TrendingDown, Trophy, Search, Check, RefreshCw, Share2, Copy, CheckCheck } from 'lucide-react'
+import { TrendingUp, TrendingDown, Trophy, Search, Check, RefreshCw, Share2, Copy, CheckCheck, Lock, UserPlus, LogIn } from 'lucide-react'
 
 // ── Mr. Guy pixel head ────────────────────────────────────────────────────────
 const N = null
@@ -193,6 +195,7 @@ function getWeekLabel(): string {
 export default function ChallengePage() {
   const { themeId } = useTheme()
   const isDark = themeId !== 'white'
+  const { data: session } = useSession()
 
   const [mrGuyPick, setMrGuyPick] = useState<WeeklyPick | null>(null)
   const [userPick, setUserPick] = useState<UserPick | null>(null)
@@ -207,6 +210,7 @@ export default function ChallengePage() {
   const [tickerError, setTickerError] = useState('')
   const [searchResults, setSearchResults] = useState<{ symbol: string; name: string }[]>([])
   const [searchLoading, setSearchLoading] = useState(false)
+  const [showGuestPrompt, setShowGuestPrompt] = useState(false)
 
   // Past results from localStorage
   const [history, setHistory] = useState<{ weekKey: string; userPick: UserPick; mrPick: WeeklyPick; userWon: boolean | null; mrWon: boolean | null }[]>([])
@@ -307,6 +311,7 @@ export default function ChallengePage() {
   }
 
   async function submitPick() {
+    if (!session) { setShowGuestPrompt(true); return }
     if (!userTicker.trim()) { setTickerError('Enter a ticker or company name'); return }
     if (!mrGuyPick) return
     setTickerError('')
@@ -567,13 +572,43 @@ export default function ChallengePage() {
                       </button>
                     </div>
 
-                    <button
-                      onClick={submitPick}
-                      disabled={submitting}
-                      className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors disabled:opacity-50"
-                    >
-                      {submitting ? 'Locking in...' : 'Lock In My Pick'}
-                    </button>
+                    {showGuestPrompt ? (
+                      <div className={cn(
+                        'rounded-xl border p-4 text-center space-y-3',
+                        isDark ? 'bg-blue-950/40 border-blue-800/60' : 'bg-blue-50 border-blue-200'
+                      )}>
+                        <div className="flex justify-center">
+                          <div className="h-10 w-10 rounded-full bg-blue-600/20 flex items-center justify-center">
+                            <Lock className="h-5 w-5 text-blue-400" />
+                          </div>
+                        </div>
+                        <p className={cn('text-sm font-semibold', isDark ? 'text-white' : 'text-slate-900')}>
+                          Sign up to lock in your pick
+                        </p>
+                        <p className={cn('text-xs', isDark ? 'text-gray-400' : 'text-slate-500')}>
+                          Create a free account to compete against Mr. Guy and track your results.
+                        </p>
+                        <div className="flex gap-2">
+                          <Link href="/register" className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors">
+                            <UserPlus className="h-3.5 w-3.5" /> Sign Up Free
+                          </Link>
+                          <Link href="/login" className={cn('flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border text-sm font-semibold transition-colors', isDark ? 'border-gray-600 text-gray-300 hover:border-gray-400' : 'border-slate-300 text-slate-600')}>
+                            <LogIn className="h-3.5 w-3.5" /> Sign In
+                          </Link>
+                        </div>
+                        <button onClick={() => setShowGuestPrompt(false)} className={cn('text-xs underline', isDark ? 'text-gray-500' : 'text-slate-400')}>
+                          Maybe later
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={submitPick}
+                        disabled={submitting}
+                        className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors disabled:opacity-50"
+                      >
+                        {submitting ? 'Locking in...' : 'Lock In My Pick'}
+                      </button>
+                    )}
                   </div>
                 ) : userPick ? (
                   <div className="space-y-3 bubble-pop">
