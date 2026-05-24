@@ -224,32 +224,7 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
         </CardContent>
       </Card>
 
-      {/* News Section */}
-      {news.length > 0 && (
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-medium">Latest News</p>
-            <div className="space-y-4">
-              {news.map((item, i) => {
-                const date = item.providerPublishTime
-                  ? new Date(item.providerPublishTime * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                  : ''
-                return (
-                  <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 group">
-                    <div className="flex-shrink-0 w-1 rounded-full bg-gray-700 group-hover:bg-blue-500 transition-colors" />
-                    <div>
-                      <p className="text-sm text-gray-200 group-hover:text-blue-400 transition-colors leading-snug">
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">{item.publisher}{date ? ` · ${date}` : ''}</p>
-                    </div>
-                  </a>
-                )
-              })}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* News section moved to research page as PersonalizedNewsSection */}
     </div>
   )
 }
