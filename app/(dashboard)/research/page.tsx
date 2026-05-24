@@ -1,5 +1,5 @@
 'use client'
-import { Search, TrendingUp, TrendingDown, BarChart2 } from 'lucide-react'
+import { Search, TrendingUp, TrendingDown, BarChart2, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import StockSearch from '@/components/research/StockSearch'
@@ -118,7 +118,10 @@ export default function ResearchPage() {
               {gainers.map(m => <MoverRow key={m.ticker} m={m} />)}
             </div>
           ) : (
-            <p className="text-sm text-gray-500 py-4 text-center">No data available</p>
+            <div className="flex flex-col items-center gap-2 py-8 text-center">
+              <AlertCircle className="h-6 w-6 text-gray-700" />
+              <p className="text-sm text-gray-500">Market data unavailable — try refreshing</p>
+            </div>
           )}
         </div>
 
@@ -140,23 +143,11 @@ export default function ResearchPage() {
               {losers.map(m => <MoverRow key={m.ticker} m={m} />)}
             </div>
           ) : (
-            <p className="text-sm text-gray-500 py-4 text-center">No data available</p>
+            <div className="flex flex-col items-center gap-2 py-8 text-center">
+              <AlertCircle className="h-6 w-6 text-gray-700" />
+              <p className="text-sm text-gray-500">Market data unavailable — try refreshing</p>
+            </div>
           )}
-        </div>
-      </div>
-
-      <div>
-        <p className="text-sm font-medium text-gray-400 mb-3">Popular Stocks</p>
-        <div className="flex flex-wrap gap-2">
-          {POPULAR.map((t) => (
-            <a
-              key={t}
-              href={`/research/${t}`}
-              className="px-4 py-2 rounded-lg border border-gray-700 bg-gray-900 text-sm font-medium text-gray-300 hover:border-blue-600 hover:text-blue-400 hover:bg-blue-600/10 transition-colors"
-            >
-              {t}
-            </a>
-          ))}
         </div>
       </div>
 

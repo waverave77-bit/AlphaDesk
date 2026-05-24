@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft, Info } from 'lucide-react'
+import { Calendar, Search, Clock, X, ChevronLeft, ChevronRight, ArrowLeft, Info, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
@@ -498,7 +498,13 @@ export default function EarningsPage() {
           {loading ? (
             <LoadingSkeleton />
           ) : error ? (
-            <p className="text-center text-gray-500 py-10">{error}</p>
+            <div className="flex flex-col items-center gap-3 py-14 text-center">
+              <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                <AlertCircle className="h-6 w-6 text-red-400" />
+              </div>
+              <p className="text-sm font-medium text-gray-300">Couldn't load earnings data</p>
+              <p className="text-xs text-gray-500">This is usually temporary — try refreshing the page</p>
+            </div>
           ) : (
             <CalendarGrid
               year={calMonth.year}

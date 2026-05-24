@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import {
   TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight,
-  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart,
+  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -743,7 +743,14 @@ export default function GamePage() {
       {tab === 'History' && (
         <div className="space-y-2">
           {loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.trades?.length ? (
-            <Card><CardContent className="p-8 text-center"><p className="text-gray-400">No trades yet</p></CardContent></Card>
+            <Card>
+              <CardContent className="p-10 text-center">
+                <History className="h-10 w-10 text-gray-700 mx-auto mb-3" />
+                <p className="text-gray-300 font-medium">No trades yet</p>
+                <p className="text-gray-500 text-sm mt-1">Your completed trades will appear here</p>
+                <Button className="mt-4 bg-blue-600 hover:bg-blue-700" onClick={() => setTab('Trade')}>Make Your First Trade</Button>
+              </CardContent>
+            </Card>
           ) : (
             portfolio.trades.map((t: Trade) => (
               <Card key={t.id}>

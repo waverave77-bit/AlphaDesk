@@ -501,11 +501,11 @@ export default function MarketsPage() {
       </div>
 
       {/* Explainer */}
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-        <p className="text-sm font-semibold text-blue-700 mb-1 flex items-center gap-1.5">
+      <div className="bg-blue-600/8 border border-blue-500/15 rounded-xl p-4 mb-6">
+        <p className="text-sm font-semibold text-blue-400 mb-1 flex items-center gap-1.5">
           <Info className="h-3.5 w-3.5" /> What is this?
         </p>
-        <p className="text-sm text-blue-600 leading-relaxed">
+        <p className="text-sm text-gray-400 leading-relaxed">
           A live snapshot of overall market health. See how fearful or greedy investors are, which sectors are gaining or losing, and upcoming economic events that could move the market.
         </p>
       </div>
