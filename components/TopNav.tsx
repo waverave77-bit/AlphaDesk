@@ -19,6 +19,7 @@ const primaryNav = [
 
 const moreNav = [
   { href: '/watchlist',  label: 'Watchlist' },
+  { href: '/news',       label: 'News Feed' },
   { href: '/dividends',  label: 'Dividends' },
   { href: '/insiders',   label: 'Smart Money' },
   { href: '/earnings',   label: 'Earnings Calendar' },
