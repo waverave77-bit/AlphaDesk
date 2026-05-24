@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
+import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
-const MR_GUY_SYSTEM = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
+const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
 
 export async function GET(req: NextRequest) {
   const limited = await checkAILimit('report-card')
@@ -15,6 +16,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const ticker = searchParams.get('ticker')?.toUpperCase()
+    const experience = searchParams.get('experience') ?? 'beginner'
     if (!ticker) {
       return NextResponse.json({ error: 'Missing ticker' }, { status: 400 })
     }
@@ -81,7 +83,7 @@ Respond ONLY with valid JSON in this exact format (no extra text, no markdown):
     const response = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 500,
-      system: MR_GUY_SYSTEM,
+      system: MR_GUY_SYSTEM_BASE + getExperienceContext(experience),
       messages: [{ role: 'user', content: userPrompt }],
     })
 

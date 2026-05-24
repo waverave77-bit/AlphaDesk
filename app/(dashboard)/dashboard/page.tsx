@@ -136,6 +136,7 @@ export default function DashboardPage() {
         body: JSON.stringify({
           message: `You are Mr. Guy, a sarcastic but loveable pixel-art financial mascot. Roast this watchlist in exactly 2-3 sentences. Be funny and a little brutal but keep it light-hearted. Watchlist: ${tickers}. If it's mostly green say something envious. If mostly red be sympathetic but roast them anyway.`,
           history: [],
+          experience: typeof window !== 'undefined' ? (localStorage.getItem('zg_experience') ?? 'beginner') : 'beginner',
         }),
       })
       if (!res.ok || !res.body) { setRoast("I tried to roast your portfolio but even I felt bad about it."); setRoasting(false); return }

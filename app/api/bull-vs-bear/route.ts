@@ -3,6 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { PrismaClient } from '@prisma/client'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, searchStocks } from '@/lib/yahoo-finance'
+import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,9 +29,11 @@ export async function POST(req: Request) {
   if (limited) return limited
 
   let rawQuery: string
+  let experience: string
   try {
     const body = await req.json()
     rawQuery = (body.ticker ?? '').trim()
+    experience = (body.experience ?? 'beginner') as string
   } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
@@ -120,7 +123,7 @@ verdict must be exactly "bull" or "bear".`
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 600,
-      system: 'You are Mr. Guy — a sharp, funny, no-BS stock analyst. When asked to debate a stock, you write both sides of the trade honestly, then pick one. Casual language. No markdown asterisks. No headers with ##. Just clean sentences.',
+      system: `You are Mr. Guy — a sharp, funny, no-BS stock analyst. When asked to debate a stock, you write both sides of the trade honestly, then pick one. Casual language. No markdown asterisks. No headers with ##. Just clean sentences.${getExperienceContext(experience)}`,
       messages: [{ role: 'user', content: userPrompt }],
     })
 

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { checkAILimit } from '@/lib/pro'
+import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
-const MR_GUY_SYSTEM = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
+const MR_GUY_SYSTEM_BASE = `You are Mr. Guy, a funny finance mascot who talks like a smart friend at a bar. Plain English only — no jargon. If you use a finance term, immediately explain it in parentheses. Casual, confident, occasionally funny. No markdown asterisks or pound signs. No em dashes. Emojis only: 🟢 🟡 🔴 🚨 ✅ ❌.`
 
 export async function POST(req: NextRequest) {
   const limited = await checkAILimit('translator')
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
-    const { text, mode } = await req.json()
+    const { text, mode, experience } = await req.json()
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: 'Missing text' }, { status: 400 })
     }
@@ -42,7 +43,7 @@ RED FLAGS:
     const response = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 800,
-      system: MR_GUY_SYSTEM,
+      system: MR_GUY_SYSTEM_BASE + getExperienceContext(experience),
       messages: [{ role: 'user', content: userPrompt }],
     })
 

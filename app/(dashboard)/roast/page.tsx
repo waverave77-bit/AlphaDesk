@@ -97,7 +97,7 @@ export default function RoastPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, experience: 'some', history: [] }),
+        body: JSON.stringify({ message, experience: localStorage.getItem('zg_experience') ?? 'beginner', history: [] }),
       })
       if (!res.ok || !res.body) { setError('Something went wrong. Try again.'); return }
       const reader = res.body.getReader()

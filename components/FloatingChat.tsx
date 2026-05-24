@@ -44,11 +44,12 @@ export default function FloatingChat() {
     const updated: Message[] = [...messages, { role: 'user', content: msg }]
     setMessages(updated)
     setLoading(true)
+    const experience = typeof window !== 'undefined' ? (localStorage.getItem('zg_experience') ?? 'beginner') : 'beginner'
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: messages }),
+        body: JSON.stringify({ message: msg, history: messages, experience }),
       })
       const data = await res.json()
       setMessages([...updated, { role: 'assistant', content: data.reply }])

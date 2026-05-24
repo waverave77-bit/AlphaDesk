@@ -112,7 +112,8 @@ export default function ReportCardPage() {
     setLimitReached(false)
     setSearchResults([])
     try {
-      const res = await fetch(`/api/report-card?ticker=${encodeURIComponent(t)}`)
+      const exp = localStorage.getItem('zg_experience') ?? 'beginner'
+      const res = await fetch(`/api/report-card?ticker=${encodeURIComponent(t)}&experience=${exp}`)
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); setLoading(false); return }
       if (data.error) { setError(data.error); return }

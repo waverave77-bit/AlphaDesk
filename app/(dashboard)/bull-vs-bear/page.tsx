@@ -97,7 +97,7 @@ export default function BullVsBearPage() {
       const res = await fetch('/api/bull-vs-bear', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticker: t }),
+        body: JSON.stringify({ ticker: t, experience: localStorage.getItem('zg_experience') ?? 'beginner' }),
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); return }

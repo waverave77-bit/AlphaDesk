@@ -1,47 +1,63 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, Briefcase, BookOpen, Newspaper } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, Briefcase, BookOpen, Newspaper, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'zg_onboarded_v2'
 
 const EXPERIENCE_LEVELS = [
   { id: 'beginner', label: 'Complete Beginner', desc: "I've never invested before", Icon: GraduationCap },
-  { id: 'some', label: 'Some Experience', desc: 'I know the basics', Icon: TrendingUp },
-  { id: 'experienced', label: 'Experienced', desc: "I've been investing for a while", Icon: Award },
+  { id: 'some',     label: 'Some Experience',   desc: 'I know the basics',           Icon: TrendingUp },
+  { id: 'experienced', label: 'Experienced',    desc: "I've been investing for years", Icon: Award },
 ]
 
 const GOALS = [
   { id: 'portfolio', label: 'Try Mr. Guy AI tools', Icon: Bot },
-  { id: 'learn', label: 'Learn investing basics', Icon: BookOpen },
-  { id: 'markets', label: 'Follow market news', Icon: Newspaper },
-  { id: 'research', label: 'Research stocks', Icon: Search },
+  { id: 'learn',     label: 'Learn investing basics', Icon: BookOpen },
+  { id: 'markets',   label: 'Follow market news',     Icon: Newspaper },
+  { id: 'research',  label: 'Research stocks',        Icon: Search },
 ]
 
 const FEATURES = [
-  { icon: Search, color: 'bg-blue-600/20 border-blue-500/30 text-blue-400', label: 'Stock Research', desc: 'Deep-dive any stock with live data, charts, and AI analysis' },
-  { icon: Bot, color: 'bg-purple-600/20 border-purple-500/30 text-purple-400', label: 'AI Investing Coach', desc: 'Ask anything, powered by live news, explained in plain English' },
-  { icon: BarChart2, color: 'bg-green-600/20 border-green-500/30 text-green-400', label: 'Live Markets', desc: 'Sector heatmaps, top movers, and the Fear and Greed index' },
+  { icon: Search,   color: 'bg-blue-600/20 border-blue-500/30 text-blue-400',   label: 'Stock Research',      desc: 'Deep-dive any stock with live data, charts, and AI analysis' },
+  { icon: Bot,      color: 'bg-purple-600/20 border-purple-500/30 text-purple-400', label: 'AI Investing Coach', desc: 'Ask anything, powered by live news, explained in plain English' },
+  { icon: BarChart2, color: 'bg-green-600/20 border-green-500/30 text-green-400', label: 'Live Markets',       desc: 'Sector heatmaps, top movers, and the Fear and Greed index' },
 ]
 
 export default function OnboardingModal() {
+  const { status } = useSession()
   const [visible, setVisible] = useState(false)
   const [step, setStep] = useState(0)
   const [experience, setExperience] = useState<string | null>(null)
   const [goals, setGoals] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) setVisible(true)
-  }, [])
+    // Only show for logged-in users who haven't completed onboarding
+    if (status === 'authenticated' && !localStorage.getItem(STORAGE_KEY)) {
+      setVisible(true)
+    }
+  }, [status])
 
   const complete = async () => {
     localStorage.setItem(STORAGE_KEY, 'true')
-    if (experience) localStorage.setItem('zg_experience', experience)
+    const level = experience ?? 'beginner'
+    localStorage.setItem('zg_experience', level)
+
+    // Save to DB so it persists across devices and powers settings
+    fetch('/api/user/experience', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ experienceLevel: level }),
+    }).catch(() => {})
+
+    // Save aggregate stats
     fetch('/api/onboarding', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ experience, goals: Array.from(goals) }),
+      body: JSON.stringify({ experience: level, goals: Array.from(goals) }),
     }).catch(() => {})
+
     setVisible(false)
   }
 
@@ -83,8 +99,8 @@ export default function OnboardingModal() {
               <div className="grid grid-cols-3 gap-4">
                 {[
                   { Icon: BarChart2, label: 'Live market data' },
-                  { Icon: Bot, label: 'AI investing coach' },
-                  { Icon: BookOpen, label: 'Learn as you go' },
+                  { Icon: Bot,       label: 'AI investing coach' },
+                  { Icon: BookOpen,  label: 'Learn as you go' },
                 ].map((f) => (
                   <div key={f.label} className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
                     <f.Icon className="h-7 w-7 text-blue-400 mb-2" />
@@ -108,6 +124,15 @@ export default function OnboardingModal() {
                 <h2 className="text-3xl font-bold text-white">What's your experience level?</h2>
                 <p className="text-gray-500 mt-2 text-base">We'll tailor things to match where you're at</p>
               </div>
+
+              {/* AI personalization notice */}
+              <div className="flex items-start gap-3 bg-blue-600/10 border border-blue-500/20 rounded-2xl px-4 py-3">
+                <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
+                <p className="text-sm text-blue-300 leading-relaxed">
+                  <strong>This changes how Mr. Guy explains things to you.</strong> Beginners get plain English and no jargon. Experienced investors get the full technical breakdown. You can change this anytime in Settings.
+                </p>
+              </div>
+
               <div className="space-y-4">
                 {EXPERIENCE_LEVELS.map((lvl) => (
                   <button
@@ -196,6 +221,7 @@ export default function OnboardingModal() {
                   )
                 })}
               </div>
+              <p className="text-xs text-gray-600 text-center">Your AI experience level is saved. You can change it anytime in Settings.</p>
               <button onClick={complete} className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors">
                 Start Exploring <ChevronRight className="h-5 w-5" />
               </button>

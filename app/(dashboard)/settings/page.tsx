@@ -1,13 +1,20 @@
 'use client'
 import { useSession, signOut, signIn } from 'next-auth/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2 } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2, GraduationCap, TrendingUp, Award, Check } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
+import { type ExperienceLevel, EXPERIENCE_LABELS, EXPERIENCE_DESCS } from '@/lib/experience'
+
+const EXPERIENCE_ICONS: Record<ExperienceLevel, React.ElementType> = {
+  beginner: GraduationCap,
+  some: TrendingUp,
+  experienced: Award,
+}
 
 export default function SettingsPage() {
   const { data: session } = useSession()
@@ -20,6 +27,39 @@ export default function SettingsPage() {
   const [deleteConfirm, setDeleteConfirm] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState('')
+  const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel>('beginner')
+  const [experienceSaving, setExperienceSaving] = useState(false)
+
+  // Load experience level from DB on mount
+  useEffect(() => {
+    fetch('/api/user/experience')
+      .then(r => r.json())
+      .then(d => {
+        if (d.experienceLevel) {
+          setExperienceLevel(d.experienceLevel as ExperienceLevel)
+          localStorage.setItem('zg_experience', d.experienceLevel)
+        }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem('zg_experience') as ExperienceLevel | null
+        if (saved) setExperienceLevel(saved)
+      })
+  }, [])
+
+  const handleExperienceChange = async (level: ExperienceLevel) => {
+    setExperienceLevel(level)
+    localStorage.setItem('zg_experience', level)
+    setExperienceSaving(true)
+    try {
+      await fetch('/api/user/experience', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ experienceLevel: level }),
+      })
+    } finally {
+      setExperienceSaving(false)
+    }
+  }
 
   const handleDeleteAccount = async () => {
     setDeleteLoading(true)
@@ -184,6 +224,47 @@ export default function SettingsPage() {
                 ))}
               </div>
               <p className="text-xs text-gray-600 mt-2">All 3 run in parallel and a 4th Claude call synthesizes a consensus answer.</p>
+            </CardContent>
+          </Card>
+
+          {/* AI Experience Level */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-semibold">
+                  <Brain className="h-4 w-4 text-blue-400" />
+                  AI Experience Level
+                </span>
+                {experienceSaving && <Loader2 className="h-3.5 w-3.5 text-gray-500 animate-spin" />}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-gray-500">Controls how Mr. Guy explains things to you across all AI features.</p>
+              <div className="space-y-2">
+                {(Object.keys(EXPERIENCE_LABELS) as ExperienceLevel[]).map((level) => {
+                  const Icon = EXPERIENCE_ICONS[level]
+                  const selected = experienceLevel === level
+                  return (
+                    <button
+                      key={level}
+                      onClick={() => handleExperienceChange(level)}
+                      className={cn(
+                        'w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-all',
+                        selected ? 'border-blue-500 bg-blue-600/10' : 'border-gray-800 bg-gray-900 hover:border-gray-700'
+                      )}
+                    >
+                      <div className={cn('h-8 w-8 rounded-lg flex items-center justify-center shrink-0', selected ? 'bg-blue-600/20' : 'bg-gray-800')}>
+                        <Icon className={cn('h-4 w-4', selected ? 'text-blue-400' : 'text-gray-400')} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={cn('text-sm font-semibold', selected ? 'text-white' : 'text-gray-300')}>{EXPERIENCE_LABELS[level]}</p>
+                        <p className="text-xs text-gray-500 truncate">{EXPERIENCE_DESCS[level]}</p>
+                      </div>
+                      {selected && <Check className="h-4 w-4 text-blue-400 shrink-0" />}
+                    </button>
+                  )
+                })}
+              </div>
             </CardContent>
           </Card>
 

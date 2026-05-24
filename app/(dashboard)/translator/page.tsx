@@ -82,7 +82,7 @@ export default function TranslatorPage() {
       const res = await fetch('/api/translator', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text.trim(), mode }),
+        body: JSON.stringify({ text: text.trim(), mode, experience: localStorage.getItem('zg_experience') ?? 'beginner' }),
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); setLoading(false); return }

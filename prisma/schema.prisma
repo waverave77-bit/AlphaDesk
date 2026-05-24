@@ -24,6 +24,10 @@ model User {
   proCancelledAt       DateTime?
   // ───────────────────────────────────────────────────────────────────
 
+  // ─── AI experience level ────────────────────────────────────────────
+  experienceLevel      String    @default("beginner")
+  // ───────────────────────────────────────────────────────────────────
+
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]
