@@ -247,7 +247,7 @@ export default function TopNav() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
+            className={cn('md:hidden p-1.5 rounded-lg transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800' : 'text-slate-500 hover:bg-slate-100')}
             onClick={() => setMobileOpen(true)}
           >
             <Menu className="h-5 w-5" />
@@ -262,8 +262,8 @@ export default function TopNav() {
           <aside className={cn('fixed right-0 top-0 h-full w-72 flex flex-col shadow-xl border-l', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
             <div className={cn('flex items-center justify-between px-5 py-4 border-b', isDark ? 'border-gray-800' : 'border-slate-100')}>
               <span className={cn('font-semibold', isDark ? 'text-white' : 'text-slate-900')}>Menu</span>
-              <button onClick={() => setMobileOpen(false)} className="p-1 rounded-lg hover:bg-slate-100">
-                <X className="h-5 w-5 text-slate-500" />
+              <button onClick={() => setMobileOpen(false)} className={cn('p-1 rounded-lg transition-colors', isDark ? 'hover:bg-gray-800' : 'hover:bg-slate-100')}>
+                <X className={cn('h-5 w-5', isDark ? 'text-gray-400' : 'text-slate-500')} />
               </button>
             </div>
 
