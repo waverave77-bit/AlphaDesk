@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb } from 'lucide-react'
+import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, SearchX } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { TERMS, CATEGORIES, type Category } from '@/lib/glossary-terms'
@@ -79,7 +79,11 @@ export default function LearnPage() {
       {/* Terms list */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
         {filtered.length === 0 && (
-          <p className="text-center text-gray-500 py-12">No terms found for &quot;{search}&quot;</p>
+          <div className="flex flex-col items-center gap-3 py-16 text-center">
+            <SearchX className="h-8 w-8 text-gray-700" />
+            <p className="text-gray-400 font-medium">No terms found for &quot;{search}&quot;</p>
+            <p className="text-sm text-gray-600">Try a different word or browse by category</p>
+          </div>
         )}
         {filtered.map((t) => (
           <Card

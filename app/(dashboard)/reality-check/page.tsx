@@ -102,8 +102,10 @@ export default function RealityCheckPage() {
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
-  async function check() {
-    if (!input.trim()) return
+  async function check(override?: string) {
+    const value = override ?? input
+    if (!value.trim()) return
+    if (override) setInput(override)
     setLoading(true)
     setResult(null)
     setError('')
@@ -112,7 +114,7 @@ export default function RealityCheckPage() {
       const res = await fetch('/api/reality-check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({ input: value }),
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); setLoading(false); return }
@@ -166,7 +168,7 @@ export default function RealityCheckPage() {
               Works for tips, trade ideas, claims — anything finance related
             </p>
             <button
-              onClick={check}
+              onClick={() => check()}
               disabled={loading || !input.trim()}
               className="flex items-center gap-2 px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors disabled:opacity-40"
             >
@@ -266,7 +268,7 @@ export default function RealityCheckPage() {
               {EXAMPLES.map(ex => (
                 <button
                   key={ex}
-                  onClick={() => setInput(ex)}
+                  onClick={() => check(ex)}
                   className={cn(
                     'text-xs px-3 py-1.5 rounded-full border transition-colors text-left',
                     isDark ? 'border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-white' : 'border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
