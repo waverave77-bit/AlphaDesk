@@ -105,13 +105,13 @@ export default function TopNav() {
   return (
     <>
       <header className={cn(
-        'h-16 flex items-center px-8 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
+        'h-16 flex items-center px-4 md:px-8 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
         isDark
           ? 'bg-gray-900 border-b border-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
           : 'bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
       )}>
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-2 mr-8 shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-2 mr-3 md:mr-8 shrink-0">
           <MrGuyPixelHead px={3} />
           <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Mr. Guy</span>
         </Link>

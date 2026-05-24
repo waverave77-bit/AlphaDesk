@@ -162,7 +162,7 @@ export default function HotTakePage() {
             <MrGuyHead px={5} />
           </div>
           <div>
-            <h1 className={cn('text-3xl font-extrabold', isDark ? 'text-white' : 'text-slate-900')}>
+            <h1 className={cn('text-2xl sm:text-3xl font-extrabold', isDark ? 'text-white' : 'text-slate-900')}>
               Mr. Guy's Hot Take
             </h1>
             <p className={cn('text-base mt-0.5', isDark ? 'text-gray-400' : 'text-slate-500')}>

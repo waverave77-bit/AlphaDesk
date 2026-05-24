@@ -149,7 +149,7 @@ export default function SpikeSummaryPage() {
           <MrGuyHead px={5} />
         </div>
         <div>
-          <h1 className={cn('text-3xl font-extrabold', text)}>Spike Summary</h1>
+          <h1 className={cn('text-2xl sm:text-3xl font-extrabold', text)}>Spike Summary</h1>
           <p className={cn('text-base mt-0.5', sub)}>
             Enter a ticker to see its biggest recent price moves — and why they happened.
           </p>

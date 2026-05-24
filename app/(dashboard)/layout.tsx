@@ -18,7 +18,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <TopNav />
       <TickerBar />
       <main className="flex-1 overflow-y-auto scrollbar-thin relative z-20">
-        <div className="p-6 w-full">
+        <div className="p-4 sm:p-6 w-full">
           {children}
         </div>
         <footer className="px-6 py-4 border-t border-gray-200 dark:border-gray-800 mt-6">

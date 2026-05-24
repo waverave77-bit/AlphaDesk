@@ -102,20 +102,20 @@ function IndexCard({
 
   return (
     <div className={cn(
-      'rounded-xl border p-4',
+      'rounded-xl border p-3 sm:p-4',
       isUp
         ? isDark ? 'bg-green-900/20 border-green-700/40' : 'bg-green-50 border-green-200'
         : isDark ? 'bg-red-900/20 border-red-700/40' : 'bg-red-50 border-red-200'
     )}>
-      <p className={cn('text-xs font-semibold uppercase tracking-wider mb-1', isDark ? 'text-gray-400' : 'text-slate-500')}>
+      <p className={cn('text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-1', isDark ? 'text-gray-400' : 'text-slate-500')}>
         {label}
       </p>
       {data ? (
         <>
-          <p className={cn('text-xl font-black', isDark ? 'text-white' : 'text-slate-900')}>
-            ${data.price.toFixed(2)}
+          <p className={cn('text-base sm:text-xl font-black tabular-nums', isDark ? 'text-white' : 'text-slate-900')}>
+            ${data.price.toLocaleString('en-US', { maximumFractionDigits: 0 })}
           </p>
-          <p className={cn('text-sm font-bold mt-0.5', isUp ? 'text-green-400' : 'text-red-400')}>
+          <p className={cn('text-xs sm:text-sm font-bold mt-0.5', isUp ? 'text-green-400' : 'text-red-400')}>
             {isUp ? '+' : ''}{pct.toFixed(2)}%
           </p>
         </>
@@ -204,7 +204,7 @@ export default function BriefingPage() {
             <MrGuyHead px={5} />
           </div>
           <div>
-            <h1 className={cn('text-3xl font-extrabold', isDark ? 'text-white' : 'text-slate-900')}>
+            <h1 className={cn('text-2xl sm:text-3xl font-extrabold', isDark ? 'text-white' : 'text-slate-900')}>
               Morning Briefing
             </h1>
             <p className={cn('text-base mt-0.5', isDark ? 'text-gray-400' : 'text-slate-500')}>
@@ -214,7 +214,7 @@ export default function BriefingPage() {
         </div>
 
         {/* Index cards */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           <IndexCard label="S&P 500" data={data?.indices?.spy ?? null} isDark={isDark} loading={loading} />
           <IndexCard label="NASDAQ" data={data?.indices?.qqq ?? null} isDark={isDark} loading={loading} />
           <IndexCard label="DOW" data={data?.indices?.dia ?? null} isDark={isDark} loading={loading} />

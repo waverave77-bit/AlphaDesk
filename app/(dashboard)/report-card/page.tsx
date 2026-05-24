@@ -153,7 +153,7 @@ export default function ReportCardPage() {
             <MrGuyHead px={5} />
           </div>
           <div>
-            <h1 className={cn('text-4xl font-extrabold tracking-tight', isDark ? 'text-white' : 'text-slate-900')}>
+            <h1 className={cn('text-2xl sm:text-4xl font-extrabold tracking-tight', isDark ? 'text-white' : 'text-slate-900')}>
               Stock Report Card
             </h1>
             <p className={cn('text-base mt-1', isDark ? 'text-gray-400' : 'text-slate-500')}>

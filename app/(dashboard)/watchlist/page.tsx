@@ -313,8 +313,8 @@ export default function WatchlistPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-6">
-                          <div className="text-right hidden sm:block">
+                        <div className="flex items-center gap-3 sm:gap-6">
+                          <div className="text-right">
                             {item.price ? (
                               <>
                                 <p className="text-white font-semibold flex items-center justify-end gap-1">
@@ -327,8 +327,7 @@ export default function WatchlistPage() {
                                     : <TrendingDown className="h-3 w-3 text-red-400" />
                                   }
                                   <span className={cn('text-xs', gainLossColor(item.changePercent ?? 0))}>
-                                    {item.change ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}
-                                    {' '}({formatPercent(item.changePercent ?? 0)})
+                                    <span className="hidden sm:inline">{item.change ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}{' '}</span>({formatPercent(item.changePercent ?? 0)})
                                   </span>
                                   <InfoTooltip text="How much the stock has moved today compared to yesterday's closing price." />
                                 </div>

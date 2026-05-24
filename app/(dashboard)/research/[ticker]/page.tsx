@@ -357,13 +357,13 @@ export default function StockDetailPage() {
         <CardContent className="p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <p className="text-4xl font-bold text-white">{formatCurrency(quote.price)}</p>
-              <div className="flex items-center gap-2 mt-1">
+              <p className="text-3xl sm:text-4xl font-bold text-white">{formatCurrency(quote.price)}</p>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
                 {pricePositive
-                  ? <TrendingUp className="h-4 w-4 text-green-400" />
-                  : <TrendingDown className="h-4 w-4 text-red-400" />
+                  ? <TrendingUp className="h-4 w-4 text-green-400 shrink-0" />
+                  : <TrendingDown className="h-4 w-4 text-red-400 shrink-0" />
                 }
-                <span className={cn('text-lg font-semibold', gainLossColor(quote.change))}>
+                <span className={cn('text-sm sm:text-lg font-semibold', gainLossColor(quote.change))}>
                   {quote.change >= 0 ? '+' : ''}{quote.change.toFixed(2)} ({quote.changePercent >= 0 ? '+' : ''}{quote.changePercent.toFixed(2)}%)
                 </span>
                 <span className="text-xs text-gray-500">Today</span>
