@@ -1,10 +1,11 @@
 'use client'
 import { useSession, signOut, signIn } from 'next-auth/react'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2, GraduationCap, TrendingUp, Award, Check } from 'lucide-react'
+import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2, GraduationCap, TrendingUp, Award, Check, Pencil, X, LogIn } from 'lucide-react'
 import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
@@ -29,8 +30,14 @@ export default function SettingsPage() {
   const [deleteError, setDeleteError] = useState('')
   const [experienceLevel, setExperienceLevel] = useState<ExperienceLevel>('beginner')
   const [experienceSaving, setExperienceSaving] = useState(false)
+  const [usernameEditing, setUsernameEditing] = useState(false)
+  const [usernameInput, setUsernameInput] = useState('')
+  const [usernameSaving, setUsernameSaving] = useState(false)
+  const [usernameError, setUsernameError] = useState('')
+  const [usernameSuccess, setUsernameSuccess] = useState(false)
+  const [currentUsername, setCurrentUsername] = useState<string | null>(null)
 
-  // Load experience level from DB on mount
+  // Load experience level + username from DB on mount
   useEffect(() => {
     fetch('/api/user/experience')
       .then(r => r.json())
@@ -39,12 +46,49 @@ export default function SettingsPage() {
           setExperienceLevel(d.experienceLevel as ExperienceLevel)
           localStorage.setItem('zg_experience', d.experienceLevel)
         }
+        if (d.username !== undefined) setCurrentUsername(d.username ?? null)
       })
       .catch(() => {
         const saved = localStorage.getItem('zg_experience') as ExperienceLevel | null
         if (saved) setExperienceLevel(saved)
       })
   }, [])
+
+  // Fallback: derive username from session name if DB didn't return it
+  useEffect(() => {
+    if (currentUsername === null && session?.user?.name) {
+      setCurrentUsername(session.user.name)
+    }
+  }, [session, currentUsername])
+
+  const handleUsernameSave = async () => {
+    setUsernameError('')
+    setUsernameSuccess(false)
+    if (!usernameInput.trim()) return
+    setUsernameSaving(true)
+    try {
+      const res = await fetch('/api/user/username', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usernameInput.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setUsernameError(data.error || 'Failed to update username.')
+        setUsernameSaving(false)
+        return
+      }
+      setCurrentUsername(data.username)
+      setUsernameEditing(false)
+      setUsernameInput('')
+      setUsernameSuccess(true)
+      setTimeout(() => setUsernameSuccess(false), 3000)
+    } catch {
+      setUsernameError('Something went wrong. Try again.')
+    } finally {
+      setUsernameSaving(false)
+    }
+  }
 
   const handleExperienceChange = async (level: ExperienceLevel) => {
     setExperienceLevel(level)
@@ -120,6 +164,27 @@ export default function SettingsPage() {
       setDemoError('Something went wrong. Try again.')
       setDemoLoading(false)
     }
+  }
+
+  // Guest guard
+  if (!session) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
+        <div className="h-16 w-16 rounded-full bg-gray-800 flex items-center justify-center">
+          <LogIn className="h-8 w-8 text-gray-400" />
+        </div>
+        <h2 className="text-xl font-bold text-white">Sign in to access Settings</h2>
+        <p className="text-sm text-gray-400 max-w-xs">Create a free account or sign in to manage your preferences, experience level, and account details.</p>
+        <div className="flex gap-3">
+          <Link href="/login">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">Sign In</Button>
+          </Link>
+          <Link href="/register">
+            <Button variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800">Create Account</Button>
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -302,15 +367,62 @@ export default function SettingsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1">
-              {[
-                { label: 'Email', value: session?.user?.email },
-                { label: 'Name',  value: session?.user?.name || 'Not set' },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex justify-between py-2.5 border-b border-gray-800 last:border-0">
-                  <span className="text-sm text-gray-400">{label}</span>
-                  <span className="text-sm text-gray-200">{value}</span>
-                </div>
-              ))}
+              <div className="flex justify-between py-2.5 border-b border-gray-800">
+                <span className="text-sm text-gray-400">Email</span>
+                <span className="text-sm text-gray-200">{session?.user?.email}</span>
+              </div>
+
+              {/* Username with edit */}
+              <div className="py-2.5 border-b border-gray-800">
+                {usernameEditing ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-400 mb-1">Username</p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={usernameInput}
+                        onChange={e => { setUsernameInput(e.target.value); setUsernameError('') }}
+                        placeholder="3–20 chars, letters/numbers/_"
+                        maxLength={20}
+                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        onKeyDown={e => { if (e.key === 'Enter') handleUsernameSave(); if (e.key === 'Escape') { setUsernameEditing(false); setUsernameError('') } }}
+                        autoFocus
+                      />
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border-0 px-3"
+                        onClick={handleUsernameSave}
+                        disabled={usernameSaving || !usernameInput.trim()}
+                      >
+                        {usernameSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Save'}
+                      </Button>
+                      <button
+                        onClick={() => { setUsernameEditing(false); setUsernameInput(''); setUsernameError('') }}
+                        className="p-1.5 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-gray-800"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    {usernameError && <p className="text-xs text-red-400">{usernameError}</p>}
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-400">Username</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-200">{currentUsername || 'Not set'}</span>
+                      <button
+                        onClick={() => { setUsernameEditing(true); setUsernameInput(currentUsername || ''); setUsernameSuccess(false) }}
+                        className="p-1 rounded text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition-colors"
+                        title="Change username"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {usernameSuccess && <p className="text-xs text-green-400 mt-1">Username updated!</p>}
+              </div>
+
               <div className="flex justify-between py-2.5">
                 <span className="text-sm text-gray-400">Status</span>
                 <Badge variant="success">Active</Badge>

@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield, Zap, BarChart3 } from 'lucide-react'
+import { TrendingUp, Settings, Menu, X, LogOut, ChevronDown, Sun, Moon, Shield, Zap, BarChart3, UserCircle, LogIn } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
@@ -94,7 +94,7 @@ export default function TopNav() {
 
   const initials = session?.user?.name
     ? session.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
-    : 'ZJ'
+    : null
 
   const isActive = (href: string) =>
     href === '/dashboard' ? pathname === href : pathname.startsWith(href)
@@ -238,21 +238,33 @@ export default function TopNav() {
               Upgrade
             </Link>
           )}
-          <Link
-            href="/settings"
-            className={cn('hidden md:flex items-center gap-1.5 text-sm transition-colors', isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-700')}
-          >
-            <Settings className="h-4 w-4" />
-            <span>Settings</span>
-          </Link>
+          {session ? (
+            <Link
+              href="/settings"
+              className={cn('hidden md:flex items-center gap-1.5 text-sm transition-colors', isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-700')}
+            >
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className={cn('hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors', isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900')}
+            >
+              <LogIn className="h-4 w-4" />
+              <span>Sign In</span>
+            </Link>
+          )}
 
-          {/* Avatar */}
-          <div
-            className="h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer"
-            style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
-          >
-            {initials}
-          </div>
+          {/* Avatar — only shown when logged in */}
+          {session && (
+            <div
+              className="h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer"
+              style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
+            >
+              {initials}
+            </div>
+          )}
 
           {/* Mobile hamburger */}
           <button
@@ -322,28 +334,38 @@ export default function TopNav() {
                   {icon} {label}
                 </button>
               ))}
-              {session && (
+              {session ? (
+                <>
+                  <Link
+                    href="/upgrade"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+                  >
+                    <Zap className="h-4 w-4" /> Upgrade to Pro
+                  </Link>
+                  <Link
+                    href="/settings"
+                    onClick={() => setMobileOpen(false)}
+                    className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
+                  >
+                    <Settings className="h-4 w-4" /> Settings
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
+                  >
+                    <LogOut className="h-4 w-4" /> Sign Out
+                  </button>
+                </>
+              ) : (
                 <Link
-                  href="/upgrade"
+                  href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+                  className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium', isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
                 >
-                  <Zap className="h-4 w-4" /> Upgrade to Pro
+                  <LogIn className="h-4 w-4" /> Sign In
                 </Link>
               )}
-              <Link
-                href="/settings"
-                onClick={() => setMobileOpen(false)}
-                className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
-              >
-                <Settings className="h-4 w-4" /> Settings
-              </Link>
-              <button
-                onClick={() => signOut({ callbackUrl: '/login' })}
-                className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
-              >
-                <LogOut className="h-4 w-4" /> Sign Out
-              </button>
             </div>
           </aside>
         </div>

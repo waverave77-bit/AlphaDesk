@@ -11,9 +11,9 @@ export async function GET() {
   try {
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { experienceLevel: true },
+      select: { experienceLevel: true, username: true },
     })
-    return NextResponse.json({ experienceLevel: user?.experienceLevel ?? 'beginner' })
+    return NextResponse.json({ experienceLevel: user?.experienceLevel ?? 'beginner', username: user?.username ?? null })
   } catch (err) {
     console.error('GET experience error:', err)
     return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
