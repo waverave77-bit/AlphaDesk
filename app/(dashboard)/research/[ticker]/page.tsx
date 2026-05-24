@@ -82,40 +82,81 @@ const TOOLTIPS: Record<string, string> = {
   'Day Low': 'The lowest price the stock hit today.',
 }
 
-// Compact dividend strip shown inside the price hero card
-function DividendStrip({ ticker, price, dividendYield }: { ticker: string; price: number; dividendYield: number }) {
+// Dividend info card — shown below analyst section for dividend-paying stocks
+function DividendInfoCard({ ticker, price, dividendYield }: { ticker: string; price: number; dividendYield: number }) {
   const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(`/api/dividends/ticker?symbol=${ticker}`)
       .then(r => r.json())
-      .then(d => setData(d))
-      .catch(() => {})
+      .then(d => { setData(d); setLoading(false) })
+      .catch(() => setLoading(false))
   }, [ticker])
 
   const annualDiv = data?.dividendRate ?? data?.trailingDividendRate
     ?? ((data?.dividendYield ?? data?.trailingDividendYield ?? dividendYield) * price)
-  const quarterlyDiv = annualDiv / 4
+  const quarterlyDiv = annualDiv > 0 ? annualDiv / 4 : null
   const yieldPct = (dividendYield * 100).toFixed(2)
+  const payoutPct = data?.payoutRatio != null ? (data.payoutRatio * 100).toFixed(0) : null
+  const fiveYrAvg = data?.fiveYearAvgYield != null ? data.fiveYearAvgYield.toFixed(2) : null
+
+  if (loading) return null
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 pt-2 border-t border-gray-800/60">
-      <span className="flex items-center gap-1 text-xs text-green-400 font-semibold">
-        💰 {yieldPct}% yield
-      </span>
-      {annualDiv > 0 && (
-        <span className="text-xs text-gray-400">${annualDiv.toFixed(4)}/yr · ${quarterlyDiv.toFixed(4)}/qtr</span>
-      )}
-      {data?.exDividendDate && (
-        <span className="text-xs text-gray-500">Ex-div: <span className="text-gray-300">{data.exDividendDate}</span></span>
-      )}
-      {data?.paymentDate && (
-        <span className="text-xs text-gray-500">Pays: <span className="text-gray-300">{data.paymentDate}</span></span>
-      )}
-      {data?.isAristocrat && (
-        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">👑 Aristocrat</span>
-      )}
-    </div>
+    <Card>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xs text-gray-500 uppercase tracking-wider">Dividend Info</CardTitle>
+          {data?.isAristocrat && (
+            <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 font-medium">
+              👑 Dividend Aristocrat · 25+ yrs
+            </span>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        {/* Top row: big yield + amounts */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="bg-green-500/5 border border-green-500/20 rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-green-400">{yieldPct}%</p>
+            <p className="text-[10px] text-gray-500 mt-0.5">Annual Yield</p>
+          </div>
+          <div className="bg-gray-800/40 rounded-xl p-3 text-center">
+            <p className="text-lg font-semibold text-gray-200">{annualDiv > 0 ? `$${annualDiv.toFixed(2)}` : '—'}</p>
+            <p className="text-[10px] text-gray-500 mt-0.5">Per Share / Year</p>
+          </div>
+          <div className="bg-gray-800/40 rounded-xl p-3 text-center">
+            <p className="text-lg font-semibold text-gray-200">{quarterlyDiv ? `$${quarterlyDiv.toFixed(2)}` : '—'}</p>
+            <p className="text-[10px] text-gray-500 mt-0.5">Per Share / Qtr</p>
+          </div>
+        </div>
+
+        {/* Bottom row: dates + payout ratio */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">Ex-Dividend Date</p>
+            <p className="text-sm font-medium text-gray-200">{data?.exDividendDate ?? '—'}</p>
+            <p className="text-[10px] text-gray-600 mt-0.5">Must own before this date</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">Payment Date</p>
+            <p className="text-sm font-medium text-gray-200">{data?.paymentDate ?? '—'}</p>
+            <p className="text-[10px] text-gray-600 mt-0.5">Cash hits your account</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">Payout Ratio</p>
+            <p className="text-sm font-medium text-gray-200">{payoutPct ? `${payoutPct}%` : '—'}</p>
+            <p className="text-[10px] text-gray-600 mt-0.5">% of earnings paid out</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">5-Yr Avg Yield</p>
+            <p className="text-sm font-medium text-gray-200">{fiveYrAvg ? `${fiveYrAvg}%` : '—'}</p>
+            <p className="text-[10px] text-gray-600 mt-0.5">Historical average</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -275,9 +316,6 @@ export default function StockDetailPage() {
               </div>
               {quote.industry && <p className="text-xs text-gray-500 mt-1">{quote.industry}</p>}
               <LastUpdated time={lastUpdated} />
-              {quote.dividendYield && quote.dividendYield > 0 && (
-                <DividendStrip ticker={quote.ticker} price={quote.price} dividendYield={quote.dividendYield} />
-              )}
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button
@@ -335,6 +373,11 @@ export default function StockDetailPage() {
         />
       )}
 
+      {/* Dividend Info Card — shown for dividend-paying stocks */}
+      {quote.dividendYield && quote.dividendYield > 0 && (
+        <DividendInfoCard ticker={quote.ticker} price={quote.price} dividendYield={quote.dividendYield} />
+      )}
+
       {/* Reddit Sentiment + Options — hidden for now, components preserved */}
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <RedditSentiment ticker={quote.ticker} />
@@ -366,7 +409,6 @@ export default function StockDetailPage() {
             <StatRow label="Market Cap" value={quote.marketCap ? '$' + formatLargeNumber(quote.marketCap) : '—'} />
             <StatRow label="P/E Ratio" value={quote.peRatio ? quote.peRatio.toFixed(2) : '—'} />
             <StatRow label="EPS (TTM)" value={quote.eps ? formatCurrency(quote.eps) : '—'} />
-            <StatRow label="Dividend Yield" value={quote.dividendYield ? (quote.dividendYield * 100).toFixed(2) + '%' : '—'} />
             <StatRow label="Beta" value={quote.beta ? quote.beta.toFixed(2) : '—'} />
             <div className="mt-3 pt-3 border-t border-gray-800/50">
               <p className="text-[10px] text-gray-600 leading-relaxed">
