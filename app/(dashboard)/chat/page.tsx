@@ -1,10 +1,11 @@
 'use client'
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Send, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight } from 'lucide-react'
+import { Send, Sparkles, TrendingUp, BookOpen, Newspaper, BarChart2, ChevronRight, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSession } from 'next-auth/react'
 import { GuestLock } from '@/components/GuestGate'
+import Link from 'next/link'
 
 // ── Mr. Guy pixel head (canvas) ───────────────────────────────────────────────
 const N = null
@@ -288,11 +289,20 @@ const CATEGORIES = [
 ]
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function ChatPage() {
+export default function ChatPageWrapper() {
+  return (
+    <Suspense>
+      <ChatPage />
+    </Suspense>
+  )
+}
+
+function ChatPage() {
   const searchParams = useSearchParams()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [limitReached, setLimitReached] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [experience, setExperience] = useState<string>('beginner')
   const [charState, setCharState] = useState<CharState>('idle')
@@ -348,6 +358,11 @@ export default function ChatPage() {
         body: JSON.stringify({ message: msg, history: messages, experience }),
       })
       const data = await res.json()
+      if (res.status === 429 || data.limitReached) {
+        setLimitReached(true)
+        setLoading(false)
+        return
+      }
       setMessages([...updated, { role: 'assistant', content: data.reply }])
       triggerChar('talk', 1000)
     } catch {
@@ -502,31 +517,47 @@ export default function ChatPage() {
 
           {/* Input */}
           <div className="p-4 border-t border-gray-800 shrink-0">
-            <div className="flex gap-3 items-end">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                placeholder="Ask anything about stocks, markets, investing..."
-                rows={1}
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-500/60 transition-colors resize-none leading-relaxed"
-                style={{ maxHeight: '120px', overflowY: 'auto' }}
-                onInput={(e) => {
-                  const t = e.currentTarget
-                  t.style.height = 'auto'
-                  t.style.height = Math.min(t.scrollHeight, 120) + 'px'
-                }}
-              />
-              <button
-                onClick={() => send()}
-                disabled={!input.trim() || loading}
-                className="h-11 w-11 rounded-xl bg-orange-500 hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
-              >
-                <Send className="h-4 w-4 text-white" />
-              </button>
-            </div>
-            <p className="text-xs text-gray-600 mt-2 text-center">Not financial advice · Always do your own research</p>
+            {limitReached ? (
+              <div className="rounded-xl bg-yellow-500/5 border border-yellow-500/20 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-sm text-yellow-300">Mr. Guy's done talking for today 😅</p>
+                  <p className="text-sm text-gray-400 mt-0.5">You've used your 3 free chats. Upgrade for unlimited conversations.</p>
+                </div>
+                <Link
+                  href="/upgrade"
+                  className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors whitespace-nowrap"
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  Upgrade Now
+                </Link>
+              </div>
+            ) : (
+              <div className="flex gap-3 items-end">
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKey}
+                  placeholder="Ask anything about stocks, markets, investing..."
+                  rows={1}
+                  className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-500/60 transition-colors resize-none leading-relaxed"
+                  style={{ maxHeight: '120px', overflowY: 'auto' }}
+                  onInput={(e) => {
+                    const t = e.currentTarget
+                    t.style.height = 'auto'
+                    t.style.height = Math.min(t.scrollHeight, 120) + 'px'
+                  }}
+                />
+                <button
+                  onClick={() => send()}
+                  disabled={!input.trim() || loading}
+                  className="h-11 w-11 rounded-xl bg-orange-500 hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shrink-0"
+                >
+                  <Send className="h-4 w-4 text-white" />
+                </button>
+              </div>
+            )}
+            {!limitReached && <p className="text-xs text-gray-600 mt-2 text-center">Not financial advice · Always do your own research</p>}
           </div>
         </div>
       </div>
