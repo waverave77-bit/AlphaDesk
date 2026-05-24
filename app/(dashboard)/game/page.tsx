@@ -345,7 +345,7 @@ export default function GamePage() {
       <div className="flex gap-1 border-b border-gray-800">
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)}
-            className={cn('px-4 py-2 text-sm font-medium border-b-2 transition-colors -mb-px',
+            className={cn('px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 transition-colors -mb-px',
               tab === t ? 'border-blue-500 text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-300')}>
             {t}
           </button>

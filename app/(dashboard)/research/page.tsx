@@ -68,13 +68,13 @@ export default function ResearchPage() {
       {/* Hero search */}
       <div className="flex flex-col items-center text-center space-y-6 pt-4 pb-8">
         {/* Icon + heading */}
-        <div className="flex items-center gap-5">
-          <div className="h-20 w-20 rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center shrink-0">
-            <Search className="h-10 w-10 text-blue-400" />
+        <div className="flex items-center gap-4 sm:gap-5">
+          <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-2xl sm:rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center shrink-0">
+            <Search className="h-7 w-7 sm:h-10 sm:w-10 text-blue-400" />
           </div>
           <div className="text-left">
-            <h1 className="text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
-            <p className="text-lg text-gray-400 mt-1">Search any stock or ETF for price data, analyst ratings, and more. Prices may be delayed up to 15 minutes.</p>
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
+            <p className="text-sm sm:text-lg text-gray-400 mt-1">Search any stock or ETF for price data, analyst ratings, and more.</p>
           </div>
         </div>
 

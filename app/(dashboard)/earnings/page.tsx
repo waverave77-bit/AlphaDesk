@@ -400,17 +400,17 @@ export default function EarningsPage() {
       </div>
 
       {/* Explainer */}
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
-        <p className="text-sm font-semibold text-blue-700 mb-1 flex items-center gap-1.5">
+      <div className="bg-blue-600/8 border border-blue-500/15 rounded-xl p-4 mb-5">
+        <p className="text-sm font-semibold text-blue-400 mb-1 flex items-center gap-1.5">
           <Info className="h-3.5 w-3.5" /> What is this?
         </p>
-        <p className="text-sm text-blue-600 leading-relaxed">
-          Every 3 months, public companies release their financial results — these are called <strong>earnings reports</strong>. Some stocks move significantly on the day they report, though moves vary widely by company. This calendar shows when companies are reporting so you're never caught off guard.
+        <p className="text-sm text-gray-400 leading-relaxed">
+          Every 3 months, public companies release their financial results — these are called <strong className="text-gray-300">earnings reports</strong>. Some stocks move significantly on the day they report, though moves vary widely by company. This calendar shows when companies are reporting so you&apos;re never caught off guard.
         </p>
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-4 mb-5 text-xs text-gray-500">
+      <div className="flex items-center flex-wrap gap-x-4 gap-y-2 mb-5 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
           <Clock size={11} className="text-blue-400" />
           <span className="text-blue-500 font-medium">BMO</span> = Before Market Open
