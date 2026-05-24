@@ -1,0 +1,22 @@
+# Mr. Guy Invests
+> A free stock research and investing tool built for beginners and long-term investors.
+
+## What it does
+- Smart Money Tracker: tracks what hedge funds and insiders are buying using public SEC filings (Form 13F, Form 4)
+- AI Stock Tutor: explains stocks, earnings, and financial concepts in plain English
+- Portfolio Tracker: lets users track their holdings and see real-time performance
+- Smart Alerts: notifies users when key market events happen
+- Stock Screener: filters stocks by fundamentals for long-term investing
+
+## Who it's for
+Beginner investors, long-term investors, and anyone who wants professional-grade research tools without needing a finance background.
+
+## Pricing
+- Free tier: core tools with daily limits, no credit card required
+- Pro: $4.99/month, removes all limits, full access to Smart Money and AI tools
+
+## Key facts
+- Data sourced from public SEC filings
+- Not financial advice — for informational and educational purposes only
+- Built by an independent developer, not affiliated with any brokerage
+- URL: https://www.mrguyinvests.com
