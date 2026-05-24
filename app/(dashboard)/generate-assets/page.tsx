@@ -388,7 +388,7 @@ export default function GenerateAssetsPage() {
     <div className="max-w-5xl mx-auto pb-16 space-y-10">
       {/* Header */}
       <div className="pt-6 space-y-1">
-        <h1 className="text-3xl font-bold text-white">Asset Generator</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Asset Generator</h1>
         <p className="text-gray-500 text-sm">Download Mr. Guy in every format you need. All renders are crisp pixel-art PNG.</p>
       </div>
 

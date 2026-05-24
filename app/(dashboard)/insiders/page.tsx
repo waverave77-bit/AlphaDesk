@@ -363,7 +363,7 @@ export default function InsidersPage() {
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
             Smart Money Tracker
             <InfoTooltip text="Tracks corporate insider trades (SEC Form 4) and top fund manager holdings (SEC 13F). All data is publicly reported. Informational only." />
           </h1>

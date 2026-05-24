@@ -61,7 +61,7 @@ export default function InsightsPage() {
             <Users className="h-6 w-6 text-purple-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">User Insights</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">User Insights</h1>
             <p className="text-gray-400 text-base mt-0.5">What users answered during onboarding</p>
           </div>
         </div>

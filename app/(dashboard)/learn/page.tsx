@@ -42,7 +42,7 @@ export default function LearnPage() {
           <BookOpen className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-white">Investing Dictionary</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Investing Dictionary</h1>
           <p className="text-base text-gray-400 mt-0.5">Every term explained in plain English</p>
         </div>
       </div>
