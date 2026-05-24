@@ -83,26 +83,8 @@ const TOOLTIPS: Record<string, string> = {
   'Day Low': 'The lowest price the stock hit today.',
 }
 
-// Personalized news feed — shows current stock news first, then watchlist news
+// Stock-specific news section
 function PersonalizedNewsSection({ ticker, stockNews }: { ticker: string; stockNews: { title: string; link: string; publisher: string; providerPublishTime: number }[] }) {
-  const [feedNews, setFeedNews] = useState<any[]>([])
-  const [loadingFeed, setLoadingFeed] = useState(true)
-
-  useEffect(() => {
-    fetch('/api/news/feed')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (d) {
-          // Combine watchlist + market news, exclude current ticker (handled by stockNews)
-          const combined = [...(d.watchlistNews ?? []), ...(d.marketNews ?? [])]
-            .filter(n => n.ticker !== ticker)
-          setFeedNews(combined)
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoadingFeed(false))
-  }, [ticker])
-
   function timeAgo(ts: number) {
     const diff = Math.floor(Date.now() / 1000 - ts)
     if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
@@ -110,67 +92,29 @@ function PersonalizedNewsSection({ ticker, stockNews }: { ticker: string; stockN
     return `${Math.floor(diff / 86400)}d ago`
   }
 
-  const thisStockNews = stockNews.slice(0, 6)
-  const otherNews = feedNews.slice(0, 8)
+  if (stockNews.length === 0) return null
 
   return (
     <Card>
       <CardContent className="p-5">
-        {/* This stock's news */}
-        {thisStockNews.length > 0 && (
-          <>
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-medium flex items-center gap-2">
-              <Newspaper className="h-3.5 w-3.5" />
-              Latest News · {ticker}
-            </p>
-            <div className="space-y-3 mb-5">
-              {thisStockNews.map((item, i) => (
-                <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 group">
-                  <div className="flex-shrink-0 w-1 rounded-full bg-gray-700 group-hover:bg-blue-500 transition-colors mt-1" />
-                  <div className="min-w-0">
-                    <p className="text-sm text-gray-200 group-hover:text-blue-400 transition-colors leading-snug">
-                      {item.title}
-                    </p>
-                    <p className="text-xs text-gray-600 mt-1">
-                      {item.publisher}{item.providerPublishTime ? ` · ${timeAgo(item.providerPublishTime)}` : ''}
-                    </p>
-                  </div>
-                  <ExternalLink className="h-3 w-3 text-gray-700 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
-                </a>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Watchlist news from other stocks */}
-        {!loadingFeed && otherNews.length > 0 && (
-          <>
-            <div className="border-t border-gray-800 pt-4 mt-1">
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">From Your Watchlist</p>
-              <div className="space-y-3">
-                {otherNews.map((item, i) => (
-                  <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 group">
-                    <div className="flex-shrink-0 w-1 rounded-full bg-gray-700 group-hover:bg-purple-500 transition-colors mt-1" />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-800 text-gray-400 border border-gray-700">
-                          {item.ticker}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-300 group-hover:text-purple-400 transition-colors leading-snug">
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        {item.publisher}{item.providerPublishTime ? ` · ${timeAgo(item.providerPublishTime)}` : ''}
-                      </p>
-                    </div>
-                    <ExternalLink className="h-3 w-3 text-gray-700 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
-                  </a>
-                ))}
+        <p className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-medium flex items-center gap-2">
+          <Newspaper className="h-3.5 w-3.5" />
+          Latest News · {ticker}
+        </p>
+        <div className="space-y-3">
+          {stockNews.slice(0, 8).map((item, i) => (
+            <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 group">
+              <div className="flex-shrink-0 w-1 rounded-full bg-gray-700 group-hover:bg-blue-500 transition-colors mt-1" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-200 group-hover:text-blue-400 transition-colors leading-snug">{item.title}</p>
+                <p className="text-xs text-gray-600 mt-1">
+                  {item.publisher}{item.providerPublishTime ? ` · ${timeAgo(item.providerPublishTime)}` : ''}
+                </p>
               </div>
-            </div>
-          </>
-        )}
+              <ExternalLink className="h-3 w-3 text-gray-700 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+            </a>
+          ))}
+        </div>
       </CardContent>
     </Card>
   )
