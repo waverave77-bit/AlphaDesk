@@ -81,7 +81,6 @@ export default function PrivacyPage() {
             <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data (Yahoo Finance, etc.)</li>
             <li><strong className="text-gray-300">SEC EDGAR</strong> — public regulatory filings (Form 4, 13F)</li>
             <li><strong className="text-gray-300">Anthropic Claude API</strong> — AI-generated analysis and responses</li>
-            <li><strong className="text-gray-300">TradingView</strong> — embedded price charts</li>
           </ul>
           <p className="text-gray-400">
             These providers may have access to minimal technical data (e.g., IP addresses) as part of standard
@@ -104,9 +103,8 @@ export default function PrivacyPage() {
           <p className="text-gray-400 leading-relaxed">
             We use only functional session cookies required for authentication (via NextAuth.js). We do not
             use advertising cookies or third-party tracking cookies for our own purposes. Vercel Analytics
-            collects anonymised performance data. TradingView embedded charts may set their own cookies
-            subject to TradingView&apos;s privacy policy. No cookie consent banner is shown for strictly
-            necessary cookies, though we recommend reviewing the policies of embedded third-party services.
+            collects anonymised performance data. No cookie consent banner is shown for strictly necessary
+            cookies.
           </p>
         </section>
 

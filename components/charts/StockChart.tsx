@@ -54,7 +54,7 @@ function computeBollingerBands(data: DataPoint[], period = 20, k = 2) {
   return data.map((_, i) => {
     const slice = data.slice(Math.max(0, i - period + 1), i + 1)
     // Allow partial windows (< period) so bands start early and widen naturally
-    // — same behaviour as TradingView. Require at least 2 pts for a std dev.
+    // Require at least 2 pts for a std dev.
     if (slice.length < 2) return { bbUpper: null as number | null, bbMiddle: null as number | null, bbLower: null as number | null }
     const mean = slice.reduce((s, x) => s + x.close, 0) / slice.length
     // Population std dev — what John Bollinger specifies
