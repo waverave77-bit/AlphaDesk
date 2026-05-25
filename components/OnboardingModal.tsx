@@ -26,7 +26,7 @@ const FEATURES = [
 ]
 
 export default function OnboardingModal() {
-  const { status } = useSession()
+  const { data: session, status, update: updateSession } = useSession()
   const [visible, setVisible] = useState(false)
   const [step, setStep] = useState(0)
   const [experience, setExperience] = useState<string | null>(null)
@@ -34,29 +34,33 @@ export default function OnboardingModal() {
 
   useEffect(() => {
     // Only show for logged-in users who haven't completed onboarding
-    if (status === 'authenticated' && !localStorage.getItem(STORAGE_KEY)) {
-      setVisible(true)
-    }
-  }, [status])
+    // Check DB flag (via session) first, fall back to localStorage for backwards compat
+    if (status !== 'authenticated') return
+    const alreadyDone = (session?.user as any)?.hasOnboarded || localStorage.getItem(STORAGE_KEY)
+    if (!alreadyDone) setVisible(true)
+  }, [status, session])
 
   const complete = async () => {
     localStorage.setItem(STORAGE_KEY, 'true')
     const level = experience ?? 'beginner'
     localStorage.setItem('zg_experience', level)
 
-    // Save to DB so it persists across devices and powers settings
+    // Save to DB — marks hasOnboarded=true so it never shows again on any device
+    await fetch('/api/onboarding', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ experience: level, goals: Array.from(goals) }),
+    }).catch(() => {})
+
+    // Save experience level
     fetch('/api/user/experience', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ experienceLevel: level }),
     }).catch(() => {})
 
-    // Save aggregate stats
-    fetch('/api/onboarding', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ experience: level, goals: Array.from(goals) }),
-    }).catch(() => {})
+    // Refresh session token so hasOnboarded is reflected immediately
+    updateSession()
 
     setVisible(false)
   }

@@ -12,6 +12,12 @@ export async function POST(req: NextRequest) {
     const { experience, goals } = await req.json()
     if (!experience) return NextResponse.json({ error: 'Missing experience' }, { status: 400 })
 
+    // Mark user as onboarded in DB so it persists across all devices
+    await prisma.user.update({
+      where: { email: session.user.email },
+      data: { hasOnboarded: true },
+    })
+
     await prisma.onboardingResponse.create({
       data: { experience, goals: JSON.stringify(goals ?? []) },
     })
