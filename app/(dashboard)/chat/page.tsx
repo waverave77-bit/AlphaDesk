@@ -288,6 +288,130 @@ const CATEGORIES = [
     questions: ['Should I buy the dip or wait?', 'How do I know when to sell?', 'Is dollar cost averaging actually good?', 'What should a beginner do with $1000?'] },
 ]
 
+// ── Guest trial chat (no sign-up required, 3 questions max) ──────────────────
+function GuestChatTrial() {
+  const [input, setInput] = useState('')
+  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([])
+  const [loading, setLoading] = useState(false)
+  const [limitReached, setLimitReached] = useState(false)
+
+  const send = async () => {
+    const msg = input.trim()
+    if (!msg || loading) return
+    setInput('')
+    const updated = [...messages, { role: 'user' as const, content: msg }]
+    setMessages([...updated, { role: 'assistant', content: '' }])
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/chat/guest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg }),
+      })
+      if (res.status === 429) { setLimitReached(true); setMessages(updated); setLoading(false); return }
+      if (!res.ok || !res.body) { setMessages([...updated, { role: 'assistant', content: 'Something went wrong!' }]); setLoading(false); return }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let fullText = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fullText += decoder.decode(value, { stream: true })
+        setMessages(prev => { const n = [...prev]; n[n.length - 1] = { role: 'assistant', content: fullText }; return n })
+      }
+    } catch { setMessages([...updated, { role: 'assistant', content: 'Something went wrong!' }]) }
+    setLoading(false)
+  }
+
+  const STARTERS = ['What even is a stock?', 'Why does the market crash?', 'Is Tesla a good buy right now?', 'What is the S&P 500?']
+  const questionsLeft = 3 - messages.filter(m => m.role === 'user').length
+
+  return (
+    <div className="max-w-2xl mx-auto py-8 px-4 space-y-6">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <MrGuyHead px={5} className="mx-auto" />
+        <h1 className="text-2xl font-bold text-slate-900 mt-3">Ask Mr. Guy anything</h1>
+        <p className="text-slate-500 text-sm">Try 3 free questions — no sign-up needed</p>
+      </div>
+
+      {/* Messages */}
+      {messages.length > 0 && (
+        <div className="space-y-4">
+          {messages.map((m, i) => (
+            <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
+              {m.role === 'assistant' && <MrGuyHead px={3} className="shrink-0 mt-1" />}
+              <div className={cn('rounded-2xl px-4 py-3 max-w-[80%] text-sm leading-relaxed',
+                m.role === 'user'
+                  ? 'bg-blue-600 text-white rounded-br-sm'
+                  : 'bg-slate-100 text-slate-800 rounded-bl-sm'
+              )}>
+                {m.content || <span className="opacity-40">Thinking…</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Starter questions */}
+      {messages.length === 0 && (
+        <div className="grid grid-cols-2 gap-2">
+          {STARTERS.map(q => (
+            <button key={q} onClick={() => { setInput(q); }} className="text-left text-sm bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-700 px-3 py-2.5 rounded-xl transition-all">
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Limit reached CTA */}
+      {limitReached && (
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-center space-y-3">
+          <p className="font-semibold text-slate-900">You've used your 3 free questions 🎉</p>
+          <p className="text-sm text-slate-500">Sign up free to get unlimited Mr. Guy chat, stock research, and more.</p>
+          <div className="flex gap-3 justify-center">
+            <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors">
+              Sign up free →
+            </Link>
+            <Link href="/login" className="border border-slate-300 text-slate-600 hover:border-slate-400 px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors">
+              Log in
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Input */}
+      {!limitReached && (
+        <div className="space-y-2">
+          <div className="flex gap-2 items-end">
+            <textarea
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+              placeholder="Ask anything about investing…"
+              rows={2}
+              className="flex-1 resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              onClick={send}
+              disabled={!input.trim() || loading}
+              className="h-10 w-10 flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white transition-colors shrink-0"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-slate-400">{questionsLeft} free question{questionsLeft !== 1 ? 's' : ''} left</p>
+            <Link href="/register" className="text-xs text-blue-500 hover:underline">Sign up for unlimited →</Link>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function ChatPageWrapper() {
   return (
@@ -407,7 +531,7 @@ function ChatPage() {
 
   const { data: session, status } = useSession()
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Mr. Guy Chat" />
+  if (!session) return <GuestChatTrial />
 
   return (
     <>

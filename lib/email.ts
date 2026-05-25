@@ -37,6 +37,43 @@ export async function sendPasswordResetEmail(email: string, resetUrl: string) {
   })
 }
 
+// ─── Welcome Email ────────────────────────────────────────────────────────────
+
+export async function sendWelcomeEmail(email: string, username: string) {
+  return getResend().emails.send({
+    from: FROM,
+    to: email,
+    subject: "Welcome to Mr. Guy Invests 🧑‍💼",
+    html: `
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#fff;">
+        <div style="margin-bottom:28px;">
+          <span style="font-size:28px;">🧑‍💼</span>
+          <span style="font-size:18px;font-weight:700;color:#111;margin-left:8px;vertical-align:middle;">Mr. Guy Invests</span>
+        </div>
+        <h2 style="font-size:22px;font-weight:700;margin:0 0 12px;color:#111;">Hey ${username}, you're in! 👋</h2>
+        <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">
+          Mr. Guy is ready to help you understand the stock market in plain English — no finance degree needed.
+        </p>
+        <p style="color:#555;font-size:14px;line-height:1.6;margin:0 0 20px;">Here's where to start:</p>
+        <ul style="color:#555;font-size:14px;line-height:2;padding-left:20px;margin:0 0 28px;">
+          <li>💬 <strong>Ask Mr. Guy</strong> — chat about any stock or finance question</li>
+          <li>📊 <strong>Research stocks</strong> — see AI analysis, analyst ratings, earnings history</li>
+          <li>👀 <strong>Smart Money</strong> — see what hedge funds and insiders are buying</li>
+          <li>🏆 <strong>$100K Challenge</strong> — build a virtual portfolio and compete</li>
+        </ul>
+        <a href="https://mrguyinvests.com/dashboard" style="display:inline-block;background:#2563eb;color:#fff;font-weight:600;font-size:15px;padding:14px 28px;border-radius:10px;text-decoration:none;">
+          Go to Dashboard →
+        </a>
+        <p style="color:#999;font-size:13px;margin-top:32px;line-height:1.5;">
+          Free forever. Upgrade to Pro for unlimited AI features at $4.99/month.
+        </p>
+        <hr style="border:none;border-top:1px solid #eee;margin:32px 0 16px;" />
+        <p style="color:#ccc;font-size:11px;margin:0;">Mr. Guy Invests · mrguyinvests.com</p>
+      </div>
+    `,
+  })
+}
+
 // ─── Pro Upgrade ──────────────────────────────────────────────────────────────
 
 export async function sendProUpgradeEmail(email: string) {

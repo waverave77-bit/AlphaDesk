@@ -224,7 +224,7 @@ export default function StockDetailPage() {
     if (session) return // logged in, no limit
     const key = 'mrg_guest_research_count'
     const count = parseInt(localStorage.getItem(key) || '0', 10)
-    if (count >= 2) {
+    if (count >= 3) {
       setGuestBlocked(true)
     } else {
       localStorage.setItem(key, String(count + 1))

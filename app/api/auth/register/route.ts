@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { containsProfanity } from '@/lib/profanity'
+import { sendWelcomeEmail } from '@/lib/email'
 
 export async function POST(req: Request) {
   try {
@@ -34,6 +35,9 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: { email, password: hashed, name: name || username, username },
     })
+
+    // Send welcome email — fire and forget (don't block registration on email failure)
+    sendWelcomeEmail(email, username).catch(() => {})
 
     return NextResponse.json({ id: user.id, email: user.email, username: user.username }, { status: 201 })
   } catch {

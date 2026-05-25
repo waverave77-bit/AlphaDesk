@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /analytics
+Disallow: /holiday-preview
+Disallow: /generate-assets
+Disallow: /settings
+Disallow: /api/
 
 User-agent: GPTBot
 Allow: /
@@ -12,6 +18,12 @@ Allow: /
 
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /analytics
+Disallow: /holiday-preview
+Disallow: /generate-assets
+Disallow: /settings
+Disallow: /api/
 
 User-agent: Applebot-Extended
 Allow: /
