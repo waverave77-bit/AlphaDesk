@@ -1024,7 +1024,7 @@ function drawPeaceSign(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
 
 // Lincoln top hat — sits on head, headTopY = effectiveOY (row-0)
 function drawTopHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
-  const hx = charX + 16, hy = headTopY
+  const hx = charX + 22, hy = headTopY  // hx+20 = charX+42 = head center
   // Body drawn FIRST — bottom edge sits exactly at hair top (hy)
   ctx.fillStyle = '#0f0f0f'; ctx.fillRect(hx, hy - 44, 40, 44)
   ctx.fillStyle = '#3a3a3a'; ctx.fillRect(hx, hy - 13, 40, 5)   // band
@@ -1150,7 +1150,7 @@ function drawTurkeyLeg(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
 
 // Santa hat — sits on head, headTopY = effectiveOY (row-0 of character)
 function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
-  const hx = charX + 10, hy = headTopY
+  const hx = charX + 18, hy = headTopY  // hx+24 = charX+42 = head center
   // Red cone drawn FIRST — base starts at hy-8 (just above hair top)
   ctx.fillStyle = '#cc1111'
   ctx.fillRect(hx + 2,  hy - 8,  44, 10)   // base row
