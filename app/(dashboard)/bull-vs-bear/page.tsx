@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 import type { BullVsBearResult } from '@/app/api/bull-vs-bear/route'
@@ -69,6 +69,7 @@ export default function BullVsBearPage() {
   const [error, setError] = useState('')
   const [limitReached, setLimitReached] = useState(false)
   const [suggestions, setSuggestions] = useState<{ symbol: string; name: string }[]>([])
+  const [showGuestModal, setShowGuestModal] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -86,6 +87,7 @@ export default function BullVsBearPage() {
   async function handleFight(overrideTicker?: string) {
     const t = (overrideTicker ?? ticker).trim()
     if (!t) return
+    if (!session) { setShowGuestModal(true); return }
 
     setLoading(true)
     setResult(null)
@@ -127,10 +129,10 @@ export default function BullVsBearPage() {
   const changeSign = result && result.changePercent >= 0 ? '+' : ''
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Bull vs Bear" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
+      <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Bull vs Bear" />
       <style>{`
         @keyframes mrg-think { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
         @keyframes mrg-idle  { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }

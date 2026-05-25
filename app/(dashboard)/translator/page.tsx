@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 import ProLimitBanner from '@/components/ProLimitBanner'
@@ -62,6 +62,7 @@ export default function TranslatorPage() {
   const [result, setResult] = useState<TranslatorResult | null>(null)
   const [error, setError] = useState('')
   const [limitReached, setLimitReached] = useState(false)
+  const [showGuestModal, setShowGuestModal] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -74,6 +75,7 @@ export default function TranslatorPage() {
 
   async function handleTranslate() {
     if (!text.trim()) return
+    if (!session) { setShowGuestModal(true); return }
     setLoading(true)
     setResult(null)
     setError('')
@@ -96,10 +98,10 @@ export default function TranslatorPage() {
   }
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Finance Translator" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
+      <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Finance Translator" />
       <style>{`
         @keyframes mrg-think { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
         @keyframes mrg-idle  { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }

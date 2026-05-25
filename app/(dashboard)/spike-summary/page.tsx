@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
 import ProLimitBanner from '@/components/ProLimitBanner'
@@ -68,9 +68,11 @@ export default function SpikeSummaryPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [limitReached, setLimitReached] = useState(false)
+  const [showGuestModal, setShowGuestModal] = useState(false)
 
   const searchSpikes = async (sym: string) => {
     if (!sym) return
+    if (!session) { setShowGuestModal(true); return }
     setLoading(true)
     setError(null)
     setSpikes([])
@@ -139,10 +141,10 @@ export default function SpikeSummaryPage() {
   const sub  = isDark ? 'text-gray-400' : 'text-slate-500'
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Spike Summary" />
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Spike Summary" />
       {/* Header */}
       <div className="flex items-center gap-4">
         <div style={{ animation: 'mrg-idle 2.4s ease-in-out infinite' }}>

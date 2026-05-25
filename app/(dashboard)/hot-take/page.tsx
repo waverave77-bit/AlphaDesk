@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
@@ -136,11 +136,12 @@ export default function HotTakePage() {
 
   const verdict = hotTake ? VERDICT_CONFIG[hotTake.verdict] : null
 
+  const isGuest = !session && status !== 'loading'
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Hot Take" />
 
   return (
     <>
+      <GuestSignupModal open={false} onClose={() => {}} feature="Hot Take" />
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes mrg-think {
           0%, 100% { transform: translateY(0px) rotate(-2deg); }
@@ -200,9 +201,22 @@ export default function HotTakePage() {
 
         {/* Main hot take card */}
         {hotTake && !loading && (
+          <div className="relative">
+            {isGuest && (
+              <div className="absolute inset-0 z-10 rounded-2xl backdrop-blur-sm bg-white/60 flex flex-col items-center justify-center gap-4 p-6 text-center">
+                <span className="text-3xl">🔥</span>
+                <p className="font-bold text-slate-900 text-lg">Sign up to see today's Hot Take</p>
+                <p className="text-slate-500 text-sm">Free forever — no credit card needed.</p>
+                <div className="flex gap-3">
+                  <a href="/register" className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors">Sign Up Free</a>
+                  <a href="/login" className="border border-gray-300 text-gray-700 font-semibold px-5 py-2.5 rounded-xl text-sm hover:border-gray-400 transition-colors">Sign In</a>
+                </div>
+              </div>
+            )}
           <div className={cn(
             'rounded-2xl border p-7 space-y-5',
-            isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-slate-200'
+            isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-slate-200',
+            isGuest && 'select-none'
           )}>
             {/* Ticker + verdict row */}
             <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -254,6 +268,7 @@ export default function HotTakePage() {
             <p className={cn('text-xs text-right', isDark ? 'text-gray-600' : 'text-slate-400')}>
               New pick every day · always under $100
             </p>
+          </div>
           </div>
         )}
 

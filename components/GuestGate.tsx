@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { Lock, UserPlus, LogIn } from 'lucide-react'
+import { Lock, UserPlus, LogIn, X } from 'lucide-react'
 
 interface GuestGateProps {
   feature?: string
@@ -40,6 +40,44 @@ export function GuestLock({ feature = 'this feature' }: { feature?: string }) {
         </Link>
       </div>
       <p className="text-xs text-gray-400 mt-5">Free forever · No credit card needed</p>
+    </div>
+  )
+}
+
+// Modal sign-up prompt — shown when a guest tries to use a tool
+export function GuestSignupModal({ open, onClose, feature = 'this feature' }: { open: boolean; onClose: () => void; feature?: string }) {
+  if (!open) return null
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+          <X className="h-5 w-5" />
+        </button>
+        <div className="h-14 w-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mx-auto mb-4">
+          <Lock className="h-7 w-7 text-blue-500" />
+        </div>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Sign up to use {feature}</h2>
+        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+          It's free forever. No credit card needed.
+        </p>
+        <div className="flex flex-col gap-3">
+          <Link
+            href="/register"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+          >
+            <UserPlus className="h-4 w-4" />
+            Sign Up Free
+          </Link>
+          <Link
+            href="/login"
+            className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:border-gray-400 font-semibold px-6 py-3 rounded-xl transition-colors"
+          >
+            <LogIn className="h-4 w-4" />
+            Sign In
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

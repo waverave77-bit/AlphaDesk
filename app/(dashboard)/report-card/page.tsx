@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { useTheme } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 import ProLimitBanner from '@/components/ProLimitBanner'
@@ -89,6 +89,7 @@ export default function ReportCardPage() {
   const [error, setError] = useState('')
   const [limitReached, setLimitReached] = useState(false)
   const [searchResults, setSearchResults] = useState<{ symbol: string; name: string }[]>([])
+  const [showGuestModal, setShowGuestModal] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -106,6 +107,7 @@ export default function ReportCardPage() {
   async function handleGrade(overrideTicker?: string) {
     const t = (overrideTicker ?? query).trim().toUpperCase()
     if (!t) return
+    if (!session) { setShowGuestModal(true); return }
     setLoading(true)
     setResult(null)
     setError('')
@@ -132,10 +134,10 @@ export default function ReportCardPage() {
   const overallStyle = result ? gradeColor(result.overallGrade) : null
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Report Card" />
 
   return (
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
+      <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Report Card" />
       <style>{`
         @keyframes mrg-idle  { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
         @keyframes mrg-run   { 0% { transform: translateX(-8px) rotate(-6deg) translateY(0px); } 25% { transform: translateX(0px) rotate(0deg) translateY(-5px); } 50% { transform: translateX(8px) rotate(6deg) translateY(0px); } 75% { transform: translateX(0px) rotate(0deg) translateY(-5px); } 100% { transform: translateX(-8px) rotate(-6deg) translateY(0px); } }

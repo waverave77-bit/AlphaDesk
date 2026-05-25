@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { GuestLock } from '@/components/GuestGate'
+import { GuestSignupModal } from '@/components/GuestGate'
 import { cn } from '@/lib/utils'
 import ProLimitBanner from '@/components/ProLimitBanner'
 import { useTheme } from '@/components/ThemeProvider'
@@ -99,12 +99,14 @@ export default function RealityCheckPage() {
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState('')
   const [limitReached, setLimitReached] = useState(false)
+  const [showGuestModal, setShowGuestModal] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   async function check(override?: string) {
     const value = override ?? input
     if (!value.trim()) return
+    if (!session) { setShowGuestModal(true); return }
     if (override) setInput(override)
     setLoading(true)
     setResult(null)
@@ -130,10 +132,10 @@ export default function RealityCheckPage() {
   const style = result ? verdictStyle(result.verdict) : null
 
   if (status === 'loading') return null
-  if (!session) return <GuestLock feature="Reality Check" />
 
   return (
     <div className={cn('min-h-screen', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
+      <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Reality Check" />
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 
