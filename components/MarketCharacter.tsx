@@ -1193,9 +1193,9 @@ function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, charY: numbe
 }
 
 /* ═══ Main component ════════════════════════════════════════════════ */
-interface Props { marketState?: MarketState; changePercent?: number; holidayPreview?: string }
+interface Props { marketState?: MarketState; changePercent?: number; holidayPreview?: string; bottomOffset?: number }
 
-export default function MarketCharacter({ marketState = 'neutral', changePercent = 0, holidayPreview }: Props) {
+export default function MarketCharacter({ marketState = 'neutral', changePercent = 0, holidayPreview, bottomOffset = 0 }: Props) {
   // When previewing a holiday, always render as closed state
   if (holidayPreview) marketState = 'closed'
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -1215,6 +1215,9 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
   // scrollOff as ref — no rAF loop restarts when it increments
   const scrollOffRef = useRef(0)
+  // bottomOffset as ref so draw callback can read it without restarting rAF
+  const bottomOffsetRef = useRef(bottomOffset)
+  useEffect(()=>{ bottomOffsetRef.current = bottomOffset }, [bottomOffset])
 
   useEffect(()=>{ setActiveState(marketState) }, [marketState])
 
@@ -1287,7 +1290,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     ctx.clearRect(0,0,W,H)
 
-    const groundY = H - CHAR_H - 20
+    const groundY = H - CHAR_H - 20 - bottomOffsetRef.current
     const zones   = sideZones(W)
     const zKey: 'L'|'R' = ms==='bear' ? 'L' : 'R'
     const zone = zones[zKey]

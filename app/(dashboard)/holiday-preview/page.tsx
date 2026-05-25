@@ -62,11 +62,12 @@ export default function HolidayPreviewPage() {
         <p className="text-xs text-gray-600 mt-2">← → arrow keys or buttons below to switch</p>
       </div>
 
-      {/* Character */}
+      {/* Character — raised 160px so bottom control bar doesn't cover him */}
       <MarketCharacter
         marketState="closed"
         changePercent={0}
         holidayPreview={holiday.name}
+        bottomOffset={160}
       />
 
       {/* Bottom controls */}
