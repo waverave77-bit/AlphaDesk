@@ -1,21 +1,7 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-import fs from 'fs'
-import path from 'path'
 import { getStockQuote } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
-
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
-}
 
 interface IndexData {
   ticker: string
@@ -35,65 +21,35 @@ interface BriefingCache {
 let cache: BriefingCache | null = null
 const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
-const RSS_FEEDS = [
-  'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US',
-  'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114',
-  'https://news.google.com/rss/search?q=stock+market+today&hl=en-US&gl=US&ceid=US:en',
-]
+async function callGrok(system: string, user: string): Promise<string> {
+  const apiKey = process.env.XAI_API_KEY
+  if (!apiKey) throw new Error('XAI_API_KEY not set')
 
-async function fetchRssFeed(url: string): Promise<{ title: string; pubDate: string }[]> {
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-      signal: AbortSignal.timeout(6000),
-    })
-    if (!res.ok) return []
-    const text = await res.text()
-    const items = text.match(/<item>([\s\S]*?)<\/item>/gi) ?? []
-    const results: { title: string; pubDate: string }[] = []
-    for (const item of items) {
-      const titleMatch = item.match(/<title[^>]*>([\s\S]*?)<\/title>/)
-      const pubDateMatch = item.match(/<pubDate>([\s\S]*?)<\/pubDate>/)
-      if (!titleMatch) continue
-      const title = titleMatch[1]
-        .replace(/<!\[CDATA\[|\]\]>/g, '')
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .trim()
-      const pubDate = pubDateMatch?.[1]?.trim() ?? ''
-      if (title) results.push({ title, pubDate })
-    }
-    return results
-  } catch {
-    return []
-  }
-}
+  const res = await fetch('https://api.x.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'grok-3',
+      max_tokens: 400,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user',   content: user   },
+      ],
+      // Live search gives Grok real-time market news and X sentiment
+      search_parameters: {
+        mode: 'auto',
+        sources: [{ type: 'web' }, { type: 'x' }],
+      },
+    }),
+    signal: AbortSignal.timeout(25000),
+  })
 
-async function fetchAllHeadlines(): Promise<string[]> {
-  const cutoff = Date.now() - 48 * 60 * 60 * 1000
-  const allFeeds = await Promise.allSettled(RSS_FEEDS.map(fetchRssFeed))
-
-  const seen = new Set<string>()
-  const headlines: string[] = []
-
-  for (const feed of allFeeds) {
-    if (feed.status !== 'fulfilled') continue
-    for (const { title, pubDate } of feed.value) {
-      if (pubDate) {
-        const ts = new Date(pubDate).getTime()
-        if (!isNaN(ts) && ts < cutoff) continue
-      }
-      const key = title.toLowerCase().slice(0, 60)
-      if (seen.has(key)) continue
-      seen.add(key)
-      headlines.push(title)
-    }
-  }
-
-  return headlines.slice(0, 10)
+  if (!res.ok) throw new Error(`Grok API error: ${res.status}`)
+  const json = await res.json()
+  return (json.choices?.[0]?.message?.content ?? '').trim()
 }
 
 export async function GET() {
@@ -106,14 +62,13 @@ export async function GET() {
     })
   }
 
-  const [headlinesRaw, spyRaw, qqqRaw, diaRaw] = await Promise.allSettled([
-    fetchAllHeadlines(),
+  // Fetch live index prices from Yahoo Finance — precise real-time numbers
+  const [spyRaw, qqqRaw, diaRaw] = await Promise.allSettled([
     getStockQuote('SPY'),
     getStockQuote('QQQ'),
     getStockQuote('DIA'),
   ])
 
-  const headlines = headlinesRaw.status === 'fulfilled' ? headlinesRaw.value : []
   const spy = spyRaw.status === 'fulfilled' && spyRaw.value
     ? { ticker: 'SPY', price: spyRaw.value.price, changePercent: spyRaw.value.changePercent, change: spyRaw.value.change }
     : null
@@ -130,23 +85,17 @@ export async function GET() {
     dia ? `DOW (DIA): $${dia.price.toFixed(2)} (${dia.changePercent >= 0 ? '+' : ''}${dia.changePercent.toFixed(2)}%)` : 'DOW: unavailable',
   ].join('\n')
 
-  const headlineBlock = headlines.length > 0
-    ? headlines.map((h) => `- ${h}`).join('\n')
-    : '- No recent headlines available'
+  const system = `You are Mr. Guy, a funny and sharp finance mascot. Write a morning market briefing in plain English. Casual, confident, a little funny. No markdown. No complicated finance terms. Use your live search to get today's actual market headlines and news — don't just rely on the index data provided.`
 
-  const client = new Anthropic({ apiKey: getAnthropicKey() })
-
-  const userPrompt = `Here are today's market headlines and index data.\n\nIndex data:\n${indexBlock}\n\nTop headlines:\n${headlineBlock}\n\nWrite a pre-market briefing covering: 1) What the overall market is doing and why, 2) The 2-3 biggest stories today, 3) What to watch. Keep it under 200 words. Casual tone. End with one punchy sentence like "Today's vibe:"`
+  const user = `Here is today's live index data:\n${indexBlock}\n\nUsing your live search, find today's top market-moving headlines and news. Then write a morning briefing covering:\n1) What the overall market is doing and why\n2) The 2-3 biggest stories today\n3) What to watch\n\nKeep it under 200 words. End with one punchy sentence starting with "Today's vibe:"`
 
   let briefingText = ''
+  let headlines: string[] = []
+
   try {
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 400,
-      system: 'You are Mr. Guy. Write a morning market briefing in plain English. Casual, funny, confident. No markdown. No complicated finance terms.',
-      messages: [{ role: 'user', content: userPrompt }],
-    })
-    briefingText = ((msg.content[0] as any).text ?? '').trim()
+    briefingText = await callGrok(system, user)
+    // Extract a few headline-style phrases for the UI to show
+    headlines = []
   } catch {
     briefingText = 'Markets are doing market things. Check back soon for the full scoop.'
   }

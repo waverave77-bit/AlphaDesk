@@ -1,21 +1,27 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import { getStockQuote } from '@/lib/yahoo-finance'
 import { prisma } from '@/lib/prisma'
-import fs from 'fs'
-import path from 'path'
 
 export const dynamic = 'force-dynamic'
 
-function getAnthropicKey(): string {
-  const fromEnv = process.env.ANTHROPIC_API_KEY
-  if (fromEnv && fromEnv.length > 10) return fromEnv
-  try {
-    const envPath = path.resolve(process.cwd(), '.env.local')
-    const content = fs.readFileSync(envPath, 'utf8')
-    const match = content.match(/ANTHROPIC_API_KEY="?([^"\n]+)"?/)
-    return match?.[1] ?? ''
-  } catch { return '' }
+async function callGrok(system: string, user: string): Promise<string> {
+  const apiKey = process.env.XAI_API_KEY
+  if (!apiKey) throw new Error('XAI_API_KEY not set')
+  const res = await fetch('https://api.x.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'grok-3',
+      max_tokens: 200,
+      messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+      // Live search so Grok knows current news, sentiment, and catalysts for this week
+      search_parameters: { mode: 'auto', sources: [{ type: 'web' }, { type: 'x' }] },
+    }),
+    signal: AbortSignal.timeout(20000),
+  })
+  if (!res.ok) throw new Error(`Grok API error: ${res.status}`)
+  const json = await res.json()
+  return (json.choices?.[0]?.message?.content ?? '').trim()
 }
 
 // Week key based on the Sunday that starts the current Sun–Sat week
@@ -72,27 +78,21 @@ export async function GET() {
     const quote = await getStockQuote(ticker).catch(() => null)
     if (!quote) return NextResponse.json({ error: 'No data' }, { status: 500 })
 
-    const client = new Anthropic({ apiKey: getAnthropicKey() }) // lazy — only runs on request, not at build time
+    const prompt = `This week's stock pick challenge is ${ticker} (${quote.companyName}). Current price: $${quote.price?.toFixed(2)}, P/E: ${quote.peRatio?.toFixed(1) ?? 'N/A'}, today's change: ${quote.changePercent?.toFixed(1)}%.
 
-    const prompt = `This week's stock pick challenge is ${ticker} (${quote.companyName}). Current price: $${quote.price?.toFixed(2)}, P/E: ${quote.peRatio?.toFixed(1) ?? 'N/A'}, this year change: approx ${quote.changePercent?.toFixed(1)}% today.
-
-You are Mr. Guy picking this stock for the weekly challenge. Give your prediction for this week in this exact JSON format (no other text):
+Use your live search to check current news, analyst sentiment, and social media buzz for ${ticker} this week. Then give your prediction in this exact JSON format (no other text, no markdown):
 {
   "direction": "up" or "down",
   "targetPct": number (1-15, how much you think it moves this week),
-  "reasoning": "2 sentences max, casual and funny, explain why you picked this direction this week"
+  "reasoning": "2 sentences max, casual and funny, explain why — reference a real current catalyst if you found one"
 }
 
 Be opinionated. Pick a direction and commit.`
 
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 200,
-      system: 'You are Mr. Guy, a funny finance mascot. Return only valid JSON, no markdown, no extra text.',
-      messages: [{ role: 'user', content: prompt }],
-    })
-
-    const text = (msg.content[0] as any).text?.trim() ?? ''
+    const text = await callGrok(
+      'You are Mr. Guy, a funny finance mascot. Return only valid JSON, no markdown, no extra text.',
+      prompt,
+    )
     let parsed: any = {}
     try {
       parsed = JSON.parse(text)
