@@ -289,11 +289,22 @@ const CATEGORIES = [
 ]
 
 // ── Guest trial chat (no sign-up required, 3 questions max) ──────────────────
+const GUEST_CHAT_KEY = 'mrg_guest_chat_used'
+const GUEST_CHAT_LIMIT = 3
+
 function GuestChatTrial() {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([])
   const [loading, setLoading] = useState(false)
   const [limitReached, setLimitReached] = useState(false)
+  // Persist used count in localStorage so it survives page refreshes
+  const [usedCount, setUsedCount] = useState(0)
+
+  useEffect(() => {
+    const stored = parseInt(localStorage.getItem(GUEST_CHAT_KEY) ?? '0', 10)
+    setUsedCount(stored)
+    if (stored >= GUEST_CHAT_LIMIT) setLimitReached(true)
+  }, [])
 
   const send = async () => {
     const msg = input.trim()
@@ -302,6 +313,11 @@ function GuestChatTrial() {
     const updated = [...messages, { role: 'user' as const, content: msg }]
     setMessages([...updated, { role: 'assistant', content: '' }])
     setLoading(true)
+
+    // Increment and persist the count before sending so closing mid-stream still counts
+    const newCount = usedCount + 1
+    setUsedCount(newCount)
+    localStorage.setItem(GUEST_CHAT_KEY, String(newCount))
 
     try {
       const res = await fetch('/api/chat/guest', {
@@ -321,12 +337,13 @@ function GuestChatTrial() {
         fullText += decoder.decode(value, { stream: true })
         setMessages(prev => { const n = [...prev]; n[n.length - 1] = { role: 'assistant', content: fullText }; return n })
       }
+      if (newCount >= GUEST_CHAT_LIMIT) setLimitReached(true)
     } catch { setMessages([...updated, { role: 'assistant', content: 'Something went wrong!' }]) }
     setLoading(false)
   }
 
   const STARTERS = ['What even is a stock?', 'Why does the market crash?', 'Is Tesla a good buy right now?', 'What is the S&P 500?']
-  const questionsLeft = 3 - messages.filter(m => m.role === 'user').length
+  const questionsLeft = Math.max(0, GUEST_CHAT_LIMIT - usedCount)
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 space-y-6">
@@ -341,7 +358,7 @@ function GuestChatTrial() {
       {messages.length > 0 && (
         <div className="space-y-4">
           {messages.map((m, i) => (
-            <div key={i} className={cn('flex gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
+            <div key={i} className={cn('flex items-start gap-3', m.role === 'user' ? 'justify-end' : 'justify-start')}>
               {m.role === 'assistant' && <MrGuyHead px={3} className="shrink-0 mt-1" />}
               <div className={cn('rounded-2xl px-4 py-3 max-w-[80%] text-sm leading-relaxed',
                 m.role === 'user'
