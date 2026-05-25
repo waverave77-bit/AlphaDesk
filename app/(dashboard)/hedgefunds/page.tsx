@@ -353,7 +353,7 @@ export default function HedgeFundsPage() {
                   <Card
                     key={fund.cik ?? fund.name}
                     className={`cursor-pointer transition-all hover:border-blue-200 ${selectedCik === (fund.cik ?? fund.name) ? 'border-blue-300 ring-1 ring-blue-200' : ''}`}
-                    onClick={() => { setSelectedCik(fund.cik ?? fund.name); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    onClick={() => { setSelectedCik(fund.cik ?? fund.name); document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' }) }}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">

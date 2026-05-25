@@ -46,30 +46,45 @@ async function getInvestorHoldings(investor: { name: string; cik: string }) {
   try {
     const padded = investor.cik.padStart(10, '0')
 
-    // Step 1: Get most recent 13F accession number
+    // Step 1: Get most recent 13F accession + primaryDocument filename
     const subText = await secFetch(`https://data.sec.gov/submissions/CIK${padded}.json`)
     if (!subText) return empty
     const sub = JSON.parse(subText)
 
-    const forms: string[] = sub.filings?.recent?.form ?? []
+    const forms: string[]    = sub.filings?.recent?.form            ?? []
     const accessions: string[] = sub.filings?.recent?.accessionNumber ?? []
-    const dates: string[] = sub.filings?.recent?.filingDate ?? []
+    const dates: string[]    = sub.filings?.recent?.filingDate      ?? []
+    const primDocs: string[] = sub.filings?.recent?.primaryDocument  ?? []
 
     const idx = forms.findIndex((f: string) => f === '13F-HR')
     if (idx === -1) return empty
 
-    const accNo = accessions[idx]
+    const accNo     = accessions[idx]
     const accNoDash = accNo.replace(/-/g, '')
     const filingDate = dates[idx]
+    const primaryDoc = primDocs[idx] ?? ''
 
-    // Step 2: Fetch the full submission .txt — predictable URL, contains all XML
-    const txt = await secFetch(
+    // Step 2: Try primaryDocument first (smaller, just the main XML/HTML for that filing)
+    // Fall back to the combined .txt only if needed
+    const urls = [
+      primaryDoc
+        ? `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${primaryDoc}`
+        : null,
+      // Common infotable XML naming patterns
+      `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/informationtable.xml`,
+      `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/form13fInfoTable.xml`,
+      // Full submission fallback (large but most reliable)
       `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${accNo}.txt`,
-      12000
-    )
-    if (!txt) return { ...investor, filingDate, topHoldings: [] }
+    ].filter(Boolean) as string[]
 
-    const topHoldings = parseHoldings(txt)
+    let topHoldings: ReturnType<typeof parseHoldings> = []
+    for (const url of urls) {
+      const txt = await secFetch(url, 15000)
+      if (!txt) continue
+      const parsed = parseHoldings(txt)
+      if (parsed.length > 0) { topHoldings = parsed; break }
+    }
+
     return { ...investor, filingDate, topHoldings }
   } catch {
     return empty
