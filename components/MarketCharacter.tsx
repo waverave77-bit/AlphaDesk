@@ -1024,12 +1024,14 @@ function drawPeaceSign(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
 
 // Lincoln top hat — sits on head, headTopY = effectiveOY (row-0)
 function drawTopHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
-  // Brim sits ON the hair (rows 0-1): brim from headTopY-2 to headTopY+8 (overlaps slightly)
-  const hx = charX + 18, hy = headTopY
-  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(hx - 8, hy - 2,  56, 10)  // brim seated on hair
-  ctx.fillStyle = '#111';    ctx.fillRect(hx + 2, hy - 42, 38, 40)  // body
-  ctx.fillStyle = '#333';    ctx.fillRect(hx + 2, hy - 12, 38, 6)   // band above brim
-  ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(hx + 6, hy - 38, 6, 26)
+  const hx = charX + 16, hy = headTopY
+  // Body drawn FIRST — bottom edge sits exactly at hair top (hy)
+  ctx.fillStyle = '#0f0f0f'; ctx.fillRect(hx, hy - 44, 40, 44)
+  ctx.fillStyle = '#3a3a3a'; ctx.fillRect(hx, hy - 13, 40, 5)   // band
+  ctx.fillStyle = 'rgba(255,255,255,.07)'; ctx.fillRect(hx + 4, hy - 40, 6, 28)
+  // Brim drawn LAST — overlaps body bottom by 4px, extends wider, dips into hair
+  ctx.fillStyle = '#181818'; ctx.fillRect(hx - 10, hy - 4, 62, 8)
+  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(hx - 8,  hy + 4, 58, 3)  // underside shadow
 }
 
 // Candle with animated flame — cx/cy = center torso (Good Friday)
@@ -1146,21 +1148,25 @@ function drawTurkeyLeg(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
   ctx.fillStyle = '#e88040'; ctx.fillRect(tx + 2, ty + 2, 12, 3)
 }
 
-// Santa hat — sits on head, headTopY = effectiveOY
+// Santa hat — sits on head, headTopY = effectiveOY (row-0 of character)
 function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
-  const hx = charX + 12, hy = headTopY
-  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 4, hy - 2, 54, 12)  // brim seated on hair
+  const hx = charX + 10, hy = headTopY
+  // Red cone drawn FIRST — base starts at hy-8 (just above hair top)
   ctx.fillStyle = '#cc1111'
-  ctx.fillRect(hx + 2,  hy - 10, 42, 10)
-  ctx.fillRect(hx + 6,  hy - 18, 32, 10)
-  ctx.fillRect(hx + 10, hy - 26, 22, 10)
-  ctx.fillRect(hx + 14, hy - 33, 14, 9)
-  ctx.fillRect(hx + 16, hy - 40, 10, 9)
-  ctx.fillRect(hx + 20, hy - 46, 8,  8)
-  ctx.fillRect(hx + 26, hy - 44, 8,  8)
-  ctx.fillRect(hx + 32, hy - 40, 8,  6)
-  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(hx + 40, hy - 38, 9, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(hx + 4, hy - 16, 8, 14)
+  ctx.fillRect(hx + 2,  hy - 8,  44, 10)   // base row
+  ctx.fillRect(hx + 6,  hy - 16, 34, 10)
+  ctx.fillRect(hx + 10, hy - 24, 24, 10)
+  ctx.fillRect(hx + 14, hy - 31, 16,  9)
+  ctx.fillRect(hx + 16, hy - 38, 12,  9)
+  ctx.fillRect(hx + 18, hy - 44,  9,  8)
+  ctx.fillRect(hx + 22, hy - 50,  8,  8)   // tip
+  ctx.fillRect(hx + 28, hy - 48,  8,  8)   // droop
+  ctx.fillRect(hx + 34, hy - 44,  8,  6)
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(hx + 42, hy - 42, 9, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(hx + 4, hy - 16, 8, 10)
+  // White brim drawn LAST — starts exactly at hair top (hy), clearly visible
+  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 6, hy, 60, 12)
+  ctx.fillStyle = 'rgba(200,200,200,.4)'; ctx.fillRect(hx - 6, hy + 10, 60, 2) // soft bottom edge
 }
 
 /* ═══ Main component ════════════════════════════════════════════════ */
