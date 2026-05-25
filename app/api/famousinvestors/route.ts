@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60 // Vercel Pro: up to 60s for the refresh path
 
 const INVESTORS = [
   { name: 'Warren Buffett (Berkshire)', cik: '1067983' },
@@ -10,9 +13,10 @@ const INVESTORS = [
   { name: 'George Soros (Soros Fund)', cik: '1029160' },
 ]
 
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 const UA = 'Mr. Guy Invests contact@mrguyinvests.com'
 
-async function secFetch(url: string, timeout = 10000): Promise<string | null> {
+async function secFetch(url: string, timeout = 12000): Promise<string | null> {
   try {
     const r = await fetch(url, {
       headers: { 'User-Agent': UA, Accept: '*/*' },
@@ -41,45 +45,41 @@ function parseHoldings(txt: string): { name: string; value: number; shares: numb
   return holdings.sort((a, b) => b.value - a.value).slice(0, 5)
 }
 
-async function getInvestorHoldings(investor: { name: string; cik: string }) {
+async function fetchFromSEC(investor: { name: string; cik: string }) {
   const empty = { ...investor, filingDate: null, topHoldings: [] }
   try {
     const padded = investor.cik.padStart(10, '0')
 
-    // Step 1: Get most recent 13F accession + primaryDocument filename
-    const subText = await secFetch(`https://data.sec.gov/submissions/CIK${padded}.json`)
+    const subText = await secFetch(`https://data.sec.gov/submissions/CIK${padded}.json`, 10000)
     if (!subText) return empty
     const sub = JSON.parse(subText)
 
-    const forms: string[]    = sub.filings?.recent?.form            ?? []
-    const accessions: string[] = sub.filings?.recent?.accessionNumber ?? []
-    const dates: string[]    = sub.filings?.recent?.filingDate      ?? []
-    const primDocs: string[] = sub.filings?.recent?.primaryDocument  ?? []
+    const forms: string[]       = sub.filings?.recent?.form            ?? []
+    const accessions: string[]  = sub.filings?.recent?.accessionNumber ?? []
+    const dates: string[]       = sub.filings?.recent?.filingDate      ?? []
+    const primDocs: string[]    = sub.filings?.recent?.primaryDocument  ?? []
 
     const idx = forms.findIndex((f: string) => f === '13F-HR')
     if (idx === -1) return empty
 
-    const accNo     = accessions[idx]
-    const accNoDash = accNo.replace(/-/g, '')
+    const accNo      = accessions[idx]
+    const accNoDash  = accNo.replace(/-/g, '')
     const filingDate = dates[idx]
     const primaryDoc = primDocs[idx] ?? ''
 
-    // Step 2: Try primaryDocument first (smaller, just the main XML/HTML for that filing)
-    // Fall back to the combined .txt only if needed
     const urls = [
       primaryDoc
         ? `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${primaryDoc}`
         : null,
-      // Common infotable XML naming patterns
       `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/informationtable.xml`,
       `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/form13fInfoTable.xml`,
-      // Full submission fallback (large but most reliable)
+      // Only try the big .txt as last resort
       `https://www.sec.gov/Archives/edgar/data/${investor.cik}/${accNoDash}/${accNo}.txt`,
     ].filter(Boolean) as string[]
 
     let topHoldings: ReturnType<typeof parseHoldings> = []
     for (const url of urls) {
-      const txt = await secFetch(url, 15000)
+      const txt = await secFetch(url, 12000)
       if (!txt) continue
       const parsed = parseHoldings(txt)
       if (parsed.length > 0) { topHoldings = parsed; break }
@@ -101,8 +101,54 @@ async function withConcurrency<T>(tasks: (() => Promise<T>)[], limit: number): P
 }
 
 export async function GET() {
-  const tasks = INVESTORS.map(inv => () => getInvestorHoldings(inv))
-  const investors = await withConcurrency(tasks, 3)
+  // ── 1. Try cache first ────────────────────────────────────────────────────
+  const cached = await prisma.hedgeFundCache.findMany({
+    where: { cik: { in: INVESTORS.map(i => i.cik) } },
+  }).catch(() => [])
+
+  const now = Date.now()
+  const cacheMap = new Map(cached.map(c => [c.cik, c]))
+
+  // Check if ALL investors have fresh cache (< 24h old)
+  const allFresh = INVESTORS.every(inv => {
+    const c = cacheMap.get(inv.cik)
+    return c && (now - new Date(c.updatedAt).getTime()) < CACHE_TTL_MS
+  })
+
+  if (allFresh) {
+    const investors = INVESTORS.map(inv => ({
+      ...JSON.parse(cacheMap.get(inv.cik)!.data),
+    }))
+    return NextResponse.json({ investors, fromCache: true })
+  }
+
+  // ── 2. Fetch stale/missing investors from SEC ─────────────────────────────
+  const stale = INVESTORS.filter(inv => {
+    const c = cacheMap.get(inv.cik)
+    return !c || (now - new Date(c.updatedAt).getTime()) >= CACHE_TTL_MS
+  })
+
+  const fresh = await withConcurrency(stale.map(inv => () => fetchFromSEC(inv)), 2)
+
+  // Save to cache
+  await Promise.allSettled(
+    fresh.map(result =>
+      prisma.hedgeFundCache.upsert({
+        where: { cik: result.cik },
+        update: { name: result.name, data: JSON.stringify(result) },
+        create: { cik: result.cik, name: result.name, data: JSON.stringify(result) },
+      })
+    )
+  )
+
+  // Merge fresh results with anything still in cache
+  const freshMap = new Map(fresh.map(r => [r.cik, r]))
+  const investors = INVESTORS.map(inv => {
+    if (freshMap.has(inv.cik)) return freshMap.get(inv.cik)!
+    const c = cacheMap.get(inv.cik)
+    return c ? JSON.parse(c.data) : { ...inv, filingDate: null, topHoldings: [] }
+  })
+
   return NextResponse.json({ investors }, {
     headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200' },
   })
