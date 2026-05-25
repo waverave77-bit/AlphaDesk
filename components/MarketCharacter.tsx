@@ -990,206 +990,165 @@ function ZzzParticles({charX,charY,viewH}:{charX:number;charY:number;viewH:numbe
 
 /* ─── Holiday prop draw functions ───────────────────────────────────── */
 
-// Champagne flute held in right hand (New Year's)
-function drawChampagneFlute(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const x = charX + 88, y = charY + 80
-  // Stem
-  ctx.fillStyle = '#c8e6fa'; ctx.fillRect(x+4, y+24, 3, 22)
-  // Base
-  ctx.fillStyle = '#a0c8e8'; ctx.fillRect(x, y+46, 11, 3)
-  // Glass body (tapered flute shape)
+// ── Holiday prop helpers — all coords are exact canvas pixels ──────────
+// hx/hy  = top of right hand pixel   (charX+75, effectiveOY+(21+rightArmDY)*PX)
+// lhx/lhy= top of left  hand pixel   (charX,    effectiveOY+(21+leftArmDY)*PX)
+// headTopY = effectiveOY (row-0 of character after body/bounce offset)
+
+// Champagne flute — grip at (hx, hy), glass extends UPWARD
+function drawChampagneFlute(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
+  const x = hx + 2, y = hy
+  ctx.fillStyle = '#c8e6fa'; ctx.fillRect(x + 3, y + 18, 3, 14)   // stem
+  ctx.fillStyle = '#a0c8e8'; ctx.fillRect(x,     y + 32, 10, 3)   // base
   ctx.fillStyle = '#d6eefa'
-  ctx.fillRect(x+2, y+4,  7, 4)
-  ctx.fillRect(x+1, y+8,  9, 4)
-  ctx.fillRect(x+1, y+12, 9, 4)
-  ctx.fillRect(x+2, y+16, 7, 4)
-  ctx.fillRect(x+3, y+20, 5, 4)
-  // Bubble fill (yellow-gold champagne)
-  ctx.fillStyle = 'rgba(255,215,0,.45)'
-  ctx.fillRect(x+2, y+8, 7, 10)
-  // Tiny bubbles
-  ctx.fillStyle = 'rgba(255,255,255,.8)'
-  ctx.fillRect(x+4, y+10, 2, 2)
-  ctx.fillRect(x+7, y+14, 2, 2)
-  ctx.fillRect(x+5, y+17, 2, 2)
+  ctx.fillRect(x + 3, y,      5, 4)
+  ctx.fillRect(x + 2, y + 4,  7, 4)
+  ctx.fillRect(x + 1, y + 8,  9, 4)
+  ctx.fillRect(x + 1, y + 12, 9, 4)
+  ctx.fillRect(x + 2, y + 16, 7, 2)
+  ctx.fillStyle = 'rgba(255,215,0,.5)'; ctx.fillRect(x + 2, y + 6, 7, 10)  // champagne
+  ctx.fillStyle = 'rgba(255,255,255,.9)'
+  ctx.fillRect(x + 4, y + 8,  2, 2)
+  ctx.fillRect(x + 7, y + 12, 2, 2)
 }
 
-// Peace sign held in left hand (MLK Day)
-function drawPeaceSign(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const cx = charX + 2, cy = charY + 88
-  const r = 16
-  // Outer ring
-  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3
+// Peace sign — center at (cx, cy) — left hand level
+function drawPeaceSign(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
+  const r = 18
+  ctx.strokeStyle = '#ddd'; ctx.lineWidth = 3
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke()
-  // Vertical line
   ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r); ctx.stroke()
-  // Two diagonal lines
   ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx - r * 0.7, cy + r * 0.7); ctx.stroke()
   ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + r * 0.7, cy + r * 0.7); ctx.stroke()
 }
 
-// Lincoln top hat above head (Presidents' Day)
-function drawTopHat(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const hx = charX + 22, hy = charY - 46
-  // Brim
-  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(hx - 6, hy + 36, 52, 8)
-  // Hat body
-  ctx.fillStyle = '#111'; ctx.fillRect(hx, hy, 40, 38)
-  // Band
-  ctx.fillStyle = '#333'; ctx.fillRect(hx, hy + 30, 40, 6)
-  // Shine highlight
-  ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(hx + 4, hy + 4, 6, 24)
+// Lincoln top hat — sits on head, headTopY = effectiveOY (row-0)
+function drawTopHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
+  const hx = charX + 18, hy = headTopY
+  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(hx - 6, hy - 8,  52, 8)   // brim on head
+  ctx.fillStyle = '#111';    ctx.fillRect(hx + 2, hy - 46, 38, 38)  // body
+  ctx.fillStyle = '#333';    ctx.fillRect(hx + 2, hy - 16, 38, 6)   // band
+  ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(hx + 6, hy - 42, 6, 28)
 }
 
-// Small cross held in both hands (Good Friday)
-function drawCross(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const cx = charX + 44, cy = charY + 70
-  const cW = 10, cH = 28
-  // Vertical beam
-  ctx.fillStyle = '#8B4513'; ctx.fillRect(cx - cW/2, cy, cW, cH)
-  // Horizontal beam
-  ctx.fillRect(cx - cW * 1.3, cy + 7, cW * 3.6, cW - 2)
-  // Grain lines
-  ctx.fillStyle = 'rgba(0,0,0,.2)'
-  ctx.fillRect(cx - 1, cy, 2, cH)
+// Candle with animated flame — cx/cy = center torso (Good Friday)
+function drawCandle(ctx: CanvasRenderingContext2D, cx: number, cy: number, now: number) {
+  ctx.fillStyle = '#f8f4e8'; ctx.fillRect(cx - 6, cy, 12, 28)
+  ctx.fillStyle = '#ece6d0'; ctx.fillRect(cx - 6, cy + 2, 3, 8); ctx.fillRect(cx + 3, cy + 4, 3, 6)
+  ctx.fillStyle = '#444'; ctx.fillRect(cx - 1, cy - 6, 2, 8)
+  const flk = Math.sin(now * 0.008) * 2, flk2 = Math.sin(now * 0.013 + 1) * 1.5
+  ctx.fillStyle = 'rgba(255,160,0,.25)'; ctx.beginPath()
+  ctx.ellipse(cx, cy - 14 + flk, 11, 17, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#FF8C00'; ctx.beginPath()
+  ctx.moveTo(cx - 5, cy - 6)
+  ctx.quadraticCurveTo(cx + flk2, cy - 22 + flk, cx, cy - 26)
+  ctx.quadraticCurveTo(cx - flk2, cy - 22 + flk, cx + 5, cy - 6)
+  ctx.closePath(); ctx.fill()
+  ctx.fillStyle = '#FFD700'; ctx.beginPath()
+  ctx.moveTo(cx - 3, cy - 6)
+  ctx.quadraticCurveTo(cx + flk2 * 0.5, cy - 16 + flk, cx, cy - 20)
+  ctx.quadraticCurveTo(cx - flk2 * 0.5, cy - 16 + flk, cx + 3, cy - 6)
+  ctx.closePath(); ctx.fill()
+  ctx.fillStyle = '#fffde0'; ctx.beginPath(); ctx.ellipse(cx, cy - 10, 2, 3, 0, 0, Math.PI * 2); ctx.fill()
 }
 
-// Small waving flag on a stick (Memorial Day)
-function drawSmallFlag(ctx: CanvasRenderingContext2D, charX: number, charY: number, now: number) {
-  const fx = charX + 82, fy = charY + 50
-  const wave = Math.sin(now * 0.003) * 3
-  // Pole
-  ctx.fillStyle = '#888'; ctx.fillRect(fx, fy, 3, 60)
-  // Flag body
-  ctx.fillStyle = '#B22234'; ctx.fillRect(fx + 3, fy, 28, 6)
-  ctx.fillStyle = '#FFFFFF'; ctx.fillRect(fx + 3, fy + 6, 28, 6)
-  ctx.fillStyle = '#B22234'; ctx.fillRect(fx + 3, fy + 12, 28, 6)
-  // Blue canton
-  ctx.fillStyle = '#3C3B6E'; ctx.fillRect(fx + 3, fy, 12, 12)
-  // Stars (tiny)
+// Small flag — pole bottom at (hx, hy) right hand, flag extends up
+function drawSmallFlag(ctx: CanvasRenderingContext2D, hx: number, hy: number, now: number) {
+  const wave = Math.round(Math.sin(now * 0.004) * 3)
+  ctx.fillStyle = '#999'; ctx.fillRect(hx + 4, hy - 52, 3, 58)  // pole
+  const fy = hy - 50
+  ctx.fillStyle = '#B22234'; ctx.fillRect(hx + 7, fy,       26, 6)
+  ctx.fillStyle = '#FFFFFF'; ctx.fillRect(hx + 7, fy + 6,   26, 6)
+  ctx.fillStyle = '#B22234'; ctx.fillRect(hx + 7, fy + 12,  26, 6)
+  ctx.fillStyle = '#3C3B6E'; ctx.fillRect(hx + 7, fy,       12, 12)
   ctx.fillStyle = '#FFFFFF'
   for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++)
-    ctx.fillRect(fx + 5 + i * 4, fy + 2 + j * 4, 2, 2)
-  // Wave offset on flag tip
-  ctx.fillStyle = 'rgba(255,255,255,.15)'
-  ctx.fillRect(fx + 25, fy + Math.round(wave), 6, 18)
+    ctx.fillRect(hx + 9 + i * 4, fy + 2 + j * 4, 2, 2)
+  ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(hx + 24, fy + wave, 8, 18)
 }
 
-// Raised fist above head (Juneteenth)
-function drawRaisedFist(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const fx = charX + 42, fy = charY - 38
-  // Arm reaching up
-  ctx.fillStyle = SK; ctx.fillRect(fx + 6, fy + 28, 10, 20)
-  // Fist
-  ctx.fillStyle = SK
-  ctx.fillRect(fx + 2, fy + 10, 18, 20)  // main fist body
-  ctx.fillRect(fx + 4, fy,      14, 14)  // fingers curled
-  // Knuckle lines
-  ctx.fillStyle = SD
-  ctx.fillRect(fx + 4,  fy + 2, 3, 3)
-  ctx.fillRect(fx + 9,  fy + 2, 3, 3)
-  ctx.fillRect(fx + 14, fy + 2, 3, 3)
+// Juneteenth confetti burst — orbiting pan-African colored squares
+function drawJuneteenthBurst(ctx: CanvasRenderingContext2D, cx: number, cy: number, now: number) {
+  const colors = ['#cc0000','#009900','#000000','#ffd700','#cc0000','#009900','#ffd700','#cc0000']
+  for (let i = 0; i < 8; i++) {
+    const angle = now * 0.003 + i * Math.PI / 4
+    const dist  = 28 + Math.sin(now * 0.005 + i) * 8
+    const size  = 6 + (i % 3) * 2
+    ctx.fillStyle = colors[i]
+    ctx.fillRect(cx + Math.cos(angle) * dist - size/2, cy + Math.sin(angle) * dist - size/2, size, size)
+  }
 }
 
-// Sparkler in right hand with animated sparks (Independence Day)
-function drawSparkler(ctx: CanvasRenderingContext2D, charX: number, charY: number, now: number) {
-  const sx = charX + 86, sy = charY + 68
-  // Stick
-  ctx.fillStyle = '#888'; ctx.fillRect(sx, sy, 4, 50)
-  // Sparkle tip
-  const tipX = sx + 2, tipY = sy - 2
+// Sparkler — stick bottom at (hx, hy) right hand, sparks at top
+function drawSparkler(ctx: CanvasRenderingContext2D, hx: number, hy: number, now: number) {
+  ctx.fillStyle = '#999'; ctx.fillRect(hx + 3, hy - 60, 4, 64)  // stick
+  const tipX = hx + 5, tipY = hy - 62
   const colors = ['#FFD700','#FF6B35','#FF4500','#FFF200','#FF69B4','#00FF88']
   for (let i = 0; i < 12; i++) {
     const angle = (now * 0.004 + i * 30) * Math.PI / 180
-    const dist = 8 + (Math.sin(now * 0.008 + i) + 1) * 10
-    const px = tipX + Math.cos(angle) * dist
-    const py = tipY + Math.sin(angle) * dist
-    ctx.fillStyle = colors[i % colors.length]
-    const size = 2 + Math.sin(now * 0.006 + i * 0.8) * 2
-    ctx.fillRect(px - size/2, py - size/2, size, size)
+    const dist  = 8 + (Math.sin(now * 0.008 + i) + 1) * 10
+    const size  = 2 + Math.sin(now * 0.006 + i * 0.8) * 2
+    ctx.fillStyle = colors[i % 6]
+    ctx.fillRect(tipX + Math.cos(angle) * dist - size/2, tipY + Math.sin(angle) * dist - size/2, size, size)
   }
-  // Bright core
   ctx.fillStyle = '#FFFFFF'; ctx.fillRect(tipX - 3, tipY - 3, 6, 6)
   ctx.fillStyle = '#FFD700'; ctx.fillRect(tipX - 2, tipY - 2, 4, 4)
 }
 
-// BBQ grill + tongs (Labor Day)
-function drawBBQ(ctx: CanvasRenderingContext2D, charX: number, charY: number, charH: number) {
-  const gx = charX + 60, gy = charH - 130
-  // Legs
+// BBQ grill (fixed background prop, Labor Day)
+function drawBBQ(ctx: CanvasRenderingContext2D, gx: number, groundY: number) {
+  const gy = groundY - 100
   ctx.fillStyle = '#555'
-  ctx.fillRect(gx + 8,  gy + 50, 6, 50)
-  ctx.fillRect(gx + 52, gy + 50, 6, 50)
-  ctx.fillRect(gx,      gy + 70, 66, 5)  // cross brace
-  // Bowl bottom
+  ctx.fillRect(gx + 8,  gy + 50, 6, 50); ctx.fillRect(gx + 52, gy + 50, 6, 50)
+  ctx.fillRect(gx,      gy + 70, 66, 5)
   ctx.fillStyle = '#333'; ctx.fillRect(gx, gy + 28, 66, 24)
-  // Grill lid (dome)
   ctx.fillStyle = '#444'; ctx.fillRect(gx, gy, 66, 30)
-  ctx.fillStyle = '#555'
-  ctx.fillRect(gx + 2, gy + 2, 62, 10)  // lid top highlight
-  // Grill grate lines
+  ctx.fillStyle = '#555'; ctx.fillRect(gx + 2, gy + 2, 62, 10)
   ctx.fillStyle = '#222'
   for (let i = 0; i < 5; i++) ctx.fillRect(gx + 4 + i * 12, gy + 30, 3, 22)
-  // Flame/heat shimmer
   ctx.fillStyle = 'rgba(255,120,0,.5)'; ctx.fillRect(gx + 10, gy + 26, 46, 6)
   ctx.fillStyle = 'rgba(255,200,0,.3)'; ctx.fillRect(gx + 20, gy + 22, 26, 6)
-  // Handle knob
   ctx.fillStyle = '#888'; ctx.fillRect(gx + 28, gy - 8, 10, 10)
-
-  // Tongs in right hand
-  const tx = charX + 78, ty = charY + 75
-  ctx.strokeStyle = '#aaa'; ctx.lineWidth = 3
-  ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx + 6, ty + 40); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(tx + 8, ty); ctx.lineTo(tx + 14, ty + 40); ctx.stroke()
-  // Tong pivot
-  ctx.fillStyle = '#888'; ctx.fillRect(tx + 2, ty + 14, 10, 4)
-  // Tong tips (open V)
-  ctx.fillRect(tx + 4, ty + 38, 3, 8)
-  ctx.fillRect(tx + 11, ty + 38, 3, 8)
 }
 
-// Turkey leg held in right hand (Thanksgiving)
-function drawTurkeyLeg(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const tx = charX + 80, ty = charY + 72
-  // Bone handle (white)
-  ctx.fillStyle = '#f5f5f0'; ctx.fillRect(tx + 4, ty + 30, 8, 22)
-  ctx.fillRect(tx + 1, ty + 50, 14, 6)  // knob
-  // Meat
+// Tongs — grip at (hx, hy) right hand, extends toward grill
+function drawTongs(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
+  const tx = hx + 2, ty = hy
+  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 3
+  ctx.beginPath(); ctx.moveTo(tx,     ty); ctx.lineTo(tx + 8,  ty + 44); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(tx + 9, ty); ctx.lineTo(tx + 16, ty + 44); ctx.stroke()
+  ctx.fillStyle = '#888'; ctx.fillRect(tx + 2, ty + 14, 12, 4)
+  ctx.fillRect(tx + 6, ty + 40, 3, 10); ctx.fillRect(tx + 13, ty + 40, 3, 10)
+}
+
+// Turkey leg — bone grip at (hx, hy), meat extends up-right
+function drawTurkeyLeg(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
+  const tx = hx + 2, ty = hy
+  ctx.fillStyle = '#f5f5f0'; ctx.fillRect(tx + 4, ty + 18, 8, 22); ctx.fillRect(tx + 1, ty + 38, 14, 6)
   ctx.fillStyle = '#c8622a'
-  ctx.fillRect(tx, ty, 16, 10)
-  ctx.fillRect(tx - 2, ty + 8, 20, 10)
-  ctx.fillRect(tx, ty + 16, 16, 8)
-  ctx.fillRect(tx + 2, ty + 22, 12, 10)
-  // Darker shading
-  ctx.fillStyle = '#a0491a'
-  ctx.fillRect(tx, ty + 10, 4, 16)
-  ctx.fillRect(tx + 12, ty + 8, 4, 16)
-  // Crispy top highlight
-  ctx.fillStyle = '#e88040'; ctx.fillRect(tx + 2, ty + 2, 12, 4)
+  ctx.fillRect(tx,     ty,      16, 6)
+  ctx.fillRect(tx - 2, ty + 5,  20, 8)
+  ctx.fillRect(tx,     ty + 11, 16, 6)
+  ctx.fillRect(tx + 2, ty + 15, 12, 6)
+  ctx.fillStyle = '#a0491a'; ctx.fillRect(tx, ty + 6, 4, 12); ctx.fillRect(tx + 12, ty + 5, 4, 12)
+  ctx.fillStyle = '#e88040'; ctx.fillRect(tx + 2, ty + 2, 12, 3)
 }
 
-// Santa hat on head (Christmas)
-function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
-  const hx = charX + 14, hy = charY - 2
-  // White brim band
-  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 2, hy + 20, 50, 10)
-  // Red hat body (triangle-ish)
+// Santa hat — sits on head, headTopY = effectiveOY
+function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
+  const hx = charX + 12, hy = headTopY
+  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 4, hy - 10, 54, 10)  // brim
   ctx.fillStyle = '#cc1111'
-  ctx.fillRect(hx + 4,  hy,      38, 8)
-  ctx.fillRect(hx + 8,  hy - 8,  28, 10)
-  ctx.fillRect(hx + 12, hy - 16, 20, 10)
-  ctx.fillRect(hx + 16, hy - 24, 14, 10)
-  ctx.fillRect(hx + 18, hy - 32, 10, 10)
-  ctx.fillRect(hx + 20, hy - 38, 8,  8)
-  // Drooping tip
-  ctx.fillRect(hx + 22, hy - 44, 6,  8)
-  ctx.fillRect(hx + 26, hy - 40, 6,  10)
-  ctx.fillRect(hx + 30, hy - 36, 6,  8)
-  // White pom
-  ctx.fillStyle = '#ffffff'; ctx.beginPath()
-  ctx.arc(hx + 36, hy - 36, 9, 0, Math.PI * 2); ctx.fill()
-  // Highlight on hat
-  ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fillRect(hx + 6, hy - 14, 8, 28)
+  ctx.fillRect(hx + 2,  hy - 18, 42, 10)
+  ctx.fillRect(hx + 6,  hy - 26, 32, 10)
+  ctx.fillRect(hx + 10, hy - 34, 22, 10)
+  ctx.fillRect(hx + 14, hy - 40, 14, 8)
+  ctx.fillRect(hx + 16, hy - 46, 10, 8)
+  ctx.fillRect(hx + 20, hy - 52, 8,  8)
+  ctx.fillRect(hx + 26, hy - 50, 8,  8)
+  ctx.fillRect(hx + 32, hy - 46, 8,  6)
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(hx + 40, hy - 44, 9, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(hx + 4, hy - 24, 8, 16)
 }
 
 /* ═══ Main component ════════════════════════════════════════════════ */
@@ -1808,12 +1767,15 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── NEW YEAR'S — bouncing + champagne flute ───────────────────
     else if(scene==='h_ny'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      const extraBounce = Math.round(Math.sin(now*.009)*-6)
-      pose.leftArmDY  = Math.round(Math.sin(now*.009)*-4)
-      pose.rightArmDY = Math.round(Math.sin(now*.009+Math.PI)*-4)
-      s.faceFlush = Math.max(0, s.faceFlush - .005)
+      const extraBounce = Math.round(Math.sin(now*.009)*-5)
+      pose.leftArmDY  = Math.round(Math.sin(now*.009)*-3)
+      pose.rightArmDY = -6   // right arm stays raised holding flute
+      pose.bodyDY     = 0
+      s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, extraBounce, 0, W, H)
-      drawChampagneFlute(ctx, Math.round(s.charX), Math.round(s.charY))
+      // Attach flute to right hand: effectiveOY + (21+rightArmDY)*PX
+      const eOY_ny  = Math.round(s.charY) + extraBounce * PX
+      drawChampagneFlute(ctx, Math.round(s.charX) + 77, eOY_ny + (21 + pose.rightArmDY) * PX)
     }
 
     // ── MLK DAY — slow dignified walk + peace sign ────────────────
@@ -1824,113 +1786,137 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       pose.leftArmDY=fr.leftArmDY; pose.rightArmDY=fr.rightArmDY
       pose.leftLegDX=fr.leftLegDX; pose.rightLegDX=fr.rightLegDX
       pose.bodyDY=fr.bodyDY
-      // Slow dignified stride — drift slightly right and loop
       s.charX += 0.4 * s.direction
       if(s.charX > W/2+40){ s.direction=-1 }
       if(s.charX < W/2-80){ s.direction=1 }
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
-      drawPeaceSign(ctx, Math.round(s.charX), Math.round(s.charY))
+      // Peace sign follows left hand
+      const eOY_mlk = Math.round(s.charY) + pose.bodyDY * PX
+      const lhY_mlk = eOY_mlk + (21 + pose.leftArmDY) * PX
+      const lhX_mlk = s.direction === 1 ? Math.round(s.charX) - 22 : Math.round(s.charX) + CHAR_W + 4
+      drawPeaceSign(ctx, lhX_mlk, lhY_mlk + 10)
     }
 
     // ── PRESIDENTS' DAY — standing tall + Lincoln hat ─────────────
     else if(scene==='h_pres'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      // Slow proud sway
-      pose.bodyDY   = Math.round(Math.sin(now*.0008)*-1)
+      pose.bodyDY     = Math.round(Math.sin(now*.0008)*-1)
       pose.leftArmDY  = Math.round(Math.sin(now*.0008)*-2)
       pose.rightArmDY = Math.round(Math.sin(now*.0008+Math.PI)*-2)
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
-      drawTopHat(ctx, Math.round(s.charX), Math.round(s.charY))
+      // Hat on head — effectiveOY accounts for bodyDY
+      const eOY_pres = Math.round(s.charY) + pose.bodyDY * PX
+      drawTopHat(ctx, Math.round(s.charX), eOY_pres)
     }
 
-    // ── GOOD FRIDAY — head bowed, arms low + cross ────────────────
+    // ── GOOD FRIDAY — quiet candlelight vigil ────────────────────
     else if(scene==='h_gf'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      // Head bowed: body leaning slightly, arms low and held together
-      pose.bodyDY = 2
-      pose.leftArmDY  = 6
-      pose.rightArmDY = 6
+      // Both arms brought inward holding candle at waist
+      pose.bodyDY     = 1
+      pose.leftArmDY  = 4
+      pose.rightArmDY = 4
       pose.leftLegDX  = -1
       pose.rightLegDX = 1
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
-      drawCross(ctx, Math.round(s.charX), Math.round(s.charY))
+      // Candle at torso center, waist height
+      const eOY_gf = Math.round(s.charY) + pose.bodyDY * PX
+      drawCandle(ctx, Math.round(s.charX) + 50, eOY_gf + 80, now)
     }
 
-    // ── MEMORIAL DAY — standing at attention + waving flag ────────
+    // ── MEMORIAL DAY — slow sway + waving flag ────────────────────
     else if(scene==='h_mem'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      // Arm raised in salute
-      pose.rightArmDY = -8
-      pose.leftArmDY  = 0
-      pose.bodyDY     = -1
+      // Gentle sway, right arm raised holding flag
+      const sway = Math.sin(now * .0012)
+      pose.bodyDY     = Math.round(sway * -1)
+      pose.leftArmDY  = Math.round(sway * -1)
+      pose.rightArmDY = Math.round(-6 + sway * -2)  // arm stays up, slight wave
+      pose.leftLegDX  = Math.round(sway * -1)
+      pose.rightLegDX = Math.round(sway * 1)
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
-      drawSmallFlag(ctx, Math.round(s.charX), Math.round(s.charY), now)
+      const eOY_mem = Math.round(s.charY) + pose.bodyDY * PX
+      drawSmallFlag(ctx, Math.round(s.charX) + 77, eOY_mem + (21 + pose.rightArmDY) * PX, now)
     }
 
-    // ── JUNETEENTH — jumping/celebrating, arms raised + fist ─────
+    // ── JUNETEENTH — jumping + pan-African confetti burst ─────────
     else if(scene==='h_jun'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      const extraBounce = Math.round(Math.abs(Math.sin(now*.008))*-8)
+      const extraBounce = Math.round(Math.abs(Math.sin(now * .008)) * -8)
       pose.leftArmDY  = -8
       pose.rightArmDY = -8
-      pose.leftLegDX  = Math.round(Math.sin(now*.008)*-3)
-      pose.rightLegDX = Math.round(Math.sin(now*.008)*3)
+      pose.leftLegDX  = Math.round(Math.sin(now * .008) * -3)
+      pose.rightLegDX = Math.round(Math.sin(now * .008) * 3)
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, extraBounce, 0, W, H)
-      drawRaisedFist(ctx, Math.round(s.charX), Math.round(s.charY) + extraBounce)
+      // Colorful confetti orbiting above his head
+      const eOY_jun = Math.round(s.charY) + extraBounce * PX
+      drawJuneteenthBurst(ctx, Math.round(s.charX) + 50, eOY_jun - 20, now)
     }
 
-    // ── INDEPENDENCE DAY — arm raised + sparkler ──────────────────
+    // ── INDEPENDENCE DAY — arm raised + sparkler attached ─────────
     else if(scene==='h_july4'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      const extraBounce = Math.round(Math.sin(now*.006)*-3)
+      const extraBounce = Math.round(Math.sin(now * .006) * -3)
       pose.rightArmDY = -10
       pose.leftArmDY  = 1
-      pose.bodyDY     = Math.round(Math.sin(now*.006)*-1)
+      pose.bodyDY     = Math.round(Math.sin(now * .006) * -1)
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, extraBounce, 0, W, H)
-      drawSparkler(ctx, Math.round(s.charX), Math.round(s.charY), now)
+      // Sparkler bottom at right hand
+      const eOY_j4 = Math.round(s.charY) + (pose.bodyDY + extraBounce) * PX
+      drawSparkler(ctx, Math.round(s.charX) + 77, eOY_j4 + (21 + pose.rightArmDY) * PX, now)
     }
 
-    // ── LABOR DAY — leaning toward BBQ + tongs ───────────────────
+    // ── LABOR DAY — tending BBQ + animated tongs ─────────────────
     else if(scene==='h_labor'){
       if(!s.sceneSnapped){ s.charX=W/2-80; s.direction=1; s.sceneSnapped=true }
-      // Lean forward — body tilted slightly, right arm extended
-      pose.bodyDY     = 1
-      pose.rightArmDY = -2
+      const reach = Math.sin(now * .0015)
+      pose.bodyDY     = Math.round(reach * -1 + 1)
+      pose.rightArmDY = Math.round(reach * -3 - 1)   // arm reaches toward grill
       pose.leftArmDY  = 2
       s.faceFlush = 0
-      drawBBQ(ctx, Math.round(s.charX), Math.round(s.charY), H)
+      // BBQ grill to the right of character
+      drawBBQ(ctx, Math.round(s.charX) + 60, groundY)
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
+      // Tongs follow right hand
+      const eOY_lb = Math.round(s.charY) + pose.bodyDY * PX
+      drawTongs(ctx, Math.round(s.charX) + 77, eOY_lb + (21 + pose.rightArmDY) * PX)
     }
 
-    // ── THANKSGIVING — standing + turkey leg ─────────────────────
+    // ── THANKSGIVING — eating + turkey leg attached to hand ───────
     else if(scene==='h_tg'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      const extraBounce = Math.round(Math.sin(now*.0025)*-2)
-      pose.rightArmDY = -3
+      const chew = Math.sin(now * .004)
+      const extraBounce = Math.round(chew * -2)
+      pose.rightArmDY = Math.round(chew * -3 - 2)   // arm raises/lowers eating motion
       pose.leftArmDY  = 2
       pose.bodyDY     = 1
-      s.faceFlush = Math.min(.2, s.faceFlush + .001)  // slight flush from eating
+      s.faceFlush = Math.min(.2, s.faceFlush + .001)
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, s.faceFlush, extraBounce, 0, W, H)
-      drawTurkeyLeg(ctx, Math.round(s.charX), Math.round(s.charY))
+      // Turkey leg follows right hand
+      const eOY_tg = Math.round(s.charY) + (pose.bodyDY + extraBounce) * PX
+      drawTurkeyLeg(ctx, Math.round(s.charX) + 77, eOY_tg + (21 + pose.rightArmDY) * PX)
     }
 
-    // ── CHRISTMAS — dancing + Santa hat ──────────────────────────
+    // ── CHRISTMAS — dancing + Santa hat on head ───────────────────
     else if(scene==='h_xmas'){
       if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
-      const extraBounce = Math.round(Math.sin(now*.008)*-5)
-      pose.leftArmDY  = Math.round(Math.sin(now*.008)*-5)
-      pose.rightArmDY = Math.round(Math.sin(now*.008+Math.PI)*-5)
-      pose.leftLegDX  = Math.round(Math.sin(now*.008)*-2)
-      pose.rightLegDX = Math.round(Math.sin(now*.008+Math.PI)*-2)
+      const extraBounce = Math.round(Math.sin(now * .008) * -5)
+      pose.leftArmDY  = Math.round(Math.sin(now * .008) * -5)
+      pose.rightArmDY = Math.round(Math.sin(now * .008 + Math.PI) * -5)
+      pose.leftLegDX  = Math.round(Math.sin(now * .008) * -2)
+      pose.rightLegDX = Math.round(Math.sin(now * .008 + Math.PI) * -2)
+      pose.bodyDY     = 0
       s.faceFlush = 0
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, extraBounce, 0, W, H)
-      drawSantaHat(ctx, Math.round(s.charX), Math.round(s.charY) + extraBounce)
+      // Hat sits on head — effectiveOY = charY + extraBounce*PX (bodyDY=0)
+      const eOY_xmas = Math.round(s.charY) + extraBounce * PX
+      drawSantaHat(ctx, Math.round(s.charX), eOY_xmas)
     }
 
     // ── Throttled React sync ──────────────────────────────────────
