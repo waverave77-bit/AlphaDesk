@@ -76,6 +76,8 @@ export default function RegisterPage() {
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
+              type="text"
+              inputMode="text"
               placeholder="e.g. zain_trades"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
@@ -89,10 +91,12 @@ export default function RegisterPage() {
             <Input
               id="email"
               type="email"
+              inputMode="email"
               placeholder="you@example.com"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
+              autoComplete="email"
             />
           </div>
           <div className="space-y-1.5">

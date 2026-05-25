@@ -50,8 +50,8 @@ export function GuestSignupModal({ open, onClose, feature = 'this feature' }: { 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+      <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center max-h-[90vh] overflow-y-auto">
+        <button onClick={onClose} className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-gray-600 transition-colors rounded-lg">
           <X className="h-5 w-5" />
         </button>
         <div className="h-14 w-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mx-auto mb-4">
