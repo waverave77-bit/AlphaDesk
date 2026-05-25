@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { getMarketStatus } from '@/lib/market-hours'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,35 +9,6 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 // Simple in-memory cache — refreshes every 30 minutes
 let _cache: { text: string; status: string; cachedAt: number } | null = null
 const CACHE_TTL = 30 * 60 * 1000
-
-function getMarketStatus(): { status: 'open' | 'pre' | 'after' | 'closed' | 'weekend'; label: string; dayName: string } {
-  // Convert to US/Eastern time
-  const now = new Date()
-  const etOffset = (() => {
-    // Rough DST: second Sunday of March → first Sunday of November
-    const yr = now.getUTCFullYear()
-    const dstStart = new Date(Date.UTC(yr, 2, 8))
-    dstStart.setUTCDate(8 + ((7 - dstStart.getUTCDay()) % 7))
-    const dstEnd = new Date(Date.UTC(yr, 10, 1))
-    dstEnd.setUTCDate(1 + ((7 - dstEnd.getUTCDay()) % 7))
-    return now >= dstStart && now < dstEnd ? -4 : -5
-  })()
-
-  const etMs = now.getTime() + etOffset * 3600000
-  const et = new Date(etMs)
-  const day = et.getUTCDay()           // 0=Sun, 6=Sat
-  const h = et.getUTCHours()
-  const m = et.getUTCMinutes()
-  const mins = h * 60 + m
-
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
-  if (day === 0 || day === 6) return { status: 'weekend', label: 'Weekend', dayName: days[day] }
-  if (mins >= 9 * 60 + 30 && mins < 16 * 60) return { status: 'open', label: 'Open', dayName: days[day] }
-  if (mins >= 4 * 60 && mins < 9 * 60 + 30) return { status: 'pre', label: 'Pre-Market', dayName: days[day] }
-  if (mins >= 16 * 60 && mins < 20 * 60) return { status: 'after', label: 'After Hours', dayName: days[day] }
-  return { status: 'closed', label: 'Closed', dayName: days[day] }
-}
 
 async function fetchMarketNews(): Promise<string[]> {
   try {
@@ -75,9 +47,13 @@ export async function GET() {
   const systemPrompt = `You write short, sharp daily market recaps for retail investors. Friendly and conversational — like a smart friend who follows markets. No markdown, no bullet points, no "Note:", never start with "I". Plain English only. Be specific and confident.`
 
   const nextOpen = dayName === 'Friday' ? 'Monday' : dayName === 'Saturday' ? 'Monday' : 'Monday'
+  // Extract holiday name from label like "Closed · Christmas"
+  const holidayName = label.startsWith('Closed ·') ? label.replace('Closed · ', '') : null
 
   const userPrompt = status === 'weekend'
     ? `Today is ${dayName}. Markets are closed for the weekend.\n\n${newsBlock}\n\nWrite a 2-3 sentence weekend market recap. Cover: what happened in markets this past week, and what specific events, data releases, or storylines investors should watch that could move markets when they open ${nextOpen}. Be concrete — name actual catalysts (Fed speakers, earnings, economic data, geopolitical events, etc.).`
+    : status === 'holiday'
+    ? `Today is ${dayName} and markets are closed for ${holidayName}.\n\n${newsBlock}\n\nWrite a 2-3 sentence market note for ${holidayName}. Wish investors a happy holiday, briefly cover any recent market context, and note what to watch when markets reopen.`
     : status === 'pre'
     ? `Today is ${dayName} and markets open in a few hours.\n\n${newsBlock}\n\nWrite a 2-3 sentence pre-market recap. Cover: what the overnight/futures action looks like and the key things investors should watch when the market opens today.`
     : status === 'open'

@@ -33,14 +33,16 @@ function formatPrice(n: number | null) {
 // ── sub-components ────────────────────────────────────────────────────────────
 
 function MarketStatusBadge({ status }: { status: string }) {
+  const isHoliday = status.startsWith('Closed ·')
   const cfg: Record<string, { bg: string; dot: string; text: string }> = {
-    'Open':        { bg: 'bg-green-500/10 border-green-500/20',  dot: 'bg-green-400', text: 'text-green-400' },
+    'Open':        { bg: 'bg-green-500/10 border-green-500/20',   dot: 'bg-green-400',  text: 'text-green-400' },
     'Pre-Market':  { bg: 'bg-yellow-500/10 border-yellow-500/20', dot: 'bg-yellow-400', text: 'text-yellow-400' },
-    'After Hours': { bg: 'bg-blue-500/10 border-blue-500/20',    dot: 'bg-blue-400',   text: 'text-blue-400' },
-    'Weekend':     { bg: 'bg-gray-500/10 border-gray-600',       dot: 'bg-gray-500',   text: 'text-gray-400' },
-    'Closed':      { bg: 'bg-gray-500/10 border-gray-600',       dot: 'bg-gray-500',   text: 'text-gray-400' },
+    'After Hours': { bg: 'bg-blue-500/10 border-blue-500/20',     dot: 'bg-blue-400',   text: 'text-blue-400' },
+    'Weekend':     { bg: 'bg-gray-500/10 border-gray-600',        dot: 'bg-gray-500',   text: 'text-gray-400' },
+    'Closed':      { bg: 'bg-gray-500/10 border-gray-600',        dot: 'bg-gray-500',   text: 'text-gray-400' },
+    'Holiday':     { bg: 'bg-purple-500/10 border-purple-500/20', dot: 'bg-purple-400', text: 'text-purple-400' },
   }
-  const c = cfg[status] ?? cfg['Closed']
+  const c = isHoliday ? cfg['Holiday'] : (cfg[status] ?? cfg['Closed'])
   return (
     <span className={cn('inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border', c.bg, c.text)}>
       <span className={cn('h-1.5 w-1.5 rounded-full', c.dot)} />
@@ -244,7 +246,7 @@ export default function DashboardPage() {
         marketState={(() => {
           if (panicMode) return 'bear'
           const status = brief?.status ?? ''
-          if (status === 'Weekend') return 'closed'
+          if (status === 'Weekend' || status.startsWith('Closed ·')) return 'closed'
           if (status !== 'Open') return 'neutral'
           const spx = indices[0]?.changePercent ?? fearGreed?.spChange ?? 0
           if (spx >= 0.5)  return 'bull'
