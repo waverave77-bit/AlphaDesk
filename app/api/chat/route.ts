@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
+import { getMarketStatus } from '@/lib/market-hours'
 
 export const dynamic = 'force-dynamic'
 
@@ -578,7 +579,23 @@ export async function POST(req: NextRequest) {
       { role: 'user' as const, content: message },
     ]
 
-    const systemPrompt = buildSystemPrompt(experience, newsHeadlines, stockContext)
+    // Add market status / holiday awareness
+    const { status: mktStatus, label: mktLabel } = getMarketStatus()
+    const holidayName = mktLabel.startsWith('Closed ·') ? mktLabel.replace('Closed · ', '') : null
+    const marketStatusLine = holidayName
+      ? `MARKET STATUS: Markets are closed today for ${holidayName}. Acknowledge the holiday if relevant and remind the user that live prices won't update until markets reopen.`
+      : mktStatus === 'weekend'
+      ? `MARKET STATUS: Markets are closed for the weekend. Prices shown are from Friday's close.`
+      : mktStatus === 'pre'
+      ? `MARKET STATUS: Pre-market hours — markets haven't opened yet today.`
+      : mktStatus === 'after'
+      ? `MARKET STATUS: After-hours — markets have closed for the day.`
+      : mktStatus === 'open'
+      ? `MARKET STATUS: Markets are open right now.`
+      : `MARKET STATUS: Markets are currently closed.`
+
+    const newsWithMarketContext = marketStatusLine + (newsHeadlines ? `\n\n${newsHeadlines}` : '')
+    const systemPrompt = buildSystemPrompt(experience, newsWithMarketContext, stockContext)
 
     const encoder = new TextEncoder()
     const anthropicStream = client.messages.stream({

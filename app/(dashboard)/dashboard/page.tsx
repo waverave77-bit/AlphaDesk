@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
 import {
   Search, Star, Calendar, FlaskConical,
   Activity, Building2, Users, BookOpen, TrendingUp,
@@ -13,6 +14,11 @@ import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
 import MarketCharacter from '@/components/MarketCharacter'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
+
+const HolidayAtmosphere = dynamic(
+  () => import('@/components/HolidayAtmosphere').then(m => ({ default: m.HolidayAtmosphere })),
+  { ssr: false }
+)
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -241,6 +247,14 @@ export default function DashboardPage() {
       )}
       <OnboardingModal />
 
+      {/* ── Holiday atmosphere (background effects) ─────────── */}
+      {(() => {
+        const holidayName = !panicMode && brief?.status?.startsWith('Closed ·')
+          ? brief.status.replace('Closed · ', '')
+          : null
+        return holidayName ? <HolidayAtmosphere holiday={holidayName} /> : null
+      })()}
+
       {/* ── Mr. Guy character ────────────────────────────────── */}
       <MarketCharacter
         changePercent={panicMode ? -99 : (fearGreed?.spChange ?? indices[0]?.changePercent ?? 0)}
@@ -254,6 +268,9 @@ export default function DashboardPage() {
           if (spx <= -0.5) return 'bear'
           return 'neutral'
         })()}
+        holidayPreview={!panicMode && brief?.status?.startsWith('Closed ·')
+          ? brief.status.replace('Closed · ', '')
+          : undefined}
       />
 
       {/* ── Hero greeting ─────────────────────────────────────────── */}
