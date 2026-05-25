@@ -1,5 +1,6 @@
 'use client'
 import { useRef, useEffect, useState, useCallback } from 'react'
+import { HolidayAtmosphere } from '@/components/HolidayAtmosphere'
 
 /* ─── Palette ──────────────────────────────────────────────────────── */
 const N  = null
@@ -972,9 +973,11 @@ function ZzzParticles({charX,charY,viewH}:{charX:number;charY:number;viewH:numbe
 }
 
 /* ═══ Main component ════════════════════════════════════════════════ */
-interface Props { marketState?: MarketState; changePercent?: number }
+interface Props { marketState?: MarketState; changePercent?: number; holidayPreview?: string }
 
-export default function MarketCharacter({ marketState = 'neutral', changePercent = 0 }: Props) {
+export default function MarketCharacter({ marketState = 'neutral', changePercent = 0, holidayPreview }: Props) {
+  // When previewing a holiday, always render as closed state
+  if (holidayPreview) marketState = 'closed'
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvasW, setCanvasW]   = useState(1440)
   const [viewH,   setViewH]     = useState(900)
@@ -1667,7 +1670,10 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {activeScene==='desk'&&<><AngerMarks charX={charXDisp}/><FlyingPapers charX={charXDisp}/><BangText charX={charXDisp} show={banging}/></>}
     {activeScene==='throw'&&<FlyingObjects charX={charXDisp}/>}
     {activeScene==='sleep'&&<ZzzParticles charX={Math.round(canvasW/2-130)} charY={viewH-248} viewH={viewH}/>}
-    {activeState==='closed'&&<NightSky/>}
+    {activeState==='closed' && (holidayPreview
+      ? <HolidayAtmosphere holiday={holidayPreview} />
+      : <NightSky/>
+    )}
     {activeScene==='perch'&&showPerchBubble&&<PerchBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='weights'&&<WeightSparkles charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp} charY={charYDisp} viewH={viewH}/>}

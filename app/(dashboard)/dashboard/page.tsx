@@ -82,7 +82,8 @@ const QUICK_LINKS = [
 ]
 
 const ADMIN_LINKS = [
-  { href: '/generate-assets', label: 'Export Assets', icon: Sparkles,     desc: 'Download Mr. Guy logos & icons' },
+  { href: '/generate-assets',  label: 'Export Assets',    icon: Sparkles, desc: 'Download Mr. Guy logos & icons' },
+  { href: '/holiday-preview',  label: 'Holiday Preview',  icon: Sparkles, desc: 'Preview Mr. Guy holiday animations' },
 ]
 
 // ── page ──────────────────────────────────────────────────────────────────────
