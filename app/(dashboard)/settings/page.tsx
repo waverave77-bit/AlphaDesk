@@ -482,7 +482,12 @@ export default function SettingsPage() {
                 Manage Subscription
               </Button>
               {portalError && (
-                <p className="text-xs text-red-400 text-center">{portalError}</p>
+                <p className="text-xs text-red-400 text-center">
+                  {portalError}{' '}
+                  <a href="mailto:support@mrguyinvests.com" className="underline">
+                    support@mrguyinvests.com
+                  </a>
+                </p>
               )}
             </CardContent>
           </Card>

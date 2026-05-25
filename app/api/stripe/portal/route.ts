@@ -20,15 +20,38 @@ export async function POST() {
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    select: { stripeCustomerId: true, isPro: true },
+    select: { id: true, stripeCustomerId: true, isPro: true },
   })
 
-  if (!user?.stripeCustomerId) {
-    return NextResponse.json({ error: 'No active subscription found.' }, { status: 404 })
+  let customerId = user?.stripeCustomerId
+
+  // Fallback: if we don't have a stripeCustomerId saved (e.g. webhook failed),
+  // search Stripe by email to find the customer
+  if (!customerId) {
+    try {
+      const customers = await getStripe().customers.list({
+        email: session.user.email,
+        limit: 1,
+      })
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id
+        // Save it so future calls work instantly
+        if (user?.id) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { stripeCustomerId: customerId },
+          }).catch(() => {})
+        }
+      }
+    } catch {}
+  }
+
+  if (!customerId) {
+    return NextResponse.json({ error: 'No subscription found. Contact support@mrguyinvests.com' }, { status: 404 })
   }
 
   const portalSession = await getStripe().billingPortal.sessions.create({
-    customer: user.stripeCustomerId,
+    customer: customerId,
     return_url: `${process.env.NEXTAUTH_URL}/settings`,
   })
 
