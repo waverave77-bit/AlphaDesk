@@ -100,10 +100,16 @@ export default function DashboardPage() {
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
 
   // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
+  const [showVerifiedBanner, setShowVerifiedBanner] = useState(false)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
   const [upgradeVerified, setUpgradeVerified] = useState<boolean | null>(null) // null=checking, true=confirmed, false=failed
   useEffect(() => {
     const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    if (params?.get('verified') === '1') {
+      setShowVerifiedBanner(true)
+      window.history.replaceState({}, '', '/dashboard')
+      updateSession()
+    }
     const isUpgrade = params?.get('upgraded') === '1'
     const sessionId = params?.get('session_id') ?? ''
     if (!isUpgrade) return
@@ -298,6 +304,18 @@ export default function DashboardPage() {
         </>
       )}
       <OnboardingModal />
+
+      {/* ── Email verified banner ────────────────────────────────── */}
+      {showVerifiedBanner && (
+        <div className="relative flex items-center gap-3 bg-green-600/10 border border-green-500/30 text-white px-5 py-4 rounded-2xl">
+          <span className="text-2xl">✅</span>
+          <div className="flex-1">
+            <p className="font-bold text-base text-green-300">Email verified!</p>
+            <p className="text-gray-400 text-sm">You now have full access to all free AI features.</p>
+          </div>
+          <button onClick={() => setShowVerifiedBanner(false)} className="text-gray-500 hover:text-white text-xl font-bold shrink-0">×</button>
+        </div>
+      )}
 
       {/* ── Pro upgrade success / failure banner ───────────────── */}
       {showUpgradedBanner && upgradeVerified === null && (

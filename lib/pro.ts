@@ -54,10 +54,18 @@ export async function checkAILimit(feature: string): Promise<NextResponse | null
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    select: { id: true, isPro: true },
+    select: { id: true, isPro: true, emailVerified: true },
   })
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 401 })
+  }
+
+  // Block unverified users from AI features
+  if (!user.emailVerified) {
+    return NextResponse.json(
+      { error: 'Please verify your email to use AI features', emailUnverified: true },
+      { status: 403 }
+    )
   }
 
   // Pro users have unlimited AI requests

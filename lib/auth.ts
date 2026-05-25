@@ -49,15 +49,17 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.isDemo = user.email === DEMO_EMAIL
         // Read isPro + hasOnboarded from DB at sign-in so they're available client-side
-        const u = await prisma.user.findUnique({ where: { id: user.id }, select: { isPro: true, hasOnboarded: true } })
+        const u = await prisma.user.findUnique({ where: { id: user.id }, select: { isPro: true, hasOnboarded: true, emailVerified: true } })
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
+        token.emailVerified = u?.emailVerified ?? false
       }
       // Re-read from DB when updateSession() is called (e.g. after Pro upgrade or onboarding)
       if (trigger === 'update' && token.id) {
-        const u = await prisma.user.findUnique({ where: { id: token.id as string }, select: { isPro: true, hasOnboarded: true } })
+        const u = await prisma.user.findUnique({ where: { id: token.id as string }, select: { isPro: true, hasOnboarded: true, emailVerified: true } })
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
+        token.emailVerified = u?.emailVerified ?? false
       }
       return token
     },
@@ -67,6 +69,7 @@ export const authOptions: NextAuthOptions = {
         ;(session.user as any).isDemo = token.isDemo ?? false
         ;(session.user as any).isPro = token.isPro ?? false
         ;(session.user as any).hasOnboarded = token.hasOnboarded ?? false
+        ;(session.user as any).emailVerified = token.emailVerified ?? false
       }
       return session
     },

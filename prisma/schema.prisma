@@ -30,6 +30,9 @@ model User {
 
   // ─── Onboarding ─────────────────────────────────────────────────────
   hasOnboarded         Boolean   @default(false)
+
+  // ─── Email verification ──────────────────────────────────────────────
+  emailVerified        Boolean   @default(false)
   // ───────────────────────────────────────────────────────────────────
 
   // ─── Activity tracking ──────────────────────────────────────────────
@@ -196,6 +199,16 @@ model PageView {
 }
 
 model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model EmailVerificationToken {
   id        String   @id @default(cuid())
   email     String
   token     String   @unique
