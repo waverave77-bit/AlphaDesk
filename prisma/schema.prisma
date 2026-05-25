@@ -218,6 +218,17 @@ model EmailVerificationToken {
   @@index([email])
 }
 
+model AIAnalysisCache {
+  id        String   @id  // "{TICKER}-{DATE}" e.g. "AAPL-2026-05-25"
+  ticker    String
+  date      String   // "YYYY-MM-DD" ET
+  data      String   // JSON stringified ensemble result
+  createdAt DateTime @default(now())
+
+  @@index([ticker])
+  @@index([date])
+}
+
 model DailyAIUsage {
   id      String @id @default(cuid())
   userId  String
