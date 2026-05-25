@@ -79,7 +79,7 @@ export default function PrivacyPage() {
             <li><strong className="text-gray-300">Vercel</strong> — hosting, deployment, Vercel Analytics (anonymised page-view data), and Vercel Speed Insights (anonymised Core Web Vitals performance data)</li>
             <li><strong className="text-gray-300">Neon (PostgreSQL)</strong> — database hosting for account and watchlist data</li>
             <li><strong className="text-gray-300">Stripe</strong> — payment processing and subscription management. Stripe&apos;s privacy policy applies to payment data.</li>
-            <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data (Yahoo Finance, etc.)</li>
+            <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data from public market data sources</li>
             <li><strong className="text-gray-300">SEC EDGAR</strong> — public regulatory filings (Form 4, 13F)</li>
             <li><strong className="text-gray-300">Anthropic Claude API</strong> — AI-generated analysis and responses</li>
             <li><strong className="text-gray-300">xAI (Grok API)</strong> — used for certain AI-generated features; your queries may be processed by xAI&apos;s servers</li>
