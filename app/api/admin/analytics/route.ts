@@ -14,9 +14,14 @@ export async function GET() {
   const now = new Date()
   const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
   const fiveMinAgo = new Date(now.getTime() - 5 * 60 * 1000)
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const startOfWeek  = new Date(startOfToday); startOfWeek.setDate(startOfToday.getDate() - 7)
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  // Use ET-aware boundaries so user counts align with ET dates (same timezone as AI usage tracking)
+  // ET is UTC-5 (EST) / UTC-4 (EDT); using the ET date string + parsing as UTC gives us a consistent reference point
+  const startOfToday = new Date(todayStr + 'T00:00:00.000Z')  // midnight ET expressed in UTC
+  const startOfWeek  = new Date(startOfToday); startOfWeek.setUTCDate(startOfToday.getUTCDate() - 7)
+  // First day of current ET month
+  const etMonthStr = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }).slice(0, 7) + '-01'
+  const startOfMonth = new Date(etMonthStr + 'T00:00:00.000Z')
 
   // Build last 14 days date strings for signup trend
   const last14Days = Array.from({ length: 14 }, (_, i) => {
@@ -87,11 +92,11 @@ export async function GET() {
     prisma.onboardingResponse.findMany({ select: { goals: true } }),
   ])
 
-  // Signup trend: count per day for last 14 days
+  // Signup trend: count per day for last 14 days (ET day boundaries)
   const signupsByDay = await Promise.all(
     last14Days.map(async (dateStr) => {
-      const start = new Date(dateStr + 'T00:00:00')
-      const end   = new Date(dateStr + 'T23:59:59')
+      const start = new Date(dateStr + 'T00:00:00.000Z')  // midnight ET as UTC reference
+      const end   = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1)  // 23:59:59.999 same ET day
       const count = await prisma.user.count({ where: { createdAt: { gte: start, lte: end } } })
       return { date: dateStr, count }
     })

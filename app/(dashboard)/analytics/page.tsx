@@ -48,18 +48,16 @@ const PAGE_LABELS: Record<string, string> = {
 }
 
 const FEATURE_LABELS: Record<string, string> = {
-  'chat': '💬 Mr. Guy Chat',
-  'bull-vs-bear': '🥊 Bull vs Bear',
-  'report-card': '📋 Report Card',
+  'chat':          '💬 Mr. Guy Chat',
+  'bull-vs-bear':  '🥊 Bull vs Bear',
+  'report-card':   '📋 Report Card',
   'spike-summary': '🚀 Spike Summary',
   'reality-check': '🔍 Reality Check',
-  'translator': '📖 Finance Translator',
-  'ai-analysis': '🤖 AI Analysis',
-  'general': '⚡ General',
-  'market-brief': '📰 Market Brief',
-  'hot-take': '🌶️ Hot Take',
-  'roast': '🔥 Roast',
-  'briefing': '📅 Briefing',
+  'translator':    '📖 Finance Translator',
+  'ai-analysis':   '🤖 AI Analysis',
+  'research':      '📊 Stock Research',
+  'quant':         '🤖 Quant',
+  'general':       '⚡ General',
 }
 
 const GOAL_LABELS: Record<string, string> = {
@@ -244,7 +242,7 @@ export default function AdminPage() {
                 </span>
                 <p className="text-3xl font-bold text-white">{data.liveNow}</p>
               </div>
-              <p className="text-xs text-gray-500 mt-1">active in last 5 min</p>
+              <p className="text-xs text-gray-500 mt-1">signed-in · last 5 min</p>
             </div>
 
             <StatCard icon={<Users className="h-4 w-4" />} label="Total Users" value={data.users.total} sub={`${data.users.free} free · ${data.users.pro} pro`} />
@@ -271,8 +269,8 @@ export default function AdminPage() {
             </div>
             <div className="grid grid-cols-1 gap-4 content-start">
               <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="New Today" value={data.users.newToday} />
-              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="New This Week" value={data.users.newThisWeek} />
-              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="New This Month" value={data.users.newThisMonth} />
+              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="Last 7 Days" value={data.users.newThisWeek} />
+              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="This Month" value={data.users.newThisMonth} />
             </div>
           </div>
 
@@ -316,6 +314,7 @@ export default function AdminPage() {
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <Globe className="h-5 w-5 text-cyan-400" />
               Most Visited Pages Today
+              <span className="text-xs font-normal text-gray-600 ml-1">(signed-in users)</span>
               {data.topPagesToday.length === 0 && <span className="text-sm font-normal text-gray-600 ml-2">— no data yet today</span>}
             </h2>
             {data.topPagesToday.length > 0 ? (
