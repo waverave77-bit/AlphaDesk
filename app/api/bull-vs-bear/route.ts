@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import { prisma } from '@/lib/prisma'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, searchStocks } from '@/lib/yahoo-finance'
 import { getExperienceContext } from '@/lib/experience'
+import { callDeepSeek } from '@/lib/deepseek'
 
 export const dynamic = 'force-dynamic'
 
@@ -116,17 +116,12 @@ Respond ONLY in this exact JSON format:
 
 verdict must be exactly "bull" or "bear".`
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
   try {
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 600,
-      system: `You are Mr. Guy — a sharp, funny, no-BS stock analyst. When asked to debate a stock, you write both sides of the trade honestly, then pick one. Casual language. No markdown asterisks. No headers with ##. Just clean sentences.${getExperienceContext(experience)}`,
-      messages: [{ role: 'user', content: userPrompt }],
-    })
-
-    const raw = ((msg.content[0] as { text?: string }).text ?? '').trim()
+    const raw = await callDeepSeek(
+      `You are Mr. Guy — a sharp, funny, no-BS stock analyst. When asked to debate a stock, you write both sides of the trade honestly, then pick one. Casual language. No markdown asterisks. No headers with ##. Just clean sentences.${getExperienceContext(experience)}`,
+      userPrompt,
+      600,
+    )
     const jsonMatch = raw.match(/\{[\s\S]*\}/)
     if (!jsonMatch) throw new Error('No JSON in response')
 

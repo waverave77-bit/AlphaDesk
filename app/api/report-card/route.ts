@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
 import { getExperienceContext } from '@/lib/experience'
+import { callDeepSeek } from '@/lib/deepseek'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
   const limited = await checkAILimit('report-card')
   if (limited) return limited
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
     const { searchParams } = new URL(req.url)
     const ticker = searchParams.get('ticker')?.toUpperCase()
@@ -80,14 +79,11 @@ Respond ONLY with valid JSON in this exact format (no extra text, no markdown):
   "summary": "Mr. Guy one-sentence take on this stock"
 }`
 
-    const response = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 500,
-      system: MR_GUY_SYSTEM_BASE + getExperienceContext(experience),
-      messages: [{ role: 'user', content: userPrompt }],
-    })
-
-    const text = response.content[0].type === 'text' ? response.content[0].text : '{}'
+    const text = await callDeepSeek(
+      MR_GUY_SYSTEM_BASE + getExperienceContext(experience),
+      userPrompt,
+      500,
+    )
     const jsonMatch = text.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       return NextResponse.json({ error: 'Failed to parse grades' }, { status: 500 })

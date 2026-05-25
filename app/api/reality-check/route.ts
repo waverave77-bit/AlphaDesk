@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData } from '@/lib/yahoo-finance'
+import { callDeepSeek } from '@/lib/deepseek'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,8 +54,6 @@ export async function POST(req: Request) {
       if (valid.length > 0) liveContext = `\n\nLive data:\n${valid.join('\n')}`
     }
 
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
     const prompt = `Someone said this: "${input}"${liveContext}
 
 Give them a reality check. This could be a stock tip, a trade idea, or anything finance-related. Be direct, funny if appropriate, and use the live data if available.
@@ -70,14 +68,11 @@ THE CATCH: [1-2 sentences on the biggest risk or thing they're missing]
 
 BOTTOM LINE: [one punchy sentence. Make it memorable.]`
 
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 300,
-      system: 'You are Mr. Guy, a funny finance mascot who gives brutally honest reality checks. Plain English only — no complicated finance terms. No markdown asterisks or pound signs. No em dashes. Confident, direct, occasionally funny. If you use a finance term, explain it immediately in plain words.',
-      messages: [{ role: 'user', content: prompt }],
-    })
-
-    const text = ((msg.content[0] as any).text ?? '').trim()
+    const text = await callDeepSeek(
+      'You are Mr. Guy, a funny finance mascot who gives brutally honest reality checks. Plain English only — no complicated finance terms. No markdown asterisks or pound signs. No em dashes. Confident, direct, occasionally funny. If you use a finance term, explain it immediately in plain words.',
+      prompt,
+      300,
+    )
 
     // Parse sections
     const verdictMatch = text.match(/VERDICT:\s*(.+)/i)
