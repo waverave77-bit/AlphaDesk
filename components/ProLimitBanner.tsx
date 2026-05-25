@@ -18,7 +18,7 @@ const MESSAGES: Record<string, { title: string; sub: string }> = {
   'am-i-dumb':     { title: "Mr. Guy won't answer that today 🤔",   sub: "You've used your 5 free questions. Upgrade for unlimited." },
   'bs-checker':    { title: "BS detector offline for today 🚨",     sub: "You've used your 5 free checks. Upgrade for unlimited." },
   'translator':    { title: "Translation limit reached 📖",          sub: "You've hit your daily limit. Upgrade for unlimited translations." },
-  'research':      { title: "4 free stock lookups used today 📊",    sub: "You've used your 4 free research pages for today. Come back tomorrow or go Pro for unlimited." },
+  'research':      { title: "5 free stock lookups used today 📊",    sub: "You've used your 5 free research pages for today. Come back tomorrow or go Pro for unlimited." },
 }
 
 const DEFAULT = { title: "Daily limit reached 😅", sub: "You've used all your free AI requests for today. Upgrade to Pro for unlimited access." }
