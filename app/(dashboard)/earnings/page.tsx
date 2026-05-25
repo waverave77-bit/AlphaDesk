@@ -438,7 +438,7 @@ export default function EarningsPage() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
         <Input
           placeholder="Search by ticker or company name..."
-          className="pl-11 h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 text-sm"
+          className="pl-11 h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 text-base"
           value={search}
           onChange={(e) => { setSearch(e.target.value); setSelectedDate(null) }}
         />

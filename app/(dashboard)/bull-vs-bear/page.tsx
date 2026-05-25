@@ -263,7 +263,7 @@ export default function BullVsBearPage() {
                   🐂 The Bull Case
                 </p>
                 <div className={cn(
-                  'text-sm leading-relaxed overflow-y-auto max-h-60',
+                  'text-sm leading-relaxed',
                   isDark ? 'text-gray-200' : 'text-slate-700'
                 )}>
                   {result.bullCase}
@@ -281,7 +281,7 @@ export default function BullVsBearPage() {
                   🐻 The Bear Case
                 </p>
                 <div className={cn(
-                  'text-sm leading-relaxed overflow-y-auto max-h-60',
+                  'text-sm leading-relaxed',
                   isDark ? 'text-gray-200' : 'text-slate-700'
                 )}>
                   {result.bearCase}

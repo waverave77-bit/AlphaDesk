@@ -19,6 +19,7 @@ const primaryNav = [
 
 const moreNav = [
   { href: '/watchlist',  label: 'Watchlist' },
+  { href: '/alerts',     label: 'Alerts' },
   { href: '/dividends',  label: 'Dividends' },
   { href: '/insiders',   label: 'Smart Money' },
   { href: '/earnings',   label: 'Earnings Calendar' },
@@ -332,7 +333,7 @@ export default function TopNav() {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
                   >
-                    <Zap className="h-4 w-4" /> Upgrade to Pro
+                    <Zap className="h-4 w-4" /> Upgrade
                   </Link>
                   <Link
                     href="/settings"

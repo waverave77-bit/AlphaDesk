@@ -65,7 +65,7 @@ export default function FloatingChat() {
     <>
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[380px] h-[540px] flex flex-col rounded-2xl border border-gray-700 bg-gray-950 shadow-2xl overflow-hidden">
+        <div className="fixed bottom-[88px] right-3 sm:right-6 z-50 w-[calc(100vw-24px)] sm:w-[380px] max-h-[calc(100vh-120px)] h-[540px] flex flex-col rounded-2xl border border-gray-700 bg-gray-950 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-800 bg-gray-900 shrink-0">
             <div className="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
@@ -151,7 +151,7 @@ export default function FloatingChat() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && send()}
                 placeholder="Ask about stocks, markets..."
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3.5 py-2.5 text-base text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
               />
               <button
                 onClick={() => send()}
@@ -169,7 +169,7 @@ export default function FloatingChat() {
       <button
         onClick={() => setOpen(!open)}
         className={cn(
-          'fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95',
+          'fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] right-3 sm:right-6 z-50 h-14 w-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95',
           open
             ? 'bg-gray-700 hover:bg-gray-600'
             : 'bg-blue-600 hover:bg-blue-700'

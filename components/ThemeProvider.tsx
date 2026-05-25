@@ -48,6 +48,12 @@ function applyToDOM(isDark: boolean, accentId: ThemeId) {
   // data-theme controls dark/light CSS overrides in globals.css
   // In light mode always use 'white'; in dark mode use the accent id
   root.setAttribute('data-theme', isDark ? accentId : 'white')
+  // Add/remove Tailwind's .dark class so dark: variants work throughout the app
+  if (isDark) {
+    root.classList.add('dark')
+  } else {
+    root.classList.remove('dark')
+  }
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

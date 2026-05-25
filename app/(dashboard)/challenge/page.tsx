@@ -272,22 +272,25 @@ export default function ChallengePage() {
 
   async function fetchLivePrices(tickers: string[]) {
     setLoading(true)
-    const unique = Array.from(new Set(tickers.filter(Boolean)))
-    const results = await Promise.allSettled(
-      unique.map(t => fetch(`/api/stock/${t}`).then(r => r.json()))
-    )
-    const prices: Record<string, LivePrice> = {}
-    results.forEach((r, i) => {
-      if (r.status === 'fulfilled' && r.value?.quote) {
-        prices[unique[i]] = {
-          price: r.value.quote.price,
-          changePercent: r.value.quote.changePercent,
-          companyName: r.value.quote.companyName,
+    try {
+      const unique = Array.from(new Set(tickers.filter(Boolean)))
+      const results = await Promise.allSettled(
+        unique.map(t => fetch(`/api/stock/${t}`).then(r => r.json()))
+      )
+      const prices: Record<string, LivePrice> = {}
+      results.forEach((r, i) => {
+        if (r.status === 'fulfilled' && r.value?.quote) {
+          prices[unique[i]] = {
+            price: r.value.quote.price,
+            changePercent: r.value.quote.changePercent,
+            companyName: r.value.quote.companyName,
+          }
         }
-      }
-    })
-    setLivePrices(prices)
-    setLoading(false)
+      })
+      setLivePrices(prices)
+    } finally {
+      setLoading(false)
+    }
   }
 
   function loadHistory() {
@@ -518,7 +521,7 @@ export default function ChallengePage() {
                         }}
                         placeholder="Or type any ticker / company name…"
                         className={cn(
-                          'w-full px-3 py-2 rounded-xl border text-sm',
+                          'w-full px-3 py-2 rounded-xl border text-base',
                           isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400',
                           tickerError && 'border-red-500'
                         )}

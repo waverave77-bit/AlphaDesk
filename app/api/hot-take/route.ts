@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import fs from 'fs'
 import path from 'path'
 import { getYahooCrumb, getMultipleQuotes } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
 
-const prisma = new PrismaClient()
 
 function getAnthropicKey(): string {
   const fromEnv = process.env.ANTHROPIC_API_KEY

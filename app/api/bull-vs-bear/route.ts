@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, searchStocks } from '@/lib/yahoo-finance'
 import { getExperienceContext } from '@/lib/experience'
 
 export const dynamic = 'force-dynamic'
 
-const prisma = new PrismaClient()
 
 function todayStr(): string {
   return new Date().toISOString().slice(0, 10)

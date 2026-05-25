@@ -176,7 +176,7 @@ export default function AdminPage() {
     const id = setInterval(() => {
       fetch('/api/admin/analytics')
         .then(r => r.json())
-        .then(d => { setData(d); setLastRefresh(new Date()) })
+        .then(d => { if (d?.users) { setData(d); setLastRefresh(new Date()) } })
         .catch(() => {})
     }, 30_000)
     return () => clearInterval(id)
@@ -207,20 +207,20 @@ export default function AdminPage() {
     <div className="space-y-7 max-w-6xl">
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-red-600/15 border border-red-600/20 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-xl bg-red-600/15 border border-red-600/20 flex items-center justify-center shrink-0">
             <Shield className="h-6 w-6 text-red-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">Admin Dashboard</h1>
             <p className="text-gray-500 text-sm mt-0.5">Last updated: {lastRefresh.toLocaleTimeString()}</p>
           </div>
         </div>
         <button
           onClick={load}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-sm text-gray-300 hover:bg-gray-700 transition-colors self-start sm:self-auto"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh

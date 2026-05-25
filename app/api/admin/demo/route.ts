@@ -24,6 +24,9 @@ export async function POST() {
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Not logged in' }, { status: 401 })
     }
+    if (session.user.email !== process.env.ADMIN_EMAIL) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
     if (session.user.email === DEMO_EMAIL) {
       return NextResponse.json({ error: 'Already in demo mode' }, { status: 400 })
     }

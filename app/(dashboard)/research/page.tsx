@@ -167,6 +167,11 @@ export default function ResearchPage() {
           <p className="text-xs text-gray-500">Wall Street analyst ratings, price targets, and reasoning from professional research coverage.</p>
         </div>
       </div>
+
+      {/* Disclaimer */}
+      <p className="text-xs text-gray-600 text-center pb-2">
+        All data is provided for informational purposes only. Not financial advice. Market data may be delayed. Always verify independently before making investment decisions.
+      </p>
     </div>
   )
 }

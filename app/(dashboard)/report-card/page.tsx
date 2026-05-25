@@ -173,7 +173,7 @@ export default function ReportCardPage() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ticker or company name (e.g. NVDA or Nvidia)"
                 className={cn(
-                  'w-full rounded-xl border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-colors',
+                  'w-full rounded-xl border px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-colors',
                   isDark
                     ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500'
                     : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400'

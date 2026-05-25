@@ -375,7 +375,7 @@ export default function InsidersPage() {
       <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-5">
         <p className="text-base font-semibold text-emerald-300 mb-1.5">Why does this matter?</p>
         <p className="text-sm text-gray-400 leading-relaxed">
-          The &quot;Insider Trades&quot; tab shows <strong className="text-gray-300">corporate insider trades</strong> — purchases and sales by executives, directors, and major shareholders disclosed via SEC Form 4 filings. The &quot;Top Investors&quot; tab shows quarterly 13F filings from well-known fund managers. This data is for informational purposes only and should not be the basis for any investment decision.
+          The &quot;Insider Trades&quot; tab shows <strong className="text-gray-300">corporate insider trades</strong> — purchases and sales by executives, directors, and major shareholders disclosed via SEC Form 4 filings — as well as <strong className="text-gray-300">congressional trades</strong> required to be disclosed under the STOCK Act. The &quot;Top Investors&quot; tab shows quarterly 13F filings from well-known fund managers. This data is for informational purposes only and should not be the basis for any investment decision.
         </p>
       </div>
 

@@ -49,6 +49,7 @@ export default function PrivacyPage() {
             <p><strong className="text-gray-300">Billing information:</strong> If you subscribe to Mr. Guy Invests Pro, payment is handled by Stripe. We store only your Stripe customer ID and subscription status — we never see or store your full card details.</p>
             <p><strong className="text-gray-300">Usage data:</strong> We may collect basic information about how you use the service (pages visited, features used) to improve the product. We do not sell this data.</p>
             <p><strong className="text-gray-300">Session data:</strong> We use secure session cookies (via NextAuth.js) to keep you signed in. These are necessary for the service to function.</p>
+            <p><strong className="text-gray-300">Virtual portfolio data:</strong> If you participate in the $100K Challenge or other virtual trading features, we store your simulated trades, portfolio holdings, and game history. This is fictional/game data only — no real money is involved.</p>
             <p><strong className="text-gray-300">We do not collect:</strong> social security numbers, government IDs, brokerage account numbers, or any other sensitive financial account details.</p>
           </div>
         </section>
@@ -81,6 +82,8 @@ export default function PrivacyPage() {
             <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data (Yahoo Finance, etc.)</li>
             <li><strong className="text-gray-300">SEC EDGAR</strong> — public regulatory filings (Form 4, 13F)</li>
             <li><strong className="text-gray-300">Anthropic Claude API</strong> — AI-generated analysis and responses</li>
+            <li><strong className="text-gray-300">xAI (Grok API)</strong> — used for certain AI-generated features; your queries may be processed by xAI&apos;s servers</li>
+            <li><strong className="text-gray-300">DeepSeek API</strong> — used for certain AI-generated features; your queries may be processed by DeepSeek&apos;s servers</li>
           </ul>
           <p className="text-gray-400">
             These providers may have access to minimal technical data (e.g., IP addresses) as part of standard

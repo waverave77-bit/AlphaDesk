@@ -92,8 +92,8 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-white">5. AI-Generated Content</h2>
           <p className="text-gray-400 leading-relaxed">
-            Several features on this site use artificial intelligence (including Anthropic Claude and other
-            AI models) to generate content. AI-generated content may be inaccurate, incomplete, or outdated.
+            Several features on this site use artificial intelligence — including Anthropic Claude, xAI (Grok),
+            DeepSeek, and other AI models — to generate content. AI-generated content may be inaccurate, incomplete, or outdated.
             It is provided for entertainment and educational purposes only. We are not responsible for any
             decisions made based on AI-generated analysis, grades, translations, or commentary.
           </p>

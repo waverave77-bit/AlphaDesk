@@ -384,7 +384,7 @@ export default function SettingsPage() {
                         onChange={e => { setUsernameInput(e.target.value); setUsernameError('') }}
                         placeholder="3–20 chars, letters/numbers/_"
                         maxLength={20}
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-base text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                         onKeyDown={e => { if (e.key === 'Enter') handleUsernameSave(); if (e.key === 'Escape') { setUsernameEditing(false); setUsernameError('') } }}
                         autoFocus
                       />

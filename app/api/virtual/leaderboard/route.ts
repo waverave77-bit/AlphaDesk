@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const portfolios = await prisma.virtualPortfolio.findMany({
     include: {
-      user: { select: { name: true, email: true } },
+      user: { select: { name: true, email: true, username: true } },
       holdings: { select: { ticker: true, companyName: true, shares: true, avgCost: true } },
     },
     take: 100,
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     const monthlyGainLossPct = monthlyBaseline > 0 ? (monthlyGainLoss / monthlyBaseline) * 100 : 0
 
     return {
-      name: p.user.name || p.user.email.split('@')[0],
+      name: p.user.username || p.user.name || 'Anonymous',
       totalValue: p.totalValue,
       gainLoss: p.totalValue - STARTING_CASH,
       gainLossPct: ((p.totalValue - STARTING_CASH) / STARTING_CASH) * 100,
