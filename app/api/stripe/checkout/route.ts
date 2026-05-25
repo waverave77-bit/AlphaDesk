@@ -22,7 +22,7 @@ export async function POST() {
     payment_method_types: ['card'],
     customer_email: session.user.email,
     line_items: [{ price: process.env.STRIPE_PRO_PRICE_ID!, quantity: 1 }],
-    success_url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=1`,
+    success_url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url:  `${process.env.NEXTAUTH_URL}/upgrade?cancelled=1`,
     metadata: { email: session.user.email.toLowerCase() },
   })

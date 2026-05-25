@@ -100,38 +100,54 @@ export default function DashboardPage() {
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
 
   // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
-  // We verify DB status rather than blindly trusting the URL param
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
   const [upgradeVerified, setUpgradeVerified] = useState<boolean | null>(null) // null=checking, true=confirmed, false=failed
   useEffect(() => {
-    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('upgraded') === '1') {
-      setShowUpgradedBanner(true)
-      window.history.replaceState({}, '', '/dashboard')
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    const isUpgrade = params?.get('upgraded') === '1'
+    const sessionId = params?.get('session_id') ?? ''
+    if (!isUpgrade) return
 
-      // Poll DB a few times to confirm the webhook fired
-      let attempts = 0
-      const check = async () => {
-        attempts++
-        const res = await fetch('/api/user/pro').catch(() => null)
-        if (res?.ok) {
-          const data = await res.json().catch(() => null)
-          if (data?.isPro) {
+    setShowUpgradedBanner(true)
+    window.history.replaceState({}, '', '/dashboard')
+
+    const activate = async () => {
+      // Primary path: verify directly with Stripe using the checkout session ID
+      // This works even if the webhook hasn't fired yet
+      if (sessionId) {
+        try {
+          const res = await fetch('/api/stripe/verify-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId }),
+          })
+          const data = await res.json()
+          if (res.ok && data.isPro) {
             setUpgradeVerified(true)
             updateSession()
             return
           }
-        }
-        if (attempts < 6) {
-          // Retry with back-off: 2s, 4s, 6s, 8s, 10s
-          setTimeout(check, attempts * 2000)
-        } else {
-          // Still not Pro after ~30s — webhook probably failed
-          setUpgradeVerified(false)
-        }
+        } catch {}
       }
-      // First check after 3 seconds (give the webhook time to fire)
-      setTimeout(check, 3000)
+
+      // Fallback: poll /api/user/pro in case webhook beat us to it
+      let attempts = 0
+      const poll = async () => {
+        attempts++
+        const res = await fetch('/api/user/pro').catch(() => null)
+        const data = await res?.json().catch(() => null)
+        if (data?.isPro) {
+          setUpgradeVerified(true)
+          updateSession()
+          return
+        }
+        if (attempts < 5) setTimeout(poll, 3000)
+        else setUpgradeVerified(false)
+      }
+      setTimeout(poll, 2000)
     }
+
+    activate()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
