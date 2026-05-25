@@ -1024,11 +1024,12 @@ function drawPeaceSign(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
 
 // Lincoln top hat — sits on head, headTopY = effectiveOY (row-0)
 function drawTopHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
+  // Brim sits ON the hair (rows 0-1): brim from headTopY-2 to headTopY+8 (overlaps slightly)
   const hx = charX + 18, hy = headTopY
-  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(hx - 6, hy - 8,  52, 8)   // brim on head
-  ctx.fillStyle = '#111';    ctx.fillRect(hx + 2, hy - 46, 38, 38)  // body
-  ctx.fillStyle = '#333';    ctx.fillRect(hx + 2, hy - 16, 38, 6)   // band
-  ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(hx + 6, hy - 42, 6, 28)
+  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(hx - 8, hy - 2,  56, 10)  // brim seated on hair
+  ctx.fillStyle = '#111';    ctx.fillRect(hx + 2, hy - 42, 38, 40)  // body
+  ctx.fillStyle = '#333';    ctx.fillRect(hx + 2, hy - 12, 38, 6)   // band above brim
+  ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(hx + 6, hy - 38, 6, 26)
 }
 
 // Candle with animated flame — cx/cy = center torso (Good Friday)
@@ -1095,20 +1096,31 @@ function drawSparkler(ctx: CanvasRenderingContext2D, hx: number, hy: number, now
   ctx.fillStyle = '#FFD700'; ctx.fillRect(tipX - 2, tipY - 2, 4, 4)
 }
 
-// BBQ grill (fixed background prop, Labor Day)
-function drawBBQ(ctx: CanvasRenderingContext2D, gx: number, groundY: number) {
-  const gy = groundY - 100
+// BBQ grill — floorY = actual ground (charY + CHAR_H), legs touch floor
+function drawBBQ(ctx: CanvasRenderingContext2D, gx: number, floorY: number) {
+  const legBot = floorY
+  const legTop = legBot - 58      // legs: 58px tall
+  const bowlBot = legTop + 6
+  const bowlTop = bowlBot - 26    // bowl: 26px tall
+  const lidBot = bowlTop
+  const lidTop = lidBot - 34      // lid: 34px tall
+  // Legs
   ctx.fillStyle = '#555'
-  ctx.fillRect(gx + 8,  gy + 50, 6, 50); ctx.fillRect(gx + 52, gy + 50, 6, 50)
-  ctx.fillRect(gx,      gy + 70, 66, 5)
-  ctx.fillStyle = '#333'; ctx.fillRect(gx, gy + 28, 66, 24)
-  ctx.fillStyle = '#444'; ctx.fillRect(gx, gy, 66, 30)
-  ctx.fillStyle = '#555'; ctx.fillRect(gx + 2, gy + 2, 62, 10)
-  ctx.fillStyle = '#222'
-  for (let i = 0; i < 5; i++) ctx.fillRect(gx + 4 + i * 12, gy + 30, 3, 22)
-  ctx.fillStyle = 'rgba(255,120,0,.5)'; ctx.fillRect(gx + 10, gy + 26, 46, 6)
-  ctx.fillStyle = 'rgba(255,200,0,.3)'; ctx.fillRect(gx + 20, gy + 22, 26, 6)
-  ctx.fillStyle = '#888'; ctx.fillRect(gx + 28, gy - 8, 10, 10)
+  ctx.fillRect(gx + 8,  legTop, 6, 58); ctx.fillRect(gx + 54, legTop, 6, 58)
+  ctx.fillRect(gx,      legTop + 20, 68, 5)   // cross brace
+  // Bowl
+  ctx.fillStyle = '#2a2a2a'; ctx.fillRect(gx, bowlTop, 68, 26)
+  // Grate lines
+  ctx.fillStyle = '#1a1a1a'
+  for (let i = 0; i < 5; i++) ctx.fillRect(gx + 4 + i * 12, bowlTop + 2, 3, 20)
+  // Lid
+  ctx.fillStyle = '#3a3a3a'; ctx.fillRect(gx, lidTop, 68, 34)
+  ctx.fillStyle = '#4a4a4a'; ctx.fillRect(gx + 2, lidTop + 2, 64, 12)
+  // Flame/heat shimmer
+  ctx.fillStyle = 'rgba(255,120,0,.55)'; ctx.fillRect(gx + 8, bowlTop - 6, 52, 8)
+  ctx.fillStyle = 'rgba(255,200,0,.35)'; ctx.fillRect(gx + 18, bowlTop - 12, 32, 8)
+  // Knob on lid top
+  ctx.fillStyle = '#777'; ctx.fillRect(gx + 30, lidTop - 10, 10, 11)
 }
 
 // Tongs — grip at (hx, hy) right hand, extends toward grill
@@ -1137,18 +1149,18 @@ function drawTurkeyLeg(ctx: CanvasRenderingContext2D, hx: number, hy: number) {
 // Santa hat — sits on head, headTopY = effectiveOY
 function drawSantaHat(ctx: CanvasRenderingContext2D, charX: number, headTopY: number) {
   const hx = charX + 12, hy = headTopY
-  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 4, hy - 10, 54, 10)  // brim
+  ctx.fillStyle = '#f0f0f0'; ctx.fillRect(hx - 4, hy - 2, 54, 12)  // brim seated on hair
   ctx.fillStyle = '#cc1111'
-  ctx.fillRect(hx + 2,  hy - 18, 42, 10)
-  ctx.fillRect(hx + 6,  hy - 26, 32, 10)
-  ctx.fillRect(hx + 10, hy - 34, 22, 10)
-  ctx.fillRect(hx + 14, hy - 40, 14, 8)
-  ctx.fillRect(hx + 16, hy - 46, 10, 8)
-  ctx.fillRect(hx + 20, hy - 52, 8,  8)
-  ctx.fillRect(hx + 26, hy - 50, 8,  8)
-  ctx.fillRect(hx + 32, hy - 46, 8,  6)
-  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(hx + 40, hy - 44, 9, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(hx + 4, hy - 24, 8, 16)
+  ctx.fillRect(hx + 2,  hy - 10, 42, 10)
+  ctx.fillRect(hx + 6,  hy - 18, 32, 10)
+  ctx.fillRect(hx + 10, hy - 26, 22, 10)
+  ctx.fillRect(hx + 14, hy - 33, 14, 9)
+  ctx.fillRect(hx + 16, hy - 40, 10, 9)
+  ctx.fillRect(hx + 20, hy - 46, 8,  8)
+  ctx.fillRect(hx + 26, hy - 44, 8,  8)
+  ctx.fillRect(hx + 32, hy - 40, 8,  6)
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(hx + 40, hy - 38, 9, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(hx + 4, hy - 16, 8, 14)
 }
 
 /* ═══ Main component ════════════════════════════════════════════════ */
@@ -1254,6 +1266,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     const zKey: 'L'|'R' = ms==='bear' ? 'L' : 'R'
     const zone = zones[zKey]
     const zL = zones.L   // always the left side zone
+    const zR = zones.R   // always the right side zone
 
     // ── Scene management ─────────────────────────────────────────
     if(s.prevState !== ms){
@@ -1766,7 +1779,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── NEW YEAR'S — bouncing + champagne flute ───────────────────
     else if(scene==='h_ny'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+30:60; s.direction=1; s.sceneSnapped=true }
       const extraBounce = Math.round(Math.sin(now*.009)*-5)
       pose.leftArmDY  = Math.round(Math.sin(now*.009)*-3)
       pose.rightArmDY = -6   // right arm stays raised holding flute
@@ -1780,7 +1793,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── MLK DAY — slow dignified walk + peace sign ────────────────
     else if(scene==='h_mlk'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
       s.tick++; if(s.tick>=10){ s.tick=0; s.frameIdx=(s.frameIdx+1)%8 }
       const fr = WALK_FRAMES[s.frameIdx]
       pose.leftArmDY=fr.leftArmDY; pose.rightArmDY=fr.rightArmDY
@@ -1800,7 +1813,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── PRESIDENTS' DAY — standing tall + Lincoln hat ─────────────
     else if(scene==='h_pres'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+30:60; s.direction=1; s.sceneSnapped=true }
       pose.bodyDY     = Math.round(Math.sin(now*.0008)*-1)
       pose.leftArmDY  = Math.round(Math.sin(now*.0008)*-2)
       pose.rightArmDY = Math.round(Math.sin(now*.0008+Math.PI)*-2)
@@ -1813,7 +1826,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── GOOD FRIDAY — quiet candlelight vigil ────────────────────
     else if(scene==='h_gf'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
       // Both arms brought inward holding candle at waist
       pose.bodyDY     = 1
       pose.leftArmDY  = 4
@@ -1829,7 +1842,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── MEMORIAL DAY — slow sway + waving flag ────────────────────
     else if(scene==='h_mem'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+30:60; s.direction=1; s.sceneSnapped=true }
       // Gentle sway, right arm raised holding flag
       const sway = Math.sin(now * .0012)
       pose.bodyDY     = Math.round(sway * -1)
@@ -1845,7 +1858,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── JUNETEENTH — jumping + pan-African confetti burst ─────────
     else if(scene==='h_jun'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
       const extraBounce = Math.round(Math.abs(Math.sin(now * .008)) * -8)
       pose.leftArmDY  = -8
       pose.rightArmDY = -8
@@ -1860,7 +1873,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── INDEPENDENCE DAY — arm raised + sparkler attached ─────────
     else if(scene==='h_july4'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+30:60; s.direction=1; s.sceneSnapped=true }
       const extraBounce = Math.round(Math.sin(now * .006) * -3)
       pose.rightArmDY = -10
       pose.leftArmDY  = 1
@@ -1874,14 +1887,14 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── LABOR DAY — tending BBQ + animated tongs ─────────────────
     else if(scene==='h_labor'){
-      if(!s.sceneSnapped){ s.charX=W/2-80; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+20:50; s.direction=1; s.sceneSnapped=true }
       const reach = Math.sin(now * .0015)
       pose.bodyDY     = Math.round(reach * -1 + 1)
       pose.rightArmDY = Math.round(reach * -3 - 1)   // arm reaches toward grill
       pose.leftArmDY  = 2
       s.faceFlush = 0
       // BBQ grill to the right of character
-      drawBBQ(ctx, Math.round(s.charX) + 60, groundY)
+      drawBBQ(ctx, Math.round(s.charX) + CHAR_W + 10, Math.round(s.charY) + CHAR_H)
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
       // Tongs follow right hand
       const eOY_lb = Math.round(s.charY) + pose.bodyDY * PX
@@ -1890,7 +1903,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── THANKSGIVING — eating + turkey leg attached to hand ───────
     else if(scene==='h_tg'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
       const chew = Math.sin(now * .004)
       const extraBounce = Math.round(chew * -2)
       pose.rightArmDY = Math.round(chew * -3 - 2)   // arm raises/lowers eating motion
@@ -1905,7 +1918,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── CHRISTMAS — dancing + Santa hat on head ───────────────────
     else if(scene==='h_xmas'){
-      if(!s.sceneSnapped){ s.charX=W/2-50; s.direction=1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zL.ok?zL.min+30:60; s.direction=1; s.sceneSnapped=true }
       const extraBounce = Math.round(Math.sin(now * .008) * -5)
       pose.leftArmDY  = Math.round(Math.sin(now * .008) * -5)
       pose.rightArmDY = Math.round(Math.sin(now * .008 + Math.PI) * -5)
