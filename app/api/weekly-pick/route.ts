@@ -14,8 +14,6 @@ async function callGrok(system: string, user: string): Promise<string> {
       model: 'grok-3',
       max_tokens: 200,
       messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
-      // Live search so Grok knows current news, sentiment, and catalysts for this week
-      search_parameters: { mode: 'auto', sources: [{ type: 'web' }, { type: 'x' }] },
     }),
     signal: AbortSignal.timeout(20000),
   })

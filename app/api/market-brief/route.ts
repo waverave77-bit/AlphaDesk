@@ -7,6 +7,27 @@ export const dynamic = 'force-dynamic'
 let _cache: { text: string; status: string; cachedAt: number } | null = null
 const CACHE_TTL = 30 * 60 * 1000
 
+async function fetchMarketNews(): Promise<string[]> {
+  try {
+    const res = await fetch(
+      'https://news.google.com/rss/search?q=stock+market+economy&hl=en-US&gl=US&ceid=US:en',
+      { cache: 'no-store', signal: AbortSignal.timeout(5000) }
+    )
+    const text = await res.text()
+    const items = text.match(/<item>([\s\S]*?)<\/item>/gi) ?? []
+    const headlines: string[] = []
+    const cutoff = Date.now() - 24 * 3600000
+    for (const item of items.slice(0, 20)) {
+      const title = item.match(/<title>(.*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[|\]\]>/g, '').trim()
+      const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1]?.trim()
+      if (title && pubDate && new Date(pubDate).getTime() > cutoff) headlines.push(title)
+    }
+    return headlines.slice(0, 8)
+  } catch {
+    return []
+  }
+}
+
 async function callGrok(systemPrompt: string, userPrompt: string): Promise<string> {
   const apiKey = process.env.XAI_API_KEY
   if (!apiKey) throw new Error('XAI_API_KEY not set')
@@ -24,11 +45,6 @@ async function callGrok(systemPrompt: string, userPrompt: string): Promise<strin
         { role: 'system', content: systemPrompt },
         { role: 'user',   content: userPrompt   },
       ],
-      // Grok live search — pulls real-time web + X (Twitter) data
-      search_parameters: {
-        mode: 'auto',
-        sources: [{ type: 'web' }, { type: 'x' }],
-      },
     }),
     signal: AbortSignal.timeout(20000),
   })
@@ -45,20 +61,26 @@ export async function GET() {
   }
 
   const { status, label, dayName } = getMarketStatus()
-  const holidayName = label.startsWith('Closed ·') ? label.replace('Closed · ', '') : null
-  const nextOpen   = 'Monday' // simplification — good enough for weekend/holiday copy
+  const headlines = await fetchMarketNews()
 
-  const systemPrompt = `You write short, sharp daily market recaps for retail investors. Friendly and conversational — like a smart friend who follows markets. No markdown, no bullet points, no "Note:", never start with "I". Plain English only. Be specific and confident. Use your live search to get today's real market data.`
+  const newsBlock = headlines.length > 0
+    ? `Recent headlines:\n${headlines.map(h => `- ${h}`).join('\n')}`
+    : 'No specific headlines available — use your knowledge of current market conditions.'
+
+  const holidayName = label.startsWith('Closed ·') ? label.replace('Closed · ', '') : null
+  const nextOpen   = 'Monday'
+
+  const systemPrompt = `You write short, sharp daily market recaps for retail investors. Friendly and conversational — like a smart friend who follows markets. No markdown, no bullet points, no "Note:", never start with "I". Plain English only. Be specific and confident.`
 
   const userPrompt = status === 'weekend'
-    ? `Today is ${dayName}. Markets are closed for the weekend. Search for what happened in markets this past week and what investors should watch when they open ${nextOpen}. Write a 2-3 sentence recap. Be concrete — name actual catalysts (Fed speakers, earnings, economic data, geopolitical events).`
+    ? `Today is ${dayName}. Markets are closed for the weekend.\n\n${newsBlock}\n\nWrite a 2-3 sentence weekend market recap. Cover: what happened in markets this past week, and what specific events, data releases, or storylines investors should watch when they open ${nextOpen}. Be concrete — name actual catalysts (Fed speakers, earnings, economic data, geopolitical events, etc.).`
     : status === 'holiday'
-    ? `Today is ${dayName} and markets are closed for ${holidayName}. Write a 2-3 sentence market note. Wish investors a happy ${holidayName}, briefly cover recent market context, and note what to watch when markets reopen.`
+    ? `Today is ${dayName} and markets are closed for ${holidayName}.\n\n${newsBlock}\n\nWrite a 2-3 sentence market note for ${holidayName}. Wish investors a happy holiday, briefly cover any recent market context, and note what to watch when markets reopen.`
     : status === 'pre'
-    ? `Today is ${dayName} and markets open in a few hours. Search for overnight futures action and pre-market news. Write a 2-3 sentence pre-market recap covering what to watch when the market opens today.`
+    ? `Today is ${dayName} and markets open in a few hours.\n\n${newsBlock}\n\nWrite a 2-3 sentence pre-market recap. Cover: what the overnight/futures action looks like and the key things investors should watch when the market opens today.`
     : status === 'open'
-    ? `Markets are open right now (${dayName}). Search for today's market action. Write a 2-3 sentence recap: what's driving markets today, which sectors are moving, what's the main story.`
-    : `Markets just closed today (${dayName}). Search for how markets closed and why. Write a 2-3 sentence end-of-day recap covering what happened and what to watch tomorrow.`
+    ? `Markets are open right now (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence market recap. Cover: what's driving the market today — which sectors are moving, what's the sentiment, and what's the main story.`
+    : `Markets just closed today (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence end-of-day market recap. Cover: how markets closed and why, and what investors should watch tonight or heading into tomorrow.`
 
   try {
     const text = await callGrok(systemPrompt, userPrompt)
