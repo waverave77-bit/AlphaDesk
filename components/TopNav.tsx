@@ -91,6 +91,7 @@ export default function TopNav() {
   const toggleDark = () => setTheme(isDark ? 'white' : 'default')
 
   const { isAdmin } = useAdmin()
+  const isPro = !!(session?.user as any)?.isPro
 
   const initials = session?.user?.name
     ? session.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
@@ -220,7 +221,7 @@ export default function TopNav() {
               <span>Admin</span>
             </Link>
           )}
-          {session && (
+          {session && !isPro && (
             <Link
               href="/upgrade"
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
@@ -327,13 +328,15 @@ export default function TopNav() {
               ))}
               {session ? (
                 <>
-                  <Link
-                    href="/upgrade"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
-                  >
-                    <Zap className="h-4 w-4" /> Upgrade
-                  </Link>
+                  {!isPro && (
+                    <Link
+                      href="/upgrade"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+                    >
+                      <Zap className="h-4 w-4" /> Upgrade
+                    </Link>
+                  )}
                   <Link
                     href="/settings"
                     onClick={() => setMobileOpen(false)}
