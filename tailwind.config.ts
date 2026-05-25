@@ -13,6 +13,11 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        brand: {
+          DEFAULT: '#f97316', // orange-500
+          dark: '#ea580c',    // orange-600
+          light: '#fb923c',   // orange-400
+        },
       },
       keyframes: {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
