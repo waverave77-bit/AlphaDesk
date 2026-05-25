@@ -26,7 +26,9 @@ export async function POST(req: Request) {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session
-      const email = session.customer_details?.email
+      // Prefer metadata.email (set at checkout creation from the authenticated session)
+      // Fall back to customer_details.email if metadata is missing
+      const email = (session.metadata?.email ?? session.customer_details?.email)?.toLowerCase().trim()
       if (!email) break
       await prisma.user.update({
         where: { email },

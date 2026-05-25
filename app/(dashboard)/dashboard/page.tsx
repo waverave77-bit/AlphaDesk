@@ -95,9 +95,22 @@ const ADMIN_LINKS = [
 // ── page ──────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
   const isPreview = !!(session?.user as any)?.isDemo
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
+
+  // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
+  const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('upgraded') === '1') {
+      setShowUpgradedBanner(true)
+      // Force session token refresh so isPro reflects the DB change immediately
+      updateSession()
+      // Clean the URL without reloading the page
+      window.history.replaceState({}, '', '/dashboard')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Defer greeting + date to client to avoid hydration mismatch
   const [{ word: greeting, emoji }, setGreeting] = useState<{ word: string; emoji: string }>({ word: 'Good morning', emoji: '☀️' })
@@ -246,6 +259,23 @@ export default function DashboardPage() {
         </>
       )}
       <OnboardingModal />
+
+      {/* ── Pro upgrade success banner ───────────────────────── */}
+      {showUpgradedBanner && (
+        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-4 rounded-2xl shadow-lg">
+          <span className="text-2xl">👑</span>
+          <div className="flex-1">
+            <p className="font-bold text-base">Welcome to Pro!</p>
+            <p className="text-blue-100 text-sm">You now have unlimited AI features. Enjoy the upgrade!</p>
+          </div>
+          <button
+            onClick={() => setShowUpgradedBanner(false)}
+            className="text-blue-200 hover:text-white text-xl font-bold leading-none shrink-0"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {/* ── Holiday atmosphere (background effects) ─────────── */}
       {(() => {
