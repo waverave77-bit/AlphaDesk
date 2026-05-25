@@ -71,18 +71,18 @@ export default function OnboardingModal() {
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xl">
-      <div className="w-full max-w-3xl mx-4 bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4">
+      <div className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
 
         {/* Progress bar */}
-        <div className="h-1.5 bg-gray-800">
+        <div className="h-1.5 bg-gray-800 rounded-t-3xl shrink-0">
           <div
-            className="h-full bg-blue-600 transition-all duration-500"
+            className="h-full bg-blue-600 transition-all duration-500 rounded-t-3xl"
             style={{ width: `${((step + 1) / 4) * 100}%` }}
           />
         </div>
 
-        <div className="p-10 md:p-14">
+        <div className="p-6 md:p-10 overflow-y-auto flex-1">
           {/* Step dots */}
           <div className="flex items-center justify-center gap-2 mb-10">
             {[0,1,2,3].map((i) => (
