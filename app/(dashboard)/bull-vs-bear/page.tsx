@@ -103,6 +103,7 @@ export default function BullVsBearPage() {
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); return }
+      if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); return }
       if (data.error) {
         setError(data.error)
       } else {

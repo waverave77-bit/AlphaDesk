@@ -88,6 +88,7 @@ export default function TranslatorPage() {
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); setLoading(false); return }
+      if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); setLoading(false); return }
       if (data.error) { setError(data.error); return }
       setResult(data)
     } catch {

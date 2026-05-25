@@ -129,6 +129,13 @@ export default function SpikeSummaryPage() {
         setLimitReached(true)
         return
       }
+      if (res.status === 403) {
+        const data = await res.json().catch(() => ({}))
+        if (data.emailUnverified) {
+          setSpikes(prev => prev.map((s, i) => i === idx ? { ...s, loading: false, summary: '📧 Verify your email first — check your inbox for the link.' } : s))
+          return
+        }
+      }
       const data = await res.json()
       setSpikes(prev => prev.map((s, i) => i === idx ? { ...s, loading: false, summary: data.summary || 'No explanation available.' } : s))
     } catch {

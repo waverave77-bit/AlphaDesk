@@ -120,6 +120,7 @@ export default function RealityCheckPage() {
       })
       const data = await res.json()
       if (data.limitReached) { setLimitReached(true); setLoading(false); return }
+      if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); return }
       if (data.error) { setError('Something went wrong — try again'); return }
       setResult(data)
     } catch {

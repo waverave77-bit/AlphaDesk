@@ -505,6 +505,15 @@ function ChatPage() {
         return
       }
 
+      if (res.status === 403) {
+        const data = await res.json().catch(() => ({}))
+        if (data.emailUnverified) {
+          setMessages([...updated, { role: 'assistant', content: '📧 Please verify your email first — check your inbox for the verification link, then come back and try again!' }])
+          setLoading(false)
+          return
+        }
+      }
+
       if (!res.ok || !res.body) {
         setMessages([...updated, { role: 'assistant', content: 'Something went wrong. Try again!' }])
         setLoading(false)
