@@ -29,38 +29,94 @@ export async function POST(req: Request) {
       // Prefer metadata.email (set at checkout creation from the authenticated session)
       // Fall back to customer_details.email if metadata is missing
       const email = (session.metadata?.email ?? session.customer_details?.email)?.toLowerCase().trim()
-      if (!email) break
-      await prisma.user.update({
-        where: { email },
-        data: {
-          isPro: true,
-          stripeCustomerId: session.customer as string,
-          stripeSubscriptionId: session.subscription as string,
-          proSince: new Date(),
-          proCancelledAt: null,
-        },
-      })
-      // Send pro upgrade confirmation email (fire-and-forget)
-      sendProUpgradeEmail(email).catch(err => console.error('Pro email error:', err))
+      const customerId = session.customer as string | undefined
+      const subscriptionId = session.subscription as string | undefined
+
+      if (!email && !customerId) {
+        console.error('[Webhook] checkout.session.completed: no email or customerId in event', event.id)
+        break
+      }
+
+      try {
+        // Try email lookup first
+        if (email) {
+          const user = await prisma.user.findUnique({ where: { email } })
+          if (user) {
+            await prisma.user.update({
+              where: { email },
+              data: {
+                isPro: true,
+                stripeCustomerId: customerId ?? undefined,
+                stripeSubscriptionId: subscriptionId ?? undefined,
+                proSince: new Date(),
+                proCancelledAt: null,
+              },
+            })
+            console.log(`[Webhook] Pro activated for ${email} (user: ${user.id})`)
+            sendProUpgradeEmail(email).catch(err => console.error('Pro email error:', err))
+            break
+          }
+          console.warn(`[Webhook] No user found with email: ${email}`)
+        }
+
+        // Fallback: look up by stripeCustomerId if already set
+        if (customerId) {
+          const user = await prisma.user.findUnique({ where: { stripeCustomerId: customerId } })
+          if (user) {
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                isPro: true,
+                stripeSubscriptionId: subscriptionId ?? undefined,
+                proSince: new Date(),
+                proCancelledAt: null,
+              },
+            })
+            console.log(`[Webhook] Pro activated for customerId ${customerId} (user: ${user.id})`)
+            sendProUpgradeEmail(user.email).catch(err => console.error('Pro email error:', err))
+            break
+          }
+        }
+
+        // Nothing matched — log full details so we can manually fix
+        console.error(
+          '[Webhook] CRITICAL: checkout.session.completed — could not find user to activate Pro.',
+          JSON.stringify({ eventId: event.id, email, customerId, subscriptionId })
+        )
+      } catch (err) {
+        console.error('[Webhook] Error processing checkout.session.completed:', err)
+        // Return 500 so Stripe retries (transient DB errors should be retried)
+        return NextResponse.json({ error: 'DB error' }, { status: 500 })
+      }
       break
     }
 
     case 'customer.subscription.updated': {
       const sub = event.data.object as Stripe.Subscription
       const isActive = sub.status === 'active' || sub.status === 'trialing'
-      await prisma.user.updateMany({
-        where: { stripeSubscriptionId: sub.id },
-        data: { isPro: isActive },
-      })
+      try {
+        await prisma.user.updateMany({
+          where: { stripeSubscriptionId: sub.id },
+          data: { isPro: isActive },
+        })
+      } catch (err) {
+        console.error('[Webhook] Error processing customer.subscription.updated:', err)
+        return NextResponse.json({ error: 'DB error' }, { status: 500 })
+      }
       break
     }
 
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription
-      await prisma.user.updateMany({
-        where: { stripeSubscriptionId: sub.id },
-        data: { isPro: false, proCancelledAt: new Date() },
-      })
+      try {
+        await prisma.user.updateMany({
+          where: { stripeSubscriptionId: sub.id },
+          data: { isPro: false, proCancelledAt: new Date() },
+        })
+      } catch (err) {
+        console.error('[Webhook] Error processing customer.subscription.deleted:', err)
+        return NextResponse.json({ error: 'DB error' }, { status: 500 })
+      }
       break
     }
   }

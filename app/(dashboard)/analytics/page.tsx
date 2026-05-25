@@ -5,7 +5,7 @@ import { useAdmin } from '@/hooks/useAdmin'
 import {
   Users, DollarSign, Crown, Activity, UserPlus, Brain,
   BarChart3, Globe, TrendingUp, Target, RefreshCw, Wifi,
-  GraduationCap, Zap, Shield, ToggleLeft, ToggleRight,
+  GraduationCap, Zap, Shield, ToggleLeft, ToggleRight, Search, CheckCircle, XCircle,
 } from 'lucide-react'
 
 // ─── Feature flag metadata ─────────────────────────────────────────────────────
@@ -139,6 +139,121 @@ interface AnalyticsData {
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
+
+interface ProUserInfo {
+  id: string; email: string; name: string | null; isPro: boolean
+  proSince: string | null; proCancelledAt: string | null
+  stripeCustomerId: string | null; stripeSubscriptionId: string | null
+  createdAt: string
+}
+
+function ProManager() {
+  const [query, setQuery] = useState('')
+  const [result, setResult] = useState<ProUserInfo | null>(null)
+  const [err, setErr] = useState('')
+  const [searching, setSearching] = useState(false)
+  const [activating, setActivating] = useState(false)
+  const [successMsg, setSuccessMsg] = useState('')
+
+  const lookup = async () => {
+    if (!query.trim()) return
+    setSearching(true); setErr(''); setResult(null); setSuccessMsg('')
+    const res = await fetch(`/api/admin/activate-pro?email=${encodeURIComponent(query.trim())}`)
+    const data = await res.json()
+    setSearching(false)
+    if (!res.ok) { setErr(data.error ?? 'Not found'); return }
+    setResult(data)
+  }
+
+  const setPro = async (isPro: boolean) => {
+    if (!result) return
+    setActivating(true); setErr(''); setSuccessMsg('')
+    const res = await fetch('/api/admin/activate-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: result.email, isPro }),
+    })
+    const data = await res.json()
+    setActivating(false)
+    if (!res.ok) { setErr(data.error ?? 'Failed'); return }
+    setResult(prev => prev ? { ...prev, isPro } : prev)
+    setSuccessMsg(isPro ? '✅ Pro activated!' : '✅ Pro removed.')
+  }
+
+  return (
+    <div className="bg-gray-900 border border-yellow-500/20 rounded-2xl p-6 space-y-5">
+      <h2 className="text-lg font-bold text-white flex items-center gap-2">
+        <Crown className="h-5 w-5 text-yellow-400" />
+        Pro Management
+      </h2>
+      <p className="text-sm text-gray-500">Look up any user by email and manually activate or remove Pro access.</p>
+
+      {/* Search */}
+      <div className="flex gap-2">
+        <input
+          type="email"
+          placeholder="user@example.com"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && lookup()}
+          className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-yellow-500/50"
+        />
+        <button
+          onClick={lookup}
+          disabled={searching}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+        >
+          <Search className="h-4 w-4" />
+          {searching ? 'Searching…' : 'Lookup'}
+        </button>
+      </div>
+
+      {err && <p className="text-sm text-red-400">{err}</p>}
+      {successMsg && <p className="text-sm text-green-400">{successMsg}</p>}
+
+      {result && (
+        <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-white font-semibold">{result.email}</p>
+              {result.name && <p className="text-gray-500 text-xs">{result.name}</p>}
+            </div>
+            {result.isPro
+              ? <span className="text-xs font-bold px-2 py-1 rounded-full bg-yellow-500/15 text-yellow-400 border border-yellow-500/20 flex items-center gap-1"><CheckCircle className="h-3 w-3" /> PRO</span>
+              : <span className="text-xs font-bold px-2 py-1 rounded-full bg-gray-700 text-gray-400 border border-gray-600 flex items-center gap-1"><XCircle className="h-3 w-3" /> FREE</span>
+            }
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
+            <p>Joined: {new Date(result.createdAt).toLocaleDateString()}</p>
+            <p>Pro since: {result.proSince ? new Date(result.proSince).toLocaleDateString() : '—'}</p>
+            <p className="truncate">Stripe customer: {result.stripeCustomerId ?? '—'}</p>
+            <p className="truncate">Subscription: {result.stripeSubscriptionId ?? '—'}</p>
+          </div>
+          <div className="flex gap-2 pt-1">
+            {!result.isPro && (
+              <button
+                onClick={() => setPro(true)}
+                disabled={activating}
+                className="flex-1 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors disabled:opacity-50"
+              >
+                {activating ? 'Activating…' : '⚡ Activate Pro'}
+              </button>
+            )}
+            {result.isPro && (
+              <button
+                onClick={() => setPro(false)}
+                disabled={activating}
+                className="flex-1 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm font-medium transition-colors disabled:opacity-50"
+              >
+                {activating ? 'Removing…' : 'Remove Pro'}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdmin()
@@ -407,6 +522,9 @@ export default function AdminPage() {
           </div>
         </>
       )}
+
+      {/* ── Pro Management ── */}
+      <ProManager />
 
       {/* ── Feature Flags ── */}
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">

@@ -100,14 +100,37 @@ export default function DashboardPage() {
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
 
   // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
+  // We verify DB status rather than blindly trusting the URL param
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
+  const [upgradeVerified, setUpgradeVerified] = useState<boolean | null>(null) // null=checking, true=confirmed, false=failed
   useEffect(() => {
     if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('upgraded') === '1') {
       setShowUpgradedBanner(true)
-      // Force session token refresh so isPro reflects the DB change immediately
-      updateSession()
-      // Clean the URL without reloading the page
       window.history.replaceState({}, '', '/dashboard')
+
+      // Poll DB a few times to confirm the webhook fired
+      let attempts = 0
+      const check = async () => {
+        attempts++
+        const res = await fetch('/api/user/pro').catch(() => null)
+        if (res?.ok) {
+          const data = await res.json().catch(() => null)
+          if (data?.isPro) {
+            setUpgradeVerified(true)
+            updateSession()
+            return
+          }
+        }
+        if (attempts < 6) {
+          // Retry with back-off: 2s, 4s, 6s, 8s, 10s
+          setTimeout(check, attempts * 2000)
+        } else {
+          // Still not Pro after ~30s — webhook probably failed
+          setUpgradeVerified(false)
+        }
+      }
+      // First check after 3 seconds (give the webhook time to fire)
+      setTimeout(check, 3000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -260,8 +283,17 @@ export default function DashboardPage() {
       )}
       <OnboardingModal />
 
-      {/* ── Pro upgrade success banner ───────────────────────── */}
-      {showUpgradedBanner && (
+      {/* ── Pro upgrade success / failure banner ───────────────── */}
+      {showUpgradedBanner && upgradeVerified === null && (
+        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600/80 to-blue-500/80 text-white px-5 py-4 rounded-2xl shadow-lg">
+          <span className="text-2xl animate-spin inline-block">⏳</span>
+          <div className="flex-1">
+            <p className="font-bold text-base">Activating Pro…</p>
+            <p className="text-blue-100 text-sm">Payment received! Confirming your upgrade now…</p>
+          </div>
+        </div>
+      )}
+      {showUpgradedBanner && upgradeVerified === true && (
         <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-4 rounded-2xl shadow-lg">
           <span className="text-2xl">👑</span>
           <div className="flex-1">
@@ -271,6 +303,21 @@ export default function DashboardPage() {
           <button
             onClick={() => setShowUpgradedBanner(false)}
             className="text-blue-200 hover:text-white text-xl font-bold leading-none shrink-0"
+          >
+            ×
+          </button>
+        </div>
+      )}
+      {showUpgradedBanner && upgradeVerified === false && (
+        <div className="relative flex items-center gap-3 bg-red-600/10 border border-red-500/30 text-white px-5 py-4 rounded-2xl shadow-lg">
+          <span className="text-2xl">⚠️</span>
+          <div className="flex-1">
+            <p className="font-bold text-base text-red-300">Payment received, but Pro activation delayed</p>
+            <p className="text-gray-400 text-sm">Your card was charged, but we couldn&apos;t confirm the upgrade yet. Please sign out and back in, or contact support. Your access will be granted — this is a sync issue.</p>
+          </div>
+          <button
+            onClick={() => setShowUpgradedBanner(false)}
+            className="text-gray-400 hover:text-white text-xl font-bold leading-none shrink-0"
           >
             ×
           </button>
