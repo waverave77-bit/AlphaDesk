@@ -4,7 +4,8 @@ Disallow: /admin
 Disallow: /analytics
 Disallow: /holiday-preview
 Disallow: /generate-assets
-Disallow: /settings
+Disallow: /settings/
+Disallow: /dashboard/
 Disallow: /api/
 
 User-agent: GPTBot
@@ -22,7 +23,8 @@ Disallow: /admin
 Disallow: /analytics
 Disallow: /holiday-preview
 Disallow: /generate-assets
-Disallow: /settings
+Disallow: /settings/
+Disallow: /dashboard/
 Disallow: /api/
 
 User-agent: Applebot-Extended

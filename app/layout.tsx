@@ -16,30 +16,41 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   metadataBase: new URL('https://mrguyinvests.com'),
   title: {
-    default: 'Mr. Guy Invests',
-    template: '%s | Mr. Guy Invests',
+    default: 'AlphaDesk — AI-Powered Stock Research & Portfolio Tracker',
+    template: '%s | AlphaDesk',
   },
-  description: 'Mr. Guy Invests — free stock research tools for beginners and long-term investors. Track hedge fund moves from SEC filings, get AI explanations of any stock, and build your portfolio. No credit card needed.',
+  description: 'AlphaDesk gives you AI-powered stock analysis, portfolio tracking, real-time alerts, and a finance translator — built for investors at every level.',
+  keywords: ['stock research', 'portfolio tracker', 'AI stock analysis', 'finance tools', 'investment tracker', 'stock alerts', 'earnings decoder', 'hedge fund tracker', 'SEC filings', 'smart money'],
+  authors: [{ name: 'AlphaDesk' }],
+  creator: 'AlphaDesk',
   openGraph: {
-    title: 'Mr. Guy Invests',
-    description: 'Free stock research tools for beginners and long-term investors. Track hedge fund moves from SEC filings, get AI explanations of any stock, and build your portfolio.',
-    url: 'https://mrguyinvests.com',
-    siteName: 'Mr. Guy Invests',
     type: 'website',
+    locale: 'en_US',
+    url: 'https://mrguyinvests.com',
+    siteName: 'AlphaDesk',
+    title: 'AlphaDesk — AI-Powered Stock Research',
+    description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AlphaDesk' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mr. Guy Invests',
-    description: 'Free stock research tools for beginners and long-term investors. Track hedge fund moves, get AI stock analysis, and build your portfolio.',
+    title: 'AlphaDesk — AI-Powered Stock Research',
+    description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
+    images: ['/og-image.png'],
+  },
+  robots: { index: true, follow: true },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 }
 
 const softwareAppSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Mr. Guy Invests',
+  name: 'AlphaDesk',
   url: 'https://www.mrguyinvests.com',
-  description: 'Free stock research tools for beginners and long-term investors. Track hedge fund moves from SEC filings, get AI explanations of any stock, and build your portfolio.',
+  description: 'AI-powered stock research tools for investors at every level. Track hedge fund moves from SEC filings, get AI explanations of any stock, and build your portfolio.',
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Web',
   offers: [
@@ -54,13 +65,13 @@ const faqSchema = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'What is Mr. Guy Invests?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is a free stock research platform for beginners and long-term investors. It tracks hedge fund and insider trades from public SEC filings (Form 13F, Form 4), provides AI-powered stock analysis explained in plain English, and includes a portfolio tracker, stock screener, and price alerts.' },
+      name: 'What is AlphaDesk?',
+      acceptedAnswer: { '@type': 'Answer', text: 'AlphaDesk is an AI-powered stock research platform for investors at every level. It tracks hedge fund and insider trades from public SEC filings (Form 13F, Form 4), provides AI-powered stock analysis explained in plain English, and includes a portfolio tracker, stock screener, and price alerts.' },
     },
     {
       '@type': 'Question',
-      name: 'Is Mr. Guy Invests free?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes. Mr. Guy Invests has a free tier with no credit card required. A Pro plan is available for $4.99/month which removes all daily limits and unlocks full access to Smart Money tracking and AI tools.' },
+      name: 'Is AlphaDesk free?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. AlphaDesk has a free tier with no credit card required. A Pro plan is available for $4.99/month which removes all daily limits and unlocks full access to Smart Money tracking and AI tools.' },
     },
     {
       '@type': 'Question',
@@ -69,18 +80,18 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'Is Mr. Guy Invests financial advice?',
-      acceptedAnswer: { '@type': 'Answer', text: 'No. Mr. Guy Invests is for informational and educational purposes only. Nothing on the site constitutes financial advice or a recommendation to buy or sell any security. Always consult a qualified financial advisor before making investment decisions.' },
+      name: 'Is AlphaDesk financial advice?',
+      acceptedAnswer: { '@type': 'Answer', text: 'No. AlphaDesk is for informational and educational purposes only. Nothing on the site constitutes financial advice or a recommendation to buy or sell any security. Always consult a qualified financial advisor before making investment decisions.' },
     },
     {
       '@type': 'Question',
-      name: 'Who is Mr. Guy Invests designed for?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is designed for beginner investors, long-term investors, and anyone who wants professional-grade stock research tools without needing a finance background. All AI analysis is written in plain English.' },
+      name: 'Who is AlphaDesk designed for?',
+      acceptedAnswer: { '@type': 'Answer', text: 'AlphaDesk is designed for investors at every level — from beginners to experienced traders — who want professional-grade stock research tools without needing a finance background. All AI analysis is written in plain English.' },
     },
     {
       '@type': 'Question',
-      name: 'What stock research tools does Mr. Guy Invests include?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests includes: Smart Money Tracker (hedge fund and insider activity), AI Stock Tutor (plain English stock analysis), Portfolio Tracker, Price Alerts, Stock Report Cards, Bull vs Bear debate, Earnings Calendar, Market Briefing, Finance Translator, and a $100K virtual trading challenge.' },
+      name: 'What stock research tools does AlphaDesk include?',
+      acceptedAnswer: { '@type': 'Answer', text: 'AlphaDesk includes: Smart Money Tracker (hedge fund and insider activity), AI Stock Tutor (plain English stock analysis), Portfolio Tracker, Price Alerts, Stock Report Cards, Bull vs Bear debate, Earnings Calendar, Market Briefing, Finance Translator, and a $100K virtual trading challenge.' },
     },
   ],
 }
@@ -88,9 +99,9 @@ const faqSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Mr. Guy Invests',
+  name: 'AlphaDesk',
   url: 'https://www.mrguyinvests.com',
-  description: 'Free stock research tools for beginners and long-term investors.',
+  description: 'AI-powered stock research tools for investors at every level.',
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: 'https://www.mrguyinvests.com/research/{search_term_string}' },

@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
-          '/dashboard',
+          '/dashboard/',
           '/research/',
           '/watchlist',
           '/earnings',
@@ -15,7 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           '/insiders',
           '/markets',
           '/alerts',
-          '/settings',
+          '/settings/',
           '/chat',
           '/learn',
           '/quant',
