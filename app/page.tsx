@@ -64,15 +64,15 @@ export default function LandingPage() {
       <section className="text-center px-6 pt-16 pb-10 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-600/20 rounded-full px-4 py-1.5 text-sm text-blue-400 mb-6">
           <Zap className="h-3.5 w-3.5" />
-          Built for young investors who want to understand their money
+          No finance degree required — just curiosity
         </div>
         <h1 className="text-5xl sm:text-6xl font-bold leading-tight mb-6">
-          Investing made{' '}
-          <span className="text-blue-400">simple.</span>
+          Understand any stock{' '}
+          <span className="text-blue-400">in seconds.</span>
         </h1>
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Plain English only. See what hedge funds and insiders are buying,
-          get AI analysis in plain English, and actually understand your stocks.
+          See what hedge funds and insiders are really buying. Get straight answers
+          from AI — no jargon, no noise. Finally know what your money is actually doing.
         </p>
 
         {/* CTAs */}
@@ -106,50 +106,50 @@ export default function LandingPage() {
 
       {/* Features */}
       <section className="px-6 pb-24 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-4">Everything you need to invest smarter</h2>
-        <p className="text-gray-400 text-center mb-12">All the tools that pros use, explained so anyone can understand.</p>
+        <h2 className="text-3xl font-bold text-center mb-4">Stop guessing. Start knowing.</h2>
+        <p className="text-gray-400 text-center mb-12">The same tools Wall Street uses — explained in plain English so you can actually act on them.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             {
               icon: <Brain className="h-6 w-6 text-blue-400" />,
               title: 'AI Stock Tutor',
-              desc: 'Ask anything about a stock. Get a straight answer in plain English, no finance degree needed.',
+              desc: 'Ask anything about a stock and get a straight answer — not a wall of financial jargon. Like having a knowledgeable friend you can actually ask "so should I be worried?"',
               disclaimer: true,
               badge: null,
             },
             {
               icon: <Users className="h-6 w-6 text-emerald-400" />,
               title: 'Smart Money Tracker',
-              desc: 'See what hedge funds and corporate insiders have recently reported buying and selling, sourced from public SEC filings (Form 13F & Form 4).',
+              desc: 'Know what hedge funds and insiders are quietly buying before it hits the news. All sourced from public SEC filings (Form 13F & Form 4) — the same data professionals pay thousands for.',
               disclaimer: true,
               badge: null,
             },
             {
               icon: <Trophy className="h-6 w-6 text-yellow-400" />,
               title: '$100K Challenge',
-              desc: 'Start with $100,000 in virtual cash. Build a portfolio, compete on the leaderboard, and see how you stack up against other investors — no real money at risk.',
+              desc: 'Practice investing with $100,000 in virtual cash — real stocks, real prices, zero risk. Build confidence before you put a single real dollar on the line.',
               disclaimer: false,
               badge: 'Free to play',
             },
             {
               icon: <Zap className="h-6 w-6 text-orange-400" />,
               title: 'Daily Market Brief',
-              desc: 'Wake up to a quick summary of what moved markets overnight. Takes 10 seconds to read.',
+              desc: 'Know what moved markets overnight in 10 seconds flat. No doom-scrolling through financial news sites — just the signal, not the noise.',
               disclaimer: false,
               badge: null,
             },
             {
               icon: <TrendingUp className="h-6 w-6 text-pink-400" />,
               title: 'Earnings Calendar',
-              desc: 'Never miss an earnings report. See upcoming dates for every stock on your watchlist.',
+              desc: 'Never be caught off guard by an earnings surprise again. Every upcoming report date for your watchlist, front and center.',
               disclaimer: false,
               badge: null,
             },
             {
               icon: <BookOpen className="h-6 w-6 text-violet-400" />,
               title: 'Investing Dictionary',
-              desc: 'Every finance term explained simply. P/E ratio, short interest, market cap — all covered.',
+              desc: 'Finally understand what people mean when they say P/E ratio, short squeeze, or market cap — every term explained like you\'re a person, not a Bloomberg terminal.',
               disclaimer: false,
               badge: null,
             },
@@ -167,7 +167,7 @@ export default function LandingPage() {
               <p className="text-gray-400 text-sm leading-relaxed flex-1">{f.desc}</p>
               {f.disclaimer && (
                 <p className="text-gray-600 text-xs mt-3 leading-relaxed">
-                  For informational purposes only. Not financial advice. Always do your own research before making investment decisions.
+                  For informational and educational purposes only. Not financial advice. Always consult a qualified professional before investing.
                 </p>
               )}
             </div>
@@ -183,7 +183,7 @@ export default function LandingPage() {
             <p className="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-1">Featured</p>
             <h3 className="text-2xl font-bold text-white mb-2">The $100K Challenge</h3>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xl">
-              Think you can beat the market? Start with $100,000 in virtual cash, build a portfolio with real stock prices, and climb the leaderboard. Learn by doing — with zero risk to your real money.
+              Think you can beat the market? Prove it. Start with $100,000 in virtual cash, trade real stocks at real prices, and climb the leaderboard. Build your instincts before a single real dollar is on the line.
             </p>
           </div>
           <Link href="/register" className="shrink-0 bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap">
@@ -194,14 +194,14 @@ export default function LandingPage() {
 
       {/* FAQ */}
       <section className="px-6 pb-24 max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3">Frequently asked questions</h2>
-        <p className="text-gray-400 text-center mb-10">Everything you need to know before getting started.</p>
+        <h2 className="text-3xl font-bold text-center mb-3">Good questions</h2>
+        <p className="text-gray-400 text-center mb-10">Honest answers before you sign up for anything.</p>
 
         <div className="space-y-3">
           {[
             {
               q: 'Is this financial advice?',
-              a: 'No. Mr. Guy Invests is a research and educational tool. Nothing on this site should be taken as financial advice. Always consult a professional before making investment decisions.',
+              a: 'No. Mr. Guy Invests is an educational and research tool. Nothing here should be taken as financial advice. Always consult a qualified professional before making investment decisions.',
             },
             {
               q: 'Where does the Smart Money / hedge fund data come from?',
@@ -213,7 +213,7 @@ export default function LandingPage() {
             },
             {
               q: "What's the difference between Free and Pro?",
-              a: 'Free gives you access to core research tools with daily limits. Pro removes all limits and gives full access to Smart Money and AI tools for $4.99/month.',
+              a: 'Free gives you access to core research tools with daily usage limits. Pro removes every limit and unlocks full Smart Money and AI tools for $4.99/month — less than a coffee a week.',
             },
             {
               q: 'Can I cancel Pro anytime?',
@@ -247,8 +247,8 @@ export default function LandingPage() {
 
       {/* Pricing */}
       <section className="px-6 pb-24 max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3">Simple pricing</h2>
-        <p className="text-gray-400 text-center mb-12">Start free. Upgrade when you want more.</p>
+        <h2 className="text-3xl font-bold text-center mb-3">Start free. Upgrade if you love it.</h2>
+        <p className="text-gray-400 text-center mb-12">No credit card, no commitment — get real value from day one.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
@@ -278,7 +278,7 @@ export default function LandingPage() {
               ))}
             </ul>
             <Link href="/register" className="block w-full py-3 rounded-xl border border-gray-700 text-center text-sm font-semibold text-gray-400 hover:border-gray-500 hover:text-white transition-colors">
-              Get Started Free
+              Start for Free
             </Link>
           </div>
 
@@ -309,7 +309,7 @@ export default function LandingPage() {
               ))}
             </ul>
             <Link href="/register" className="block w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-center text-sm font-bold text-white transition-colors shadow-lg shadow-blue-600/20">
-              Get Pro — $4.99/month
+              Unlock Pro — $4.99/month
             </Link>
           </div>
 
@@ -318,14 +318,14 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="px-6 pb-24 text-center max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">Ready to actually understand your investments?</h2>
-        <p className="text-gray-400 mb-8">Join young investors learning about markets with real data and AI-powered tools.</p>
+        <h2 className="text-3xl font-bold mb-4">Your money deserves more than a gut feeling.</h2>
+        <p className="text-gray-400 mb-8">Join investors who stopped guessing and started actually understanding what they own.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
-            Create Free Account <ChevronRight className="h-5 w-5" />
+            Try AlphaDesk Free <ChevronRight className="h-5 w-5" />
           </Link>
           <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
-            Try It Now →
+            See How It Works →
           </Link>
         </div>
       </section>
@@ -337,7 +337,7 @@ export default function LandingPage() {
             <MrGuyLogoSvg px={2} />
             <span className="font-semibold">Mr. Guy Invests</span>
           </div>
-          <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>
+          <p className="text-xs text-gray-600">For informational and educational purposes only. Not financial advice. Always consult a qualified professional before investing.</p>
           <div className="flex gap-4 text-xs text-gray-600">
             <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms of Service</Link>
