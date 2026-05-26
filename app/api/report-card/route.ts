@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
 import { getExperienceContext } from '@/lib/experience'
@@ -12,10 +14,13 @@ export async function GET(req: NextRequest) {
   const limited = await checkAILimit('report-card')
   if (limited) return limited
 
+  const session = await getServerSession(authOptions)
+
   try {
     const { searchParams } = new URL(req.url)
     const ticker = searchParams.get('ticker')?.toUpperCase()
-    const experience = searchParams.get('experience') ?? 'beginner'
+    // Use session's experienceLevel (from DB) — ignore query param for logged-in users
+    const experience = (session?.user as any)?.experienceLevel ?? searchParams.get('experience') ?? 'beginner'
     if (!ticker) {
       return NextResponse.json({ error: 'Missing ticker' }, { status: 400 })
     }

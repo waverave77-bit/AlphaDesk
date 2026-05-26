@@ -48,18 +48,34 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.isDemo = user.email === DEMO_EMAIL
-        // Read isPro + hasOnboarded from DB at sign-in so they're available client-side
-        const u = await prisma.user.findUnique({ where: { id: user.id }, select: { isPro: true, hasOnboarded: true, emailVerified: true } })
+        // Read user prefs from DB at sign-in so they're available client-side immediately
+        const u = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
+        })
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
         token.emailVerified = u?.emailVerified ?? false
+        token.experienceLevel = u?.experienceLevel ?? 'beginner'
+        token.themeDark = u?.themeDark ?? true
+        token.themeAccent = u?.themeAccent ?? 'default'
+        token.loginStreak = u?.loginStreak ?? 0
+        token.lastStreakDate = u?.lastStreakDate ?? null
       }
-      // Re-read from DB when updateSession() is called (e.g. after Pro upgrade or onboarding)
+      // Re-read from DB when updateSession() is called
       if (trigger === 'update' && token.id) {
-        const u = await prisma.user.findUnique({ where: { id: token.id as string }, select: { isPro: true, hasOnboarded: true, emailVerified: true } })
+        const u = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
+        })
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
         token.emailVerified = u?.emailVerified ?? false
+        token.experienceLevel = u?.experienceLevel ?? 'beginner'
+        token.themeDark = u?.themeDark ?? true
+        token.themeAccent = u?.themeAccent ?? 'default'
+        token.loginStreak = u?.loginStreak ?? 0
+        token.lastStreakDate = u?.lastStreakDate ?? null
       }
       return token
     },
@@ -70,6 +86,11 @@ export const authOptions: NextAuthOptions = {
         ;(session.user as any).isPro = token.isPro ?? false
         ;(session.user as any).hasOnboarded = token.hasOnboarded ?? false
         ;(session.user as any).emailVerified = token.emailVerified ?? false
+        ;(session.user as any).experienceLevel = token.experienceLevel ?? 'beginner'
+        ;(session.user as any).themeDark = token.themeDark ?? true
+        ;(session.user as any).themeAccent = token.themeAccent ?? 'default'
+        ;(session.user as any).loginStreak = token.loginStreak ?? 0
+        ;(session.user as any).lastStreakDate = token.lastStreakDate ?? null
       }
       return session
     },

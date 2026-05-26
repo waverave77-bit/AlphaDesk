@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { checkAILimit } from '@/lib/pro'
 import { getExperienceContext } from '@/lib/experience'
 
@@ -11,9 +13,13 @@ export async function POST(req: NextRequest) {
   const limited = await checkAILimit('translator')
   if (limited) return limited
 
+  const session = await getServerSession(authOptions)
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
-    const { text, mode, experience } = await req.json()
+    const body = await req.json()
+    const { text, mode } = body
+    // Use session's experienceLevel (from DB) — ignore client value for logged-in users
+    const experience = (session?.user as any)?.experienceLevel ?? body.experience ?? 'beginner'
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: 'Missing text' }, { status: 400 })
     }

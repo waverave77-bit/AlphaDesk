@@ -440,6 +440,7 @@ export default function ChatPageWrapper() {
 
 function ChatPage() {
   const searchParams = useSearchParams()
+  const { data: session, status } = useSession()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -455,9 +456,16 @@ function ChatPage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   useEffect(() => {
-    const saved = localStorage.getItem('zg_experience') ?? 'beginner'
-    setExperience(saved)
-  }, [])
+    // Prefer session (DB) value; fall back to localStorage for guests
+    const sessionLevel = (session?.user as any)?.experienceLevel
+    if (sessionLevel) {
+      setExperience(sessionLevel)
+      localStorage.setItem('zg_experience', sessionLevel) // keep in sync
+    } else {
+      const saved = localStorage.getItem('zg_experience') ?? 'beginner'
+      setExperience(saved)
+    }
+  }, [session?.user?.email])
 
   useEffect(() => {
     const q = searchParams.get('q')
@@ -555,7 +563,6 @@ function ChatPage() {
     : charState === 'think' ? 'mrg-think'
     : 'mrg-talk'
 
-  const { data: session, status } = useSession()
   if (status === 'loading') return null
   if (!session) return <GuestChatTrial />
 

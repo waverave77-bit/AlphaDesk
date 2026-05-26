@@ -37,7 +37,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     rawQuery = (body.ticker ?? '').trim()
-    experience = (body.experience ?? 'beginner') as string
+    // Use session's experienceLevel (from DB) — ignore client value for logged-in users
+    experience = (session?.user as any)?.experienceLevel ?? body.experience ?? 'beginner'
   } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }

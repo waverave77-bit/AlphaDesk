@@ -1,5 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export type ThemeId = 'default' | 'midnight' | 'emerald' | 'purple' | 'amber' | 'rose' | 'white'
 
@@ -34,7 +35,6 @@ interface ThemeContextType {
   setAccent: (id: ThemeId) => void
 }
 
-const defaultTheme = THEMES[0]
 const ThemeContext = createContext<ThemeContextType>({
   themeId: 'white', theme: THEMES.find(t => t.id === 'white')!, isDark: false,
   accentId: 'default', setTheme: () => {}, setDark: () => {}, setAccent: () => {},
@@ -45,10 +45,7 @@ function applyToDOM(isDark: boolean, accentId: ThemeId) {
   const root = document.documentElement
   root.style.setProperty('--accent', accent.accentRgb)
   root.style.setProperty('--accent-light', accent.accentLightRgb)
-  // data-theme controls dark/light CSS overrides in globals.css
-  // In light mode always use 'white'; in dark mode use the accent id
   root.setAttribute('data-theme', isDark ? accentId : 'white')
-  // Add/remove Tailwind's .dark class so dark: variants work throughout the app
   if (isDark) {
     root.classList.add('dark')
   } else {
@@ -56,10 +53,20 @@ function applyToDOM(isDark: boolean, accentId: ThemeId) {
   }
 }
 
+function saveDB(data: { themeDark?: boolean; themeAccent?: string }) {
+  fetch('/api/user/preferences', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  }).catch(() => {})
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession()
   const [isDark, setIsDarkState] = useState(false)
   const [accentId, setAccentIdState] = useState<ThemeId>('default')
 
+  // Step 1: Apply localStorage immediately on mount to prevent flash
   useEffect(() => {
     const savedDark   = localStorage.getItem('mrguy-dark') === 'true'
     const savedAccent = (localStorage.getItem('mrguy-accent') as ThemeId) || 'default'
@@ -68,10 +75,33 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     applyToDOM(savedDark, savedAccent)
   }, [])
 
+  // Step 2: Once session loads, sync with DB prefs (DB is source of truth for logged-in users)
+  useEffect(() => {
+    if (status !== 'authenticated' || !session?.user) return
+
+    const user = session.user as any
+    // DB values come from the JWT token set at login
+    const dbDark   = user.themeDark   ?? true
+    const dbAccent = (user.themeAccent as ThemeId) ?? 'default'
+
+    // Only apply if different from current localStorage (avoids unnecessary re-renders)
+    const localDark   = localStorage.getItem('mrguy-dark') === 'true'
+    const localAccent = (localStorage.getItem('mrguy-accent') as ThemeId) || 'default'
+
+    if (dbDark !== localDark || dbAccent !== localAccent) {
+      setIsDarkState(dbDark)
+      setAccentIdState(dbAccent)
+      applyToDOM(dbDark, dbAccent)
+      localStorage.setItem('mrguy-dark', String(dbDark))
+      localStorage.setItem('mrguy-accent', dbAccent)
+    }
+  }, [status, session?.user?.email])
+
   const setDark = (dark: boolean) => {
     setIsDarkState(dark)
     localStorage.setItem('mrguy-dark', String(dark))
     applyToDOM(dark, accentId)
+    if (session?.user) saveDB({ themeDark: dark })
   }
 
   const setAccent = (id: ThemeId) => {
@@ -79,6 +109,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setAccentIdState(id)
     localStorage.setItem('mrguy-accent', id)
     applyToDOM(isDark, id)
+    if (session?.user) saveDB({ themeAccent: id })
   }
 
   // Legacy: setTheme('white') = light mode; anything else = dark + set accent

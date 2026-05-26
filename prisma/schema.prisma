@@ -39,6 +39,16 @@ model User {
   lastActiveAt         DateTime?
   // ───────────────────────────────────────────────────────────────────
 
+  // ─── Theme preferences ──────────────────────────────────────────────
+  themeDark            Boolean   @default(true)
+  themeAccent          String    @default("default")
+  // ───────────────────────────────────────────────────────────────────
+
+  // ─── Login streak ───────────────────────────────────────────────────
+  loginStreak          Int       @default(0)
+  lastStreakDate       String?   // "YYYY-MM-DD"
+  // ───────────────────────────────────────────────────────────────────
+
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]

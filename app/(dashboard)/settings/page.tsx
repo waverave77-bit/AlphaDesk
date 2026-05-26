@@ -37,8 +37,13 @@ export default function SettingsPage() {
   const [usernameSuccess, setUsernameSuccess] = useState(false)
   const [currentUsername, setCurrentUsername] = useState<string | null>(null)
 
-  // Load experience level + username from DB on mount
+  // Load experience level from session JWT first (instant, no API call), then verify with DB
   useEffect(() => {
+    const sessionLevel = (session?.user as any)?.experienceLevel as ExperienceLevel | undefined
+    if (sessionLevel) {
+      setExperienceLevel(sessionLevel)
+      localStorage.setItem('zg_experience', sessionLevel)
+    }
     fetch('/api/user/experience')
       .then(r => r.json())
       .then(d => {
@@ -52,7 +57,7 @@ export default function SettingsPage() {
         const saved = localStorage.getItem('zg_experience') as ExperienceLevel | null
         if (saved) setExperienceLevel(saved)
       })
-  }, [])
+  }, [session?.user?.email])
 
   // Fallback: derive username from session name if DB didn't return it
   useEffect(() => {

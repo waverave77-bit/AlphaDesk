@@ -552,7 +552,10 @@ export async function POST(req: NextRequest) {
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
-    const { message, history = [], experience = 'beginner' } = await req.json()
+    const body = await req.json()
+    const { message, history = [] } = body
+    // Use session's experienceLevel (from DB) — ignore client value for logged-in users
+    const experience = (session?.user as any)?.experienceLevel ?? body.experience ?? 'beginner'
 
     // Resolve tickers (validates each one against Yahoo Finance)
     let tickers: string[] = []
