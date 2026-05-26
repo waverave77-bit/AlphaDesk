@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, Briefcase, BookOpen, Newspaper, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -65,14 +65,61 @@ export default function OnboardingModal() {
     setVisible(false)
   }
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Escape key closes modal
+  useEffect(() => {
+    if (!visible) return
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setVisible(false)
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [visible])
+
+  // Focus trap
+  useEffect(() => {
+    if (!visible) return
+    const modal = modalRef.current
+    if (!modal) return
+
+    // Focus first focusable element
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
+    )
+    focusable[0]?.focus()
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', trap)
+    return () => document.removeEventListener('keydown', trap)
+  }, [visible])
+
   const toggleGoal = (id: string) =>
     setGoals((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
 
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto">
-      <div className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] my-auto">
+    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto" onClick={() => setVisible(false)}>
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
 
         {/* Progress bar */}
         <div className="h-1.5 bg-gray-800 rounded-t-3xl shrink-0">
@@ -99,7 +146,7 @@ export default function OnboardingModal() {
                 <TrendingUp className="h-10 w-10 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl sm:text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
+                <h2 id="modal-title" className="text-2xl sm:text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
                 <p className="text-gray-400 mt-3 text-base sm:text-lg leading-relaxed max-w-lg mx-auto">Your personal stock market research and learning platform, built for everyday investors.</p>
               </div>
               <div className="grid grid-cols-3 gap-3">

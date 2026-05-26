@@ -27,11 +27,15 @@ export default function ProLimitBanner({ feature, isDark = true }: Props) {
   const msg = (feature && MESSAGES[feature]) || DEFAULT
 
   return (
-    <div className={`rounded-xl border p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
-      isDark
-        ? 'bg-yellow-500/5 border-yellow-500/20'
-        : 'bg-yellow-50 border-yellow-200'
-    }`}>
+    <div
+      role="alert"
+      aria-live="assertive"
+      className={`rounded-xl border p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+        isDark
+          ? 'bg-yellow-500/5 border-yellow-500/20'
+          : 'bg-yellow-50 border-yellow-200'
+      }`}
+    >
       <div>
         <p className={`font-semibold text-sm mb-0.5 ${isDark ? 'text-yellow-300' : 'text-yellow-800'}`}>
           {msg.title}

@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 import { Lock, UserPlus, LogIn, X } from 'lucide-react'
 
 interface GuestGateProps {
@@ -46,11 +47,57 @@ export function GuestLock({ feature = 'this feature' }: { feature?: string }) {
 
 // Modal sign-up prompt — shown when a guest tries to use a tool
 export function GuestSignupModal({ open, onClose, feature = 'this feature' }: { open: boolean; onClose: () => void; feature?: string }) {
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Escape key closes modal
+  useEffect(() => {
+    if (!open) return
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [open, onClose])
+
+  // Focus trap
+  useEffect(() => {
+    if (!open) return
+    const modal = modalRef.current
+    if (!modal) return
+
+    // Focus first focusable element
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
+    )
+    focusable[0]?.focus()
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', trap)
+    return () => document.removeEventListener('keydown', trap)
+  }, [open])
+
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 overflow-y-auto">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full text-center flex flex-col max-h-[90vh] my-auto">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full text-center flex flex-col max-h-[90vh] my-auto"
+      >
         {/* Close button — large tap target, always accessible */}
         <button onClick={onClose} className="absolute top-2 right-2 p-3 text-gray-400 hover:text-gray-600 transition-colors rounded-xl" aria-label="Close">
           <X className="h-5 w-5" />
@@ -60,7 +107,7 @@ export function GuestSignupModal({ open, onClose, feature = 'this feature' }: { 
           <div className="h-14 w-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mx-auto mb-4">
             <Lock className="h-7 w-7 text-blue-500" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Sign up to use {feature}</h2>
+          <h2 id="modal-title" className="text-xl font-bold text-gray-900 mb-2">Sign up to use {feature}</h2>
           <p className="text-gray-500 text-sm leading-relaxed">
             It's free forever. No credit card needed.
           </p>
