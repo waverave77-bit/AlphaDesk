@@ -8,9 +8,9 @@ export default function ActivityTracker() {
   const { status } = useSession()
   const pingRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Record page view on every navigation
+  // Record page view on every navigation (logged-in users + guests)
   useEffect(() => {
-    if (status !== 'authenticated') return
+    if (status === 'loading') return  // wait until auth state is known
     fetch('/api/analytics/pageview', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
