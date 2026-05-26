@@ -33,7 +33,7 @@ KEY_STRENGTH: [One sentence on the biggest strength]
 
 Stock data:
 - Ticker: ${data.ticker} (${data.companyName})
-- Price: $${data.price} (${data.changePercent >= 0 ? '+' : ''}${data.changePercent?.toFixed(2)}% today)
+- Price: $${data.price ?? 'N/A'} (${(data.changePercent ?? 0) >= 0 ? '+' : ''}${(data.changePercent ?? 0).toFixed(2)}% today)
 - Sector: ${data.sector ?? 'N/A'} | Industry: ${data.industry ?? 'N/A'}
 - Market Cap: ${data.marketCap ? '$' + (data.marketCap / 1e9).toFixed(1) + 'B' : 'N/A'}
 - P/E Ratio: ${data.peRatio?.toFixed(2) ?? 'N/A'}
@@ -47,8 +47,8 @@ Be direct. No disclaimers.`
 }
 
 function buildPortfolioPrompt(data: any): string {
-  const topHoldings = (data.holdings || []).slice(0, 6).map((h: any) =>
-    `${h.ticker} (${h.weight?.toFixed(1)}%, ${h.gainLossPercent >= 0 ? '+' : ''}${h.gainLossPercent?.toFixed(1)}%)`
+  const topHoldings = (data.holdings ?? []).slice(0, 6).map((h: any) =>
+    `${h.ticker} (${(h.weight ?? 0).toFixed(1)}%, ${(h.gainLossPercent ?? 0) >= 0 ? '+' : ''}${(h.gainLossPercent ?? 0).toFixed(1)}%)`
   ).join(', ')
 
   return `You are a concise portfolio analyst. Analyze this portfolio and respond in exactly this format:
@@ -60,7 +60,7 @@ KEY_STRENGTH: [One sentence on the biggest portfolio strength]
 
 Portfolio data:
 - Total Value: $${data.totalValue?.toLocaleString()}
-- Overall P&L: ${data.totalGainLossPercent >= 0 ? '+' : ''}${data.totalGainLossPercent?.toFixed(2)}%
+- Overall P&L: ${(data.totalGainLossPercent ?? 0) >= 0 ? '+' : ''}${(data.totalGainLossPercent ?? 0).toFixed(2)}%
 - Holdings: ${data.holdings?.length ?? 0} stocks across ${new Set((data.holdings || []).map((h: any) => h.sector)).size} sectors
 - Top positions: ${topHoldings}
 
@@ -150,7 +150,6 @@ async function callGrok(prompt: string): Promise<ModelResult> {
     })
     clearTimeout(timer)
     if (!res.ok) {
-      const errText = await res.text().catch(() => '')
       return { ...fallback, rationale: `API error (${res.status})` }
     }
     const json = await res.json()

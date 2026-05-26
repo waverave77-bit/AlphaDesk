@@ -17,7 +17,9 @@ interface Mover {
 
 function MoverRow({ m }: { m: Mover }) {
   const router = useRouter()
-  const pos = m.changePercent >= 0
+  const changePercent = m.changePercent ?? 0
+  const price = m.price ?? 0
+  const pos = changePercent >= 0
   return (
     <div
       onClick={() => router.push(`/research/${m.ticker}`)}
@@ -33,9 +35,9 @@ function MoverRow({ m }: { m: Mover }) {
         </div>
       </div>
       <div className="text-right">
-        <p className="text-base font-semibold text-white">${m.price.toFixed(2)}</p>
+        <p className="text-base font-semibold text-white">${price.toFixed(2)}</p>
         <p className={cn('text-sm font-bold', pos ? 'text-green-400' : 'text-red-400')}>
-          {pos ? '+' : ''}{m.changePercent.toFixed(2)}%
+          {pos ? '+' : ''}{changePercent.toFixed(2)}%
         </p>
       </div>
     </div>
@@ -48,15 +50,15 @@ export default function ResearchPage() {
   const [losers, setLosers] = useState<Mover[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchMovers = () => {
-    fetch('/api/movers')
-      .then(r => r.json())
-      .then(d => { setGainers(d.gainers || []); setLosers(d.losers || []) })
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }
-
   useEffect(() => {
+    const fetchMovers = () => {
+      fetch('/api/movers')
+        .then(r => r.json())
+        .then(d => { setGainers(d.gainers || []); setLosers(d.losers || []) })
+        .catch(() => {})
+        .finally(() => setLoading(false))
+    }
+
     fetchMovers()
     const interval = setInterval(fetchMovers, 60_000) // refresh every 60s
     return () => clearInterval(interval)

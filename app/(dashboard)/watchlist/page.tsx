@@ -174,9 +174,6 @@ export default function WatchlistPage() {
   const [removing, setRemoving] = useState<string | null>(null)
   const { toast } = useToast()
 
-  // Guard: hooks must always be called before any conditional return
-  if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
-
   const fetchWatchlist = useCallback(async () => {
     setLoading(true)
     try {
@@ -212,6 +209,7 @@ export default function WatchlistPage() {
   }, [])
 
   const refresh = async () => {
+    if (refreshing) return
     setRefreshing(true)
     await fetchWatchlist()
     setRefreshing(false)
@@ -235,6 +233,9 @@ export default function WatchlistPage() {
       setRemoving(null)
     }
   }
+
+  // Guard placed after all hooks so React's rules of hooks are never violated
+  if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
 
   const tickers = items.map(i => i.ticker)
 
@@ -384,7 +385,7 @@ export default function WatchlistPage() {
                                     : <TrendingDown className="h-3 w-3 text-red-400" />
                                   }
                                   <span className={cn('text-xs', gainLossColor(item.changePercent ?? 0))}>
-                                    <span className="hidden sm:inline">{item.change ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}{' '}</span>({formatPercent(item.changePercent ?? 0)})
+                                    <span className="hidden sm:inline">{item.change != null ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) : ''}{' '}</span>({formatPercent(item.changePercent ?? 0)})
                                   </span>
                                   <InfoTooltip text="How much the stock has moved today compared to yesterday's closing price." />
                                 </div>
