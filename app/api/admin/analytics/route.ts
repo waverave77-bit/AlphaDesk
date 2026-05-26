@@ -5,6 +5,43 @@ import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
+// Compute session duration + recent pages from an activity log
+// A "session" = any sequence of visits with no more than 30 min gap
+function computeLastSession(activity: { page: string; visitedAt: Date }[]) {
+  if (!activity.length) return null
+
+  // Sort most recent first
+  const sorted = [...activity].sort((a, b) => b.visitedAt.getTime() - a.visitedAt.getTime())
+
+  // Walk forward until we hit a gap > 30 min
+  const SESSION_GAP_MS = 30 * 60 * 1000
+  const sessionPages: { page: string; visitedAt: Date }[] = [sorted[0]]
+
+  for (let i = 1; i < sorted.length; i++) {
+    const gap = sessionPages[sessionPages.length - 1].visitedAt.getTime() - sorted[i].visitedAt.getTime()
+    if (gap > SESSION_GAP_MS) break
+    sessionPages.push(sorted[i])
+  }
+
+  const start = sessionPages[sessionPages.length - 1].visitedAt
+  const end   = sessionPages[0].visitedAt
+  const durationMs = end.getTime() - start.getTime()
+
+  // Dedupe pages (keep order, most recent first)
+  const seen = new Set<string>()
+  const uniquePages = sessionPages
+    .map(a => a.page)
+    .filter(p => { if (seen.has(p)) return false; seen.add(p); return true })
+
+  return {
+    start:      start.toISOString(),
+    end:        end.toISOString(),
+    durationMs,
+    pages:      uniquePages.slice(0, 8),   // cap at 8 pages for display
+    pageCount:  sessionPages.length,
+  }
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions)
   if (session?.user?.email !== process.env.ADMIN_EMAIL) {
@@ -15,20 +52,10 @@ export async function GET() {
   const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
   const fiveMinAgo = new Date(now.getTime() - 5 * 60 * 1000)
 
-  // Use ET-aware boundaries so user counts align with ET dates (same timezone as AI usage tracking)
-  // ET is UTC-5 (EST) / UTC-4 (EDT); using the ET date string + parsing as UTC gives us a consistent reference point
-  const startOfToday = new Date(todayStr + 'T00:00:00.000Z')  // midnight ET expressed in UTC
+  const startOfToday = new Date(todayStr + 'T00:00:00.000Z')
   const startOfWeek  = new Date(startOfToday); startOfWeek.setUTCDate(startOfToday.getUTCDate() - 7)
-  // First day of current ET month
-  const etMonthStr = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }).slice(0, 7) + '-01'
+  const etMonthStr   = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }).slice(0, 7) + '-01'
   const startOfMonth = new Date(etMonthStr + 'T00:00:00.000Z')
-
-  // Build last 14 days date strings for signup trend
-  const last14Days = Array.from({ length: 14 }, (_, i) => {
-    const d = new Date(startOfToday)
-    d.setDate(d.getDate() - (13 - i))
-    return d.toLocaleDateString('en-CA')
-  })
 
   const [
     liveNow,
@@ -41,32 +68,26 @@ export async function GET() {
     topPagesToday,
     aiToday,
     aiAllTime,
-    recentUsers,
+    allUsers,
     onboardingResponses,
+    guestToday,
+    guestThisWeek,
   ] = await Promise.all([
-    // Live now: lastActiveAt within 5 min
     prisma.user.count({ where: { lastActiveAt: { gte: fiveMinAgo } } }),
-
     prisma.user.count(),
     prisma.user.count({ where: { isPro: true } }),
     prisma.user.count({ where: { createdAt: { gte: startOfToday } } }),
     prisma.user.count({ where: { createdAt: { gte: startOfWeek } } }),
     prisma.user.count({ where: { createdAt: { gte: startOfMonth } } }),
 
-    // Experience level breakdown from real User data
-    prisma.user.groupBy({
-      by: ['experienceLevel'],
-      _count: { _all: true },
-    }),
+    prisma.user.groupBy({ by: ['experienceLevel'], _count: { _all: true } }),
 
-    // Top pages today
     prisma.pageView.findMany({
       where: { date: todayStr },
       orderBy: { count: 'desc' },
       take: 12,
     }),
 
-    // AI usage today by feature
     prisma.dailyAIUsage.groupBy({
       by: ['feature'],
       where: { date: todayStr },
@@ -74,53 +95,77 @@ export async function GET() {
       orderBy: { _sum: { count: 'desc' } },
     }),
 
-    // AI usage all time by feature
     prisma.dailyAIUsage.groupBy({
       by: ['feature'],
       _sum: { count: true },
       orderBy: { _sum: { count: 'desc' } },
     }),
 
-    // Recent signups
+    // All users, sorted by most recently active
     prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 8,
-      select: { email: true, username: true, isPro: true, experienceLevel: true, createdAt: true, lastActiveAt: true },
+      orderBy: { lastActiveAt: { sort: 'desc', nulls: 'last' } },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        isPro: true,
+        experienceLevel: true,
+        createdAt: true,
+        lastActiveAt: true,
+        // last 20 activity records per user
+        activity: {
+          orderBy: { visitedAt: 'desc' },
+          take: 20,
+          select: { page: true, visitedAt: true },
+        },
+      },
     }),
 
-    // Onboarding goals
     prisma.onboardingResponse.findMany({ select: { goals: true } }),
+
+    // Guest visits today
+    prisma.guestVisit.findUnique({ where: { date: todayStr } }),
+
+    // Guest visits this week (sum last 7 days)
+    prisma.guestVisit.findMany({
+      where: {
+        date: {
+          gte: startOfWeek.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }),
+        },
+      },
+    }),
   ])
 
-  // Signup trend: count per day for last 14 days (ET day boundaries)
-  const signupsByDay = await Promise.all(
-    last14Days.map(async (dateStr) => {
-      const start = new Date(dateStr + 'T00:00:00.000Z')  // midnight ET as UTC reference
-      const end   = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1)  // 23:59:59.999 same ET day
-      const count = await prisma.user.count({ where: { createdAt: { gte: start, lte: end } } })
-      return { date: dateStr, count }
-    })
-  )
-
-  // Tally goals from onboarding responses
+  // Tally onboarding goals
   const goalCounts: Record<string, number> = {}
   for (const r of onboardingResponses) {
     try {
       const goals = JSON.parse(r.goals) as string[]
-      for (const g of goals) {
-        goalCounts[g] = (goalCounts[g] ?? 0) + 1
-      }
+      for (const g of goals) goalCounts[g] = (goalCounts[g] ?? 0) + 1
     } catch {}
   }
 
-  // Experience level map
   const expMap: Record<string, number> = {}
-  for (const e of experienceLevels) {
-    expMap[e.experienceLevel] = e._count._all
-  }
+  for (const e of experienceLevels) expMap[e.experienceLevel] = e._count._all
 
   const mrr = proUsers * 4.99
   const freeUsers = totalUsers - proUsers
+
+  const guestWeekTotal = guestThisWeek.reduce((s, g) => s + g.count, 0)
+
+  // Build enriched user list with session info
+  const usersWithActivity = allUsers.map(u => ({
+    id:              u.id,
+    email:           u.email,
+    username:        u.username,
+    isPro:           u.isPro,
+    experienceLevel: u.experienceLevel,
+    createdAt:       u.createdAt.toISOString(),
+    lastActiveAt:    u.lastActiveAt?.toISOString() ?? null,
+    lastSession:     computeLastSession(
+      u.activity.map(a => ({ page: a.page, visitedAt: a.visitedAt }))
+    ),
+  }))
 
   return NextResponse.json({
     liveNow,
@@ -135,17 +180,20 @@ export async function GET() {
       mrr: mrr.toFixed(2),
       arr: (mrr * 12).toFixed(2),
     },
+    guests: {
+      today: guestToday?.count ?? 0,
+      thisWeek: guestWeekTotal,
+    },
     experienceLevels: {
       beginner:    expMap['beginner']    ?? 0,
       some:        expMap['some']        ?? 0,
       experienced: expMap['experienced'] ?? 0,
     },
     topPagesToday,
-    aiToday: aiToday.map(f => ({ feature: f.feature, count: f._sum.count ?? 0 })),
+    aiToday:  aiToday.map(f  => ({ feature: f.feature,  count: f._sum.count ?? 0 })),
     aiAllTime: aiAllTime.map(f => ({ feature: f.feature, count: f._sum.count ?? 0 })),
-    signupsByDay,
     goalCounts,
     onboardingTotal: onboardingResponses.length,
-    recentUsers,
+    allUsers: usersWithActivity,
   })
 }

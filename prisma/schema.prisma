@@ -55,6 +55,7 @@ model User {
   virtualPortfolio    VirtualPortfolio?
   virtualSeasonRecord VirtualSeasonRecord[]
   weeklyUserPicks     WeeklyUserPick[]
+  activity            UserActivity[]
 }
 
 model Holding {
@@ -263,6 +264,22 @@ model WeeklyUserPick {
 
   @@unique([userId, weekKey])
   @@index([userId])
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  page      String
+  visitedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, visitedAt])
+  @@index([visitedAt])
+}
+
+model GuestVisit {
+  date  String @id  // "YYYY-MM-DD"
+  count Int    @default(0)
 }
 
 model DailyAIUsage {

@@ -10,7 +10,6 @@ const IGNORED = ['/admin', '/analytics', '/settings', '/login', '/register', '/f
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.email) return NextResponse.json({ ok: false })
 
   try {
     const { page } = await req.json()
@@ -22,11 +21,31 @@ export async function POST(req: NextRequest) {
 
     const date = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
 
-    await prisma.pageView.upsert({
-      where: { page_date: { page: clean, date } },
-      create: { page: clean, date, count: 1 },
-      update: { count: { increment: 1 } },
-    })
+    if (session?.user?.email) {
+      // Logged-in user: increment aggregate PageView + log individual UserActivity
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true },
+      })
+
+      await Promise.all([
+        prisma.pageView.upsert({
+          where: { page_date: { page: clean, date } },
+          create: { page: clean, date, count: 1 },
+          update: { count: { increment: 1 } },
+        }),
+        user
+          ? prisma.userActivity.create({ data: { userId: user.id, page: clean } })
+          : Promise.resolve(),
+      ])
+    } else {
+      // Guest: just tally the daily guest visit count
+      await prisma.guestVisit.upsert({
+        where: { date },
+        create: { date, count: 1 },
+        update: { count: { increment: 1 } },
+      })
+    }
   } catch {}
 
   return NextResponse.json({ ok: true })

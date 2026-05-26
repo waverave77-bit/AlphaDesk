@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation'
 import { useAdmin } from '@/hooks/useAdmin'
 import {
   Users, DollarSign, Crown, Activity, UserPlus, Brain,
-  BarChart3, Globe, TrendingUp, Target, RefreshCw, Wifi,
-  GraduationCap, Zap, Shield, ToggleLeft, ToggleRight, Search, CheckCircle, XCircle,
+  Globe, TrendingUp, Target, RefreshCw, Wifi,
+  GraduationCap, Zap, Shield, ToggleLeft, ToggleRight, Search, CheckCircle, XCircle, Eye,
+  ChevronDown, ChevronUp, Clock,
 } from 'lucide-react'
 
 // ─── Feature flag metadata ─────────────────────────────────────────────────────
@@ -17,8 +18,6 @@ const FLAG_META: Record<string, { label: string; desc: string }> = {
   smart_money_nav: { label: 'Smart Money Nav Link', desc: 'Smart Money / Insiders page in the top navigation' },
   game_nav:        { label: '$100K Challenge Nav',  desc: 'The virtual trading game link in the nav' },
 }
-
-// ─── Labels ───────────────────────────────────────────────────────────────────
 
 const PAGE_LABELS: Record<string, string> = {
   '/dashboard': '🏠 Dashboard',
@@ -35,6 +34,7 @@ const PAGE_LABELS: Record<string, string> = {
   '/translator': '📖 Finance Translator',
   '/watchlist': '⭐ Watchlist',
   '/game': '🎮 $100K Challenge',
+  '/challenge': '🏆 Pick of the Week',
   '/learn': '📚 Learn',
   '/roast': '🔥 Roast',
   '/hot-take': '🌶️ Hot Take',
@@ -42,7 +42,6 @@ const PAGE_LABELS: Record<string, string> = {
   '/alerts': '🔔 Alerts',
   '/dividends': '💰 Dividends',
   '/quant': '🤖 Quant',
-  '/generate-assets': '✨ Generate Assets',
   '/reality-check': '🔍 Reality Check',
   '/upgrade': '⚡ Upgrade',
 }
@@ -96,30 +95,41 @@ function StatCard({ icon, label, value, sub, accent }: {
   )
 }
 
-function MiniBarChart({ data }: { data: { date: string; count: number }[] }) {
-  const max = Math.max(...data.map(d => d.count), 1)
-  return (
-    <div className="flex items-end gap-1 h-16">
-      {data.map((d, i) => {
-        const pct = Math.max((d.count / max) * 100, d.count > 0 ? 8 : 2)
-        const isToday = i === data.length - 1
-        return (
-          <div key={d.date} className="flex-1 flex flex-col items-center gap-1 group relative">
-            <div
-              className={`w-full rounded-sm transition-all ${isToday ? 'bg-blue-500' : 'bg-gray-700 group-hover:bg-gray-500'}`}
-              style={{ height: `${pct}%` }}
-            />
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-700 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-              {d.date.slice(5)}: {d.count}
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
+function fmtDuration(ms: number): string {
+  if (ms < 60_000) return `${Math.round(ms / 1000)}s`
+  if (ms < 3600_000) return `${Math.round(ms / 60_000)}m`
+  return `${(ms / 3600_000).toFixed(1)}h`
+}
+
+function timeAgo(iso: string | null): string {
+  if (!iso) return 'never'
+  const diff = Date.now() - new Date(iso).getTime()
+  if (diff < 60_000) return 'just now'
+  if (diff < 3600_000) return `${Math.round(diff / 60_000)}m ago`
+  if (diff < 86400_000) return `${Math.round(diff / 3600_000)}h ago`
+  return `${Math.round(diff / 86400_000)}d ago`
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+interface LastSession {
+  start: string
+  end: string
+  durationMs: number
+  pages: string[]
+  pageCount: number
+}
+
+interface UserRow {
+  id: string
+  email: string
+  username: string | null
+  isPro: boolean
+  experienceLevel: string
+  createdAt: string
+  lastActiveAt: string | null
+  lastSession: LastSession | null
+}
 
 interface AnalyticsData {
   liveNow: number
@@ -128,17 +138,92 @@ interface AnalyticsData {
     newToday: number; newThisWeek: number; newThisMonth: number
     conversionRate: string; mrr: string; arr: string
   }
+  guests: { today: number; thisWeek: number }
   experienceLevels: { beginner: number; some: number; experienced: number }
   topPagesToday: { page: string; count: number }[]
   aiToday: { feature: string; count: number }[]
   aiAllTime: { feature: string; count: number }[]
-  signupsByDay: { date: string; count: number }[]
   goalCounts: Record<string, number>
   onboardingTotal: number
-  recentUsers: { email: string; username: string | null; isPro: boolean; experienceLevel: string; createdAt: string; lastActiveAt: string | null }[]
+  allUsers: UserRow[]
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── User Activity Row ────────────────────────────────────────────────────────
+
+function UserActivityRow({ u }: { u: UserRow }) {
+  const [expanded, setExpanded] = useState(false)
+  const isLive = u.lastActiveAt && (Date.now() - new Date(u.lastActiveAt).getTime()) < 5 * 60 * 1000
+  const expEmoji = u.experienceLevel === 'experienced' ? '🏆' : u.experienceLevel === 'some' ? '📈' : '🌱'
+
+  return (
+    <div className="border border-gray-700/40 rounded-xl overflow-hidden">
+      {/* Main row */}
+      <div className="flex items-center justify-between py-2.5 px-3 bg-gray-800/50">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="relative shrink-0">
+            <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-300">
+              {(u.username?.[0] ?? u.email[0]).toUpperCase()}
+            </div>
+            {isLive && (
+              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-gray-900" />
+            )}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-white truncate">{u.username ?? u.email}</p>
+            {u.username && <p className="text-xs text-gray-500 truncate">{u.email}</p>}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 ml-2">
+          <span className="text-xs">{expEmoji}</span>
+          {u.isPro && (
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 border border-yellow-500/20">PRO</span>
+          )}
+          <span className="text-xs text-gray-500 hidden sm:block">
+            joined {new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
+          <span className="text-xs text-gray-600 hidden md:block">
+            seen {timeAgo(u.lastActiveAt)}
+          </span>
+          {u.lastSession && (
+            <button
+              onClick={() => setExpanded(e => !e)}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-700/60 hover:bg-gray-700 text-gray-400 hover:text-white text-xs transition-colors"
+            >
+              <Eye className="h-3 w-3" />
+              {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Expanded session detail */}
+      {expanded && u.lastSession && (
+        <div className="bg-gray-900/60 border-t border-gray-700/40 px-4 py-3 space-y-2">
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              Last session: {new Date(u.lastSession.start).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+            </span>
+            {u.lastSession.durationMs > 0 && (
+              <span className="text-blue-400 font-medium">{fmtDuration(u.lastSession.durationMs)} on site</span>
+            )}
+            <span>{u.lastSession.pageCount} page{u.lastSession.pageCount !== 1 ? 's' : ''} visited</span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {u.lastSession.pages.map((page, i) => (
+              <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-gray-800 border border-gray-700 text-gray-300">
+                {PAGE_LABELS[page] ?? page}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Pro Manager ──────────────────────────────────────────────────────────────
 
 interface ProUserInfo {
   id: string; email: string; name: string | null; isPro: boolean
@@ -187,8 +272,6 @@ function ProManager() {
         Pro Management
       </h2>
       <p className="text-sm text-gray-500">Look up any user by email and manually activate or remove Pro access.</p>
-
-      {/* Search */}
       <div className="flex gap-2">
         <input
           type="email"
@@ -207,10 +290,8 @@ function ProManager() {
           {searching ? 'Searching…' : 'Lookup'}
         </button>
       </div>
-
       {err && <p className="text-sm text-red-400">{err}</p>}
       {successMsg && <p className="text-sm text-green-400">{successMsg}</p>}
-
       {result && (
         <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
@@ -231,20 +312,14 @@ function ProManager() {
           </div>
           <div className="flex gap-2 pt-1">
             {!result.isPro && (
-              <button
-                onClick={() => setPro(true)}
-                disabled={activating}
-                className="flex-1 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors disabled:opacity-50"
-              >
+              <button onClick={() => setPro(true)} disabled={activating}
+                className="flex-1 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors disabled:opacity-50">
                 {activating ? 'Activating…' : '⚡ Activate Pro'}
               </button>
             )}
             {result.isPro && (
-              <button
-                onClick={() => setPro(false)}
-                disabled={activating}
-                className="flex-1 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm font-medium transition-colors disabled:opacity-50"
-              >
+              <button onClick={() => setPro(false)} disabled={activating}
+                className="flex-1 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 text-sm font-medium transition-colors disabled:opacity-50">
                 {activating ? 'Removing…' : 'Remove Pro'}
               </button>
             )}
@@ -255,6 +330,8 @@ function ProManager() {
   )
 }
 
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useAdmin()
   const router = useRouter()
@@ -263,6 +340,7 @@ export default function AdminPage() {
   const [toggling, setToggling] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastRefresh, setLastRefresh] = useState(new Date())
+  const [userSearch, setUserSearch] = useState('')
 
   useEffect(() => {
     if (!adminLoading && !isAdmin) router.replace('/dashboard')
@@ -284,7 +362,6 @@ export default function AdminPage() {
 
   useEffect(() => { load() }, [load])
 
-  // Auto-refresh live count every 30s
   useEffect(() => {
     const id = setInterval(() => {
       fetch('/api/admin/analytics')
@@ -312,9 +389,13 @@ export default function AdminPage() {
 
   const totalExp = (data?.experienceLevels.beginner ?? 0) + (data?.experienceLevels.some ?? 0) + (data?.experienceLevels.experienced ?? 0)
   const maxAIToday = data?.aiToday[0]?.count ?? 1
-  const maxAIAll = data?.aiAllTime[0]?.count ?? 1
-  const maxPage = data?.topPagesToday[0]?.count ?? 1
-  const maxGoal = Math.max(...Object.values(data?.goalCounts ?? {}), 1)
+  const maxAIAll   = data?.aiAllTime[0]?.count ?? 1
+  const maxPage    = data?.topPagesToday[0]?.count ?? 1
+  const maxGoal    = Math.max(...Object.values(data?.goalCounts ?? {}), 1)
+
+  const filteredUsers = (data?.allUsers ?? []).filter(u =>
+    !userSearch || u.email.includes(userSearch.toLowerCase()) || (u.username ?? '').toLowerCase().includes(userSearch.toLowerCase())
+  )
 
   return (
     <div className="space-y-7 max-w-6xl">
@@ -330,11 +411,8 @@ export default function AdminPage() {
             <p className="text-gray-500 text-sm mt-0.5">Last updated: {lastRefresh.toLocaleTimeString()}</p>
           </div>
         </div>
-        <button
-          onClick={load}
-          disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-sm text-gray-300 hover:bg-gray-700 transition-colors self-start sm:self-auto"
-        >
+        <button onClick={load} disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-sm text-gray-300 hover:bg-gray-700 transition-colors self-start sm:self-auto">
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </button>
@@ -342,13 +420,12 @@ export default function AdminPage() {
 
       {data && (
         <>
-          {/* ── Row 1: Live + User Stats ── */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* ── Row 1: Key Stats ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
             {/* Live Now */}
             <div className="col-span-2 lg:col-span-1 bg-gray-900 border border-green-500/30 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-3 text-sm font-medium text-gray-400">
-                <Wifi className="h-4 w-4 text-green-400" />
-                Live Now
+                <Wifi className="h-4 w-4 text-green-400" />Live Now
               </div>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-3 w-3">
@@ -363,33 +440,43 @@ export default function AdminPage() {
             <StatCard icon={<Users className="h-4 w-4" />} label="Total Users" value={data.users.total} sub={`${data.users.free} free · ${data.users.pro} pro`} />
             <StatCard icon={<Crown className="h-4 w-4 text-yellow-400" />} label="Pro Subscribers" value={data.users.pro} sub={`${data.users.conversionRate}% conversion`} accent="border-yellow-500/20" />
             <StatCard icon={<DollarSign className="h-4 w-4 text-green-400" />} label="MRR" value={`$${data.users.mrr}`} sub={`$${data.users.arr} ARR`} accent="border-green-500/20" />
+            <StatCard icon={<Eye className="h-4 w-4 text-purple-400" />} label="Guest Visits Today" value={data.guests.today.toLocaleString()} sub={`${data.guests.thisWeek.toLocaleString()} this week`} accent="border-purple-500/20" />
             <StatCard icon={<Activity className="h-4 w-4 text-blue-400" />} label="AI Calls Today" value={data.aiToday.reduce((s, f) => s + f.count, 0)} sub="across all features" accent="border-blue-500/20" />
           </div>
 
-          {/* ── Row 2: Signup Trend + New Users ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
+          {/* ── Row 2: New Signups ── */}
+          <div className="grid grid-cols-3 gap-4">
+            <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="New Today" value={data.users.newToday} />
+            <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="Last 7 Days" value={data.users.newThisWeek} />
+            <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="This Month" value={data.users.newThisMonth} />
+          </div>
+
+          {/* ── Row 3: All Users ── */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <UserPlus className="h-5 w-5 text-emerald-400" />
-                Signups — Last 14 Days
+                <Users className="h-5 w-5 text-emerald-400" />
+                All Users
+                <span className="text-sm font-normal text-gray-500">({data.users.total})</span>
               </h2>
-              <MiniBarChart data={data.signupsByDay} />
-              <div className="flex gap-1 overflow-hidden">
-                {data.signupsByDay.map((d, i) => (
-                  <p key={i} className={`flex-1 text-center text-[9px] truncate ${i === data.signupsByDay.length - 1 ? 'text-blue-400' : 'text-gray-700'}`}>
-                    {d.date.slice(8)}
-                  </p>
-                ))}
-              </div>
+              <input
+                type="text"
+                placeholder="Search email or username…"
+                value={userSearch}
+                onChange={e => setUserSearch(e.target.value)}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-sm text-white placeholder-gray-600 outline-none focus:border-blue-500/50 w-56"
+              />
             </div>
-            <div className="grid grid-cols-1 gap-4 content-start">
-              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="New Today" value={data.users.newToday} />
-              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="Last 7 Days" value={data.users.newThisWeek} />
-              <StatCard icon={<UserPlus className="h-4 w-4 text-emerald-400" />} label="This Month" value={data.users.newThisMonth} />
+            <p className="text-xs text-gray-600">Click the 👁 button on any user to see their last session and what pages they visited.</p>
+            <div className="space-y-1.5 max-h-[600px] overflow-y-auto pr-1">
+              {filteredUsers.length === 0
+                ? <p className="text-sm text-gray-600 py-4 text-center">No users match that search.</p>
+                : filteredUsers.map(u => <UserActivityRow key={u.id} u={u} />)
+              }
             </div>
           </div>
 
-          {/* ── Row 3: Experience Levels + Onboarding Goals ── */}
+          {/* ── Row 4: Experience Levels + Onboarding Goals ── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-5">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
@@ -424,7 +511,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* ── Row 4: Most Visited Pages ── */}
+          {/* ── Row 5: Most Visited Pages ── */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-5">
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <Globe className="h-5 w-5 text-cyan-400" />
@@ -443,7 +530,7 @@ export default function AdminPage() {
             )}
           </div>
 
-          {/* ── Row 5: AI Feature Usage ── */}
+          {/* ── Row 6: AI Feature Usage ── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-5">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
@@ -477,47 +564,6 @@ export default function AdminPage() {
               ) : (
                 <p className="text-sm text-gray-600">No AI calls recorded yet.</p>
               )}
-            </div>
-          </div>
-
-          {/* ── Row 6: Recent Signups ── */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Users className="h-5 w-5 text-emerald-400" />
-              Recent Signups
-            </h2>
-            <div className="space-y-2">
-              {data.recentUsers.map((u, i) => {
-                const isLive = u.lastActiveAt && (Date.now() - new Date(u.lastActiveAt).getTime()) < 5 * 60 * 1000
-                const expEmoji = u.experienceLevel === 'experienced' ? '🏆' : u.experienceLevel === 'some' ? '📈' : '🌱'
-                return (
-                  <div key={i} className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-800/50 border border-gray-700/40">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-300">
-                          {(u.username?.[0] ?? u.email[0]).toUpperCase()}
-                        </div>
-                        {isLive && (
-                          <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-gray-900" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-white">{u.username ?? '—'}</p>
-                        <p className="text-xs text-gray-500">{u.email}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs">{expEmoji}</span>
-                      {u.isPro && (
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 border border-yellow-500/20">PRO</span>
-                      )}
-                      <span className="text-xs text-gray-600">
-                        {new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
             </div>
           </div>
         </>
