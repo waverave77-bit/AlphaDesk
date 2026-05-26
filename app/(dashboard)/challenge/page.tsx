@@ -219,7 +219,7 @@ export default function ChallengePage() {
     window.scrollTo(0, 0)
     loadData()
     loadHistory()
-  }, [])
+  }, [session?.user?.email])
 
   // Auto-refresh live prices every 60 seconds
   useEffect(() => {
@@ -253,18 +253,36 @@ export default function ChallengePage() {
 
       setMrGuyPick(data)
 
-      // Load existing user pick from localStorage
-      const stored = localStorage.getItem('mrGuyUserPick')
-      if (stored) {
-        const pick: UserPick = JSON.parse(stored)
-        if (pick.weekKey === getWeekKey()) {
-          setUserPick(pick)
-          setSubmitted(true)
-          // Fetch live prices
-          fetchLivePrices([data.ticker, pick.ticker])
-          return
+      // Load existing user pick — DB first (logged-in), then localStorage fallback
+      let pick: UserPick | null = null
+
+      // 1. Try DB for authenticated users
+      try {
+        const pickRes = await fetch('/api/challenge/pick')
+        const pickData = await pickRes.json()
+        if (pickData.pick && pickData.pick.weekKey === getWeekKey()) {
+          pick = pickData.pick
+          // Keep localStorage in sync
+          localStorage.setItem('mrGuyUserPick', JSON.stringify(pick))
+        }
+      } catch {}
+
+      // 2. Fall back to localStorage (guest or network error)
+      if (!pick) {
+        const stored = localStorage.getItem('mrGuyUserPick')
+        if (stored) {
+          const cached: UserPick = JSON.parse(stored)
+          if (cached.weekKey === getWeekKey()) pick = cached
         }
       }
+
+      if (pick) {
+        setUserPick(pick)
+        setSubmitted(true)
+        fetchLivePrices([data.ticker, pick.ticker])
+        return
+      }
+
       fetchLivePrices([data.ticker])
     } catch {}
     setLoading(false)
@@ -339,7 +357,24 @@ export default function ChallengePage() {
         companyName: data.quote.companyName ?? ticker,
         submittedAt: new Date().toISOString(),
       }
+
+      // Save to localStorage (always — works for guests and as offline fallback)
       localStorage.setItem('mrGuyUserPick', JSON.stringify(pick))
+
+      // Save to DB for authenticated users so pick syncs across devices
+      if (session?.user?.email) {
+        fetch('/api/challenge/pick', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ticker: pick.ticker,
+            companyName: pick.companyName,
+            entryPrice: pick.entryPrice,
+            direction: pick.direction,
+          }),
+        }).catch(err => console.error('Failed to sync pick to DB:', err))
+      }
+
       setUserPick(pick)
       setSubmitted(true)
       fetchLivePrices([mrGuyPick.ticker, ticker])

@@ -44,6 +44,7 @@ model User {
   alerts              PriceAlert[]
   virtualPortfolio    VirtualPortfolio?
   virtualSeasonRecord VirtualSeasonRecord[]
+  weeklyUserPicks     WeeklyUserPick[]
 }
 
 model Holding {
@@ -237,6 +238,21 @@ model MarketBriefCache {
   createdAt DateTime @default(now())
 
   @@index([date])
+}
+
+model WeeklyUserPick {
+  id          String   @id @default(cuid())
+  userId      String
+  weekKey     String   // e.g. "2026-05-25" (Sunday of that week)
+  ticker      String
+  companyName String
+  entryPrice  Float
+  direction   String   // "up" | "down"
+  submittedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekKey])
+  @@index([userId])
 }
 
 model DailyAIUsage {
