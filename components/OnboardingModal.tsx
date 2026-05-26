@@ -71,8 +71,8 @@ export default function OnboardingModal() {
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4">
-      <div className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto">
+      <div className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] my-auto">
 
         {/* Progress bar */}
         <div className="h-1.5 bg-gray-800 rounded-t-3xl shrink-0">

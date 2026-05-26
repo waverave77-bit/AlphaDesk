@@ -42,7 +42,7 @@ export default function ProLimitBanner({ feature, isDark = true }: Props) {
       </div>
       <Link
         href="/upgrade"
-        className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors whitespace-nowrap"
+        className="shrink-0 flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-lg bg-yellow-500 hover:bg-yellow-400 text-gray-950 text-sm font-bold transition-colors whitespace-nowrap"
       >
         <Zap className="h-3.5 w-3.5" />
         Upgrade to Pro

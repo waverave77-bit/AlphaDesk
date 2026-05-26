@@ -48,30 +48,35 @@ export function GuestLock({ feature = 'this feature' }: { feature?: string }) {
 export function GuestSignupModal({ open, onClose, feature = 'this feature' }: { open: boolean; onClose: () => void; feature?: string }) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 overflow-y-auto">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-gray-600 transition-colors rounded-lg">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full text-center flex flex-col max-h-[90vh] my-auto">
+        {/* Close button — large tap target, always accessible */}
+        <button onClick={onClose} className="absolute top-2 right-2 p-3 text-gray-400 hover:text-gray-600 transition-colors rounded-xl" aria-label="Close">
           <X className="h-5 w-5" />
         </button>
-        <div className="h-14 w-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mx-auto mb-4">
-          <Lock className="h-7 w-7 text-blue-500" />
+        {/* Scrollable body */}
+        <div className="overflow-y-auto px-8 pt-8 pb-4">
+          <div className="h-14 w-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mx-auto mb-4">
+            <Lock className="h-7 w-7 text-blue-500" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Sign up to use {feature}</h2>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            It's free forever. No credit card needed.
+          </p>
         </div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Sign up to use {feature}</h2>
-        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-          It's free forever. No credit card needed.
-        </p>
-        <div className="flex flex-col gap-3">
+        {/* Pinned action buttons — never scrolled away */}
+        <div className="px-8 pb-8 pt-4 flex flex-col gap-3 shrink-0">
           <Link
             href="/register"
-            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-colors min-h-[44px]"
           >
             <UserPlus className="h-4 w-4" />
             Sign Up Free
           </Link>
           <Link
             href="/login"
-            className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:border-gray-400 font-semibold px-6 py-3 rounded-xl transition-colors"
+            className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:border-gray-400 font-semibold px-6 py-3 rounded-xl transition-colors min-h-[44px]"
           >
             <LogIn className="h-4 w-4" />
             Sign In

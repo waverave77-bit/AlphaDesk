@@ -34,8 +34,8 @@ export default function VerifyEmailPage() {
   }, [token])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4">
-      <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-5">
+    <div className="min-h-screen flex items-start sm:items-center justify-center bg-gray-950 px-4 py-10 overflow-y-auto">
+      <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-5 my-auto">
         <span className="text-4xl">🧑‍💼</span>
 
         {status === 'loading' && (
