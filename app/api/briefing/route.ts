@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server'
 import { getStockQuote } from '@/lib/yahoo-finance'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
+
+// ── Slot helpers ────────────────────────────────────────────────────────────
+// Two slots per day (ET): "morning" = before noon, "midday" = noon+
+function getSlot(): { date: string; slot: 'morning' | 'midday'; id: string } {
+  const now = new Date()
+  const etHour = parseInt(
+    now.toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/New_York' }),
+    10
+  )
+  const date = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) // YYYY-MM-DD
+  const slot: 'morning' | 'midday' = etHour < 12 ? 'morning' : 'midday'
+  return { date, slot, id: `${date}-${slot}` }
+}
 
 interface IndexData {
   ticker: string
@@ -10,17 +24,15 @@ interface IndexData {
   change: number
 }
 
-interface BriefingCache {
-  cachedAt: number
+interface BriefingPayload {
   briefing: string
   indices: { spy: IndexData | null; qqq: IndexData | null; dia: IndexData | null }
   date: string
   headlines: string[]
+  slot: string
 }
 
-let cache: BriefingCache | null = null
-const CACHE_TTL = 60 * 60 * 1000 // 1 hour
-
+// ── Data fetchers ────────────────────────────────────────────────────────────
 const RSS_FEEDS = [
   'https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^DJI,^IXIC&region=US&lang=en-US',
   'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114',
@@ -78,13 +90,9 @@ async function fetchAllHeadlines(): Promise<string[]> {
 async function callGrok(system: string, user: string): Promise<string> {
   const apiKey = process.env.XAI_API_KEY
   if (!apiKey) throw new Error('XAI_API_KEY not set')
-
   const res = await fetch('https://api.x.ai/v1/chat/completions', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
     body: JSON.stringify({
       model: 'grok-3',
       max_tokens: 400,
@@ -95,22 +103,22 @@ async function callGrok(system: string, user: string): Promise<string> {
     }),
     signal: AbortSignal.timeout(25000),
   })
-
   if (!res.ok) throw new Error(`Grok API error: ${res.status}`)
   const json = await res.json()
   return (json.choices?.[0]?.message?.content ?? '').trim()
 }
 
+// ── Route ────────────────────────────────────────────────────────────────────
 export async function GET() {
-  if (cache && Date.now() - cache.cachedAt < CACHE_TTL) {
-    return NextResponse.json({
-      briefing: cache.briefing,
-      indices: cache.indices,
-      date: cache.date,
-      headlines: cache.headlines,
-    })
+  const { date, slot, id } = getSlot()
+
+  // 1. Check DB cache — same brief for ALL users this slot
+  const cached = await prisma.marketBriefCache.findUnique({ where: { id } }).catch(() => null)
+  if (cached) {
+    return NextResponse.json({ ...(JSON.parse(cached.data) as BriefingPayload), fromCache: true })
   }
 
+  // 2. Cache miss — generate fresh brief for this slot
   const [headlinesRaw, spyRaw, qqqRaw, diaRaw] = await Promise.allSettled([
     fetchAllHeadlines(),
     getStockQuote('SPY'),
@@ -139,9 +147,11 @@ export async function GET() {
     ? headlines.map(h => `- ${h}`).join('\n')
     : '- No recent headlines available'
 
-  const system = `You are Mr. Guy, a funny and sharp finance mascot. Write a morning market briefing in plain English. Casual, confident, a little funny. No markdown. No complicated finance terms.`
+  const system = `You are Mr. Guy, a funny and sharp finance mascot. Write a ${slot === 'morning' ? 'morning' : 'midday'} market briefing in plain English. Casual, confident, a little funny. No markdown. No complicated finance terms.`
 
-  const user = `Here is today's live index data:\n${indexBlock}\n\nTop headlines:\n${headlineBlock}\n\nWrite a morning briefing covering:\n1) What the overall market is doing and why\n2) The 2-3 biggest stories today\n3) What to watch\n\nKeep it under 200 words. Casual tone. End with one punchy sentence like "Today's vibe:"`
+  const user = slot === 'morning'
+    ? `Here is today's live index data:\n${indexBlock}\n\nTop headlines:\n${headlineBlock}\n\nWrite a morning briefing covering:\n1) What the overall market is doing and why\n2) The 2-3 biggest stories today\n3) What to watch\n\nKeep it under 200 words. Casual tone. End with one punchy sentence like "Today's vibe:"`
+    : `Here is the midday market data:\n${indexBlock}\n\nTop headlines:\n${headlineBlock}\n\nWrite a midday market check-in covering:\n1) How markets are performing so far today\n2) Any big moves or news since this morning\n3) What to watch for the rest of the session\n\nKeep it under 200 words. Casual tone. End with one punchy sentence.`
 
   let briefingText = ''
   try {
@@ -155,7 +165,20 @@ export async function GET() {
     timeZone: 'America/New_York',
   })
 
-  cache = { cachedAt: Date.now(), briefing: briefingText, indices: { spy, qqq, dia }, date: dateStr, headlines }
+  const payload: BriefingPayload = {
+    briefing: briefingText,
+    indices: { spy, qqq, dia },
+    date: dateStr,
+    headlines,
+    slot,
+  }
 
-  return NextResponse.json({ briefing: briefingText, indices: { spy, qqq, dia }, date: dateStr, headlines })
+  // 3. Save to DB — fire and forget
+  prisma.marketBriefCache.upsert({
+    where: { id },
+    update: { data: JSON.stringify(payload) },
+    create: { id, slot, date, data: JSON.stringify(payload) },
+  }).catch(() => {})
+
+  return NextResponse.json(payload)
 }

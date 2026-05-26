@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server'
 import { getMarketStatus } from '@/lib/market-hours'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-// Simple in-memory cache — refreshes every 30 minutes
-let _cache: { text: string; status: string; cachedAt: number } | null = null
-const CACHE_TTL = 30 * 60 * 1000
+// ── Slot helpers ─────────────────────────────────────────────────────────────
+function getSlot(): { date: string; slot: 'morning' | 'midday'; id: string } {
+  const now = new Date()
+  const etHour = parseInt(
+    now.toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/New_York' }),
+    10
+  )
+  const date = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
+  const slot: 'morning' | 'midday' = etHour < 12 ? 'morning' : 'midday'
+  return { date, slot, id: `brief-${date}-${slot}` }
+}
 
 async function fetchMarketNews(): Promise<string[]> {
   try {
@@ -31,13 +40,9 @@ async function fetchMarketNews(): Promise<string[]> {
 async function callGrok(systemPrompt: string, userPrompt: string): Promise<string> {
   const apiKey = process.env.XAI_API_KEY
   if (!apiKey) throw new Error('XAI_API_KEY not set')
-
   const res = await fetch('https://api.x.ai/v1/chat/completions', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
     body: JSON.stringify({
       model: 'grok-3',
       max_tokens: 200,
@@ -48,18 +53,22 @@ async function callGrok(systemPrompt: string, userPrompt: string): Promise<strin
     }),
     signal: AbortSignal.timeout(20000),
   })
-
   if (!res.ok) throw new Error(`Grok API error: ${res.status}`)
   const json = await res.json()
   return (json.choices?.[0]?.message?.content ?? '').trim()
 }
 
 export async function GET() {
-  // Serve from cache if fresh
-  if (_cache && Date.now() - _cache.cachedAt < CACHE_TTL) {
-    return NextResponse.json({ text: _cache.text, status: _cache.status })
+  const { date, slot, id } = getSlot()
+
+  // 1. Serve from DB cache — same text for every user this slot
+  const cached = await prisma.marketBriefCache.findUnique({ where: { id } }).catch(() => null)
+  if (cached) {
+    const payload = JSON.parse(cached.data)
+    return NextResponse.json({ text: payload.text, status: payload.status, fromCache: true })
   }
 
+  // 2. Cache miss — generate for this slot
   const { status, label, dayName } = getMarketStatus()
   const headlines = await fetchMarketNews()
 
@@ -68,25 +77,33 @@ export async function GET() {
     : 'No specific headlines available — use your knowledge of current market conditions.'
 
   const holidayName = label.startsWith('Closed ·') ? label.replace('Closed · ', '') : null
-  const nextOpen   = 'Monday'
+  const nextOpen = 'Monday'
 
   const systemPrompt = `You write short, sharp daily market recaps for retail investors. Friendly and conversational — like a smart friend who follows markets. No markdown, no bullet points, no "Note:", never start with "I". Plain English only. Be specific and confident.`
 
   const userPrompt = status === 'weekend'
     ? `Today is ${dayName}. Markets are closed for the weekend.\n\n${newsBlock}\n\nWrite a 2-3 sentence weekend market recap. Cover: what happened in markets this past week, and what specific events, data releases, or storylines investors should watch when they open ${nextOpen}. Be concrete — name actual catalysts (Fed speakers, earnings, economic data, geopolitical events, etc.).`
     : status === 'holiday'
-    ? `Today is ${dayName} and markets are closed for ${holidayName}.\n\n${newsBlock}\n\nWrite a 2-3 sentence market note for ${holidayName}. Wish investors a happy holiday, briefly cover any recent market context, and note what to watch when markets reopen.`
-    : status === 'pre'
-    ? `Today is ${dayName} and markets open in a few hours.\n\n${newsBlock}\n\nWrite a 2-3 sentence pre-market recap. Cover: what the overnight/futures action looks like and the key things investors should watch when the market opens today.`
-    : status === 'open'
-    ? `Markets are open right now (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence market recap. Cover: what's driving the market today — which sectors are moving, what's the sentiment, and what's the main story.`
-    : `Markets just closed today (${dayName}).\n\n${newsBlock}\n\nWrite a 2-3 sentence end-of-day market recap. Cover: how markets closed and why, and what investors should watch tonight or heading into tomorrow.`
+    ? `Today is ${dayName} and markets are closed for ${holidayName}.\n\n${newsBlock}\n\nWrite a 2-3 sentence market note for ${holidayName}. Briefly cover recent market context and note what to watch when markets reopen.`
+    : slot === 'morning'
+    ? `Today is ${dayName} and markets open in a few hours or just opened.\n\n${newsBlock}\n\nWrite a 2-3 sentence morning market brief. Cover: what the overnight/futures action looks like and the key things investors should watch today.`
+    : `It's midday on ${dayName}.\n\n${newsBlock}\n\nWrite a 2-3 sentence midday market check-in. Cover: how markets are tracking so far today and what to watch for the rest of the session.`
 
+  let text = ''
   try {
-    const text = await callGrok(systemPrompt, userPrompt)
-    _cache = { text, status: label, cachedAt: Date.now() }
-    return NextResponse.json({ text, status: label })
+    text = await callGrok(systemPrompt, userPrompt)
   } catch {
-    return NextResponse.json({ text: '', status: label })
+    text = ''
   }
+
+  const payload = { text, status: label }
+
+  // 3. Save to DB — fire and forget
+  prisma.marketBriefCache.upsert({
+    where: { id },
+    update: { data: JSON.stringify(payload) },
+    create: { id, slot, date, data: JSON.stringify(payload) },
+  }).catch(() => {})
+
+  return NextResponse.json(payload)
 }

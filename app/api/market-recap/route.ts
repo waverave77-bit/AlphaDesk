@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { prisma } from '@/lib/prisma'
 
-export const revalidate = 3600 // cache for 1 hour
+export const dynamic = 'force-dynamic'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+// ── Slot helpers ─────────────────────────────────────────────────────────────
+function getSlot(): { date: string; slot: 'morning' | 'midday'; id: string } {
+  const now = new Date()
+  const etHour = parseInt(
+    now.toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'America/New_York' }),
+    10
+  )
+  const date = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
+  const slot: 'morning' | 'midday' = etHour < 12 ? 'morning' : 'midday'
+  return { date, slot, id: `recap-${date}-${slot}` }
+}
 
 async function fetchFearGreed() {
   try {
@@ -39,6 +52,15 @@ async function fetchSectors() {
 }
 
 export async function GET() {
+  const { date, slot, id } = getSlot()
+
+  // 1. Serve from DB cache
+  const cached = await prisma.marketBriefCache.findUnique({ where: { id } }).catch(() => null)
+  if (cached) {
+    return NextResponse.json({ ...(JSON.parse(cached.data)), fromCache: true })
+  }
+
+  // 2. Cache miss — generate
   const [fearGreed, sectors] = await Promise.all([fetchFearGreed(), fetchSectors()])
 
   const top3 = (sectors as any[]).slice(0, 3).map((s: any) => `${s.sym} ${s.pct > 0 ? '+' : ''}${s.pct}%`).join(', ')
@@ -46,37 +68,32 @@ export async function GET() {
 
   const context = [
     fearGreed ? `Fear & Greed Index: ${fearGreed}` : '',
-    top3 ? `Top performing sectors today: ${top3}` : '',
-    bot3 ? `Weakest sectors today: ${bot3}` : '',
-  ]
-    .filter(Boolean)
-    .join('. ')
+    top3 ? `Top performing sectors: ${top3}` : '',
+    bot3 ? `Weakest sectors: ${bot3}` : '',
+  ].filter(Boolean).join('. ')
 
+  let recap = 'Market recap unavailable right now. Check the Markets page for live data.'
   try {
     const response = await client.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 200,
-      system: `You write brief, sharp daily market recaps for retail investors.
-Write 2-3 sentences max. Be factual, plain English, no complicated finance terms.
-Mention sentiment and notable sector moves. No investment advice. No bullet points.`,
-      messages: [
-        {
-          role: 'user',
-          content: `Write today's market recap based on this data: ${context || 'Markets are open and trading normally today.'}`,
-        },
-      ],
+      system: `You write brief, sharp ${slot} market recaps for retail investors. 2-3 sentences max. Plain English, no complicated finance terms. Mention sentiment and notable sector moves. No investment advice. No bullet points.`,
+      messages: [{
+        role: 'user',
+        content: `Write a ${slot === 'morning' ? 'morning market outlook' : 'midday market check-in'} based on this data: ${context || 'Markets are trading normally today.'}`,
+      }],
     })
+    if (response.content[0].type === 'text') recap = response.content[0].text
+  } catch { /* use fallback */ }
 
-    const recap =
-      response.content[0].type === 'text'
-        ? response.content[0].text
-        : 'Markets are trading today. Check the Markets page for full details.'
+  const payload = { recap, fearGreed, generatedAt: new Date().toISOString(), slot }
 
-    return NextResponse.json({ recap, fearGreed, generatedAt: new Date().toISOString() })
-  } catch {
-    return NextResponse.json({
-      recap: 'Market recap unavailable right now. Check the Markets page for live data.',
-      generatedAt: new Date().toISOString(),
-    })
-  }
+  // 3. Save to DB — fire and forget
+  prisma.marketBriefCache.upsert({
+    where: { id },
+    update: { data: JSON.stringify(payload) },
+    create: { id, slot, date, data: JSON.stringify(payload) },
+  }).catch(() => {})
+
+  return NextResponse.json(payload)
 }

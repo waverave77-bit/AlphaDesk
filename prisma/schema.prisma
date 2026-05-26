@@ -229,6 +229,16 @@ model AIAnalysisCache {
   @@index([date])
 }
 
+model MarketBriefCache {
+  id        String   @id  // "{DATE}-{slot}" e.g. "2026-05-26-morning"
+  slot      String        // "morning" | "midday"
+  date      String        // "YYYY-MM-DD" ET
+  data      String        // JSON stringified result
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
+
 model DailyAIUsage {
   id      String @id @default(cuid())
   userId  String
