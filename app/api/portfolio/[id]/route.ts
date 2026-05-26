@@ -31,11 +31,29 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     }
 
     const body = await req.json()
+
+    let sharesVal: number | undefined
+    let purchasePriceVal: number | undefined
+
+    if (body.shares !== undefined) {
+      sharesVal = parseFloat(body.shares)
+      if (isNaN(sharesVal) || sharesVal <= 0) {
+        return NextResponse.json({ error: 'Invalid shares' }, { status: 400 })
+      }
+    }
+
+    if (body.purchasePrice !== undefined) {
+      purchasePriceVal = parseFloat(body.purchasePrice)
+      if (isNaN(purchasePriceVal) || purchasePriceVal <= 0) {
+        return NextResponse.json({ error: 'Invalid price' }, { status: 400 })
+      }
+    }
+
     const updated = await prisma.holding.update({
       where: { id: params.id },
       data: {
-        shares: body.shares ? parseFloat(body.shares) : undefined,
-        purchasePrice: body.purchasePrice ? parseFloat(body.purchasePrice) : undefined,
+        shares: sharesVal,
+        purchasePrice: purchasePriceVal,
       },
     })
     return NextResponse.json({ holding: updated })

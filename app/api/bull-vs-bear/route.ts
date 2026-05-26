@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, searchStocks } from '@/lib/yahoo-finance'
@@ -24,6 +26,9 @@ export interface BullVsBearResult {
 }
 
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
   const limited = await checkAILimit('bull-vs-bear')
   if (limited) return limited
 

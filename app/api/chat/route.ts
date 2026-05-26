@@ -542,6 +542,9 @@ ${liveBlock}${newsBlock}`
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
   const limited = await checkAILimit('chat')
   if (limited) return limited
 

@@ -26,13 +26,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    const parsedShares = parseFloat(shares)
+    if (isNaN(parsedShares) || parsedShares <= 0) {
+      return NextResponse.json({ error: 'Invalid shares' }, { status: 400 })
+    }
+
+    const parsedPrice = parseFloat(purchasePrice)
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      return NextResponse.json({ error: 'Invalid price' }, { status: 400 })
+    }
+
+    const sanitizedTicker = (ticker ?? '').toUpperCase().replace(/[^A-Z0-9.]/g, '').slice(0, 10)
+    if (!sanitizedTicker) {
+      return NextResponse.json({ error: 'Invalid ticker' }, { status: 400 })
+    }
+
     const holding = await prisma.holding.create({
       data: {
         userId: session.user.id,
-        ticker: ticker.toUpperCase(),
-        companyName: companyName || ticker.toUpperCase(),
-        shares: parseFloat(shares),
-        purchasePrice: parseFloat(purchasePrice),
+        ticker: sanitizedTicker,
+        companyName: companyName || sanitizedTicker,
+        shares: parsedShares,
+        purchasePrice: parsedPrice,
         purchaseDate: purchaseDate ? new Date(purchaseDate) : new Date(),
         sector: sector || 'Unknown',
       },
