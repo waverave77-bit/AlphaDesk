@@ -108,15 +108,39 @@ export async function POST(req: Request) {
 
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription
+      const customerId = sub.customer as string
       try {
-        await prisma.user.updateMany({
+        // Match by subscriptionId first (most precise); fall back to customerId
+        const bySubId = await prisma.user.updateMany({
           where: { stripeSubscriptionId: sub.id },
           data: { isPro: false, proCancelledAt: new Date() },
         })
+        if (bySubId.count === 0) {
+          // Fallback: webhook may have fired before stripeSubscriptionId was saved
+          await prisma.user.updateMany({
+            where: { stripeCustomerId: customerId },
+            data: { isPro: false, proCancelledAt: new Date() },
+          })
+        }
+        console.log(`[Webhook] Pro revoked for subscription ${sub.id} / customer ${customerId}`)
       } catch (err) {
         console.error('[Webhook] Error processing customer.subscription.deleted:', err)
         return NextResponse.json({ error: 'DB error' }, { status: 500 })
       }
+      break
+    }
+
+    case 'invoice.payment_failed': {
+      const invoice = event.data.object as Stripe.Invoice
+      const customerId = invoice.customer as string
+      const subscriptionId = invoice.subscription as string | undefined
+      const attemptCount = invoice.attempt_count
+      console.error(
+        '[Webhook] invoice.payment_failed — customer may lose Pro access if this persists.',
+        JSON.stringify({ eventId: event.id, customerId, subscriptionId, attemptCount })
+      )
+      // Stripe will automatically retry and eventually fire customer.subscription.deleted
+      // if the grace period expires. No DB change needed here, but we log for alerting.
       break
     }
   }

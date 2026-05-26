@@ -50,10 +50,16 @@ export async function POST() {
     return NextResponse.json({ error: 'No subscription found. Contact support@mrguyinvests.com' }, { status: 404 })
   }
 
-  const portalSession = await getStripe().billingPortal.sessions.create({
-    customer: customerId,
-    return_url: `${process.env.NEXTAUTH_URL}/settings`,
-  })
+  let portalSession: Stripe.BillingPortal.Session
+  try {
+    portalSession = await getStripe().billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${process.env.NEXTAUTH_URL}/settings`,
+    })
+  } catch (err) {
+    console.error('[Portal] Failed to create billing portal session:', err)
+    return NextResponse.json({ error: 'Could not open billing portal. Please try again.' }, { status: 502 })
+  }
 
   return NextResponse.json({ url: portalSession.url })
 }
