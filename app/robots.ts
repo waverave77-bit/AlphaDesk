@@ -38,6 +38,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://mrguyinvests.com/sitemap.xml',
+    sitemap: `${process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com'}/sitemap.xml`,
   }
 }

@@ -1,150 +1,285 @@
 import Link from 'next/link'
-import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 export const metadata = {
-  title: 'Privacy Policy',
-  description: 'How Mr. Guy Invests collects, uses, and protects your personal information.',
+  title: 'Privacy Policy — AlphaDesk',
+  description: 'How AlphaDesk collects, uses, and protects your personal information.',
 }
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-gray-200">
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto border-b border-gray-800">
         <Link href="/" className="flex items-center gap-2.5">
-          <MrGuyLogoSvg px={3} />
-          <span className="text-xl font-bold">Mr. Guy Invests</span>
+          <span className="text-xl font-bold tracking-tight text-white">AlphaDesk</span>
         </Link>
         <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
           Sign In
         </Link>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-16 space-y-10">
-        <div>
-          <h1 className="text-4xl font-bold mb-3">Privacy Policy</h1>
-          <p className="text-gray-400 text-sm">Last updated: May 2026</p>
+      <main className="max-w-3xl mx-auto px-6 py-16">
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold mb-3 text-white">Privacy Policy</h1>
+          <p className="text-gray-400 text-sm">Effective date: May 25, 2026</p>
         </div>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">1. Who We Are</h2>
-          <p className="text-gray-400 leading-relaxed">
-            Mr. Guy Invests (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the website at{' '}
-            <span className="text-blue-400">mrguyinvests.com</span>. This Privacy Policy explains what personal
-            information we collect, how we use it, and your rights regarding that information.
+        {/* 1. Who We Are */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">1. Who We Are</h2>
+          <p className="text-gray-300 leading-relaxed">
+            AlphaDesk (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the financial
+            data and education platform available at{' '}
+            <span className="text-blue-400">alphadesk.app</span>. This Privacy Policy explains what
+            personal information we collect when you use the Service, how we use it, who we share it
+            with, and the rights you have over your data.
           </p>
-          <p className="text-gray-400 leading-relaxed">
-            This service is intended for users who are 13 years of age or older. Users under 18 should have
-            parental or guardian permission before creating an account. We do not knowingly collect personal
-            information from children under 13. If you believe a child under 13 has created an account, please
-            contact us immediately so we can delete the information.
+          <p className="text-gray-300 leading-relaxed mt-3">
+            By using AlphaDesk you agree to the collection and use of information as described in
+            this policy. If you do not agree, please do not use the Service.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">2. What We Collect</h2>
-          <div className="space-y-3 text-gray-400 leading-relaxed">
-            <p><strong className="text-gray-300">Account information:</strong> When you register, we collect your email address and a hashed (encrypted) password. We never store your password in plain text.</p>
-            <p><strong className="text-gray-300">Watchlist data:</strong> If you add stocks to your watchlist, that data is stored in our database associated with your account.</p>
-            <p><strong className="text-gray-300">Billing information:</strong> If you subscribe to Mr. Guy Invests Pro, payment is handled by Stripe. We store only your Stripe customer ID and subscription status — we never see or store your full card details.</p>
-            <p><strong className="text-gray-300">Usage data:</strong> We may collect basic information about how you use the service (pages visited, features used) to improve the product. We do not sell this data.</p>
-            <p><strong className="text-gray-300">Session data:</strong> We use secure session cookies (via NextAuth.js) to keep you signed in. These are necessary for the service to function.</p>
-            <p><strong className="text-gray-300">Virtual portfolio data:</strong> If you participate in the $100K Challenge or other virtual trading features, we store your simulated trades, portfolio holdings, and game history. This is fictional/game data only — no real money is involved.</p>
-            <p><strong className="text-gray-300">We do not collect:</strong> social security numbers, government IDs, brokerage account numbers, or any other sensitive financial account details.</p>
+        {/* 2. What We Collect */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">2. Information We Collect</h2>
+          <div className="space-y-3 text-gray-300 leading-relaxed">
+            <p>
+              <strong className="text-white">Account information:</strong> When you register we
+              collect your name (if provided) and email address. Passwords are stored using
+              bcrypt hashing — we never store your password in plain text.
+            </p>
+            <p>
+              <strong className="text-white">Portfolio and watchlist data:</strong> Stocks, assets,
+              and positions you add to your portfolio or watchlist are stored in our database
+              associated with your account.
+            </p>
+            <p>
+              <strong className="text-white">Inputs to AI features:</strong> When you use
+              AI-powered analysis, chat, or Q&amp;A features your queries and any context you
+              provide are transmitted to our AI provider(s) to generate a response. See Section 4
+              for details on those providers and how inputs are handled.
+            </p>
+            <p>
+              <strong className="text-white">Billing information:</strong> If you subscribe to
+              AlphaDesk Pro, payment is processed by Stripe. We store only your Stripe customer ID
+              and subscription status — we never see or store your full card number.
+            </p>
+            <p>
+              <strong className="text-white">Usage analytics:</strong> We collect anonymised
+              information about how you interact with the Service — pages visited, features used,
+              clicks, and session duration — to understand usage patterns and improve the product.
+            </p>
+            <p>
+              <strong className="text-white">IP address and device data:</strong> Our servers and
+              hosting provider automatically record your IP address, browser type, operating system,
+              and referring URL as part of standard web server logs. This data is used for security,
+              fraud prevention, and aggregate analytics.
+            </p>
+            <p>
+              <strong className="text-white">Session cookies:</strong> We use secure session
+              cookies required for authentication. See Section 6 for details.
+            </p>
+            <p>
+              <strong className="text-white">What we do not collect:</strong> We do not collect
+              Social Security numbers, government-issued ID numbers, brokerage account credentials,
+              or any other sensitive financial account identifiers.
+            </p>
           </div>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">3. How We Use Your Information</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-400 leading-relaxed">
-            <li>To operate your account and provide the service</li>
-            <li>To display your saved watchlist and preferences</li>
-            <li>To manage your subscription and billing via Stripe</li>
-            <li>To send transactional emails (e.g., password reset) — we do not send marketing emails</li>
-            <li>To enforce usage limits and prevent abuse of AI features</li>
-            <li>To improve and debug the service</li>
+        {/* 3. How We Use Your Information */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">3. How We Use Your Information</h2>
+          <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed">
+            <li>To create and operate your account and provide the Service</li>
+            <li>To power AI-driven analysis and personalized features using your portfolio data
+              and query inputs</li>
+            <li>To personalise your dashboard, watchlist, alerts, and content recommendations</li>
+            <li>To manage your Pro subscription and billing via Stripe</li>
+            <li>To send transactional emails — such as email verification, password reset, and
+              subscription receipts — via our email provider</li>
+            <li>To generate aggregate, anonymised analytics that help us understand how the
+              product is used and guide product decisions</li>
+            <li>To detect fraud, enforce usage limits, and protect the security of the Service</li>
+            <li>To comply with legal obligations</li>
           </ul>
-          <p className="text-gray-400">
-            We do <strong className="text-gray-300">not</strong> sell, rent, or share your personal information
-            with third parties for their marketing purposes.
+          <p className="text-gray-300 leading-relaxed mt-3">
+            We do <strong className="text-white">not</strong> sell, rent, or share your personal
+            information with third parties for their marketing or advertising purposes.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">4. Third-Party Services</h2>
-          <p className="text-gray-400 leading-relaxed">
-            The service uses the following third-party providers to function:
+        {/* 4. Third-Party Services */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">4. Third-Party Services</h2>
+          <p className="text-gray-300 leading-relaxed mb-3">
+            We rely on the following third-party providers to deliver the Service. Each provider
+            operates under its own privacy policy and data processing terms.
           </p>
-          <ul className="list-disc list-inside space-y-2 text-gray-400 leading-relaxed">
-            <li><strong className="text-gray-300">Vercel</strong> — hosting, deployment, Vercel Analytics (anonymised page-view data), and Vercel Speed Insights (anonymised Core Web Vitals performance data)</li>
-            <li><strong className="text-gray-300">Neon (PostgreSQL)</strong> — database hosting for account and watchlist data</li>
-            <li><strong className="text-gray-300">Stripe</strong> — payment processing and subscription management. Stripe&apos;s privacy policy applies to payment data.</li>
-            <li><strong className="text-gray-300">Third-party market data providers</strong> — stock prices and financial data from public market data sources</li>
-            <li><strong className="text-gray-300">SEC EDGAR</strong> — public regulatory filings (Form 4, 13F)</li>
-            <li><strong className="text-gray-300">Anthropic Claude API</strong> — AI-generated analysis and responses</li>
-            <li><strong className="text-gray-300">xAI (Grok API)</strong> — used for certain AI-generated features; your queries may be processed by xAI&apos;s servers</li>
-            <li><strong className="text-gray-300">DeepSeek API</strong> — used for certain AI-generated features; your queries may be processed by DeepSeek&apos;s servers</li>
-          </ul>
-          <p className="text-gray-400">
-            These providers may have access to minimal technical data (e.g., IP addresses) as part of standard
-            internet operations. We are not responsible for their independent privacy practices.
-          </p>
-        </section>
-
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">5. Data Retention and Deletion</h2>
-          <p className="text-gray-400 leading-relaxed">
-            Your account data is retained as long as your account is active. You may request deletion of your
-            account and all associated data at any time by contacting us. Upon request, we will delete your
-            email address, watchlist, and any other personal data within 30 days. Note that Stripe retains
-            billing records independently as required by financial regulations.
-          </p>
-        </section>
-
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">6. Cookies</h2>
-          <p className="text-gray-400 leading-relaxed">
-            We use only functional session cookies required for authentication (via NextAuth.js). We do not
-            use advertising cookies or third-party tracking cookies for our own purposes. Vercel Analytics
-            collects anonymised performance data. No cookie consent banner is shown for strictly necessary
-            cookies.
-          </p>
-        </section>
-
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">7. Your Rights</h2>
-          <p className="text-gray-400 leading-relaxed">
-            Depending on your location, you may have rights to access, correct, or delete your personal data.
-            If you are located in the European Economic Area (EEA) or the UK, you have rights under the GDPR.
-            California residents have rights under the CCPA, including the right to know what data we collect
-            and the right to request deletion. To exercise any of these rights, contact us at the address below.
-          </p>
-        </section>
-
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">8. Security</h2>
-          <p className="text-gray-400 leading-relaxed">
-            We use industry-standard practices to protect your data, including bcrypt password hashing,
-            encrypted HTTPS connections on all pages, and JWT-based secure sessions. No system is 100% secure,
-            and we cannot guarantee the absolute security of your information. In the event of a data breach
-            that affects your personal data, we will notify affected users as required by applicable law.
+          <div className="space-y-3 text-gray-300 leading-relaxed">
+            <p>
+              <strong className="text-white">Vercel</strong> — cloud hosting, deployment, and
+              infrastructure. Vercel processes server logs including IP addresses. Vercel Analytics
+              and Speed Insights collect anonymised page-view and performance data.
+            </p>
+            <p>
+              <strong className="text-white">Neon / PostgreSQL</strong> — managed database hosting.
+              Your account data, portfolio data, and watchlist data are stored here.
+            </p>
+            <p>
+              <strong className="text-white">Stripe</strong> — payment processing and subscription
+              management. When you subscribe, your payment details are submitted directly to Stripe.
+              We receive only a customer ID and subscription status. Stripe&apos;s privacy policy
+              governs all payment data.
+            </p>
+            <p>
+              <strong className="text-white">Resend</strong> — transactional email delivery.
+              Your email address is shared with Resend solely to deliver emails we send you
+              (verification links, password resets, subscription notices).
+            </p>
+            <p>
+              <strong className="text-white">Anthropic Claude API</strong> — AI-generated analysis
+              and responses. Queries you submit to AI features are sent to Anthropic&apos;s servers
+              for processing. We do not store your AI inputs beyond the current session; Anthropic
+              may retain inputs subject to their own data retention policies.
+            </p>
+            <p>
+              <strong className="text-white">xAI (Grok API)</strong> — AI-generated features.
+              Certain AI features route queries through xAI&apos;s servers. The same session-only
+              retention policy applies on our end; xAI&apos;s policies govern their handling.
+            </p>
+            <p>
+              <strong className="text-white">DeepSeek API</strong> — AI-generated features.
+              Certain AI features route queries through DeepSeek&apos;s servers. The same
+              session-only retention applies on our end; DeepSeek&apos;s policies govern their
+              handling.
+            </p>
+            <p>
+              <strong className="text-white">Third-party market data providers and SEC EDGAR</strong>{' '}
+              — stock prices, financial data, and public regulatory filings. These are read-only
+              data sources; we do not share your personal information with them.
+            </p>
+          </div>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            We are not responsible for the independent privacy practices of these third-party
+            providers. We encourage you to review their privacy policies directly.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">9. Changes to This Policy</h2>
-          <p className="text-gray-400 leading-relaxed">
-            We may update this Privacy Policy from time to time. Changes will be posted on this page with an
-            updated date. Continued use of the service after changes constitutes acceptance of the updated policy.
+        {/* 5. Data Retention */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">5. Data Retention</h2>
+          <p className="text-gray-300 leading-relaxed">
+            Your account data — including your email address, name, portfolio data, watchlist, and
+            preferences — is retained for as long as your account is active. You may request deletion
+            of your account and all associated personal data at any time (see Section 7). Upon a
+            valid deletion request we will remove your personal data from our systems within 30 days.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            <strong className="text-white">AI inputs:</strong> We do not store queries or responses
+            from AI features beyond the current browser session. Your inputs are sent to the
+            applicable AI provider in real time and are not persisted in our database after the
+            session ends.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            Stripe independently retains billing records as required by financial and tax
+            regulations. Server logs are retained for a limited period for security and
+            debugging purposes.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white">10. Contact</h2>
-          <p className="text-gray-400 leading-relaxed">
-            For privacy-related questions or data deletion requests, contact us at:{' '}
-            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
-              support@mrguyinvests.com
+        {/* 6. Cookies */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">6. Cookies</h2>
+          <p className="text-gray-300 leading-relaxed">
+            We use only functional session cookies that are strictly necessary to keep you
+            authenticated while you use the Service (managed via NextAuth.js). We do not use
+            advertising cookies, third-party tracking cookies, or behavioural profiling cookies.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            Vercel Analytics collects anonymised performance and usage data using privacy-preserving
+            methods that do not require persistent cookies or fingerprinting. No cookie consent
+            banner is displayed because we use only strictly necessary functional cookies.
+          </p>
+        </section>
+
+        {/* 7. Your Rights */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">7. Your Rights</h2>
+          <p className="text-gray-300 leading-relaxed mb-3">
+            Depending on your location you may have the following rights regarding your personal
+            data. To exercise any of them, contact us at the address in Section 10.
+          </p>
+          <div className="space-y-3 text-gray-300 leading-relaxed">
+            <p>
+              <strong className="text-white">Delete your account:</strong> You may request deletion
+              of your account and all associated personal data at any time. We will process the
+              request within 30 days.
+            </p>
+            <p>
+              <strong className="text-white">Export your data:</strong> You may request a copy of
+              the personal data we hold about you in a portable, machine-readable format.
+            </p>
+            <p>
+              <strong className="text-white">Opt out of analytics:</strong> You may opt out of
+              usage analytics collection by contacting us. Note that strictly necessary session
+              cookies required for authentication cannot be disabled without affecting your ability
+              to sign in.
+            </p>
+            <p>
+              <strong className="text-white">Access and correction:</strong> You may request access
+              to your personal data or ask us to correct inaccurate information.
+            </p>
+            <p>
+              <strong className="text-white">GDPR (EEA / UK) rights:</strong> If you are located in
+              the European Economic Area or United Kingdom, you have rights under the GDPR including
+              the right to access, rectify, erase, restrict processing, and object to processing of
+              your personal data, as well as the right to data portability.
+            </p>
+            <p>
+              <strong className="text-white">CCPA (California) rights:</strong> California residents
+              have the right to know what personal information we collect and how it is used, the
+              right to delete personal information, and the right to opt out of sale of personal
+              information. We do not sell personal information.
+            </p>
+          </div>
+        </section>
+
+        {/* 8. Security */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">8. Security</h2>
+          <p className="text-gray-300 leading-relaxed">
+            We implement industry-standard security measures including bcrypt password hashing,
+            HTTPS encryption on all connections, and JWT-based secure session management. Access to
+            production data is restricted to authorised personnel only.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            No system is 100% secure and we cannot guarantee the absolute security of your
+            information. In the event of a data breach that materially affects your personal data,
+            we will notify affected users as required by applicable law.
+          </p>
+        </section>
+
+        {/* 9. Changes to This Policy */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">9. Changes to This Policy</h2>
+          <p className="text-gray-300 leading-relaxed">
+            We may update this Privacy Policy from time to time. When we make material changes we
+            will update the effective date at the top of this page and, where appropriate, notify
+            registered users via email. Continued use of the Service after changes take effect
+            constitutes your acceptance of the updated policy.
+          </p>
+        </section>
+
+        {/* 10. Contact */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">10. Contact Us</h2>
+          <p className="text-gray-300 leading-relaxed">
+            For privacy-related questions, data deletion requests, or data export requests,
+            please contact us at:{' '}
+            <a href="mailto:support@alphadesk.app" className="text-blue-400 hover:underline">
+              support@alphadesk.app
             </a>
           </p>
         </section>

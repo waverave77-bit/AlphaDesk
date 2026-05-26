@@ -14,23 +14,23 @@ import ActivityTracker from '@/components/ActivityTracker'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mrguyinvests.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com'),
   title: {
     default: 'AlphaDesk — AI-Powered Stock Research & Portfolio Tracker',
     template: '%s | AlphaDesk',
   },
   description: 'AlphaDesk gives you AI-powered stock analysis, portfolio tracking, real-time alerts, and a finance translator — built for investors at every level.',
-  keywords: ['stock research', 'portfolio tracker', 'AI stock analysis', 'finance tools', 'investment tracker', 'stock alerts', 'earnings decoder', 'hedge fund tracker', 'SEC filings', 'smart money'],
+  keywords: ['stock research', 'portfolio tracker', 'AI stock analysis', 'finance tools', 'investment tracker', 'stock alerts', 'earnings decoder', 'hedge fund tracker', 'SEC filings', 'smart money', 'virtual trading'],
   authors: [{ name: 'AlphaDesk' }],
   creator: 'AlphaDesk',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://mrguyinvests.com',
+    url: process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com',
     siteName: 'AlphaDesk',
     title: 'AlphaDesk — AI-Powered Stock Research',
     description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AlphaDesk' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AlphaDesk — AI Stock Research' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -38,9 +38,14 @@ export const metadata: Metadata = {
     description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
     images: ['/og-image.png'],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   icons: {
     icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
 }
