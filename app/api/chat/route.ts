@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { checkAILimit } from '@/lib/pro'
 import { getStockQuote, getAnalystData, getEarningsHistory, SECTOR_NORMAL_PE, DEFAULT_NORMAL_PE } from '@/lib/yahoo-finance'
 import { getMarketStatus } from '@/lib/market-hours'
