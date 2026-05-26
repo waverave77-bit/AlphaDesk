@@ -133,7 +133,7 @@ export async function POST(req: Request) {
     case 'invoice.payment_failed': {
       const invoice = event.data.object as Stripe.Invoice
       const customerId = invoice.customer as string
-      const subscriptionId = invoice.subscription as string | undefined
+      const subscriptionId = (invoice as any).subscription as string | undefined
       const attemptCount = invoice.attempt_count
       console.error(
         '[Webhook] invoice.payment_failed — customer may lose Pro access if this persists.',

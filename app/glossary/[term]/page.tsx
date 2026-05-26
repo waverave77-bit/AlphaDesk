@@ -5,19 +5,21 @@ import { TERMS, termToSlug, type Category } from '@/lib/glossary-terms'
 import { BookOpen, Lightbulb, TrendingUp, BarChart2, Shield, ChevronRight, ArrowLeft } from 'lucide-react'
 
 const CATEGORY_ICONS: Record<Category, React.ReactNode> = {
-  Basics:           <BookOpen className="h-3.5 w-3.5" />,
-  Charts:           <BarChart2 className="h-3.5 w-3.5" />,
-  'Company Health': <TrendingUp className="h-3.5 w-3.5" />,
-  Risk:             <Shield className="h-3.5 w-3.5" />,
-  Strategies:       <Lightbulb className="h-3.5 w-3.5" />,
+  Basics:            <BookOpen className="h-3.5 w-3.5" />,
+  Charts:            <BarChart2 className="h-3.5 w-3.5" />,
+  'Company Health':  <TrendingUp className="h-3.5 w-3.5" />,
+  Risk:              <Shield className="h-3.5 w-3.5" />,
+  Strategies:        <Lightbulb className="h-3.5 w-3.5" />,
+  'Options & Bonds': <ChevronRight className="h-3.5 w-3.5" />,
 }
 
 const CATEGORY_COLORS: Record<Category, string> = {
-  Basics:           'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  Charts:           'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  'Company Health': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  Risk:             'bg-red-500/10 text-red-400 border-red-500/20',
-  Strategies:       'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  Basics:            'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  Charts:            'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  'Company Health':  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  Risk:              'bg-red-500/10 text-red-400 border-red-500/20',
+  Strategies:        'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  'Options & Bonds': 'bg-orange-500/10 text-orange-400 border-orange-500/20',
 }
 
 export async function generateStaticParams() {
