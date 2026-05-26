@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export const metadata = {
   title: 'Terms of Service',
-  description: 'Terms and conditions for using AlphaDesk.',
+  description: 'Terms and conditions for using Mr. Guy Invests.',
 }
 
 export default function TermsPage() {
@@ -11,7 +11,7 @@ export default function TermsPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto border-b border-gray-800">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="text-xl font-bold tracking-tight">AlphaDesk</span>
+          <span className="text-xl font-bold tracking-tight">Mr. Guy Invests</span>
         </Link>
         <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
           Sign In
@@ -28,7 +28,7 @@ export default function TermsPage() {
         <section className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-5">
           <p className="text-yellow-300 font-semibold mb-2">Important Notice — Not Financial Advice</p>
           <p className="text-gray-300 text-sm leading-relaxed">
-            AlphaDesk provides AI-generated analysis for informational and educational purposes only.{' '}
+            Mr. Guy Invests provides AI-generated analysis for informational and educational purposes only.{' '}
             <strong>Nothing on this platform constitutes financial advice, investment advice, or a
             recommendation to buy, sell, or hold any security.</strong> Past performance does not guarantee
             future results. All investments involve risk, including the possible loss of principal.
@@ -40,7 +40,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">1. Acceptance of Terms</h2>
           <p className="text-gray-300 leading-relaxed">
-            By accessing or using AlphaDesk (&ldquo;the Service&rdquo;), you agree to be bound by these
+            By accessing or using Mr. Guy Invests (&ldquo;the Service&rdquo;), you agree to be bound by these
             Terms of Service (&ldquo;Terms&rdquo;) and our{' '}
             <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link>.
             If you do not agree to these Terms, you must not use the Service. These Terms apply to all
@@ -73,7 +73,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">3. Service Description</h2>
           <p className="text-gray-300 leading-relaxed">
-            AlphaDesk is a financial data and education platform that provides:
+            Mr. Guy Invests is a financial data and education platform that provides:
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed ml-2">
             <li>AI-generated stock analysis, market commentary, and financial Q&amp;A</li>
@@ -85,7 +85,7 @@ export default function TermsPage() {
           </ul>
           <p className="text-gray-300 leading-relaxed">
             All content and tools are provided for <strong className="text-white">informational and
-            educational purposes only</strong>. AlphaDesk is not a registered investment adviser,
+            educational purposes only</strong>. Mr. Guy Invests is not a registered investment adviser,
             broker-dealer, or financial planning firm.
           </p>
         </section>
@@ -94,7 +94,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">4. Not Financial Advice</h2>
           <p className="text-gray-300 leading-relaxed">
-            The content on AlphaDesk — including AI-generated analysis, stock grades, market commentary,
+            The content on Mr. Guy Invests — including AI-generated analysis, stock grades, market commentary,
             bull/bear arguments, earnings summaries, insider trade data, hedge fund tracking, and
             financial translations — does <strong className="text-white">not</strong> constitute:
           </p>
@@ -107,7 +107,7 @@ export default function TermsPage() {
           <p className="text-gray-300 leading-relaxed">
             Past performance data shown on this platform does not guarantee or predict future results.
             All investments involve risk, including the possible loss of principal. You are solely
-            responsible for your own investment decisions. AlphaDesk expressly disclaims any liability
+            responsible for your own investment decisions. Mr. Guy Invests expressly disclaims any liability
             for financial losses arising from reliance on content provided through the Service.
           </p>
         </section>
@@ -119,7 +119,7 @@ export default function TermsPage() {
           {/* Prominent disclaimer box */}
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5">
             <p className="text-blue-200 text-sm leading-relaxed">
-              <strong>Disclaimer:</strong> AlphaDesk provides AI-generated analysis for informational and
+              <strong>Disclaimer:</strong> Mr. Guy Invests provides AI-generated analysis for informational and
               educational purposes only. This is not financial advice. Past performance does not guarantee
               future results. Always consult a qualified financial advisor before making investment decisions.
             </p>
@@ -145,7 +145,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">6. Data Accuracy</h2>
           <p className="text-gray-300 leading-relaxed">
-            Financial data on AlphaDesk is sourced from third-party market data providers, SEC EDGAR,
+            Financial data on Mr. Guy Invests is sourced from third-party market data providers, SEC EDGAR,
             and other public sources. We make no warranty that data is accurate, complete, up-to-date,
             or suitable for any purpose. Market data may be delayed. Always verify data independently
             before relying on it for any financial decision.
@@ -182,7 +182,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">8. Pro Subscription — Billing and Cancellation</h2>
           <p className="text-gray-300 leading-relaxed">
-            AlphaDesk offers a free tier and an optional paid Pro subscription. The following terms
+            Mr. Guy Invests offers a free tier and an optional paid Pro subscription. The following terms
             apply to Pro subscribers:
           </p>
           <div className="space-y-3 text-gray-300 leading-relaxed">
@@ -246,7 +246,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">11. Intellectual Property</h2>
           <p className="text-gray-300 leading-relaxed">
-            The AlphaDesk name, logo, branding, and all original platform content are owned by AlphaDesk
+            The Mr. Guy Invests name, logo, branding, and all original platform content are owned by Mr. Guy Invests
             and are protected by applicable intellectual property laws. Financial data displayed on the
             platform belongs to its respective data providers. You may not reproduce, redistribute,
             sublicense, or commercially exploit any content from the Service without our prior written
@@ -258,7 +258,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">12. Limitation of Liability</h2>
           <p className="text-gray-300 leading-relaxed">
-            To the maximum extent permitted by applicable law, AlphaDesk and its operators, directors,
+            To the maximum extent permitted by applicable law, Mr. Guy Invests and its operators, directors,
             employees, and agents shall not be liable for any direct, indirect, incidental, special,
             consequential, or punitive damages arising from or related to your use of the Service.
             This includes, without limitation, financial losses resulting from investment decisions made
@@ -281,7 +281,7 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">13. Indemnification</h2>
           <p className="text-gray-300 leading-relaxed">
-            You agree to indemnify and hold harmless AlphaDesk and its operators from any claims,
+            You agree to indemnify and hold harmless Mr. Guy Invests and its operators from any claims,
             damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising
             from your use of the Service, your violation of these Terms, or your violation of any rights
             of a third party.

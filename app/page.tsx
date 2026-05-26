@@ -322,7 +322,7 @@ export default function LandingPage() {
         <p className="text-gray-400 mb-8">Join investors who stopped guessing and started actually understanding what they own.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
-            Try AlphaDesk Free <ChevronRight className="h-5 w-5" />
+            Try Mr. Guy Invests Free <ChevronRight className="h-5 w-5" />
           </Link>
           <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             See How It Works →

@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Privacy Policy — AlphaDesk',
-  description: 'How AlphaDesk collects, uses, and protects your personal information.',
+  title: 'Privacy Policy — Mr. Guy Invests',
+  description: 'How Mr. Guy Invests collects, uses, and protects your personal information.',
 }
 
 export default function PrivacyPage() {
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto border-b border-gray-800">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="text-xl font-bold tracking-tight text-white">AlphaDesk</span>
+          <span className="text-xl font-bold tracking-tight text-white">Mr. Guy Invests</span>
         </Link>
         <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
           Sign In
@@ -28,14 +28,14 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-bold text-white mb-3 mt-10">1. Who We Are</h2>
           <p className="text-gray-300 leading-relaxed">
-            AlphaDesk (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the financial
+            Mr. Guy Invests (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the financial
             data and education platform available at{' '}
             <span className="text-blue-400">alphadesk.app</span>. This Privacy Policy explains what
             personal information we collect when you use the Service, how we use it, who we share it
             with, and the rights you have over your data.
           </p>
           <p className="text-gray-300 leading-relaxed mt-3">
-            By using AlphaDesk you agree to the collection and use of information as described in
+            By using Mr. Guy Invests you agree to the collection and use of information as described in
             this policy. If you do not agree, please do not use the Service.
           </p>
         </section>
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               <strong className="text-white">Billing information:</strong> If you subscribe to
-              AlphaDesk Pro, payment is processed by Stripe. We store only your Stripe customer ID
+              Mr. Guy Invests Pro, payment is processed by Stripe. We store only your Stripe customer ID
               and subscription status — we never see or store your full card number.
             </p>
             <p>
