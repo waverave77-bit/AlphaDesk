@@ -97,7 +97,7 @@ const _lastAnalystResult = new Map<string, any>()
 // ─── SEC EDGAR helpers ────────────────────────────────────────────────────────
 // Free, no API key. Source of truth for EPS: straight from 10-Q / 10-K filings.
 
-const EDGAR_UA = 'AlphaDesk contact@alphadesk.app'  // SEC requires an identifying User-Agent
+const EDGAR_UA = 'Mr. Guy Invests contact@mrguyinvests.com'  // SEC requires an identifying User-Agent
 
 // Ticker → zero-padded 10-digit CIK (e.g. "0000320193" for AAPL)
 const _edgarCikCache = new Map<string, string>()

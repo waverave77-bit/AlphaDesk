@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <p className="text-gray-300 leading-relaxed">
             Mr. Guy Invests (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the financial
             data and education platform available at{' '}
-            <span className="text-blue-400">alphadesk.app</span>. This Privacy Policy explains what
+            <span className="text-blue-400">mrguyinvests.com</span>. This Privacy Policy explains what
             personal information we collect when you use the Service, how we use it, who we share it
             with, and the rights you have over your data.
           </p>
@@ -278,8 +278,8 @@ export default function PrivacyPage() {
           <p className="text-gray-300 leading-relaxed">
             For privacy-related questions, data deletion requests, or data export requests,
             please contact us at:{' '}
-            <a href="mailto:support@alphadesk.app" className="text-blue-400 hover:underline">
-              support@alphadesk.app
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
             </a>
           </p>
         </section>

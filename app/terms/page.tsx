@@ -201,8 +201,8 @@ export default function TermsPage() {
               <strong className="text-white">Refund policy:</strong> We offer refunds within 7 days of
               your initial subscription purchase if you are unsatisfied with the Service. After 7 days,
               no refunds will be issued. Refund requests must be submitted to{' '}
-              <a href="mailto:support@alphadesk.app" className="text-blue-400 hover:underline">
-                support@alphadesk.app
+              <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+                support@mrguyinvests.com
               </a>{' '}
               within the 7-day window.
             </p>
@@ -318,8 +318,8 @@ export default function TermsPage() {
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">16. Contact Us</h2>
           <p className="text-gray-300 leading-relaxed">
             For questions about these Terms, subscription issues, or refund requests, contact us at:{' '}
-            <a href="mailto:support@alphadesk.app" className="text-blue-400 hover:underline">
-              support@alphadesk.app
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
             </a>
           </p>
         </section>

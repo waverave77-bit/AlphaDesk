@@ -47,7 +47,7 @@ function parseRss(xml: string, source: string): Article[] {
 
 async function fetchFeed(url: string, source: string): Promise<Article[]> {
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; AlphaDesk/1.0)' },
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MrGuyInvests/1.0)' },
     signal: AbortSignal.timeout(8000),
   })
   if (!res.ok) return []

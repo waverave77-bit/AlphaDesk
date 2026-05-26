@@ -61,8 +61,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [accentId, setAccentIdState] = useState<ThemeId>('default')
 
   useEffect(() => {
-    const savedDark   = localStorage.getItem('alphadesk-dark') === 'true'
-    const savedAccent = (localStorage.getItem('alphadesk-accent') as ThemeId) || 'default'
+    const savedDark   = localStorage.getItem('mrguy-dark') === 'true'
+    const savedAccent = (localStorage.getItem('mrguy-accent') as ThemeId) || 'default'
     setIsDarkState(savedDark)
     setAccentIdState(savedAccent)
     applyToDOM(savedDark, savedAccent)
@@ -70,14 +70,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setDark = (dark: boolean) => {
     setIsDarkState(dark)
-    localStorage.setItem('alphadesk-dark', String(dark))
+    localStorage.setItem('mrguy-dark', String(dark))
     applyToDOM(dark, accentId)
   }
 
   const setAccent = (id: ThemeId) => {
     if (id === 'white') return  // 'white' is not an accent, it's a mode
     setAccentIdState(id)
-    localStorage.setItem('alphadesk-accent', id)
+    localStorage.setItem('mrguy-accent', id)
     applyToDOM(isDark, id)
   }
 
