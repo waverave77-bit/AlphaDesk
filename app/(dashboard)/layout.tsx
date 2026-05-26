@@ -14,12 +14,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const isGuest = !session
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen bg-white dark:bg-gray-950 overflow-x-hidden">
       {isGuest ? <GuestBanner /> : <DemoBanner />}
       <EmailVerificationBanner />
       <TopNav />
       <TickerBar />
-      <main className="flex-1 overflow-y-auto scrollbar-thin relative z-20">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin relative z-20">
         <div className="p-4 sm:p-6 w-full">
           {children}
         </div>

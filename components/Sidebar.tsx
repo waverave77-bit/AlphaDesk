@@ -45,7 +45,7 @@ export default function Sidebar() {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                'flex items-center gap-3 min-h-[44px] rounded-lg px-3 py-3 text-sm font-medium transition-colors',
                 active ? 'border' : 'text-gray-400 hover:text-gray-100 hover:bg-gray-800/50'
               )}
               style={active ? {
@@ -61,11 +61,11 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-gray-800 pt-4">
+      <div className="border-t border-gray-800 pt-4 pb-6">
         {!isPro && (
           <Link
             href="/upgrade"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-bold mb-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+            className="flex items-center gap-3 min-h-[44px] rounded-lg px-3 py-3 text-sm font-bold mb-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
           >
             <Zap className="h-4 w-4" />
             Upgrade to Pro
@@ -73,7 +73,7 @@ export default function Sidebar() {
         )}
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
-          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-gray-800/50 transition-colors w-full"
+          className="flex items-center gap-3 min-h-[44px] rounded-lg px-3 py-3 text-sm font-medium text-gray-400 hover:text-gray-100 hover:bg-gray-800/50 transition-colors w-full"
         >
           <LogOut className="h-4 w-4" />
           Sign Out

@@ -207,7 +207,7 @@ export default function TopNav() {
           <button
             onClick={toggleDark}
             title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={cn('h-8 w-8 rounded-lg flex items-center justify-center transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700')}
+            className={cn('min-h-[44px] min-w-[44px] rounded-lg flex items-center justify-center transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700')}
           >
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
@@ -251,7 +251,7 @@ export default function TopNav() {
           {/* Avatar — only shown when logged in */}
           {session && (
             <div
-              className="h-8 w-8 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer"
+              className="min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer"
               style={{ backgroundColor: `rgb(var(--accent, 37 99 235))` }}
             >
               {initials}
@@ -260,7 +260,8 @@ export default function TopNav() {
 
           {/* Mobile hamburger */}
           <button
-            className={cn('md:hidden p-1.5 rounded-lg transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800' : 'text-slate-500 hover:bg-slate-100')}
+            aria-label="Open navigation menu"
+            className={cn('md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors', isDark ? 'text-gray-400 hover:bg-gray-800' : 'text-slate-500 hover:bg-slate-100')}
             onClick={() => setMobileOpen(true)}
           >
             <Menu className="h-5 w-5" />
@@ -271,16 +272,20 @@ export default function TopNav() {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="fixed inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <aside className={cn('fixed right-0 top-0 h-full w-72 flex flex-col shadow-xl border-l', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
+          <div className="fixed inset-0 bg-black/40" onClick={() => setMobileOpen(false)} aria-hidden="true" />
+          <aside id="mobile-nav" aria-label="Mobile navigation" className={cn('fixed right-0 top-0 h-full w-72 flex flex-col shadow-xl border-l', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
             <div className={cn('flex items-center justify-between px-5 py-4 border-b', isDark ? 'border-gray-800' : 'border-slate-100')}>
               <span className={cn('font-semibold', isDark ? 'text-white' : 'text-slate-900')}>Menu</span>
-              <button onClick={() => setMobileOpen(false)} className={cn('p-1 rounded-lg transition-colors', isDark ? 'hover:bg-gray-800' : 'hover:bg-slate-100')}>
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close navigation menu"
+                className={cn('min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:outline-none', isDark ? 'hover:bg-gray-800' : 'hover:bg-slate-100')}
+              >
                 <X className={cn('h-5 w-5', isDark ? 'text-gray-400' : 'text-slate-500')} />
               </button>
             </div>
 
-            <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+            <nav aria-label="Mobile navigation links" className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
               {[...primaryNav, ...moreNav].map(({ href, label }) => {
                 const active = isActive(href)
                 return (
@@ -289,7 +294,7 @@ export default function TopNav() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      'flex items-center min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium transition-colors',
                       active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
@@ -308,7 +313,7 @@ export default function TopNav() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                      'flex items-center min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium transition-colors',
                       active ? 'bg-orange-500/10 text-orange-400' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
@@ -318,11 +323,11 @@ export default function TopNav() {
               })}
             </nav>
 
-            <div className={cn('border-t p-4 space-y-1', isDark ? 'border-gray-800' : 'border-slate-100')}>
+            <div className={cn('border-t p-4 space-y-1 pb-safe', isDark ? 'border-gray-800' : 'border-slate-100')}>
               {[
                 { onClick: toggleDark, icon: isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />, label: isDark ? 'Light Mode' : 'Dark Mode' },
               ].map(({ onClick, icon, label }) => (
-                <button key={label} onClick={onClick} className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}>
+                <button key={label} onClick={onClick} className={cn('flex items-center gap-2 w-full min-h-[44px] px-3 py-3 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}>
                   {icon} {label}
                 </button>
               ))}
@@ -332,7 +337,7 @@ export default function TopNav() {
                     <Link
                       href="/upgrade"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+                      className="flex items-center gap-2 min-h-[44px] px-3 py-3 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
                     >
                       <Zap className="h-4 w-4" /> Upgrade
                     </Link>
@@ -340,13 +345,13 @@ export default function TopNav() {
                   <Link
                     href="/settings"
                     onClick={() => setMobileOpen(false)}
-                    className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
+                    className={cn('flex items-center gap-2 min-h-[44px] px-3 py-3 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
                   >
                     <Settings className="h-4 w-4" /> Settings
                   </Link>
                   <button
                     onClick={() => signOut({ callbackUrl: '/login' })}
-                    className={cn('flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
+                    className={cn('flex items-center gap-2 w-full min-h-[44px] px-3 py-3 rounded-lg text-sm', isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
                   >
                     <LogOut className="h-4 w-4" /> Sign Out
                   </button>
@@ -355,7 +360,7 @@ export default function TopNav() {
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className={cn('flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium', isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
+                  className={cn('flex items-center gap-2 min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium', isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100')}
                 >
                   <LogIn className="h-4 w-4" /> Sign In
                 </Link>
