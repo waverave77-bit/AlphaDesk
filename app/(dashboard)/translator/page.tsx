@@ -25,7 +25,7 @@ const HEAD_PIXELS: Array<Array<string|null>> = [
 ]
 const HEAD_COLS = 12, HEAD_ROWS = 14
 
-function MrGuyHead({ px = 3, className }: { px?: number; className?: string }) {
+function MrGuyHead({ px = 3, className, winking = false }: { px?: number; className?: string; winking?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const c = ref.current; if (!c) return
@@ -34,11 +34,15 @@ function MrGuyHead({ px = 3, className }: { px?: number; className?: string }) {
     HEAD_PIXELS.forEach((row, r) => {
       row.forEach((color, col) => {
         if (!color) return
-        ctx.fillStyle = color
+        let drawColor = color
+        if (winking && r === 6 && (col === 3 || col === 4)) {
+          drawColor = '#f5c49a'
+        }
+        ctx.fillStyle = drawColor
         ctx.fillRect(col * px, r * px, px, px)
       })
     })
-  }, [px])
+  }, [px, winking])
   return <canvas ref={ref} width={HEAD_COLS * px} height={HEAD_ROWS * px} className={className} style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }} />
 }
 
@@ -63,8 +67,18 @@ export default function TranslatorPage() {
   const [error, setError] = useState('')
   const [limitReached, setLimitReached] = useState(false)
   const [showGuestModal, setShowGuestModal] = useState(false)
+  const [mascotState, setMascotState] = useState<'idle' | 'thinking' | 'happy' | 'error'>('idle')
+  const [winking, setWinking] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWinking(true)
+      setTimeout(() => setWinking(false), 200)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
 
   function handleModeSwitch(newMode: 'finance' | 'earnings') {
     setMode(newMode)
@@ -77,6 +91,7 @@ export default function TranslatorPage() {
     if (!text.trim()) return
     if (!session) { setShowGuestModal(true); return }
     setLoading(true)
+    setMascotState('thinking')
     setResult(null)
     setError('')
     setLimitReached(false)
@@ -87,12 +102,16 @@ export default function TranslatorPage() {
         body: JSON.stringify({ text: text.trim(), mode, experience: localStorage.getItem('zg_experience') ?? 'beginner' }),
       })
       const data = await res.json()
-      if (data.limitReached) { setLimitReached(true); setLoading(false); return }
-      if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); setLoading(false); return }
-      if (data.error) { setError(data.error); return }
+      if (data.limitReached) { setLimitReached(true); setLoading(false); setMascotState('idle'); return }
+      if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); setLoading(false); setMascotState('error'); setTimeout(() => setMascotState('idle'), 600); return }
+      if (data.error) { setError(data.error); setMascotState('error'); setTimeout(() => setMascotState('idle'), 600); return }
       setResult(data)
+      setMascotState('happy')
+      setTimeout(() => setMascotState('idle'), 1000)
     } catch {
       setError('Something went wrong. Try again.')
+      setMascotState('error')
+      setTimeout(() => setMascotState('idle'), 600)
     } finally {
       setLoading(false)
     }
@@ -104,19 +123,25 @@ export default function TranslatorPage() {
     <div className={cn('min-h-screen transition-colors', isDark ? 'bg-gray-950' : 'bg-slate-50')}>
       <GuestSignupModal open={showGuestModal} onClose={() => setShowGuestModal(false)} feature="Finance Translator" />
       <style>{`
-        @keyframes mrg-think { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
-        @keyframes mrg-idle  { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
-        @keyframes bubble-pop { 0% { opacity: 0; transform: scale(0.5) translateY(8px); } 70% { transform: scale(1.05) translateY(-2px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-        .mrg-think { animation: mrg-think 1.1s ease-in-out infinite; }
-        .mrg-idle  { animation: mrg-idle 2.4s ease-in-out infinite; }
-        .bubble-pop { animation: bubble-pop 0.28s cubic-bezier(.34,1.56,.64,1) both; }
+        @keyframes mrg-think   { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
+        @keyframes mrg-idle    { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        @keyframes mrg-happy   { 0% { transform: translateY(0) scale(1); } 30% { transform: translateY(-8px) scale(1.1); } 60% { transform: translateY(-4px) scale(1.05); } 100% { transform: translateY(0) scale(1); } }
+        @keyframes mrg-shake   { 0%, 100% { transform: translateX(0) rotate(0); } 20% { transform: translateX(-4px) rotate(-3deg); } 40% { transform: translateX(4px) rotate(3deg); } 60% { transform: translateX(-3px) rotate(-2deg); } 80% { transform: translateX(3px) rotate(2deg); } }
+        @keyframes mrg-excited { 0%, 100% { transform: translateY(0) rotate(-1deg); } 25% { transform: translateY(-6px) rotate(2deg); } 75% { transform: translateY(-3px) rotate(-2deg); } }
+        @keyframes bubble-pop  { 0% { opacity: 0; transform: scale(0.5) translateY(8px); } 70% { transform: scale(1.05) translateY(-2px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .mrg-think   { animation: mrg-think 1.1s ease-in-out infinite; }
+        .mrg-idle    { animation: mrg-idle 2.4s ease-in-out infinite; }
+        .mrg-happy   { animation: mrg-happy 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+        .mrg-error   { animation: mrg-shake 0.5s ease-in-out both; }
+        .mrg-excited { animation: mrg-excited 0.8s ease-in-out infinite; }
+        .bubble-pop  { animation: bubble-pop 0.28s cubic-bezier(.34,1.56,.64,1) both; }
       `}</style>
 
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
         {/* Header */}
         <div className="flex items-center gap-5">
-          <div className="mrg-idle">
-            <MrGuyHead px={5} />
+          <div className={mascotState === 'thinking' ? 'mrg-think' : mascotState === 'happy' ? 'mrg-happy' : mascotState === 'error' ? 'mrg-error' : mode === 'earnings' ? 'mrg-excited' : 'mrg-idle'}>
+            <MrGuyHead px={5} winking={winking} />
           </div>
           <div>
             <h1 className={cn('text-2xl sm:text-4xl font-extrabold tracking-tight', isDark ? 'text-white' : 'text-slate-900')}>
