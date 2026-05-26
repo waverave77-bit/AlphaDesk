@@ -72,10 +72,17 @@ function WatchlistNews({ tickers }: { tickers: string[] }) {
   )
 
   if (tickers.length === 0) return (
-    <div className="text-center py-16">
-      <Newspaper className="h-10 w-10 text-gray-700 mx-auto mb-3" />
-      <p className="text-gray-400 font-medium">No stocks in your watchlist yet</p>
-      <p className="text-sm text-gray-600 mt-1">Add stocks to see their news here</p>
+    <div className="flex flex-col items-center justify-center py-20 space-y-4 text-center">
+      <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-xl scale-150" />
+        <div className="relative rounded-full bg-gray-800/80 p-5 border border-gray-700/50">
+          <Newspaper className="h-10 w-10 text-gray-500" />
+        </div>
+      </div>
+      <div className="space-y-1">
+        <p className="text-gray-300 font-semibold">No stocks in your watchlist yet</p>
+        <p className="text-sm text-gray-500">Add stocks to see their latest news here</p>
+      </div>
     </div>
   )
 
@@ -94,7 +101,7 @@ function WatchlistNews({ tickers }: { tickers: string[] }) {
         <button
           onClick={() => setActiveFilter('all')}
           className={cn(
-            'px-3 py-1 rounded-full text-xs font-semibold border transition-all',
+            'px-3 py-1 rounded-full text-xs font-semibold border transition-all active:scale-95',
             activeFilter === 'all'
               ? 'bg-blue-600 border-blue-600 text-white'
               : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600 hover:text-white'
@@ -110,7 +117,7 @@ function WatchlistNews({ tickers }: { tickers: string[] }) {
               key={t}
               onClick={() => setActiveFilter(t)}
               className={cn(
-                'px-3 py-1 rounded-full text-xs font-semibold border transition-all',
+                'px-3 py-1 rounded-full text-xs font-semibold border transition-all active:scale-95',
                 activeFilter === t
                   ? 'bg-blue-600 border-blue-600 text-white'
                   : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600 hover:text-white'
@@ -164,8 +171,10 @@ export default function WatchlistPage() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [removing, setRemoving] = useState<string | null>(null)
   const { toast } = useToast()
 
+  // Guard: hooks must always be called before any conditional return
   if (status !== 'loading' && !session) return <GuestLock feature="your Watchlist" />
 
   const fetchWatchlist = useCallback(async () => {
@@ -211,6 +220,7 @@ export default function WatchlistPage() {
   useEffect(() => { fetchWatchlist() }, [fetchWatchlist])
 
   const removeFromWatchlist = async (ticker: string) => {
+    setRemoving(ticker)
     try {
       await fetch('/api/watchlist', {
         method: 'DELETE',
@@ -221,6 +231,8 @@ export default function WatchlistPage() {
       toast({ title: 'Removed', description: `${ticker} removed from watchlist` })
     } catch {
       toast({ title: 'Error', variant: 'destructive' })
+    } finally {
+      setRemoving(null)
     }
   }
 
@@ -240,7 +252,13 @@ export default function WatchlistPage() {
         <div className="flex items-center gap-2">
           <LastUpdated time={lastUpdated} className="text-slate-400" />
           {tab === 'stocks' && (
-            <Button variant="outline" size="sm" onClick={refresh} disabled={refreshing}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={refresh}
+              disabled={refreshing}
+              className="active:scale-95 transition-transform"
+            >
               <RefreshCw className={cn('h-4 w-4', refreshing && 'animate-spin')} />
               Refresh
             </Button>
@@ -278,17 +296,49 @@ export default function WatchlistPage() {
           <p className="text-xs text-gray-600 -mt-4">Prices may be delayed up to 15 minutes. Not a reflection of real-time value.</p>
           {loading ? (
             <div className="space-y-3">
-              {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="rounded-xl border border-gray-800/60 bg-gray-900/40 p-4 animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-2">
+                      <div className="h-4 w-16 rounded bg-gray-800/60" />
+                      <div className="h-3 w-32 rounded bg-gray-800/60" />
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="space-y-2 text-right">
+                        <div className="h-4 w-20 rounded bg-gray-800/60 ml-auto" />
+                        <div className="h-3 w-14 rounded bg-gray-800/60 ml-auto" />
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="h-8 w-8 rounded-md bg-gray-800/60" />
+                        <div className="h-8 w-8 rounded-md bg-gray-800/60" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : items.length === 0 ? (
             <Card>
-              <CardContent className="flex flex-col items-center py-16 text-center">
-                <Star className="h-12 w-12 text-gray-700 mb-3" />
-                <p className="text-gray-400 font-medium">Your watchlist is empty</p>
-                <p className="text-sm text-gray-600 mt-1">Search for stocks and click &quot;Add Watchlist&quot; on any stock page</p>
-                <Button variant="outline" className="mt-4" asChild>
+              <CardContent className="flex flex-col items-center py-20 text-center space-y-4">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-yellow-500/10 blur-xl scale-150" />
+                  <div className="relative rounded-full bg-gray-800/80 p-5 border border-gray-700/50">
+                    <Star className="h-10 w-10 text-gray-500" />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-gray-300 font-semibold text-lg">Your watchlist is empty</p>
+                  <p className="text-sm text-gray-500 max-w-xs mx-auto">
+                    Track stocks you&apos;re interested in — add any stock from its research page
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="mt-2 active:scale-95 transition-transform border-gray-700 hover:border-gray-500 hover:bg-gray-800/60"
+                  asChild
+                >
                   <Link href="/research">
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-4 w-4 mr-1" />
                     Discover Stocks
                   </Link>
                 </Button>
@@ -298,8 +348,15 @@ export default function WatchlistPage() {
             <div className="space-y-2">
               {items.map((item) => {
                 const positive = (item.changePercent ?? 0) >= 0
+                const isRemoving = removing === item.ticker
                 return (
-                  <Card key={item.id} className="hover:border-gray-700 transition-colors">
+                  <Card
+                    key={item.id}
+                    className={cn(
+                      'hover:border-gray-700 hover:bg-gray-800/30 transition-all cursor-default group',
+                      isRemoving && 'opacity-50 scale-[0.99] pointer-events-none'
+                    )}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -336,7 +393,12 @@ export default function WatchlistPage() {
                           </div>
 
                           <div className="flex gap-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 active:scale-95 transition-transform"
+                              asChild
+                            >
                               <Link href={`/research/${item.ticker}`}>
                                 <ExternalLink className="h-3.5 w-3.5" />
                               </Link>
@@ -344,8 +406,9 @@ export default function WatchlistPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 hover:text-red-400 hover:bg-red-400/10"
+                              className="h-8 w-8 hover:text-red-400 hover:bg-red-400/10 active:scale-95 transition-all"
                               onClick={() => removeFromWatchlist(item.ticker)}
+                              disabled={isRemoving}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
