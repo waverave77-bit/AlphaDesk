@@ -103,7 +103,7 @@ body {
 
 /* ── Global scrollbar — dark theme style ── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #030712; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
 
@@ -195,6 +195,22 @@ body {
 [data-theme="white"] body {
   background-color: #f8fafc !important;
   color: #0f172a !important;
+}
+
+@layer base {
+  /* Smooth scrolling & prevent layout shift from scrollbar gutter */
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Better font rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 }
 
 @layer utilities {
