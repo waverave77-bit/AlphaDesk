@@ -33,7 +33,7 @@ const PAGE_LABELS: Record<string, string> = {
   '/report-card': '📋 Report Card',
   '/translator': '📖 Finance Translator',
   '/watchlist': '⭐ Watchlist',
-  '/game': '🎮 $100K Challenge',
+  '/trading-simulator': '🎮 Stock Trading Simulator',
   '/challenge': '🏆 Pick of the Week',
   '/learn': '📚 Learn',
   '/roast': '🔥 Roast',

@@ -12,7 +12,7 @@ const primaryNav = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/research',  label: 'Research' },
   { href: '/learn',     label: 'Learn' },
-  { href: '/game',      label: '$100K Challenge' },
+  { href: '/trading-simulator', label: '$100K Challenge' },
   { href: '/chat',      label: 'Mr. Guy' },
   { href: '/markets',   label: 'Markets' },
 ]

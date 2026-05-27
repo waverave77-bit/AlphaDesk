@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      // /game → /trading-simulator (permanent — tells Google the new canonical URL)
+      { source: '/game', destination: '/trading-simulator', permanent: true },
+    ]
+  },
   compress: true,
   poweredByHeader: false,
   images: {

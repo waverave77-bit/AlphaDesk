@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/register`,          lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
 
     // ── Guest-accessible app pages (real content Google can rank) ──────
-    { url: `${base}/game`,              lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${base}/trading-simulator`, lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${base}/markets`,           lastModified: now, changeFrequency: 'daily',   priority: 0.8 },
     { url: `${base}/challenge`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${base}/bull-vs-bear`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },

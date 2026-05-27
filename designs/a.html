@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Design A — Dark Pro</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; background:#0f1117; color:#e2e8f0; display:flex; height:100vh; overflow:hidden; }
+
+/* Sidebar */
+.sidebar { width:220px; background:#0a0c10; border-right:1px solid #1e2230; display:flex; flex-direction:column; padding:20px 12px; flex-shrink:0; }
+.logo { display:flex; align-items:center; gap:10px; padding:8px 10px; margin-bottom:28px; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,#2563eb,#1d4ed8); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.logo-text { font-size:16px; font-weight:700; color:white; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; font-size:13px; color:#64748b; cursor:pointer; margin-bottom:2px; transition:all 0.15s; }
+.nav-item:hover { background:#131620; color:#94a3b8; }
+.nav-item.active { background:#1e3a8a22; color:#60a5fa; }
+.nav-item .icon { width:16px; text-align:center; font-size:14px; }
+.nav-section { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:#334155; padding:12px 10px 6px; }
+.sidebar-bottom { margin-top:auto; border-top:1px solid #1e2230; padding-top:16px; }
+
+/* Main */
+.main { flex:1; overflow-y:auto; padding:28px 32px; background:#0f1117; }
+.page-header { margin-bottom:28px; }
+.page-header h1 { font-size:22px; font-weight:700; color:white; margin-bottom:4px; }
+.page-header p { font-size:13px; color:#475569; }
+
+/* Stats */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+.stat-card { background:#131620; border:1px solid #1e2230; border-radius:14px; padding:18px 20px; }
+.stat-label { font-size:11px; color:#475569; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }
+.stat-value { font-size:26px; font-weight:700; color:white; margin-bottom:4px; font-variant-numeric:tabular-nums; }
+.stat-sub { font-size:12px; color:#22c55e; }
+.stat-sub.neg { color:#ef4444; }
+.stat-icon { float:right; width:36px; height:36px; border-radius:10px; background:#1e2230; display:flex; align-items:center; justify-content:center; font-size:16px; margin-top:-2px; }
+
+/* Cards */
+.card { background:#131620; border:1px solid #1e2230; border-radius:16px; padding:20px; margin-bottom:16px; }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.card-title { font-size:13px; font-weight:600; color:#94a3b8; }
+.chart-placeholder { height:180px; background:linear-gradient(180deg,#1e3a8a15 0%,transparent 100%); border-radius:10px; display:flex; align-items:flex-end; padding:0 8px 8px; gap:3px; }
+.bar { background:linear-gradient(180deg,#3b82f6,#1d4ed8); border-radius:3px 3px 0 0; flex:1; opacity:0.7; }
+.bar:hover { opacity:1; }
+
+/* Holdings table */
+.table { width:100%; border-collapse:collapse; }
+.table th { font-size:11px; color:#334155; text-transform:uppercase; letter-spacing:0.05em; padding:8px 12px; text-align:left; border-bottom:1px solid #1e2230; }
+.table td { padding:12px 12px; border-bottom:1px solid #0f1117; font-size:13px; }
+.table tr:last-child td { border:none; }
+.ticker { font-weight:700; color:#60a5fa; font-size:14px; }
+.pos { color:#22c55e; }
+.neg { color:#ef4444; }
+
+/* Two col */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+
+/* Pill */
+.pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+.pill.buy { background:#16a34a22; color:#4ade80; }
+.pill.hold { background:#d9770622; color:#fb923c; }
+
+.btn { padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; border:none; }
+.btn-primary { background:#2563eb; color:white; }
+.btn-ghost { background:transparent; color:#475569; border:1px solid #1e2230; }
+
+/* Line chart fake */
+.line-chart { height:180px; position:relative; overflow:hidden; border-radius:10px; background:#0f1117; }
+.line-chart svg { width:100%; height:100%; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">📈</div>
+    <span class="logo-text">Zains Game</span>
+  </div>
+
+  <div class="nav-item active"><span class="icon">⊞</span> Dashboard</div>
+  <div class="nav-item"><span class="icon">🔍</span> Research</div>
+  <div class="nav-item"><span class="icon">⭐</span> Watchlist</div>
+  <div class="nav-item"><span class="icon">📅</span> Earnings</div>
+  <div class="nav-item"><span class="icon">📖</span> Dictionary</div>
+
+  <div class="nav-section">Markets</div>
+  <div class="nav-item"><span class="icon">🌐</span> Macro</div>
+  <div class="nav-item"><span class="icon">📊</span> Markets</div>
+  <div class="nav-item"><span class="icon">🏦</span> Hedge Funds</div>
+  <div class="nav-item"><span class="icon">👥</span> Smart Money</div>
+
+  <div class="nav-section">Tools</div>
+  <div class="nav-item"><span class="icon">🔔</span> Alerts</div>
+  <div class="nav-item"><span class="icon">⚗️</span> Quant</div>
+
+  <div class="sidebar-bottom">
+    <div class="nav-item"><span class="icon">⚙️</span> Settings</div>
+    <div class="nav-item"><span class="icon">↩</span> Sign Out</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <h1>Portfolio Dashboard</h1>
+    <p>Track your investments in real time · Last updated 2 min ago</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div style="display:flex;justify-content:space-between">
+        <div>
+          <div class="stat-label">Total Value</div>
+          <div class="stat-value">$24,831</div>
+          <div class="stat-sub">▲ +$1,240 today</div>
+        </div>
+        <div class="stat-icon">💰</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div style="display:flex;justify-content:space-between">
+        <div>
+          <div class="stat-label">Total Gain</div>
+          <div class="stat-value" style="color:#22c55e">+$3,421</div>
+          <div class="stat-sub">▲ +15.97%</div>
+        </div>
+        <div class="stat-icon">📈</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div style="display:flex;justify-content:space-between">
+        <div>
+          <div class="stat-label">Today's Change</div>
+          <div class="stat-value" style="color:#22c55e">+$498</div>
+          <div class="stat-sub">▲ +2.04%</div>
+        </div>
+        <div class="stat-icon">⚡</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div style="display:flex;justify-content:space-between">
+        <div>
+          <div class="stat-label">Holdings</div>
+          <div class="stat-value">6</div>
+          <div class="stat-sub" style="color:#94a3b8">Best: NVDA +82%</div>
+        </div>
+        <div class="stat-icon">📁</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Portfolio Performance</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;">1W</button>
+          <button class="btn btn-primary" style="padding:4px 10px;font-size:11px;">1M</button>
+          <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;">1Y</button>
+        </div>
+      </div>
+      <div class="line-chart">
+        <svg viewBox="0 0 400 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,140 C40,130 60,120 80,110 S120,90 140,80 S180,60 200,55 S240,45 260,40 S300,35 320,30 S360,25 400,20" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+          <path d="M0,140 C40,130 60,120 80,110 S120,90 140,80 S180,60 200,55 S240,45 260,40 S300,35 320,30 S360,25 400,20 L400,180 L0,180 Z" fill="url(#grad)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Allocation</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px;"><span>NVDA</span><span>32%</span></div>
+          <div style="height:6px;background:#1e2230;border-radius:3px;"><div style="width:32%;height:100%;background:#3b82f6;border-radius:3px;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px;"><span>AAPL</span><span>24%</span></div>
+          <div style="height:6px;background:#1e2230;border-radius:3px;"><div style="width:24%;height:100%;background:#8b5cf6;border-radius:3px;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px;"><span>TSLA</span><span>18%</span></div>
+          <div style="height:6px;background:#1e2230;border-radius:3px;"><div style="width:18%;height:100%;background:#10b981;border-radius:3px;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px;"><span>MSFT</span><span>15%</span></div>
+          <div style="height:6px;background:#1e2230;border-radius:3px;"><div style="width:15%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px;"><span>Other</span><span>11%</span></div>
+          <div style="height:6px;background:#1e2230;border-radius:3px;"><div style="width:11%;height:100%;background:#64748b;border-radius:3px;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Holdings</span>
+      <button class="btn btn-primary">+ Add Stock</button>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Stock</th><th>Shares</th><th>Avg Cost</th><th>Price</th><th>Value</th><th>P&L</th><th>P&L %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ticker">NVDA</span><br><span style="font-size:11px;color:#475569">NVIDIA Corp</span></td><td>12</td><td>$420.00</td><td>$875.20</td><td>$10,502</td><td class="pos">+$5,462</td><td class="pos">+108%</td></tr>
+        <tr><td><span class="ticker">AAPL</span><br><span style="font-size:11px;color:#475569">Apple Inc</span></td><td>35</td><td>$162.00</td><td>$189.50</td><td>$6,632</td><td class="pos">+$962</td><td class="pos">+17%</td></tr>
+        <tr><td><span class="ticker">TSLA</span><br><span style="font-size:11px;color:#475569">Tesla Inc</span></td><td>18</td><td>$230.00</td><td>$198.20</td><td>$3,568</td><td class="neg">-$572</td><td class="neg">-13.8%</td></tr>
+        <tr><td><span class="ticker">MSFT</span><br><span style="font-size:11px;color:#475569">Microsoft Corp</span></td><td>10</td><td>$350.00</td><td>$415.80</td><td>$4,158</td><td class="pos">+$658</td><td class="pos">+18.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+</body>
+</html>
