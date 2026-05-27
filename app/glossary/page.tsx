@@ -14,19 +14,21 @@ export const metadata: Metadata = {
 }
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  Basics: <BookOpen className="h-4 w-4" />,
-  Charts: <BarChart2 className="h-4 w-4" />,
-  'Company Health': <TrendingUp className="h-4 w-4" />,
-  Risk: <Shield className="h-4 w-4" />,
-  Strategies: <Lightbulb className="h-4 w-4" />,
+  Basics:            <BookOpen className="h-4 w-4" />,
+  Charts:            <BarChart2 className="h-4 w-4" />,
+  'Company Health':  <TrendingUp className="h-4 w-4" />,
+  Risk:              <Shield className="h-4 w-4" />,
+  Strategies:        <Lightbulb className="h-4 w-4" />,
+  'Options & Bonds': <ChevronRight className="h-4 w-4" />,
 }
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Basics:           { bg: 'bg-blue-500/10',    text: 'text-blue-400',    border: 'border-blue-500/20' },
-  Charts:           { bg: 'bg-purple-500/10',  text: 'text-purple-400',  border: 'border-purple-500/20' },
-  'Company Health': { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20' },
-  Risk:             { bg: 'bg-red-500/10',     text: 'text-red-400',     border: 'border-red-500/20' },
-  Strategies:       { bg: 'bg-yellow-500/10',  text: 'text-yellow-400',  border: 'border-yellow-500/20' },
+  Basics:            { bg: 'bg-blue-500/10',    text: 'text-blue-400',    border: 'border-blue-500/20' },
+  Charts:            { bg: 'bg-purple-500/10',  text: 'text-purple-400',  border: 'border-purple-500/20' },
+  'Company Health':  { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20' },
+  Risk:              { bg: 'bg-red-500/10',     text: 'text-red-400',     border: 'border-red-500/20' },
+  Strategies:        { bg: 'bg-yellow-500/10',  text: 'text-yellow-400',  border: 'border-yellow-500/20' },
+  'Options & Bonds': { bg: 'bg-orange-500/10',  text: 'text-orange-400',  border: 'border-orange-500/20' },
 }
 
 export default function GlossaryPage() {
