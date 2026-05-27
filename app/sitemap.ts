@@ -17,7 +17,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/challenge`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${base}/bull-vs-bear`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${base}/translator`,        lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/briefing`,          lastModified: now, changeFrequency: 'daily',   priority: 0.7 },
     { url: `${base}/report-card`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${base}/hot-take`,          lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
     { url: `${base}/reality-check`,     lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
