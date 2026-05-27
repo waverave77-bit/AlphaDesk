@@ -77,10 +77,10 @@ export default function LandingPage() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
-          <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2">
+          <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30">
             Start for Free <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="/dashboard" className="border border-gray-700 hover:border-blue-500/50 hover:bg-blue-600/5 text-gray-300 hover:text-blue-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+          <Link href="/dashboard" className="border-2 border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
             Try It Now →
           </Link>
         </div>
@@ -173,6 +173,19 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Mid-page CTA */}
+      <section className="px-6 pb-16 max-w-2xl mx-auto text-center">
+        <Link
+          href="/dashboard"
+          className="group flex items-center justify-center gap-3 w-full bg-blue-600/10 hover:bg-blue-600/20 border-2 border-blue-500/40 hover:border-blue-500/70 text-white px-8 py-5 rounded-2xl font-semibold text-lg transition-all"
+        >
+          <Zap className="h-5 w-5 text-blue-400" />
+          Try It Now — No Account Needed
+          <ChevronRight className="h-5 w-5 text-blue-400 group-hover:translate-x-1 transition-transform" />
+        </Link>
+        <p className="text-sm text-gray-600 mt-3">Jump straight in. Create an account later if you want to save your progress.</p>
       </section>
 
       {/* $100K Challenge banner */}
@@ -324,8 +337,8 @@ export default function LandingPage() {
           <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
             Try Mr. Guy Invests Free <ChevronRight className="h-5 w-5" />
           </Link>
-          <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border border-gray-700 hover:border-gray-500 text-gray-300 px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors">
-            See How It Works →
+          <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-all">
+            Try It Now →
           </Link>
         </div>
       </section>
