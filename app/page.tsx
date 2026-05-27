@@ -77,11 +77,11 @@ export default function LandingPage() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
-          <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30">
-            Start for Free <ChevronRight className="h-5 w-5" />
-          </Link>
-          <Link href="/dashboard" className="border-2 border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+          <Link href="/dashboard" className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-xl font-bold text-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30">
             Try It Now →
+          </Link>
+          <Link href="/register" className="border-2 border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white px-8 py-3.5 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+            Start for Free <ChevronRight className="h-5 w-5" />
           </Link>
         </div>
 
