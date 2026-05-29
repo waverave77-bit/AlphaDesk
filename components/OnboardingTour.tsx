@@ -108,10 +108,14 @@ export default function OnboardingTour({ forceShow = false, onComplete }: Props)
   // Hydration guard + show logic
   useEffect(() => {
     setMounted(true)
-    if (forceShow) { setVisible(true); return }
+    // Check URL param directly — most reliable, avoids prop timing issues
+    const isTourParam = typeof window !== 'undefined'
+      && new URLSearchParams(window.location.search).get('tour') === '1'
+    if (forceShow || isTourParam) { setVisible(true); return }
     const done = localStorage.getItem(TOUR_KEY)
     if (!done) setTimeout(() => setVisible(true), 800)
-  }, [forceShow])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Animate lines in
   useEffect(() => {
@@ -143,7 +147,7 @@ export default function OnboardingTour({ forceShow = false, onComplete }: Props)
 
   return (
     <div
-      className="fixed bottom-20 right-5 z-50 transition-all duration-500 animate-slideUp"
+      className="fixed bottom-24 right-4 sm:right-20 z-[9998] transition-all duration-500 animate-slideUp"
       style={{ width: 'min(340px, calc(100vw - 24px))' }}
     >
       <style>{`
