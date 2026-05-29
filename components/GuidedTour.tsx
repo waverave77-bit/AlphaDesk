@@ -45,6 +45,8 @@ type TourStep = {
   match: (p: string) => boolean
   title: string
   body: string
+  /** Small gray note shown below body — e.g. auto-advance hint */
+  hint?: string
   nextLabel: string
   nextHref?: string
   isLast?: boolean
@@ -54,40 +56,42 @@ const STEPS: TourStep[] = [
   {
     idx: 0,
     match: (p) => p === '/dashboard',
-    title: "Hey! I'm Mr. Guy 👋",
-    body: "I'm your AI investing sidekick. Let me show you around the site.",
-    nextLabel: "Let's go →",
+    title: "Hey, I'm Mr. Guy 👋",
+    body: "Your AI stock market sidekick. I'll show you around in 60 seconds — it's worth it.",
+    nextLabel: "Show me around →",
     nextHref: '/research',
   },
   {
     idx: 1,
     match: (p) => p === '/research',
-    title: "📊 This is the Research Tool",
-    body: "Search for any stock using the search bar above. Try typing AAPL, NVDA, or any company you know.",
-    nextLabel: "I searched one →",
+    title: "Search any stock 🔍",
+    body: "Type any ticker or company name in the search bar. Try AAPL, NVDA, TSLA — whatever you've heard of.",
+    hint: "I'll update automatically once you search.",
+    nextLabel: "Skip ahead →",
   },
   {
     idx: 2,
     match: (p) => p.startsWith('/research/') && p.length > 10,
-    title: "🔍 This is your stock deep-dive",
-    body: "You can see the live price, chart, key financial metrics, and an AI summary that explains everything in plain English. Scroll down to see it all.",
-    nextLabel: "Nice! Show me Mr. Guy Chat →",
+    title: "This is everything on that stock 📊",
+    body: "Live price, chart, financials, analyst ratings — and my AI breakdown that explains it all in plain English. Scroll down when you're ready.",
+    nextLabel: "Show me the AI chat →",
     nextHref: '/chat',
   },
   {
     idx: 3,
     match: (p) => p === '/chat' || p.startsWith('/chat?') || p.startsWith('/chat/'),
-    title: "🤖 This is Mr. Guy Chat",
-    body: "Ask me anything about any stock. Try: \"Is Apple a good buy right now?\" or \"What does P/E ratio mean?\" Type in the box at the bottom of the page.",
-    nextLabel: "I asked one →",
+    title: "Ask me literally anything 🤖",
+    body: "\"Is NVDA overvalued?\" \"Explain this earnings report.\" \"What's a good stock for a beginner?\" Type it in the box below — I'll give you a real answer.",
+    hint: "I pull live market data, not generic answers.",
+    nextLabel: "What else is there? →",
     nextHref: '/trading-simulator',
   },
   {
     idx: 4,
     match: (p) => p.startsWith('/trading-simulator'),
-    title: "That's the tour! 🎉",
-    body: "Mr. Guy has a ton of tools — markets, earnings, hedge funds, quant screener and more. Poke around and see what clicks. I'm here if you need me.",
-    nextLabel: "Let's explore →",
+    title: "You're all set 🎉",
+    body: "There's a lot more to explore — markets, earnings calendars, hedge fund filings, a quant screener... poke around. Click me anytime you need help.",
+    nextLabel: "Let's go! 🚀",
     isLast: true,
   },
 ]
@@ -203,6 +207,9 @@ export default function GuidedTour() {
               <div className="flex-1 min-w-0 space-y-2">
                 <p className="text-sm font-bold text-white leading-snug">{step.title}</p>
                 <p className="text-sm text-gray-300 leading-relaxed">{step.body}</p>
+                {step.hint && (
+                  <p className="text-xs text-gray-500 leading-relaxed">{step.hint}</p>
+                )}
               </div>
             </div>
           </div>
