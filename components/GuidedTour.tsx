@@ -92,7 +92,7 @@ const STEPS: TourStep[] = [
     match: (p) => p.startsWith('/trading-simulator'),
     title: "The $100K Challenge 🏆",
     body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, no risk. Beat the S&P 500 and climb the leaderboard. And that's just one tool — there's also markets, earnings, hedge fund filings, a quant screener and more. Poke around, you'll find stuff you like.",
-    hint: "Click me anytime you need help.",
+    hint: "Hit the Mr. Guy tab in the nav if you ever need help.",
     nextLabel: "Let's go! 🚀",
     isLast: true,
   },
