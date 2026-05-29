@@ -164,8 +164,8 @@ export default function GuidedTour() {
 
       <div
         key={step.idx}
-        className="gt-panel fixed bottom-24 right-4 sm:right-20 z-[9998]"
-        style={{ width: 'min(340px, calc(100vw - 24px))' }}
+        className="gt-panel fixed bottom-6 right-4 z-[9998]"
+        style={{ width: 'min(300px, calc(100vw - 24px))' }}
       >
         <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
 
