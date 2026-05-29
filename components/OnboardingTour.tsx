@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { ChevronRight, X, ExternalLink } from 'lucide-react'
+import { ChevronRight, X, ArrowRight } from 'lucide-react'
 
 /* ── Mr. Guy pixel head ─────────────────────────────────────────────── */
 const N = null
@@ -39,7 +39,8 @@ type Step = {
   lines: string[]
   expandedTitle?: string
   expandedLines?: string[]
-  expandedHref?: string
+  tryHref?: string       // navigate user directly to the feature
+  tryLabel?: string      // label on the "Try it" button
   nextLabel: string
 }
 
@@ -49,37 +50,41 @@ const STEPS: Step[] = [
     nextLabel: "Let's go! →",
   },
   {
-    lines: ["This is 🔥 — the Smart Money Tracker.", "See what hedge funds & insiders are buying. Real SEC filings, plain English."],
-    nextLabel: 'Cool, next →',
-    expandedTitle: 'Smart Money Tracker',
+    lines: ["📊 Start with the Research Tool.", "Pull up any stock — live price, financials, AI summary, and more. This is your home base."],
+    nextLabel: 'Next →',
+    expandedTitle: 'Stock Research',
     expandedLines: [
-      "Hedge funds file 13F reports with the SEC every quarter — we decode them automatically.",
-      "Insiders (CEOs, CFOs, board members) must report when they buy or sell their own stock.",
-      "You see which funds bought what, how much, and when — and whether insiders are buying alongside them.",
+      "Search any ticker or company name to get a full deep-dive:",
+      "• Live price, charts & key metrics",
+      "• AI-powered plain-English analysis",
+      "• Recent news, earnings, and analyst ratings",
     ],
-    expandedHref: '/insiders',
+    tryHref: '/research',
+    tryLabel: 'Open Research →',
   },
   {
-    lines: ["Ask me anything about any stock 🤖", "I'll explain earnings, valuations, and risks in plain English. No finance degree needed."],
-    nextLabel: 'Got it, next →',
-    expandedTitle: 'Mr. Guy Chat',
+    lines: ["🤖 Ask me anything — literally.", "I'm Mr. Guy. I explain stocks, earnings, valuations, anything — in plain English. No finance degree needed."],
+    nextLabel: 'Next →',
+    expandedTitle: 'Mr. Guy AI Chat',
     expandedLines: [
-      '"What does Apple\'s P/E ratio mean?" → I\'ll explain it simply.',
-      '"Is NVDA overvalued?" → I\'ll give you bull and bear sides.',
-      '"Translate this earnings report" → paste it, I\'ll decode it.',
+      '"What does Apple\'s P/E ratio mean?" → Plain English.',
+      '"Is NVDA overvalued?" → Bull & bear sides.',
+      '"Translate this earnings report" → Paste it, I\'ll decode it.',
     ],
-    expandedHref: '/chat',
+    tryHref: '/chat',
+    tryLabel: 'Chat with Mr. Guy →',
   },
   {
-    lines: ["Not sure about a stock? 🎯", "I'll grade it A–F on financials, momentum, valuation, and sentiment. Takes 10 seconds."],
-    nextLabel: 'Nice, last one →',
-    expandedTitle: 'Stock Report Card',
+    lines: ["🏆 Ready for a challenge?", "The $100K Challenge gives you $100,000 in virtual money. Build your portfolio. See if you can beat the market."],
+    nextLabel: 'Next →',
+    expandedTitle: '$100K Challenge',
     expandedLines: [
-      "Type any ticker. I pull live data and grade it across 4 categories:",
-      "📊 Financials · 📈 Momentum · 💰 Valuation · 🧠 Sentiment",
-      "You get a letter grade and a plain-English explanation for each.",
+      "Start with $100,000 in virtual cash — no real money at risk.",
+      "Buy and sell real stocks at live prices.",
+      "Track your performance vs. the S&P 500 and other players.",
     ],
-    expandedHref: '/report-card',
+    tryHref: '/trading-simulator',
+    tryLabel: 'Take the Challenge →',
   },
   {
     lines: ["That's the tour 🎉", "Explore at your own pace. Click me anytime if you get lost."],
@@ -144,6 +149,7 @@ export default function OnboardingTour({ forceShow = false, onComplete }: Props)
 
   const cur = STEPS[step]
   const isLast = step === STEPS.length - 1
+  const isFirst = step === 0
 
   return (
     <div
@@ -156,6 +162,11 @@ export default function OnboardingTour({ forceShow = false, onComplete }: Props)
           to   { opacity: 1; transform: translateY(0); }
         }
         .animate-slideUp { animation: slideUp 0.4s ease both; }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+          50% { box-shadow: 0 0 0 6px rgba(59,130,246,0.25); }
+        }
+        .try-btn { animation: pulseGlow 2s ease-in-out infinite; }
       `}</style>
 
       <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
@@ -226,43 +237,55 @@ export default function OnboardingTour({ forceShow = false, onComplete }: Props)
                   <p key={i} className="text-xs text-gray-300 leading-snug">{line}</p>
                 ))}
               </div>
-              {cur.expandedHref && (
-                <a
-                  href={cur.expandedHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                >
-                  Open in new tab <ExternalLink className="h-3 w-3" />
-                </a>
-              )}
             </div>
           )}
         </div>
 
         {/* Buttons */}
         <div className="px-4 pb-4 flex flex-col gap-2 mt-2">
-          <button
-            onClick={advance}
-            className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20 flex items-center justify-center gap-1.5 transition-colors"
-          >
-            {cur.nextLabel}
-            {!isLast && <ChevronRight className="h-4 w-4" />}
-          </button>
 
-          {/* "Tell me more" only for steps that have expanded content */}
-          {cur.expandedLines && (
-            <button
-              onClick={() => setExpanded(e => !e)}
-              className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors"
+          {/* Primary CTA: "Try it →" for feature steps, or "Start exploring" for last */}
+          {cur.tryHref ? (
+            <a
+              href={cur.tryHref}
+              className="try-btn w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-1.5 transition-colors"
             >
-              {expanded ? 'Got it ✓' : 'Tell me more'}
+              {cur.tryLabel ?? 'Try it →'}
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          ) : (
+            <button
+              onClick={advance}
+              className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20 flex items-center justify-center gap-1.5 transition-colors"
+            >
+              {cur.nextLabel}
+              {!isLast && <ChevronRight className="h-4 w-4" />}
             </button>
+          )}
+
+          {/* For feature steps: secondary "next step" button + optional "tell me more" */}
+          {cur.tryHref && (
+            <div className="flex gap-2">
+              {cur.expandedLines && (
+                <button
+                  onClick={() => setExpanded(e => !e)}
+                  className="flex-1 py-2 px-3 rounded-xl text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
+                >
+                  {expanded ? 'Less info' : 'Tell me more'}
+                </button>
+              )}
+              <button
+                onClick={advance}
+                className="flex-1 py-2 px-3 rounded-xl text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-1"
+              >
+                {cur.nextLabel} <ChevronRight className="h-3 w-3" />
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Skip (only on non-last steps) */}
-        {!isLast && step > 0 && (
+        {/* Skip (only on non-last, non-first steps) */}
+        {!isLast && !isFirst && (
           <div className="border-t border-gray-800 px-4 py-2 text-center">
             <button onClick={finish} className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
               Skip tour
