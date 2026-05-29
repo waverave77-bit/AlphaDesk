@@ -5,6 +5,7 @@ import TickerBar from '@/components/TickerBar'
 import DemoBanner from '@/components/DemoBanner'
 import GuestBanner from '@/components/GuestBanner'
 import EmailVerificationBanner from '@/components/EmailVerificationBanner'
+import GuidedTourWrapper from '@/components/GuidedTourWrapper'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -19,6 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <EmailVerificationBanner />
       <TopNav />
       <TickerBar />
+      <GuidedTourWrapper />
       <main className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin relative z-20">
         <div className="p-4 sm:p-6 w-full">
           {children}
