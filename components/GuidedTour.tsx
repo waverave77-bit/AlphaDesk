@@ -72,8 +72,9 @@ const STEPS: TourStep[] = [
   {
     idx: 2,
     match: (p) => p.startsWith('/research/') && p.length > 10,
-    title: "This is everything on that stock 📊",
-    body: "Live price, chart, financials, analyst ratings — and my AI breakdown that explains it all in plain English. Scroll down when you're ready.",
+    title: "This is the full picture 🔥",
+    body: "Live price, chart, and real financials — plus multiple AI models analyzing the stock from different angles. Sentiment, valuation, momentum, risk. Scroll down, it's all there.",
+    hint: "Most sites give you raw numbers. I tell you what they actually mean.",
     nextLabel: "Show me the AI chat →",
     nextHref: '/chat',
   },
