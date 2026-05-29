@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { X, ChevronRight } from 'lucide-react'
 
 /* ── Persistence ────────────────────────────────────────────────────── */
@@ -106,6 +106,7 @@ function getActiveStep(pathname: string, minStep: number): TourStep | null {
 /* ── Component ──────────────────────────────────────────────────────── */
 export default function GuidedTour() {
   const pathname = usePathname()
+  const router = useRouter()
   const [mounted, setMounted]     = useState(false)
   const [active, setActive]       = useState(false)
   const [minStep, setMinStep]     = useState(0)
@@ -148,7 +149,7 @@ export default function GuidedTour() {
     const next = step.idx + 1
     setMinStep(next)
     localStorage.setItem(TOUR_STEP_KEY, String(next))
-    if (step.nextHref) window.location.href = step.nextHref
+    if (step.nextHref) router.push(step.nextHref)
   }
 
   if (!mounted || !active || dismissed) return null
