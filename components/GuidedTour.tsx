@@ -90,8 +90,9 @@ const STEPS: TourStep[] = [
   {
     idx: 4,
     match: (p) => p.startsWith('/trading-simulator'),
-    title: "You're all set 🎉",
-    body: "There's a lot more to explore — markets, earnings calendars, hedge fund filings, a quant screener... poke around. Click me anytime you need help.",
+    title: "The $100K Challenge 🏆",
+    body: "You get $100,000 in virtual cash and you invest it like it's real — buying and selling actual stocks at live prices. No real money, no risk. The goal? Beat the S&P 500. Your performance is tracked and you can see how you stack up on the leaderboard.",
+    hint: "This is the best way to learn investing without losing money.",
     nextLabel: "Let's go! 🚀",
     isLast: true,
   },
