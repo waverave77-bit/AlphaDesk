@@ -25,9 +25,9 @@ type Scene = 'walk' | 'party' | 'beach' | 'desk' | 'throw' | 'sleep' | 'perch'
            | 'h_jun' | 'h_july4' | 'h_labor' | 'h_tg' | 'h_xmas'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
-const PX     = 5
-const CHAR_W = 20 * PX   // 100
-const CHAR_H = 32 * PX   // 160
+let PX       = 5
+const CHAR_W = 20 * PX   // 100 (desktop) — used for zone calc only; draw uses 20*PX dynamically
+const CHAR_H = 32 * PX   // 160 (desktop) — used for zone calc only; draw uses 32*PX dynamically
 const CONTENT_MAX = 1024
 const CONTENT_PAD = 24
 
@@ -337,7 +337,7 @@ function drawDesk(ctx: CanvasRenderingContext2D, cx: number, viewH: number) {
 /* ── Umbrella — centered over character, direction-aware ────────────── */
 function drawUmbrella(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number) {
   // Center umbrella over character regardless of facing direction
-  const cx = charX + CHAR_W / 2
+  const cx = charX + 10 * PX
   const cy = charY - 8
   // Handle — curves toward the holding hand side
   ctx.strokeStyle='#5C3A1E'; ctx.lineWidth=4; ctx.lineCap='round'
@@ -366,7 +366,7 @@ function drawUmbrella(ctx: CanvasRenderingContext2D, charX: number, charY: numbe
 
 /* ── Newspaper ──────────────────────────────────────────────────────── */
 function drawNewspaper(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number, wave: number) {
-  const nx = dir===1 ? charX+CHAR_W-5 : charX-52
+  const nx = dir===1 ? charX+20*PX-5 : charX-52
   const ny = Math.round(charY+55+wave)
   ctx.fillStyle='#f5f0e0'; ctx.fillRect(nx,ny,55,48)
   ctx.fillStyle='#e8e0cc'; ctx.fillRect(nx+1,ny+1,53,46)
@@ -389,7 +389,7 @@ function drawDumbbell(ctx: CanvasRenderingContext2D, charX: number, charY: numbe
   const armY = charY + 21 * PX - liftCycle * 9 * PX
   const by = armY - 10   // plates straddle the arm row
   const bx = charX - 14
-  const barLen = CHAR_W + 28
+  const barLen = 20*PX + 28
   // Bar
   ctx.fillStyle = '#888'; ctx.fillRect(bx + 18, by + 13, barLen - 36, 7)
   ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(bx + 18, by + 13, barLen - 36, 2)
@@ -406,7 +406,7 @@ function drawDumbbell(ctx: CanvasRenderingContext2D, charX: number, charY: numbe
 /* ── Game controller — centered under character ─────────────────────── */
 function drawController(ctx: CanvasRenderingContext2D, charX: number, charY: number) {
   const cw=80
-  const cx=charX+(CHAR_W-cw)/2  // always centered under character
+  const cx=charX+(20*PX-cw)/2  // always centered under character
   const cy=charY+88
   ctx.fillStyle='#1a1a2e'; ctx.beginPath()
   ctx.moveTo(cx+8,cy); ctx.lineTo(cx+cw-8,cy)
@@ -436,7 +436,7 @@ function drawController(ctx: CanvasRenderingContext2D, charX: number, charY: num
 
 /* ── Phone / doom scroll ────────────────────────────────────────────── */
 function drawPhone(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number, scrollT: number) {
-  const px=dir===1 ? charX+CHAR_W-6 : charX-40
+  const px=dir===1 ? charX+20*PX-6 : charX-40
   const py=charY+28
   // Body
   ctx.fillStyle='#0f0f1a'; ctx.fillRect(px,py,36,64)
@@ -475,7 +475,7 @@ function drawPhone(ctx: CanvasRenderingContext2D, charX: number, charY: number, 
 function drawTelescope(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number) {
   // Points inward toward content
   const angle = dir===1 ? -0.22 : Math.PI+0.22
-  const baseX = dir===1 ? charX+CHAR_W+4 : charX-4
+  const baseX = dir===1 ? charX+20*PX+4 : charX-4
   const baseY = charY+60
   const len=95
   const endX=baseX+Math.cos(angle)*len
@@ -516,7 +516,7 @@ function drawTelescope(ctx: CanvasRenderingContext2D, charX: number, charY: numb
 
 function drawCoffeeCup(ctx: CanvasRenderingContext2D, charX: number, charY: number, dir: number) {
   // Position cup at hand level — arm rows 21-23 are at charY+105, raised by armDY=-2*PX=10 → charY+95
-  const cx = dir===1 ? charX+CHAR_W-20 : charX-16
+  const cx = dir===1 ? charX+20*PX-20 : charX-16
   const cy = charY+92
   // Cup body
   ctx.fillStyle='#f5f0e8'; ctx.fillRect(cx,cy,18,22)
@@ -766,7 +766,7 @@ function FlyingObjects({charX}:{charX:number}){
 /* ── Dust cloud — trails behind panic runner ─────────────────────────── */
 const DUST_PUFFS = Array.from({length:8},(_,i)=>({delay:i*0.11,dur:0.65+i*0.07,dx:i*16}))
 function DustCloud({charX,dir}:{charX:number;dir:number}){
-  const baseX=dir===1?charX-10:charX+CHAR_W+10
+  const baseX=dir===1?charX-10:charX+20*PX+10
   return(<>
     <style>{`@keyframes dP{0%{opacity:.65;transform:scale(.35) translateY(0)}100%{opacity:0;transform:scale(2) translateY(-28px)}}`}</style>
     {DUST_PUFFS.map((d,i)=>(
@@ -830,7 +830,7 @@ function WeightSparkles({charX,charY,viewH}:{charX:number;charY:number;viewH:num
 
 /* ── Telescope sparkles ─────────────────────────────────────────────── */
 function TelescopeSparkles({charX,dir}:{charX:number;dir:number}){
-  const baseX=dir===1?charX+CHAR_W+85:charX-85
+  const baseX=dir===1?charX+20*PX+85:charX-85
   return(<>
     <style>{`@keyframes ts{0%{opacity:0;transform:scale(.2)}55%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(.5)}}`}</style>
     {[0,1,2].map(i=>(
@@ -879,7 +879,7 @@ function ZenParticles({charX, charY, viewH}:{charX:number;charY:number;viewH:num
       <div key={i} style={{position:'fixed',left:charX-30+i*22,bottom:bottom+i%2*20,fontSize:10+i%3*4,
         animation:`zenF ${2.5+i*.4}s ease-in-out ${i*.5}s infinite`,pointerEvents:'none',zIndex:12}}>{s}</div>
     ))}
-    <div style={{position:'fixed',left:charX+CHAR_W/2-20,bottom:bottom+30,
+    <div style={{position:'fixed',left:charX+10*PX-20,bottom:bottom+30,
       width:40,height:40,borderRadius:'50%',
       border:'1.5px solid rgba(167,243,208,.4)',
       boxShadow:'0 0 18px rgba(167,243,208,.2)',
@@ -918,7 +918,7 @@ function PhoneBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number
   const bottom=viewH-charY+30
   return(<>
     <style>{`@keyframes phB{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}`}</style>
-    <div style={{position:'fixed',left:charX+CHAR_W+8,bottom:bottom,
+    <div style={{position:'fixed',left:charX+20*PX+8,bottom:bottom,
       background:'rgba(255,255,255,.9)',border:'1px solid rgba(0,0,0,.1)',borderRadius:12,
       padding:'4px 10px',fontSize:11,fontWeight:700,color:'#333',whiteSpace:'nowrap',
       animation:'phB 1.2s ease-in-out infinite',pointerEvents:'none',zIndex:13,
@@ -938,7 +938,7 @@ function PeekEffect({side, progress}:{side:'left'|'right'; progress:number}){
 function PerchBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
   return(<>
     <style>{`@keyframes pbob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}`}</style>
-    <div style={{position:'fixed',left:charX+CHAR_W/2,top:charY-52,
+    <div style={{position:'fixed',left:charX+10*PX,top:charY-52,
       transform:'translateX(-50%)',
       background:'rgba(255,255,255,.94)',border:'1px solid rgba(0,0,0,.08)',borderRadius:12,
       padding:'5px 10px',fontSize:13,fontWeight:700,color:'#333',whiteSpace:'nowrap',
@@ -977,7 +977,7 @@ function NightSky(){
 }
 
 function ZzzParticles({charX,charY,viewH}:{charX:number;charY:number;viewH:number}){
-  const bottom=viewH-charY-CHAR_H+20
+  const bottom=viewH-charY-32*PX+20
   return(<>
     <style>{`@keyframes zU{0%{opacity:.85;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(.7)}}`}</style>
     {[0,1,2].map(i=>(
@@ -1178,6 +1178,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvasW, setCanvasW]   = useState(1440)
   const [viewH,   setViewH]     = useState(900)
+  const [charPX,  setCharPX]    = useState(5)    // reactive PX for JSX (3 on mobile, 5 on desktop)
   const [activeState, setActiveState] = useState<MarketState>(marketState)
   const [activeScene, setActiveScene] = useState<Scene>('walk')
   const [charXDisp, setCharXDisp] = useState(300)
@@ -1216,7 +1217,11 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
   useEffect(()=>{ msRef.current = activeState }, [activeState])
 
   useEffect(()=>{
-    const upd=()=>{ viewHRef.current=window.innerHeight; setViewH(window.innerHeight); setCanvasW(window.innerWidth) }
+    const upd=()=>{
+      const px = window.innerWidth < 640 ? 3 : 5
+      PX = px; setCharPX(px)
+      viewHRef.current=window.innerHeight; setViewH(window.innerHeight); setCanvasW(window.innerWidth)
+    }
     upd(); window.addEventListener('resize',upd); return()=>window.removeEventListener('resize',upd)
   },[])
 
@@ -1264,10 +1269,12 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     const W   = canvas.width
     const H   = canvas.height
     const now = performance.now()
+    const isMobile = W < 640
+    PX = isMobile ? 3 : 5   // smaller character on mobile
 
     ctx.clearRect(0,0,W,H)
 
-    const groundY = H - CHAR_H - 20 - bottomOffsetRef.current
+    const groundY = H - 32 * PX - 20 - bottomOffsetRef.current
     const zones   = sideZones(W)
     const zKey: 'L'|'R' = ms==='bear' ? 'L' : 'R'
     const zone = zones[zKey]
@@ -1387,8 +1394,8 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       }
       let extraBounce=0, shakeX=0
       if(ms==='bull'){
-        // Head-bob — visible rhythmic bounce like he's vibing
-        extraBounce = Math.round(Math.sin(now*.007)*-5)
+        // Head-bob — reduced on mobile to avoid jumpy feel
+        extraBounce = isMobile ? 0 : Math.round(Math.sin(now*.007)*-5)
         pose.leftArmDY  = Math.round(Math.sin(now*.007)*-3)
         pose.rightArmDY = Math.round(Math.sin(now*.007+Math.PI)*-3)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
@@ -1398,8 +1405,8 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         s.faceFlush = Math.min(1, s.faceFlush+.003)
         pose.bodyDY += 1
       } else {
-        // Neutral: visible idle bob so animation is apparent from frame 1
-        extraBounce = Math.round(Math.sin(now*.005)*-4)
+        // Neutral: idle bob — removed on mobile to avoid jumpy feel
+        extraBounce = isMobile ? 0 : Math.round(Math.sin(now*.005)*-4)
         pose.leftArmDY  = Math.round(Math.sin(now*.005)*-2)
         pose.rightArmDY = Math.round(Math.sin(now*.005+Math.PI)*-2)
         s.faceFlush = Math.max(0, s.faceFlush-.005)
@@ -1456,7 +1463,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       ctx.fillRect(lyingOx+25, lyingOy+53, PX, PX)
 
       // Sync charX/charY for overlay positioning (head is at lyingOx, lyingOy+40 center)
-      s.charX=lyingOx; s.charY=Math.round(H-20-CHAR_H)
+      s.charX=lyingOx; s.charY=Math.round(H-20-32*PX)
     }
 
     // ── WAKE-UP (jolt awake from sleep) ─────────────────────────
@@ -1493,8 +1500,8 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       s.faceFlush=0
       const elapsed=now-s.sceneStartMs
       const peekSide: 1|-1 = 1  // always from right
-      const hiddenX = W+CHAR_W+10
-      const peekX   = W-CHAR_W-18
+      const hiddenX = W+20*PX+10
+      const peekX   = W-20*PX-18
       // Timeline: 0-1200ms slide in, 1200-4000ms hold, 4000-5200ms slide out
       let charX: number
       if(elapsed<1200){
@@ -1561,7 +1568,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       // Phone pressed to whichever side the left arm appears on (left when dir=1, right when dir=-1)
       const phoneEarX=s.direction===1
         ? Math.round(s.charX)+2                  // dir=1: left arm at charX+0..10
-        : Math.round(s.charX)+CHAR_W-18          // dir=-1: left arm flips to charX+90..95
+        : Math.round(s.charX)+20*PX-18          // dir=-1: left arm flips to charX+90..95
       const phoneEarY=Math.round(s.charY)+22     // ear level ~row 5
       ctx.fillStyle='#0f0f1a'; ctx.fillRect(phoneEarX,phoneEarY,9,16)
       ctx.fillStyle='#4a90d9'; ctx.fillRect(phoneEarX+1,phoneEarY+1,7,4)  // screen glow
@@ -1583,7 +1590,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       ctx.save()
       ctx.beginPath(); ctx.rect(Math.round(s.charX)-100, H-200, 200, 200); ctx.clip()
       pose.bodyDY=4; pose.leftArmDY=3; pose.rightArmDY=3
-      renderCharacter(ctx,pose,Math.round(s.charX)-CHAR_W/2,Math.round(s.charY+bob),s.direction,0,0,0,W,H,16,SHIRTLESS_MAP)
+      renderCharacter(ctx,pose,Math.round(s.charX)-10*PX,Math.round(s.charY+bob),s.direction,0,0,0,W,H,16,SHIRTLESS_MAP)
       ctx.restore()
       // Rubber duck
       const duckX=Math.round(s.charX)+55
@@ -1597,7 +1604,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       ctx.fillStyle='#1a1a1a'; ctx.beginPath(); ctx.arc(duckX-11,duckY-10,1.5,0,Math.PI*2); ctx.fill()
       // Water foam line
       ctx.fillStyle='rgba(255,255,255,.4)'; ctx.fillRect(Math.round(s.charX)-82,H-52,164,5)
-      s.charY=Math.round(H-CHAR_H-20)
+      s.charY=Math.round(H-32*PX-20)
     }
 
     // ── MONEY COUNT ──────────────────────────────────────────────
@@ -1614,7 +1621,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       renderCharacter(ctx,pose,Math.round(s.charX),Math.round(s.charY),s.direction,0,0,0,W,H)
       // Draw a stack of bills in hand
       const billDir=s.direction
-      const bx=billDir===1?Math.round(s.charX)+CHAR_W-8:Math.round(s.charX)-38
+      const bx=billDir===1?Math.round(s.charX)+20*PX-8:Math.round(s.charX)-38
       const by=Math.round(s.charY)+65+Math.round(Math.sin(flipT)*-3)*PX
       // Stack of bills (offset layers)
       for(let i=3;i>=0;i--){
@@ -1651,7 +1658,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       s.faceFlush=Math.max(0,s.faceFlush-.01)
       const seatY=H-75  // must match drawBeachChair: base-55 = H-20-55
       drawBeachChair(ctx, Math.round(s.charX), H)
-      const seatedY=seatY-CHAR_H+55  // sit character so torso rests on seat
+      const seatedY=seatY-32*PX+55  // sit character so torso rests on seat
       const breathe=Math.sin(now*.0008)
       pose.bodyDY=0
       pose.leftArmDY=3; pose.rightArmDY=2; pose.leftLegDX=-2; pose.rightLegDX=2
@@ -1731,7 +1738,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         if(s.charX<zone.min){s.charX=zone.min;s.direction=1}
       }else{
         s.charX+=panicSpeed*s.direction
-        if(s.charX>W-CHAR_W-10){s.charX=W-CHAR_W-10;s.direction=-1}
+        if(s.charX>W-20*PX-10){s.charX=W-20*PX-10;s.direction=-1}
         if(s.charX<10){s.charX=10;s.direction=1}
       }
       s.tick++; if(s.tick>=panicFrameRate){s.tick=0;s.frameIdx=(s.frameIdx+1)%8}
@@ -1764,10 +1771,10 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         const vis=widgetPosRef.current.filter(w=>w.top>80&&w.top<H*.75&&w.bottom>0)
         if(vis.length>0){
           const widget=vis[Math.floor(Math.random()*vis.length)]
-          s.targetY=widget.top-CHAR_H+4
-          const innerEdge=ms==='bear'?widget.left-CHAR_W+10:widget.right-CHAR_W-10
+          s.targetY=widget.top-32*PX+4
+          const innerEdge=ms==='bear'?widget.left-20*PX+10:widget.right-20*PX-10
           const z=zones[zKey]
-          s.charX=Math.max(z.ok?z.min:5, Math.min(z.ok?z.max:W-CHAR_W-5, innerEdge))
+          s.charX=Math.max(z.ok?z.min:5, Math.min(z.ok?z.max:W-20*PX-5, innerEdge))
         } else { s.targetY=H*.38 }
         s.direction=ms==='bear'?1:-1
       }
@@ -1799,7 +1806,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── MLK DAY — slow dignified walk + peace sign ────────────────
     else if(scene==='h_mlk'){
-      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-20*PX-60; s.direction=-1; s.sceneSnapped=true }
       s.tick++; if(s.tick>=10){ s.tick=0; s.frameIdx=(s.frameIdx+1)%8 }
       const fr = WALK_FRAMES[s.frameIdx]
       pose.leftArmDY=fr.leftArmDY; pose.rightArmDY=fr.rightArmDY
@@ -1813,7 +1820,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       // Peace sign follows left hand
       const eOY_mlk = Math.round(s.charY) + pose.bodyDY * PX
       const lhY_mlk = eOY_mlk + (21 + pose.leftArmDY) * PX
-      const lhX_mlk = s.direction === 1 ? Math.round(s.charX) - 22 : Math.round(s.charX) + CHAR_W + 4
+      const lhX_mlk = s.direction === 1 ? Math.round(s.charX) - 22 : Math.round(s.charX) + 20*PX + 4
       drawPeaceSign(ctx, lhX_mlk, lhY_mlk + 10)
     }
 
@@ -1832,7 +1839,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── GOOD FRIDAY — quiet candlelight vigil ────────────────────
     else if(scene==='h_gf'){
-      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-20*PX-60; s.direction=-1; s.sceneSnapped=true }
       // Both arms brought inward holding candle at waist
       pose.bodyDY     = 1
       pose.leftArmDY  = 4
@@ -1864,7 +1871,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── JUNETEENTH — jumping + pan-African confetti burst ─────────
     else if(scene==='h_jun'){
-      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-20*PX-60; s.direction=-1; s.sceneSnapped=true }
       const extraBounce = Math.round(Math.abs(Math.sin(now * .008)) * -8)
       pose.leftArmDY  = -8
       pose.rightArmDY = -8
@@ -1900,7 +1907,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       pose.leftArmDY  = 2
       s.faceFlush = 0
       // BBQ grill to the right of character
-      drawBBQ(ctx, Math.round(s.charX) + CHAR_W + 10, Math.round(s.charY) + CHAR_H)
+      drawBBQ(ctx, Math.round(s.charX) + 20*PX + 10, Math.round(s.charY) + 32*PX)
       renderCharacter(ctx, pose, Math.round(s.charX), Math.round(s.charY), s.direction, 0, 0, 0, W, H)
       // Tongs follow right hand
       const eOY_lb = Math.round(s.charY) + pose.bodyDY * PX
@@ -1909,7 +1916,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     // ── THANKSGIVING — eating + turkey leg attached to hand ───────
     else if(scene==='h_tg'){
-      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-CHAR_W-60; s.direction=-1; s.sceneSnapped=true }
+      if(!s.sceneSnapped){ s.charX=zR.ok?zR.min+10:W-20*PX-60; s.direction=-1; s.sceneSnapped=true }
       const chew = Math.sin(now * .004)
       const extraBounce = Math.round(chew * -2)
       pose.rightArmDY = Math.round(chew * -3 - 2)   // arm raises/lowers eating motion
@@ -2003,7 +2010,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
 
     {/* Clickable zone over character */}
     <div
-      style={{position:'fixed',left:charXDisp,top:charYDisp,width:CHAR_W,height:CHAR_H,
+      style={{position:'fixed',left:charXDisp,top:charYDisp,width:charPX*20,height:charPX*32,
         cursor:'pointer',pointerEvents:'all',zIndex:16}}
       onClick={handleCharacterClick}
     />
@@ -2012,7 +2019,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {clickBubble && (
       <>
         <style>{`@keyframes bubblePop{0%{opacity:0;transform:translateX(-50%) scale(.5) translateY(8px)}15%{opacity:1;transform:translateX(-50%) scale(1.1) translateY(-2px)}25%{transform:translateX(-50%) scale(1) translateY(0)}85%{opacity:1;transform:translateX(-50%)}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}`}</style>
-        <div style={{position:'fixed',left:charXDisp+CHAR_W/2,top:charYDisp-62,
+        <div style={{position:'fixed',left:charXDisp+charPX*10,top:charYDisp-62,
           transform:'translateX(-50%)',
           zIndex:20,pointerEvents:'none',
           background:'#fff',border:'2px solid #222',borderRadius:12,
@@ -2047,7 +2054,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     {activeScene==='doomscroll'&&<SweatDrops charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
     {activeScene==='panicrun'&&<><DustCloud charX={charXDisp} dir={dirDisp}/><PanicExclaim charX={charXDisp}/></>}
 
-    {activeScene==='defeat'&&<DefeatStars headX={Math.round(canvasW/2-31*PX/2-20)} viewH={viewH}/>}
+    {activeScene==='defeat'&&<DefeatStars headX={Math.round(canvasW/2-31*charPX/2-20)} viewH={viewH}/>}
     {activeScene==='wakeup'&&<ZzzParticles charX={Math.round(canvasW/2-130)} charY={viewH-248} viewH={viewH}/>}
     {activeScene==='bubblebath'&&<BathBubbles charX={charXDisp}/>}
     {activeScene==='phone'&&<PhoneBubble charX={charXDisp} charY={charYDisp} viewH={viewH}/>}
