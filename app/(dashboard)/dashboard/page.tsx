@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
+import OnboardingTour from '@/components/OnboardingTour'
 import MarketCharacter from '@/components/MarketCharacter'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
@@ -99,12 +100,19 @@ export default function DashboardPage() {
   const isPreview = !!(session?.user as any)?.isDemo
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
 
+  // Guided tour — force-show when ?tour=1 is in the URL (preview mode)
+  const [forceTour, setForceTour] = useState(false)
+
   // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
   const [showVerifiedBanner, setShowVerifiedBanner] = useState(false)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
   const [upgradeVerified, setUpgradeVerified] = useState<boolean | null>(null) // null=checking, true=confirmed, false=failed
   useEffect(() => {
     const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    if (params?.get('tour') === '1') {
+      setForceTour(true)
+      window.history.replaceState({}, '', '/dashboard?tour=1') // keep param so refresh works
+    }
     if (params?.get('verified') === '1') {
       setShowVerifiedBanner(true)
       window.history.replaceState({}, '', '/dashboard')
@@ -304,6 +312,7 @@ export default function DashboardPage() {
         </>
       )}
       <OnboardingModal />
+      <OnboardingTour forceShow={forceTour} />
 
       {/* ── Email verified banner ────────────────────────────────── */}
       {showVerifiedBanner && (
