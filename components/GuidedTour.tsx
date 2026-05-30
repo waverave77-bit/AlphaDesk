@@ -110,7 +110,8 @@ const STEPS: TourStep[] = [
 function getActiveStep(pathname: string, minStep: number): TourStep | null {
   const matching = STEPS.filter(s => s.match(pathname) && s.idx >= minStep)
   if (!matching.length) return null
-  return matching.sort((a, b) => b.idx - a.idx)[0]
+  // Return the LOWEST matching step — never skip ahead automatically on same-page multi-steps
+  return matching.sort((a, b) => a.idx - b.idx)[0]
 }
 
 /* ── Component ──────────────────────────────────────────────────────── */
@@ -136,25 +137,7 @@ export default function GuidedTour() {
     }
   }, [])
 
-  // Keep ref in sync so the effect below never reads stale state
   minStepRef.current = minStep
-
-  // Auto-advance when navigating to a NEW page that matches a future step.
-  // Uses ref (not state) to avoid stale closure on minStep.
-  useEffect(() => {
-    if (!active || dismissed) return
-    const cur = minStepRef.current
-    const currentStepDef = STEPS.find(s => s.idx === cur)
-    // If current step already matches this page, stay — user clicks through manually
-    if (currentStepDef?.match(pathname)) return
-    // Find the lowest future step that matches this new page
-    const future = STEPS.filter(s => s.match(pathname) && s.idx > cur)
-    if (!future.length) return
-    const next = Math.min(...future.map(s => s.idx))
-    setMinStep(next)
-    localStorage.setItem(TOUR_STEP_KEY, String(next))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, active, dismissed])
 
   const finish = () => {
     localStorage.removeItem(TOUR_ACTIVE_KEY)
