@@ -121,6 +121,7 @@ export default function GuidedTour() {
   const [active, setActive]       = useState(false)
   const [minStep, setMinStep]     = useState(0)
   const [dismissed, setDismissed] = useState(false)
+  const minStepRef = useRef(0)
 
   useEffect(() => {
     setMounted(true)
@@ -135,16 +136,19 @@ export default function GuidedTour() {
     }
   }, [])
 
+  // Keep ref in sync so the effect below never reads stale state
+  minStepRef.current = minStep
+
   // Auto-advance when navigating to a NEW page that matches a future step.
-  // But if the current step already matches this page, don't skip ahead —
-  // the user needs to click through manually.
+  // Uses ref (not state) to avoid stale closure on minStep.
   useEffect(() => {
     if (!active || dismissed) return
-    const currentStepDef = STEPS.find(s => s.idx === minStep)
-    // If current step matches this page, we're already in the right place
+    const cur = minStepRef.current
+    const currentStepDef = STEPS.find(s => s.idx === cur)
+    // If current step already matches this page, stay — user clicks through manually
     if (currentStepDef?.match(pathname)) return
-    // Otherwise find the lowest future step that matches this new page
-    const future = STEPS.filter(s => s.match(pathname) && s.idx > minStep)
+    // Find the lowest future step that matches this new page
+    const future = STEPS.filter(s => s.match(pathname) && s.idx > cur)
     if (!future.length) return
     const next = Math.min(...future.map(s => s.idx))
     setMinStep(next)
