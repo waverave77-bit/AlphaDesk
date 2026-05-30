@@ -135,16 +135,20 @@ export default function GuidedTour() {
     }
   }, [])
 
-  // Auto-advance when navigating to a page that matches a higher step
+  // Auto-advance when navigating to a NEW page that matches a future step.
+  // But if the current step already matches this page, don't skip ahead —
+  // the user needs to click through manually.
   useEffect(() => {
     if (!active || dismissed) return
-    const matching = STEPS.filter(s => s.match(pathname))
-    if (!matching.length) return
-    const highest = Math.max(...matching.map(s => s.idx))
-    if (highest > minStep) {
-      setMinStep(highest)
-      localStorage.setItem(TOUR_STEP_KEY, String(highest))
-    }
+    const currentStepDef = STEPS.find(s => s.idx === minStep)
+    // If current step matches this page, we're already in the right place
+    if (currentStepDef?.match(pathname)) return
+    // Otherwise find the lowest future step that matches this new page
+    const future = STEPS.filter(s => s.match(pathname) && s.idx > minStep)
+    if (!future.length) return
+    const next = Math.min(...future.map(s => s.idx))
+    setMinStep(next)
+    localStorage.setItem(TOUR_STEP_KEY, String(next))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, active, dismissed])
 
