@@ -2005,7 +2005,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
   return (<>
     <div style={{position:'fixed',top:0,left:0,width:'100%',height:'100vh',zIndex:10,pointerEvents:'none'}}>
       <canvas ref={canvasRef} width={canvasW} height={viewH}
-        style={{display:'block',width:'100%',height:'100vh',imageRendering:'pixelated'}}/>
+        style={{display:'block',width:'100%',height:`${viewH}px`,imageRendering:'pixelated'}}/>
     </div>
 
     {/* Clickable zone over character */}
