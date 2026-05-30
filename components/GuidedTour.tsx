@@ -68,6 +68,7 @@ const STEPS: TourStep[] = [
     body: "Type any ticker or company name in the search bar. Try AAPL, NVDA, TSLA — whatever you've heard of.",
     hint: "I'll update automatically once you search.",
     nextLabel: "Skip ahead →",
+    nextHref: '/research/AAPL',
   },
   {
     idx: 2,
