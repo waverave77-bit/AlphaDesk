@@ -1309,9 +1309,9 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       drawBed(ctx, W/2, H)
 
       // ── Blanket: shaped path with raised body profile ─────────────
-      // head right (neck) = headOx + 11*PX = W/2-108+55 = W/2-53
-      // Start blanket a bit left of neck so it tucks under the chin — no gap
-      const neckX  = Math.round(W/2-62)
+      // head right (neck) = headOx + 11*PX. On mobile (PX=3) head ends at W/2-75,
+      // so blanket must start there — otherwise a 13px gap appears between head and blanket.
+      const neckX  = isMobile ? Math.round(W/2 - 108 + 11*PX) : Math.round(W/2-62)
       const bedBot = Math.round(H-8)
       // Blanket left edge goes up to chin height (same y as head center)
       const chinY  = Math.round(H-110)
@@ -1474,7 +1474,7 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         // Phase 1: sleeping
         const bob=Math.round(Math.sin(now*0.0008)*2)
         drawBed(ctx,W/2,H)
-        const neckX=Math.round(W/2-62)
+        const neckX=isMobile ? Math.round(W/2 - 108 + 11*PX) : Math.round(W/2-62)
         const bedBot=Math.round(H-8)
         ctx.fillStyle='#1e3a8a'
         ctx.beginPath()
