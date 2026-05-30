@@ -91,8 +91,16 @@ const STEPS: TourStep[] = [
     idx: 4,
     match: (p) => p.startsWith('/trading-simulator'),
     title: "The $100K Challenge 🏆",
-    body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, no risk. Beat the S&P 500 and climb the leaderboard. And that's just one tool — there's also markets, earnings, hedge fund filings, a quant screener and more. Poke around, you'll find stuff you like.",
-    hint: "Need help? Go to mrguyinvests.com/chat and just ask me.",
+    body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, zero risk. The goal is to beat the S&P 500. Your returns are tracked and you can see how you stack up on the leaderboard.",
+    hint: "Best way to learn investing without risking real money.",
+    nextLabel: "Cool! What else is there? →",
+  },
+  {
+    idx: 5,
+    match: (p) => p.startsWith('/trading-simulator'),
+    title: "You're all set 🎉",
+    body: "There's a lot more to explore — markets overview, earnings calendars, hedge fund filings, a quant stock screener, and more. Poke around and find what works for you.",
+    hint: "last",
     nextLabel: "Let's go! 🚀",
     isLast: true,
   },
@@ -212,7 +220,7 @@ export default function GuidedTour() {
                 <p className="text-sm text-gray-300 leading-relaxed">{step.body}</p>
                 {step.hint && (
                   <p className="text-xs text-gray-500 leading-relaxed">
-                    {step.isLast
+                    {step.hint === 'last'
                       ? <>Need help? <a href="/chat" className="text-blue-400 hover:text-blue-300 underline">Ask Mr. Guy</a> anything.</>
                       : step.hint
                     }
