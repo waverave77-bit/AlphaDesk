@@ -30,35 +30,35 @@ const ROW1 = ['AAPL', 'TSLA', 'MSFT', 'NVDA', 'GOOGL', 'META', 'AMZN', 'NFLX', '
 const ROW2 = ['INTC', 'JPM', 'BAC', 'WMT', 'DIS', 'SPOT', 'UBER', 'LYFT', 'PYPL']
 const ROW3 = ['SQ', 'COIN', 'SPY', 'QQQ', 'GLD', 'PLTR', 'SOFI', 'RBLX', 'SNAP']
 
-// Hardcoded fallback prices so there's always something to show
+// Fallback prices shown while live data loads (updated May 2025)
 const FALLBACK: Record<string, { price: number; change: number }> = {
-  AAPL: { price: 189.30, change: 1.24 },
-  TSLA: { price: 248.50, change: -2.15 },
-  MSFT: { price: 415.80, change: 0.87 },
-  NVDA: { price: 875.40, change: 3.52 },
-  GOOGL: { price: 175.60, change: 0.43 },
-  META: { price: 527.10, change: 1.95 },
-  AMZN: { price: 198.20, change: -0.62 },
-  NFLX: { price: 648.90, change: 2.11 },
-  AMD: { price: 162.40, change: -1.38 },
-  INTC: { price: 22.85, change: -0.94 },
-  JPM: { price: 218.70, change: 0.55 },
-  BAC: { price: 41.20, change: -0.22 },
-  WMT: { price: 84.50, change: 0.31 },
-  DIS: { price: 112.30, change: 1.05 },
-  SPOT: { price: 356.80, change: 4.12 },
-  UBER: { price: 72.40, change: 1.67 },
-  LYFT: { price: 13.80, change: -3.21 },
-  PYPL: { price: 68.20, change: -0.89 },
-  SQ: { price: 72.60, change: 2.34 },
-  COIN: { price: 228.40, change: 5.67 },
-  SPY: { price: 547.20, change: 0.41 },
-  QQQ: { price: 474.80, change: 0.63 },
-  GLD: { price: 242.10, change: 0.18 },
-  PLTR: { price: 28.90, change: 3.45 },
-  SOFI: { price: 7.82, change: -1.25 },
-  RBLX: { price: 42.30, change: 2.78 },
-  SNAP: { price: 14.60, change: -0.94 },
+  AAPL: { price: 211.00, change: 0.50 },
+  TSLA: { price: 335.00, change: -1.20 },
+  MSFT: { price: 450.00, change: 0.80 },
+  NVDA: { price: 1090.00, change: 2.10 },
+  GOOGL: { price: 175.00, change: 0.40 },
+  META: { price: 590.00, change: 1.50 },
+  AMZN: { price: 198.00, change: -0.50 },
+  NFLX: { price: 1070.00, change: 1.80 },
+  AMD: { price: 155.00, change: -1.00 },
+  INTC: { price: 21.00, change: -0.80 },
+  JPM: { price: 250.00, change: 0.60 },
+  BAC: { price: 43.00, change: -0.20 },
+  WMT: { price: 95.00, change: 0.30 },
+  DIS: { price: 100.00, change: 0.90 },
+  SPOT: { price: 600.00, change: 3.50 },
+  UBER: { price: 80.00, change: 1.50 },
+  LYFT: { price: 14.00, change: -2.50 },
+  PYPL: { price: 67.00, change: -0.70 },
+  SQ: { price: 70.00, change: 1.80 },
+  COIN: { price: 260.00, change: 4.00 },
+  SPY: { price: 580.00, change: 0.40 },
+  QQQ: { price: 500.00, change: 0.60 },
+  GLD: { price: 300.00, change: 0.20 },
+  PLTR: { price: 120.00, change: 3.00 },
+  SOFI: { price: 14.00, change: -1.00 },
+  RBLX: { price: 55.00, change: 2.50 },
+  SNAP: { price: 10.00, change: -0.80 },
 }
 
 function TickerChip({ data }: { data: TickerData }) {
@@ -104,37 +104,30 @@ export default function TickerWall() {
   const marketStatus = getMarketStatus()
 
   useEffect(() => {
-    // Fetch a handful of real prices in the background
-    const fetchSome = async (symbols: string[], setter: (d: TickerData[]) => void, fallbackList: string[]) => {
-      const subset = symbols.slice(0, 3) // only fetch 3 per row to avoid rate limits
-      try {
-        const results = await Promise.allSettled(
-          subset.map(sym => fetch(`/api/stock/${sym}`).then(r => r.json()))
-        )
-        setter(
-          symbols.map(sym => {
-            const idx = subset.indexOf(sym)
-            if (idx !== -1) {
-              const result = results[idx]
-              if (result.status === 'fulfilled' && result.value?.quote?.price) {
-                return {
-                  symbol: sym,
-                  price: result.value.quote.price,
-                  change: result.value.quote.changePercent ?? (FALLBACK[sym]?.change ?? null),
-                }
-              }
+    // Fetch live prices for all symbols in batches to avoid rate limits
+    const fetchAll = async (symbols: string[], setter: (d: TickerData[]) => void) => {
+      const results = await Promise.allSettled(
+        symbols.map(sym => fetch(`/api/stock/${sym}`).then(r => r.json()))
+      )
+      setter(
+        symbols.map((sym, idx) => {
+          const result = results[idx]
+          if (result.status === 'fulfilled' && result.value?.quote?.price) {
+            return {
+              symbol: sym,
+              price: result.value.quote.price,
+              change: result.value.quote.changePercent ?? (FALLBACK[sym]?.change ?? null),
             }
-            return { symbol: sym, price: FALLBACK[sym]?.price ?? null, change: FALLBACK[sym]?.change ?? null }
-          })
-        )
-      } catch {
-        // keep fallback
-      }
+          }
+          return { symbol: sym, price: FALLBACK[sym]?.price ?? null, change: FALLBACK[sym]?.change ?? null }
+        })
+      )
     }
 
-    fetchSome(ROW1, setRow1, ROW1)
-    fetchSome(ROW2, setRow2, ROW2)
-    fetchSome(ROW3, setRow3, ROW3)
+    // Stagger the 3 rows slightly to avoid hammering the API all at once
+    fetchAll(ROW1, setRow1)
+    setTimeout(() => fetchAll(ROW2, setRow2), 500)
+    setTimeout(() => fetchAll(ROW3, setRow3), 1000)
   }, [])
 
   return (
