@@ -92,7 +92,7 @@ const STEPS: TourStep[] = [
     match: (p) => p.startsWith('/trading-simulator'),
     title: "The $100K Challenge 🏆",
     body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, no risk. Beat the S&P 500 and climb the leaderboard. And that's just one tool — there's also markets, earnings, hedge fund filings, a quant screener and more. Poke around, you'll find stuff you like.",
-    hint: "Hit the Mr. Guy tab in the nav if you ever need help.",
+    hint: "Need help? Go to mrguyinvests.com/chat and just ask me.",
     nextLabel: "Let's go! 🚀",
     isLast: true,
   },
@@ -211,7 +211,12 @@ export default function GuidedTour() {
                 <p className="text-sm font-bold text-white leading-snug">{step.title}</p>
                 <p className="text-sm text-gray-300 leading-relaxed">{step.body}</p>
                 {step.hint && (
-                  <p className="text-xs text-gray-500 leading-relaxed">{step.hint}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    {step.isLast
+                      ? <>Need help? <a href="/chat" className="text-blue-400 hover:text-blue-300 underline">Ask Mr. Guy</a> anything.</>
+                      : step.hint
+                    }
+                  </p>
                 )}
               </div>
             </div>
