@@ -62,6 +62,11 @@ export default function OnboardingModal() {
     // Refresh session token so hasOnboarded is reflected immediately
     updateSession()
 
+    // Kick off the guided tour for new users
+    localStorage.setItem('zg_guided_tour_active', '1')
+    localStorage.setItem('zg_guided_tour_step', '0')
+    window.dispatchEvent(new Event('zg-tour-start'))
+
     setVisible(false)
   }
 

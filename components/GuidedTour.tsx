@@ -135,6 +135,15 @@ export default function GuidedTour() {
       if (isTourUrl) window.history.replaceState({}, '', '/dashboard')
       localStorage.setItem(TOUR_ACTIVE_KEY, '1')
     }
+
+    // Listen for onboarding modal completing — start tour for new users
+    const handleTourStart = () => {
+      setActive(true)
+      setMinStep(0)
+      setDismissed(false)
+    }
+    window.addEventListener('zg-tour-start', handleTourStart)
+    return () => window.removeEventListener('zg-tour-start', handleTourStart)
   }, [])
 
   minStepRef.current = minStep
