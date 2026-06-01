@@ -3,6 +3,7 @@ import { getStockQuote, getHistoricalData, getStockNews, getAnalystData, getEarn
 import { checkAILimit } from '@/lib/pro'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { checkIpLimit, getIp } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,16 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
   const url = new URL(req.url)
   const type = url.searchParams.get('type') || 'quote'
   const range = (url.searchParams.get('range') || '1m') as '1d' | '1w' | '1m' | '3m' | '6m' | 'ytd' | '1y' | '5y'
+
+  // Guest IP rate limit — 120 stock requests per minute (plenty for real users,
+  // blocks scrapers before they can get us banned from Yahoo Finance)
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) {
+    const ip = getIp(req)
+    if (!checkIpLimit(ip, 'stock-guest', 120, 60_000)) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+  }
 
   try {
     if (type === 'historical') {

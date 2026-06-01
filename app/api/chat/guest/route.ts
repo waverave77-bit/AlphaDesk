@@ -5,32 +5,15 @@
  */
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { checkIpLimit, getIp } from '@/lib/ratelimit'
 
 export const dynamic = 'force-dynamic'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-// Simple in-memory IP rate limiter — resets every hour
-const ipUsage = new Map<string, { count: number; resetAt: number }>()
-const GUEST_LIMIT = 3
-const WINDOW_MS = 60 * 60 * 1000 // 1 hour
-
-function checkGuestLimit(ip: string): boolean {
-  const now = Date.now()
-  const entry = ipUsage.get(ip)
-  if (!entry || now > entry.resetAt) {
-    ipUsage.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return true // allowed
-  }
-  if (entry.count >= GUEST_LIMIT) return false // blocked
-  entry.count++
-  return true
-}
-
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
-
-  if (!checkGuestLimit(ip)) {
+  // 3 questions per IP per hour — lets guests try the product without burning credits
+  if (!checkIpLimit(getIp(req), 'guest-chat', 3, 60 * 60 * 1000)) {
     return NextResponse.json(
       { error: 'Guest limit reached', limitReached: true },
       { status: 429 }
