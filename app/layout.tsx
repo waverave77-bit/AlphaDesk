@@ -14,7 +14,7 @@ import ActivityTracker from '@/components/ActivityTracker'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? 'https://www.mrguyinvests.com'),
   title: {
     default: 'Mr. Guy Invests — AI-Powered Stock Research & Portfolio Tracker',
     template: '%s | Mr. Guy Invests',
