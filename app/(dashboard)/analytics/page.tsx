@@ -600,6 +600,19 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* ── Quick Links ── */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
+        <h2 className="text-lg font-bold text-white">🔗 Quick Links</h2>
+        <a href="/generate-assets" target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-3 p-4 rounded-xl bg-gray-800/50 border border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800 transition-all group">
+          <span className="text-2xl">🎨</span>
+          <div>
+            <p className="text-white font-semibold text-sm group-hover:text-blue-400 transition-colors">Brand Assets</p>
+            <p className="text-gray-500 text-xs mt-0.5">Mr. Guy logos, icons, social media PNGs</p>
+          </div>
+        </a>
+      </div>
+
     </div>
   )
 }
