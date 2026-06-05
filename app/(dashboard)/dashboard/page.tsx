@@ -259,12 +259,25 @@ export default function DashboardPage() {
       .catch(() => setBrief({ text: '', status: 'Closed' }))
       .finally(() => setBriefLoading(false))
 
-    // Indices
-    fetch('/api/market-indices')
-      .then(r => r.json())
-      .then(d => setIndices(d.indices ?? []))
-      .catch(() => {})
-      .finally(() => setIndicesLoading(false))
+    // Indices — fetch once now, then auto-refresh every 60s during market hours
+    const fetchIndices = () =>
+      fetch('/api/market-indices')
+        .then(r => r.json())
+        .then(d => setIndices(d.indices ?? []))
+        .catch(() => {})
+        .finally(() => setIndicesLoading(false))
+
+    fetchIndices()
+
+    // Refresh every 60s while market is open (9:30am–4pm ET Mon–Fri)
+    const indicesTimer = setInterval(() => {
+      const now = new Date()
+      const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+      const day = et.getDay()
+      const mins = et.getHours() * 60 + et.getMinutes()
+      const isOpen = day >= 1 && day <= 5 && mins >= 570 && mins < 960
+      if (isOpen) fetchIndices()
+    }, 60_000)
 
     // Fear & Greed index (VIX + S&P momentum composite)
     fetch('/api/fear-greed')
@@ -297,6 +310,8 @@ export default function DashboardPage() {
         setWatchLoading(false)
       })
       .catch(() => setWatchLoading(false))
+
+    return () => clearInterval(indicesTimer)
   }, [])
 
   return (
