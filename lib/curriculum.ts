@@ -42,6 +42,8 @@ export interface Lesson {
   globalOrder: number // 0-based position across the whole path
   title: string
   terms: Term[]
+  /** The final "boss" lesson of a course — reviews ALL its terms. */
+  isReview?: boolean
 }
 
 export interface QuizQuestion {
@@ -64,7 +66,8 @@ function buildLessons(): Lesson[] {
   let globalOrder = 0
   for (const course of COURSES) {
     const courseTerms = TERMS.filter((t) => t.category === course.category)
-    chunk(courseTerms, LESSON_SIZE).forEach((terms, i) => {
+    const chunks = chunk(courseTerms, LESSON_SIZE)
+    chunks.forEach((terms, i) => {
       lessons.push({
         id: `${course.id}-${i + 1}`,
         courseId: course.id,
@@ -76,6 +79,19 @@ function buildLessons(): Lesson[] {
         title: `Lesson ${i + 1}`,
         terms,
       })
+    })
+    // Boss review lesson — combines everything from the whole course.
+    lessons.push({
+      id: `${course.id}-review`,
+      courseId: course.id,
+      courseTitle: course.title,
+      emoji: course.emoji,
+      color: course.color,
+      index: chunks.length + 1,
+      globalOrder: globalOrder++,
+      title: 'Review',
+      terms: courseTerms,
+      isReview: true,
     })
   }
   return lessons

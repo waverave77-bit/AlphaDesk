@@ -135,8 +135,47 @@ function pickExtra(lesson: Lesson): Exercise | null {
   return pool[(lesson.index - 1) % pool.length]
 }
 
+/** Deterministic shuffle (LCG) — no Math.random, so SSR and client agree. */
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const a = [...arr]
+  let s = (seed % 233280) + 1
+  for (let i = a.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280
+    const j = Math.floor((s / 233280) * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/**
+ * Boss review — combines everything from the whole course. No teaching,
+ * all testing: a wide sample of choice/blank across every term, two match
+ * sets, plus the course scenario & myth. Deterministic.
+ */
+function buildReviewExercises(lesson: Lesson): Exercise[] {
+  const terms = lesson.terms
+  const seed = lesson.globalOrder + 7
+  const shuffled = seededShuffle(terms, seed)
+  const out: Exercise[] = []
+
+  const sample = shuffled.slice(0, Math.min(8, shuffled.length))
+  sample.forEach((t, i) => out.push(i % 2 === 0 ? makeChoice(t, seed + i) : makeBlank(t, seed + i)))
+
+  // Drop in match sets among the questions.
+  out.splice(3, 0, makeMatch(seededShuffle(terms, seed + 1).slice(0, 4)))
+  if (terms.length >= 8) out.push(makeMatch(seededShuffle(terms, seed + 2).slice(0, 4)))
+
+  const scn = SCENARIOS[lesson.courseId]?.[0]
+  if (scn) out.push(scn)
+  const myth = MYTHS[lesson.courseId]?.[0]
+  if (myth) out.push(myth)
+
+  return out
+}
+
 /** Build the ordered exercise stream for a lesson. */
 export function buildLessonExercises(lesson: Lesson): Exercise[] {
+  if (lesson.isReview) return buildReviewExercises(lesson)
   const out: Exercise[] = []
   lesson.terms.forEach((term, i) => {
     out.push({ kind: 'teach', term })

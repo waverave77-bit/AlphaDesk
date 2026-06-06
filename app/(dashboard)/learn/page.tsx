@@ -8,7 +8,7 @@ import { etDateString } from '@/lib/learn-streak'
 import MrGuyMascot from '@/components/learn/MrGuyMascot'
 import MrGuyHead from '@/components/MrGuyHead'
 import { useSound } from '@/components/learn/useSound'
-import { Flame, Star, Lock, Check, BookOpen, X } from 'lucide-react'
+import { Flame, Star, Lock, Check, BookOpen, X, Crown } from 'lucide-react'
 
 type Progress = {
   authed: boolean
@@ -135,33 +135,41 @@ export default function LearnPage() {
                     const done = completedIds.has(lesson.id)
                     const unlockedNode = isUnlocked(lesson.globalOrder)
                     const isCurrent = currentLesson?.id === lesson.id
-                    const f = unlockedNode ? hex.front : LOCKED.front
-                    const e = unlockedNode ? hex.edge : LOCKED.edge
+                    const review = !!lesson.isReview
+                    const GOLD = '#f59e0b', GOLD_EDGE = '#b45309', GOLD_GLOW = 'rgba(245,158,11,.6)'
+                    const f = !unlockedNode ? LOCKED.front : review ? GOLD : hex.front
+                    const e = !unlockedNode ? LOCKED.edge : review ? GOLD_EDGE : hex.edge
+                    const ring = review ? GOLD_GLOW : hex.glow
                     const offset = OFFSETS[i % OFFSETS.length]
+                    const size = review ? 88 : 74
                     return (
                       <div key={lesson.id} className="relative flex flex-col items-center" style={{ transform: `translateX(${offset}px)` }}>
                         {/* Mr. Guy stands beside the current node */}
                         {isCurrent && (
-                          <div className="absolute top-1 z-0" style={{ [offset > 0 ? 'right' : 'left']: '78px' }}>
+                          <div className="absolute top-1 z-0" style={{ [offset > 0 ? 'right' : 'left']: `${size + 4}px` }}>
                             <MrGuyMascot px={2} mood="idle" flip={offset > 0} />
                           </div>
                         )}
                         {isCurrent && (
                           <div className="absolute -top-9 left-1/2 -translate-x-1/2 z-10" style={{ animation: 'lpStartBob 1.6s ease-in-out infinite' }}>
                             <div className="relative bg-white px-3 py-1 rounded-xl shadow-lg">
-                              <span className="text-[12px] font-black uppercase tracking-wide" style={{ color: hex.front }}>Start</span>
+                              <span className="text-[12px] font-black uppercase tracking-wide" style={{ color: review ? GOLD : hex.front }}>{review ? 'Boss' : 'Start'}</span>
                               <div className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-3 h-3 bg-white rotate-45" />
                             </div>
                           </div>
                         )}
                         <button disabled={!unlockedNode} onClick={() => go(`/learn/${lesson.id}`)} className="lnode relative z-[1]"
-                          style={{ ['--f' as any]: f, ['--e' as any]: e, ['--ring' as any]: hex.glow, ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}) }}
-                          aria-label={`${course.title} lesson ${lesson.index}${done ? ' (completed)' : unlockedNode ? '' : ' (locked)'}`}>
+                          style={{ width: size, height: size, ['--f' as any]: f, ['--e' as any]: e, ['--ring' as any]: ring, ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}) }}
+                          aria-label={`${course.title} ${review ? 'review boss' : `lesson ${lesson.index}`}${done ? ' (completed)' : unlockedNode ? '' : ' (locked)'}`}>
                           <span className="lne" />
-                          <span className="lnf" style={done ? { boxShadow: `0 0 18px ${hex.glow}` } : undefined}>
-                            {done ? <Check className="h-8 w-8 text-white" strokeWidth={3.5} /> : !unlockedNode ? <Lock className="h-6 w-6 text-gray-500" /> : <span className="text-white font-black text-2xl drop-shadow">{lesson.index}</span>}
+                          <span className="lnf" style={done || review ? { boxShadow: `0 0 18px ${review ? GOLD_GLOW : hex.glow}` } : undefined}>
+                            {!unlockedNode ? <Lock className="h-6 w-6 text-gray-500" />
+                              : review ? <Crown className="h-9 w-9 text-white" strokeWidth={2.5} fill={done ? 'currentColor' : 'none'} />
+                              : done ? <Check className="h-8 w-8 text-white" strokeWidth={3.5} />
+                              : <span className="text-white font-black text-2xl drop-shadow">{lesson.index}</span>}
                           </span>
                         </button>
+                        {review && <span className="text-[10px] font-black mt-1.5 uppercase tracking-widest" style={{ color: unlockedNode ? GOLD : '#6b7280' }}>Review</span>}
                       </div>
                     )
                   })}

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getLesson, XP_PER_CORRECT, XP_LESSON_BONUS } from '@/lib/curriculum'
+import { buildLessonExercises, scoredCount } from '@/lib/exercises'
 import { etDateString, nextStreak } from '@/lib/learn-streak'
 import { levelFromXP, PERFECT_BONUS, ACHIEVEMENTS, unlockedAchievements } from '@/lib/progression'
 
@@ -24,7 +25,9 @@ export async function POST(req: NextRequest) {
   if (!lesson) {
     return NextResponse.json({ error: 'Unknown lesson' }, { status: 400 })
   }
-  const total = lesson.terms.length
+  // Score out of the actual number of graded exercises (handles reviews,
+  // where there are far fewer questions than terms).
+  const total = scoredCount(buildLessonExercises(lesson))
   const clampedScore = Math.min(score, total)
 
   // First completion earns XP; replays update the best score but don't re-farm XP.

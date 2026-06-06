@@ -182,6 +182,13 @@ export default function LessonPlayer() {
         <button onClick={sound.toggleMute} aria-label="Toggle sound" className="text-gray-600 hover:text-gray-400 shrink-0">{sound.muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}</button>
       </div>
 
+      {/* Boss review banner */}
+      {phase === 'play' && lesson.isReview && (
+        <div className="mb-5 flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-2xl py-2 text-amber-400 font-black text-sm uppercase tracking-widest">
+          👑 Boss Review — everything you’ve learned
+        </div>
+      )}
+
       {/* ── PLAY ── */}
       {phase === 'play' && ex && (
         <div key={idx} className="lp-bounce">
