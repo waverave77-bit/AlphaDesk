@@ -12,6 +12,7 @@ import { useAdmin } from '@/hooks/useAdmin'
 const primaryNav = [
   { href: '/dashboard', label: 'Home' },
   { href: '/learn',     label: 'Learn' },
+  { href: '/glossary',  label: 'Dictionary' },
   { href: '/trading-simulator', label: '$100K Challenge' },
   { href: '/chat',      label: 'Ask Mr. Guy' },
 ]

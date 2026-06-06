@@ -54,6 +54,7 @@ model User {
   learnStreak          Int       @default(0)
   learnLongestStreak   Int       @default(0)
   lastLearnDate        String?   // "YYYY-MM-DD"
+  claimedAchievements  String[]  @default([])
   // ───────────────────────────────────────────────────────────────────
 
   holdings            Holding[]

@@ -50,17 +50,17 @@ export type ProgressSnapshot = {
   streak: number
   longestStreak: number
 }
-export type Achievement = { id: string; title: string; desc: string; emoji: string; check: (p: ProgressSnapshot) => boolean }
+export type Achievement = { id: string; title: string; desc: string; emoji: string; xp: number; check: (p: ProgressSnapshot) => boolean }
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'first',     title: 'First Steps',     desc: 'Finish your first lesson',     emoji: '🎓', check: (p) => p.completed.length >= 1 },
-  { id: 'perfect',   title: 'Flawless',        desc: 'Ace a lesson (100%)',          emoji: '💯', check: (p) => p.completed.some((c) => c.total > 0 && c.score === c.total) },
-  { id: 'streak3',   title: 'On a Roll',       desc: 'Hit a 3-day streak',           emoji: '🔥', check: (p) => p.longestStreak >= 3 },
-  { id: 'basics',    title: 'Back to Basics',  desc: 'Finish the Basics course',     emoji: '🌱', check: (p) => courseDone(p, 'basics') },
-  { id: 'ten',       title: 'Bookworm',        desc: 'Finish 10 lessons',            emoji: '📚', check: (p) => p.completed.length >= 10 },
-  { id: 'streak7',   title: 'Committed',       desc: 'Hit a 7-day streak',           emoji: '📅', check: (p) => p.longestStreak >= 7 },
-  { id: 'half',      title: 'Halfway There',   desc: 'Finish half the path',         emoji: '⛳', check: (p) => p.completed.length >= Math.ceil(TOTAL_LESSONS / 2) },
-  { id: 'legend',    title: 'Market Master',   desc: 'Finish every lesson',          emoji: '👑', check: (p) => p.completed.length >= TOTAL_LESSONS },
+  { id: 'first',     title: 'First Steps',     desc: 'Finish your first lesson',     emoji: '🎓', xp: 25,  check: (p) => p.completed.length >= 1 },
+  { id: 'perfect',   title: 'Flawless',        desc: 'Ace a lesson with 100%',       emoji: '💯', xp: 25,  check: (p) => p.completed.some((c) => c.total > 0 && c.score === c.total) },
+  { id: 'streak3',   title: 'On a Roll',       desc: 'Reach a 3-day streak',         emoji: '🔥', xp: 30,  check: (p) => p.longestStreak >= 3 },
+  { id: 'basics',    title: 'Back to Basics',  desc: 'Finish the Basics course',     emoji: '🌱', xp: 40,  check: (p) => courseDone(p, 'basics') },
+  { id: 'ten',       title: 'Bookworm',        desc: 'Finish 10 lessons total',      emoji: '📚', xp: 50,  check: (p) => p.completed.length >= 10 },
+  { id: 'streak7',   title: 'Committed',       desc: 'Reach a 7-day streak',         emoji: '📅', xp: 60,  check: (p) => p.longestStreak >= 7 },
+  { id: 'half',      title: 'Halfway There',   desc: 'Finish half the path',         emoji: '⛳', xp: 75,  check: (p) => p.completed.length >= Math.ceil(TOTAL_LESSONS / 2) },
+  { id: 'legend',    title: 'Market Master',   desc: 'Finish every single lesson',   emoji: '👑', xp: 150, check: (p) => p.completed.length >= TOTAL_LESSONS },
 ]
 
 function courseDone(p: ProgressSnapshot, courseId: string): boolean {

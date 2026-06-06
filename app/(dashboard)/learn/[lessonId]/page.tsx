@@ -12,13 +12,32 @@ import CountUp from '@/components/learn/CountUp'
 import { useSound } from '@/components/learn/useSound'
 import { X, Check, Lightbulb, Flame, Star, Volume2, VolumeX } from 'lucide-react'
 
-const ACCENT: Record<string, { v: PushVariant; text: string; soft: string; bar: string }> = {
-  blue:    { v: 'blue',    text: 'text-blue-400',    soft: 'bg-blue-500/10',    bar: 'bg-blue-500' },
-  purple:  { v: 'purple',  text: 'text-purple-400',  soft: 'bg-purple-500/10',  bar: 'bg-purple-500' },
-  emerald: { v: 'emerald', text: 'text-emerald-400', soft: 'bg-emerald-500/10', bar: 'bg-emerald-500' },
-  red:     { v: 'red',     text: 'text-red-400',     soft: 'bg-red-500/10',     bar: 'bg-red-500' },
-  amber:   { v: 'amber',   text: 'text-amber-400',   soft: 'bg-amber-500/10',   bar: 'bg-amber-500' },
-  pink:    { v: 'pink',    text: 'text-pink-400',    soft: 'bg-pink-500/10',    bar: 'bg-pink-500' },
+const ACCENT: Record<string, { v: PushVariant; text: string; soft: string; bar: string; grad: string }> = {
+  blue:    { v: 'blue',    text: 'text-blue-400',    soft: 'bg-blue-500/10',    bar: 'bg-blue-500',    grad: 'from-blue-500 to-blue-600' },
+  purple:  { v: 'purple',  text: 'text-purple-400',  soft: 'bg-purple-500/10',  bar: 'bg-purple-500',  grad: 'from-purple-500 to-purple-600' },
+  emerald: { v: 'emerald', text: 'text-emerald-400', soft: 'bg-emerald-500/10', bar: 'bg-emerald-500', grad: 'from-emerald-500 to-emerald-600' },
+  red:     { v: 'red',     text: 'text-red-400',     soft: 'bg-red-500/10',     bar: 'bg-red-500',     grad: 'from-red-500 to-red-600' },
+  amber:   { v: 'amber',   text: 'text-amber-400',   soft: 'bg-amber-500/10',   bar: 'bg-amber-500',   grad: 'from-amber-500 to-amber-600' },
+  pink:    { v: 'pink',    text: 'text-pink-400',    soft: 'bg-pink-500/10',    bar: 'bg-pink-500',    grad: 'from-pink-500 to-pink-600' },
+}
+
+function emojiForTerm(name: string): string {
+  const n = name.toLowerCase()
+  if (/dividend|cash|income|pay/.test(n)) return '💰'
+  if (/etf|fund|basket|index/.test(n)) return '🧺'
+  if (/bull/.test(n)) return '🐂'
+  if (/bear/.test(n)) return '🐻'
+  if (/ipo|public|debut/.test(n)) return '🎉'
+  if (/risk|volat|loss/.test(n)) return '⚠️'
+  if (/chart|trend|moving|candle/.test(n)) return '📈'
+  if (/stock|share|equity/.test(n)) return '📜'
+  if (/option|call|put|deriv/.test(n)) return '🎲'
+  if (/bond|yield|treasury/.test(n)) return '🏦'
+  if (/cap|value|worth|price/.test(n)) return '🏷️'
+  if (/portfolio|diversif/.test(n)) return '💼'
+  if (/broker|exchange|market/.test(n)) return '🤝'
+  if (/ticker|symbol/.test(n)) return '🔤'
+  return '📊'
 }
 
 const HYPE = ['Nice!', 'Correct!', 'You got it!', 'Let’s gooo!', 'Big brain 🧠', 'Boom 💥']
@@ -69,7 +88,7 @@ export default function LessonPlayer() {
   const [result, setResult] = useState<boolean | null>(null) // null = unanswered
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
-  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean; perfect?: boolean; perfectBonus?: number; leveledUp?: boolean; levelTitle?: string; levelEmoji?: string } | null>(null)
+  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean; perfect?: boolean; perfectBonus?: number; leveledUp?: boolean; levelTitle?: string; levelEmoji?: string; newAchievements?: { id: string; title: string; emoji: string; xp: number }[] } | null>(null)
   const [chestOpen, setChestOpen] = useState(false)
   const posted = useRef(false)
 
@@ -93,7 +112,7 @@ export default function LessonPlayer() {
     sound.complete()
     fetch('/api/learn/complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lessonId: lesson.id, score }) })
       .then((r) => r.json())
-      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false, perfect: d.perfect, perfectBonus: d.perfectBonus ?? 0, leveledUp: d.leveledUp, levelTitle: d.levelTitle, levelEmoji: d.levelEmoji }))
+      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false, perfect: d.perfect, perfectBonus: d.perfectBonus ?? 0, leveledUp: d.leveledUp, levelTitle: d.levelTitle, levelEmoji: d.levelEmoji, newAchievements: d.newAchievements ?? [] }))
       .catch(() => setPost({ xpGain: 0, streak: 0, authed: false }))
   }, [phase, lesson, score, sound])
 
@@ -176,23 +195,31 @@ export default function LessonPlayer() {
                   <div className={`absolute -left-1.5 bottom-3 w-3 h-3 ${a.soft} rotate-45`} />
                 </div>
               </div>
-              <div className="bg-gray-900 border-2 border-gray-800 rounded-3xl p-6 space-y-4 shadow-xl">
-                <div>
-                  <h2 className="text-3xl font-black text-white tracking-tight">{ex.term.term}</h2>
-                  <p className={`text-xl font-bold ${a.text} mt-1`}>{ex.term.simple}</p>
+              <div className="rounded-3xl overflow-hidden border-2 border-gray-800 shadow-xl">
+                {/* Colored flashcard header */}
+                <div className={`bg-gradient-to-br ${a.grad} px-6 py-5 flex items-center gap-4`}>
+                  <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl shrink-0 shadow-inner">{emojiForTerm(ex.term.term)}</div>
+                  <div className="min-w-0">
+                    <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">New term</p>
+                    <h2 className="text-3xl font-black text-white tracking-tight leading-tight">{ex.term.term}</h2>
+                  </div>
                 </div>
-                <p className="text-gray-300 leading-relaxed text-[15px]">{ex.term.explanation}</p>
-                {ex.term.example && (
-                  <div className="bg-gray-800/70 rounded-2xl px-4 py-3 border border-gray-700/50">
-                    <p className="text-[11px] uppercase tracking-wider text-gray-500 font-bold mb-1">For example</p>
-                    <p className="text-sm text-gray-200">{ex.term.example}</p>
-                  </div>
-                )}
-                {ex.term.tip && (
-                  <div className="flex items-start gap-2 text-sm text-yellow-300/90 bg-yellow-500/5 rounded-2xl px-3 py-2">
-                    <Lightbulb className="h-4 w-4 mt-0.5 shrink-0" /><span>{ex.term.tip}</span>
-                  </div>
-                )}
+                {/* Body */}
+                <div className="bg-gray-900 p-6 space-y-4">
+                  <p className={`text-xl font-bold ${a.text}`}>{ex.term.simple}</p>
+                  <p className="text-gray-300 leading-relaxed text-[15px]">{ex.term.explanation}</p>
+                  {ex.term.example && (
+                    <div className="bg-gray-800/70 rounded-2xl px-4 py-3 border border-gray-700/50">
+                      <p className="text-[11px] uppercase tracking-wider text-gray-500 font-bold mb-1">For example</p>
+                      <p className="text-sm text-gray-200">{ex.term.example}</p>
+                    </div>
+                  )}
+                  {ex.term.tip && (
+                    <div className="flex items-start gap-2 text-sm text-yellow-300/90 bg-yellow-500/5 rounded-2xl px-3 py-2">
+                      <Lightbulb className="h-4 w-4 mt-0.5 shrink-0" /><span>{ex.term.tip}</span>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex justify-end mt-6">
                 <PushButton variant={a.v} className="px-8 py-3 text-base" onClick={advance}>Got it 👊</PushButton>
@@ -337,6 +364,22 @@ export default function LessonPlayer() {
 
           {post?.perfect && (post?.perfectBonus ?? 0) > 0 && (
             <p className="mt-4 text-sm font-black text-yellow-300">💯 Perfect bonus: +{post.perfectBonus} XP</p>
+          )}
+
+          {/* Achievement unlocks */}
+          {(post?.newAchievements?.length ?? 0) > 0 && (
+            <div className="mt-5 space-y-2 max-w-sm mx-auto">
+              {post!.newAchievements!.map((ach) => (
+                <div key={ach.id} className="lp-bounce flex items-center gap-3 bg-gradient-to-r from-yellow-500/20 to-amber-600/10 border-2 border-yellow-500/40 rounded-2xl px-4 py-3 text-left">
+                  <div className="text-3xl shrink-0">{ach.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">Achievement unlocked!</p>
+                    <p className="text-base font-black text-white">{ach.title}</p>
+                  </div>
+                  <span className="font-black text-yellow-300 shrink-0">+{ach.xp}</span>
+                </div>
+              ))}
+            </div>
           )}
 
           {post && !post.authed && <Link href="/register" className="block mt-6 text-sm font-bold text-blue-400 hover:text-blue-300">Sign up free to save your XP & streak →</Link>}

@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getLesson, XP_PER_CORRECT, XP_LESSON_BONUS } from '@/lib/curriculum'
 import { etDateString, nextStreak } from '@/lib/learn-streak'
-import { levelFromXP, PERFECT_BONUS } from '@/lib/progression'
+import { levelFromXP, PERFECT_BONUS, ACHIEVEMENTS, unlockedAchievements } from '@/lib/progression'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,28 +39,40 @@ export async function POST(req: NextRequest) {
     update: { score: Math.max(existing?.score ?? 0, clampedScore), total, completedAt: new Date() },
   })
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { learnXP: true, learnStreak: true, learnLongestStreak: true, lastLearnDate: true },
-  })
+  const [user, allProgress] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { learnXP: true, learnStreak: true, learnLongestStreak: true, lastLearnDate: true, claimedAchievements: true },
+    }),
+    prisma.lessonProgress.findMany({ where: { userId }, select: { lessonId: true, score: true, total: true } }),
+  ])
 
   const today = etDateString(0)
   const streak = nextStreak(user?.learnStreak ?? 0, user?.lastLearnDate ?? null)
   const longestStreak = Math.max(user?.learnLongestStreak ?? 0, streak)
   const perfect = total > 0 && clampedScore === total
   const baseXP = clampedScore * XP_PER_CORRECT + XP_LESSON_BONUS
-  const xpGain = isFirst ? baseXP + (perfect ? PERFECT_BONUS : 0) : 0
+  const lessonXP = isFirst ? baseXP + (perfect ? PERFECT_BONUS : 0) : 0
 
   const beforeXP = user?.learnXP ?? 0
-  const afterXP = beforeXP + xpGain
+
+  // Newly-unlocked achievements award bonus XP (once each).
+  const claimed = new Set(user?.claimedAchievements ?? [])
+  const unlocked = unlockedAchievements({ completed: allProgress, xp: beforeXP + lessonXP, streak, longestStreak })
+  const newAchievements = ACHIEVEMENTS.filter((a) => unlocked.has(a.id) && !claimed.has(a.id))
+  const achievementXP = newAchievements.reduce((s, a) => s + a.xp, 0)
+
+  const totalGain = lessonXP + achievementXP
+  const afterXP = beforeXP + totalGain
 
   const updated = await prisma.user.update({
     where: { id: userId },
     data: {
-      learnXP: { increment: xpGain },
+      learnXP: { increment: totalGain },
       learnStreak: streak,
       learnLongestStreak: longestStreak,
       lastLearnDate: today,
+      ...(newAchievements.length ? { claimedAchievements: [...claimed, ...newAchievements.map((a) => a.id)] } : {}),
     },
     select: { learnXP: true, learnStreak: true, learnLongestStreak: true },
   })
@@ -72,7 +84,9 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     ok: true,
-    xpGain,
+    xpGain: lessonXP,
+    achievementXP,
+    newAchievements: newAchievements.map((a) => ({ id: a.id, title: a.title, emoji: a.emoji, xp: a.xp })),
     perfect: perfect && isFirst,
     perfectBonus: perfect && isFirst ? PERFECT_BONUS : 0,
     xp: updated.learnXP,

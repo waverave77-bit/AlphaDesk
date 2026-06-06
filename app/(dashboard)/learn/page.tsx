@@ -7,7 +7,8 @@ import { levelFromXP, ACHIEVEMENTS, unlockedAchievements, DAILY_GOAL, type Progr
 import { etDateString } from '@/lib/learn-streak'
 import MrGuyMascot from '@/components/learn/MrGuyMascot'
 import MrGuyHead from '@/components/MrGuyHead'
-import { Flame, Star, Lock, Check, BookOpen, Trophy } from 'lucide-react'
+import { useSound } from '@/components/learn/useSound'
+import { Flame, Star, Lock, Check, BookOpen, X } from 'lucide-react'
 
 type Progress = {
   authed: boolean
@@ -37,9 +38,13 @@ function etDateOf(iso?: string): string {
 
 export default function LearnPage() {
   const router = useRouter()
+  const sound = useSound()
   const [progress, setProgress] = useState<Progress | null>(null)
   const [board, setBoard] = useState<LbRow[]>([])
   const [loading, setLoading] = useState(true)
+  const [showAch, setShowAch] = useState(false)
+
+  const go = (href: string) => { sound.tick(); router.push(href) }
 
   useEffect(() => {
     fetch('/api/learn/progress').then((r) => r.json()).then(setProgress).catch(() => {}).finally(() => setLoading(false))
@@ -102,9 +107,9 @@ export default function LearnPage() {
 
             <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
               {progress && !progress.authed ? (
-                <Link href="/register" className="text-sm font-bold text-blue-300 hover:text-blue-200">Sign up free to save your streak →</Link>
+                <Link href="/register" onClick={() => sound.tick()} className="text-sm font-bold text-blue-300 hover:text-blue-200">Sign up free to save your streak →</Link>
               ) : <span />}
-              <Link href="/glossary" className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium"><BookOpen className="h-4 w-4" /> Dictionary</Link>
+              <Link href="/glossary" onClick={() => sound.tick()} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium"><BookOpen className="h-4 w-4" /> Dictionary</Link>
             </div>
           </div>
 
@@ -149,7 +154,7 @@ export default function LearnPage() {
                             </div>
                           </div>
                         )}
-                        <button disabled={!unlockedNode} onClick={() => router.push(`/learn/${lesson.id}`)} className="lnode relative z-[1]"
+                        <button disabled={!unlockedNode} onClick={() => go(`/learn/${lesson.id}`)} className="lnode relative z-[1]"
                           style={{ ['--f' as any]: f, ['--e' as any]: e, ['--ring' as any]: hex.glow, ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}) }}
                           aria-label={`${course.title} lesson ${lesson.index}${done ? ' (completed)' : unlockedNode ? '' : ' (locked)'}`}>
                           <span className="lne" />
@@ -178,7 +183,7 @@ export default function LearnPage() {
         <aside className="hidden lg:block w-80 shrink-0 space-y-4 self-start sticky top-4">
           <LevelCard xp={xp} lvl={lvl} />
           <RailCard title="Daily goal"><DailyGoal done={lessonsToday} /></RailCard>
-          <RailCard title="Achievements"><Achievements unlocked={unlocked} /></RailCard>
+          <RailCard title="Achievements"><Achievements unlocked={unlocked} onOpen={() => { sound.tick(); setShowAch(true) }} /></RailCard>
           <RailCard title="Top learners"><Leaderboard rows={board} /></RailCard>
         </aside>
       </div>
@@ -186,9 +191,11 @@ export default function LearnPage() {
       {/* ── Mobile: achievements + leaderboard below the path ── */}
       <div className="lg:hidden mt-6 space-y-4 max-w-2xl mx-auto">
         <RailCard title="Daily goal"><DailyGoal done={lessonsToday} /></RailCard>
-        <RailCard title="Achievements"><Achievements unlocked={unlocked} /></RailCard>
+        <RailCard title="Achievements"><Achievements unlocked={unlocked} onOpen={() => { sound.tick(); setShowAch(true) }} /></RailCard>
         <RailCard title="Top learners"><Leaderboard rows={board} /></RailCard>
       </div>
+
+      {showAch && <AchievementsModal unlocked={unlocked} onClose={() => setShowAch(false)} />}
 
       {loading && <p className="text-center text-gray-600 text-sm mt-4">Loading…</p>}
     </div>
@@ -253,17 +260,54 @@ function DailyGoal({ done }: { done: number }) {
   )
 }
 
-function Achievements({ unlocked }: { unlocked: Set<string> }) {
+function Achievements({ unlocked, onOpen }: { unlocked: Set<string>; onOpen: () => void }) {
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {ACHIEVEMENTS.map((a) => {
-        const got = unlocked.has(a.id)
-        return (
-          <div key={a.id} title={`${a.title} — ${a.desc}`} className={`aspect-square rounded-2xl flex items-center justify-center text-2xl border ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
-            <span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span>
-          </div>
-        )
-      })}
+    <>
+      <button onClick={onOpen} className="grid grid-cols-4 gap-2 w-full">
+        {ACHIEVEMENTS.map((a) => {
+          const got = unlocked.has(a.id)
+          return (
+            <div key={a.id} className={`aspect-square rounded-2xl flex items-center justify-center text-2xl border transition-transform hover:scale-105 ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
+              <span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span>
+            </div>
+          )
+        })}
+      </button>
+      <button onClick={onOpen} className="mt-3 w-full text-xs font-bold text-blue-400 hover:text-blue-300">
+        {unlocked.size}/{ACHIEVEMENTS.length} unlocked · see all →
+      </button>
+    </>
+  )
+}
+
+function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-md bg-gray-950 border border-gray-800 rounded-3xl p-6 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="text-xl font-black text-white">Achievements</h2>
+          <button onClick={onClose} aria-label="Close" className="text-gray-500 hover:text-white"><X className="h-6 w-6" /></button>
+        </div>
+        <p className="text-sm text-gray-500 mb-5">Earn these as you learn — each one drops bonus XP. 🪙</p>
+        <div className="space-y-2.5">
+          {ACHIEVEMENTS.map((a) => {
+            const got = unlocked.has(a.id)
+            return (
+              <div key={a.id} className={`flex items-center gap-3 rounded-2xl px-4 py-3 border ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-900 border-gray-800'}`}>
+                <div className="text-3xl shrink-0"><span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span></div>
+                <div className="flex-1 min-w-0">
+                  <p className={`font-black ${got ? 'text-white' : 'text-gray-400'}`}>{a.title}</p>
+                  <p className="text-sm text-gray-500">{a.desc}</p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className={`font-black ${got ? 'text-yellow-400' : 'text-gray-600'}`}>+{a.xp}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-gray-600">{got ? '✓ earned' : 'locked'}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
