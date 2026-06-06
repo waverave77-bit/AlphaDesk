@@ -49,6 +49,13 @@ model User {
   lastStreakDate       String?   // "YYYY-MM-DD"
   // ───────────────────────────────────────────────────────────────────
 
+  // ─── Learning path (Duolingo-style) ─────────────────────────────────
+  learnXP              Int       @default(0)
+  learnStreak          Int       @default(0)
+  learnLongestStreak   Int       @default(0)
+  lastLearnDate        String?   // "YYYY-MM-DD"
+  // ───────────────────────────────────────────────────────────────────
+
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]
@@ -56,6 +63,20 @@ model User {
   virtualSeasonRecord VirtualSeasonRecord[]
   weeklyUserPicks     WeeklyUserPick[]
   activity            UserActivity[]
+  lessonProgress      LessonProgress[]
+}
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String   // e.g. "basics-1"
+  score       Int      @default(0) // correct answers
+  total       Int      @default(0) // out of
+  completedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
 }
 
 model Holding {
