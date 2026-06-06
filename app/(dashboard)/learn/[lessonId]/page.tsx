@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter, useParams } from 'next/navigation'
 import { getLesson, buildQuiz, ALL_LESSONS, getLessonsForCourse } from '@/lib/curriculum'
-import MrGuyHead from '@/components/MrGuyHead'
+import MrGuyMascot, { Mood } from '@/components/learn/MrGuyMascot'
 import PushButton, { PushVariant } from '@/components/learn/PushButton'
 import Confetti from '@/components/learn/Confetti'
 import CountUp from '@/components/learn/CountUp'
@@ -19,9 +19,10 @@ const ACCENT: Record<string, { v: PushVariant; text: string; soft: string; bar: 
   pink:    { v: 'pink',    text: 'text-pink-400',    soft: 'bg-pink-500/10',    bar: 'bg-pink-500' },
 }
 
-const TEACH_INTROS = ['Alright, watch this 👇', 'Quick one — this matters 👀', 'Ooh, good one:', "Here's a key term:", 'Lock this one in 🔒', 'You’ll use this a lot:']
-const HYPE = ['Nice!', 'Correct!', 'You got it!', 'Yes!', 'Smart!', 'Boom 💥']
-const BIG_HYPE = ['On fire! 🔥', 'Unstoppable! ⚡', 'Genius! 🧠', 'Crushing it! 💪']
+const TEACH_INTROS = ['Alright, lock this in 🔒', 'Ooh, this one’s big 👀', 'You’ll use this constantly:', 'Pay attention, rookie 😎', 'This is where it clicks:', 'Easy money — watch:']
+const HYPE = ['Nice!', 'Correct!', 'You got it!', 'Let’s gooo!', 'Big brain 🧠', 'Boom 💥']
+const BIG_HYPE = ['ON FIRE! 🔥', 'UNSTOPPABLE! ⚡', 'Certified genius 🧠', 'Wall Street’s shaking 📈']
+const WRONG_LINES = ['Nah, not that one.', 'Close! But nope.', 'Swing and a miss ⚾', 'We’ll get the next one.']
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -105,6 +106,9 @@ export default function LessonPlayer() {
   }
 
   const hypeMsg = combo >= 3 ? BIG_HYPE[combo % BIG_HYPE.length] : HYPE[score % HYPE.length]
+  const mood: Mood = phase === 'results' ? 'celebrate'
+    : phase === 'quiz' ? (checked ? (isCorrect ? 'happy' : 'sad') : 'idle')
+    : 'think'
 
   return (
     <div className="max-w-xl mx-auto pb-40 min-h-[80vh]">
@@ -142,10 +146,11 @@ export default function LessonPlayer() {
       {/* ── TEACH ── */}
       {phase === 'teach' && term && (
         <div key={termIdx} className="lp-bounce">
-          <div className="flex items-end gap-3 mb-5">
-            <div className="shrink-0 bg-gray-800 rounded-2xl p-2 lp-float"><MrGuyHead px={4} /></div>
-            <div className={`${a.soft} border border-white/5 rounded-3xl rounded-bl-md px-4 py-3 text-sm text-gray-100 font-medium`}>
+          <div className="flex items-center gap-1 mb-3">
+            <div className="shrink-0 -mb-2"><MrGuyMascot px={3} mood="think" /></div>
+            <div className={`${a.soft} border border-white/5 rounded-3xl rounded-bl-md px-4 py-3 text-sm text-gray-100 font-semibold relative`}>
               {TEACH_INTROS[(termIdx + lesson.globalOrder) % TEACH_INTROS.length]}
+              <div className={`absolute -left-1.5 bottom-3 w-3 h-3 ${a.soft} rotate-45`} />
             </div>
           </div>
 
@@ -190,9 +195,12 @@ export default function LessonPlayer() {
       {phase === 'quiz' && q && (
         <div>
           <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Question {quizIdx + 1} of {quiz.length}</p>
-          <div className="flex items-end gap-3 mb-6">
-            <div className="shrink-0 bg-gray-800 rounded-2xl p-2"><MrGuyHead px={4} /></div>
-            <div className="bg-gray-800 border border-white/5 rounded-3xl rounded-bl-md px-4 py-3 text-base font-bold text-white">{q.prompt}</div>
+          <div className="flex items-center gap-1 mb-6">
+            <div className="shrink-0 -mb-2"><MrGuyMascot px={3} mood={mood} /></div>
+            <div className="bg-gray-800 border border-white/5 rounded-3xl rounded-bl-md px-4 py-3 text-base font-bold text-white relative">
+              {q.prompt}
+              <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-gray-800 rotate-45" />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -244,7 +252,7 @@ export default function LessonPlayer() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className={`font-black text-lg ${isCorrect ? 'text-green-300' : 'text-red-300'}`}>
-                    {isCorrect ? hypeMsg : 'Not quite'}
+                    {isCorrect ? hypeMsg : WRONG_LINES[quizIdx % WRONG_LINES.length]}
                   </p>
                   {!isCorrect && <p className="text-sm text-red-200/80 truncate">Answer: <span className="font-semibold">{q.answer}</span></p>}
                   {isCorrect && combo >= 3 && <p className="text-sm text-green-200/80">{combo} in a row 🔥</p>}
@@ -262,8 +270,8 @@ export default function LessonPlayer() {
       {phase === 'results' && (
         <div className="text-center pt-4">
           <Confetti />
-          <div className="inline-block bg-gray-800 rounded-3xl p-4 mb-4 lp-bounce" style={{ animation: 'lpBounceIn .5s cubic-bezier(.3,.7,.4,1.5) both, lpFloat 2.4s ease-in-out infinite .5s' }}>
-            <MrGuyHead px={7} />
+          <div className="inline-block mb-2 lp-bounce">
+            <MrGuyMascot px={6} mood="celebrate" />
           </div>
           <h2 className="text-4xl font-black text-white tracking-tight">
             {score === quiz.length ? 'Perfect! 🎉' : score >= quiz.length / 2 ? 'Lesson done! 👏' : 'Keep going! 💪'}
