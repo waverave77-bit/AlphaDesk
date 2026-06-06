@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { COURSES, ALL_LESSONS, TOTAL_LESSONS, getLessonsForCourse } from '@/lib/curriculum'
-import { levelFromXP, ACHIEVEMENTS, unlockedAchievements, DAILY_GOAL, type ProgressSnapshot } from '@/lib/progression'
+import { levelFromXP, levelIcon, ACHIEVEMENTS, unlockedAchievements, DAILY_GOAL, type ProgressSnapshot } from '@/lib/progression'
 import { etDateString } from '@/lib/learn-streak'
 import MrGuyMascot from '@/components/learn/MrGuyMascot'
 import MrGuyHead from '@/components/MrGuyHead'
 import { useSound } from '@/components/learn/useSound'
-import { Flame, Star, Lock, Check, BookOpen, X, Crown } from 'lucide-react'
+import { Flame, Star, Lock, Check, BookOpen, X, Crown, Gift, Target } from 'lucide-react'
 
 type Progress = {
   authed: boolean
@@ -17,7 +17,7 @@ type Progress = {
   streak: number
   longestStreak: number
 }
-type LbRow = { rank: number; name: string; xp: number; level: number; emoji: string; isMe: boolean }
+type LbRow = { rank: number; name: string; xp: number; level: number; isMe: boolean }
 
 const HEX: Record<string, { front: string; edge: string; glow: string }> = {
   blue:    { front: '#3b82f6', edge: '#1d4ed8', glow: 'rgba(59,130,246,.55)' },
@@ -91,8 +91,8 @@ export default function LearnPage() {
                 <p className="text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Zero jargon. Mr. Guy’s got you.</p>
               </div>
               <div className="shrink-0 text-center hidden sm:block">
-                <div className="text-3xl">{lvl.emoji}</div>
-                <div className="text-[10px] font-black uppercase tracking-wide text-blue-300 mt-0.5">Lvl {lvl.level}</div>
+                <lvl.Icon className="h-7 w-7 text-blue-300 mx-auto" />
+                <div className="text-[10px] font-black uppercase tracking-wide text-blue-300 mt-1">Lvl {lvl.level}</div>
               </div>
             </div>
 
@@ -109,7 +109,7 @@ export default function LearnPage() {
               {progress && !progress.authed ? (
                 <Link href="/register" onClick={() => sound.tick()} className="text-sm font-bold text-blue-300 hover:text-blue-200">Sign up free to save your streak →</Link>
               ) : <span />}
-              <Link href="/glossary" onClick={() => sound.tick()} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium"><BookOpen className="h-4 w-4" /> Dictionary</Link>
+              <Link href="/dictionary" onClick={() => sound.tick()} className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium"><BookOpen className="h-4 w-4" /> Dictionary</Link>
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export default function LearnPage() {
             return (
               <div key={course.id} className="mb-2">
                 <div className="rounded-3xl px-5 py-4 flex items-center gap-4 shadow-lg" style={{ background: hex.front, boxShadow: `0 5px 0 ${hex.edge}` }}>
-                  <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">{course.emoji}</div>
+                  <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0"><course.Icon className="h-6 w-6 text-white" /></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">{courseDone ? 'Completed' : courseStarted ? 'In progress' : 'Up next'}</p>
                     <h2 className="text-white font-black text-xl leading-tight flex items-center gap-2">{course.title} {courseDone && <Check className="h-5 w-5" strokeWidth={3} />}</h2>
@@ -176,8 +176,8 @@ export default function LearnPage() {
 
                   {/* Chest milestone at the end of each course */}
                   <div className="relative flex flex-col items-center pt-1">
-                    <div className="h-16 w-16 rounded-2xl flex items-center justify-center text-3xl" style={courseDone ? { background: 'linear-gradient(#fbbf24,#d97706)', boxShadow: '0 4px 0 #b45309' } : { background: '#1f2937', boxShadow: '0 4px 0 #111827' }}>
-                      <span className={courseDone ? '' : 'grayscale opacity-50'}>🎁</span>
+                    <div className="h-16 w-16 rounded-2xl flex items-center justify-center" style={courseDone ? { background: 'linear-gradient(#fbbf24,#d97706)', boxShadow: '0 4px 0 #b45309' } : { background: '#1f2937', boxShadow: '0 4px 0 #111827' }}>
+                      <Gift className={`h-7 w-7 ${courseDone ? 'text-white' : 'text-gray-600'}`} />
                     </div>
                     <span className="text-[10px] font-bold text-gray-500 mt-1.5 uppercase tracking-wide">{courseDone ? 'Claimed' : 'Reward'}</span>
                   </div>
@@ -232,7 +232,7 @@ function LevelCard({ xp, lvl }: { xp: number; lvl: ReturnType<typeof levelFromXP
   return (
     <div className="bg-gradient-to-br from-purple-600/25 to-blue-600/15 border-2 border-purple-400/25 rounded-3xl p-5">
       <div className="flex items-center gap-3">
-        <div className="text-4xl">{lvl.emoji}</div>
+        <div className="h-12 w-12 rounded-2xl bg-purple-500/20 flex items-center justify-center shrink-0"><lvl.Icon className="h-6 w-6 text-purple-300" /></div>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] font-black uppercase tracking-widest text-purple-300">Level {lvl.level}</p>
           <p className="text-lg font-black text-white leading-tight">{lvl.title}</p>
@@ -241,7 +241,7 @@ function LevelCard({ xp, lvl }: { xp: number; lvl: ReturnType<typeof levelFromXP
       <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
         <div className="h-full bg-gradient-to-r from-purple-400 to-blue-500 rounded-full transition-all duration-700" style={{ width: `${lvl.pct}%` }} />
       </div>
-      <p className="text-[11px] text-gray-400 mt-1.5 font-semibold">{lvl.nextXP !== null ? `${lvl.nextXP - xp} XP to next level` : 'Max level — legend 👑'}</p>
+      <p className="text-[11px] text-gray-400 mt-1.5 font-semibold">{lvl.nextXP !== null ? `${lvl.nextXP - xp} XP to next level` : 'Max level reached'}</p>
     </div>
   )
 }
@@ -258,11 +258,11 @@ function DailyGoal({ done }: { done: number }) {
           <circle cx="36" cy="36" r={r} fill="none" stroke="#1f2937" strokeWidth="8" />
           <circle cx="36" cy="36" r={r} fill="none" stroke={met ? '#22c55e' : '#f59e0b'} strokeWidth="8" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} transform="rotate(-90 36 36)" style={{ transition: 'stroke-dashoffset .6s' }} />
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center text-lg">{met ? '✅' : '🎯'}</div>
+        <div className="absolute inset-0 flex items-center justify-center">{met ? <Check className="h-6 w-6 text-green-400" strokeWidth={3} /> : <Target className="h-6 w-6 text-amber-400" />}</div>
       </div>
       <div>
         <p className="text-white font-black text-lg">{Math.min(done, goal)}/{goal} lessons</p>
-        <p className="text-gray-500 text-sm">{met ? 'Goal smashed today! 🔥' : 'Keep your streak alive'}</p>
+        <p className="text-gray-500 text-sm">{met ? 'Goal smashed today!' : 'Keep your streak alive'}</p>
       </div>
     </div>
   )
@@ -275,8 +275,8 @@ function Achievements({ unlocked, onOpen }: { unlocked: Set<string>; onOpen: () 
         {ACHIEVEMENTS.map((a) => {
           const got = unlocked.has(a.id)
           return (
-            <div key={a.id} className={`aspect-square rounded-2xl flex items-center justify-center text-2xl border transition-transform hover:scale-105 ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
-              <span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span>
+            <div key={a.id} className={`aspect-square rounded-2xl flex items-center justify-center border transition-transform hover:scale-105 ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
+              <a.Icon className={`h-6 w-6 ${got ? 'text-yellow-400' : 'text-gray-600'}`} />
             </div>
           )
         })}
@@ -296,13 +296,13 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
           <h2 className="text-xl font-black text-white">Achievements</h2>
           <button onClick={onClose} aria-label="Close" className="text-gray-500 hover:text-white"><X className="h-6 w-6" /></button>
         </div>
-        <p className="text-sm text-gray-500 mb-5">Earn these as you learn — each one drops bonus XP. 🪙</p>
+        <p className="text-sm text-gray-500 mb-5">Earn these as you learn — each one drops bonus XP.</p>
         <div className="space-y-2.5">
           {ACHIEVEMENTS.map((a) => {
             const got = unlocked.has(a.id)
             return (
               <div key={a.id} className={`flex items-center gap-3 rounded-2xl px-4 py-3 border ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-900 border-gray-800'}`}>
-                <div className="text-3xl shrink-0"><span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span></div>
+                <div className={`h-11 w-11 rounded-xl flex items-center justify-center shrink-0 ${got ? 'bg-yellow-500/15' : 'bg-gray-800'}`}><a.Icon className={`h-6 w-6 ${got ? 'text-yellow-400' : 'text-gray-600'}`} /></div>
                 <div className="flex-1 min-w-0">
                   <p className={`font-black ${got ? 'text-white' : 'text-gray-400'}`}>{a.title}</p>
                   <p className="text-sm text-gray-500">{a.desc}</p>
@@ -321,18 +321,21 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
 }
 
 function Leaderboard({ rows }: { rows: LbRow[] }) {
-  if (!rows.length) return <p className="text-sm text-gray-500">Be the first to earn XP! 🚀</p>
-  const medal = ['🥇', '🥈', '🥉']
+  if (!rows.length) return <p className="text-sm text-gray-500">Be the first to earn XP!</p>
+  const medalColor = ['text-yellow-400', 'text-gray-300', 'text-amber-600']
   return (
     <div className="space-y-1.5">
-      {rows.slice(0, 6).map((r) => (
-        <div key={r.rank} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl ${r.isMe ? 'bg-blue-500/15 border border-blue-500/30' : ''}`}>
-          <span className="w-5 text-center text-sm font-black text-gray-400">{medal[r.rank - 1] ?? r.rank}</span>
-          <span className="text-base">{r.emoji}</span>
-          <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
-          <span className="text-sm font-black text-yellow-400">{r.xp}</span>
-        </div>
-      ))}
+      {rows.slice(0, 6).map((r) => {
+        const RankIcon = levelIcon(r.level)
+        return (
+          <div key={r.rank} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl ${r.isMe ? 'bg-blue-500/15 border border-blue-500/30' : ''}`}>
+            <span className={`w-5 text-center text-sm font-black ${medalColor[r.rank - 1] ?? 'text-gray-500'}`}>{r.rank}</span>
+            <RankIcon className="h-4 w-4 text-gray-400 shrink-0" />
+            <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
+            <span className="text-sm font-black text-yellow-400">{r.xp}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }

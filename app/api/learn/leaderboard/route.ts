@@ -22,7 +22,6 @@ export async function GET() {
     name: u.username || u.name?.split(' ')[0] || 'Learner',
     xp: u.learnXP,
     level: levelFromXP(u.learnXP).level,
-    emoji: levelFromXP(u.learnXP).emoji,
     isMe: !!session?.user?.id && u.id === session.user.id,
   }))
 

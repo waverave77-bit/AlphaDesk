@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     ok: true,
     xpGain: lessonXP,
     achievementXP,
-    newAchievements: newAchievements.map((a) => ({ id: a.id, title: a.title, emoji: a.emoji, xp: a.xp })),
+    newAchievements: newAchievements.map((a) => ({ id: a.id, title: a.title, xp: a.xp })),
     perfect: perfect && isFirst,
     perfectBonus: perfect && isFirst ? PERFECT_BONUS : 0,
     xp: updated.learnXP,
@@ -100,6 +100,5 @@ export async function POST(req: NextRequest) {
     leveledUp,
     level: after.level,
     levelTitle: after.title,
-    levelEmoji: after.emoji,
   })
 }

@@ -6,13 +6,15 @@
  */
 import { TERMS, type Term } from './glossary-terms'
 import type { Lesson } from './curriculum'
+import type { LucideIcon } from 'lucide-react'
+import { Wallet, LineChart, Building2, TrendingDown, Target, Shield } from 'lucide-react'
 
 export type Exercise =
   | { kind: 'teach'; term: Term }
   | { kind: 'choice'; termName: string; prompt: string; answer: string; options: string[] }
   | { kind: 'blank'; definition: string; answer: string; options: string[] }
   | { kind: 'match'; pairs: { term: string; def: string }[] }
-  | { kind: 'scenario'; emoji: string; situation: string; prompt: string; options: ScenarioOption[] }
+  | { kind: 'scenario'; Icon: LucideIcon; situation: string; prompt: string; options: ScenarioOption[] }
   | { kind: 'truefalse'; statement: string; isTrue: boolean; explain: string }
 
 export type ScenarioOption = { label: string; correct: boolean; reply: string }
@@ -53,7 +55,7 @@ function makeMatch(terms: Term[]): Exercise {
 /* ── Hand-authored scenario & myth bank (accurate, Mr. Guy voice) ── */
 const SCENARIOS: Record<string, Exercise[]> = {
   basics: [
-    { kind: 'scenario', emoji: '💸', situation: 'You’ve got $500 you won’t need for 10+ years.', prompt: 'Smartest move for most beginners?',
+    { kind: 'scenario', Icon: Wallet, situation: 'You’ve got $500 you won’t need for 10+ years.', prompt: 'Smartest move for most beginners?',
       options: [
         { label: 'Dump it all into one hot meme stock', correct: false, reply: 'That’s a gamble, not investing. One bad day can wipe it out.' },
         { label: 'Spread it across a low-cost index fund', correct: true, reply: 'Exactly. Instant diversification, low fees, proven over decades.' },
@@ -61,7 +63,7 @@ const SCENARIOS: Record<string, Exercise[]> = {
       ] },
   ],
   charts: [
-    { kind: 'scenario', emoji: '📈', situation: 'A stock just hit its all-time high. A friend says “it only goes up!”', prompt: 'What do you do?',
+    { kind: 'scenario', Icon: LineChart, situation: 'A stock just hit its all-time high. A friend says “it only goes up!”', prompt: 'What do you do?',
       options: [
         { label: 'Buy immediately — momentum!', correct: false, reply: 'Price near a high tells you nothing about what’s next. FOMO is dangerous.' },
         { label: 'Do your own research first', correct: true, reply: 'Smart. A high price ≠ a good buy. Check the actual business first.' },
@@ -69,7 +71,7 @@ const SCENARIOS: Record<string, Exercise[]> = {
       ] },
   ],
   health: [
-    { kind: 'scenario', emoji: '🏢', situation: 'A company’s sales are growing fast — but it burns more cash every single year.', prompt: 'How should you read that?',
+    { kind: 'scenario', Icon: Building2, situation: 'A company’s sales are growing fast — but it burns more cash every single year.', prompt: 'How should you read that?',
       options: [
         { label: 'Growth is all that matters', correct: false, reply: 'Growth is great until the cash runs out. Profit (or a path to it) matters.' },
         { label: 'A real risk worth digging into', correct: true, reply: 'Right. Revenue isn’t profit. Always check if they actually make money.' },
@@ -77,7 +79,7 @@ const SCENARIOS: Record<string, Exercise[]> = {
       ] },
   ],
   risk: [
-    { kind: 'scenario', emoji: '📉', situation: 'The market drops 20%. You’re investing for retirement 30 years away.', prompt: 'Best move?',
+    { kind: 'scenario', Icon: TrendingDown, situation: 'The market drops 20%. You’re investing for retirement 30 years away.', prompt: 'Best move?',
       options: [
         { label: 'Sell everything to stop the bleeding', correct: false, reply: 'That locks in the loss. Crashes are temporary; selling makes them permanent.' },
         { label: 'Keep investing on schedule', correct: true, reply: 'This is the answer. Down markets = stocks on sale for long-term investors.' },
@@ -85,7 +87,7 @@ const SCENARIOS: Record<string, Exercise[]> = {
       ] },
   ],
   strategies: [
-    { kind: 'scenario', emoji: '🎯', situation: 'You can invest $200 every month, or wait in cash to “buy the perfect dip.”', prompt: 'What works better for most people?',
+    { kind: 'scenario', Icon: Target, situation: 'You can invest $200 every month, or wait in cash to “buy the perfect dip.”', prompt: 'What works better for most people?',
       options: [
         { label: 'Wait for the perfect dip', correct: false, reply: 'Almost nobody times the bottom. Waiting usually costs more than it saves.' },
         { label: 'Invest $200 every month, rain or shine', correct: true, reply: 'Yep — dollar-cost averaging. Boring, consistent, and it wins.' },
@@ -93,7 +95,7 @@ const SCENARIOS: Record<string, Exercise[]> = {
       ] },
   ],
   options: [
-    { kind: 'scenario', emoji: '🛡️', situation: 'You want steadier, lower-risk income to balance your stocks.', prompt: 'Where do you lean?',
+    { kind: 'scenario', Icon: Shield, situation: 'You want steadier, lower-risk income to balance your stocks.', prompt: 'Where do you lean?',
       options: [
         { label: 'Go 100% stocks anyway', correct: false, reply: 'More risk, not less. That’s the opposite of what you wanted.' },
         { label: 'Add some bonds to the mix', correct: true, reply: 'Right. Bonds are steadier and balance out stock swings.' },

@@ -7,13 +7,15 @@
  * automatically — no duplicated content.
  */
 import { TERMS, type Term, type Category } from './glossary-terms'
+import type { LucideIcon } from 'lucide-react'
+import { Sprout, LineChart, Building2, ShieldAlert, Target, Rocket } from 'lucide-react'
 
 export interface Course {
   id: string
   category: Category
   title: string
   tagline: string
-  emoji: string
+  Icon: LucideIcon
   /** tailwind color stem, e.g. 'blue' → bg-blue-500 */
   color: string
   order: number
@@ -21,12 +23,12 @@ export interface Course {
 
 /** The 6 courses, in the order a beginner should walk them. */
 export const COURSES: Course[] = [
-  { id: 'basics',     category: 'Basics',          title: 'The Basics',           tagline: 'What even is a stock?',         emoji: '🌱', color: 'blue',    order: 0 },
-  { id: 'charts',     category: 'Charts',          title: 'Reading Charts',        tagline: 'Make sense of the squiggly lines', emoji: '📈', color: 'purple',  order: 1 },
-  { id: 'health',     category: 'Company Health',  title: 'Is It a Good Company?', tagline: 'Spot a winner from a dud',      emoji: '🏢', color: 'emerald', order: 2 },
-  { id: 'risk',       category: 'Risk',            title: 'Managing Risk',         tagline: 'How not to lose your shirt',    emoji: '🛡️', color: 'red',     order: 3 },
-  { id: 'strategies', category: 'Strategies',      title: 'Investing Strategies',  tagline: 'Actually putting money to work', emoji: '🎯', color: 'amber',   order: 4 },
-  { id: 'options',    category: 'Options & Bonds', title: 'Advanced Stuff',        tagline: 'Options, bonds & beyond',       emoji: '🚀', color: 'pink',    order: 5 },
+  { id: 'basics',     category: 'Basics',          title: 'The Basics',           tagline: 'What even is a stock?',         Icon: Sprout,      color: 'blue',    order: 0 },
+  { id: 'charts',     category: 'Charts',          title: 'Reading Charts',        tagline: 'Make sense of the squiggly lines', Icon: LineChart,   color: 'purple',  order: 1 },
+  { id: 'health',     category: 'Company Health',  title: 'Is It a Good Company?', tagline: 'Spot a winner from a dud',      Icon: Building2,   color: 'emerald', order: 2 },
+  { id: 'risk',       category: 'Risk',            title: 'Managing Risk',         tagline: 'How not to lose your shirt',    Icon: ShieldAlert, color: 'red',     order: 3 },
+  { id: 'strategies', category: 'Strategies',      title: 'Investing Strategies',  tagline: 'Actually putting money to work', Icon: Target,      color: 'amber',   order: 4 },
+  { id: 'options',    category: 'Options & Bonds', title: 'Advanced Stuff',        tagline: 'Options, bonds & beyond',       Icon: Rocket,      color: 'pink',    order: 5 },
 ]
 
 /** Terms taught per lesson. */
@@ -36,7 +38,7 @@ export interface Lesson {
   id: string          // e.g. 'basics-1'
   courseId: string
   courseTitle: string
-  emoji: string
+  Icon: LucideIcon
   color: string
   index: number       // 1-based within its course
   globalOrder: number // 0-based position across the whole path
@@ -72,7 +74,7 @@ function buildLessons(): Lesson[] {
         id: `${course.id}-${i + 1}`,
         courseId: course.id,
         courseTitle: course.title,
-        emoji: course.emoji,
+        Icon: course.Icon,
         color: course.color,
         index: i + 1,
         globalOrder: globalOrder++,
@@ -85,7 +87,7 @@ function buildLessons(): Lesson[] {
       id: `${course.id}-review`,
       courseId: course.id,
       courseTitle: course.title,
-      emoji: course.emoji,
+      Icon: course.Icon,
       color: course.color,
       index: chunks.length + 1,
       globalOrder: globalOrder++,

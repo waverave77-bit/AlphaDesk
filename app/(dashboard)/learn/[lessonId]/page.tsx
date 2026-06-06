@@ -10,7 +10,13 @@ import PushButton, { PushVariant } from '@/components/learn/PushButton'
 import Confetti from '@/components/learn/Confetti'
 import CountUp from '@/components/learn/CountUp'
 import { useSound } from '@/components/learn/useSound'
-import { X, Check, Lightbulb, Flame, Star, Volume2, VolumeX } from 'lucide-react'
+import { levelIcon, achievementIcon } from '@/lib/progression'
+import type { LucideIcon } from 'lucide-react'
+import {
+  X, Check, Lightbulb, Flame, Star, Volume2, VolumeX, Gift, Trophy, BadgeCheck, Crown,
+  Banknote, Package, TrendingUp, TrendingDown, Sparkles, AlertTriangle, LineChart,
+  ScrollText, Dices, Landmark, Tag, Briefcase, Handshake, Hash, BarChart3,
+} from 'lucide-react'
 
 const ACCENT: Record<string, { v: PushVariant; text: string; soft: string; bar: string; grad: string }> = {
   blue:    { v: 'blue',    text: 'text-blue-400',    soft: 'bg-blue-500/10',    bar: 'bg-blue-500',    grad: 'from-blue-500 to-blue-600' },
@@ -21,29 +27,29 @@ const ACCENT: Record<string, { v: PushVariant; text: string; soft: string; bar: 
   pink:    { v: 'pink',    text: 'text-pink-400',    soft: 'bg-pink-500/10',    bar: 'bg-pink-500',    grad: 'from-pink-500 to-pink-600' },
 }
 
-function emojiForTerm(name: string): string {
+function iconForTerm(name: string): LucideIcon {
   const n = name.toLowerCase()
-  if (/dividend|cash|income|pay/.test(n)) return '💰'
-  if (/etf|fund|basket|index/.test(n)) return '🧺'
-  if (/bull/.test(n)) return '🐂'
-  if (/bear/.test(n)) return '🐻'
-  if (/ipo|public|debut/.test(n)) return '🎉'
-  if (/risk|volat|loss/.test(n)) return '⚠️'
-  if (/chart|trend|moving|candle/.test(n)) return '📈'
-  if (/stock|share|equity/.test(n)) return '📜'
-  if (/option|call|put|deriv/.test(n)) return '🎲'
-  if (/bond|yield|treasury/.test(n)) return '🏦'
-  if (/cap|value|worth|price/.test(n)) return '🏷️'
-  if (/portfolio|diversif/.test(n)) return '💼'
-  if (/broker|exchange|market/.test(n)) return '🤝'
-  if (/ticker|symbol/.test(n)) return '🔤'
-  return '📊'
+  if (/dividend|cash|income|pay/.test(n)) return Banknote
+  if (/etf|fund|basket|index/.test(n)) return Package
+  if (/bull/.test(n)) return TrendingUp
+  if (/bear/.test(n)) return TrendingDown
+  if (/ipo|public|debut/.test(n)) return Sparkles
+  if (/risk|volat|loss/.test(n)) return AlertTriangle
+  if (/chart|trend|moving|candle/.test(n)) return LineChart
+  if (/stock|share|equity/.test(n)) return ScrollText
+  if (/option|call|put|deriv/.test(n)) return Dices
+  if (/bond|yield|treasury/.test(n)) return Landmark
+  if (/cap|value|worth|price/.test(n)) return Tag
+  if (/portfolio|diversif/.test(n)) return Briefcase
+  if (/broker|exchange|market/.test(n)) return Handshake
+  if (/ticker|symbol/.test(n)) return Hash
+  return BarChart3
 }
 
-const HYPE = ['Nice!', 'Correct!', 'You got it!', 'Let’s gooo!', 'Big brain 🧠', 'Boom 💥']
-const BIG_HYPE = ['ON FIRE! 🔥', 'UNSTOPPABLE! ⚡', 'Certified genius 🧠', 'Wall Street’s shaking 📈']
-const WRONG = ['Nah, not that one.', 'Close! But nope.', 'Swing and a miss ⚾', 'We’ll get the next one.']
-const TEACH_INTROS = ['Alright, lock this in 🔒', 'Ooh, this one’s big 👀', 'You’ll use this constantly:', 'Pay attention, rookie 😎', 'This is where it clicks:']
+const HYPE = ['Nice!', 'Correct!', 'You got it!', 'Let’s gooo!', 'Big brain', 'Boom']
+const BIG_HYPE = ['ON FIRE!', 'UNSTOPPABLE!', 'Certified genius', 'Wall Street’s shaking']
+const WRONG = ['Nah, not that one.', 'Close! But nope.', 'Swing and a miss.', 'We’ll get the next one.']
+const TEACH_INTROS = ['Alright, lock this in:', 'Ooh, this one’s big:', 'You’ll use this constantly:', 'Pay attention, rookie:', 'This is where it clicks:']
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -65,9 +71,9 @@ function bubbleFor(ex: Exercise): string {
   switch (ex.kind) {
     case 'choice': return ex.prompt
     case 'blank': return 'Which term fits?'
-    case 'truefalse': return 'Myth or fact? 🤔'
+    case 'truefalse': return 'Myth or fact?'
     case 'scenario': return ex.prompt
-    case 'match': return 'Match ’em up! 🔗'
+    case 'match': return 'Match ’em up!'
     default: return ''
   }
 }
@@ -88,7 +94,7 @@ export default function LessonPlayer() {
   const [result, setResult] = useState<boolean | null>(null) // null = unanswered
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
-  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean; perfect?: boolean; perfectBonus?: number; leveledUp?: boolean; levelTitle?: string; levelEmoji?: string; newAchievements?: { id: string; title: string; emoji: string; xp: number }[] } | null>(null)
+  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean; perfect?: boolean; perfectBonus?: number; leveledUp?: boolean; levelTitle?: string; level?: number; newAchievements?: { id: string; title: string; xp: number }[] } | null>(null)
   const [chestOpen, setChestOpen] = useState(false)
   const posted = useRef(false)
 
@@ -112,7 +118,7 @@ export default function LessonPlayer() {
     sound.complete()
     fetch('/api/learn/complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lessonId: lesson.id, score }) })
       .then((r) => r.json())
-      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false, perfect: d.perfect, perfectBonus: d.perfectBonus ?? 0, leveledUp: d.leveledUp, levelTitle: d.levelTitle, levelEmoji: d.levelEmoji, newAchievements: d.newAchievements ?? [] }))
+      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false, perfect: d.perfect, perfectBonus: d.perfectBonus ?? 0, leveledUp: d.leveledUp, levelTitle: d.levelTitle, level: d.level, newAchievements: d.newAchievements ?? [] }))
       .catch(() => setPost({ xpGain: 0, streak: 0, authed: false }))
   }, [phase, lesson, score, sound])
 
@@ -185,7 +191,7 @@ export default function LessonPlayer() {
       {/* Boss review banner */}
       {phase === 'play' && lesson.isReview && (
         <div className="mb-5 flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-2xl py-2 text-amber-400 font-black text-sm uppercase tracking-widest">
-          👑 Boss Review — everything you’ve learned
+          <Crown className="h-4 w-4" /> Boss Review — everything you’ve learned
         </div>
       )}
 
@@ -205,7 +211,7 @@ export default function LessonPlayer() {
               <div className="rounded-3xl overflow-hidden border-2 border-gray-800 shadow-xl">
                 {/* Colored flashcard header */}
                 <div className={`bg-gradient-to-br ${a.grad} px-6 py-5 flex items-center gap-4`}>
-                  <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl shrink-0 shadow-inner">{emojiForTerm(ex.term.term)}</div>
+                  <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 shadow-inner">{(() => { const TI = iconForTerm(ex.term.term); return <TI className="h-8 w-8 text-white" /> })()}</div>
                   <div className="min-w-0">
                     <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">New term</p>
                     <h2 className="text-3xl font-black text-white tracking-tight leading-tight">{ex.term.term}</h2>
@@ -229,7 +235,7 @@ export default function LessonPlayer() {
                 </div>
               </div>
               <div className="flex justify-end mt-6">
-                <PushButton variant={a.v} className="px-8 py-3 text-base" onClick={advance}>Got it 👊</PushButton>
+                <PushButton variant={a.v} className="px-8 py-3 text-base" onClick={advance}>Got it</PushButton>
               </div>
             </>
           )}
@@ -271,7 +277,7 @@ export default function LessonPlayer() {
               )}
               {ex.kind === 'scenario' && (
                 <div className={`${a.soft} border-2 border-white/5 rounded-3xl px-5 py-5 mb-4`}>
-                  <div className="text-3xl mb-2">{ex.emoji}</div>
+                  <ex.Icon className={`h-8 w-8 ${a.text} mb-2`} />
                   <p className="text-base font-semibold text-gray-100 leading-relaxed">{ex.situation}</p>
                 </div>
               )}
@@ -333,10 +339,10 @@ export default function LessonPlayer() {
       {phase === 'results' && !chestOpen && (
         <div className="text-center pt-10">
           <style>{`@keyframes chestWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}`}</style>
-          <h2 className="text-3xl font-black text-white tracking-tight mb-1">{score === totalScored ? 'Perfect run! 🎉' : 'Lesson complete! 👏'}</h2>
+          <h2 className="text-3xl font-black text-white tracking-tight mb-1">{score === totalScored ? 'Perfect run!' : 'Lesson complete!'}</h2>
           <p className="text-gray-400 mb-8 text-lg">You scored <span className="font-bold text-white">{score}/{totalScored}</span></p>
           <button onClick={() => { setChestOpen(true); sound.complete() }} className="group inline-flex flex-col items-center" aria-label="Open your reward">
-            <div className="text-[120px] leading-none" style={{ animation: 'chestWiggle 1.2s ease-in-out infinite' }}>🎁</div>
+            <Gift className="h-28 w-28 text-amber-400 mx-auto" style={{ animation: 'chestWiggle 1.2s ease-in-out infinite' }} strokeWidth={1.5} />
             <span className="mt-4 px-6 py-3 rounded-2xl bg-blue-600 group-hover:bg-blue-500 text-white font-black text-lg transition-colors" style={{ boxShadow: '0 5px 0 #1d4ed8' }}>Tap to open!</span>
           </button>
         </div>
@@ -350,12 +356,15 @@ export default function LessonPlayer() {
           {/* Level-up banner */}
           {post?.leveledUp && (
             <div className="lp-bounce mb-4 mx-auto max-w-xs bg-gradient-to-r from-purple-600/30 to-blue-600/20 border-2 border-purple-400/40 rounded-3xl px-5 py-3">
-              <p className="text-[11px] font-black uppercase tracking-widest text-purple-300">⭐ Level up!</p>
-              <p className="text-xl font-black text-white">{post.levelEmoji} You’re now a {post.levelTitle}</p>
+              <p className="flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-purple-300"><Star className="h-3.5 w-3.5 fill-purple-300" /> Level up!</p>
+              <p className="flex items-center justify-center gap-2 text-xl font-black text-white mt-0.5">
+                {(() => { const LI = levelIcon(post.level ?? 1); return <LI className="h-6 w-6 text-purple-300" /> })()}
+                You’re now a {post.levelTitle}
+              </p>
             </div>
           )}
 
-          <h2 className="text-4xl font-black text-white tracking-tight">{score === totalScored ? 'Flawless! 🎉' : 'Nice work! 👏'}</h2>
+          <h2 className="text-4xl font-black text-white tracking-tight">{score === totalScored ? 'Flawless!' : 'Nice work!'}</h2>
           <p className="text-gray-400 mt-2 text-lg">You got <span className="font-bold text-white">{score}/{totalScored}</span> right.</p>
 
           <div className="flex items-center justify-center gap-3 mt-7">
@@ -370,22 +379,25 @@ export default function LessonPlayer() {
           </div>
 
           {post?.perfect && (post?.perfectBonus ?? 0) > 0 && (
-            <p className="mt-4 text-sm font-black text-yellow-300">💯 Perfect bonus: +{post.perfectBonus} XP</p>
+            <p className="mt-4 flex items-center justify-center gap-1.5 text-sm font-black text-yellow-300"><BadgeCheck className="h-4 w-4" /> Perfect bonus: +{post.perfectBonus} XP</p>
           )}
 
           {/* Achievement unlocks */}
           {(post?.newAchievements?.length ?? 0) > 0 && (
             <div className="mt-5 space-y-2 max-w-sm mx-auto">
-              {post!.newAchievements!.map((ach) => (
-                <div key={ach.id} className="lp-bounce flex items-center gap-3 bg-gradient-to-r from-yellow-500/20 to-amber-600/10 border-2 border-yellow-500/40 rounded-2xl px-4 py-3 text-left">
-                  <div className="text-3xl shrink-0">{ach.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">Achievement unlocked!</p>
-                    <p className="text-base font-black text-white">{ach.title}</p>
+              {post!.newAchievements!.map((ach) => {
+                const AI = achievementIcon(ach.id)
+                return (
+                  <div key={ach.id} className="lp-bounce flex items-center gap-3 bg-gradient-to-r from-yellow-500/20 to-amber-600/10 border-2 border-yellow-500/40 rounded-2xl px-4 py-3 text-left">
+                    <div className="h-11 w-11 rounded-xl bg-yellow-500/15 flex items-center justify-center shrink-0"><AI className="h-6 w-6 text-yellow-400" /></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">Achievement unlocked!</p>
+                      <p className="text-base font-black text-white">{ach.title}</p>
+                    </div>
+                    <span className="font-black text-yellow-300 shrink-0">+{ach.xp}</span>
                   </div>
-                  <span className="font-black text-yellow-300 shrink-0">+{ach.xp}</span>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
 
@@ -393,7 +405,7 @@ export default function LessonPlayer() {
 
           {isLastInCourse && (
             <div className="mt-7 bg-gradient-to-r from-blue-600/25 to-blue-500/10 border-2 border-blue-500/30 rounded-3xl p-5 text-left">
-              <p className="text-base text-blue-100 font-semibold">🏆 You finished <span className="font-black">{lesson.courseTitle}</span>!</p>
+              <p className="flex items-center gap-2 text-base text-blue-100 font-semibold"><Trophy className="h-5 w-5 text-amber-400 shrink-0" /> You finished <span className="font-black">{lesson.courseTitle}</span>!</p>
               <p className="text-sm text-blue-200/70 mt-1">Now put it to work with $100K of fake money — zero risk.</p>
               <Link href="/trading-simulator" className="inline-block mt-3 font-black text-blue-400 hover:text-blue-300">Try the $100K Challenge →</Link>
             </div>
