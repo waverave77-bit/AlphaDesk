@@ -1,135 +1,154 @@
 'use client'
-import { useState, useMemo } from 'react'
-import { Search, BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, SearchX } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent } from '@/components/ui/card'
-import { TERMS, CATEGORIES, type Category } from '@/lib/glossary-terms'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { COURSES, ALL_LESSONS, TOTAL_LESSONS, getLessonsForCourse } from '@/lib/curriculum'
+import MrGuyHead from '@/components/MrGuyHead'
+import { Flame, Star, Lock, Check, BookOpen } from 'lucide-react'
 
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  Basics: <BookOpen className="h-3.5 w-3.5" />,
-  Charts: <BarChart2 className="h-3.5 w-3.5" />,
-  'Company Health': <TrendingUp className="h-3.5 w-3.5" />,
-  Risk: <Shield className="h-3.5 w-3.5" />,
-  Strategies: <Lightbulb className="h-3.5 w-3.5" />,
+type Progress = {
+  authed: boolean
+  completed: { lessonId: string; score: number; total: number }[]
+  xp: number
+  streak: number
+  longestStreak: number
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Basics: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  Charts: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  'Company Health': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  Risk: 'bg-red-500/10 text-red-400 border-red-500/20',
-  Strategies: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+/* Static Tailwind class maps (dynamic bg-${color}-500 would get purged). */
+const COLOR: Record<string, { solid: string; ring: string; text: string; soft: string }> = {
+  blue:    { solid: 'bg-blue-500',    ring: 'ring-blue-400',    text: 'text-blue-400',    soft: 'bg-blue-500/10' },
+  purple:  { solid: 'bg-purple-500',  ring: 'ring-purple-400',  text: 'text-purple-400',  soft: 'bg-purple-500/10' },
+  emerald: { solid: 'bg-emerald-500', ring: 'ring-emerald-400', text: 'text-emerald-400', soft: 'bg-emerald-500/10' },
+  red:     { solid: 'bg-red-500',     ring: 'ring-red-400',     text: 'text-red-400',     soft: 'bg-red-500/10' },
+  amber:   { solid: 'bg-amber-500',   ring: 'ring-amber-400',   text: 'text-amber-400',   soft: 'bg-amber-500/10' },
+  pink:    { solid: 'bg-pink-500',    ring: 'ring-pink-400',    text: 'text-pink-400',    soft: 'bg-pink-500/10' },
 }
+
+// Zig-zag horizontal offsets for that winding-path feel.
+const OFFSETS = [0, 48, 72, 48, 0, -48, -72, -48]
 
 export default function LearnPage() {
-  const [search, setSearch] = useState('')
-  const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All')
-  const [expanded, setExpanded] = useState<string | null>(null)
+  const router = useRouter()
+  const [progress, setProgress] = useState<Progress | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const filtered = useMemo(() => {
-    return TERMS.filter((t) => {
-      const matchesSearch = !search || t.term.toLowerCase().includes(search.toLowerCase()) || t.simple.toLowerCase().includes(search.toLowerCase())
-      const matchesCategory = activeCategory === 'All' || t.category === activeCategory
-      return matchesSearch && matchesCategory
-    }).sort((a, b) => a.term.localeCompare(b.term))
-  }, [search, activeCategory])
+  useEffect(() => {
+    fetch('/api/learn/progress')
+      .then((r) => r.json())
+      .then(setProgress)
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const completedIds = new Set(progress?.completed.map((c) => c.lessonId) ?? [])
+  const isUnlocked = (globalOrder: number) =>
+    globalOrder === 0 || completedIds.has(ALL_LESSONS[globalOrder - 1]?.id)
+  const currentLesson = ALL_LESSONS.find((l) => !completedIds.has(l.id) && isUnlocked(l.globalOrder))
+
+  const completedCount = completedIds.size
+  const pct = Math.round((completedCount / TOTAL_LESSONS) * 100)
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-xl bg-blue-600/15 border border-blue-600/20 flex items-center justify-center">
-          <BookOpen className="h-6 w-6 text-blue-400" />
-        </div>
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white">Investing Dictionary</h1>
-          <p className="text-base text-gray-400 mt-0.5">Every term explained in plain English</p>
-        </div>
-      </div>
+    <div className="max-w-2xl mx-auto pb-16 space-y-6">
+      <style>{`@keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,.5)}50%{box-shadow:0 0 0 10px rgba(96,165,250,0)}}`}</style>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-        <Input
-          placeholder="Search any term..."
-          className="pl-11 h-12 text-base bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Category filters */}
-      <div className="flex gap-2 flex-wrap">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-              activeCategory === cat ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
-            }`}
-          >
-            {cat !== 'All' && CATEGORY_ICONS[cat]}
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <p className="text-base text-gray-500">{filtered.length} terms</p>
-
-      {/* Terms list */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
-        {filtered.length === 0 && (
-          <div className="flex flex-col items-center gap-3 py-16 text-center">
-            <SearchX className="h-8 w-8 text-gray-700" />
-            <p className="text-gray-400 font-medium">No terms found for &quot;{search}&quot;</p>
-            <p className="text-sm text-gray-600">Try a different word or browse by category</p>
+      {/* Header / stats */}
+      <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6">
+        <div className="flex items-center gap-4">
+          <div className="shrink-0 bg-gray-800 rounded-2xl p-2"><MrGuyHead px={4} /></div>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-extrabold text-white leading-tight">Learn to Invest</h1>
+            <p className="text-gray-400 text-sm mt-0.5">Bite-sized lessons. 5 minutes a day. Zero jargon.</p>
           </div>
-        )}
-        {filtered.map((t) => (
-          <Card
-            key={t.term}
-            className="cursor-pointer hover:bg-gray-800/40 transition-colors"
-            onClick={() => setExpanded(expanded === t.term ? null : t.term)}
-          >
-            <CardContent className="p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                    <h3 className="text-base font-bold text-white">{t.term}</h3>
-                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
-                      {CATEGORY_ICONS[t.category]}
-                      {t.category}
-                    </span>
-                  </div>
-                  <p className="text-base text-blue-300 font-medium">{t.simple}</p>
-                  {expanded === t.term && (
-                    <div className="mt-4 space-y-3 border-t border-gray-800 pt-4">
-                      <p className="text-sm text-gray-300 leading-relaxed">{t.explanation}</p>
-                      {t.example && (
-                        <div className="bg-gray-900 rounded-lg px-4 py-3">
-                          <span className="text-sm text-gray-500 font-medium">Example: </span>
-                          <span className="text-sm text-gray-300">{t.example}</span>
-                        </div>
-                      )}
-                      {t.tip && (
-                        <div className="flex gap-2 bg-yellow-500/5 border border-yellow-500/20 rounded-lg px-4 py-3">
-                          <Lightbulb className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
-                          <span className="text-sm text-yellow-300">{t.tip}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <span className="text-gray-500 text-sm mt-0.5">{expanded === t.term ? '▲' : '▼'}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        </div>
+
+        {/* Streak / XP / progress */}
+        <div className="grid grid-cols-3 gap-3 mt-5">
+          <div className="bg-gray-800/60 rounded-2xl px-3 py-3 text-center">
+            <div className="flex items-center justify-center gap-1 text-orange-400 font-extrabold text-xl">
+              <Flame className="h-5 w-5" /> {progress?.streak ?? 0}
+            </div>
+            <p className="text-[11px] text-gray-500 mt-0.5">day streak</p>
+          </div>
+          <div className="bg-gray-800/60 rounded-2xl px-3 py-3 text-center">
+            <div className="flex items-center justify-center gap-1 text-yellow-400 font-extrabold text-xl">
+              <Star className="h-5 w-5" /> {progress?.xp ?? 0}
+            </div>
+            <p className="text-[11px] text-gray-500 mt-0.5">XP earned</p>
+          </div>
+          <div className="bg-gray-800/60 rounded-2xl px-3 py-3 text-center">
+            <div className="text-blue-400 font-extrabold text-xl">{completedCount}/{TOTAL_LESSONS}</div>
+            <p className="text-[11px] text-gray-500 mt-0.5">lessons done</p>
+          </div>
+        </div>
+        <div className="mt-3 h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-full bg-blue-500 transition-all duration-700" style={{ width: `${pct}%` }} />
+        </div>
+
+        {/* Guest nudge + dictionary link */}
+        <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
+          {progress && !progress.authed ? (
+            <Link href="/register" className="text-sm font-semibold text-blue-400 hover:text-blue-300">
+              Sign up free to save your streak & XP →
+            </Link>
+          ) : <span />}
+          <Link href="/glossary" className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+            <BookOpen className="h-4 w-4" /> Browse the Dictionary
+          </Link>
+        </div>
       </div>
 
-      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
-        Definitions and explanations are for educational purposes only. Not financial advice. Finance concepts can have nuances beyond what is shown here — always consult authoritative sources and qualified professionals for decisions.
-      </p>
+      {/* Courses + winding lesson path */}
+      {COURSES.map((course) => {
+        const lessons = getLessonsForCourse(course.id)
+        const c = COLOR[course.color] ?? COLOR.blue
+        const courseDone = lessons.every((l) => completedIds.has(l.id))
+        return (
+          <div key={course.id} className="bg-gray-900/60 border border-gray-800 rounded-3xl p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`h-12 w-12 rounded-2xl ${c.soft} flex items-center justify-center text-2xl`}>{course.emoji}</div>
+              <div className="flex-1">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  {course.title}
+                  {courseDone && <Check className={`h-4 w-4 ${c.text}`} />}
+                </h2>
+                <p className="text-sm text-gray-500">{course.tagline}</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-4 py-4">
+              {lessons.map((lesson, i) => {
+                const done = completedIds.has(lesson.id)
+                const unlocked = isUnlocked(lesson.globalOrder)
+                const isCurrent = currentLesson?.id === lesson.id
+                const offset = OFFSETS[i % OFFSETS.length]
+                return (
+                  <div key={lesson.id} className="flex flex-col items-center" style={{ transform: `translateX(${offset}px)` }}>
+                    <button
+                      disabled={!unlocked}
+                      onClick={() => router.push(`/learn/${lesson.id}`)}
+                      style={isCurrent ? { animation: 'lpPulse 1.8s infinite' } : undefined}
+                      className={[
+                        'h-16 w-16 rounded-full flex items-center justify-center transition-transform',
+                        unlocked ? 'cursor-pointer hover:scale-110 active:scale-95' : 'cursor-not-allowed',
+                        done ? `${c.solid} shadow-lg` : isCurrent ? `${c.solid} ring-4 ${c.ring}` : unlocked ? 'bg-gray-700' : 'bg-gray-800',
+                      ].join(' ')}
+                      aria-label={`${course.title} lesson ${lesson.index}${done ? ' (completed)' : unlocked ? '' : ' (locked)'}`}
+                    >
+                      {done ? <Check className="h-7 w-7 text-white" strokeWidth={3} />
+                        : !unlocked ? <Lock className="h-6 w-6 text-gray-600" />
+                        : <span className="text-white font-extrabold text-lg">{lesson.index}</span>}
+                    </button>
+                    {isCurrent && <span className={`mt-1.5 text-[11px] font-bold ${c.text} uppercase tracking-wide`}>Start</span>}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
+
+      {loading && <p className="text-center text-gray-600 text-sm">Loading your progress…</p>}
     </div>
   )
 }
