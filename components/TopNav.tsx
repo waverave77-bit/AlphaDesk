@@ -8,32 +8,26 @@ import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 
+// ── Primary nav — leads with learning, the core of the product ──
 const primaryNav = [
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/research',  label: 'Research' },
+  { href: '/dashboard', label: 'Home' },
   { href: '/learn',     label: 'Learn' },
   { href: '/trading-simulator', label: '$100K Challenge' },
-  { href: '/chat',      label: 'Mr. Guy' },
-  { href: '/markets',   label: 'Markets' },
+  { href: '/chat',      label: 'Ask Mr. Guy' },
 ]
 
-const moreNav = [
+// ── "Go Deeper" research layer — kept for users who graduate, tucked away ──
+const exploreNav = [
+  { href: '/research',   label: 'Research a Stock' },
+  { href: '/markets',    label: 'Markets' },
   { href: '/watchlist',  label: 'Watchlist' },
-  { href: '/dividends',  label: 'Dividends' },
-  { href: '/insiders',   label: 'Smart Money' },
   { href: '/earnings',   label: 'Earnings Calendar' },
-  { href: '/hedgefunds', label: 'Hedge Funds' },
-  { href: '/quant',      label: 'Quant Strategy' },
+  { href: '/dividends',  label: 'Dividends' },
 ]
 
-const mrGuyNav = [
-  { href: '/hot-take',      label: 'Hot Take' },
-  { href: '/bull-vs-bear',  label: 'Bull vs Bear' },
-  { href: '/challenge',     label: 'Pick of the Week' },
-  { href: '/report-card',   label: 'Stock Report Card' },
-  { href: '/reality-check', label: 'Reality Check' },
-  { href: '/translator',    label: 'Finance Translator' },
-]
+// Hidden from nav (still reachable by URL): /insiders, /hedgefunds, /quant,
+// /hot-take, /bull-vs-bear, /challenge, /report-card, /reality-check, /translator
+// — research-trader features + AI snacks that dilute the beginner-learning focus.
 
 /* ── Mr. Guy pixel head logo — canvas renderer ──────────────────
    Pixel data = GRID rows 0-13, cols 3-14 (the head + shirt top)  */
@@ -85,7 +79,6 @@ export default function TopNav() {
   const { data: session } = useSession()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
-  const [mrGuyOpen, setMrGuyOpen] = useState(false)
   const { themeId, setTheme } = useTheme()
   const isDark = themeId !== 'white'
   const toggleDark = () => setTheme(isDark ? 'white' : 'default')
@@ -100,8 +93,7 @@ export default function TopNav() {
   const isActive = (href: string) =>
     href === '/dashboard' ? pathname === href : pathname.startsWith(href)
 
-  const moreActive = moreNav.some(n => isActive(n.href))
-  const mrGuyToolsActive = mrGuyNav.some(n => isActive(n.href))
+  const moreActive = exploreNav.some(n => isActive(n.href))
 
   return (
     <>
@@ -137,7 +129,7 @@ export default function TopNav() {
             )
           })}
 
-          {/* More dropdown */}
+          {/* Explore dropdown — the "Go Deeper" research layer */}
           <div className="relative">
             <button
               onClick={() => setMoreOpen(!moreOpen)}
@@ -147,50 +139,20 @@ export default function TopNav() {
                 moreActive ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               )}
             >
-              More <ChevronDown className="h-3 w-3" />
+              Explore <ChevronDown className="h-3 w-3" />
             </button>
             {moreOpen && (
-              <div className={cn('absolute top-full left-0 mt-1 w-48 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
-                {moreNav.map(({ href, label }) => (
+              <div className={cn('absolute top-full left-0 mt-1 w-52 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
+                <div className={cn('px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-slate-400')}>
+                  Go Deeper
+                </div>
+                {exploreNav.map(({ href, label }) => (
                   <Link
                     key={href}
                     href={href}
                     className={cn(
                       'block px-4 py-2 text-sm transition-colors',
                       isActive(href) ? 'text-blue-500 bg-blue-600/10' : isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-slate-700 hover:bg-slate-50'
-                    )}
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Mr. Guy Tools dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setMrGuyOpen(!mrGuyOpen)}
-              onBlur={() => setTimeout(() => setMrGuyOpen(false), 150)}
-              className={cn(
-                'flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                mrGuyToolsActive ? 'bg-orange-500/10 text-orange-400' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              )}
-            >
-              Mr. Guy Tools <ChevronDown className="h-3 w-3" />
-            </button>
-            {mrGuyOpen && (
-              <div className={cn('absolute top-full left-0 mt-1 w-52 rounded-xl shadow-lg py-1 z-50 border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-slate-200')}>
-                <div className={cn('px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-slate-400')}>
-                  Mr. Guy Features
-                </div>
-                {mrGuyNav.map(({ href, label }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={cn(
-                      'block px-4 py-2 text-sm transition-colors',
-                      isActive(href) ? 'text-orange-400 bg-orange-500/10' : isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-slate-700 hover:bg-slate-50'
                     )}
                   >
                     {label}
@@ -286,7 +248,7 @@ export default function TopNav() {
             </div>
 
             <nav aria-label="Mobile navigation links" className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-              {[...primaryNav, ...moreNav].map(({ href, label }) => {
+              {primaryNav.map(({ href, label }) => {
                 const active = isActive(href)
                 return (
                   <Link
@@ -303,9 +265,9 @@ export default function TopNav() {
                 )
               })}
               <div className={cn('px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-slate-400')}>
-                Mr. Guy Tools
+                Go Deeper
               </div>
-              {mrGuyNav.map(({ href, label }) => {
+              {exploreNav.map(({ href, label }) => {
                 const active = isActive(href)
                 return (
                   <Link
@@ -314,7 +276,7 @@ export default function TopNav() {
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       'flex items-center min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium transition-colors',
-                      active ? 'bg-orange-500/10 text-orange-400' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
                     {label}
