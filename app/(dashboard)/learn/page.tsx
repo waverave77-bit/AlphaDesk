@@ -3,18 +3,21 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { COURSES, ALL_LESSONS, TOTAL_LESSONS, getLessonsForCourse } from '@/lib/curriculum'
+import { levelFromXP, ACHIEVEMENTS, unlockedAchievements, DAILY_GOAL, type ProgressSnapshot } from '@/lib/progression'
+import { etDateString } from '@/lib/learn-streak'
+import MrGuyMascot from '@/components/learn/MrGuyMascot'
 import MrGuyHead from '@/components/MrGuyHead'
-import { Flame, Star, Lock, Check, BookOpen } from 'lucide-react'
+import { Flame, Star, Lock, Check, BookOpen, Trophy } from 'lucide-react'
 
 type Progress = {
   authed: boolean
-  completed: { lessonId: string; score: number; total: number }[]
+  completed: { lessonId: string; score: number; total: number; completedAt?: string }[]
   xp: number
   streak: number
   longestStreak: number
 }
+type LbRow = { rank: number; name: string; xp: number; level: number; emoji: string; isMe: boolean }
 
-/* Per-course front/edge hex for the 3D nodes + banners. */
 const HEX: Record<string, { front: string; edge: string; glow: string }> = {
   blue:    { front: '#3b82f6', edge: '#1d4ed8', glow: 'rgba(59,130,246,.55)' },
   purple:  { front: '#a855f7', edge: '#7e22ce', glow: 'rgba(168,85,247,.55)' },
@@ -24,17 +27,23 @@ const HEX: Record<string, { front: string; edge: string; glow: string }> = {
   pink:    { front: '#ec4899', edge: '#be185d', glow: 'rgba(236,72,153,.55)' },
 }
 const LOCKED = { front: '#374151', edge: '#1f2937' }
-
-// Zig-zag offsets for the winding path.
 const OFFSETS = [0, 52, 78, 52, 0, -52, -78, -52]
+
+function etDateOf(iso?: string): string {
+  if (!iso) return ''
+  const et = new Date(new Date(iso).toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  return `${et.getFullYear()}-${String(et.getMonth() + 1).padStart(2, '0')}-${String(et.getDate()).padStart(2, '0')}`
+}
 
 export default function LearnPage() {
   const router = useRouter()
   const [progress, setProgress] = useState<Progress | null>(null)
+  const [board, setBoard] = useState<LbRow[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch('/api/learn/progress').then((r) => r.json()).then(setProgress).catch(() => {}).finally(() => setLoading(false))
+    fetch('/api/learn/leaderboard').then((r) => r.json()).then((d) => setBoard(d.leaderboard ?? [])).catch(() => {})
   }, [])
 
   const completedIds = new Set(progress?.completed.map((c) => c.lessonId) ?? [])
@@ -43,10 +52,16 @@ export default function LearnPage() {
   const completedCount = completedIds.size
   const pct = Math.round((completedCount / TOTAL_LESSONS) * 100)
 
+  const xp = progress?.xp ?? 0
+  const lvl = levelFromXP(xp)
+  const today = etDateString(0)
+  const lessonsToday = (progress?.completed ?? []).filter((c) => etDateOf(c.completedAt) === today).length
+  const snapshot: ProgressSnapshot = { completed: progress?.completed ?? [], xp, streak: progress?.streak ?? 0, longestStreak: progress?.longestStreak ?? 0 }
+  const unlocked = unlockedAchievements(snapshot)
+
   return (
-    <div className="max-w-2xl mx-auto pb-20">
+    <div className="max-w-5xl mx-auto pb-20">
       <style>{`
-        @keyframes lpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
         @keyframes lpStartBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
         @keyframes lpPulseRing{0%{box-shadow:0 0 0 0 var(--ring)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
         .lnode{position:relative;width:74px;height:74px;border:none;background:transparent;padding:0}
@@ -56,106 +71,126 @@ export default function LearnPage() {
         .lnode:not(:disabled):hover .lnf{transform:translateY(-10px)}
         .lnode:not(:disabled):active .lnf{transform:translateY(-2px)}
         .lp-float{animation:lpFloat 2.6s ease-in-out infinite}
+        @keyframes lpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
       `}</style>
 
-      {/* ── Hero / stats ── */}
-      <div className="relative overflow-hidden rounded-3xl p-6 mb-6 border-2 border-blue-500/20 bg-gradient-to-br from-blue-600/20 via-gray-900 to-gray-900">
-        <div className="flex items-center gap-4">
-          <div className="shrink-0 bg-gray-950/40 rounded-2xl p-2 lp-float"><MrGuyHead px={5} /></div>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-black text-white leading-tight tracking-tight">Learn to Invest</h1>
-            <p className="text-blue-200/70 text-sm mt-1 font-medium">5 minutes a day. Zero jargon. Mr. Guy’s got you.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 mt-5">
-          <Stat icon={<Flame className="h-5 w-5 fill-orange-400" />} value={progress?.streak ?? 0} label="day streak" color="text-orange-400" />
-          <Stat icon={<Star className="h-5 w-5 fill-yellow-400" />} value={progress?.xp ?? 0} label="total XP" color="text-yellow-400" />
-          <Stat plain={`${completedCount}/${TOTAL_LESSONS}`} label="lessons" color="text-blue-400" />
-        </div>
-        <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
-        </div>
-
-        <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-          {progress && !progress.authed ? (
-            <Link href="/register" className="text-sm font-bold text-blue-300 hover:text-blue-200">Sign up free to save your streak →</Link>
-          ) : <span />}
-          <Link href="/glossary" className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium">
-            <BookOpen className="h-4 w-4" /> Dictionary
-          </Link>
-        </div>
-      </div>
-
-      {/* ── Courses + winding path ── */}
-      {COURSES.map((course) => {
-        const lessons = getLessonsForCourse(course.id)
-        const hex = HEX[course.color] ?? HEX.blue
-        const courseDone = lessons.every((l) => completedIds.has(l.id))
-        const courseStarted = lessons.some((l) => completedIds.has(l.id) || currentLesson?.courseId === course.id)
-        return (
-          <div key={course.id} className="mb-4">
-            {/* Unit banner */}
-            <div
-              className="rounded-3xl px-5 py-4 flex items-center gap-4 shadow-lg"
-              style={{ background: hex.front, boxShadow: `0 5px 0 ${hex.edge}` }}
-            >
-              <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">{course.emoji}</div>
+      <div className="flex gap-6 justify-center">
+        {/* ── Main column ── */}
+        <div className="flex-1 max-w-2xl min-w-0">
+          {/* Hero */}
+          <div className="relative overflow-hidden rounded-3xl p-6 mb-6 border-2 border-blue-500/20 bg-gradient-to-br from-blue-600/20 via-gray-900 to-gray-900">
+            <div className="flex items-center gap-4">
+              <div className="shrink-0 bg-gray-950/40 rounded-2xl p-2 lp-float"><MrGuyHead px={5} /></div>
               <div className="flex-1 min-w-0">
-                <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">{courseDone ? 'Completed' : courseStarted ? 'In progress' : 'Up next'}</p>
-                <h2 className="text-white font-black text-xl leading-tight flex items-center gap-2">
-                  {course.title} {courseDone && <Check className="h-5 w-5" strokeWidth={3} />}
-                </h2>
-                <p className="text-white/80 text-sm font-medium">{course.tagline}</p>
+                <h1 className="text-3xl font-black text-white leading-tight tracking-tight">Learn to Invest</h1>
+                <p className="text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Zero jargon. Mr. Guy’s got you.</p>
+              </div>
+              <div className="shrink-0 text-center hidden sm:block">
+                <div className="text-3xl">{lvl.emoji}</div>
+                <div className="text-[10px] font-black uppercase tracking-wide text-blue-300 mt-0.5">Lvl {lvl.level}</div>
               </div>
             </div>
 
-            {/* Lesson nodes */}
-            <div className="flex flex-col items-center gap-5 py-6">
-              {lessons.map((lesson, i) => {
-                const done = completedIds.has(lesson.id)
-                const unlocked = isUnlocked(lesson.globalOrder)
-                const isCurrent = currentLesson?.id === lesson.id
-                const f = unlocked ? hex.front : LOCKED.front
-                const e = unlocked ? hex.edge : LOCKED.edge
-                const offset = OFFSETS[i % OFFSETS.length]
-                return (
-                  <div key={lesson.id} className="relative flex flex-col items-center" style={{ transform: `translateX(${offset}px)` }}>
-                    {isCurrent && (
-                      <div className="absolute -top-9 left-1/2 -translate-x-1/2 z-10" style={{ animation: 'lpStartBob 1.6s ease-in-out infinite' }}>
-                        <div className="relative bg-white px-3 py-1 rounded-xl shadow-lg">
-                          <span className="text-[12px] font-black uppercase tracking-wide" style={{ color: hex.front }}>Start</span>
-                          <div className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-3 h-3 bg-white rotate-45" />
-                        </div>
-                      </div>
-                    )}
-                    <button
-                      disabled={!unlocked}
-                      onClick={() => router.push(`/learn/${lesson.id}`)}
-                      className="lnode"
-                      style={{
-                        ['--f' as any]: f, ['--e' as any]: e,
-                        ['--ring' as any]: hex.glow,
-                        ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}),
-                      }}
-                      aria-label={`${course.title} lesson ${lesson.index}${done ? ' (completed)' : unlocked ? '' : ' (locked)'}`}
-                    >
-                      <span className="lne" />
-                      <span className="lnf" style={done ? { boxShadow: `0 0 18px ${hex.glow}` } : undefined}>
-                        {done ? <Check className="h-8 w-8 text-white" strokeWidth={3.5} />
-                          : !unlocked ? <Lock className="h-6 w-6 text-gray-500" />
-                          : <span className="text-white font-black text-2xl drop-shadow">{lesson.index}</span>}
-                      </span>
-                    </button>
-                  </div>
-                )
-              })}
+            <div className="grid grid-cols-3 gap-3 mt-5">
+              <Stat icon={<Flame className="h-5 w-5 fill-orange-400" />} value={progress?.streak ?? 0} label="day streak" color="text-orange-400" />
+              <Stat icon={<Star className="h-5 w-5 fill-yellow-400" />} value={xp} label="total XP" color="text-yellow-400" />
+              <Stat plain={`${completedCount}/${TOTAL_LESSONS}`} label="lessons" color="text-blue-400" />
+            </div>
+            <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
+            </div>
+
+            <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
+              {progress && !progress.authed ? (
+                <Link href="/register" className="text-sm font-bold text-blue-300 hover:text-blue-200">Sign up free to save your streak →</Link>
+              ) : <span />}
+              <Link href="/glossary" className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors font-medium"><BookOpen className="h-4 w-4" /> Dictionary</Link>
             </div>
           </div>
-        )
-      })}
 
-      {loading && <p className="text-center text-gray-600 text-sm">Loading your progress…</p>}
+          {/* Courses + winding path */}
+          {COURSES.map((course) => {
+            const lessons = getLessonsForCourse(course.id)
+            const hex = HEX[course.color] ?? HEX.blue
+            const courseDone = lessons.every((l) => completedIds.has(l.id))
+            const courseStarted = lessons.some((l) => completedIds.has(l.id)) || currentLesson?.courseId === course.id
+            return (
+              <div key={course.id} className="mb-2">
+                <div className="rounded-3xl px-5 py-4 flex items-center gap-4 shadow-lg" style={{ background: hex.front, boxShadow: `0 5px 0 ${hex.edge}` }}>
+                  <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">{course.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">{courseDone ? 'Completed' : courseStarted ? 'In progress' : 'Up next'}</p>
+                    <h2 className="text-white font-black text-xl leading-tight flex items-center gap-2">{course.title} {courseDone && <Check className="h-5 w-5" strokeWidth={3} />}</h2>
+                    <p className="text-white/80 text-sm font-medium">{course.tagline}</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-4 py-5">
+                  {lessons.map((lesson, i) => {
+                    const done = completedIds.has(lesson.id)
+                    const unlockedNode = isUnlocked(lesson.globalOrder)
+                    const isCurrent = currentLesson?.id === lesson.id
+                    const f = unlockedNode ? hex.front : LOCKED.front
+                    const e = unlockedNode ? hex.edge : LOCKED.edge
+                    const offset = OFFSETS[i % OFFSETS.length]
+                    return (
+                      <div key={lesson.id} className="relative flex flex-col items-center" style={{ transform: `translateX(${offset}px)` }}>
+                        {/* Mr. Guy stands beside the current node */}
+                        {isCurrent && (
+                          <div className="absolute top-1 z-0" style={{ [offset > 0 ? 'right' : 'left']: '78px' }}>
+                            <MrGuyMascot px={2} mood="idle" flip={offset > 0} />
+                          </div>
+                        )}
+                        {isCurrent && (
+                          <div className="absolute -top-9 left-1/2 -translate-x-1/2 z-10" style={{ animation: 'lpStartBob 1.6s ease-in-out infinite' }}>
+                            <div className="relative bg-white px-3 py-1 rounded-xl shadow-lg">
+                              <span className="text-[12px] font-black uppercase tracking-wide" style={{ color: hex.front }}>Start</span>
+                              <div className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-3 h-3 bg-white rotate-45" />
+                            </div>
+                          </div>
+                        )}
+                        <button disabled={!unlockedNode} onClick={() => router.push(`/learn/${lesson.id}`)} className="lnode relative z-[1]"
+                          style={{ ['--f' as any]: f, ['--e' as any]: e, ['--ring' as any]: hex.glow, ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}) }}
+                          aria-label={`${course.title} lesson ${lesson.index}${done ? ' (completed)' : unlockedNode ? '' : ' (locked)'}`}>
+                          <span className="lne" />
+                          <span className="lnf" style={done ? { boxShadow: `0 0 18px ${hex.glow}` } : undefined}>
+                            {done ? <Check className="h-8 w-8 text-white" strokeWidth={3.5} /> : !unlockedNode ? <Lock className="h-6 w-6 text-gray-500" /> : <span className="text-white font-black text-2xl drop-shadow">{lesson.index}</span>}
+                          </span>
+                        </button>
+                      </div>
+                    )
+                  })}
+
+                  {/* Chest milestone at the end of each course */}
+                  <div className="relative flex flex-col items-center pt-1">
+                    <div className="h-16 w-16 rounded-2xl flex items-center justify-center text-3xl" style={courseDone ? { background: 'linear-gradient(#fbbf24,#d97706)', boxShadow: '0 4px 0 #b45309' } : { background: '#1f2937', boxShadow: '0 4px 0 #111827' }}>
+                      <span className={courseDone ? '' : 'grayscale opacity-50'}>🎁</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-gray-500 mt-1.5 uppercase tracking-wide">{courseDone ? 'Claimed' : 'Reward'}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* ── Desktop right rail ── */}
+        <aside className="hidden lg:block w-80 shrink-0 space-y-4 self-start sticky top-4">
+          <LevelCard xp={xp} lvl={lvl} />
+          <RailCard title="Daily goal"><DailyGoal done={lessonsToday} /></RailCard>
+          <RailCard title="Achievements"><Achievements unlocked={unlocked} /></RailCard>
+          <RailCard title="Top learners"><Leaderboard rows={board} /></RailCard>
+        </aside>
+      </div>
+
+      {/* ── Mobile: achievements + leaderboard below the path ── */}
+      <div className="lg:hidden mt-6 space-y-4 max-w-2xl mx-auto">
+        <RailCard title="Daily goal"><DailyGoal done={lessonsToday} /></RailCard>
+        <RailCard title="Achievements"><Achievements unlocked={unlocked} /></RailCard>
+        <RailCard title="Top learners"><Leaderboard rows={board} /></RailCard>
+      </div>
+
+      {loading && <p className="text-center text-gray-600 text-sm mt-4">Loading…</p>}
     </div>
   )
 }
@@ -163,10 +198,89 @@ export default function LearnPage() {
 function Stat({ icon, value, plain, label, color }: { icon?: React.ReactNode; value?: number; plain?: string; label: string; color: string }) {
   return (
     <div className="bg-gray-950/40 rounded-2xl px-2 py-3 text-center">
-      <div className={`flex items-center justify-center gap-1 font-black text-2xl ${color}`}>
-        {icon} {plain ?? value}
-      </div>
+      <div className={`flex items-center justify-center gap-1 font-black text-2xl ${color}`}>{icon} {plain ?? value}</div>
       <p className="text-[10px] text-gray-400 mt-0.5 font-bold uppercase tracking-wide">{label}</p>
+    </div>
+  )
+}
+
+function RailCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+      <h3 className="text-sm font-black text-white uppercase tracking-wide mb-3">{title}</h3>
+      {children}
+    </div>
+  )
+}
+
+function LevelCard({ xp, lvl }: { xp: number; lvl: ReturnType<typeof levelFromXP> }) {
+  return (
+    <div className="bg-gradient-to-br from-purple-600/25 to-blue-600/15 border-2 border-purple-400/25 rounded-3xl p-5">
+      <div className="flex items-center gap-3">
+        <div className="text-4xl">{lvl.emoji}</div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] font-black uppercase tracking-widest text-purple-300">Level {lvl.level}</p>
+          <p className="text-lg font-black text-white leading-tight">{lvl.title}</p>
+        </div>
+      </div>
+      <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-purple-400 to-blue-500 rounded-full transition-all duration-700" style={{ width: `${lvl.pct}%` }} />
+      </div>
+      <p className="text-[11px] text-gray-400 mt-1.5 font-semibold">{lvl.nextXP !== null ? `${lvl.nextXP - xp} XP to next level` : 'Max level — legend 👑'}</p>
+    </div>
+  )
+}
+
+function DailyGoal({ done }: { done: number }) {
+  const goal = DAILY_GOAL
+  const pct = Math.min(1, done / goal)
+  const r = 30, c = 2 * Math.PI * r
+  const met = done >= goal
+  return (
+    <div className="flex items-center gap-4">
+      <div className="relative shrink-0" style={{ width: 72, height: 72 }}>
+        <svg width="72" height="72">
+          <circle cx="36" cy="36" r={r} fill="none" stroke="#1f2937" strokeWidth="8" />
+          <circle cx="36" cy="36" r={r} fill="none" stroke={met ? '#22c55e' : '#f59e0b'} strokeWidth="8" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} transform="rotate(-90 36 36)" style={{ transition: 'stroke-dashoffset .6s' }} />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center text-lg">{met ? '✅' : '🎯'}</div>
+      </div>
+      <div>
+        <p className="text-white font-black text-lg">{Math.min(done, goal)}/{goal} lessons</p>
+        <p className="text-gray-500 text-sm">{met ? 'Goal smashed today! 🔥' : 'Keep your streak alive'}</p>
+      </div>
+    </div>
+  )
+}
+
+function Achievements({ unlocked }: { unlocked: Set<string> }) {
+  return (
+    <div className="grid grid-cols-4 gap-2">
+      {ACHIEVEMENTS.map((a) => {
+        const got = unlocked.has(a.id)
+        return (
+          <div key={a.id} title={`${a.title} — ${a.desc}`} className={`aspect-square rounded-2xl flex items-center justify-center text-2xl border ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
+            <span className={got ? '' : 'grayscale opacity-30'}>{a.emoji}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function Leaderboard({ rows }: { rows: LbRow[] }) {
+  if (!rows.length) return <p className="text-sm text-gray-500">Be the first to earn XP! 🚀</p>
+  const medal = ['🥇', '🥈', '🥉']
+  return (
+    <div className="space-y-1.5">
+      {rows.slice(0, 6).map((r) => (
+        <div key={r.rank} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl ${r.isMe ? 'bg-blue-500/15 border border-blue-500/30' : ''}`}>
+          <span className="w-5 text-center text-sm font-black text-gray-400">{medal[r.rank - 1] ?? r.rank}</span>
+          <span className="text-base">{r.emoji}</span>
+          <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
+          <span className="text-sm font-black text-yellow-400">{r.xp}</span>
+        </div>
+      ))}
     </div>
   )
 }

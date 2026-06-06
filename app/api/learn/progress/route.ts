@@ -22,7 +22,7 @@ export async function GET() {
   const [progress, user] = await Promise.all([
     prisma.lessonProgress.findMany({
       where: { userId: session.user.id },
-      select: { lessonId: true, score: true, total: true },
+      select: { lessonId: true, score: true, total: true, completedAt: true },
     }),
     prisma.user.findUnique({
       where: { id: session.user.id },

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getLesson, XP_PER_CORRECT, XP_LESSON_BONUS } from '@/lib/curriculum'
 import { etDateString, nextStreak } from '@/lib/learn-streak'
+import { levelFromXP, PERFECT_BONUS } from '@/lib/progression'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,7 +47,12 @@ export async function POST(req: NextRequest) {
   const today = etDateString(0)
   const streak = nextStreak(user?.learnStreak ?? 0, user?.lastLearnDate ?? null)
   const longestStreak = Math.max(user?.learnLongestStreak ?? 0, streak)
-  const xpGain = isFirst ? clampedScore * XP_PER_CORRECT + XP_LESSON_BONUS : 0
+  const perfect = total > 0 && clampedScore === total
+  const baseXP = clampedScore * XP_PER_CORRECT + XP_LESSON_BONUS
+  const xpGain = isFirst ? baseXP + (perfect ? PERFECT_BONUS : 0) : 0
+
+  const beforeXP = user?.learnXP ?? 0
+  const afterXP = beforeXP + xpGain
 
   const updated = await prisma.user.update({
     where: { id: userId },
@@ -59,13 +65,24 @@ export async function POST(req: NextRequest) {
     select: { learnXP: true, learnStreak: true, learnLongestStreak: true },
   })
 
+  // Detect a level-up so the UI can celebrate.
+  const before = levelFromXP(beforeXP)
+  const after = levelFromXP(afterXP)
+  const leveledUp = after.level > before.level
+
   return NextResponse.json({
     ok: true,
     xpGain,
+    perfect: perfect && isFirst,
+    perfectBonus: perfect && isFirst ? PERFECT_BONUS : 0,
     xp: updated.learnXP,
     streak: updated.learnStreak,
     longestStreak: updated.learnLongestStreak,
     score: clampedScore,
     total,
+    leveledUp,
+    level: after.level,
+    levelTitle: after.title,
+    levelEmoji: after.emoji,
   })
 }

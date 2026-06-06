@@ -69,7 +69,8 @@ export default function LessonPlayer() {
   const [result, setResult] = useState<boolean | null>(null) // null = unanswered
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
-  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean } | null>(null)
+  const [post, setPost] = useState<{ xpGain: number; streak: number; authed: boolean; perfect?: boolean; perfectBonus?: number; leveledUp?: boolean; levelTitle?: string; levelEmoji?: string } | null>(null)
+  const [chestOpen, setChestOpen] = useState(false)
   const posted = useRef(false)
 
   const ex = exercises[idx]
@@ -83,7 +84,7 @@ export default function LessonPlayer() {
   }, [ex])
 
   useEffect(() => {
-    setPhase('play'); setIdx(0); setSelected(null); setResult(null); setScore(0); setCombo(0); setPost(null); posted.current = false
+    setPhase('play'); setIdx(0); setSelected(null); setResult(null); setScore(0); setCombo(0); setPost(null); setChestOpen(false); posted.current = false
   }, [lessonId])
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function LessonPlayer() {
     sound.complete()
     fetch('/api/learn/complete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lessonId: lesson.id, score }) })
       .then((r) => r.json())
-      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false }))
+      .then((d) => setPost({ xpGain: d.xpGain ?? 0, streak: d.streak ?? 0, authed: d.authed !== false, perfect: d.perfect, perfectBonus: d.perfectBonus ?? 0, leveledUp: d.leveledUp, levelTitle: d.levelTitle, levelEmoji: d.levelEmoji }))
       .catch(() => setPost({ xpGain: 0, streak: 0, authed: false }))
   }, [phase, lesson, score, sound])
 
@@ -295,11 +296,32 @@ export default function LessonPlayer() {
       )}
 
       {/* ── RESULTS ── */}
-      {phase === 'results' && (
+      {phase === 'results' && !chestOpen && (
+        <div className="text-center pt-10">
+          <style>{`@keyframes chestWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}`}</style>
+          <h2 className="text-3xl font-black text-white tracking-tight mb-1">{score === totalScored ? 'Perfect run! 🎉' : 'Lesson complete! 👏'}</h2>
+          <p className="text-gray-400 mb-8 text-lg">You scored <span className="font-bold text-white">{score}/{totalScored}</span></p>
+          <button onClick={() => { setChestOpen(true); sound.complete() }} className="group inline-flex flex-col items-center" aria-label="Open your reward">
+            <div className="text-[120px] leading-none" style={{ animation: 'chestWiggle 1.2s ease-in-out infinite' }}>🎁</div>
+            <span className="mt-4 px-6 py-3 rounded-2xl bg-blue-600 group-hover:bg-blue-500 text-white font-black text-lg transition-colors" style={{ boxShadow: '0 5px 0 #1d4ed8' }}>Tap to open!</span>
+          </button>
+        </div>
+      )}
+
+      {phase === 'results' && chestOpen && (
         <div className="text-center pt-4">
           <Confetti />
           <div className="inline-block mb-2 lp-bounce"><MrGuyMascot px={6} mood="celebrate" /></div>
-          <h2 className="text-4xl font-black text-white tracking-tight">{score === totalScored ? 'Perfect! 🎉' : score >= totalScored / 2 ? 'Lesson done! 👏' : 'Keep going! 💪'}</h2>
+
+          {/* Level-up banner */}
+          {post?.leveledUp && (
+            <div className="lp-bounce mb-4 mx-auto max-w-xs bg-gradient-to-r from-purple-600/30 to-blue-600/20 border-2 border-purple-400/40 rounded-3xl px-5 py-3">
+              <p className="text-[11px] font-black uppercase tracking-widest text-purple-300">⭐ Level up!</p>
+              <p className="text-xl font-black text-white">{post.levelEmoji} You’re now a {post.levelTitle}</p>
+            </div>
+          )}
+
+          <h2 className="text-4xl font-black text-white tracking-tight">{score === totalScored ? 'Flawless! 🎉' : 'Nice work! 👏'}</h2>
           <p className="text-gray-400 mt-2 text-lg">You got <span className="font-bold text-white">{score}/{totalScored}</span> right.</p>
 
           <div className="flex items-center justify-center gap-3 mt-7">
@@ -312,6 +334,10 @@ export default function LessonPlayer() {
               <p className="text-[11px] text-orange-200/60 mt-1 font-bold uppercase tracking-wide">day streak</p>
             </div>
           </div>
+
+          {post?.perfect && (post?.perfectBonus ?? 0) > 0 && (
+            <p className="mt-4 text-sm font-black text-yellow-300">💯 Perfect bonus: +{post.perfectBonus} XP</p>
+          )}
 
           {post && !post.authed && <Link href="/register" className="block mt-6 text-sm font-bold text-blue-400 hover:text-blue-300">Sign up free to save your XP & streak →</Link>}
 
