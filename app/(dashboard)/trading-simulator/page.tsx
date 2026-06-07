@@ -6,23 +6,14 @@ import dynamic from 'next/dynamic'
 import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2, Search, X, Trophy } from 'lucide-react'
+import { COMPANIES, THEMES, ALL_SIM_TICKERS } from '@/lib/sim-companies'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
+const MrGuyHead = dynamic(() => import('@/components/MrGuyHead'), { ssr: false })
 const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
 // NOTE: WhatsHappening (market-pulse learning card) is kept in
 // components/game/WhatsHappening.tsx but removed from the page for now.
 
-/* ── Familiar, beginner-recognisable companies ── */
-const FAMILIAR = [
-  { ticker: 'AAPL',  name: 'Apple',     color: '#64748b' },
-  { ticker: 'MSFT',  name: 'Microsoft', color: '#0ea5e9' },
-  { ticker: 'NVDA',  name: 'Nvidia',    color: '#22c55e' },
-  { ticker: 'TSLA',  name: 'Tesla',     color: '#ef4444' },
-  { ticker: 'AMZN',  name: 'Amazon',    color: '#f59e0b' },
-  { ticker: 'GOOGL', name: 'Google',    color: '#3b82f6' },
-  { ticker: 'DIS',   name: 'Disney',    color: '#6366f1' },
-  { ticker: 'NFLX',  name: 'Netflix',   color: '#dc2626' },
-]
 const BUY_AMOUNTS = [100, 500, 1000, 5000]
 const BADGE_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#0ea5e9', '#6366f1']
 
@@ -34,7 +25,7 @@ async function priceOf(t: string): Promise<{ price: number; name: string } | nul
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface LbEntry { rank: number; name: string; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
-type BuyTarget = { ticker: string; name: string; price: number }
+type BuyTarget = { ticker: string; name: string; price: number; blurb?: string }
 
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
   return (
@@ -82,7 +73,7 @@ export default function GamePage() {
     if (status === 'unauthenticated') { setLoading(false); return }
     fetchPortfolio(); fetchLeaderboard()
   }, [status])
-  useEffect(() => { FAMILIAR.forEach(({ ticker }) => priceOf(ticker).then((p) => { if (p) setPrices((s) => ({ ...s, [ticker]: p.price })) })) }, [])
+  useEffect(() => { ALL_SIM_TICKERS.forEach((ticker) => priceOf(ticker).then((p) => { if (p) setPrices((s) => ({ ...s, [ticker]: p.price })) })) }, [])
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return }
     const t = setTimeout(async () => { try { const d = await fetch(`/api/stock/search?q=${encodeURIComponent(query)}`).then((r) => r.json()); setResults((d.results || []).slice(0, 6)) } catch { setResults([]) } }, 350)
@@ -93,7 +84,8 @@ export default function GamePage() {
     setBuyAmount(500)
     const p = prices[ticker] ? { price: prices[ticker], name: name || ticker } : await priceOf(ticker)
     if (!p) { toast({ title: 'Couldn’t load price', description: 'Try again in a sec.', variant: 'destructive' }); return }
-    setBuyTarget({ ticker, name: name || p.name, price: p.price }); setShowSearch(false); setQuery('')
+    const known = COMPANIES[ticker]
+    setBuyTarget({ ticker, name: known?.name || name || p.name, price: p.price, blurb: known?.blurb }); setShowSearch(false); setQuery('')
   }
   const confirmBuy = async () => {
     if (!buyTarget || buying) return
@@ -130,17 +122,28 @@ export default function GamePage() {
     : up ? 'Nicely done — you’re in the green.'
     : 'Down a little? Totally normal. It’s a long game.'
 
+  const companyCard = (ticker: string) => {
+    const c = COMPANIES[ticker]
+    if (!c) return null
+    return (
+      <button key={ticker} onClick={() => openBuy(ticker, c.name)} disabled={!prices[ticker]}
+        className="text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3.5 transition-all disabled:opacity-60 hover:-translate-y-0.5 active:translate-y-0">
+        <div className="flex items-center gap-2.5">
+          <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
+          <div className="min-w-0"><p className="font-bold text-white truncate">{c.name}</p><p className="text-[11px] text-gray-500">{ticker}</p></div>
+        </div>
+        <p className="text-base font-bold text-gray-300 mt-3">{prices[ticker] ? formatCurrency(prices[ticker]) : '…'}</p>
+      </button>
+    )
+  }
   const buyGrid = (
-    <div className="grid grid-cols-2 gap-3">
-      {FAMILIAR.map((c) => (
-        <button key={c.ticker} onClick={() => openBuy(c.ticker, c.name)} disabled={!prices[c.ticker]}
-          className="text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3.5 transition-all disabled:opacity-60 hover:-translate-y-0.5 active:translate-y-0">
-          <div className="flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
-            <div className="min-w-0"><p className="font-bold text-white truncate">{c.name}</p><p className="text-[11px] text-gray-500">{c.ticker}</p></div>
-          </div>
-          <p className="text-base font-bold text-gray-300 mt-3">{prices[c.ticker] ? formatCurrency(prices[c.ticker]) : '…'}</p>
-        </button>
+    <div className="space-y-5">
+      {THEMES.map((theme) => (
+        <div key={theme.id}>
+          <p className="font-black text-white">{theme.title}</p>
+          <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">{theme.blurb}</p>
+          <div className="grid grid-cols-2 gap-3">{theme.tickers.map(companyCard)}</div>
+        </div>
       ))}
     </div>
   )
@@ -191,7 +194,7 @@ export default function GamePage() {
             {/* Buy (main) */}
             <div className="lg:col-span-3">
               <Section title="Buy a stock" action={<button onClick={() => setShowSearch((s) => !s)} className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1"><Search className="h-3.5 w-3.5" /> Search all</button>}>
-                <p className="text-sm text-gray-500 -mt-2 mb-4">Tap a company you recognise.</p>
+                <p className="text-sm text-gray-500 -mt-2 mb-4">Not sure what to buy? Browse by what you know — tap any company and Mr. Guy explains it.</p>
                 {showSearch && (
                   <div className="mb-4">
                     <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search any company or ticker…"
@@ -273,6 +276,12 @@ export default function GamePage() {
               </div>
               <button onClick={() => !buying && setBuyTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
             </div>
+            {buyTarget.blurb && (
+              <div className="flex items-start gap-2.5 mb-4 bg-blue-500/10 rounded-2xl p-3">
+                <div className="shrink-0 rounded-lg overflow-hidden mt-0.5"><MrGuyHead px={3} /></div>
+                <p className="text-sm text-gray-300 leading-relaxed">{buyTarget.blurb}</p>
+              </div>
+            )}
             <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
             <div className="grid grid-cols-4 gap-2 mb-2.5">
               {BUY_AMOUNTS.map((a) => (
