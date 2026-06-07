@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import {
   TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight,
-  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History,
+  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History, HelpCircle,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ const TickerWall = dynamic(() => import('@/components/game/TickerWall'), { ssr: 
 const BeatMrGuy = dynamic(() => import('@/components/game/BeatMrGuy'), { ssr: false })
 const AchievementBadges = dynamic(() => import('@/components/game/AchievementBadges'), { ssr: false })
 const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { ssr: false })
+const BeginnerStart = dynamic(() => import('@/components/game/BeginnerStart'), { ssr: false })
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
@@ -276,24 +277,28 @@ export default function GamePage() {
           {[
             {
               label: 'Portfolio Value',
+              hint: "Everything you own plus your spare cash, at today's prices.",
               value: session && portfolio ? formatCurrency(portfolio.totalValue) : '$100,000.00',
               sub: session && portfolio ? `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%` : 'Your starting balance',
               color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-400',
             },
             {
-              label: 'Cash Available',
+              label: 'Cash to Invest',
+              hint: "Money you haven't put into stocks yet.",
               value: session && portfolio ? formatCurrency(portfolio.cash) : '——',
-              sub: session && portfolio ? `${((portfolio.cash / 100000) * 100).toFixed(1)}% of capital` : 'Sign up to trade',
+              sub: session && portfolio ? `${((portfolio.cash / 100000) * 100).toFixed(1)}% of your money` : 'Sign up to trade',
               color: session && portfolio ? 'text-blue-400' : 'text-gray-600',
             },
             {
-              label: 'Total P&L',
+              label: 'Profit / Loss',
+              hint: "How much you're up or down since your $100,000 start.",
               value: session && portfolio ? `${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)}` : '——',
-              sub: session && portfolio ? 'vs $100,000 start' : 'Sign up to track',
+              sub: session && portfolio ? 'since you started' : 'Sign up to track',
               color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-600',
             },
             {
               label: 'This Month',
+              hint: 'Your gain or loss so far this month.',
               value: session && portfolio
                 ? `${(portfolio.monthlyGainLoss ?? 0) >= 0 ? '+' : ''}${formatCurrency(portfolio.monthlyGainLoss ?? 0)}`
                 : '——',
@@ -302,10 +307,13 @@ export default function GamePage() {
                 : 'Sign up to track',
               color: session && portfolio ? gainColor(portfolio.monthlyGainLoss ?? 0) : 'text-gray-600',
             },
-          ].map(({ label, value, sub, color }) => (
+          ].map(({ label, value, sub, color, hint }) => (
             <Card key={label} className={cn(!session && label !== 'Season Resets' && label !== 'Portfolio Value' ? 'opacity-60' : '')}>
               <CardContent className="p-4">
-                <p className="text-xs text-gray-500 mb-1">{label}</p>
+                <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
+                  {label}
+                  {hint && <span title={hint} className="cursor-help"><HelpCircle className="h-3 w-3 text-gray-600 hover:text-gray-400" /></span>}
+                </p>
                 <p className={cn('text-lg font-bold', color)}>{value}</p>
                 <p className="text-xs text-gray-500">{sub}</p>
               </CardContent>
@@ -369,14 +377,7 @@ export default function GamePage() {
               </CardContent>
             </Card>
           ) : loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.holdings?.length ? (
-            <Card>
-              <CardContent className="p-10 text-center">
-                <DollarSign className="h-12 w-12 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-400">No positions yet</p>
-                <p className="text-gray-600 text-sm mt-1">Go to Trade tab to buy your first stock</p>
-                <Button className="mt-4 bg-blue-600 hover:bg-blue-700" onClick={() => setTab('Trade')}>Start Trading</Button>
-              </CardContent>
-            </Card>
+            <BeginnerStart cash={portfolio?.cash ?? 100000} onTraded={async () => { await fetchPortfolio(); await fetchHistory() }} />
           ) : (
             <>
               {portfolio.holdings.map((h: Holding) => (
