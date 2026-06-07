@@ -9,7 +9,8 @@ import { Loader2, Search, X, Trophy } from 'lucide-react'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
 const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
-const WhatsHappening = dynamic(() => import('@/components/game/WhatsHappening'), { ssr: false })
+// NOTE: WhatsHappening (market-pulse learning card) is kept in
+// components/game/WhatsHappening.tsx but removed from the page for now.
 
 /* ── Familiar, beginner-recognisable companies ── */
 const FAMILIAR = [
@@ -184,9 +185,6 @@ export default function GamePage() {
               </div>
             </div>
           </div>
-
-          {/* ── What's happening today (learning) ── */}
-          <WhatsHappening onBuy={openBuy} />
 
           {/* ── Two-column dashboard ── */}
           <div className="grid lg:grid-cols-5 gap-5 items-start">
