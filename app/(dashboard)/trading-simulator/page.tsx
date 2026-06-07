@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import {
   TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight,
-  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History, HelpCircle,
+  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -20,6 +20,8 @@ const BeatMrGuy = dynamic(() => import('@/components/game/BeatMrGuy'), { ssr: fa
 const AchievementBadges = dynamic(() => import('@/components/game/AchievementBadges'), { ssr: false })
 const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { ssr: false })
 const BeginnerStart = dynamic(() => import('@/components/game/BeginnerStart'), { ssr: false })
+const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
+import InfoTip from '@/components/game/InfoTip'
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
@@ -260,6 +262,9 @@ export default function GamePage() {
 
   return (
     <div className="space-y-5">
+      {/* One-time Mr. Guy welcome (shows once for everyone) */}
+      <SimIntro />
+
       {/* Ticker Wall Hero */}
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2 mb-3">
@@ -312,7 +317,7 @@ export default function GamePage() {
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                   {label}
-                  {hint && <span title={hint} className="cursor-help"><HelpCircle className="h-3 w-3 text-gray-600 hover:text-gray-400" /></span>}
+                  {hint && <InfoTip text={hint} />}
                 </p>
                 <p className={cn('text-lg font-bold', color)}>{value}</p>
                 <p className="text-xs text-gray-500">{sub}</p>
