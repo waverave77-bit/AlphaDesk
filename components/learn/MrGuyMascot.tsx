@@ -57,22 +57,22 @@ type Pose = { bodyDY: number; bounce: number; shakeX: number; lArm: number; rArm
 
 function poseFor(mood: Mood, t: number): Pose {
   switch (mood) {
-    case 'happy': // arms thrown up, little hops
-      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 9)) * -3), shakeX: 0,
+    case 'happy': // arms thrown up, slow gentle hops
+      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 3)) * -3), shakeX: 0,
         lArm: -10, rArm: -10, lLeg: 0, rLeg: 0 }
     case 'celebrate': // big jumps + pumping arms + kicking legs
-      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 6)) * -7), shakeX: 0,
-        lArm: Math.round(Math.sin(t * 11) * -9), rArm: Math.round(Math.sin(t * 11 + Math.PI) * -9),
-        lLeg: Math.round(Math.sin(t * 11) * 2), rLeg: Math.round(Math.sin(t * 11 + Math.PI) * 2) }
-    case 'sad': // slumped, head-shake
-      return { bodyDY: 2, bounce: 0, shakeX: Math.round(Math.sin(t * 18) * 1.2),
+      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 4)) * -7), shakeX: 0,
+        lArm: Math.round(Math.sin(t * 7) * -9), rArm: Math.round(Math.sin(t * 7 + Math.PI) * -9),
+        lLeg: Math.round(Math.sin(t * 7) * 2), rLeg: Math.round(Math.sin(t * 7 + Math.PI) * 2) }
+    case 'sad': // slumped, slow head-shake
+      return { bodyDY: 2, bounce: 0, shakeX: Math.round(Math.sin(t * 9) * 1.2),
         lArm: 3, rArm: 3, lLeg: 0, rLeg: 0 }
     case 'think': // one arm up to chin, slow sway
-      return { bodyDY: Math.round(Math.sin(t * 2) * 0.5), bounce: 0, shakeX: 0,
+      return { bodyDY: Math.round(Math.sin(t * 1.4) * 0.5), bounce: 0, shakeX: 0,
         lArm: 0, rArm: -6, lLeg: 0, rLeg: 0 }
-    default: // idle — gentle breathing bob
-      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 2)) * -1.2), shakeX: 0,
-        lArm: Math.round(Math.sin(t * 2) * 1), rArm: Math.round(Math.sin(t * 2 + Math.PI) * 1), lLeg: 0, rLeg: 0 }
+    default: // idle — slow breathing bob
+      return { bodyDY: 0, bounce: Math.round(Math.abs(Math.sin(t * 1.1)) * -1.2), shakeX: 0,
+        lArm: Math.round(Math.sin(t * 1.1) * 1), rArm: Math.round(Math.sin(t * 1.1 + Math.PI) * 1), lLeg: 0, rLeg: 0 }
   }
 }
 

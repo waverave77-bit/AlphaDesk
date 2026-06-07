@@ -36,9 +36,9 @@ type BuyTarget = { ticker: string; name: string; price: number }
 
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
   return (
-    <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-3 py-3 text-center">
-      <p className={`text-xl font-black ${cls} leading-none`}>{value}</p>
-      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide mt-1">{label}</p>
+    <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-2 py-3 text-center overflow-hidden">
+      <p className={`text-base font-black ${cls} leading-tight whitespace-nowrap`}>{value}</p>
+      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide mt-1 truncate">{label}</p>
     </div>
   )
 }
@@ -176,7 +176,7 @@ export default function GamePage() {
                   <p className="text-sm text-gray-400 mt-1.5">{take}</p>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3 lg:w-[380px] shrink-0">
+              <div className="grid grid-cols-3 gap-2.5 lg:w-[440px] shrink-0">
                 <StatTile label="Cash to spend" value={formatCurrency(cash)} cls="text-blue-600 dark:text-blue-400" />
                 <StatTile label="Total return" value={`${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(1)}%`} cls={gainCls(pnl)} />
                 <StatTile label="Your rank" value={myRank ? `#${myRank}` : '—'} cls="text-yellow-600 dark:text-yellow-400" />
@@ -217,17 +217,23 @@ export default function GamePage() {
                 ) : (
                   <div className="space-y-3">
                     {holdings.map((h) => (
-                      <div key={h.ticker} className="flex items-center justify-between gap-3 bg-black/5 dark:bg-white/5 rounded-2xl p-3">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: badgeColor(h.ticker) }}>{(h.companyName || h.ticker)[0]}</div>
-                          <div className="min-w-0">
-                            <p className="font-bold text-white truncate">{h.companyName || h.ticker}</p>
-                            <p className="text-xs text-gray-500">{formatCurrency(h.currentValue)} · <span className={gainCls(h.gainLoss)}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span></p>
+                      <div key={h.ticker} className="bg-black/5 dark:bg-white/5 rounded-2xl p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="h-12 w-12 rounded-2xl flex items-center justify-center text-[#fff] font-black text-lg shrink-0" style={{ background: badgeColor(h.ticker) }}>{(h.companyName || h.ticker)[0]}</div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-bold text-white truncate text-base">{h.companyName || h.ticker}</p>
+                            <p className="text-xs text-gray-500">{h.ticker} · {h.shares.toFixed(2)} shares</p>
                           </div>
                         </div>
-                        <button onClick={() => sellAll(h)} disabled={!!selling} className="shrink-0 text-xs font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-3 py-2 hover:bg-red-500/10 disabled:opacity-50">
-                          {selling === h.ticker ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Sell'}
-                        </button>
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-800">
+                          <div>
+                            <span className="font-black text-white text-lg">{formatCurrency(h.currentValue)}</span>
+                            <span className={`ml-2 text-sm font-bold ${gainCls(h.gainLoss)}`}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span>
+                          </div>
+                          <button onClick={() => sellAll(h)} disabled={!!selling} className="shrink-0 text-sm font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-4 py-2 hover:bg-red-500/10 disabled:opacity-50">
+                            {selling === h.ticker ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Sell'}
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -266,7 +272,7 @@ export default function GamePage() {
               <button onClick={() => !buying && setBuyTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
             </div>
             <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
-            <div className="grid grid-cols-4 gap-2 mb-4">
+            <div className="grid grid-cols-4 gap-2 mb-2.5">
               {BUY_AMOUNTS.map((a) => (
                 <button key={a} onClick={() => setBuyAmount(a)} disabled={a > cash}
                   className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all disabled:opacity-30 ${buyAmount === a ? 'border-blue-500 bg-blue-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
@@ -274,11 +280,18 @@ export default function GamePage() {
                 </button>
               ))}
             </div>
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-blue-500">
+              <span className="text-gray-500 font-bold">$</span>
+              <input type="number" inputMode="decimal" min={0} value={buyAmount || ''}
+                onChange={(e) => setBuyAmount(Math.max(0, Math.min(cash, parseFloat(e.target.value) || 0)))}
+                placeholder="custom amount"
+                className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
+            </div>
             <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
               <span className="text-gray-500">You’ll get</span>
               <span className="font-bold text-white">{(buyAmount / buyTarget.price).toFixed(3)} shares</span>
             </div>
-            <button onClick={confirmBuy} disabled={buying || buyAmount > cash}
+            <button onClick={confirmBuy} disabled={buying || buyAmount > cash || buyAmount <= 0}
               className="w-full bg-blue-600 hover:bg-blue-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #1d4ed8' }}>
               {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : `Buy ${formatCurrency(buyAmount)} of ${buyTarget.name}`}
             </button>
