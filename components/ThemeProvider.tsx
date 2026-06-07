@@ -75,26 +75,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     applyToDOM(savedDark, savedAccent)
   }, [])
 
-  // Step 2: Once session loads, sync with DB prefs (DB is source of truth for logged-in users)
+  // Step 2: Once authenticated, fetch the saved theme straight from the DB —
+  // the source of truth. (The JWT/session copy is only refreshed at login, so
+  // it goes stale the moment you change your theme; reading it here would
+  // revert your choice on every refresh.)
   useEffect(() => {
     if (status !== 'authenticated' || !session?.user) return
-
-    const user = session.user as any
-    // DB values come from the JWT token set at login
-    const dbDark   = user.themeDark   ?? true
-    const dbAccent = (user.themeAccent as ThemeId) ?? 'default'
-
-    // Only apply if different from current localStorage (avoids unnecessary re-renders)
-    const localDark   = localStorage.getItem('mrguy-dark') === 'true'
-    const localAccent = (localStorage.getItem('mrguy-accent') as ThemeId) || 'default'
-
-    if (dbDark !== localDark || dbAccent !== localAccent) {
-      setIsDarkState(dbDark)
-      setAccentIdState(dbAccent)
-      applyToDOM(dbDark, dbAccent)
-      localStorage.setItem('mrguy-dark', String(dbDark))
-      localStorage.setItem('mrguy-accent', dbAccent)
-    }
+    let cancelled = false
+    fetch('/api/user/preferences')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => {
+        if (cancelled || !p) return
+        const dbDark = p.themeDark ?? true
+        const dbAccent = (p.themeAccent as ThemeId) ?? 'default'
+        setIsDarkState(dbDark)
+        setAccentIdState(dbAccent)
+        applyToDOM(dbDark, dbAccent)
+        localStorage.setItem('mrguy-dark', String(dbDark))
+        localStorage.setItem('mrguy-accent', dbAccent)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
   }, [status, session?.user?.email])
 
   const setDark = (dark: boolean) => {
