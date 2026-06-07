@@ -19,6 +19,7 @@ const MiniChart = dynamic(() => import('@/components/game/MiniChart'), { ssr: fa
 const BUY_AMOUNTS = [100, 500, 1000, 5000]
 
 function gainCls(n: number) { return n >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }
+function gainTint(n: number) { return n >= 0 ? 'bg-green-500/10 border border-green-500/25' : 'bg-red-500/10 border border-red-500/25' }
 async function priceOf(t: string): Promise<{ price: number; name: string } | null> {
   try { const d = await fetch(`/api/stock/${t}`).then((r) => r.json()); return d?.quote?.price ? { price: d.quote.price, name: d.quote.companyName || t } : null } catch { return null }
 }
@@ -127,7 +128,8 @@ export default function GamePage() {
     if (!c) return null
     return (
       <button key={ticker} onClick={() => openBuy(ticker, c.name)} disabled={!prices[ticker]}
-        className="text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3.5 transition-all disabled:opacity-60 hover:-translate-y-0.5 active:translate-y-0">
+        style={{ background: `${c.color}14`, borderColor: `${c.color}40` }}
+        className="text-left border rounded-2xl p-3.5 transition-all disabled:opacity-60 hover:-translate-y-0.5 active:translate-y-0 hover:brightness-110">
         <div className="flex items-center gap-2.5">
           <CompanyLogo ticker={ticker} size={40} />
           <div className="min-w-0"><p className="font-bold text-white truncate">{c.name}</p><p className="text-[11px] text-gray-500">{ticker}</p></div>
@@ -236,7 +238,7 @@ export default function GamePage() {
                 ) : (
                   <div className="space-y-3">
                     {holdings.map((h) => (
-                      <div key={h.ticker} className="bg-black/5 dark:bg-white/5 rounded-2xl p-4">
+                      <div key={h.ticker} className={`${gainTint(h.gainLoss)} rounded-2xl p-4`}>
                         <div className="flex items-center gap-3">
                           <CompanyLogo ticker={h.ticker} size={48} radius={14} name={h.companyName} />
                           <div className="min-w-0 flex-1">
@@ -244,7 +246,7 @@ export default function GamePage() {
                             <p className="text-xs text-gray-500">{h.ticker} · {h.shares.toFixed(2)} shares</p>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-800">
+                        <div className={`flex items-center justify-between mt-3 pt-3 border-t ${h.gainLoss >= 0 ? 'border-green-500/20' : 'border-red-500/20'}`}>
                           <div>
                             <span className="font-black text-white text-lg">{formatCurrency(h.currentValue)}</span>
                             <span className={`ml-2 text-sm font-bold ${gainCls(h.gainLoss)}`}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span>
