@@ -13,11 +13,12 @@ export default function CompanyLogo({ ticker, size = 40, radius = 12, name }: { 
   const [failed, setFailed] = useState(false)
   useEffect(() => { setFailed(false) }, [ticker])
 
-  if (c?.domain && !failed) {
+  if (!failed) {
+    const src = `/api/logo/${encodeURIComponent(ticker)}${c?.domain ? `?domain=${encodeURIComponent(c.domain)}` : ''}`
     return (
       <div className="bg-white flex items-center justify-center overflow-hidden shrink-0" style={{ width: size, height: size, borderRadius: radius }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`https://logo.clearbit.com/${c.domain}`} alt={label} onError={() => setFailed(true)} loading="lazy"
+        <img src={src} alt={label} onError={() => setFailed(true)} loading="lazy"
           style={{ width: size * 0.74, height: size * 0.74, objectFit: 'contain' }} />
       </div>
     )
