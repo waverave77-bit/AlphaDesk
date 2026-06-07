@@ -125,7 +125,7 @@ export default function LearnPage() {
                   <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0"><course.Icon className="h-6 w-6 text-white" /></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">{courseDone ? 'Completed' : courseStarted ? 'In progress' : 'Up next'}</p>
-                    <h2 className="text-white font-black text-xl leading-tight flex items-center gap-2">{course.title} {courseDone && <Check className="h-5 w-5" strokeWidth={3} />}</h2>
+                    <h2 className="text-[#fff] font-black text-xl leading-tight flex items-center gap-2">{course.title} {courseDone && <Check className="h-5 w-5" strokeWidth={3} />}</h2>
                     <p className="text-white/80 text-sm font-medium">{course.tagline}</p>
                   </div>
                 </div>
@@ -164,9 +164,9 @@ export default function LearnPage() {
                           <span className="lne" />
                           <span className="lnf" style={done || review ? { boxShadow: `0 0 18px ${review ? GOLD_GLOW : hex.glow}` } : undefined}>
                             {!unlockedNode ? <Lock className="h-6 w-6 text-gray-500" />
-                              : review ? <Crown className="h-9 w-9 text-white" strokeWidth={2.5} fill={done ? 'currentColor' : 'none'} />
-                              : done ? <Check className="h-8 w-8 text-white" strokeWidth={3.5} />
-                              : <span className="text-white font-black text-2xl drop-shadow">{lesson.index}</span>}
+                              : review ? <Crown className="h-9 w-9 text-[#fff]" strokeWidth={2.5} fill={done ? 'currentColor' : 'none'} />
+                              : done ? <Check className="h-8 w-8 text-[#fff]" strokeWidth={3.5} />
+                              : <span className="text-[#fff] font-black text-2xl drop-shadow">{lesson.index}</span>}
                           </span>
                         </button>
                         {review && <span className="text-[10px] font-black mt-1.5 uppercase tracking-widest" style={{ color: unlockedNode ? GOLD : '#6b7280' }}>Review</span>}
@@ -177,7 +177,7 @@ export default function LearnPage() {
                   {/* Chest milestone at the end of each course */}
                   <div className="relative flex flex-col items-center pt-1">
                     <div className="h-16 w-16 rounded-2xl flex items-center justify-center" style={courseDone ? { background: 'linear-gradient(#fbbf24,#d97706)', boxShadow: '0 4px 0 #b45309' } : { background: '#1f2937', boxShadow: '0 4px 0 #111827' }}>
-                      <Gift className={`h-7 w-7 ${courseDone ? 'text-white' : 'text-gray-600'}`} />
+                      <Gift className={`h-7 w-7 ${courseDone ? 'text-[#fff]' : 'text-gray-600'}`} />
                     </div>
                     <span className="text-[10px] font-bold text-gray-500 mt-1.5 uppercase tracking-wide">{courseDone ? 'Claimed' : 'Reward'}</span>
                   </div>

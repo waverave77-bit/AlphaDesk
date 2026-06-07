@@ -88,7 +88,7 @@ export default function BeginnerStart({ cash, onTraded }: { cash: number; onTrad
               className="group text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3 transition-all disabled:opacity-60 active:scale-[0.98]"
             >
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
+                <div className="h-9 w-9 rounded-xl flex items-center justify-center text-[#fff] font-black text-sm shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
                 <div className="min-w-0">
                   <p className="font-bold text-white text-sm truncate">{c.name}</p>
                   <p className="text-[11px] text-gray-500">{c.ticker}</p>
@@ -114,7 +114,7 @@ export default function BeginnerStart({ cash, onTraded }: { cash: number; onTrad
       <button
         onClick={buildStarter}
         disabled={!!busy}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 disabled:opacity-60 text-white rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-[0.99]"
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 disabled:opacity-60 text-[#fff] rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-[0.99]"
         style={{ boxShadow: '0 4px 0 #1d4ed8' }}
       >
         <div className="h-10 w-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">

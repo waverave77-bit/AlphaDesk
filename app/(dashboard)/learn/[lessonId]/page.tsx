@@ -211,10 +211,10 @@ export default function LessonPlayer() {
               <div className="rounded-3xl overflow-hidden border-2 border-gray-800 shadow-xl">
                 {/* Colored flashcard header */}
                 <div className={`bg-gradient-to-br ${a.grad} px-6 py-5 flex items-center gap-4`}>
-                  <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 shadow-inner">{(() => { const TI = iconForTerm(ex.term.term); return <TI className="h-8 w-8 text-white" /> })()}</div>
+                  <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 shadow-inner">{(() => { const TI = iconForTerm(ex.term.term); return <TI className="h-8 w-8 text-[#fff]" /> })()}</div>
                   <div className="min-w-0">
-                    <p className="text-white/70 text-[11px] font-black uppercase tracking-widest">New term</p>
-                    <h2 className="text-3xl font-black text-white tracking-tight leading-tight">{ex.term.term}</h2>
+                    <p className="text-[#fff]/70 text-[11px] font-black uppercase tracking-widest">New term</p>
+                    <h2 className="text-3xl font-black text-[#fff] tracking-tight leading-tight">{ex.term.term}</h2>
                   </div>
                 </div>
                 {/* Body */}
