@@ -11,20 +11,20 @@ import { COMPANIES, THEMES, ALL_SIM_TICKERS } from '@/lib/sim-companies'
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
 const MrGuyHead = dynamic(() => import('@/components/MrGuyHead'), { ssr: false })
 const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
+const CompanyLogo = dynamic(() => import('@/components/game/CompanyLogo'), { ssr: false })
+const MiniChart = dynamic(() => import('@/components/game/MiniChart'), { ssr: false })
 // NOTE: WhatsHappening (market-pulse learning card) is kept in
 // components/game/WhatsHappening.tsx but removed from the page for now.
 
 const BUY_AMOUNTS = [100, 500, 1000, 5000]
-const BADGE_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#0ea5e9', '#6366f1']
 
-function badgeColor(t: string) { let h = 0; for (let i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) >>> 0; return BADGE_COLORS[h % BADGE_COLORS.length] }
 function gainCls(n: number) { return n >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }
 async function priceOf(t: string): Promise<{ price: number; name: string } | null> {
   try { const d = await fetch(`/api/stock/${t}`).then((r) => r.json()); return d?.quote?.price ? { price: d.quote.price, name: d.quote.companyName || t } : null } catch { return null }
 }
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
-interface LbEntry { rank: number; name: string; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
+interface LbEntry { rank: number; name: string; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
 type BuyTarget = { ticker: string; name: string; price: number; blurb?: string }
 
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
@@ -61,7 +61,7 @@ export default function GamePage() {
   const [buying, setBuying] = useState(false)
   const [selling, setSelling] = useState<string | null>(null)
 
-  const [showSearch, setShowSearch] = useState(false)
+  const [activeTheme, setActiveTheme] = useState('all')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ ticker: string; name: string }[]>([])
 
@@ -85,7 +85,7 @@ export default function GamePage() {
     const p = prices[ticker] ? { price: prices[ticker], name: name || ticker } : await priceOf(ticker)
     if (!p) { toast({ title: 'Couldn’t load price', description: 'Try again in a sec.', variant: 'destructive' }); return }
     const known = COMPANIES[ticker]
-    setBuyTarget({ ticker, name: known?.name || name || p.name, price: p.price, blurb: known?.blurb }); setShowSearch(false); setQuery('')
+    setBuyTarget({ ticker, name: known?.name || name || p.name, price: p.price, blurb: known?.blurb }); setQuery('')
   }
   const confirmBuy = async () => {
     if (!buyTarget || buying) return
@@ -129,7 +129,7 @@ export default function GamePage() {
       <button key={ticker} onClick={() => openBuy(ticker, c.name)} disabled={!prices[ticker]}
         className="text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3.5 transition-all disabled:opacity-60 hover:-translate-y-0.5 active:translate-y-0">
         <div className="flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
+          <CompanyLogo ticker={ticker} size={40} />
           <div className="min-w-0"><p className="font-bold text-white truncate">{c.name}</p><p className="text-[11px] text-gray-500">{ticker}</p></div>
         </div>
         <p className="text-base font-bold text-gray-300 mt-3">{prices[ticker] ? formatCurrency(prices[ticker]) : '…'}</p>
@@ -138,9 +138,9 @@ export default function GamePage() {
   }
   const buyGrid = (
     <div className="space-y-5">
-      {THEMES.map((theme) => (
+      {THEMES.filter((t) => activeTheme === 'all' || t.id === activeTheme).map((theme) => (
         <div key={theme.id}>
-          <p className="font-black text-white">{theme.title}</p>
+          <p className="font-black text-white flex items-center gap-1.5"><theme.Icon className="h-4 w-4 text-gray-400" /> {theme.title}</p>
           <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">{theme.blurb}</p>
           <div className="grid grid-cols-2 gap-3">{theme.tickers.map(companyCard)}</div>
         </div>
@@ -193,24 +193,38 @@ export default function GamePage() {
           <div className="grid lg:grid-cols-5 gap-5 items-start">
             {/* Buy (main) */}
             <div className="lg:col-span-3">
-              <Section title="Buy a stock" action={<button onClick={() => setShowSearch((s) => !s)} className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1"><Search className="h-3.5 w-3.5" /> Search all</button>}>
-                <p className="text-sm text-gray-500 -mt-2 mb-4">Not sure what to buy? Browse by what you know — tap any company and Mr. Guy explains it.</p>
-                {showSearch && (
-                  <div className="mb-4">
-                    <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search any company or ticker…"
-                      className="w-full px-4 h-11 rounded-2xl bg-gray-800/60 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500" />
-                    {results.length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        {results.map((r) => (
-                          <button key={r.ticker} onClick={() => openBuy(r.ticker, r.name)} className="w-full text-left px-4 py-2.5 rounded-xl bg-gray-800/40 hover:bg-gray-800 border border-gray-700/50 flex items-center justify-between">
-                            <span className="text-white font-semibold truncate">{r.name}</span><span className="text-xs text-gray-500 shrink-0 ml-2">{r.ticker}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+              <Section title="Buy a stock">
+                <p className="text-sm text-gray-500 -mt-2 mb-4">Not sure what to buy? Search, pick a category, or tap any company — Mr. Guy explains each one.</p>
+                {/* Prominent search bar */}
+                <div className="relative mb-4">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                  <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search any company or ticker…"
+                    className="w-full pl-11 pr-4 h-12 rounded-2xl bg-gray-800/60 border-2 border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500" />
+                </div>
+
+                {query.length >= 2 ? (
+                  <div className="space-y-1.5">
+                    {results.length === 0 ? <p className="text-sm text-gray-500 text-center py-4">No matches — try a company name.</p> : results.map((r) => (
+                      <button key={r.ticker} onClick={() => openBuy(r.ticker, r.name)} className="w-full text-left px-3 py-2.5 rounded-xl bg-gray-800/40 hover:bg-gray-800 border border-gray-700/50 flex items-center gap-3">
+                        <CompanyLogo ticker={r.ticker} size={32} name={r.name} radius={10} />
+                        <span className="text-white font-semibold truncate flex-1">{r.name}</span><span className="text-xs text-gray-500 shrink-0">{r.ticker}</span>
+                      </button>
+                    ))}
                   </div>
+                ) : (
+                  <>
+                    {/* Category chips */}
+                    <div className="flex gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1">
+                      <button onClick={() => setActiveTheme('all')} className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === 'all' ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>All</button>
+                      {THEMES.map((t) => (
+                        <button key={t.id} onClick={() => setActiveTheme(t.id)} className={`shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === t.id ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>
+                          <t.Icon className="h-3.5 w-3.5" /> {t.short}
+                        </button>
+                      ))}
+                    </div>
+                    {buyGrid}
+                  </>
                 )}
-                {buyGrid}
               </Section>
             </div>
 
@@ -224,7 +238,7 @@ export default function GamePage() {
                     {holdings.map((h) => (
                       <div key={h.ticker} className="bg-black/5 dark:bg-white/5 rounded-2xl p-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-12 w-12 rounded-2xl flex items-center justify-center text-[#fff] font-black text-lg shrink-0" style={{ background: badgeColor(h.ticker) }}>{(h.companyName || h.ticker)[0]}</div>
+                          <CompanyLogo ticker={h.ticker} size={48} radius={14} name={h.companyName} />
                           <div className="min-w-0 flex-1">
                             <p className="font-bold text-white truncate text-base">{h.companyName || h.ticker}</p>
                             <p className="text-xs text-gray-500">{h.ticker} · {h.shares.toFixed(2)} shares</p>
@@ -246,13 +260,16 @@ export default function GamePage() {
               </Section>
 
               {leaderboard.length > 0 && (
-                <Section title="Leaderboard" action={<span className="text-xs text-gray-500">by return</span>}>
+                <Section title="Leaderboard" action={<span className="text-xs text-gray-500">by profit</span>}>
                   <div className="space-y-1.5">
                     {leaderboard.slice(0, 7).map((e) => (
                       <div key={e.rank} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${e.isMe ? 'bg-blue-500/10 border border-blue-500/30' : ''}`}>
                         <span className="w-5 text-center text-sm font-black text-gray-500">{e.rank}</span>
                         <span className={`flex-1 truncate text-sm font-semibold ${e.isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-200'}`}>{e.name}{e.isMe && ' (you)'}</span>
-                        <span className={`text-sm font-black ${gainCls(e.gainLossPct)}`}>{e.gainLossPct >= 0 ? '+' : ''}{e.gainLossPct.toFixed(1)}%</span>
+                        <div className="text-right shrink-0">
+                          <p className={`text-sm font-black ${gainCls(e.gainLoss)}`}>{e.gainLoss >= 0 ? '+' : '-'}{formatCurrency(Math.abs(e.gainLoss))}</p>
+                          <p className="text-[10px] text-gray-500 -mt-0.5">{e.gainLossPct >= 0 ? '+' : ''}{e.gainLossPct.toFixed(1)}%</p>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -271,7 +288,7 @@ export default function GamePage() {
           <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="h-11 w-11 rounded-xl flex items-center justify-center text-[#fff] font-black" style={{ background: badgeColor(buyTarget.ticker) }}>{buyTarget.name[0]}</div>
+                <CompanyLogo ticker={buyTarget.ticker} size={44} name={buyTarget.name} />
                 <div><p className="font-black text-white text-lg leading-tight">{buyTarget.name}</p><p className="text-xs text-gray-500">{buyTarget.ticker} · {formatCurrency(buyTarget.price)}</p></div>
               </div>
               <button onClick={() => !buying && setBuyTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
@@ -282,6 +299,8 @@ export default function GamePage() {
                 <p className="text-sm text-gray-300 leading-relaxed">{buyTarget.blurb}</p>
               </div>
             )}
+            {/* Price chart */}
+            <MiniChart ticker={buyTarget.ticker} />
             <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
             <div className="grid grid-cols-4 gap-2 mb-2.5">
               {BUY_AMOUNTS.map((a) => (
