@@ -83,25 +83,25 @@ export default function LearnPage() {
         {/* ── Main column ── */}
         <div className="flex-1 max-w-2xl min-w-0">
           {/* Hero */}
-          <div className="relative overflow-hidden rounded-3xl p-6 mb-6 border-2 border-blue-500/20 bg-gradient-to-br from-blue-600/20 via-gray-900 to-gray-900">
+          <div className="relative overflow-hidden rounded-3xl p-6 mb-6 border-2 border-blue-500/20 bg-gray-900 bg-gradient-to-br from-blue-500/15 via-transparent to-transparent">
             <div className="flex items-center gap-4">
-              <div className="shrink-0 bg-gray-950/40 rounded-2xl p-2 lp-float"><MrGuyHead px={5} /></div>
+              <div className="shrink-0 bg-black/5 dark:bg-white/5 rounded-2xl p-2 lp-float"><MrGuyHead px={5} /></div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-3xl font-black text-white leading-tight tracking-tight">Learn to Invest</h1>
-                <p className="text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Zero jargon. Mr. Guy’s got you.</p>
+                <p className="text-blue-700/80 dark:text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Zero jargon. Mr. Guy’s got you.</p>
               </div>
               <div className="shrink-0 text-center hidden sm:block">
-                <lvl.Icon className="h-7 w-7 text-blue-300 mx-auto" />
-                <div className="text-[10px] font-black uppercase tracking-wide text-blue-300 mt-1">Lvl {lvl.level}</div>
+                <lvl.Icon className="h-7 w-7 text-blue-600 dark:text-blue-300 mx-auto" />
+                <div className="text-[10px] font-black uppercase tracking-wide text-blue-600 dark:text-blue-300 mt-1">Lvl {lvl.level}</div>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-3 mt-5">
-              <Stat icon={<Flame className="h-5 w-5 fill-orange-400" />} value={progress?.streak ?? 0} label="day streak" color="text-orange-400" />
-              <Stat icon={<Star className="h-5 w-5 fill-yellow-400" />} value={xp} label="total XP" color="text-yellow-400" />
-              <Stat plain={`${completedCount}/${TOTAL_LESSONS}`} label="lessons" color="text-blue-400" />
+              <Stat icon={<Flame className="h-5 w-5 fill-orange-500 dark:fill-orange-400" />} value={progress?.streak ?? 0} label="day streak" color="text-orange-600 dark:text-orange-400" />
+              <Stat icon={<Star className="h-5 w-5 fill-yellow-500 dark:fill-yellow-400" />} value={xp} label="total XP" color="text-yellow-600 dark:text-yellow-400" />
+              <Stat plain={`${completedCount}/${TOTAL_LESSONS}`} label="lessons" color="text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
+            <div className="mt-3 h-2.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
             </div>
 
@@ -212,7 +212,7 @@ export default function LearnPage() {
 
 function Stat({ icon, value, plain, label, color }: { icon?: React.ReactNode; value?: number; plain?: string; label: string; color: string }) {
   return (
-    <div className="bg-gray-950/40 rounded-2xl px-2 py-3 text-center">
+    <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-2 py-3 text-center">
       <div className={`flex items-center justify-center gap-1 font-black text-2xl ${color}`}>{icon} {plain ?? value}</div>
       <p className="text-[10px] text-gray-400 mt-0.5 font-bold uppercase tracking-wide">{label}</p>
     </div>
@@ -232,13 +232,13 @@ function LevelCard({ xp, lvl }: { xp: number; lvl: ReturnType<typeof levelFromXP
   return (
     <div className="bg-gradient-to-br from-purple-600/25 to-blue-600/15 border-2 border-purple-400/25 rounded-3xl p-5">
       <div className="flex items-center gap-3">
-        <div className="h-12 w-12 rounded-2xl bg-purple-500/20 flex items-center justify-center shrink-0"><lvl.Icon className="h-6 w-6 text-purple-300" /></div>
+        <div className="h-12 w-12 rounded-2xl bg-purple-500/20 flex items-center justify-center shrink-0"><lvl.Icon className="h-6 w-6 text-purple-600 dark:text-purple-300" /></div>
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-black uppercase tracking-widest text-purple-300">Level {lvl.level}</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-300">Level {lvl.level}</p>
           <p className="text-lg font-black text-white leading-tight">{lvl.title}</p>
         </div>
       </div>
-      <div className="mt-3 h-2.5 bg-gray-950/50 rounded-full overflow-hidden">
+      <div className="mt-3 h-2.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
         <div className="h-full bg-gradient-to-r from-purple-400 to-blue-500 rounded-full transition-all duration-700" style={{ width: `${lvl.pct}%` }} />
       </div>
       <p className="text-[11px] text-gray-400 mt-1.5 font-semibold">{lvl.nextXP !== null ? `${lvl.nextXP - xp} XP to next level` : 'Max level reached'}</p>
@@ -255,7 +255,7 @@ function DailyGoal({ done }: { done: number }) {
     <div className="flex items-center gap-4">
       <div className="relative shrink-0" style={{ width: 72, height: 72 }}>
         <svg width="72" height="72">
-          <circle cx="36" cy="36" r={r} fill="none" stroke="#1f2937" strokeWidth="8" />
+          <circle cx="36" cy="36" r={r} fill="none" className="stroke-gray-200 dark:stroke-gray-800" strokeWidth="8" />
           <circle cx="36" cy="36" r={r} fill="none" stroke={met ? '#22c55e' : '#f59e0b'} strokeWidth="8" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} transform="rotate(-90 36 36)" style={{ transition: 'stroke-dashoffset .6s' }} />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">{met ? <Check className="h-6 w-6 text-green-400" strokeWidth={3} /> : <Target className="h-6 w-6 text-amber-400" />}</div>
@@ -276,12 +276,12 @@ function Achievements({ unlocked, onOpen }: { unlocked: Set<string>; onOpen: () 
           const got = unlocked.has(a.id)
           return (
             <div key={a.id} className={`aspect-square rounded-2xl flex items-center justify-center border transition-transform hover:scale-105 ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-800/50 border-gray-700/40'}`}>
-              <a.Icon className={`h-6 w-6 ${got ? 'text-yellow-400' : 'text-gray-600'}`} />
+              <a.Icon className={`h-6 w-6 ${got ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600'}`} />
             </div>
           )
         })}
       </button>
-      <button onClick={onOpen} className="mt-3 w-full text-xs font-bold text-blue-400 hover:text-blue-300">
+      <button onClick={onOpen} className="mt-3 w-full text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
         {unlocked.size}/{ACHIEVEMENTS.length} unlocked · see all →
       </button>
     </>
@@ -302,13 +302,13 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
             const got = unlocked.has(a.id)
             return (
               <div key={a.id} className={`flex items-center gap-3 rounded-2xl px-4 py-3 border ${got ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-gray-900 border-gray-800'}`}>
-                <div className={`h-11 w-11 rounded-xl flex items-center justify-center shrink-0 ${got ? 'bg-yellow-500/15' : 'bg-gray-800'}`}><a.Icon className={`h-6 w-6 ${got ? 'text-yellow-400' : 'text-gray-600'}`} /></div>
+                <div className={`h-11 w-11 rounded-xl flex items-center justify-center shrink-0 ${got ? 'bg-yellow-500/15' : 'bg-gray-800'}`}><a.Icon className={`h-6 w-6 ${got ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600'}`} /></div>
                 <div className="flex-1 min-w-0">
                   <p className={`font-black ${got ? 'text-white' : 'text-gray-400'}`}>{a.title}</p>
                   <p className="text-sm text-gray-500">{a.desc}</p>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className={`font-black ${got ? 'text-yellow-400' : 'text-gray-600'}`}>+{a.xp}</p>
+                  <p className={`font-black ${got ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600'}`}>+{a.xp}</p>
                   <p className="text-[10px] font-bold uppercase tracking-wide text-gray-600">{got ? '✓ earned' : 'locked'}</p>
                 </div>
               </div>
@@ -322,7 +322,7 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
 
 function Leaderboard({ rows }: { rows: LbRow[] }) {
   if (!rows.length) return <p className="text-sm text-gray-500">Be the first to earn XP!</p>
-  const medalColor = ['text-yellow-400', 'text-gray-300', 'text-amber-600']
+  const medalColor = ['text-yellow-600 dark:text-yellow-400', 'text-gray-500 dark:text-gray-300', 'text-amber-600']
   return (
     <div className="space-y-1.5">
       {rows.slice(0, 6).map((r) => {
@@ -331,8 +331,8 @@ function Leaderboard({ rows }: { rows: LbRow[] }) {
           <div key={r.rank} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl ${r.isMe ? 'bg-blue-500/15 border border-blue-500/30' : ''}`}>
             <span className={`w-5 text-center text-sm font-black ${medalColor[r.rank - 1] ?? 'text-gray-500'}`}>{r.rank}</span>
             <RankIcon className="h-4 w-4 text-gray-400 shrink-0" />
-            <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
-            <span className="text-sm font-black text-yellow-400">{r.xp}</span>
+            <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-600 dark:text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
+            <span className="text-sm font-black text-yellow-600 dark:text-yellow-400">{r.xp}</span>
           </div>
         )
       })}
