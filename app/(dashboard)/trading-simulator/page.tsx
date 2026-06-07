@@ -1,814 +1,286 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import {
-  TrendingUp, TrendingDown, Trophy, Search, ArrowUpRight, ArrowDownRight,
-  Clock, DollarSign, RefreshCw, X, Lock, Share2, Flame, LineChart, History,
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { cn, formatCurrency } from '@/lib/utils'
-import { useToast } from '@/hooks/use-toast'
-import StockChart from '@/components/charts/StockChart'
 import dynamic from 'next/dynamic'
+import { formatCurrency } from '@/lib/utils'
+import { useToast } from '@/hooks/use-toast'
+import { Loader2, Search, X, Trophy, ChevronRight } from 'lucide-react'
 
-// Lazy-load heavy game components
-const TickerWall = dynamic(() => import('@/components/game/TickerWall'), { ssr: false })
-const BeatMrGuy = dynamic(() => import('@/components/game/BeatMrGuy'), { ssr: false })
-const AchievementBadges = dynamic(() => import('@/components/game/AchievementBadges'), { ssr: false })
-const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { ssr: false })
-const BeginnerStart = dynamic(() => import('@/components/game/BeginnerStart'), { ssr: false })
+const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
 const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
-const MrGuyTake = dynamic(() => import('@/components/game/MrGuyTake'), { ssr: false })
-import InfoTip from '@/components/game/InfoTip'
 
-// Stable colored badge per ticker (for company-first holdings).
+/* ── Familiar, beginner-recognisable companies ── */
+const FAMILIAR = [
+  { ticker: 'AAPL',  name: 'Apple',     color: '#64748b' },
+  { ticker: 'MSFT',  name: 'Microsoft', color: '#0ea5e9' },
+  { ticker: 'NVDA',  name: 'Nvidia',    color: '#22c55e' },
+  { ticker: 'TSLA',  name: 'Tesla',     color: '#ef4444' },
+  { ticker: 'AMZN',  name: 'Amazon',    color: '#f59e0b' },
+  { ticker: 'GOOGL', name: 'Google',    color: '#3b82f6' },
+  { ticker: 'DIS',   name: 'Disney',    color: '#6366f1' },
+  { ticker: 'NFLX',  name: 'Netflix',   color: '#dc2626' },
+]
+const BUY_AMOUNTS = [100, 500, 1000, 5000]
 const BADGE_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#0ea5e9', '#6366f1']
-function badgeColor(ticker: string) {
-  let h = 0
-  for (let i = 0; i < ticker.length; i++) h = (h * 31 + ticker.charCodeAt(i)) >>> 0
-  return BADGE_COLORS[h % BADGE_COLORS.length]
+
+function badgeColor(t: string) { let h = 0; for (let i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) >>> 0; return BADGE_COLORS[h % BADGE_COLORS.length] }
+function gainCls(n: number) { return n >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }
+async function priceOf(t: string): Promise<{ price: number; name: string } | null> {
+  try { const d = await fetch(`/api/stock/${t}`).then((r) => r.json()); return d?.quote?.price ? { price: d.quote.price, name: d.quote.companyName || t } : null } catch { return null }
 }
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
-interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
-interface LbHolding { ticker: string; companyName: string; shares: number; avgCost: number }
-interface LeaderEntry { rank: number; name: string; totalValue: number; gainLoss: number; gainLossPct: number; monthlyGainLoss?: number; monthlyGainLossPct?: number; isMe: boolean; isMrGuy?: boolean; holdings?: LbHolding[] }
-interface MrGuyPick { ticker: string; currentPrice: number; currentValue: number; gainLoss: number }
-
-// Mr. Guy's season portfolio — 5 equal-weight positions, $20k each
-const MR_GUY_PICKS = [
-  { ticker: 'NVDA', shares: 22.86, costBasis: 875 },
-  { ticker: 'AAPL', shares: 105.82, costBasis: 189 },
-  { ticker: 'META', shares: 37.95, costBasis: 527 },
-  { ticker: 'BRK-B', shares: 54.05, costBasis: 370 },
-  { ticker: 'SPY', shares: 36.56, costBasis: 547 },
-]
-const MR_GUY_START = 100_000
-
-const TABS = ['Portfolio', 'Trade', 'Leaderboard', 'History'] as const
-type Tab = typeof TABS[number]
-
-function gainColor(n: number) { return n >= 0 ? 'text-green-500' : 'text-red-500' }
-function gainBg(n: number) { return n >= 0 ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20' }
+interface LbEntry { rank: number; name: string; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
+type BuyTarget = { ticker: string; name: string; price: number }
 
 export default function GamePage() {
-  const { data: session, status: sessionStatus } = useSession()
+  const { data: session, status } = useSession()
   const { toast } = useToast()
-  const [tab, setTab] = useState<Tab>('Portfolio')
   const [portfolio, setPortfolio] = useState<any>(null)
-  const [leaderboard, setLeaderboard] = useState<LeaderEntry[]>([])
-  const [lbMode, setLbMode] = useState<'alltime' | 'monthly'>('alltime')
   const [loading, setLoading] = useState(true)
-  const [lbLoading, setLbLoading] = useState(false)
-  const [expandedLbRow, setExpandedLbRow] = useState<string | null>(null)
-  const [roast, setRoast] = useState<string | null>(null)
-  const [roastLoading, setRoastLoading] = useState(false)
+  const [leaderboard, setLeaderboard] = useState<LbEntry[]>([])
+  const [prices, setPrices] = useState<Record<string, number>>({})
 
-  // Portfolio history for mini chart
-  const [historyPoints, setHistoryPoints] = useState<{ date: string; value: number }[]>([])
+  // Buy sheet
+  const [buyTarget, setBuyTarget] = useState<BuyTarget | null>(null)
+  const [buyAmount, setBuyAmount] = useState(500)
+  const [buying, setBuying] = useState(false)
+  const [selling, setSelling] = useState<string | null>(null)
 
-  // Mr. Guy's portfolio P&L (fetched for leaderboard injection)
-  const [mrGuyPct, setMrGuyPct] = useState<number | null>(null)
-  const [mrGuyValue, setMrGuyValue] = useState<number>(100000)
-  const [mrGuyPickResults, setMrGuyPickResults] = useState<MrGuyPick[]>([])
-
-  // Trade form
-  const [tradeTicker, setTradeTicker] = useState('')
-  const [tradeShares, setTradeShares] = useState('')
-  const [tradeType, setTradeType] = useState<'BUY' | 'SELL'>('BUY')
-  const [tradeLoading, setTradeLoading] = useState(false)
-  const [preview, setPreview] = useState<{ price: number; total: number; companyName: string } | null>(null)
-  const [previewLoading, setPreviewLoading] = useState(false)
-  // Search
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<{ ticker: string; name: string }[]>([])
-  const [searchLoading, setSearchLoading] = useState(false)
+  // Search (advanced)
   const [showSearch, setShowSearch] = useState(false)
-  const searchRef = useRef<HTMLDivElement>(null)
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<{ ticker: string; name: string }[]>([])
 
   const fetchPortfolio = async () => {
-    setLoading(true)
-    const r = await fetch('/api/virtual')
-    const d = await r.json()
-    setPortfolio(d?.error ? null : d)
-    setLoading(false)
+    const r = await fetch('/api/virtual'); const d = await r.json()
+    setPortfolio(d?.error ? null : d); setLoading(false)
+  }
+  const fetchLeaderboard = async () => {
+    try { const d = await fetch('/api/virtual/leaderboard?mode=alltime').then((r) => r.json()); setLeaderboard(d.board || []) } catch {}
   }
 
-  const fetchLeaderboard = async (mode: 'alltime' | 'monthly' = lbMode) => {
-    setLbLoading(true)
-    const r = await fetch(`/api/virtual/leaderboard?mode=${mode}`)
-    const d = await r.json()
-    setLeaderboard(d.board || [])
-    setLbLoading(false)
-  }
-
-  const fetchHistory = async () => {
-    try {
-      const r = await fetch('/api/virtual/history')
-      const d = await r.json()
-      setHistoryPoints(d.points || [])
-    } catch { }
-  }
-
-  // Wait for session to resolve before fetching — avoids NaN for guests
   useEffect(() => {
-    if (sessionStatus === 'loading') return
-    if (sessionStatus === 'unauthenticated') { setLoading(false); return }
-    fetchPortfolio()
-    fetchHistory()
-  }, [sessionStatus])
+    if (status === 'loading') return
+    if (status === 'unauthenticated') { setLoading(false); return }
+    fetchPortfolio(); fetchLeaderboard()
+  }, [status])
 
-  // Fetch Mr. Guy's portfolio from API (driven by Hot Take history)
-  useEffect(() => {
-    fetch('/api/mr-guy/portfolio')
-      .then(r => r.json())
-      .then(d => {
-        if (d?.holdings) {
-          setMrGuyPickResults(d.holdings.map((h: any) => ({
-            ticker: h.ticker,
-            currentPrice: h.currentPrice,
-            currentValue: h.currentValue,
-            gainLoss: h.gainLoss,
-          })))
-          setMrGuyValue(d.totalValue)
-          setMrGuyPct(d.gainLossPct)
-        }
-      })
-      .catch(() => {})
-  }, [])
-
-  useEffect(() => { if (tab === 'Leaderboard') fetchLeaderboard(lbMode) }, [tab, lbMode])
+  useEffect(() => { FAMILIAR.forEach(({ ticker }) => priceOf(ticker).then((p) => { if (p) setPrices((s) => ({ ...s, [ticker]: p.price })) })) }, [])
 
   // Search debounce
   useEffect(() => {
-    if (!searchQuery || searchQuery.length < 2) { setSearchResults([]); return }
+    if (!query || query.length < 2) { setResults([]); return }
     const t = setTimeout(async () => {
-      setSearchLoading(true)
-      try {
-        const r = await fetch(`/api/stock/search?q=${encodeURIComponent(searchQuery)}`)
-        const d = await r.json()
-        setSearchResults((d.results || []).slice(0, 6))
-      } catch { setSearchResults([]) }
-      setSearchLoading(false)
+      try { const d = await fetch(`/api/stock/search?q=${encodeURIComponent(query)}`).then((r) => r.json()); setResults((d.results || []).slice(0, 6)) } catch { setResults([]) }
     }, 350)
     return () => clearTimeout(t)
-  }, [searchQuery])
+  }, [query])
 
-  const selectStock = (ticker: string, name: string) => {
-    setTradeTicker(ticker)
-    setSearchQuery('')
-    setSearchResults([])
-    setShowSearch(false)
+  const openBuy = async (ticker: string, name?: string) => {
+    setBuyAmount(500)
+    const p = prices[ticker] ? { price: prices[ticker], name: name || ticker } : await priceOf(ticker)
+    if (!p) { toast({ title: 'Couldn’t load price', description: 'Try again in a sec.', variant: 'destructive' }); return }
+    setBuyTarget({ ticker, name: name || p.name, price: p.price })
+    setShowSearch(false); setQuery('')
   }
 
-  // Live price preview
-  useEffect(() => {
-    if (!tradeTicker || tradeTicker.length < 1) { setPreview(null); return }
-    const t = setTimeout(async () => {
-      setPreviewLoading(true)
-      try {
-        const r = await fetch(`/api/stock/${tradeTicker.toUpperCase()}`)
-        const d = await r.json()
-        if (d?.quote?.price) {
-          setPreview({ price: d.quote.price, total: d.quote.price * (parseFloat(tradeShares) || 1), companyName: d.quote.companyName })
-        } else setPreview(null)
-      } catch { setPreview(null) }
-      setPreviewLoading(false)
-    }, 600)
-    return () => clearTimeout(t)
-  }, [tradeTicker])
-
-  useEffect(() => {
-    if (preview) setPreview(p => p ? { ...p, total: p.price * (parseFloat(tradeShares) || 1) } : null)
-  }, [tradeShares])
-
-  const executeTrade = async () => {
-    if (!tradeTicker || !tradeShares) return
-    setTradeLoading(true)
+  const confirmBuy = async () => {
+    if (!buyTarget || buying) return
+    setBuying(true)
+    const shares = +(buyAmount / buyTarget.price).toFixed(4)
     try {
-      const r = await fetch('/api/virtual/trade', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticker: tradeTicker.toUpperCase(), shares: parseFloat(tradeShares), type: tradeType }),
-      })
+      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: buyTarget.ticker, shares, type: 'BUY' }) })
       const d = await r.json()
       if (!r.ok) throw new Error(d.error)
-      toast(tradeType === 'BUY'
-        ? { title: 'Boom — you’re an owner!', description: `You bought ${tradeShares} shares of ${tradeTicker.toUpperCase()} at ${formatCurrency(d.price)}.` }
-        : { title: 'Sold!', description: `You sold ${tradeShares} shares of ${tradeTicker.toUpperCase()} at ${formatCurrency(d.price)}.` })
-      setTradeTicker(''); setTradeShares(''); setPreview(null)
-      await fetchPortfolio()
-      await fetchHistory()
-      setTab('Portfolio')
-    } catch (e: any) {
-      toast({ title: 'Trade failed', description: e.message, variant: 'destructive' })
-    }
-    setTradeLoading(false)
+      toast({ title: 'Boom — you’re an owner!', description: `You put ${formatCurrency(buyAmount)} into ${buyTarget.name}.` })
+      setBuyTarget(null); await fetchPortfolio(); fetchLeaderboard()
+    } catch (e: any) { toast({ title: 'Couldn’t buy', description: e.message, variant: 'destructive' }) }
+    setBuying(false)
   }
 
-  const getRoasted = async () => {
-    if (!portfolio?.holdings?.length) return
-    setRoastLoading(true)
-    setRoast(null)
+  const sellAll = async (h: Holding) => {
+    if (selling) return
+    setSelling(h.ticker)
     try {
-      const r = await fetch('/api/virtual/roast', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          holdings: portfolio.holdings,
-          totalGainLoss: portfolio.totalGainLoss,
-          totalGainLossPct: portfolio.totalGainLossPct,
-        }),
-      })
+      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: h.ticker, shares: h.shares, type: 'SELL' }) })
       const d = await r.json()
-      setRoast(d.roast ?? 'Mr. Guy has nothing to say. That might be worse.')
-    } catch {
-      setRoast('Mr. Guy tried to roast you but something went wrong. Try again.')
-    }
-    setRoastLoading(false)
+      if (!r.ok) throw new Error(d.error)
+      toast({ title: 'Sold!', description: `You sold all your ${h.companyName || h.ticker}.` })
+      await fetchPortfolio(); fetchLeaderboard()
+    } catch (e: any) { toast({ title: 'Couldn’t sell', description: e.message, variant: 'destructive' }) }
+    setSelling(null)
   }
 
-  const shareRank = (entry: LeaderEntry) => {
-    const text = `I'm ranked #${entry.rank} on Mr. Guy Invests $100K Challenge with ${entry.gainLossPct >= 0 ? '+' : ''}${entry.gainLossPct.toFixed(2)}% return! 🏆 mrguyinvests.com`
-    navigator.clipboard.writeText(text).then(() => {
-      toast({ title: 'Copied to clipboard!', description: 'Share your rank with friends.' })
-    }).catch(() => {
-      toast({ title: 'Could not copy', description: text, variant: 'destructive' })
-    })
-  }
-
-  // Simple SVG sparkline for portfolio history
-  const renderSparkline = () => {
-    if (historyPoints.length < 2) {
-      return (
-        <div className="flex items-center justify-center h-full text-center px-4">
-          <div>
-            <LineChart className="h-8 w-8 text-gray-700 mx-auto mb-2" />
-            <p className="text-xs text-gray-500">Chart will appear as you trade and your value changes over time</p>
-          </div>
-        </div>
-      )
-    }
-    const values = historyPoints.map(p => p.value)
-    const min = Math.min(...values)
-    const max = Math.max(...values)
-    const range = max - min || 1
-    const W = 300, H = 60
-    const pts = values.map((v, i) => {
-      const x = (i / (values.length - 1)) * W
-      const y = H - ((v - min) / range) * H
-      return `${x},${y}`
-    }).join(' ')
-    const isUp = values[values.length - 1] >= values[0]
-    const color = isUp ? '#22c55e' : '#ef4444'
-    return (
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-full" preserveAspectRatio="none">
-        <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
-  }
+  const holdings: Holding[] = portfolio?.holdings ?? []
+  const cash = portfolio?.cash ?? 0
+  const pnl = portfolio?.totalGainLoss ?? 0
+  const pnlPct = portfolio?.totalGainLossPct ?? 0
+  const up = pnl >= 0
+  const take = pnlPct === 0 ? 'Fresh start. Buy a company you actually believe in.'
+    : pnlPct >= 2 ? 'You’re crushing it. Let it ride.'
+    : up ? 'Nicely done — you’re in the green.'
+    : 'Down a little? Totally normal. It’s a long game.'
 
   return (
-    <div className="space-y-5">
-      {/* One-time Mr. Guy welcome (shows once for everyone) */}
+    <div className="max-w-2xl mx-auto space-y-5 pb-20">
       <SimIntro />
 
-      {/* Ticker Wall Hero */}
-      <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2 mb-3">
-          <Trophy className="h-6 w-6 text-yellow-400" />
-          $100K Challenge
-        </h1>
-        <TickerWall />
-        <p className="text-xs text-gray-600 mt-1 text-center">Live market prices</p>
-      </div>
+      <h1 className="text-2xl font-black text-white flex items-center gap-2">
+        <Trophy className="h-6 w-6 text-yellow-500 dark:text-yellow-400" /> $100K Challenge
+      </h1>
 
-      {/* Stats bar — always visible; guests see locked placeholders */}
-      <p className="text-[10px] text-gray-600 -mt-2">Portfolio prices may be delayed up to 15 minutes. Virtual money only — not a reflection of real investment performance.</p>
-      {loading && session ? <Skeleton className="h-24 w-full" /> : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            {
-              label: 'Portfolio Value',
-              hint: "Everything you own plus your spare cash, at today's prices.",
-              value: session && portfolio ? formatCurrency(portfolio.totalValue) : '$100,000.00',
-              sub: session && portfolio ? `${portfolio.totalGainLossPct >= 0 ? '+' : ''}${portfolio.totalGainLossPct?.toFixed(2)}%` : 'Your starting balance',
-              color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-400',
-            },
-            {
-              label: 'Cash to Invest',
-              hint: "Money you haven't put into stocks yet.",
-              value: session && portfolio ? formatCurrency(portfolio.cash) : '——',
-              sub: session && portfolio ? `${((portfolio.cash / 100000) * 100).toFixed(1)}% of your money` : 'Sign up to trade',
-              color: session && portfolio ? 'text-blue-400' : 'text-gray-600',
-            },
-            {
-              label: 'Profit / Loss',
-              hint: "How much you're up or down since your $100,000 start.",
-              value: session && portfolio ? `${portfolio.totalGainLoss >= 0 ? '+' : ''}${formatCurrency(portfolio.totalGainLoss)}` : '——',
-              sub: session && portfolio ? 'since you started' : 'Sign up to track',
-              color: session && portfolio ? gainColor(portfolio.totalGainLoss) : 'text-gray-600',
-            },
-            {
-              label: 'This Month',
-              hint: 'Your gain or loss so far this month.',
-              value: session && portfolio
-                ? `${(portfolio.monthlyGainLoss ?? 0) >= 0 ? '+' : ''}${formatCurrency(portfolio.monthlyGainLoss ?? 0)}`
-                : '——',
-              sub: session && portfolio
-                ? `${(portfolio.monthlyGainLossPct ?? 0) >= 0 ? '+' : ''}${(portfolio.monthlyGainLossPct ?? 0).toFixed(2)}% vs last month`
-                : 'Sign up to track',
-              color: session && portfolio ? gainColor(portfolio.monthlyGainLoss ?? 0) : 'text-gray-600',
-            },
-          ].map(({ label, value, sub, color, hint }) => (
-            <Card key={label} className={cn(!session && label !== 'Season Resets' && label !== 'Portfolio Value' ? 'opacity-60' : '')}>
-              <CardContent className="p-4">
-                <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-                  {label}
-                  {hint && <InfoTip text={hint} />}
-                </p>
-                <p className={cn('text-lg font-bold', color)}>{value}</p>
-                <p className="text-xs text-gray-500">{sub}</p>
-              </CardContent>
-            </Card>
-          ))}
+      {/* ── Guests ── */}
+      {!session && status !== 'loading' ? (
+        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 text-center">
+          <div className="flex justify-center mb-3"><MrGuyMascot px={3} mood="idle" /></div>
+          <p className="text-white font-black text-xl">Get your $100,000 in fake money</p>
+          <p className="text-gray-400 text-sm mt-1">Sign up free to invest risk-free and climb the leaderboard.</p>
+          <div className="flex gap-3 justify-center mt-5">
+            <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-[#fff] font-bold rounded-2xl px-6 py-3">Sign up free</Link>
+            <Link href="/login" className="border border-gray-700 text-gray-200 font-bold rounded-2xl px-6 py-3">Sign in</Link>
+          </div>
         </div>
-      )}
-
-      {/* Portfolio sparkline + vs market (only for logged-in users with portfolio) */}
-      {session && portfolio && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* Mini portfolio chart */}
-          <Card>
-            <CardHeader className="pb-1 pt-3 px-4">
-              <CardTitle className="text-xs font-semibold text-gray-400 flex items-center gap-2">
-                <LineChart className="h-3.5 w-3.5" /> Portfolio Value Over Time
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 pb-3">
-              <div className="h-16">
-                {renderSparkline()}
+      ) : loading ? (
+        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-10 text-center text-gray-500">Loading your money…</div>
+      ) : (
+        <>
+          {/* ── 1. Your money ── */}
+          <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border border-gray-800 rounded-3xl p-5">
+            <div className="flex items-center gap-4">
+              <div className="shrink-0 -mb-2 self-end"><MrGuyMascot px={3} mood={pnlPct >= 2 ? 'celebrate' : up ? 'happy' : 'sad'} /></div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-black uppercase tracking-widest text-gray-500">Your money</p>
+                <p className="text-4xl font-black text-white leading-tight">{formatCurrency(portfolio?.totalValue ?? 100000)}</p>
+                <p className={`text-base font-bold ${gainCls(pnl)}`}>{up ? '▲' : '▼'} {up ? '+' : ''}{formatCurrency(pnl)} ({pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(2)}%)</p>
               </div>
-              {historyPoints.length >= 2 && (
-                <div className="flex justify-between text-xs text-gray-600 mt-1">
-                  <span>{historyPoints[0].date}</span>
-                  <span>{historyPoints[historyPoints.length - 1].date}</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* vs S&P 500 */}
-          <VsMarketCard userGainLossPct={portfolio.totalGainLossPct ?? null} />
-        </div>
-      )}
-
-      {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-800">
-        {TABS.map(t => (
-          <button key={t} onClick={() => setTab(t)}
-            className={cn('px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 transition-colors -mb-px',
-              tab === t ? 'border-blue-500 text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-300')}>
-            {t}
-          </button>
-        ))}
-      </div>
-
-      {/* Portfolio Tab */}
-      {tab === 'Portfolio' && (
-        <div className="space-y-4">
-          {!session ? (
-            <Card>
-              <CardContent className="p-10 text-center">
-                <DollarSign className="h-12 w-12 text-gray-700 mx-auto mb-3" />
-                <p className="text-white font-semibold">Sign up to get your $100,000</p>
-                <p className="text-gray-500 text-sm mt-1">Create a free account to start trading and appear on the leaderboard.</p>
-                <div className="flex gap-3 justify-center mt-4">
-                  <Button asChild className="bg-blue-600 hover:bg-blue-700"><Link href="/register">Sign Up Free</Link></Button>
-                  <Button asChild variant="outline"><Link href="/login">Sign In</Link></Button>
-                </div>
-              </CardContent>
-            </Card>
-          ) : loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.holdings?.length ? (
-            <BeginnerStart cash={portfolio?.cash ?? 100000} onTraded={async () => { await fetchPortfolio(); await fetchHistory() }} />
-          ) : (
-            <>
-              <MrGuyTake gainLoss={portfolio.totalGainLoss ?? 0} gainLossPct={portfolio.totalGainLossPct ?? 0} />
-              {portfolio.holdings.map((h: Holding) => (
-                <Card key={h.ticker} className={cn('border', gainBg(h.gainLoss))}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: badgeColor(h.ticker) }}>
-                          {(h.companyName || h.ticker)[0]}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-bold text-white truncate">{h.companyName || h.ticker}</p>
-                          <p className="text-xs text-gray-500 mt-0.5">{h.ticker} · {h.shares} shares · avg {formatCurrency(h.avgCost)}</p>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="font-bold text-white">{formatCurrency(h.currentValue)}</p>
-                        <p className={cn('text-sm font-medium', gainColor(h.gainLoss))}>
-                          {h.gainLoss >= 0 ? '+' : ''}{formatCurrency(h.gainLoss)} ({h.gainLossPct >= 0 ? '+' : ''}{h.gainLossPct.toFixed(2)}%)
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 mt-3">
-                      <Button size="sm" variant="outline" className="text-xs h-7" onClick={() => { setTradeTicker(h.ticker); setTradeType('BUY'); setTab('Trade') }}>Buy More</Button>
-                      <Button size="sm" variant="outline" className="text-xs h-7 text-red-400 border-red-500/30" onClick={() => { setTradeTicker(h.ticker); setTradeType('SELL'); setTab('Trade') }}>Sell</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={fetchPortfolio}>
-                  <RefreshCw className="h-3 w-3 mr-2" /> Refresh Prices
-                </Button>
-                <Button
-                  variant="outline" size="sm"
-                  className="text-orange-400 border-orange-500/30 hover:bg-orange-500/10"
-                  onClick={getRoasted}
-                  disabled={roastLoading}
-                >
-                  <Flame className="h-3 w-3 mr-1.5" />
-                  {roastLoading ? 'Roasting...' : 'Get Roasted'}
-                </Button>
-              </div>
-
-              {/* Roast result */}
-              {roast && (
-                <Card className="border-orange-500/20 bg-orange-500/5">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Flame className="h-4 w-4 text-orange-400" />
-                      <span className="text-sm font-semibold text-orange-400">Mr. Guy's Verdict</span>
-                    </div>
-                    <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{roast}</p>
-                    <button onClick={() => setRoast(null)} className="text-xs text-gray-600 hover:text-gray-400 mt-3 transition-colors">Dismiss</button>
-                  </CardContent>
-                </Card>
-              )}
-            </>
-          )}
-        </div>
-      )}
-
-      {/* Trade Tab */}
-      {tab === 'Trade' && !session && (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center gap-4">
-            <div className="h-14 w-14 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-              <Lock className="h-7 w-7 text-blue-400" />
             </div>
-            <div>
-              <h3 className="text-white font-semibold text-lg">Sign up to start trading</h3>
-              <p className="text-gray-400 text-sm mt-1">Create a free account to trade with your $100,000 in virtual cash and join the leaderboard.</p>
+            <p className="text-sm text-gray-400 mt-3">{take}</p>
+            <div className="mt-3 flex items-center justify-between bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-2.5">
+              <span className="text-sm text-gray-500">Cash to spend</span>
+              <span className="text-base font-bold text-blue-600 dark:text-blue-400">{formatCurrency(cash)}</span>
             </div>
-            <div className="flex gap-3">
-              <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                <Link href="/register">Sign Up Free</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/login">Sign In</Link>
-              </Button>
+          </div>
+
+          {/* ── 2. Buy a stock ── */}
+          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-lg font-black text-white">Buy a stock</h2>
+              <button onClick={() => setShowSearch((s) => !s)} className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1"><Search className="h-3.5 w-3.5" /> Search all</button>
             </div>
-            <p className="text-xs text-gray-600">Free forever · No credit card needed</p>
-          </CardContent>
-        </Card>
-      )}
+            <p className="text-sm text-gray-500 mb-4">Tap a company you recognise.</p>
 
-      {tab === 'Trade' && session && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Left: trade form */}
-            <Card>
-              <CardHeader className="pb-3"><CardTitle className="text-sm text-gray-400">Execute Trade</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                {/* BUY / SELL toggle */}
-                <div className="flex rounded-lg overflow-hidden border border-gray-700">
-                  <button onClick={() => setTradeType('BUY')} className={cn('flex-1 py-2 text-sm font-semibold transition-colors', tradeType === 'BUY' ? 'bg-green-600 text-white' : 'text-gray-400 hover:bg-gray-800')}>BUY</button>
-                  <button onClick={() => setTradeType('SELL')} className={cn('flex-1 py-2 text-sm font-semibold transition-colors', tradeType === 'SELL' ? 'bg-red-600 text-white' : 'text-gray-400 hover:bg-gray-800')}>SELL</button>
-                </div>
-
-                {/* Search by name or ticker */}
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Search by company name or ticker</label>
-                  <div className="relative" ref={searchRef}>
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                    <input
-                      value={searchQuery}
-                      onChange={e => { setSearchQuery(e.target.value); setShowSearch(true) }}
-                      onFocus={() => setShowSearch(true)}
-                      placeholder="e.g. Apple or AAPL"
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    />
-                    {searchLoading && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 animate-pulse">...</span>}
-                    {showSearch && searchResults.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
-                        {searchResults.map(r => (
-                          <button key={r.ticker} onClick={() => selectStock(r.ticker, r.name)}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-800 transition-colors text-left">
-                            <span className="text-xs font-bold text-blue-400 w-16 shrink-0">{r.ticker}</span>
-                            <span className="text-sm text-gray-300 truncate">{r.name}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+            {showSearch && (
+              <div className="mb-4">
+                <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search any company or ticker…"
+                  className="w-full px-4 h-11 rounded-2xl bg-gray-800/60 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500" />
+                {results.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {results.map((r) => (
+                      <button key={r.ticker} onClick={() => openBuy(r.ticker, r.name)} className="w-full text-left px-4 py-2.5 rounded-xl bg-gray-800/40 hover:bg-gray-800 border border-gray-700/50 flex items-center justify-between">
+                        <span className="text-white font-semibold truncate">{r.name}</span><span className="text-xs text-gray-500 shrink-0 ml-2">{r.ticker}</span>
+                      </button>
+                    ))}
                   </div>
-                </div>
+                )}
+              </div>
+            )}
 
-                {/* Selected ticker display */}
-                {tradeTicker && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {FAMILIAR.map((c) => (
+                <button key={c.ticker} onClick={() => openBuy(c.ticker, c.name)} disabled={!prices[c.ticker]}
+                  className="text-left bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-blue-500/50 rounded-2xl p-3 transition-all disabled:opacity-60 active:scale-[0.98]">
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 flex items-center justify-between">
-                      <span className="text-blue-400 font-bold text-sm">{tradeTicker}</span>
-                      {preview && <span className="text-xs text-gray-400">{preview.companyName}</span>}
+                    <div className="h-9 w-9 rounded-xl flex items-center justify-center text-[#fff] font-black text-sm shrink-0" style={{ background: c.color }}>{c.name[0]}</div>
+                    <div className="min-w-0"><p className="font-bold text-white text-sm truncate">{c.name}</p><p className="text-[11px] text-gray-500">{c.ticker}</p></div>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-300 mt-2.5">{prices[c.ticker] ? formatCurrency(prices[c.ticker]) : '…'}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ── 3. What you own ── */}
+          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+            <h2 className="text-lg font-black text-white mb-4">What you own</h2>
+            {holdings.length === 0 ? (
+              <p className="text-gray-500 text-sm text-center py-6">Nothing yet — tap a company above to buy your first stock.</p>
+            ) : (
+              <div className="space-y-3">
+                {holdings.map((h) => (
+                  <div key={h.ticker} className="flex items-center justify-between gap-3 bg-black/5 dark:bg-white/5 rounded-2xl p-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: badgeColor(h.ticker) }}>{(h.companyName || h.ticker)[0]}</div>
+                      <div className="min-w-0">
+                        <p className="font-bold text-white truncate">{h.companyName || h.ticker}</p>
+                        <p className="text-xs text-gray-500">{formatCurrency(h.currentValue)} · <span className={gainCls(h.gainLoss)}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span></p>
+                      </div>
                     </div>
-                    <button onClick={() => { setTradeTicker(''); setPreview(null) }} className="text-gray-500 hover:text-gray-300 p-1">
-                      <X className="h-4 w-4" />
+                    <button onClick={() => sellAll(h)} disabled={!!selling} className="shrink-0 text-xs font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-3 py-2 hover:bg-red-500/10 disabled:opacity-50">
+                      {selling === h.ticker ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Sell'}
                     </button>
                   </div>
-                )}
-
-                {/* Or type ticker directly */}
-                {!tradeTicker && (
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Or type ticker directly</label>
-                    <input
-                      value={tradeTicker}
-                      onChange={e => setTradeTicker(e.target.value.toUpperCase())}
-                      placeholder="e.g. MSFT"
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                )}
-
-                {/* Live price */}
-                {previewLoading && <p className="text-xs text-gray-500 animate-pulse">Fetching live price...</p>}
-                {preview && !previewLoading && (
-                  <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-sm">
-                    <p className="text-blue-400 text-xl font-bold">{formatCurrency(preview.price)} <span className="text-xs text-gray-500">per share</span></p>
-                  </div>
-                )}
-
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">Number of Shares</label>
-                  <input
-                    value={tradeShares}
-                    onChange={e => setTradeShares(e.target.value)}
-                    type="number" min="0.01" step="0.01" placeholder="e.g. 10"
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                {preview && tradeShares && (
-                  <div className="p-3 rounded-lg bg-gray-800 border border-gray-700 space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Estimated Total</span>
-                      <span className="text-white font-bold">{formatCurrency(preview.price * parseFloat(tradeShares))}</span>
-                    </div>
-                    {tradeType === 'BUY' && portfolio && (
-                      <div className="flex justify-between text-xs">
-                        <span className="text-gray-500">Cash after trade</span>
-                        <span className={portfolio.cash - (preview.price * parseFloat(tradeShares)) < 0 ? 'text-red-400' : 'text-green-400'}>
-                          {formatCurrency(portfolio.cash - (preview.price * parseFloat(tradeShares)))}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <Button onClick={executeTrade} disabled={tradeLoading || !tradeTicker || !tradeShares}
-                  className={cn('w-full font-semibold', tradeType === 'BUY' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700')}>
-                  {tradeLoading ? 'Processing...' : `${tradeType} ${tradeShares || '0'} shares${preview ? ` · ${formatCurrency(preview.price * (parseFloat(tradeShares) || 0))}` : ''}`}
-                </Button>
-                <p className="text-xs text-gray-600 text-center">Real-time prices · Virtual money only</p>
-              </CardContent>
-            </Card>
-
-            {/* Right: chart */}
-            {tradeTicker ? (
-              <Card className="overflow-hidden">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-gray-400">{tradeTicker}, Price Chart</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <StockChart ticker={tradeTicker} currentPrice={preview?.price ?? 0} />
-                </CardContent>
-              </Card>
-            ) : (
-              <Card>
-                <CardContent className="p-8 flex flex-col items-center justify-center h-full text-center">
-                  <TrendingUp className="h-12 w-12 text-gray-700 mb-3" />
-                  <p className="text-gray-500 text-sm">Search for a stock to see its chart</p>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
             )}
           </div>
-        </div>
-      )}
 
-      {/* Leaderboard Tab */}
-      {tab === 'Leaderboard' && (
-        <div className="space-y-2">
-          {/* Mode toggle */}
-          <div className="flex rounded-lg overflow-hidden border border-gray-800 w-fit">
-            <button
-              onClick={() => setLbMode('alltime')}
-              className={cn('px-4 py-1.5 text-sm font-medium transition-colors',
-                lbMode === 'alltime' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white')}
-            >
-              All-Time
-            </button>
-            <button
-              onClick={() => setLbMode('monthly')}
-              className={cn('px-4 py-1.5 text-sm font-medium transition-colors',
-                lbMode === 'monthly' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white')}
-            >
-              This Month
-            </button>
-          </div>
-
-          {lbLoading ? <Skeleton className="h-48 w-full" /> : (() => {
-            // Inject Mr. Guy as a synthetic entry, sorted by totalValue
-            const mrGuyEntry: LeaderEntry = {
-              rank: 0,
-              name: 'Mr. Guy',
-              totalValue: mrGuyValue,
-              gainLoss: mrGuyValue - MR_GUY_START,
-              gainLossPct: mrGuyPct ?? 0,
-              isMe: false,
-              isMrGuy: true,
-            }
-            const combined = [...leaderboard, mrGuyEntry]
-              .sort((a, b) => b.totalValue - a.totalValue)
-              .map((e, i) => ({ ...e, rank: i + 1 }))
-
-            return (
-              <>
-                <div className="flex justify-between text-xs text-gray-500 px-4 py-2">
-                  <span>Player</span>
-                  <span>Portfolio Value</span>
-                </div>
-                {combined.map((p) => {
-                  const rowKey = p.isMrGuy ? 'mr-guy' : `${p.rank}-${p.name}`
-                  const isExpanded = expandedLbRow === rowKey
-                  return (
-                    <Card key={rowKey} className={cn('border transition-colors',
-                      p.isMe ? 'border-blue-500/40 bg-blue-500/5'
-                      : p.isMrGuy ? 'border-purple-500/30 bg-purple-950/10'
-                      : '')}>
-                      <CardContent className="p-4">
-                        <button
-                          className="w-full text-left"
-                          onClick={() => setExpandedLbRow(isExpanded ? null : rowKey)}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={cn('text-lg font-bold w-8 text-center',
-                              p.rank === 1 ? 'text-yellow-400' : p.rank === 2 ? 'text-gray-300' : p.rank === 3 ? 'text-orange-400' : 'text-gray-600')}>
-                              #{p.rank}
-                            </span>
-                            <div className="flex-1">
-                              <p className="font-medium text-white flex items-center gap-2">
-                                {p.isMrGuy ? (
-                                  <><span>🤖 Mr. Guy</span><span className="text-xs text-purple-400">AI player</span></>
-                                ) : (
-                                  <>{p.name} {p.isMe && <span className="text-xs text-blue-400">(you)</span>}</>
-                                )}
-                              </p>
-                              {(() => {
-                                const gl = lbMode === 'monthly' && !p.isMrGuy
-                                  ? (p.monthlyGainLoss ?? p.gainLoss)
-                                  : p.gainLoss
-                                const glPct = lbMode === 'monthly' && !p.isMrGuy
-                                  ? (p.monthlyGainLossPct ?? p.gainLossPct)
-                                  : p.gainLossPct
-                                return (
-                                  <p className={cn('text-xs', gl >= 0 ? 'text-green-500' : 'text-red-500')}>
-                                    {gl >= 0 ? '+' : ''}{formatCurrency(gl)} ({glPct >= 0 ? '+' : ''}{glPct.toFixed(2)}%)
-                                    {lbMode === 'monthly' && !p.isMrGuy && <span className="text-gray-600 ml-1">this month</span>}
-                                  </p>
-                                )
-                              })()}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <p className="font-bold text-white">{formatCurrency(p.totalValue)}</p>
-                              {!p.isMrGuy && (
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); shareRank(p) }}
-                                  title="Share your rank"
-                                  className="p-1.5 rounded-md text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"
-                                >
-                                  <Share2 className="h-3.5 w-3.5" />
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </button>
-
-                        {/* Expanded: Mr. Guy's picks */}
-                        {isExpanded && p.isMrGuy && mrGuyPickResults.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-purple-500/20 space-y-1.5">
-                            <p className="text-xs text-purple-300 font-semibold uppercase tracking-wide mb-2">🤖 Mr. Guy&apos;s Portfolio</p>
-                            {mrGuyPickResults.map(pick => (
-                              <div key={pick.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/50 last:border-0">
-                                <span className="font-bold text-white w-16">{pick.ticker}</span>
-                                <span className="text-gray-400">{formatCurrency(pick.currentPrice)}</span>
-                                <span className={pick.gainLoss >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                  {pick.gainLoss >= 0 ? '+' : ''}{formatCurrency(pick.gainLoss)}
-                                </span>
-                              </div>
-                            ))}
-                            <div className="flex justify-between text-xs pt-1 font-semibold">
-                              <span className="text-gray-400">Total Value</span>
-                              <span className={mrGuyPct !== null && mrGuyPct >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                {formatCurrency(mrGuyValue)}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Expanded: real player's holdings */}
-                        {isExpanded && !p.isMrGuy && p.holdings && p.holdings.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-gray-800 space-y-1.5">
-                            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-2">{p.name}&apos;s Holdings</p>
-                            {p.holdings.map(h => (
-                              <div key={h.ticker} className="flex items-center justify-between text-xs py-1 border-b border-gray-800/50 last:border-0">
-                                <span className="font-bold text-white w-16">{h.ticker}</span>
-                                <span className="text-gray-500 flex-1 px-2 truncate">{h.companyName}</span>
-                                <span className="text-gray-400">{h.shares.toFixed(2)} shares</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {isExpanded && !p.isMrGuy && (!p.holdings || p.holdings.length === 0) && (
-                          <div className="mt-3 pt-3 border-t border-gray-800">
-                            <p className="text-xs text-gray-600 text-center">No holdings yet</p>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </>
-            )
-          })()}
-        </div>
-      )}
-
-      {/* History Tab */}
-      {tab === 'History' && (
-        <div className="space-y-2">
-          {loading ? <Skeleton className="h-48 w-full" /> : !portfolio?.trades?.length ? (
-            <Card>
-              <CardContent className="p-10 text-center">
-                <History className="h-10 w-10 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-300 font-medium">No trades yet</p>
-                <p className="text-gray-500 text-sm mt-1">Your completed trades will appear here</p>
-                <Button className="mt-4 bg-blue-600 hover:bg-blue-700" onClick={() => setTab('Trade')}>Make Your First Trade</Button>
-              </CardContent>
-            </Card>
-          ) : (
-            portfolio.trades.map((t: Trade) => (
-              <Card key={t.id}>
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className={cn('h-8 w-8 rounded-full flex items-center justify-center shrink-0', t.type === 'BUY' ? 'bg-green-500/20' : 'bg-red-500/20')}>
-                    {t.type === 'BUY' ? <ArrowUpRight className="h-4 w-4 text-green-400" /> : <ArrowDownRight className="h-4 w-4 text-red-400" />}
+          {/* ── 4. How you rank ── */}
+          {leaderboard.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-black text-white">Leaderboard</h2>
+                <span className="text-xs text-gray-500">by total return</span>
+              </div>
+              <div className="space-y-1.5">
+                {leaderboard.slice(0, 6).map((e) => (
+                  <div key={e.rank} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${e.isMe ? 'bg-blue-500/10 border border-blue-500/30' : ''}`}>
+                    <span className="w-5 text-center text-sm font-black text-gray-500">{e.rank}</span>
+                    <span className={`flex-1 truncate text-sm font-semibold ${e.isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-200'}`}>{e.name}{e.isMe && ' (you)'}</span>
+                    <span className={`text-sm font-black ${gainCls(e.gainLossPct)}`}>{e.gainLossPct >= 0 ? '+' : ''}{e.gainLossPct.toFixed(1)}%</span>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-white">{t.type} {t.shares} shares of {t.ticker}</p>
-                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                      <Clock className="h-3 w-3" />{new Date(t.executedAt).toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-white">{formatCurrency(t.price * t.shares)}</p>
-                    <p className="text-xs text-gray-500">@ {formatCurrency(t.price)}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+                ))}
+              </div>
+            </div>
           )}
-        </div>
+
+          <p className="text-[11px] text-gray-600 text-center px-4">Virtual money only — not real investing. Prices may be delayed up to 15 minutes.</p>
+        </>
       )}
 
-      {/* Beat Mr. Guy + Achievements — shown below tabs for authenticated users */}
-      {session && portfolio && (
-        <div className="space-y-4 pt-2">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <BeatMrGuy userGainLossPct={portfolio.totalGainLossPct ?? null} />
-            <AchievementBadges portfolio={portfolio} />
+      {/* ── Buy sheet (modal) ── */}
+      {buyTarget && (
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !buying && setBuyTarget(null)}>
+          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center text-[#fff] font-black" style={{ background: badgeColor(buyTarget.ticker) }}>{buyTarget.name[0]}</div>
+                <div><p className="font-black text-white text-lg leading-tight">{buyTarget.name}</p><p className="text-xs text-gray-500">{buyTarget.ticker} · {formatCurrency(buyTarget.price)}</p></div>
+              </div>
+              <button onClick={() => !buying && setBuyTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
+            </div>
+            <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {BUY_AMOUNTS.map((a) => (
+                <button key={a} onClick={() => setBuyAmount(a)} disabled={a > cash}
+                  className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all disabled:opacity-30 ${buyAmount === a ? 'border-blue-500 bg-blue-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
+                  ${a >= 1000 ? `${a / 1000}k` : a}
+                </button>
+              ))}
+            </div>
+            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
+              <span className="text-gray-500">You’ll get</span>
+              <span className="font-bold text-white">{(buyAmount / buyTarget.price).toFixed(3)} shares</span>
+            </div>
+            <button onClick={confirmBuy} disabled={buying || buyAmount > cash}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #1d4ed8' }}>
+              {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : `Buy ${formatCurrency(buyAmount)} of ${buyTarget.name}`}
+            </button>
+            <p className="text-[11px] text-gray-600 text-center mt-3">Cash to spend: {formatCurrency(cash)}</p>
           </div>
         </div>
       )}
-
-      <p className="text-xs text-gray-500 text-center mt-6 pb-4 px-4">
-        The $100K Challenge is a simulated game using virtual money only. No real funds are involved. Simulated trading performance does not reflect or predict real-world investment results. For educational and entertainment purposes only. Not financial advice.
-      </p>
     </div>
   )
 }
