@@ -21,7 +21,16 @@ const AchievementBadges = dynamic(() => import('@/components/game/AchievementBad
 const VsMarketCard = dynamic(() => import('@/components/game/VsMarketCard'), { ssr: false })
 const BeginnerStart = dynamic(() => import('@/components/game/BeginnerStart'), { ssr: false })
 const SimIntro = dynamic(() => import('@/components/game/SimIntro'), { ssr: false })
+const MrGuyTake = dynamic(() => import('@/components/game/MrGuyTake'), { ssr: false })
 import InfoTip from '@/components/game/InfoTip'
+
+// Stable colored badge per ticker (for company-first holdings).
+const BADGE_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#0ea5e9', '#6366f1']
+function badgeColor(ticker: string) {
+  let h = 0
+  for (let i = 0; i < ticker.length; i++) h = (h * 31 + ticker.charCodeAt(i)) >>> 0
+  return BADGE_COLORS[h % BADGE_COLORS.length]
+}
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface Trade { id: string; ticker: string; shares: number; price: number; type: string; executedAt: string }
@@ -187,7 +196,9 @@ export default function GamePage() {
       })
       const d = await r.json()
       if (!r.ok) throw new Error(d.error)
-      toast({ title: `${tradeType} executed!`, description: `${tradeShares} shares of ${tradeTicker.toUpperCase()} @ ${formatCurrency(d.price)}` })
+      toast(tradeType === 'BUY'
+        ? { title: 'Boom — you’re an owner!', description: `You bought ${tradeShares} shares of ${tradeTicker.toUpperCase()} at ${formatCurrency(d.price)}.` }
+        : { title: 'Sold!', description: `You sold ${tradeShares} shares of ${tradeTicker.toUpperCase()} at ${formatCurrency(d.price)}.` })
       setTradeTicker(''); setTradeShares(''); setPreview(null)
       await fetchPortfolio()
       await fetchHistory()
@@ -272,7 +283,7 @@ export default function GamePage() {
           $100K Challenge
         </h1>
         <TickerWall />
-        <p className="text-xs text-gray-600 mt-1 text-center">Live market data · 27 tickers</p>
+        <p className="text-xs text-gray-600 mt-1 text-center">Live market prices</p>
       </div>
 
       {/* Stats bar — always visible; guests see locked placeholders */}
@@ -385,18 +396,21 @@ export default function GamePage() {
             <BeginnerStart cash={portfolio?.cash ?? 100000} onTraded={async () => { await fetchPortfolio(); await fetchHistory() }} />
           ) : (
             <>
+              <MrGuyTake gainLoss={portfolio.totalGainLoss ?? 0} gainLossPct={portfolio.totalGainLossPct ?? 0} />
               {portfolio.holdings.map((h: Holding) => (
                 <Card key={h.ticker} className={cn('border', gainBg(h.gainLoss))}>
                   <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{h.ticker}</span>
-                          <span className="text-xs text-gray-400">{h.companyName}</span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="h-10 w-10 rounded-xl flex items-center justify-center text-[#fff] font-black shrink-0" style={{ background: badgeColor(h.ticker) }}>
+                          {(h.companyName || h.ticker)[0]}
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{h.shares} shares · avg cost {formatCurrency(h.avgCost)}</p>
+                        <div className="min-w-0">
+                          <p className="font-bold text-white truncate">{h.companyName || h.ticker}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">{h.ticker} · {h.shares} shares · avg {formatCurrency(h.avgCost)}</p>
+                        </div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right shrink-0">
                         <p className="font-bold text-white">{formatCurrency(h.currentValue)}</p>
                         <p className={cn('text-sm font-medium', gainColor(h.gainLoss))}>
                           {h.gainLoss >= 0 ? '+' : ''}{formatCurrency(h.gainLoss)} ({h.gainLossPct >= 0 ? '+' : ''}{h.gainLossPct.toFixed(2)}%)
