@@ -161,7 +161,7 @@ export default function GamePage() {
               <p className="font-black text-white truncate">{theme.title}</p>
             </div>
             <button onClick={() => setActiveTheme(theme.id)} className="shrink-0 flex items-center gap-0.5 text-xs font-bold hover:opacity-80" style={{ color: theme.accent }}>
-              See all<ChevronRight className="h-3.5 w-3.5" />
+              See more<ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
           <p className="text-xs text-gray-500 mb-3 leading-relaxed">{theme.blurb}</p>
