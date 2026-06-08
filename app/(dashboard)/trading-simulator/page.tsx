@@ -5,7 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-import { Loader2, Search, X, Trophy, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Loader2, Search, X, Trophy, ChevronRight } from 'lucide-react'
 import { COMPANIES, THEMES } from '@/lib/sim-companies'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
@@ -62,7 +62,7 @@ export default function GamePage() {
   const [buying, setBuying] = useState(false)
   const [selling, setSelling] = useState<string | null>(null)
 
-  const [openCategory, setOpenCategory] = useState<string | null>(null)
+  const [activeTheme, setActiveTheme] = useState('all')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ ticker: string; name: string }[]>([])
 
@@ -82,9 +82,9 @@ export default function GamePage() {
     if (status === 'unauthenticated') { setLoading(false); return }
     fetchPortfolio(); fetchLeaderboard()
   }, [status])
-  // Preview = first 2 of each theme; a category's full list loads when opened.
+  // Preview = first 2 of each theme; the full list loads when its chip is active.
   useEffect(() => { THEMES.flatMap((t) => t.tickers.slice(0, 2)).forEach(loadPrice) }, [loadPrice])
-  useEffect(() => { if (openCategory) THEMES.find((t) => t.id === openCategory)?.tickers.forEach(loadPrice) }, [openCategory, loadPrice])
+  useEffect(() => { if (activeTheme !== 'all') THEMES.find((t) => t.id === activeTheme)?.tickers.forEach(loadPrice) }, [activeTheme, loadPrice])
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return }
     const t = setTimeout(async () => { try { const d = await fetch(`/api/stock/search?q=${encodeURIComponent(query)}`).then((r) => r.json()); setResults((d.results || []).slice(0, 6)) } catch { setResults([]) } }, 350)
@@ -160,8 +160,8 @@ export default function GamePage() {
               </span>
               <p className="font-black text-white truncate">{theme.title}</p>
             </div>
-            <button onClick={() => setOpenCategory(theme.id)} className="shrink-0 flex items-center gap-0.5 text-xs font-bold hover:opacity-80" style={{ color: theme.accent }}>
-              See all {theme.tickers.length}<ChevronRight className="h-3.5 w-3.5" />
+            <button onClick={() => setActiveTheme(theme.id)} className="shrink-0 flex items-center gap-0.5 text-xs font-bold hover:opacity-80" style={{ color: theme.accent }}>
+              See all<ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
           <p className="text-xs text-gray-500 mb-3 leading-relaxed">{theme.blurb}</p>
@@ -170,36 +170,27 @@ export default function GamePage() {
       ))}
     </div>
   )
-  const activeCat = THEMES.find((t) => t.id === openCategory) || null
+  // Full list for one category (shown inline when its chip is active).
+  const catObj = THEMES.find((t) => t.id === activeTheme) || null
+  const buyCategory = catObj && (
+    <div>
+      <div className="flex items-center gap-2.5 mb-1">
+        <span className="grid place-items-center h-9 w-9 rounded-xl shrink-0" style={{ background: `${catObj.accent}1f` }}>
+          <catObj.Icon className="h-5 w-5" style={{ color: catObj.accent }} />
+        </span>
+        <div className="min-w-0">
+          <p className="font-black text-white truncate">{catObj.title}</p>
+          <p className="text-xs text-gray-500">Tap any company — Mr. Guy explains it</p>
+        </div>
+      </div>
+      <p className="text-xs text-gray-500 mb-3 leading-relaxed">{catObj.blurb}</p>
+      <div className="grid grid-cols-2 gap-3">{catObj.tickers.map(companyCard)}</div>
+    </div>
+  )
 
   return (
     <div className="max-w-6xl mx-auto space-y-5 pb-20">
       <SimIntro />
-      {activeCat ? (
-        /* ── Full category page (opened from a "See all") ── */
-        <div className="space-y-5">
-          <button onClick={() => setOpenCategory(null)} className="flex items-center gap-1 text-sm font-bold text-gray-400 hover:text-gray-200">
-            <ChevronLeft className="h-4 w-4" /> Back to all
-          </button>
-          <div className="rounded-3xl p-6 border" style={{ background: `${activeCat.accent}14`, borderColor: `${activeCat.accent}33` }}>
-            <div className="flex items-center gap-3">
-              <span className="grid place-items-center h-12 w-12 rounded-2xl shrink-0" style={{ background: `${activeCat.accent}26` }}>
-                <activeCat.Icon className="h-6 w-6" style={{ color: activeCat.accent }} />
-              </span>
-              <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-black text-white truncate">{activeCat.title}</h1>
-                <p className="text-sm text-gray-500">{activeCat.tickers.length} companies you can buy</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-400 mt-3 leading-relaxed">{activeCat.blurb}</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {activeCat.tickers.map(companyCard)}
-          </div>
-          <p className="text-[11px] text-gray-600 text-center px-4">Tap any company to see what it does and buy it. Virtual money only.</p>
-        </div>
-      ) : (
-      <>
       <h1 className="text-2xl font-black text-white flex items-center gap-2">
         <Trophy className="h-6 w-6 text-yellow-500 dark:text-yellow-400" /> $100K Challenge
       </h1>
@@ -261,7 +252,23 @@ export default function GamePage() {
                     ))}
                   </div>
                 ) : (
-                  buyPreview
+                  <>
+                    {/* Category chips — colour-coded, persistent navigation */}
+                    <div className="flex gap-2 overflow-x-auto pb-1 mb-5 -mx-1 px-1">
+                      <button onClick={() => setActiveTheme('all')} className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === 'all' ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>All</button>
+                      {THEMES.map((t) => {
+                        const on = activeTheme === t.id
+                        return (
+                          <button key={t.id} onClick={() => setActiveTheme(t.id)}
+                            style={on ? { background: t.accent, borderColor: t.accent } : undefined}
+                            className={`shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${on ? 'text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>
+                            <t.Icon className="h-3.5 w-3.5" style={on ? undefined : { color: t.accent }} /> {t.short}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    {activeTheme === 'all' ? buyPreview : buyCategory}
+                  </>
                 )}
               </Section>
             </div>
@@ -318,8 +325,6 @@ export default function GamePage() {
 
           <p className="text-[11px] text-gray-600 text-center px-4">Virtual money only — not real investing. Prices may be delayed up to 15 minutes.</p>
         </>
-      )}
-      </>
       )}
 
       {/* ── Buy sheet ── */}
