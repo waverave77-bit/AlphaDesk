@@ -1,12 +1,12 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-import { Loader2, Search, X, Trophy } from 'lucide-react'
-import { COMPANIES, THEMES, ALL_SIM_TICKERS } from '@/lib/sim-companies'
+import { Loader2, Search, X, Trophy, ChevronRight, ChevronLeft } from 'lucide-react'
+import { COMPANIES, THEMES } from '@/lib/sim-companies'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
 const MrGuyHead = dynamic(() => import('@/components/MrGuyHead'), { ssr: false })
@@ -62,19 +62,29 @@ export default function GamePage() {
   const [buying, setBuying] = useState(false)
   const [selling, setSelling] = useState<string | null>(null)
 
-  const [activeTheme, setActiveTheme] = useState('all')
+  const [openCategory, setOpenCategory] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ ticker: string; name: string }[]>([])
 
   const fetchPortfolio = async () => { const d = await fetch('/api/virtual').then((r) => r.json()); setPortfolio(d?.error ? null : d); setLoading(false) }
   const fetchLeaderboard = async () => { try { const d = await fetch('/api/virtual/leaderboard?mode=alltime').then((r) => r.json()); setLeaderboard(d.board || []) } catch {} }
 
+  // Load prices on demand (the catalog is ~100 names — never fetch all at once).
+  const requested = useRef<Set<string>>(new Set())
+  const loadPrice = useCallback((t: string) => {
+    if (requested.current.has(t)) return
+    requested.current.add(t)
+    priceOf(t).then((p) => { if (p) setPrices((s) => ({ ...s, [t]: p.price })) })
+  }, [])
+
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { setLoading(false); return }
     fetchPortfolio(); fetchLeaderboard()
   }, [status])
-  useEffect(() => { ALL_SIM_TICKERS.forEach((ticker) => priceOf(ticker).then((p) => { if (p) setPrices((s) => ({ ...s, [ticker]: p.price })) })) }, [])
+  // Preview = first 2 of each theme; a category's full list loads when opened.
+  useEffect(() => { THEMES.flatMap((t) => t.tickers.slice(0, 2)).forEach(loadPrice) }, [loadPrice])
+  useEffect(() => { if (openCategory) THEMES.find((t) => t.id === openCategory)?.tickers.forEach(loadPrice) }, [openCategory, loadPrice])
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return }
     const t = setTimeout(async () => { try { const d = await fetch(`/api/stock/search?q=${encodeURIComponent(query)}`).then((r) => r.json()); setResults((d.results || []).slice(0, 6)) } catch { setResults([]) } }, 350)
@@ -138,21 +148,58 @@ export default function GamePage() {
       </button>
     )
   }
-  const buyGrid = (
-    <div className="space-y-5">
-      {THEMES.filter((t) => activeTheme === 'all' || t.id === activeTheme).map((theme) => (
+  // Preview: each category shows 2 stocks + a colour-coded "See all" to its page.
+  const buyPreview = (
+    <div className="space-y-6">
+      {THEMES.map((theme) => (
         <div key={theme.id}>
-          <p className="font-black text-white flex items-center gap-1.5"><theme.Icon className="h-4 w-4 text-gray-400" /> {theme.title}</p>
-          <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">{theme.blurb}</p>
-          <div className="grid grid-cols-2 gap-3">{theme.tickers.map(companyCard)}</div>
+          <div className="flex items-center justify-between gap-2 mb-0.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="grid place-items-center h-7 w-7 rounded-lg shrink-0" style={{ background: `${theme.accent}1f` }}>
+                <theme.Icon className="h-4 w-4" style={{ color: theme.accent }} />
+              </span>
+              <p className="font-black text-white truncate">{theme.title}</p>
+            </div>
+            <button onClick={() => setOpenCategory(theme.id)} className="shrink-0 flex items-center gap-0.5 text-xs font-bold hover:opacity-80" style={{ color: theme.accent }}>
+              See all {theme.tickers.length}<ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mb-3 leading-relaxed">{theme.blurb}</p>
+          <div className="grid grid-cols-2 gap-3">{theme.tickers.slice(0, 2).map(companyCard)}</div>
         </div>
       ))}
     </div>
   )
+  const activeCat = THEMES.find((t) => t.id === openCategory) || null
 
   return (
     <div className="max-w-6xl mx-auto space-y-5 pb-20">
       <SimIntro />
+      {activeCat ? (
+        /* ── Full category page (opened from a "See all") ── */
+        <div className="space-y-5">
+          <button onClick={() => setOpenCategory(null)} className="flex items-center gap-1 text-sm font-bold text-gray-400 hover:text-gray-200">
+            <ChevronLeft className="h-4 w-4" /> Back to all
+          </button>
+          <div className="rounded-3xl p-6 border" style={{ background: `${activeCat.accent}14`, borderColor: `${activeCat.accent}33` }}>
+            <div className="flex items-center gap-3">
+              <span className="grid place-items-center h-12 w-12 rounded-2xl shrink-0" style={{ background: `${activeCat.accent}26` }}>
+                <activeCat.Icon className="h-6 w-6" style={{ color: activeCat.accent }} />
+              </span>
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-black text-white truncate">{activeCat.title}</h1>
+                <p className="text-sm text-gray-500">{activeCat.tickers.length} companies you can buy</p>
+              </div>
+            </div>
+            <p className="text-sm text-gray-400 mt-3 leading-relaxed">{activeCat.blurb}</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {activeCat.tickers.map(companyCard)}
+          </div>
+          <p className="text-[11px] text-gray-600 text-center px-4">Tap any company to see what it does and buy it. Virtual money only.</p>
+        </div>
+      ) : (
+      <>
       <h1 className="text-2xl font-black text-white flex items-center gap-2">
         <Trophy className="h-6 w-6 text-yellow-500 dark:text-yellow-400" /> $100K Challenge
       </h1>
@@ -214,18 +261,7 @@ export default function GamePage() {
                     ))}
                   </div>
                 ) : (
-                  <>
-                    {/* Category chips */}
-                    <div className="flex gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1">
-                      <button onClick={() => setActiveTheme('all')} className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === 'all' ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>All</button>
-                      {THEMES.map((t) => (
-                        <button key={t.id} onClick={() => setActiveTheme(t.id)} className={`shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === t.id ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>
-                          <t.Icon className="h-3.5 w-3.5" /> {t.short}
-                        </button>
-                      ))}
-                    </div>
-                    {buyGrid}
-                  </>
+                  buyPreview
                 )}
               </Section>
             </div>
@@ -282,6 +318,8 @@ export default function GamePage() {
 
           <p className="text-[11px] text-gray-600 text-center px-4">Virtual money only — not real investing. Prices may be delayed up to 15 minutes.</p>
         </>
+      )}
+      </>
       )}
 
       {/* ── Buy sheet ── */}
