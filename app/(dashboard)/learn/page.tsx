@@ -221,7 +221,7 @@ function Stat({ icon, value, plain, label, color }: { icon?: React.ReactNode; va
 
 function RailCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+    <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-5">
       <h3 className="text-sm font-black text-white uppercase tracking-wide mb-3">{title}</h3>
       {children}
     </div>
@@ -309,7 +309,7 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
                 </div>
                 <div className="shrink-0 text-right">
                   <p className={`font-black ${got ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600'}`}>+{a.xp}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wide text-gray-600">{got ? '✓ earned' : 'locked'}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-gray-600">{got ? 'earned' : 'locked'}</p>
                 </div>
               </div>
             )
