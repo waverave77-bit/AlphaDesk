@@ -5,7 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-import { Loader2, Search, X, Trophy, ChevronRight } from 'lucide-react'
+import { Loader2, Search, X, Trophy, ChevronRight, Shield, Sparkles, Zap } from 'lucide-react'
 import { COMPANIES, THEMES } from '@/lib/sim-companies'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
@@ -17,6 +17,18 @@ const MiniChart = dynamic(() => import('@/components/game/MiniChart'), { ssr: fa
 // components/game/WhatsHappening.tsx but removed from the page for now.
 
 const BUY_AMOUNTS = [100, 500, 1000, 5000]
+const SELL_PCTS: [number, string][] = [[0.25, '25%'], [0.5, 'Half'], [0.75, '75%'], [1, 'All']]
+
+// "Don't know what to buy?" — one question, each answer points to a category.
+const HELP_OPTIONS = [
+  { id: 'safe',     label: 'Slow & steady',  sub: 'Lower risk, calmer ride',     Icon: Shield,   theme: 'index',
+    line: 'Index funds hold hundreds of companies at once, so no single one can sink you — the classic calm way to start.', picks: ['SPY', 'VOO', 'SCHD'] },
+  { id: 'familiar', label: 'Brands I know',  sub: 'Household names I recognise',  Icon: Sparkles, theme: 'brands',
+    line: 'Big, familiar companies you already use. Widely owned and steadier than tiny unknown stocks.', picks: ['DIS', 'NKE', 'WMT'] },
+  { id: 'exciting', label: 'Exciting & fast', sub: 'Bigger swings, more thrill',  Icon: Zap,      theme: 'tech',
+    line: 'Fast-growing tech names — more upside, but expect bigger ups and downs. A small amount is a smart way to start.', picks: ['AAPL', 'NVDA', 'AMD'] },
+]
+const accentOf = (id: string) => THEMES.find((t) => t.id === id)?.accent || '#3b82f6'
 
 function gainCls(n: number) { return n >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }
 function gainTint(n: number) { return n >= 0 ? 'bg-green-500/10 border border-green-500/25' : 'bg-red-500/10 border border-red-500/25' }
@@ -61,6 +73,10 @@ export default function GamePage() {
   const [buyAmount, setBuyAmount] = useState(500)
   const [buying, setBuying] = useState(false)
   const [selling, setSelling] = useState<string | null>(null)
+  const [sellTarget, setSellTarget] = useState<Holding | null>(null)
+  const [sellAmount, setSellAmount] = useState(0)
+  const [helperOpen, setHelperOpen] = useState(false)
+  const [helperChoice, setHelperChoice] = useState<string | null>(null)
 
   const [activeTheme, setActiveTheme] = useState('all')
   const [query, setQuery] = useState('')
@@ -85,6 +101,7 @@ export default function GamePage() {
   // Preview = first 2 of each theme; the full list loads when its chip is active.
   useEffect(() => { THEMES.flatMap((t) => t.tickers.slice(0, 2)).forEach(loadPrice) }, [loadPrice])
   useEffect(() => { if (activeTheme !== 'all') THEMES.find((t) => t.id === activeTheme)?.tickers.forEach(loadPrice) }, [activeTheme, loadPrice])
+  useEffect(() => { if (helperOpen) HELP_OPTIONS.flatMap((o) => o.picks).forEach(loadPrice) }, [helperOpen, loadPrice])
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return }
     const t = setTimeout(async () => { try { const d = await fetch(`/api/stock/search?q=${encodeURIComponent(query)}`).then((r) => r.json()); setResults((d.results || []).slice(0, 6)) } catch { setResults([]) } }, 350)
@@ -110,14 +127,19 @@ export default function GamePage() {
     } catch (e: any) { toast({ title: 'Couldn’t buy', description: e.message, variant: 'destructive' }) }
     setBuying(false)
   }
-  const sellAll = async (h: Holding) => {
-    if (selling) return
-    setSelling(h.ticker)
+  const openSell = (h: Holding) => { setSellTarget(h); setSellAmount(h.currentValue) }
+  const confirmSell = async () => {
+    if (!sellTarget || selling) return
+    const full = sellAmount >= sellTarget.currentValue - 0.01
+    // Sell exactly what's owned for "All"; otherwise convert $ → shares, clamped.
+    const shares = full ? sellTarget.shares : Math.min(sellTarget.shares, +(sellAmount / sellTarget.currentPrice).toFixed(4))
+    if (shares <= 0) { toast({ title: 'Pick an amount', description: 'Choose how much you want to sell.', variant: 'destructive' }); return }
+    setSelling(sellTarget.ticker)
     try {
-      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: h.ticker, shares: h.shares, type: 'SELL' }) })
+      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: sellTarget.ticker, shares, type: 'SELL' }) })
       const d = await r.json(); if (!r.ok) throw new Error(d.error)
-      toast({ title: 'Sold!', description: `You sold all your ${h.companyName || h.ticker}.` })
-      await fetchPortfolio(); fetchLeaderboard()
+      toast({ title: 'Sold!', description: full ? `You sold all your ${sellTarget.companyName || sellTarget.ticker}.` : `You sold ${formatCurrency(sellAmount)} of ${sellTarget.companyName || sellTarget.ticker}.` })
+      setSellTarget(null); await fetchPortfolio(); fetchLeaderboard()
     } catch (e: any) { toast({ title: 'Couldn’t sell', description: e.message, variant: 'destructive' }) }
     setSelling(null)
   }
@@ -148,7 +170,21 @@ export default function GamePage() {
       </button>
     )
   }
-  // Preview: each category shows 2 stocks + a colour-coded "See all" to its page.
+  // Compact pick used inside the helper — tapping it jumps straight to buying.
+  const helperPickCard = (ticker: string) => {
+    const c = COMPANIES[ticker]
+    if (!c) return null
+    return (
+      <button key={ticker} onClick={() => { setHelperOpen(false); openBuy(ticker, c.name) }}
+        style={{ background: `${c.color}14`, borderColor: `${c.color}40` }}
+        className="w-full text-left border rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:brightness-110">
+        <CompanyLogo ticker={ticker} size={36} />
+        <div className="min-w-0 flex-1"><p className="font-bold text-white truncate text-sm">{c.name}</p><p className="text-[11px] text-gray-500">{ticker}</p></div>
+        <span className="text-sm font-bold text-gray-300 shrink-0">{prices[ticker] ? formatCurrency(prices[ticker]) : '…'}</span>
+      </button>
+    )
+  }
+  // Preview: each category shows 2 stocks + a colour-coded "See more" to its page.
   const buyPreview = (
     <div className="space-y-6">
       {THEMES.map((theme) => (
@@ -253,6 +289,16 @@ export default function GamePage() {
                   </div>
                 ) : (
                   <>
+                    {/* Don't know what to buy? helper */}
+                    <button onClick={() => { setHelperChoice(null); setHelperOpen(true) }}
+                      className="w-full flex items-center gap-3 mb-4 p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/20 transition-colors text-left">
+                      <div className="shrink-0 rounded-lg overflow-hidden"><MrGuyHead px={3} /></div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-black text-white">Don’t know what to buy?</p>
+                        <p className="text-xs text-gray-400">Answer one quick question — Mr. Guy points you somewhere.</p>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+                    </button>
                     {/* Category chips — colour-coded, persistent navigation */}
                     <div className="flex gap-2 overflow-x-auto pb-1 mb-5 -mx-1 px-1">
                       <button onClick={() => setActiveTheme('all')} className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-bold border transition-colors ${activeTheme === 'all' ? 'bg-blue-600 border-blue-600 text-[#fff]' : 'border-gray-700 text-gray-300 hover:border-gray-500'}`}>All</button>
@@ -294,8 +340,8 @@ export default function GamePage() {
                             <span className="font-black text-white text-lg">{formatCurrency(h.currentValue)}</span>
                             <span className={`ml-2 text-sm font-bold ${gainCls(h.gainLoss)}`}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span>
                           </div>
-                          <button onClick={() => sellAll(h)} disabled={!!selling} className="shrink-0 text-sm font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-4 py-2 hover:bg-red-500/10 disabled:opacity-50">
-                            {selling === h.ticker ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Sell'}
+                          <button onClick={() => openSell(h)} className="shrink-0 text-sm font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-4 py-2 hover:bg-red-500/10">
+                            Sell
                           </button>
                         </div>
                       </div>
@@ -371,6 +417,104 @@ export default function GamePage() {
               {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : `Buy ${formatCurrency(buyAmount)} of ${buyTarget.name}`}
             </button>
             <p className="text-[11px] text-gray-600 text-center mt-3">Cash to spend: {formatCurrency(cash)}</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Sell sheet ── */}
+      {sellTarget && (
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !selling && setSellTarget(null)}>
+          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <CompanyLogo ticker={sellTarget.ticker} size={44} name={sellTarget.companyName} />
+                <div><p className="font-black text-white text-lg leading-tight">{sellTarget.companyName || sellTarget.ticker}</p><p className="text-xs text-gray-500">{sellTarget.ticker} · {formatCurrency(sellTarget.currentPrice)}</p></div>
+              </div>
+              <button onClick={() => !selling && setSellTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
+              <span className="text-gray-500">You own</span>
+              <span className="font-bold text-white">{sellTarget.shares.toFixed(3)} shares · {formatCurrency(sellTarget.currentValue)} <span className={gainCls(sellTarget.gainLoss)}>({sellTarget.gainLoss >= 0 ? '+' : ''}{sellTarget.gainLossPct.toFixed(1)}%)</span></span>
+            </div>
+            <p className="text-sm text-gray-400 mb-2">How much do you want to sell?</p>
+            <div className="grid grid-cols-4 gap-2 mb-2.5">
+              {SELL_PCTS.map(([pct, label]) => {
+                const amt = +(sellTarget.currentValue * pct).toFixed(2)
+                const on = Math.abs(sellAmount - amt) < 0.01
+                return (
+                  <button key={label} onClick={() => setSellAmount(amt)}
+                    className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all ${on ? 'border-red-500 bg-red-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-red-500">
+              <span className="text-gray-500 font-bold">$</span>
+              <input type="number" inputMode="decimal" min={0} value={sellAmount ? +sellAmount.toFixed(2) : ''}
+                onChange={(e) => setSellAmount(Math.max(0, Math.min(sellTarget.currentValue, parseFloat(e.target.value) || 0)))}
+                placeholder="custom amount"
+                className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
+            </div>
+            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
+              <span className="text-gray-500">You’ll sell</span>
+              <span className="font-bold text-white">{Math.min(sellTarget.shares, sellAmount / sellTarget.currentPrice || 0).toFixed(3)} shares</span>
+            </div>
+            <button onClick={confirmSell} disabled={!!selling || sellAmount <= 0}
+              className="w-full bg-red-600 hover:bg-red-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #b91c1c' }}>
+              {selling ? <Loader2 className="h-5 w-5 animate-spin" /> : sellAmount >= sellTarget.currentValue - 0.01 ? `Sell all of ${sellTarget.companyName || sellTarget.ticker}` : `Sell ${formatCurrency(sellAmount)}`}
+            </button>
+            <p className="text-[11px] text-gray-600 text-center mt-3">The cash goes straight back to your buying power.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── "Don't know what to buy?" helper ── */}
+      {helperOpen && (
+        <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setHelperOpen(false)}>
+          <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="shrink-0 rounded-lg overflow-hidden"><MrGuyHead px={3} /></div>
+                <p className="font-black text-white text-lg leading-tight truncate">{helperChoice ? 'A good place to start' : 'Let’s find your style'}</p>
+              </div>
+              <button onClick={() => setHelperOpen(false)} className="text-gray-500 hover:text-gray-300 shrink-0"><X className="h-5 w-5" /></button>
+            </div>
+            {!helperChoice ? (
+              <>
+                <p className="text-sm text-gray-400 mb-4">Quick question — what sounds more like you? There’s no wrong answer.</p>
+                <div className="space-y-2.5">
+                  {HELP_OPTIONS.map((o) => (
+                    <button key={o.id} onClick={() => setHelperChoice(o.id)}
+                      className="w-full text-left flex items-center gap-3 p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-gray-700/60 hover:border-gray-500 transition-colors">
+                      <span className="grid place-items-center h-10 w-10 rounded-xl shrink-0" style={{ background: `${accentOf(o.theme)}1f` }}>
+                        <o.Icon className="h-5 w-5" style={{ color: accentOf(o.theme) }} />
+                      </span>
+                      <div className="min-w-0 flex-1"><p className="font-bold text-white">{o.label}</p><p className="text-xs text-gray-500">{o.sub}</p></div>
+                      <ChevronRight className="h-4 w-4 text-gray-500 shrink-0" />
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-gray-600 text-center mt-4">A starting point for learning — not financial advice.</p>
+              </>
+            ) : (() => {
+              const o = HELP_OPTIONS.find((x) => x.id === helperChoice)!
+              const th = THEMES.find((t) => t.id === o.theme)!
+              return (
+                <>
+                  <div className="rounded-2xl p-3.5 mb-4" style={{ background: `${th.accent}14` }}>
+                    <p className="text-sm text-gray-300 leading-relaxed">{o.line}</p>
+                  </div>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">A few to look at</p>
+                  <div className="space-y-2 mb-4">{o.picks.map(helperPickCard)}</div>
+                  <button onClick={() => { setActiveTheme(o.theme); setHelperOpen(false) }}
+                    className="w-full font-black rounded-2xl py-3 text-[#fff] flex items-center justify-center gap-1" style={{ background: th.accent }}>
+                    Browse all {th.short} <ChevronRight className="h-4 w-4" />
+                  </button>
+                  <button onClick={() => setHelperChoice(null)} className="w-full text-sm font-bold text-gray-500 hover:text-gray-300 mt-2 py-1">← Pick a different vibe</button>
+                </>
+              )
+            })()}
           </div>
         </div>
       )}
