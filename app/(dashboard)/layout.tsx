@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const isGuest = !session
 
   return (
-    <div className="flex flex-col h-screen bg-white dark:bg-gray-950 overflow-x-hidden">
+    <div className="flex flex-col h-screen bg-[#fdf3d7] dark:bg-gray-950 overflow-x-hidden">
       {isGuest ? <GuestBanner /> : <DemoBanner />}
       <EmailVerificationBanner />
       <TopNav />

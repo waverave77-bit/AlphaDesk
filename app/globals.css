@@ -4,8 +4,8 @@
 
 /* ── Accent CSS variables (R G B format for opacity support) ── */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #fdf3d7;
+  --foreground: #16130a;
   --accent: 37 99 235;           /* blue-600 */
   --accent-light: 59 130 246;    /* blue-500 */
   --brand: 249 115 22;           /* orange-500 = #f97316 */
@@ -111,7 +111,7 @@ body {
    LIGHT THEME (default — "white" data-theme or no theme set)
    Maps dark-coded Tailwind classes → light equivalents
 ───────────────────────────────────────────────────────────── */
-.bg-gray-950  { background-color: #f8fafc !important; }
+.bg-gray-950  { background-color: #fdf3d7 !important; }   /* arcade cream canvas */
 .bg-gray-900  { background-color: #ffffff !important; }
 .bg-gray-800  { background-color: #f1f5f9 !important; }
 .bg-gray-800\/30, .bg-gray-800\/40, .bg-gray-800\/50,
@@ -193,8 +193,8 @@ body {
 
 /* ── White / Light explicit override ── */
 [data-theme="white"] body {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
+  background-color: #fdf3d7 !important;
+  color: #16130a !important;
 }
 
 @layer base {
@@ -210,6 +210,15 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Brand: all primary headings use the chunky display face. font-synthesis:none
+     keeps it crisp even where a font-black/bold utility requests a heavier weight
+     (Archivo Black only ships 400). */
+  h1, h2 {
+    font-family: var(--font-display), 'Arial Black', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    font-synthesis: none;
   }
 }
 

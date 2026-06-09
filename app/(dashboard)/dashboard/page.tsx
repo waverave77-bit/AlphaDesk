@@ -7,6 +7,7 @@ import {
   Search, Star, Calendar, FlaskConical,
   Activity, Building2, Users, BookOpen, TrendingUp,
   TrendingDown, Sparkles, RefreshCw, ChevronRight,
+  CheckCircle2, Crown, AlertTriangle, Loader2, Eye, EyeOff, Flame,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -24,9 +25,9 @@ const HolidayAtmosphere = dynamic(
 
 function getGreeting() {
   const h = new Date().getHours()
-  if (h < 12) return { word: 'Good morning', emoji: '☀️' }
-  if (h < 17) return { word: 'Good afternoon', emoji: '👋' }
-  return { word: 'Good evening', emoji: '🌙' }
+  if (h < 12) return { word: 'Good morning' }
+  if (h < 17) return { word: 'Good afternoon' }
+  return { word: 'Good evening' }
 }
 
 function formatPrice(n: number | null) {
@@ -164,7 +165,7 @@ export default function DashboardPage() {
   }, [])
 
   // Defer greeting + date to client to avoid hydration mismatch
-  const [{ word: greeting, emoji }, setGreeting] = useState<{ word: string; emoji: string }>({ word: 'Good morning', emoji: '☀️' })
+  const [{ word: greeting }, setGreeting] = useState<{ word: string }>({ word: 'Good morning' })
   const [today, setToday] = useState('')
   useEffect(() => {
     setGreeting(getGreeting())
@@ -329,7 +330,7 @@ export default function DashboardPage() {
       {/* ── Email verified banner ────────────────────────────────── */}
       {showVerifiedBanner && (
         <div className="relative flex items-center gap-3 bg-green-600/10 border border-green-500/30 text-white px-5 py-4 rounded-2xl">
-          <span className="text-2xl">✅</span>
+          <CheckCircle2 className="h-6 w-6 text-green-400 shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base text-green-300">Email verified!</p>
             <p className="text-gray-400 text-sm">You now have full access to all free AI features.</p>
@@ -341,7 +342,7 @@ export default function DashboardPage() {
       {/* ── Pro upgrade success / failure banner ───────────────── */}
       {showUpgradedBanner && upgradeVerified === null && (
         <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600/80 to-blue-500/80 text-white px-5 py-4 rounded-2xl shadow-lg">
-          <span className="text-2xl animate-spin inline-block">⏳</span>
+          <Loader2 className="h-6 w-6 animate-spin shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base">Activating Pro…</p>
             <p className="text-blue-100 text-sm">Payment received! Confirming your upgrade now…</p>
@@ -350,7 +351,7 @@ export default function DashboardPage() {
       )}
       {showUpgradedBanner && upgradeVerified === true && (
         <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-4 rounded-2xl shadow-lg">
-          <span className="text-2xl">👑</span>
+          <Crown className="h-6 w-6 shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base">Welcome to Pro!</p>
             <p className="text-blue-100 text-sm">You now have unlimited AI features. Enjoy the upgrade!</p>
@@ -365,7 +366,7 @@ export default function DashboardPage() {
       )}
       {showUpgradedBanner && upgradeVerified === false && (
         <div className="relative flex items-center gap-3 bg-red-600/10 border border-red-500/30 text-white px-5 py-4 rounded-2xl shadow-lg">
-          <span className="text-2xl">⚠️</span>
+          <AlertTriangle className="h-6 w-6 text-red-400 shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base text-red-300">Payment received, but Pro activation delayed</p>
             <p className="text-gray-400 text-sm">Your card was charged, but we couldn&apos;t confirm the upgrade yet. Please sign out and back in, or contact support. Your access will be granted — this is a sync issue.</p>
@@ -409,7 +410,7 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
         <div>
           <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 leading-tight">
-            {greeting}{firstName ? `, ${firstName}` : ''} {emoji}
+            {greeting}{firstName ? `, ${firstName}` : ''}
           </h1>
           <p className="text-slate-500 mt-1 text-sm">{today}</p>
         </div>
@@ -418,13 +419,13 @@ export default function DashboardPage() {
           <button
             onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
             className={cn(
-              'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
+              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
               panicMode
                 ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
                 : 'bg-slate-100 border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-500'
             )}
           >
-            {panicMode ? '👁️ Take a peek' : '🙈 I Can\'t Look'}
+            {panicMode ? <><Eye className="h-3.5 w-3.5" /> Take a peek</> : <><EyeOff className="h-3.5 w-3.5" /> I Can&apos;t Look</>}
           </button>
         </div>
       </div>
@@ -468,7 +469,7 @@ export default function DashboardPage() {
                   disabled={roasting || watchlist.length === 0}
                   className="text-xs text-orange-500 hover:text-orange-600 disabled:opacity-40 font-semibold transition-colors flex items-center gap-1"
                 >
-                  {roasting ? '...' : '🔥 Roast'}
+                  {roasting ? '...' : <><Flame className="h-3.5 w-3.5" /> Roast</>}
                 </button>
                 <Link href="/watchlist" className="text-xs text-blue-500 hover:underline">View all</Link>
               </div>
@@ -519,7 +520,7 @@ export default function DashboardPage() {
             {roast && (
               <div className="mt-4 pt-4 border-t border-slate-100">
                 <div className="flex items-start gap-2">
-                  <span className="text-lg shrink-0">🧑‍💼</span>
+                  <div className="shrink-0 mt-0.5"><MrGuyLogoSvg px={2} /></div>
                   <p className="text-sm text-orange-600 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
                 </div>
               </div>
