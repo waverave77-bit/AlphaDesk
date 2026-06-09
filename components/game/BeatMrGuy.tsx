@@ -28,9 +28,9 @@ export default function BeatMrGuy({ userGainLossPct }: Props) {
   const userLosing = userGainLossPct !== null && mrGuyPct !== null && userGainLossPct < mrGuyPct
 
   const taunt = userLosing
-    ? "Mr. Guy says: \"You call that a portfolio? 🤖 My circuits predicted this.\""
+    ? "Mr. Guy says: \"You call that a portfolio? My circuits predicted this.\""
     : userWinning
-    ? "You're beating Mr. Guy! 🎉 The robot is shaking."
+    ? "You're beating Mr. Guy! The robot is shaking."
     : "You're neck-and-neck with Mr. Guy. Make your move!"
 
   return (
@@ -38,7 +38,7 @@ export default function BeatMrGuy({ userGainLossPct }: Props) {
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-semibold text-white flex items-center gap-2">
           <Bot className="h-4 w-4 text-purple-400" />
-          Beat Mr. Guy 🤖
+          Beat Mr. Guy
           {data?.source === 'hot-takes' && (
             <span className="text-xs text-purple-400 font-normal ml-auto">
               {data.pickCount} AI picks
@@ -60,7 +60,7 @@ export default function BeatMrGuy({ userGainLossPct }: Props) {
                 </p>
               </div>
               <div className={cn('rounded-lg p-3 border text-center', userLosing ? 'bg-red-500/10 border-red-500/30' : 'bg-gray-800 border-gray-700')}>
-                <p className="text-xs text-gray-400 mb-1">Mr. Guy 🤖</p>
+                <p className="text-xs text-gray-400 mb-1">Mr. Guy</p>
                 <p className={cn('text-xl font-bold', mrGuyPct !== null ? gainColor(mrGuyPct) : 'text-gray-500')}>
                   {mrGuyPct !== null ? `${mrGuyPct >= 0 ? '+' : ''}${mrGuyPct.toFixed(2)}%` : '—'}
                 </p>

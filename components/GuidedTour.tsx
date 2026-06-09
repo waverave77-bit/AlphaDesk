@@ -56,7 +56,7 @@ const STEPS: TourStep[] = [
   {
     idx: 0,
     match: (p) => p === '/dashboard',
-    title: "Hey, I'm Mr. Guy 👋",
+    title: "Hey, I'm Mr. Guy",
     body: "Your AI stock market sidekick. I'll show you around in 60 seconds — it's worth it.",
     nextLabel: "Show me around →",
     nextHref: '/research',
@@ -64,7 +64,7 @@ const STEPS: TourStep[] = [
   {
     idx: 1,
     match: (p) => p === '/research',
-    title: "Search any stock 🔍",
+    title: "Search any stock",
     body: "Type any ticker or company name in the search bar. Try AAPL, NVDA, TSLA — whatever you've heard of.",
     hint: "I'll update automatically once you search.",
     nextLabel: "Skip ahead →",
@@ -73,7 +73,7 @@ const STEPS: TourStep[] = [
   {
     idx: 2,
     match: (p) => p.startsWith('/research/') && p.length > 10,
-    title: "This is the full picture 🔥",
+    title: "This is the full picture",
     body: "Live price, chart, and real financials — plus multiple AI models analyzing the stock from different angles. Sentiment, valuation, momentum, risk. Scroll down, it's all there.",
     hint: "Most sites give you raw numbers. I tell you what they actually mean.",
     nextLabel: "Show me the AI chat →",
@@ -82,7 +82,7 @@ const STEPS: TourStep[] = [
   {
     idx: 3,
     match: (p) => p === '/chat' || p.startsWith('/chat?') || p.startsWith('/chat/'),
-    title: "Ask me literally anything 🤖",
+    title: "Ask me literally anything",
     body: "\"Is NVDA overvalued?\" \"Explain this earnings report.\" \"What's a good stock for a beginner?\" Type it in the box below — I'll give you a real answer.",
     hint: "I pull live market data, not generic answers.",
     nextLabel: "What else is there? →",
@@ -91,7 +91,7 @@ const STEPS: TourStep[] = [
   {
     idx: 4,
     match: (p) => p.startsWith('/trading-simulator'),
-    title: "The $100K Challenge 🏆",
+    title: "The $100K Challenge",
     body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, zero risk. The goal is to beat the S&P 500. Your returns are tracked and you can see how you stack up on the leaderboard.",
     hint: "Best way to learn investing without risking real money.",
     nextLabel: "Cool! What else is there? →",
@@ -99,10 +99,10 @@ const STEPS: TourStep[] = [
   {
     idx: 5,
     match: (p) => p.startsWith('/trading-simulator'),
-    title: "You're all set 🎉",
-    body: "There's a lot more to explore — markets overview, earnings calendars, hedge fund filings, a quant stock screener, and more. Poke around and find what works for you.",
+    title: "You're all set",
+    body: "There's a lot more to explore — bite-sized lessons, the investing dictionary, a markets overview, and earnings calendars. Poke around and find what works for you.",
     hint: "last",
-    nextLabel: "Let's go! 🚀",
+    nextLabel: "Let's go!",
     isLast: true,
   },
 ]

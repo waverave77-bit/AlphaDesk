@@ -55,7 +55,7 @@ export default function VsMarketCard({ userGainLossPct }: Props) {
         )}
         {!loading && userGainLossPct !== null && spyChange !== null && (
           <p className={cn('text-xs text-center mt-2', beating ? 'text-green-400' : 'text-gray-500')}>
-            {beating ? '🚀 You\'re beating the market!' : `📉 SPY is ahead by ${(spyChange - userGainLossPct).toFixed(2)}%`}
+            {beating ? 'You\'re beating the market!' : `SPY is ahead by ${(spyChange - userGainLossPct).toFixed(2)}%`}
           </p>
         )}
       </CardContent>

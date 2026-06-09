@@ -46,11 +46,11 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    lines: ["Hey! I'm Mr. Guy 👋", "I'm your AI investing sidekick.", "Want a quick 30-second tour?"],
+    lines: ["Hey! I'm Mr. Guy", "I'm your AI investing sidekick.", "Want a quick 30-second tour?"],
     nextLabel: "Let's go! →",
   },
   {
-    lines: ["📊 Start with the Research Tool.", "Pull up any stock — live price, financials, AI summary, and more. This is your home base."],
+    lines: ["Start with the Research Tool.", "Pull up any stock — live price, financials, AI summary, and more. This is your home base."],
     nextLabel: 'Next →',
     expandedTitle: 'Stock Research',
     expandedLines: [
@@ -63,7 +63,7 @@ const STEPS: Step[] = [
     tryLabel: 'Open Research →',
   },
   {
-    lines: ["🤖 Ask me anything — literally.", "I'm Mr. Guy. I explain stocks, earnings, valuations, anything — in plain English. No finance degree needed."],
+    lines: ["Ask me anything — literally.", "I'm Mr. Guy. I explain stocks, earnings, valuations, anything — in plain English. No finance degree needed."],
     nextLabel: 'Next →',
     expandedTitle: 'Mr. Guy AI Chat',
     expandedLines: [
@@ -75,7 +75,7 @@ const STEPS: Step[] = [
     tryLabel: 'Chat with Mr. Guy →',
   },
   {
-    lines: ["🏆 Ready for a challenge?", "The $100K Challenge gives you $100,000 in virtual money. Build your portfolio. See if you can beat the market."],
+    lines: ["Ready for a challenge?", "The $100K Challenge gives you $100,000 in virtual money. Build your portfolio. See if you can beat the market."],
     nextLabel: 'Next →',
     expandedTitle: '$100K Challenge',
     expandedLines: [
@@ -87,7 +87,7 @@ const STEPS: Step[] = [
     tryLabel: 'Take the Challenge →',
   },
   {
-    lines: ["That's the tour 🎉", "Explore at your own pace. Click me anytime if you get lost."],
+    lines: ["That's the tour", "Explore at your own pace. Click me anytime if you get lost."],
     nextLabel: 'Start exploring →',
   },
 ]

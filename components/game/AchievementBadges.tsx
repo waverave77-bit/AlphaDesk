@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Award } from 'lucide-react'
+import { Award, Target, Coins, Rocket, Gem, Trophy, Brain, type LucideIcon } from 'lucide-react'
 
 interface Portfolio {
   totalGainLoss: number
@@ -17,7 +17,7 @@ interface Props {
 
 interface Badge {
   id: string
-  emoji: string
+  Icon: LucideIcon
   label: string
   desc: string
   unlocked: boolean
@@ -43,42 +43,42 @@ export default function AchievementBadges({ portfolio }: Props) {
   const badges: Badge[] = [
     {
       id: 'first-trade',
-      emoji: '🎯',
+      Icon: Target,
       label: 'First Trade',
       desc: 'Execute your first trade',
       unlocked: tradesLen > 0,
     },
     {
       id: 'in-the-green',
-      emoji: '💰',
+      Icon: Coins,
       label: 'In the Green',
       desc: 'Achieve a positive P&L',
       unlocked: portfolio.totalGainLoss > 0,
     },
     {
       id: 'moon-shot',
-      emoji: '🚀',
+      Icon: Rocket,
       label: 'Moon Shot',
       desc: 'Gain more than +10% on your portfolio',
       unlocked: portfolio.totalGainLossPct > 10,
     },
     {
       id: 'diamond-hands',
-      emoji: '💎',
+      Icon: Gem,
       label: 'Diamond Hands',
       desc: 'Hold positions and make 5+ trades',
       unlocked: holdingsLen > 0 && tradesLen >= 5,
     },
     {
       id: 'market-beater',
-      emoji: '🏆',
+      Icon: Trophy,
       label: 'Market Beater',
       desc: 'Beat SPY return today',
       unlocked: spyChange !== null && portfolio.totalGainLossPct > spyChange,
     },
     {
       id: 'diversified',
-      emoji: '🧠',
+      Icon: Brain,
       label: 'Diversified',
       desc: 'Hold 5 or more different stocks',
       unlocked: holdingsLen >= 5,
@@ -108,7 +108,7 @@ export default function AchievementBadges({ portfolio }: Props) {
                   : 'bg-gray-900 border-gray-800 opacity-50 grayscale'
               )}
             >
-              <span className="text-2xl">{b.emoji}</span>
+              <b.Icon className={cn('h-7 w-7', b.unlocked ? 'text-yellow-500 dark:text-yellow-400' : 'text-gray-500')} />
               <p className={cn('text-xs font-semibold', b.unlocked ? 'text-white' : 'text-gray-500')}>{b.label}</p>
               <p className="text-xs text-gray-500 leading-tight">{b.desc}</p>
             </div>

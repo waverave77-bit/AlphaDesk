@@ -41,7 +41,7 @@ export default function EmailVerificationBanner() {
       <div className="flex items-center gap-2 shrink-0 pl-6 sm:pl-0">
         {error && <span className="text-red-400 text-xs">{error}</span>}
         {sent ? (
-          <span className="text-green-400 text-xs font-medium">Sent ✓</span>
+          <span className="text-green-400 text-xs font-medium">Sent</span>
         ) : (
           <button
             onClick={resend}

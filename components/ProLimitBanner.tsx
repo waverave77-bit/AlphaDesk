@@ -8,20 +8,20 @@ interface Props {
 }
 
 const MESSAGES: Record<string, { title: string; sub: string }> = {
-  'chat':          { title: "Mr. Guy's done talking for today 😅", sub: "You've used your 3 free chats. Come back tomorrow or go Pro for unlimited." },
-  'bull-vs-bear':  { title: "Mr. Guy needs a breather 🥊",         sub: "You've hit your daily limit on Bull vs Bear. Upgrade for unlimited fights." },
-  'report-card':   { title: "No more report cards today 📋",        sub: "You've used your 3 free stock analyses. Upgrade for unlimited." },
-  'ai-analysis':   { title: "AI analysis limit hit 🤖",             sub: "You've used your 2 free AI analyses today. Upgrade for unlimited." },
-  'spike-summary': { title: "No more spike summaries today 📈",     sub: "You've used your 5 free summaries. Upgrade for unlimited." },
-  'hot-take':      { title: "Mr. Guy's out of hot takes today 🌶️",  sub: "You've used your 5 free hot takes. Upgrade for unlimited." },
-  'reality-check': { title: "Reality check limit reached 🔍",       sub: "You've used your 5 free reality checks. Upgrade for unlimited." },
-  'am-i-dumb':     { title: "Mr. Guy won't answer that today 🤔",   sub: "You've used your 5 free questions. Upgrade for unlimited." },
-  'bs-checker':    { title: "BS detector offline for today 🚨",     sub: "You've used your 5 free checks. Upgrade for unlimited." },
-  'translator':    { title: "Translation limit reached 📖",          sub: "You've hit your daily limit. Upgrade for unlimited translations." },
-  'research':      { title: "5 free stock lookups used today 📊",    sub: "You've used your 5 free research pages for today. Come back tomorrow or go Pro for unlimited." },
+  'chat':          { title: "Mr. Guy's done talking for today", sub: "You've used your 3 free chats. Come back tomorrow or go Pro for unlimited." },
+  'bull-vs-bear':  { title: "Mr. Guy needs a breather",         sub: "You've hit your daily limit on Bull vs Bear. Upgrade for unlimited fights." },
+  'report-card':   { title: "No more report cards today",        sub: "You've used your 3 free stock analyses. Upgrade for unlimited." },
+  'ai-analysis':   { title: "AI analysis limit hit",             sub: "You've used your 2 free AI analyses today. Upgrade for unlimited." },
+  'spike-summary': { title: "No more spike summaries today",     sub: "You've used your 5 free summaries. Upgrade for unlimited." },
+  'hot-take':      { title: "Mr. Guy's out of hot takes today",  sub: "You've used your 5 free hot takes. Upgrade for unlimited." },
+  'reality-check': { title: "Reality check limit reached",       sub: "You've used your 5 free reality checks. Upgrade for unlimited." },
+  'am-i-dumb':     { title: "Mr. Guy won't answer that today",   sub: "You've used your 5 free questions. Upgrade for unlimited." },
+  'bs-checker':    { title: "BS detector offline for today",     sub: "You've used your 5 free checks. Upgrade for unlimited." },
+  'translator':    { title: "Translation limit reached",          sub: "You've hit your daily limit. Upgrade for unlimited translations." },
+  'research':      { title: "5 free stock lookups used today",    sub: "You've used your 5 free research pages for today. Come back tomorrow or go Pro for unlimited." },
 }
 
-const DEFAULT = { title: "Daily limit reached 😅", sub: "You've used all your free AI requests for today. Upgrade to Pro for unlimited access." }
+const DEFAULT = { title: "Daily limit reached", sub: "You've used all your free AI requests for today. Upgrade to Pro for unlimited access." }
 
 export default function ProLimitBanner({ feature, isDark = true }: Props) {
   const msg = (feature && MESSAGES[feature]) || DEFAULT
