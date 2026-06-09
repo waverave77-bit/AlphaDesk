@@ -51,7 +51,7 @@ function StatTile({ label, value, cls }: { label: string; value: string; cls: st
 
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-3xl p-5">
+    <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-black text-white">{title}</h2>
         {action}
@@ -232,7 +232,7 @@ export default function GamePage() {
       </h1>
 
       {!session && status !== 'loading' ? (
-        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-10 text-center max-w-xl mx-auto">
+        <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-10 text-center max-w-xl mx-auto">
           <div className="flex justify-center mb-3"><MrGuyMascot px={3} mood="idle" /></div>
           <p className="text-white font-black text-xl">Get your $100,000 in fake money</p>
           <p className="text-gray-400 text-sm mt-1">Sign up free to invest risk-free and climb the leaderboard.</p>
@@ -242,11 +242,11 @@ export default function GamePage() {
           </div>
         </div>
       ) : loading ? (
-        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-10 text-center text-gray-500">Loading your money…</div>
+        <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-10 text-center text-gray-500">Loading your money…</div>
       ) : (
         <>
           {/* ── Hero ── */}
-          <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border border-gray-800 rounded-3xl p-6">
+          <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6">
             <div className="flex flex-col lg:flex-row lg:items-center gap-6">
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <div className="shrink-0 -mb-2 self-end"><MrGuyMascot px={4} mood={pnlPct >= 2 ? 'celebrate' : up ? 'happy' : 'sad'} /></div>
@@ -376,7 +376,7 @@ export default function GamePage() {
       {/* ── Buy sheet ── */}
       {buyTarget && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !buying && setBuyTarget(null)}>
-          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <CompanyLogo ticker={buyTarget.ticker} size={44} name={buyTarget.name} />
@@ -424,7 +424,7 @@ export default function GamePage() {
       {/* ── Sell sheet ── */}
       {sellTarget && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !selling && setSellTarget(null)}>
-          <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <CompanyLogo ticker={sellTarget.ticker} size={44} name={sellTarget.companyName} />
@@ -472,7 +472,7 @@ export default function GamePage() {
       {/* ── "Don't know what to buy?" helper ── */}
       {helperOpen && (
         <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setHelperOpen(false)}>
-          <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-md bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="shrink-0 rounded-lg overflow-hidden"><MrGuyHead px={3} /></div>
