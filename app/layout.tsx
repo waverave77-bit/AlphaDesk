@@ -20,11 +20,11 @@ const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], varia
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? 'https://www.mrguyinvests.com'),
   title: {
-    default: 'Mr. Guy Invests — AI-Powered Stock Research & Portfolio Tracker',
+    default: 'Mr. Guy Invests — Learn Investing the Fun Way',
     template: '%s | Mr. Guy Invests',
   },
-  description: 'Mr. Guy Invests gives you AI-powered stock analysis, portfolio tracking, real-time alerts, and a finance translator — built for investors at every level.',
-  keywords: ['stock research', 'portfolio tracker', 'AI stock analysis', 'finance tools', 'investment tracker', 'stock alerts', 'earnings decoder', 'hedge fund tracker', 'SEC filings', 'smart money', 'virtual trading'],
+  description: 'Mr. Guy Invests is the beginner-friendly way to learn investing: bite-sized lessons, a $100K virtual practice account, and an AI tutor that explains any stock in plain English.',
+  keywords: ['learn investing', 'investing for beginners', 'stock market basics', 'how to invest', 'virtual trading game', 'paper trading', 'stock market simulator', 'investing course', 'AI stock explainer', 'investing dictionary'],
   authors: [{ name: 'Mr. Guy Invests' }],
   creator: 'Mr. Guy Invests',
   openGraph: {
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com',
     siteName: 'Mr. Guy Invests',
-    title: 'Mr. Guy Invests — AI-Powered Stock Research',
-    description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Mr. Guy Invests — AI Stock Research' }],
+    title: 'Mr. Guy Invests — Learn Investing the Fun Way',
+    description: 'Bite-sized lessons, a $100K practice account, and an AI tutor that explains any stock in plain English. Built for total beginners.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Mr. Guy Invests — Learn Investing the Fun Way' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mr. Guy Invests — AI-Powered Stock Research',
-    description: 'AI stock analysis, portfolio tracking, real-time alerts, and finance translation in one place.',
+    title: 'Mr. Guy Invests — Learn Investing the Fun Way',
+    description: 'Bite-sized lessons, a $100K practice account, and an AI tutor that explains any stock in plain English. Built for total beginners.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -54,12 +54,12 @@ const softwareAppSchema = {
   '@type': 'SoftwareApplication',
   name: 'Mr. Guy Invests',
   url: 'https://www.mrguyinvests.com',
-  description: 'AI-powered stock research tools for investors at every level. Track hedge fund moves from SEC filings, get AI explanations of any stock, and build your portfolio.',
+  description: 'A beginner-friendly way to learn investing: gamified bite-sized lessons, a $100K virtual practice account, and an AI tutor that explains any stock in plain English.',
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Web',
   offers: [
-    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD', description: 'Core research tools with daily limits. No credit card required.' },
-    { '@type': 'Offer', name: 'Pro', price: '4.99', priceCurrency: 'USD', description: 'Removes all limits. Full access to Smart Money tracking and AI tools.', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD', description: 'All lessons, the full $100K Challenge, the dictionary, and daily AI tools. No credit card required.' },
+    { '@type': 'Offer', name: 'Pro', price: '4.99', priceCurrency: 'USD', description: 'Removes the daily limits on every AI tool.', billingIncrement: 'P1M' },
   ],
 }
 
@@ -70,17 +70,17 @@ const faqSchema = {
     {
       '@type': 'Question',
       name: 'What is Mr. Guy Invests?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is an AI-powered stock research platform for investors at every level. It tracks hedge fund and insider trades from public SEC filings (Form 13F, Form 4), provides AI-powered stock analysis explained in plain English, and includes a portfolio tracker, stock screener, and price alerts.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is a beginner-friendly way to learn investing. It combines gamified bite-sized lessons, a $100K virtual practice account, an investing dictionary, and an AI tutor that explains any stock in plain English.' },
     },
     {
       '@type': 'Question',
       name: 'Is Mr. Guy Invests free?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes. Mr. Guy Invests has a free tier with no credit card required. A Pro plan is available for $4.99/month which removes all daily limits and unlocks full access to Smart Money tracking and AI tools.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. The lessons, the investing dictionary, and the full $100K Challenge are free with no credit card required. A Pro plan ($4.99/month) removes the daily limits on the AI tools.' },
     },
     {
       '@type': 'Question',
-      name: 'What is the Smart Money Tracker?',
-      acceptedAnswer: { '@type': 'Answer', text: 'The Smart Money Tracker shows what hedge funds and company insiders are buying and selling, using public SEC filings (Form 13F and Form 4). It makes institutional trading data accessible to everyday investors without needing a finance background.' },
+      name: 'What is the $100K Challenge?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The $100K Challenge is a free game where you start with $100,000 in virtual cash and buy and sell real stocks at real prices. It is a risk-free way for beginners to practice investing and climb the leaderboard.' },
     },
     {
       '@type': 'Question',
@@ -90,12 +90,12 @@ const faqSchema = {
     {
       '@type': 'Question',
       name: 'Who is Mr. Guy Invests designed for?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is designed for investors at every level — from beginners to experienced traders — who want professional-grade stock research tools without needing a finance background. All AI analysis is written in plain English.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is designed for complete beginners who want to learn investing without the jargon. Everything — the lessons, the practice account, and the AI tutor — is written in plain English, no finance background needed.' },
     },
     {
       '@type': 'Question',
-      name: 'What stock research tools does Mr. Guy Invests include?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests includes: Smart Money Tracker (hedge fund and insider activity), AI Stock Tutor (plain English stock analysis), Portfolio Tracker, Price Alerts, Stock Report Cards, Bull vs Bear debate, Earnings Calendar, Market Briefing, Finance Translator, and a $100K virtual trading challenge.' },
+      name: 'What is included in Mr. Guy Invests?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests includes a gamified learning path, the $100K Challenge virtual trading game, Ask Mr. Guy (plain-English AI answers about any stock), an investing dictionary, stock research, a markets overview, and an earnings calendar.' },
     },
   ],
 }
@@ -105,7 +105,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'Mr. Guy Invests',
   url: 'https://www.mrguyinvests.com',
-  description: 'AI-powered stock research tools for investors at every level.',
+  description: 'Learn investing the fun way — gamified lessons, a $100K practice account, and an AI tutor for total beginners.',
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: 'https://www.mrguyinvests.com/research/{search_term_string}' },
