@@ -88,7 +88,7 @@ export default function LearnPage() {
               <div className="shrink-0 bg-black/5 dark:bg-white/5 rounded-2xl p-2 lp-float"><MrGuyHead px={5} /></div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-3xl font-black text-white leading-tight tracking-tight">Learn to Invest</h1>
-                <p className="text-blue-700/80 dark:text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Zero jargon. Mr. Guy’s got you.</p>
+                <p className="text-blue-700/80 dark:text-blue-200/70 text-sm mt-1 font-medium">5 min a day. Plain English. Mr. Guy’s got you.</p>
               </div>
               <div className="shrink-0 text-center hidden sm:block">
                 <lvl.Icon className="h-7 w-7 text-blue-600 dark:text-blue-300 mx-auto" />

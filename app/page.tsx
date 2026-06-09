@@ -57,7 +57,7 @@ function Tile({ code, color }: { code: string; color: string }) {
 const FEATURES = [
   { code: 'XP',  color: '#ffd23f', title: 'Learn the Basics',     desc: 'Bite-sized lessons that take you from clueless to confident. Earn XP, keep your streak, level up.', badge: 'Start here' },
   { code: '100K',color: '#3ef08f', title: '$100K Challenge',      desc: 'Practice with $100,000 in virtual cash. Real stocks, real prices, zero real risk.', badge: 'Free to play' },
-  { code: 'AI',  color: '#ff7a59', title: 'Ask Mr. Guy',          desc: 'Ask anything about any stock and get a straight, plain-English answer — never a wall of jargon.' },
+  { code: 'AI',  color: '#ff7a59', title: 'Ask Mr. Guy',          desc: 'Ask anything about any stock and get a straight, plain-English answer — never a wall of confusing terms.' },
   { code: 'A-Z', color: '#2f9bff', title: 'Investing Dictionary', desc: 'P/E ratio, market cap, short squeeze — every confusing term explained like you are a person.' },
   { code: 'P/E', color: '#c084fc', title: 'Research a Stock',     desc: 'When you are ready to go deeper: the real numbers, news, and charts for any company.' },
   { code: 'S&P', color: '#f472b6', title: 'Markets & Earnings',   desc: 'See what is moving today and which companies report next — without the endless doom-scroll.' },
@@ -99,7 +99,7 @@ export default function LandingPage() {
               <span className={`inline-block bg-[#ffd23f] px-2 ${sticker}`}>game.</span>
             </h1>
             <p className="font-mono text-[15px] leading-relaxed mt-7 mb-8 max-w-md font-bold">
-              Bite-sized lessons, a $100K practice account, and Mr. Guy to explain anything in plain English. No finance degree. No jargon. No real risk.
+              Bite-sized lessons, a $100K practice account, and Mr. Guy to explain anything in plain English. No finance degree. No confusing terms. No real risk.
             </p>
             <div className="flex flex-wrap gap-4">
               <Btn href="/register" size="lg">Start free</Btn>

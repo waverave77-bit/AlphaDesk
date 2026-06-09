@@ -101,13 +101,15 @@ export default function TopNav() {
       <header className={cn(
         'h-16 flex items-center px-4 md:px-8 gap-0 flex-shrink-0 sticky top-0 z-40 transition-colors',
         isDark
-          ? 'bg-gray-900 border-b border-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
-          : 'bg-white border-b border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
+          ? 'bg-gray-900 border-b-2 border-gray-800'
+          : 'bg-white border-b-[3px] border-[#16130a]'
       )}>
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-2 mr-3 md:mr-8 shrink-0">
-          <MrGuyPixelHead px={3} />
-          <span className={cn('text-[15px] lg:text-base font-700 tracking-tight font-bold', isDark ? 'text-white' : 'text-slate-900')}>Mr. Guy</span>
+        <Link href="/dashboard" className="flex items-center gap-2.5 mr-3 md:mr-8 shrink-0">
+          <span className={cn('flex items-center justify-center p-1 bg-white border-2 border-[#16130a]', !isDark && 'shadow-[3px_3px_0_#16130a]')}>
+            <MrGuyPixelHead px={3} />
+          </span>
+          <span className={cn('font-display text-base lg:text-lg uppercase tracking-tight', isDark ? 'text-white' : 'text-[#16130a]')}>Mr. Guy</span>
         </Link>
 
         {/* Primary nav — desktop */}
@@ -119,10 +121,10 @@ export default function TopNav() {
                 key={href}
                 href={href}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                  'font-mono font-bold text-[13px] px-3 py-1.5 rounded-md transition-colors',
                   active
-                    ? 'bg-blue-600/10 text-blue-500'
-                    : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    ? isDark ? 'bg-blue-600 text-[#fff]' : 'bg-[#2563eb] text-[#fff] border-2 border-[#16130a]'
+                    : isDark ? 'text-gray-400 hover:text-white' : 'text-slate-600 hover:text-[#16130a]'
                 )}
               >
                 {label}
@@ -136,8 +138,10 @@ export default function TopNav() {
               onClick={() => setMoreOpen(!moreOpen)}
               onBlur={() => setTimeout(() => setMoreOpen(false), 150)}
               className={cn(
-                'flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                moreActive ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                'flex items-center gap-1 font-mono font-bold text-[13px] px-3 py-1.5 rounded-md transition-colors',
+                moreActive
+                  ? isDark ? 'bg-blue-600 text-[#fff]' : 'bg-[#2563eb] text-[#fff] border-2 border-[#16130a]'
+                  : isDark ? 'text-gray-400 hover:text-white' : 'text-slate-600 hover:text-[#16130a]'
               )}
             >
               Explore <ChevronDown className="h-3 w-3" />
@@ -187,7 +191,8 @@ export default function TopNav() {
           {session && !isPro && (
             <Link
               href="/upgrade"
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+              className={cn('hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono font-bold text-[13px] uppercase transition-all',
+                isDark ? 'bg-yellow-500/15 text-yellow-300 hover:bg-yellow-500/25' : 'bg-[#ffd23f] text-[#16130a] border-2 border-[#16130a] shadow-[2px_2px_0_#16130a] hover:-translate-y-0.5')}
             >
               <Zap className="h-3.5 w-3.5" />
               Upgrade
@@ -257,8 +262,10 @@ export default function TopNav() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      'flex items-center min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium transition-colors',
-                      active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      'flex items-center min-h-[44px] px-3 py-3 rounded-md font-mono font-bold text-sm transition-colors',
+                      active
+                        ? isDark ? 'bg-blue-600 text-[#fff]' : 'bg-[#2563eb] text-[#fff] border-2 border-[#16130a]'
+                        : isDark ? 'text-gray-400 hover:text-white' : 'text-slate-600 hover:text-[#16130a]'
                     )}
                   >
                     {label}
@@ -276,8 +283,10 @@ export default function TopNav() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      'flex items-center min-h-[44px] px-3 py-3 rounded-lg text-sm font-medium transition-colors',
-                      active ? 'bg-blue-600/10 text-blue-500' : isDark ? 'text-gray-400 hover:bg-gray-800 hover:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      'flex items-center min-h-[44px] px-3 py-3 rounded-md font-mono font-bold text-sm transition-colors',
+                      active
+                        ? isDark ? 'bg-blue-600 text-[#fff]' : 'bg-[#2563eb] text-[#fff] border-2 border-[#16130a]'
+                        : isDark ? 'text-gray-400 hover:text-white' : 'text-slate-600 hover:text-[#16130a]'
                     )}
                   >
                     {label}

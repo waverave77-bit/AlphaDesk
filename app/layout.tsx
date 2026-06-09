@@ -90,7 +90,7 @@ const faqSchema = {
     {
       '@type': 'Question',
       name: 'Who is Mr. Guy Invests designed for?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is designed for complete beginners who want to learn investing without the jargon. Everything — the lessons, the practice account, and the AI tutor — is written in plain English, no finance background needed.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Mr. Guy Invests is designed for complete beginners who want to learn investing without the confusing finance-speak. Everything — the lessons, the practice account, and the AI tutor — is written in plain English, no finance background needed.' },
     },
     {
       '@type': 'Question',
