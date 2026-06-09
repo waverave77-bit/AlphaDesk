@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Archivo_Black, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import SessionProvider from '@/components/SessionProvider'
@@ -12,6 +12,10 @@ import CookieNotice from '@/components/CookieNotice'
 import ActivityTracker from '@/components/ActivityTracker'
 
 const inter = Inter({ subsets: ['latin'] })
+// Brand display + mono (arcade-pixel identity). Exposed as CSS vars so any
+// page/component can opt in via the `font-display` / `font-mono` utilities.
+const archivoBlack = Archivo_Black({ subsets: ['latin'], weight: '400', variable: '--font-display' })
+const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? 'https://www.mrguyinvests.com'),
@@ -118,7 +122,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
-      <body className={`${inter.className} bg-slate-50 text-slate-900 antialiased`} suppressHydrationWarning>
+      <body className={`${inter.className} ${archivoBlack.variable} ${spaceMono.variable} bg-slate-50 text-slate-900 antialiased`} suppressHydrationWarning>
         <SessionProvider session={session}>
           <ThemeProvider>
             {children}
