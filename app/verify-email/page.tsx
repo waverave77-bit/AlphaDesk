@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
+import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 export default function VerifyEmailPage() {
   const params = useSearchParams()
@@ -36,7 +37,7 @@ export default function VerifyEmailPage() {
   return (
     <div className="min-h-screen flex items-start sm:items-center justify-center bg-gray-950 px-4 py-10 overflow-y-auto">
       <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-5 my-auto">
-        <span className="text-4xl">🧑‍💼</span>
+        <div className="flex justify-center"><MrGuyLogoSvg px={4} /></div>
 
         {status === 'loading' && (
           <>
@@ -48,7 +49,7 @@ export default function VerifyEmailPage() {
         {status === 'success' && (
           <>
             <CheckCircle className="h-10 w-10 text-green-400 mx-auto" />
-            <p className="text-white font-bold text-xl">Email verified! ✅</p>
+            <p className="text-white font-bold text-xl">Email verified!</p>
             <p className="text-gray-400 text-sm">Redirecting you to the dashboard…</p>
           </>
         )}

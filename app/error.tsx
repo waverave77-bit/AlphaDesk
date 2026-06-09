@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { AlertTriangle } from 'lucide-react'
 
 export default function GlobalError({
   error,
@@ -15,7 +16,7 @@ export default function GlobalError({
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center px-6 text-center">
-      <div className="mb-6 text-6xl select-none">😬</div>
+      <AlertTriangle className="h-14 w-14 text-yellow-500 mb-6" />
       <h1 className="text-3xl font-bold text-white mb-2">Something went wrong</h1>
       <p className="text-gray-400 text-sm max-w-sm mb-8">
         Mr. Guy tripped over a cable. We&apos;ve logged the error and will look into it.
