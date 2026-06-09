@@ -34,13 +34,11 @@ export const metadata: Metadata = {
     siteName: 'Mr. Guy Invests',
     title: 'Mr. Guy Invests — Learn Investing the Fun Way',
     description: 'Bite-sized lessons, a $100K practice account, and an AI tutor that explains any stock in plain English. Built for total beginners.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Mr. Guy Invests — Learn Investing the Fun Way' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mr. Guy Invests — Learn Investing the Fun Way',
     description: 'Bite-sized lessons, a $100K practice account, and an AI tutor that explains any stock in plain English. Built for total beginners.',
-    images: ['/og-image.png'],
   },
   robots: {
     index: true,
