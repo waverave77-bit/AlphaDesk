@@ -148,7 +148,7 @@ function DividendInfoCard({ ticker, price, dividendYield }: { ticker: string; pr
           <CardTitle className="text-xs text-gray-500 uppercase tracking-wider">Dividend Info</CardTitle>
           {data?.isAristocrat && (
             <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 font-medium">
-              👑 Dividend Aristocrat · 25+ yrs
+              Dividend Aristocrat · 25+ yrs
             </span>
           )}
         </div>

@@ -386,7 +386,7 @@ function GuestChatTrial() {
       {/* Limit reached CTA */}
       {limitReached && (
         <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-center space-y-3">
-          <p className="font-semibold text-slate-900">You've used your 3 free questions 🎉</p>
+          <p className="font-semibold text-slate-900">You've used your 3 free questions</p>
           <p className="text-sm text-slate-500">Sign up free to get unlimited Mr. Guy chat, stock research, and more.</p>
           <div className="flex gap-3 justify-center">
             <Link href="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors">
@@ -516,7 +516,7 @@ function ChatPage() {
       if (res.status === 403) {
         const data = await res.json().catch(() => ({}))
         if (data.emailUnverified) {
-          setMessages([...updated, { role: 'assistant', content: '📧 Please verify your email first — check your inbox for the verification link, then come back and try again!' }])
+          setMessages([...updated, { role: 'assistant', content: 'Please verify your email first — check your inbox for the verification link, then come back and try again!' }])
           setLoading(false)
           return
         }
@@ -700,7 +700,7 @@ function ChatPage() {
             {limitReached ? (
               <div className="rounded-xl bg-yellow-500/5 border border-yellow-500/20 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div>
-                  <p className="font-semibold text-sm text-yellow-300">Mr. Guy's done talking for today 😅</p>
+                  <p className="font-semibold text-sm text-yellow-300">Mr. Guy's done talking for today</p>
                   <p className="text-sm text-gray-400 mt-0.5">You've used your 3 free chats. Upgrade for unlimited conversations.</p>
                 </div>
                 <Link

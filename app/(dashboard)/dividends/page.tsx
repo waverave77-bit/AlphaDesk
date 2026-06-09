@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Search, DollarSign, TrendingUp, Calendar, Award, Info, ChevronDown, ChevronUp } from 'lucide-react'
+import { Search, DollarSign, TrendingUp, Calendar, Award, Info, ChevronDown, ChevronUp, Crown, Lightbulb, Pin, AlertTriangle, Banknote } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
@@ -50,7 +50,7 @@ function DividendExplainer() {
         className="w-full flex items-center justify-between px-4 py-3 text-left"
       >
         <div className="flex items-center gap-2">
-          <span className="text-lg">💡</span>
+          <Lightbulb className="h-5 w-5 text-blue-400 shrink-0" />
           <span className="text-sm font-semibold text-blue-300">New to dividends? Start here</span>
         </div>
         {open ? <ChevronUp className="h-4 w-4 text-blue-400" /> : <ChevronDown className="h-4 w-4 text-blue-400" />}
@@ -76,7 +76,7 @@ function DividendExplainer() {
             ))}
           </div>
           <div className="bg-gray-900 rounded-lg p-3 flex gap-3 items-start">
-            <span className="text-xl shrink-0">📌</span>
+            <Pin className="h-5 w-5 text-gray-400 shrink-0 mt-0.5" />
             <p className="text-xs text-gray-400 leading-relaxed">
               <strong className="text-white">Quick tip:</strong> A Dividend Aristocrat is a company that has raised its dividend every single year for 25+ years in a row. These are considered very reliable dividend payers — think Coca-Cola, P&G, or Johnson & Johnson.
             </p>
@@ -334,7 +334,7 @@ function Calculator() {
                   <CardContent className="px-4 pb-4 space-y-4">
                     {divData.exDividendDate ? (
                       <div className="p-3 rounded-lg bg-orange-500/5 border border-orange-500/20">
-                        <p className="text-xs font-semibold text-orange-300 mb-0.5">⚠️ Ex-Dividend Date — {divData.exDividendDate}</p>
+                        <p className="text-xs font-semibold text-orange-300 mb-0.5">Ex-Dividend Date — {divData.exDividendDate}</p>
                         <p className="text-xs text-gray-400 leading-relaxed">
                           <strong className="text-white">This is the deadline.</strong> You must own shares before this date to receive the upcoming dividend. Buy on or after this date and you&apos;ll miss it.
                         </p>
@@ -346,7 +346,7 @@ function Calculator() {
                     )}
                     {divData.paymentDate ? (
                       <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
-                        <p className="text-xs font-semibold text-green-300 mb-0.5">💰 Payment Date — {divData.paymentDate}</p>
+                        <p className="text-xs font-semibold text-green-300 mb-0.5">Payment Date — {divData.paymentDate}</p>
                         <p className="text-xs text-gray-400 leading-relaxed">
                           This is when the cash actually lands in your brokerage account. Usually a few weeks after the ex-dividend date.
                         </p>
@@ -419,12 +419,12 @@ function TopStocks() {
       {/* What to look for */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
-          { label: 'Yield', tip: 'Higher yield = more income per dollar invested. But very high yields (8%+) can be a warning sign — the company may be struggling.', icon: '📈' },
-          { label: 'Annual Dividend', tip: 'The total cash paid per share per year. Multiply by how many shares you\'d own to see your income.', icon: '💵' },
-          { label: '👑 Aristocrat', tip: 'A Dividend Aristocrat has raised its dividend every year for 25+ years. These are the gold standard of reliable income stocks.', icon: '🏆' },
+          { label: 'Yield', tip: 'Higher yield = more income per dollar invested. But very high yields (8%+) can be a warning sign — the company may be struggling.', Icon: TrendingUp },
+          { label: 'Annual Dividend', tip: 'The total cash paid per share per year. Multiply by how many shares you\'d own to see your income.', Icon: Banknote },
+          { label: 'Aristocrat', tip: 'A Dividend Aristocrat has raised its dividend every year for 25+ years. These are the gold standard of reliable income stocks.', Icon: Crown },
         ].map(item => (
           <div key={item.label} className="flex items-start gap-2 p-3 rounded-lg bg-gray-900 border border-gray-800">
-            <span className="text-base shrink-0">{item.icon}</span>
+            <item.Icon className="h-4 w-4 text-gray-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-semibold text-white">{item.label}</p>
               <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{item.tip}</p>
@@ -476,7 +476,7 @@ function TopStocks() {
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-white">{s.ticker}</span>
                           {s.isAristocrat && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400">👑 25+ yrs</span>
+                            <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400"><Crown className="h-2.5 w-2.5" /> 25+ yrs</span>
                           )}
                         </div>
                         <p className="text-xs text-gray-500 truncate max-w-[160px]">{s.companyName}</p>
@@ -491,7 +491,7 @@ function TopStocks() {
                       {pct(s.dividendYield)}
                     </p>
                     {s.dividendYield >= 0.08 && (
-                      <p className="text-[10px] text-orange-400">⚠️ Very high</p>
+                      <p className="text-[10px] text-orange-400">Very high</p>
                     )}
                   </div>
                   <div className="text-right">
@@ -545,14 +545,14 @@ function DividendCalendar() {
         <p className="text-sm font-semibold text-white">How to use this calendar</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex gap-2 items-start">
-            <span className="text-orange-400 shrink-0 mt-0.5">⚠️</span>
+            <AlertTriangle className="h-4 w-4 text-orange-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-semibold text-orange-300">Ex-Dividend Date (the deadline)</p>
               <p className="text-xs text-gray-400 leading-relaxed">You must OWN the stock before this date. If you buy on or after it, you&apos;ll miss the next payment.</p>
             </div>
           </div>
           <div className="flex gap-2 items-start">
-            <span className="text-green-400 shrink-0 mt-0.5">💰</span>
+            <Banknote className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-semibold text-green-300">Pay Date (when you get paid)</p>
               <p className="text-xs text-gray-400 leading-relaxed">The cash hits your brokerage account on this date — usually a few weeks after the ex-dividend date.</p>
@@ -589,8 +589,8 @@ function DividendCalendar() {
         <>
           <div className="hidden md:grid grid-cols-5 text-xs text-gray-500 px-4 py-2">
             <span className="col-span-2">Company</span>
-            <span>⚠️ Ex-Date (deadline)</span>
-            <span>💰 Pay Date</span>
+            <span>Ex-Date (deadline)</span>
+            <span>Pay Date</span>
             <span className="text-right">Div / Share</span>
           </div>
           {filtered.map(e => (
