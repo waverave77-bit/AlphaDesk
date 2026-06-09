@@ -4,10 +4,9 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import {
-  Search, Star, Calendar, FlaskConical,
-  Activity, Building2, Users, BookOpen, TrendingUp,
-  TrendingDown, Sparkles, RefreshCw, ChevronRight,
-  CheckCircle2, Crown, AlertTriangle, Loader2, Eye, EyeOff, Flame,
+  Search, Star, Calendar, Activity, TrendingUp, TrendingDown,
+  Sparkles, ChevronRight, CheckCircle2, Crown, AlertTriangle,
+  Loader2, Eye, EyeOff, Flame,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -77,15 +76,13 @@ function IndexCard({ label, price, change, changePercent }: {
   )
 }
 
+// "Go Deeper" research layer — secondary tools for when a beginner graduates.
 const QUICK_LINKS = [
-  { href: '/research',        label: 'Research',      icon: Search,       desc: 'Deep-dive any stock' },
-  { href: '/watchlist',       label: 'Watchlist',     icon: Star,         desc: 'Stocks you\'re tracking' },
-  { href: '/earnings',        label: 'Earnings',      icon: Calendar,     desc: 'Upcoming earnings dates' },
-  { href: '/hedgefunds',      label: 'Hedge Funds',   icon: Building2,    desc: 'Where big money is going' },
-  { href: '/insiders',        label: 'Smart Money',   icon: Users,        desc: 'Corporate insider & fund trades' },
-  { href: '/markets',         label: 'Markets',       icon: Activity,     desc: 'Market overview' },
-  { href: '/quant',           label: 'Quant',         icon: FlaskConical, desc: 'Screen stocks systematically' },
-  { href: '/learn',           label: 'Dictionary',    icon: BookOpen,     desc: 'Plain-English finance terms' },
+  { href: '/research',  label: 'Research a Stock', icon: Search,     desc: 'Look up any company' },
+  { href: '/markets',   label: 'Markets',          icon: Activity,   desc: 'Today’s overview' },
+  { href: '/earnings',  label: 'Earnings',         icon: Calendar,   desc: 'Upcoming report dates' },
+  { href: '/watchlist', label: 'Watchlist',        icon: Star,       desc: 'Stocks you’re tracking' },
+  { href: '/dividends', label: 'Dividends',        icon: TrendingUp, desc: 'Who pays you to hold' },
 ]
 
 const ADMIN_LINKS = [
@@ -430,6 +427,51 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ── Jump back in — the fun, action-led hub ─────────────────── */}
+      <div className="grid sm:grid-cols-2 gap-4">
+        {/* Today's lesson — primary */}
+        <Link href="/learn" className="group rounded-3xl p-6 border-2 border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none bg-[#2563eb] text-[#fff] flex flex-col min-h-[150px] transition-transform hover:-translate-y-0.5">
+          <div className="flex items-center justify-between">
+            <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#ffd23f] border-2 border-[#16130a] font-mono font-bold text-[#16130a]">XP</span>
+            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </div>
+          <div className="mt-auto pt-6">
+            <p className="font-display uppercase text-xl leading-tight">Today&apos;s lesson</p>
+            <p className="font-mono text-xs mt-1.5 opacity-90">Bite-sized. Five minutes a day.</p>
+          </div>
+        </Link>
+        {/* $100K Challenge — primary */}
+        <Link href="/trading-simulator" className="group rounded-3xl p-6 border-2 border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none bg-[#ffd23f] text-[#16130a] flex flex-col min-h-[150px] transition-transform hover:-translate-y-0.5">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#fff] border-2 border-[#16130a]"><MrGuyLogoSvg px={2} /></span>
+            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </div>
+          <div className="mt-auto pt-6">
+            <p className="font-display uppercase text-xl leading-tight">$100K Challenge</p>
+            <p className="font-mono text-xs mt-1.5 opacity-80">Trade real stocks with fake money.</p>
+          </div>
+        </Link>
+      </div>
+      {/* secondary launchers */}
+      <div className="grid sm:grid-cols-2 gap-4 -mt-4">
+        <Link href="/chat" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:shadow-none bg-white flex items-center gap-4 transition-transform hover:-translate-y-0.5">
+          <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#ff7a59] border-2 border-[#16130a] font-mono font-bold text-[#16130a] shrink-0">AI</span>
+          <div className="flex-1 min-w-0">
+            <p className="font-display uppercase text-base text-slate-900">Ask Mr. Guy</p>
+            <p className="font-mono text-xs text-slate-500">Ask anything about a stock or term.</p>
+          </div>
+          <ChevronRight className="h-5 w-5 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+        </Link>
+        <Link href="/dictionary" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:shadow-none bg-white flex items-center gap-4 transition-transform hover:-translate-y-0.5">
+          <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#2f9bff] border-2 border-[#16130a] font-mono font-bold text-[#16130a] shrink-0">A-Z</span>
+          <div className="flex-1 min-w-0">
+            <p className="font-display uppercase text-base text-slate-900">Dictionary</p>
+            <p className="font-mono text-xs text-slate-500">Look up any confusing word.</p>
+          </div>
+          <ChevronRight className="h-5 w-5 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+        </Link>
+      </div>
+
       {/* ── AI Market Brief ───────────────────────────────────────── */}
       <Card className="border-slate-200 bg-white">
         <CardContent className="p-4 sm:p-6">
@@ -569,30 +611,6 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* ── Mr. Guy Chat ─────────────────────────────────────────── */}
-        <Link href="/chat" className="mt-3 block">
-        <Card className="border-slate-200 bg-white hover:bg-slate-50 hover:border-blue-300 transition-all cursor-pointer group">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
-                <MrGuyLogoSvg px={4} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-base font-bold text-slate-900">Ask Mr. Guy</p>
-                <p className="text-sm text-slate-500 mt-0.5">Your pixel-art finance buddy — ask anything about stocks, markets, or investing.</p>
-              </div>
-              <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all shrink-0" />
-            </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {['What even is a stock?', 'Why does the market crash?', 'How do I evaluate NVDA?', 'What is the VIX?'].map(q => (
-                <span key={q} className="text-xs bg-slate-100 border border-slate-200 text-slate-500 rounded-lg px-2.5 py-1">
-                  {q}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-        </Link>
       </div>
 
       <p className="text-xs text-slate-400 text-center">
