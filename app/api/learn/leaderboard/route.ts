@@ -14,7 +14,7 @@ export async function GET() {
     where: { learnXP: { gt: 0 } },
     orderBy: { learnXP: 'desc' },
     take: 10,
-    select: { id: true, username: true, name: true, learnXP: true },
+    select: { id: true, username: true, name: true, learnXP: true, isPro: true },
   })
 
   const rows = top.map((u, i) => ({
@@ -23,6 +23,7 @@ export async function GET() {
     xp: u.learnXP,
     level: levelFromXP(u.learnXP).level,
     isMe: !!session?.user?.id && u.id === session.user.id,
+    isPro: u.isPro ?? false,
   }))
 
   return NextResponse.json({ leaderboard: rows })

@@ -39,6 +39,7 @@ async function priceOf(t: string): Promise<{ price: number; name: string } | nul
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
 interface LbEntry { rank: number; name: string; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean; isPro?: boolean }
+interface CommunityTrade { ticker: string; shares: number; price: number; type: 'BUY' | 'SELL'; executedAt: string; userName: string; isPro: boolean; isMe: boolean }
 type BuyTarget = { ticker: string; name: string; price: number; blurb?: string }
 
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
@@ -105,6 +106,7 @@ export default function GamePage() {
   const [portfolio, setPortfolio] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [leaderboard, setLeaderboard] = useState<LbEntry[]>([])
+  const [communityTrades, setCommunityTrades] = useState<CommunityTrade[]>([])
   const [prices, setPrices] = useState<Record<string, number>>({})
   const [portfolios, setPortfolios] = useState<{ id: string; name: string }[]>([])
   const [activePid, setActivePid] = useState<string | null>(null)
@@ -134,6 +136,7 @@ export default function GamePage() {
     setLoading(false)
   }
   const fetchLeaderboard = async () => { try { const d = await fetch('/api/virtual/leaderboard?mode=alltime').then((r) => r.json()); setLeaderboard(d.board || []) } catch {} }
+  const fetchCommunityTrades = async () => { try { const d = await fetch('/api/virtual/community-trades').then((r) => r.json()); setCommunityTrades(d.feed || []) } catch {} }
 
   const switchPortfolio = (id: string) => { if (id === activePid) return; setActivePid(id); fetchPortfolio(id) }
   const createPortfolio = async () => {
@@ -175,7 +178,7 @@ export default function GamePage() {
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { setLoading(false); return }
-    fetchPortfolio(); fetchLeaderboard()
+    fetchPortfolio(); fetchLeaderboard(); fetchCommunityTrades()
   }, [status])
   // Preview = first 2 of each theme; the full list loads when its chip is active.
   useEffect(() => { THEMES.flatMap((t) => t.tickers.slice(0, 2)).forEach(loadPrice) }, [loadPrice])
@@ -202,7 +205,7 @@ export default function GamePage() {
       const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: buyTarget.ticker, shares, type: 'BUY', portfolioId: activePid }) })
       const d = await r.json(); if (!r.ok) throw new Error(d.error)
       toast({ title: 'Boom — you’re an owner!', description: `You put ${formatCurrency(buyAmount)} into ${buyTarget.name}.` })
-      setBuyTarget(null); await fetchPortfolio(); fetchLeaderboard()
+      setBuyTarget(null); await fetchPortfolio(); fetchLeaderboard(); fetchCommunityTrades()
     } catch (e: any) { toast({ title: 'Couldn’t buy', description: e.message, variant: 'destructive' }) }
     setBuying(false)
   }
@@ -218,7 +221,7 @@ export default function GamePage() {
       const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: sellTarget.ticker, shares, type: 'SELL', portfolioId: activePid }) })
       const d = await r.json(); if (!r.ok) throw new Error(d.error)
       toast({ title: 'Sold!', description: full ? `You sold all your ${sellTarget.companyName || sellTarget.ticker}.` : `You sold ${formatCurrency(sellAmount)} of ${sellTarget.companyName || sellTarget.ticker}.` })
-      setSellTarget(null); await fetchPortfolio(); fetchLeaderboard()
+      setSellTarget(null); await fetchPortfolio(); fetchLeaderboard(); fetchCommunityTrades()
     } catch (e: any) { toast({ title: 'Couldn’t sell', description: e.message, variant: 'destructive' }) }
     setSelling(null)
   }
@@ -479,6 +482,45 @@ export default function GamePage() {
               )}
             </div>
           </div>
+
+          {/* ── Community Activity feed ── */}
+          {communityTrades.length > 0 && (
+            <Section title="What others are trading">
+              <div className="space-y-2">
+                {communityTrades.map((t, i) => {
+                  const isBuy = t.type === 'BUY'
+                  const companyName = COMPANIES[t.ticker]?.name || t.ticker
+                  const timeAgo = (() => {
+                    const diff = Date.now() - new Date(t.executedAt).getTime()
+                    const mins = Math.floor(diff / 60_000)
+                    if (mins < 2) return 'just now'
+                    if (mins < 60) return `${mins}m ago`
+                    const hrs = Math.floor(mins / 60)
+                    if (hrs < 24) return `${hrs}h ago`
+                    return `${Math.floor(hrs / 24)}d ago`
+                  })()
+                  return (
+                    <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-800/40">
+                      <span className={`shrink-0 text-xs font-black uppercase px-2 py-1 rounded-lg ${isBuy ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400'}`}>
+                        {isBuy ? 'BUY' : 'SELL'}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-200 truncate">
+                          <span className={t.isMe ? 'text-blue-400' : ''}>{t.isMe ? 'You' : t.userName}</span>
+                          {t.isPro && !t.isMe && <span className="ml-1 font-mono font-bold text-[9px] uppercase tracking-wide bg-[#ffd23f] text-[#16130a] border border-[#16130a] rounded px-1 py-px leading-none">Pro</span>}
+                          <span className="text-gray-400 font-normal"> {isBuy ? 'bought' : 'sold'} </span>
+                          <span className="text-white">{companyName}</span>
+                          <span className="text-gray-400 font-normal"> · {t.ticker}</span>
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">{formatCurrency(t.shares * t.price)} · {timeAgo}</p>
+                      </div>
+                      <CompanyLogo ticker={t.ticker} size={32} name={companyName} />
+                    </div>
+                  )
+                })}
+              </div>
+            </Section>
+          )}
 
           <p className="text-[11px] text-gray-600 text-center px-4">Virtual money only — not real investing. Prices may be delayed up to 15 minutes.</p>
         </>

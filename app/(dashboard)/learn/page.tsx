@@ -17,7 +17,7 @@ type Progress = {
   streak: number
   longestStreak: number
 }
-type LbRow = { rank: number; name: string; xp: number; level: number; isMe: boolean }
+type LbRow = { rank: number; name: string; xp: number; level: number; isMe: boolean; isPro?: boolean }
 
 const HEX: Record<string, { front: string; edge: string; glow: string }> = {
   blue:    { front: '#3b82f6', edge: '#1d4ed8', glow: 'rgba(59,130,246,.55)' },
@@ -331,7 +331,10 @@ function Leaderboard({ rows }: { rows: LbRow[] }) {
           <div key={r.rank} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl ${r.isMe ? 'bg-blue-500/15 border border-blue-500/30' : ''}`}>
             <span className={`w-5 text-center text-sm font-black ${medalColor[r.rank - 1] ?? 'text-gray-500'}`}>{r.rank}</span>
             <RankIcon className="h-4 w-4 text-gray-400 shrink-0" />
-            <span className={`flex-1 truncate text-sm font-semibold ${r.isMe ? 'text-blue-600 dark:text-blue-300' : 'text-gray-200'}`}>{r.name}{r.isMe && ' (you)'}</span>
+            <span className={`flex items-center gap-1.5 flex-1 min-w-0 text-sm font-semibold ${r.isMe ? 'text-blue-600 dark:text-blue-300' : 'text-gray-200'}`}>
+              <span className="truncate">{r.name}{r.isMe && ' (you)'}</span>
+              {r.isPro && <span className="shrink-0 font-mono font-bold text-[9px] uppercase tracking-wide bg-[#ffd23f] text-[#16130a] border border-[#16130a] rounded px-1 py-px leading-none">Pro</span>}
+            </span>
             <span className="text-sm font-black text-yellow-600 dark:text-yellow-400">{r.xp}</span>
           </div>
         )
