@@ -7,6 +7,7 @@ import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
 import { Loader2, Search, X, Trophy, ChevronRight, Shield, Sparkles, Zap, Plus, Pencil, RotateCcw } from 'lucide-react'
 import { COMPANIES, THEMES } from '@/lib/sim-companies'
+import { useMarketStatus } from '@/hooks/use-market-status'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
 const MrGuyHead = dynamic(() => import('@/components/MrGuyHead'), { ssr: false })
@@ -49,6 +50,42 @@ function StatTile({ label, value, cls }: { label: string; value: string; cls: st
   )
 }
 
+function MarketPill({ market }: { market: { status: string; label: string; dayName: string } }) {
+  const tone: Record<string, { box: string; dot: string }> = {
+    open:    { box: 'bg-green-500/10 border-green-500/30 text-green-400',   dot: 'bg-green-400' },
+    pre:     { box: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400', dot: 'bg-yellow-400' },
+    after:   { box: 'bg-blue-500/10 border-blue-500/30 text-blue-400',     dot: 'bg-blue-400' },
+    closed:  { box: 'bg-gray-500/10 border-gray-600 text-gray-400',         dot: 'bg-gray-500' },
+    weekend: { box: 'bg-gray-500/10 border-gray-600 text-gray-400',         dot: 'bg-gray-500' },
+    holiday: { box: 'bg-purple-500/10 border-purple-500/30 text-purple-400', dot: 'bg-purple-400' },
+  }
+  const t = tone[market.status] ?? tone.closed
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-mono font-bold ${t.box}`} title={market.dayName}>
+      <span className={`h-2 w-2 rounded-full ${t.dot} ${market.status === 'open' ? 'animate-pulse' : ''}`} />
+      {market.status === 'open' ? 'Market open' : market.label === 'Closed' ? 'Market closed' : market.label}
+    </span>
+  )
+}
+
+function ClosedNote({ market, verb }: { market: { status: string; label: string } | null; verb: 'buy' | 'sell' }) {
+  if (!market || market.status === 'open') return null
+  const reason =
+    market.status === 'weekend' ? 'Markets are closed for the weekend.'
+    : market.status === 'holiday' ? `Markets are closed — ${market.label.replace('Closed · ', '')}.`
+    : market.status === 'pre' ? 'Markets aren’t open yet (pre-market).'
+    : market.status === 'after' ? 'Markets have closed for the day (after-hours).'
+    : 'Markets are closed right now.'
+  return (
+    <div className="mb-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-3 py-2.5">
+      <p className="text-xs text-yellow-300 leading-relaxed">
+        <span className="font-bold">{reason}</span>{' '}
+        Your practice {verb} still goes through at the last price — a real broker would just queue it until the next open.
+      </p>
+    </div>
+  )
+}
+
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-5">
@@ -64,6 +101,7 @@ function Section({ title, action, children }: { title: string; action?: React.Re
 export default function GamePage() {
   const { data: session, status } = useSession()
   const { toast } = useToast()
+  const market = useMarketStatus()
   const [portfolio, setPortfolio] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [leaderboard, setLeaderboard] = useState<LbEntry[]>([])
@@ -268,9 +306,12 @@ export default function GamePage() {
   return (
     <div className="max-w-6xl mx-auto space-y-5 pb-20">
       <SimIntro />
-      <h1 className="text-2xl font-black text-white flex items-center gap-2">
-        <Trophy className="h-6 w-6 text-yellow-500 dark:text-yellow-400" /> $100K Challenge
-      </h1>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <h1 className="text-2xl font-black text-white flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-yellow-500 dark:text-yellow-400" /> $100K Challenge
+        </h1>
+        {market && <MarketPill market={market} />}
+      </div>
 
       {!session && status !== 'loading' ? (
         <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-10 text-center max-w-xl mx-auto">
@@ -462,6 +503,7 @@ export default function GamePage() {
             )}
             {/* Price chart */}
             <MiniChart ticker={buyTarget.ticker} />
+            <ClosedNote market={market} verb="buy" />
             <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
             <div className="grid grid-cols-4 gap-2 mb-2.5">
               {BUY_AMOUNTS.map((a) => (
@@ -506,6 +548,7 @@ export default function GamePage() {
               <span className="text-gray-500">You own</span>
               <span className="font-bold text-white">{sellTarget.shares.toFixed(3)} shares · {formatCurrency(sellTarget.currentValue)} <span className={gainCls(sellTarget.gainLoss)}>({sellTarget.gainLoss >= 0 ? '+' : ''}{sellTarget.gainLossPct.toFixed(1)}%)</span></span>
             </div>
+            <ClosedNote market={market} verb="sell" />
             <p className="text-sm text-gray-400 mb-2">How much do you want to sell?</p>
             <div className="grid grid-cols-4 gap-2 mb-2.5">
               {SELL_PCTS.map(([pct, label]) => {

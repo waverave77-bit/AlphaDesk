@@ -61,15 +61,18 @@ async function callGrok(systemPrompt: string, userPrompt: string): Promise<strin
 export async function GET() {
   const { date, slot, id } = getSlot()
 
-  // 1. Serve from DB cache — same text for every user this slot
+  // Market status is ALWAYS computed live — never served from the cache. The brief
+  // TEXT is cached per slot (morning/midday), but the open/closed status changes
+  // through the day, so reusing the cached status made the dashboard show "Closed"
+  // after the market had already opened.
+  const { status, label, dayName } = getMarketStatus()
+
+  // 1. Serve cached TEXT (same recap for every user this slot) + live status
   const cached = await prisma.marketBriefCache.findUnique({ where: { id } }).catch(() => null)
   if (cached) {
     const payload = JSON.parse(cached.data)
-    return NextResponse.json({ text: payload.text, status: payload.status, fromCache: true })
+    return NextResponse.json({ text: payload.text, status: label, fromCache: true })
   }
-
-  // 2. Cache miss — generate for this slot
-  const { status, label, dayName } = getMarketStatus()
   const headlines = await fetchMarketNews()
 
   const newsBlock = headlines.length > 0

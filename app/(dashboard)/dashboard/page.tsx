@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
 import MarketCharacter from '@/components/MarketCharacter'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
+import { useMarketStatus } from '@/hooks/use-market-status'
 
 const HolidayAtmosphere = dynamic(
   () => import('@/components/HolidayAtmosphere').then(m => ({ default: m.HolidayAtmosphere })),
@@ -96,6 +97,7 @@ export default function DashboardPage() {
   const { data: session, update: updateSession } = useSession()
   const isPreview = !!(session?.user as any)?.isDemo
   const isAdmin = session?.user?.email === 'waverave77@gmail.com'
+  const market = useMarketStatus() // live, timezone-correct market status (not the cached brief)
 
   // Pro upgrade banner — shown when redirected back from Stripe with ?upgraded=1
   const [showVerifiedBanner, setShowVerifiedBanner] = useState(false)
@@ -378,8 +380,8 @@ export default function DashboardPage() {
 
       {/* ── Holiday atmosphere (background effects) ─────────── */}
       {(() => {
-        const holidayName = !panicMode && brief?.status?.startsWith('Closed ·')
-          ? brief.status.replace('Closed · ', '')
+        const holidayName = !panicMode && market?.status === 'holiday'
+          ? market.label.replace('Closed · ', '')
           : null
         return holidayName ? <HolidayAtmosphere holiday={holidayName} /> : null
       })()}
@@ -389,16 +391,16 @@ export default function DashboardPage() {
         changePercent={panicMode ? -99 : (fearGreed?.spChange ?? indices[0]?.changePercent ?? 0)}
         marketState={(() => {
           if (panicMode) return 'bear'
-          const status = brief?.status ?? ''
-          if (status === 'Weekend' || status.startsWith('Closed ·')) return 'closed'
-          if (status !== 'Open') return 'neutral'
+          const s = market?.status
+          if (s === 'weekend' || s === 'holiday') return 'closed'
+          if (s !== 'open') return 'neutral'
           const spx = indices[0]?.changePercent ?? fearGreed?.spChange ?? 0
           if (spx >= 0.5)  return 'bull'
           if (spx <= -0.5) return 'bear'
           return 'neutral'
         })()}
-        holidayPreview={!panicMode && brief?.status?.startsWith('Closed ·')
-          ? brief.status.replace('Closed · ', '')
+        holidayPreview={!panicMode && market?.status === 'holiday'
+          ? market.label.replace('Closed · ', '')
           : undefined}
       />
 
@@ -411,7 +413,7 @@ export default function DashboardPage() {
           <p className="text-slate-500 mt-1 text-sm">{today}</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          {brief && <MarketStatusBadge status={brief.status} />}
+          {market && <MarketStatusBadge status={market.label} />}
           <button
             onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
             className={cn(
