@@ -44,6 +44,9 @@ export async function POST(req: Request) {
       payment_method_types: ['card'],
       customer_email: session.user.email,
       line_items: [{ price, quantity: 1 }],
+      // Lets you enter a promo code at checkout — also used for $0 end-to-end testing
+      // via a 100%-off coupon, and for launch discounts.
+      allow_promotion_codes: true,
       success_url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.NEXTAUTH_URL}/upgrade?cancelled=1`,
       metadata: {
