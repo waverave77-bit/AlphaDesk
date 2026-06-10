@@ -228,7 +228,7 @@ export default function LessonPlayer() {
                     </div>
                   )}
                   {ex.term.tip && (
-                    <div className="flex items-start gap-2 text-sm text-yellow-300/90 bg-yellow-500/5 rounded-2xl px-3 py-2">
+                    <div className="flex items-start gap-2 text-sm text-yellow-800 dark:text-yellow-300/90 bg-yellow-500/5 rounded-2xl px-3 py-2">
                       <Lightbulb className="h-4 w-4 mt-0.5 shrink-0" /><span>{ex.term.tip}</span>
                     </div>
                   )}

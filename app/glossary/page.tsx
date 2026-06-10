@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TERMS, CATEGORIES, termToSlug, type Category } from '@/lib/glossary-terms'
 import { BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, ChevronRight, Search } from 'lucide-react'
+import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 export const metadata: Metadata = {
   title: 'Investing Dictionary, Every Stock Market Term Explained Simply | Mr. Guy Invests',
@@ -38,19 +39,17 @@ export default function GlossaryPage() {
     <div className="min-h-screen bg-gray-950 text-white">
 
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto border-b border-gray-900">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-xl font-bold">Mr. Guy Invests</span>
+      <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto border-b-[3px] border-[#16130a]">
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="bg-white border-2 border-[#16130a] p-1 shadow-[3px_3px_0_#16130a] flex"><MrGuyLogoSvg px={2} /></span>
+          <span className="font-display text-lg uppercase tracking-tight">Mr. Guy Invests</span>
         </Link>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-4 py-2">
-            Sign In
+          <Link href="/login" className="font-mono font-bold text-sm uppercase hover:opacity-70 px-2 py-2">
+            Sign in
           </Link>
-          <Link href="/register" className="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Get Started Free
+          <Link href="/register" className="font-mono font-bold text-sm uppercase bg-[#2563eb] text-[#fff] border-2 border-[#16130a] shadow-[3px_3px_0_#16130a] px-4 py-2 hover:-translate-y-0.5 transition-transform">
+            Get started
           </Link>
         </div>
       </nav>
@@ -132,10 +131,8 @@ export default function GlossaryPage() {
       <footer className="border-t border-gray-800 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
-              <TrendingUp className="h-3 w-3 text-white" />
-            </div>
-            <span className="font-semibold text-sm">Mr. Guy Invests</span>
+            <MrGuyLogoSvg px={2} />
+            <span className="font-mono font-bold text-sm uppercase">Mr. Guy Invests</span>
           </Link>
           <p className="text-xs text-gray-600">For informational purposes only. Not financial advice.</p>
         </div>

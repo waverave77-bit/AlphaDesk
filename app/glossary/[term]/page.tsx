@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TERMS, termToSlug, type Category } from '@/lib/glossary-terms'
 import { BookOpen, Lightbulb, TrendingUp, BarChart2, Shield, ChevronRight, ArrowLeft } from 'lucide-react'
+import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 const CATEGORY_ICONS: Record<Category, React.ReactNode> = {
   Basics:            <BookOpen className="h-3.5 w-3.5" />,
@@ -69,19 +70,17 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
     <div className="min-h-screen bg-gray-950 text-white">
 
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto border-b border-gray-900">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-xl font-bold">Mr. Guy Invests</span>
+      <nav className="flex items-center justify-between px-6 py-4 max-w-4xl mx-auto border-b-[3px] border-[#16130a]">
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="bg-white border-2 border-[#16130a] p-1 shadow-[3px_3px_0_#16130a] flex"><MrGuyLogoSvg px={2} /></span>
+          <span className="font-display text-lg uppercase tracking-tight">Mr. Guy Invests</span>
         </Link>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-4 py-2 hidden sm:block">
-            Sign In
+          <Link href="/login" className="font-mono font-bold text-sm uppercase hover:opacity-70 px-2 py-2 hidden sm:block">
+            Sign in
           </Link>
-          <Link href="/register" className="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Get Started Free
+          <Link href="/register" className="font-mono font-bold text-sm uppercase bg-[#2563eb] text-[#fff] border-2 border-[#16130a] shadow-[3px_3px_0_#16130a] px-4 py-2 hover:-translate-y-0.5 transition-transform">
+            Get started
           </Link>
         </div>
       </nav>
@@ -133,7 +132,7 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
             <Lightbulb className="h-5 w-5 text-yellow-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-bold text-yellow-300 mb-1">Pro Tip</p>
-              <p className="text-yellow-200/80 leading-relaxed text-sm">{term.tip}</p>
+              <p className="text-yellow-800 dark:text-yellow-200/80 leading-relaxed text-sm">{term.tip}</p>
             </div>
           </div>
         )}
@@ -205,10 +204,8 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
       <footer className="border-t border-gray-800 px-6 py-8">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-blue-600 flex items-center justify-center">
-              <TrendingUp className="h-3 w-3 text-white" />
-            </div>
-            <span className="font-semibold text-sm">Mr. Guy Invests</span>
+            <MrGuyLogoSvg px={2} />
+            <span className="font-mono font-bold text-sm uppercase">Mr. Guy Invests</span>
           </Link>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <Link href="/glossary" className="hover:text-gray-400 transition-colors">Dictionary</Link>

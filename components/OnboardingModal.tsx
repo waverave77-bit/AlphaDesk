@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, Briefcase, BookOpen, Newspaper, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 const STORAGE_KEY = 'zg_onboarded_v2'
 
@@ -147,8 +148,10 @@ export default function OnboardingModal() {
           {/* STEP 0: Welcome */}
           {step === 0 && (
             <div className="text-center space-y-6">
-              <div className="h-20 w-20 rounded-3xl bg-blue-600 flex items-center justify-center mx-auto shadow-2xl shadow-blue-600/40">
-                <TrendingUp className="h-10 w-10 text-white" />
+              <div className="flex justify-center">
+                <div className="bg-white border-[3px] border-[#16130a] shadow-[5px_5px_0_#16130a] p-3 inline-flex">
+                  <MrGuyLogoSvg px={4} />
+                </div>
               </div>
               <div>
                 <h2 id="modal-title" className="text-2xl sm:text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
