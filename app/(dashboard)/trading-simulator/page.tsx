@@ -487,48 +487,52 @@ export default function GamePage() {
       {/* ── Buy sheet ── */}
       {buyTarget && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !buying && setBuyTarget(null)}>
-          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
+          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6 max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4 shrink-0">
               <div className="flex items-center gap-3">
                 <CompanyLogo ticker={buyTarget.ticker} size={44} name={buyTarget.name} />
                 <div><p className="font-black text-white text-lg leading-tight">{buyTarget.name}</p><p className="text-xs text-gray-500">{buyTarget.ticker} · {formatCurrency(buyTarget.price)}</p></div>
               </div>
               <button onClick={() => !buying && setBuyTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
             </div>
-            {buyTarget.blurb && (
-              <div className="flex items-start gap-2.5 mb-4 bg-blue-500/10 rounded-2xl p-3">
-                <div className="shrink-0 rounded-lg overflow-hidden mt-0.5"><MrGuyHead px={3} /></div>
-                <p className="text-sm text-gray-300 leading-relaxed">{buyTarget.blurb}</p>
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              {buyTarget.blurb && (
+                <div className="flex items-start gap-2.5 mb-4 bg-blue-500/10 rounded-2xl p-3">
+                  <div className="shrink-0 rounded-lg overflow-hidden mt-0.5"><MrGuyHead px={3} /></div>
+                  <p className="text-sm text-gray-300 leading-relaxed">{buyTarget.blurb}</p>
+                </div>
+              )}
+              {/* Price chart */}
+              <MiniChart ticker={buyTarget.ticker} />
+              <ClosedNote market={market} verb="buy" />
+              <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
+              <div className="grid grid-cols-4 gap-2 mb-2.5">
+                {BUY_AMOUNTS.map((a) => (
+                  <button key={a} onClick={() => setBuyAmount(a)} disabled={a > cash}
+                    className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all disabled:opacity-30 ${buyAmount === a ? 'border-blue-500 bg-blue-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
+                    ${a >= 1000 ? `${a / 1000}k` : a}
+                  </button>
+                ))}
               </div>
-            )}
-            {/* Price chart */}
-            <MiniChart ticker={buyTarget.ticker} />
-            <ClosedNote market={market} verb="buy" />
-            <p className="text-sm text-gray-400 mb-2">How much do you want to invest?</p>
-            <div className="grid grid-cols-4 gap-2 mb-2.5">
-              {BUY_AMOUNTS.map((a) => (
-                <button key={a} onClick={() => setBuyAmount(a)} disabled={a > cash}
-                  className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all disabled:opacity-30 ${buyAmount === a ? 'border-blue-500 bg-blue-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
-                  ${a >= 1000 ? `${a / 1000}k` : a}
-                </button>
-              ))}
+              <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-blue-500">
+                <span className="text-gray-500 font-bold">$</span>
+                <input type="number" inputMode="decimal" min={0} value={buyAmount || ''}
+                  onChange={(e) => setBuyAmount(Math.max(0, Math.min(cash, parseFloat(e.target.value) || 0)))}
+                  placeholder="custom amount"
+                  className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
+              </div>
+              <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 flex items-center justify-between text-sm">
+                <span className="text-gray-500">You’ll get</span>
+                <span className="font-bold text-white">{(buyAmount / buyTarget.price).toFixed(3)} shares</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-blue-500">
-              <span className="text-gray-500 font-bold">$</span>
-              <input type="number" inputMode="decimal" min={0} value={buyAmount || ''}
-                onChange={(e) => setBuyAmount(Math.max(0, Math.min(cash, parseFloat(e.target.value) || 0)))}
-                placeholder="custom amount"
-                className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
+            <div className="shrink-0 pt-4">
+              <button onClick={confirmBuy} disabled={buying || buyAmount > cash || buyAmount <= 0}
+                className="w-full bg-blue-600 hover:bg-blue-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #1d4ed8' }}>
+                {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : `Buy ${formatCurrency(buyAmount)} of ${buyTarget.name}`}
+              </button>
+              <p className="text-[11px] text-gray-600 text-center mt-3">Cash to spend: {formatCurrency(cash)}</p>
             </div>
-            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
-              <span className="text-gray-500">You’ll get</span>
-              <span className="font-bold text-white">{(buyAmount / buyTarget.price).toFixed(3)} shares</span>
-            </div>
-            <button onClick={confirmBuy} disabled={buying || buyAmount > cash || buyAmount <= 0}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #1d4ed8' }}>
-              {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : `Buy ${formatCurrency(buyAmount)} of ${buyTarget.name}`}
-            </button>
-            <p className="text-[11px] text-gray-600 text-center mt-3">Cash to spend: {formatCurrency(cash)}</p>
           </div>
         </div>
       )}
@@ -536,48 +540,52 @@ export default function GamePage() {
       {/* ── Sell sheet ── */}
       {sellTarget && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => !selling && setSellTarget(null)}>
-          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
+          <div className="w-full max-w-sm bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6 max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4 shrink-0">
               <div className="flex items-center gap-3">
                 <CompanyLogo ticker={sellTarget.ticker} size={44} name={sellTarget.companyName} />
                 <div><p className="font-black text-white text-lg leading-tight">{sellTarget.companyName || sellTarget.ticker}</p><p className="text-xs text-gray-500">{sellTarget.ticker} · {formatCurrency(sellTarget.currentPrice)}</p></div>
               </div>
               <button onClick={() => !selling && setSellTarget(null)} className="text-gray-500 hover:text-gray-300"><X className="h-5 w-5" /></button>
             </div>
-            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
-              <span className="text-gray-500">You own</span>
-              <span className="font-bold text-white">{sellTarget.shares.toFixed(3)} shares · {formatCurrency(sellTarget.currentValue)} <span className={gainCls(sellTarget.gainLoss)}>({sellTarget.gainLoss >= 0 ? '+' : ''}{sellTarget.gainLossPct.toFixed(1)}%)</span></span>
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
+                <span className="text-gray-500">You own</span>
+                <span className="font-bold text-white">{sellTarget.shares.toFixed(3)} shares · {formatCurrency(sellTarget.currentValue)} <span className={gainCls(sellTarget.gainLoss)}>({sellTarget.gainLoss >= 0 ? '+' : ''}{sellTarget.gainLossPct.toFixed(1)}%)</span></span>
+              </div>
+              <ClosedNote market={market} verb="sell" />
+              <p className="text-sm text-gray-400 mb-2">How much do you want to sell?</p>
+              <div className="grid grid-cols-4 gap-2 mb-2.5">
+                {SELL_PCTS.map(([pct, label]) => {
+                  const amt = +(sellTarget.currentValue * pct).toFixed(2)
+                  const on = Math.abs(sellAmount - amt) < 0.01
+                  return (
+                    <button key={label} onClick={() => setSellAmount(amt)}
+                      className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all ${on ? 'border-red-500 bg-red-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
+                      {label}
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-red-500">
+                <span className="text-gray-500 font-bold">$</span>
+                <input type="number" inputMode="decimal" min={0} value={sellAmount ? +sellAmount.toFixed(2) : ''}
+                  onChange={(e) => setSellAmount(Math.max(0, Math.min(sellTarget.currentValue, parseFloat(e.target.value) || 0)))}
+                  placeholder="custom amount"
+                  className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
+              </div>
+              <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 flex items-center justify-between text-sm">
+                <span className="text-gray-500">You’ll sell</span>
+                <span className="font-bold text-white">{Math.min(sellTarget.shares, sellAmount / sellTarget.currentPrice || 0).toFixed(3)} shares</span>
+              </div>
             </div>
-            <ClosedNote market={market} verb="sell" />
-            <p className="text-sm text-gray-400 mb-2">How much do you want to sell?</p>
-            <div className="grid grid-cols-4 gap-2 mb-2.5">
-              {SELL_PCTS.map(([pct, label]) => {
-                const amt = +(sellTarget.currentValue * pct).toFixed(2)
-                const on = Math.abs(sellAmount - amt) < 0.01
-                return (
-                  <button key={label} onClick={() => setSellAmount(amt)}
-                    className={`py-2.5 rounded-xl font-bold text-sm border-2 transition-all ${on ? 'border-red-500 bg-red-500/15 text-white' : 'border-gray-700 text-gray-300'}`}>
-                    {label}
-                  </button>
-                )
-              })}
+            <div className="shrink-0 pt-4">
+              <button onClick={confirmSell} disabled={!!selling || sellAmount <= 0}
+                className="w-full bg-red-600 hover:bg-red-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #b91c1c' }}>
+                {selling ? <Loader2 className="h-5 w-5 animate-spin" /> : sellAmount >= sellTarget.currentValue - 0.01 ? `Sell all of ${sellTarget.companyName || sellTarget.ticker}` : `Sell ${formatCurrency(sellAmount)}`}
+              </button>
+              <p className="text-[11px] text-gray-600 text-center mt-3">The cash goes straight back to your buying power.</p>
             </div>
-            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 rounded-xl px-3 mb-3 border-2 border-transparent focus-within:border-red-500">
-              <span className="text-gray-500 font-bold">$</span>
-              <input type="number" inputMode="decimal" min={0} value={sellAmount ? +sellAmount.toFixed(2) : ''}
-                onChange={(e) => setSellAmount(Math.max(0, Math.min(sellTarget.currentValue, parseFloat(e.target.value) || 0)))}
-                placeholder="custom amount"
-                className="flex-1 min-w-0 bg-transparent py-2.5 text-white font-bold focus:outline-none placeholder:font-normal placeholder:text-gray-500" />
-            </div>
-            <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between text-sm">
-              <span className="text-gray-500">You’ll sell</span>
-              <span className="font-bold text-white">{Math.min(sellTarget.shares, sellAmount / sellTarget.currentPrice || 0).toFixed(3)} shares</span>
-            </div>
-            <button onClick={confirmSell} disabled={!!selling || sellAmount <= 0}
-              className="w-full bg-red-600 hover:bg-red-500 text-[#fff] font-black rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-50" style={{ boxShadow: '0 4px 0 #b91c1c' }}>
-              {selling ? <Loader2 className="h-5 w-5 animate-spin" /> : sellAmount >= sellTarget.currentValue - 0.01 ? `Sell all of ${sellTarget.companyName || sellTarget.ticker}` : `Sell ${formatCurrency(sellAmount)}`}
-            </button>
-            <p className="text-[11px] text-gray-600 text-center mt-3">The cash goes straight back to your buying power.</p>
           </div>
         </div>
       )}
