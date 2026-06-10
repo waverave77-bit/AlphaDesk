@@ -24,7 +24,7 @@ const ThemeContext = createContext<ThemeContextType>({
   setTheme: () => {}, setDark: () => {}, setSkin: () => {}, setOutfit: () => {},
 })
 
-function applyToDOM(isDark: boolean) {
+function applyToDOM(isDark: boolean, skin: string | null) {
   const root = document.documentElement
   // data-theme drives the light/dark CSS in globals.css. --accent stays at the
   // :root blue default for everyone (no per-user accent anymore).
@@ -33,6 +33,13 @@ function applyToDOM(isDark: boolean) {
     root.classList.add('dark')
   } else {
     root.classList.remove('dark')
+  }
+  // A Pro skin is a light-mode-only repaint. We keep the saved skin even while in
+  // dark mode (just don't apply it) so it comes back when you return to light.
+  if (!isDark && skin) {
+    root.setAttribute('data-skin', skin)
+  } else {
+    root.removeAttribute('data-skin')
   }
 }
 
@@ -53,14 +60,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Step 1: Apply localStorage immediately on mount to prevent flash
   useEffect(() => {
     const savedDark = localStorage.getItem('mrguy-dark') === 'true'
-    setIsDarkState(savedDark)
-    applyToDOM(savedDark)
-    // Pro skin is a light-mode-only repaint
     const savedSkin = localStorage.getItem('mrguy-skin')
-    if (savedSkin && !savedDark) {
-      setSkinState(savedSkin)
-      document.documentElement.setAttribute('data-skin', savedSkin)
-    }
+    setIsDarkState(savedDark)
+    setSkinState(savedSkin)
+    applyToDOM(savedDark, savedSkin)
     const savedOutfit = localStorage.getItem('mrguy-outfit')
     if (savedOutfit) setOutfitState(savedOutfit)
   }, [])
@@ -78,7 +81,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         if (cancelled || !p) return
         const dbDark = p.themeDark ?? true
         setIsDarkState(dbDark)
-        applyToDOM(dbDark)
+        applyToDOM(dbDark, localStorage.getItem('mrguy-skin'))
         localStorage.setItem('mrguy-dark', String(dbDark))
       })
       .catch(() => {})
@@ -88,26 +91,24 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setDark = (dark: boolean) => {
     setIsDarkState(dark)
     localStorage.setItem('mrguy-dark', String(dark))
-    applyToDOM(dark)
-    // Skins are light-only; switching to dark clears the active skin.
-    if (dark && skin) {
-      setSkinState(null)
-      localStorage.removeItem('mrguy-skin')
-      document.documentElement.removeAttribute('data-skin')
-    }
+    // Keep the saved skin — applyToDOM hides it in dark mode and brings it back in
+    // light, so toggling dark on/off restores the skin you had instead of resetting.
+    applyToDOM(dark, skin)
     if (session?.user) saveDB({ themeDark: dark })
   }
 
   const setSkin = (s: string | null) => {
     setSkinState(s)
-    if (s) {
-      localStorage.setItem('mrguy-skin', s)
-      document.documentElement.setAttribute('data-skin', s)
-      if (isDark) setDark(false)   // a skin implies light mode
-    } else {
-      localStorage.removeItem('mrguy-skin')
-      document.documentElement.removeAttribute('data-skin')
+    if (s) localStorage.setItem('mrguy-skin', s)
+    else localStorage.removeItem('mrguy-skin')
+    // A skin implies light mode; switching to it also turns dark off.
+    const nextDark = s ? false : isDark
+    if (s && isDark) {
+      setIsDarkState(false)
+      localStorage.setItem('mrguy-dark', 'false')
+      if (session?.user) saveDB({ themeDark: false })
     }
+    applyToDOM(nextDark, s)
   }
 
   const setOutfit = (o: string | null) => {

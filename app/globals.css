@@ -175,6 +175,19 @@ body {
 
 [data-theme="default"] {
 
+  /* ── Arcade literals → dark-mode values ──
+     The literal arcade classes are mapped to brand vars with !important (so Pro
+     skins can repaint them), which unfortunately overrides every dark: variant.
+     Re-point the outline + hard-shadow here for dark mode so app cards read right.
+     (bg-[#2563eb]/bg-[#ffd23f] stay blue/yellow; text-[#16130a] stays dark — it's
+     only ever on coloured stickers. The page canvas is handled by the app layout's
+     bg-gray-950, and the cream bg-[#fdf3d7] literal is left alone so the light-only
+     marketing homepage doesn't break.) */
+  .border-\[\#16130a\] { border-color: #374151 !important; }     /* sticker/card outline */
+  .shadow-\[2px_2px_0_\#16130a\], .shadow-\[3px_3px_0_\#16130a\],
+  .shadow-\[4px_4px_0_\#16130a\], .shadow-\[5px_5px_0_\#16130a\],
+  .shadow-\[7px_7px_0_\#16130a\], .shadow-\[10px_10px_0_\#16130a\] { box-shadow: none !important; }
+
   /* ── Gray palette (restore originals) ── */
   .bg-gray-950  { background-color: #030712 !important; }
   .bg-gray-900  { background-color: #111827 !important; }
