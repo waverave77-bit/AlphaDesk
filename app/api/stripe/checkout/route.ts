@@ -17,10 +17,13 @@ export async function POST(req: Request) {
   }
   // Guard against the common env mix-up where STRIPE_SECRET_KEY holds a webhook
   // secret (whsec_…) or publishable key (pk_…) instead of the real secret key (sk_…).
+  // Surface the actual prefix the server resolved so a misconfigured Vercel value is
+  // unmistakable (a 6-char prefix like "whsec_" / "sk_liv" is not a usable secret).
   if (!process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
-    console.error('STRIPE_SECRET_KEY is misconfigured — must start with "sk_"')
+    const prefix = process.env.STRIPE_SECRET_KEY.slice(0, 6)
+    console.error(`STRIPE_SECRET_KEY is misconfigured — starts with "${prefix}", must start with "sk_"`)
     return NextResponse.json(
-      { error: 'Payments are temporarily misconfigured on our end. Please try again later.' },
+      { error: `Server payment key is misconfigured: STRIPE_SECRET_KEY starts with "${prefix}…" but must start with "sk_". Fix its value in Vercel (Production) and redeploy.` },
       { status: 503 }
     )
   }
