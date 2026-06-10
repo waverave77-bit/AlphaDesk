@@ -30,14 +30,16 @@ interface ThemeContextType {
   theme: Theme
   isDark: boolean
   accentId: ThemeId
+  skin: string | null    // Pro-only light-mode repaint (mint/grape/sunset)
   setTheme: (id: ThemeId) => void   // legacy: 'white' = light, anything else = dark+accent
   setDark: (dark: boolean) => void
   setAccent: (id: ThemeId) => void
+  setSkin: (s: string | null) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   themeId: 'white', theme: THEMES.find(t => t.id === 'white')!, isDark: false,
-  accentId: 'default', setTheme: () => {}, setDark: () => {}, setAccent: () => {},
+  accentId: 'default', skin: null, setTheme: () => {}, setDark: () => {}, setAccent: () => {}, setSkin: () => {},
 })
 
 function applyToDOM(isDark: boolean, accentId: ThemeId) {
@@ -65,6 +67,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
   const [isDark, setIsDarkState] = useState(false)
   const [accentId, setAccentIdState] = useState<ThemeId>('default')
+  const [skin, setSkinState] = useState<string | null>(null)
 
   // Step 1: Apply localStorage immediately on mount to prevent flash
   useEffect(() => {
@@ -73,6 +76,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setIsDarkState(savedDark)
     setAccentIdState(savedAccent)
     applyToDOM(savedDark, savedAccent)
+    // Pro skin is a light-mode-only repaint
+    const savedSkin = localStorage.getItem('mrguy-skin')
+    if (savedSkin && !savedDark) {
+      setSkinState(savedSkin)
+      document.documentElement.setAttribute('data-skin', savedSkin)
+    }
   }, [])
 
   // Step 2: Once authenticated, fetch the saved theme straight from the DB —
@@ -102,7 +111,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setIsDarkState(dark)
     localStorage.setItem('mrguy-dark', String(dark))
     applyToDOM(dark, accentId)
+    // Skins are light-only; switching to dark clears the active skin.
+    if (dark && skin) {
+      setSkinState(null)
+      localStorage.removeItem('mrguy-skin')
+      document.documentElement.removeAttribute('data-skin')
+    }
     if (session?.user) saveDB({ themeDark: dark })
+  }
+
+  const setSkin = (s: string | null) => {
+    setSkinState(s)
+    if (s) {
+      localStorage.setItem('mrguy-skin', s)
+      document.documentElement.setAttribute('data-skin', s)
+      if (isDark) setDark(false)   // a skin implies light mode
+    } else {
+      localStorage.removeItem('mrguy-skin')
+      document.documentElement.removeAttribute('data-skin')
+    }
   }
 
   const setAccent = (id: ThemeId) => {
@@ -127,7 +154,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = THEMES.find(t => t.id === themeId) ?? THEMES[0]
 
   return (
-    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, setTheme, setDark, setAccent }}>
+    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, skin, setTheme, setDark, setAccent, setSkin }}>
       {children}
     </ThemeContext.Provider>
   )

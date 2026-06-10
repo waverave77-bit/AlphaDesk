@@ -197,7 +197,7 @@ export default function LandingPage() {
             <div className="flex items-end gap-1 mb-1"><span className="font-display text-4xl">$4.99</span><span className="font-mono text-sm mb-1 opacity-80">/month</span></div>
             <p className="font-mono text-xs opacity-80 mb-6">Cancel anytime</p>
             <ul className="space-y-2.5 mb-7">
-              {['Everything in Free','Unlimited Mr. Guy chat','Unlimited AI stock breakdowns','No daily limits, ever','A 2nd $100K portfolio','A Pro badge on the leaderboard'].map((f) => (
+              {['Everything in Free','Unlimited Mr. Guy chat','Unlimited AI stock breakdowns','No daily limits, ever','A 2nd $100K portfolio','Exclusive colour themes','A Pro badge on the leaderboard'].map((f) => (
                 <li key={f} className="flex items-center gap-2.5 text-sm"><span className="h-3 w-3 bg-[#ffd23f] border-[2px] border-[#16130a] shrink-0" />{f}</li>
               ))}
             </ul>

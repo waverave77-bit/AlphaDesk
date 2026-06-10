@@ -19,7 +19,13 @@ const EXPERIENCE_ICONS: Record<ExperienceLevel, React.ElementType> = {
 
 export default function SettingsPage() {
   const { data: session } = useSession()
-  const { isDark, accentId, setDark, setAccent } = useTheme()
+  const isPro = !!(session?.user as any)?.isPro
+  const { isDark, accentId, setDark, setAccent, skin, setSkin } = useTheme()
+  const PRO_SKINS = [
+    { id: 'mint',   name: 'Mint',   canvas: '#e7f7ee', primary: '#0e9f6e', hi: '#ffd23f' },
+    { id: 'grape',  name: 'Grape',  canvas: '#f3ecff', primary: '#7c4dff', hi: '#ff8fc7' },
+    { id: 'sunset', name: 'Sunset', canvas: '#ffe9d6', primary: '#ff6b35', hi: '#ffd23f' },
+  ]
   const { isAdmin } = useAdmin()
   const [demoLoading, setDemoLoading] = useState(false)
   const [demoError, setDemoError] = useState('')
@@ -264,12 +270,56 @@ export default function SettingsPage() {
                         />
                         <span className="text-sm text-white">{theme.name}</span>
                         {isSelected && (
-                          <span className="ml-auto text-[10px]" style={{ color: `rgb(${theme.accentRgb})` }}>✓</span>
+                          <Check className="ml-auto h-3.5 w-3.5" style={{ color: `rgb(${theme.accentRgb})` }} />
                         )}
                       </button>
                     )
                   })}
                 </div>
+              </div>
+
+              {/* Pro themes (light-mode skins) */}
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-sm font-medium text-white">Mr. Guy Themes</p>
+                  <span className="text-[10px] font-bold uppercase bg-yellow-500/15 text-yellow-400 border border-yellow-500/20 rounded px-1.5 py-0.5">Pro</span>
+                </div>
+                <p className="text-xs text-gray-500 mb-3">Full-colour repaints of the light theme.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {/* Default (blue arcade) */}
+                  <button
+                    onClick={() => setSkin(null)}
+                    className={cn('rounded-lg border p-2 text-left transition-all', !skin ? 'border-blue-500' : 'border-gray-800 hover:border-gray-600')}
+                  >
+                    <div className="h-9 rounded-md mb-1.5 flex items-center gap-1.5 px-2 border border-black/10" style={{ background: '#fdf3d7' }}>
+                      <span className="h-3.5 w-3.5 rounded-full" style={{ background: '#2563eb' }} />
+                      <span className="h-3.5 w-3.5 rounded-full" style={{ background: '#ffd23f' }} />
+                    </div>
+                    <span className="text-xs text-white flex items-center gap-1">Blue{!skin && <Check className="h-3 w-3 text-blue-400" />}</span>
+                  </button>
+                  {PRO_SKINS.map((s) => {
+                    const sel = skin === s.id
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => { if (isPro) setSkin(s.id); else window.location.href = '/upgrade' }}
+                        className={cn('rounded-lg border p-2 text-left transition-all relative', sel ? 'border-blue-500' : 'border-gray-800 hover:border-gray-600')}
+                      >
+                        <div className="h-9 rounded-md mb-1.5 flex items-center gap-1.5 px-2 border border-black/10" style={{ background: s.canvas }}>
+                          <span className="h-3.5 w-3.5 rounded-full" style={{ background: s.primary }} />
+                          <span className="h-3.5 w-3.5 rounded-full" style={{ background: s.hi }} />
+                        </div>
+                        <span className="text-xs text-white flex items-center gap-1">{s.name}{sel && <Check className="h-3 w-3 text-blue-400" />}</span>
+                        {!isPro && <span className="absolute top-1.5 right-1.5 text-[8px] font-bold uppercase bg-yellow-400 text-gray-950 rounded px-1 leading-tight">Pro</span>}
+                      </button>
+                    )
+                  })}
+                </div>
+                {!isPro && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Themes are a <Link href="/upgrade" className="text-blue-400 hover:underline">Pro</Link> perk.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>

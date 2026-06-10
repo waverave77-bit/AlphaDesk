@@ -12,7 +12,32 @@
   --brand-dark: 234 88 12;       /* orange-600 = #ea580c */
   --brand-light: 251 146 60;     /* orange-400 = #fb923c */
   --radius: 0.5rem;
+
+  /* ── Arcade brand colours (Pro skins repaint these) ── */
+  --canvas: #fdf3d7;   /* page background */
+  --ink: #16130a;      /* borders, hard shadows, ink text */
+  --primary: #2563eb;  /* buttons / active state */
+  --hi: #ffd23f;       /* highlight stickers */
 }
+
+/* Map the literal arcade utility classes to the brand variables so a Pro skin
+   can recolour the whole look by just changing the variables above. */
+.bg-\[\#fdf3d7\]     { background-color: var(--canvas) !important; }
+.bg-\[\#2563eb\]     { background-color: var(--primary) !important; }
+.bg-\[\#ffd23f\]     { background-color: var(--hi) !important; }
+.border-\[\#16130a\] { border-color: var(--ink) !important; }
+.text-\[\#16130a\]   { color: var(--ink) !important; }
+.shadow-\[2px_2px_0_\#16130a\]   { box-shadow: 2px 2px 0 var(--ink) !important; }
+.shadow-\[3px_3px_0_\#16130a\]   { box-shadow: 3px 3px 0 var(--ink) !important; }
+.shadow-\[4px_4px_0_\#16130a\]   { box-shadow: 4px 4px 0 var(--ink) !important; }
+.shadow-\[5px_5px_0_\#16130a\]   { box-shadow: 5px 5px 0 var(--ink) !important; }
+.shadow-\[7px_7px_0_\#16130a\]   { box-shadow: 7px 7px 0 var(--ink) !important; }
+.shadow-\[10px_10px_0_\#16130a\] { box-shadow: 10px 10px 0 var(--ink) !important; }
+
+/* ── Pro skins (light-mode repaints, applied via data-skin on <html>) ── */
+[data-skin="mint"]   { --canvas: #e7f7ee; --ink: #0c2a1c; --primary: #0e9f6e; --hi: #ffd23f; }
+[data-skin="grape"]  { --canvas: #f3ecff; --ink: #281450; --primary: #7c4dff; --hi: #ff8fc7; }
+[data-skin="sunset"] { --canvas: #ffe9d6; --ink: #3a1d0e; --primary: #ff6b35; --hi: #ffd23f; }
 
 /* ── Accent color overrides — remap all "blue" Tailwind classes to use --accent ──
    ThemeProvider sets --accent per user preference (RGB triplet, no commas).
@@ -111,7 +136,7 @@ body {
    LIGHT THEME (default — "white" data-theme or no theme set)
    Maps dark-coded Tailwind classes → light equivalents
 ───────────────────────────────────────────────────────────── */
-.bg-gray-950  { background-color: #fdf3d7 !important; }   /* arcade cream canvas */
+.bg-gray-950  { background-color: var(--canvas) !important; }   /* arcade cream canvas */
 .bg-gray-900  { background-color: #ffffff !important; }
 .bg-gray-800  { background-color: #f1f5f9 !important; }
 .bg-gray-800\/30, .bg-gray-800\/40, .bg-gray-800\/50,
@@ -239,7 +264,7 @@ body {
 
 /* ── White / Light explicit override ── */
 [data-theme="white"] body {
-  background-color: #fdf3d7 !important;
+  background-color: var(--canvas) !important;
   color: #16130a !important;
 }
 
