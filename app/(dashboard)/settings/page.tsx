@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { User, Shield, Palette, LogOut, Sun, Moon, Brain, FlaskConical, Loader2, CreditCard, Mail, Trash2, GraduationCap, TrendingUp, Award, Check, Pencil, X, LogIn } from 'lucide-react'
-import { useTheme, ACCENT_THEMES } from '@/components/ThemeProvider'
+import { useTheme } from '@/components/ThemeProvider'
 import { useAdmin } from '@/hooks/useAdmin'
 import { cn } from '@/lib/utils'
 import { type ExperienceLevel, EXPERIENCE_LABELS, EXPERIENCE_DESCS } from '@/lib/experience'
@@ -20,7 +20,7 @@ const EXPERIENCE_ICONS: Record<ExperienceLevel, React.ElementType> = {
 export default function SettingsPage() {
   const { data: session, update: updateSession } = useSession()
   const isPro = !!(session?.user as any)?.isPro
-  const { isDark, accentId, setDark, setAccent, skin, setSkin, outfit, setOutfit } = useTheme()
+  const { isDark, setDark, skin, setSkin, outfit, setOutfit } = useTheme()
   const PRO_SKINS = [
     { id: 'mint',   name: 'Mint',   canvas: '#e7f7ee', primary: '#0e9f6e', hi: '#ffd23f' },
     { id: 'grape',  name: 'Grape',  canvas: '#f3ecff', primary: '#7c4dff', hi: '#ff8fc7' },
@@ -244,40 +244,6 @@ export default function SettingsPage() {
                     }
                   </span>
                 </button>
-              </div>
-
-              {/* Accent colour */}
-              <div>
-                <p className="text-sm font-medium text-white mb-3">Accent Colour</p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {ACCENT_THEMES.map((theme) => {
-                    const isSelected = accentId === theme.id
-                    return (
-                      <button
-                        key={theme.id}
-                        onClick={() => setAccent(theme.id)}
-                        style={isSelected ? {
-                          borderColor: `rgb(${theme.accentRgb} / 0.6)`,
-                          backgroundColor: `rgb(${theme.accentRgb} / 0.1)`,
-                        } : {}}
-                        className={cn(
-                          'flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-all',
-                          isSelected ? 'border-transparent' : 'border-gray-800 hover:border-gray-600 hover:bg-gray-800/40'
-                        )}
-                      >
-                        {/* Always use inline style so the dot colour never changes with the theme */}
-                        <div
-                          className="h-4 w-4 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: `rgb(${theme.accentRgb})` }}
-                        />
-                        <span className="text-sm text-white">{theme.name}</span>
-                        {isSelected && (
-                          <Check className="ml-auto h-3.5 w-3.5" style={{ color: `rgb(${theme.accentRgb})` }} />
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
               </div>
 
               {/* Pro themes (light-mode skins) */}

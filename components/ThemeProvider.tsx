@@ -2,55 +2,33 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
-export type ThemeId = 'default' | 'midnight' | 'emerald' | 'purple' | 'amber' | 'rose' | 'white'
-
-export interface Theme {
-  id: ThemeId
-  name: string
-  description: string
-  accent: string
-  accentRgb: string
-  accentLightRgb: string
-}
-
-export const THEMES: Theme[] = [
-  { id: 'default',  name: 'Ocean Blue',  description: 'Classic blue',      accent: 'bg-blue-500',    accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
-  { id: 'midnight', name: 'Midnight',    description: 'Cool cyan',          accent: 'bg-cyan-400',    accentRgb: '34 211 238',  accentLightRgb: '103 232 249' },
-  { id: 'emerald',  name: 'Emerald',     description: 'Money green',        accent: 'bg-emerald-500', accentRgb: '16 185 129',  accentLightRgb: '52 211 153' },
-  { id: 'purple',   name: 'Purple Haze', description: 'Bold violet',        accent: 'bg-violet-500',  accentRgb: '139 92 246',  accentLightRgb: '167 139 250' },
-  { id: 'amber',    name: 'Amber',       description: 'Warm gold',          accent: 'bg-amber-500',   accentRgb: '245 158 11',  accentLightRgb: '251 191 36' },
-  { id: 'rose',     name: 'Rose',        description: 'Soft red/pink',      accent: 'bg-rose-500',    accentRgb: '244 63 94',   accentLightRgb: '251 113 133' },
-  { id: 'white',    name: 'Light Mode',  description: 'Light background',   accent: 'bg-slate-400',   accentRgb: '59 130 246',  accentLightRgb: '96 165 250' },
-]
-
-const ACCENT_THEMES = THEMES.filter(t => t.id !== 'white')
+// Two looks only now: the arcade light theme (cream) and a dark theme. The old
+// per-accent colour picker (Ocean Blue / Midnight / Emerald / …) was removed — the
+// brand is one consistent blue. Pro "skins" (mint/grape/sunset) still repaint the
+// light theme via data-skin, and outfits dress up Mr. Guy.
+export type ThemeId = 'default' | 'white'
 
 interface ThemeContextType {
-  themeId: ThemeId       // computed: isDark ? accentId : 'white'
-  theme: Theme
+  themeId: ThemeId       // 'white' = light, 'default' = dark
   isDark: boolean
-  accentId: ThemeId
   skin: string | null    // Pro-only light-mode repaint (mint/grape/sunset)
-  outfit: string | null  // Pro-only Mr. Guy outfit (beanie/crown)
-  setTheme: (id: ThemeId) => void   // legacy: 'white' = light, anything else = dark+accent
+  outfit: string | null  // Pro-only Mr. Guy outfit (royal/winter/tuxedo)
+  setTheme: (id: ThemeId) => void   // 'white' = light, anything else = dark
   setDark: (dark: boolean) => void
-  setAccent: (id: ThemeId) => void
   setSkin: (s: string | null) => void
   setOutfit: (o: string | null) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  themeId: 'white', theme: THEMES.find(t => t.id === 'white')!, isDark: false,
-  accentId: 'default', skin: null, outfit: null,
-  setTheme: () => {}, setDark: () => {}, setAccent: () => {}, setSkin: () => {}, setOutfit: () => {},
+  themeId: 'white', isDark: false, skin: null, outfit: null,
+  setTheme: () => {}, setDark: () => {}, setSkin: () => {}, setOutfit: () => {},
 })
 
-function applyToDOM(isDark: boolean, accentId: ThemeId) {
-  const accent = THEMES.find(t => t.id === accentId) ?? THEMES[0]
+function applyToDOM(isDark: boolean) {
   const root = document.documentElement
-  root.style.setProperty('--accent', accent.accentRgb)
-  root.style.setProperty('--accent-light', accent.accentLightRgb)
-  root.setAttribute('data-theme', isDark ? accentId : 'white')
+  // data-theme drives the light/dark CSS in globals.css. --accent stays at the
+  // :root blue default for everyone (no per-user accent anymore).
+  root.setAttribute('data-theme', isDark ? 'default' : 'white')
   if (isDark) {
     root.classList.add('dark')
   } else {
@@ -58,7 +36,7 @@ function applyToDOM(isDark: boolean, accentId: ThemeId) {
   }
 }
 
-function saveDB(data: { themeDark?: boolean; themeAccent?: string }) {
+function saveDB(data: { themeDark?: boolean }) {
   fetch('/api/user/preferences', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -69,17 +47,14 @@ function saveDB(data: { themeDark?: boolean; themeAccent?: string }) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
   const [isDark, setIsDarkState] = useState(false)
-  const [accentId, setAccentIdState] = useState<ThemeId>('default')
   const [skin, setSkinState] = useState<string | null>(null)
   const [outfit, setOutfitState] = useState<string | null>(null)
 
   // Step 1: Apply localStorage immediately on mount to prevent flash
   useEffect(() => {
-    const savedDark   = localStorage.getItem('mrguy-dark') === 'true'
-    const savedAccent = (localStorage.getItem('mrguy-accent') as ThemeId) || 'default'
+    const savedDark = localStorage.getItem('mrguy-dark') === 'true'
     setIsDarkState(savedDark)
-    setAccentIdState(savedAccent)
-    applyToDOM(savedDark, savedAccent)
+    applyToDOM(savedDark)
     // Pro skin is a light-mode-only repaint
     const savedSkin = localStorage.getItem('mrguy-skin')
     if (savedSkin && !savedDark) {
@@ -102,12 +77,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       .then((p) => {
         if (cancelled || !p) return
         const dbDark = p.themeDark ?? true
-        const dbAccent = (p.themeAccent as ThemeId) ?? 'default'
         setIsDarkState(dbDark)
-        setAccentIdState(dbAccent)
-        applyToDOM(dbDark, dbAccent)
+        applyToDOM(dbDark)
         localStorage.setItem('mrguy-dark', String(dbDark))
-        localStorage.setItem('mrguy-accent', dbAccent)
       })
       .catch(() => {})
     return () => { cancelled = true }
@@ -116,7 +88,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setDark = (dark: boolean) => {
     setIsDarkState(dark)
     localStorage.setItem('mrguy-dark', String(dark))
-    applyToDOM(dark, accentId)
+    applyToDOM(dark)
     // Skins are light-only; switching to dark clears the active skin.
     if (dark && skin) {
       setSkinState(null)
@@ -144,29 +116,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     else localStorage.removeItem('mrguy-outfit')
   }
 
-  const setAccent = (id: ThemeId) => {
-    if (id === 'white') return  // 'white' is not an accent, it's a mode
-    setAccentIdState(id)
-    localStorage.setItem('mrguy-accent', id)
-    applyToDOM(isDark, id)
-    if (session?.user) saveDB({ themeAccent: id })
-  }
+  // 'white' = light mode; anything else = dark.
+  const setTheme = (id: ThemeId) => setDark(id !== 'white')
 
-  // Legacy: setTheme('white') = light mode; anything else = dark + set accent
-  const setTheme = (id: ThemeId) => {
-    if (id === 'white') {
-      setDark(false)
-    } else {
-      setAccent(id)
-      setDark(true)
-    }
-  }
-
-  const themeId: ThemeId = isDark ? accentId : 'white'
-  const theme = THEMES.find(t => t.id === themeId) ?? THEMES[0]
+  const themeId: ThemeId = isDark ? 'default' : 'white'
 
   return (
-    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, skin, outfit, setTheme, setDark, setAccent, setSkin, setOutfit }}>
+    <ThemeContext.Provider value={{ themeId, isDark, skin, outfit, setTheme, setDark, setSkin, setOutfit }}>
       {children}
     </ThemeContext.Provider>
   )
@@ -175,5 +131,3 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   return useContext(ThemeContext)
 }
-
-export { ACCENT_THEMES }

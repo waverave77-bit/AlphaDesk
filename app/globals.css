@@ -169,12 +169,11 @@ body {
 .text-pink-300, .text-pink-400 { color: #be185d !important; }
 
 /* ─────────────────────────────────────────────────────────────
-   DARK THEMES — shorthand targeting all non-white themes
+   DARK THEME ("default" data-theme)
    Restores gray palette + overrides slate palette
 ───────────────────────────────────────────────────────────── */
 
-/* Convenience: target all 6 dark themes at once */
-:is([data-theme="default"],[data-theme="midnight"],[data-theme="emerald"],[data-theme="purple"],[data-theme="amber"],[data-theme="rose"]) {
+[data-theme="default"] {
 
   /* ── Gray palette (restore originals) ── */
   .bg-gray-950  { background-color: #030712 !important; }
@@ -266,6 +265,18 @@ body {
 [data-theme="white"] body {
   background-color: var(--canvas) !important;
   color: #16130a !important;
+}
+
+/* Emphasis text with an opacity modifier (e.g. text-yellow-300/90) escapes the
+   plain-class remap above and washes out on the cream canvas. Darken these in
+   light mode too. (Dark mode keeps Tailwind's defaults — these are scoped to white.) */
+[data-theme="white"] {
+  .text-blue-200\/70, .text-blue-200\/80 { color: rgb(var(--accent) / 0.85) !important; }
+  .text-yellow-400\/70, .text-yellow-300\/90, .text-yellow-300\/80,
+  .text-yellow-200\/80, .text-yellow-200\/60 { color: rgb(180 83 9 / 0.9) !important; }
+  .text-red-200\/80 { color: rgb(220 38 38 / 0.9) !important; }
+  .text-orange-400\/80, .text-orange-200\/60 { color: rgb(196 65 12 / 0.9) !important; }
+  .text-green-300\/50, .text-green-200\/80 { color: rgb(21 128 61 / 0.85) !important; }
 }
 
 @layer base {
