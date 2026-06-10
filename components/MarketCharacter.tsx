@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { HolidayAtmosphere } from '@/components/HolidayAtmosphere'
 import { useTheme } from '@/components/ThemeProvider'
+import { OUTFITS } from '@/lib/outfits'
 
 /* ─── Palette ──────────────────────────────────────────────────────── */
 const N  = null
@@ -168,23 +169,8 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${Math.round(ar+(br-ar)*t)},${Math.round(ag+(bg-ag)*t)},${Math.round(ab+(bb-ab)*t)})`
 }
 
-/* ─── Pro outfits (hat pixels over the head) ───────────────────────── */
+/* ─── Pro outfits ──────────────────────────────────────────────────── */
 let _activeOutfit: string | null = null   // kept in sync by the component
-const _BD = '#c43d3d', _DO = '#e05a5a', _PO = '#f5f5f5'
-const _GO = '#ffcf33', _GD = '#d39e00', _JW = '#e0384e'
-const OUTFITS: Record<string, [number, number, string][]> = {
-  beanie: [
-    [-3, 9, _PO],
-    [-2, 6, _DO], [-2, 7, _DO], [-2, 8, _DO], [-2, 9, _DO], [-2, 10, _DO], [-2, 11, _DO], [-2, 12, _DO],
-    [-1, 5, _DO], [-1, 6, _DO], [-1, 7, _DO], [-1, 8, _DO], [-1, 9, _DO], [-1, 10, _DO], [-1, 11, _DO], [-1, 12, _DO], [-1, 13, _DO],
-    [0, 4, _BD], [0, 5, _BD], [0, 6, _BD], [0, 7, _BD], [0, 8, _BD], [0, 9, _BD], [0, 10, _BD], [0, 11, _BD], [0, 12, _BD], [0, 13, _BD], [0, 14, _BD],
-  ],
-  crown: [
-    [-2, 5, _GO], [-2, 7, _GO], [-2, 9, _GO], [-2, 11, _GO], [-2, 13, _GO],
-    [-1, 5, _GO], [-1, 6, _GO], [-1, 7, _GO], [-1, 8, _GO], [-1, 9, _JW], [-1, 10, _GO], [-1, 11, _GO], [-1, 12, _GO], [-1, 13, _GO],
-    [0, 5, _GD], [0, 6, _GD], [0, 7, _GD], [0, 8, _GD], [0, 9, _GD], [0, 10, _GD], [0, 11, _GD], [0, 12, _GD], [0, 13, _GD],
-  ],
-}
 
 /* ─── Character renderer ───────────────────────────────────────────── */
 function renderCharacter(
@@ -195,11 +181,14 @@ function renderCharacter(
   colorMap?: Record<string,string>,
 ) {
   const eox = ox + shakeX
+  // Pro outfit only dresses the normal character (special states pass a colorMap).
+  const outfit = (!colorMap && _activeOutfit) ? OUTFITS[_activeOutfit] : null
+  const effColorMap = outfit ? outfit.suit : colorMap
   for (let r = 0; r < Math.min(GRID.length, maxRow); r++) {
     for (let c = 0; c < 20; c++) {
       let color = GRID[r][c]
       if (!color) continue
-      if (colorMap && colorMap[color]) color = colorMap[color]
+      if (effColorMap && effColorMap[color]) color = effColorMap[color]
       if (flush > 0 && color === SK && r >= 4 && r <= 11 && c >= 5 && c <= 12)
         color = lerpColor(SK, '#ff6060', flush)
 
@@ -225,9 +214,9 @@ function renderCharacter(
     }
   }
 
-  // Pro outfit (hat) — only on the normal, fully-dressed character (no colorMap).
-  if (!colorMap && _activeOutfit && OUTFITS[_activeOutfit]) {
-    for (const [hr, hc, hcolor] of OUTFITS[_activeOutfit]) {
+  // Pro outfit (hat) — only on the normal, fully-dressed character.
+  if (outfit) {
+    for (const [hr, hc, hcolor] of outfit.hat) {
       const dc = dir === -1 ? 19 - hc : hc
       const cx = eox + dc * PX
       const cy = oy + hr * PX + (pose.bodyDY + extraBounce) * PX

@@ -68,7 +68,7 @@ const PRO_FEATURES = [
   { icon: MessageSquare,  text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear & Reality Check' },
   { icon: Layers,         text: 'A 2nd $100K portfolio to test another strategy' },
   { icon: Palette,        text: 'Exclusive Mr. Guy colour themes' },
-  { icon: Crown,          text: 'Mr. Guy outfits — dress him in a beanie or crown' },
+  { icon: Crown,          text: 'Mr. Guy outfits — dress him up (Royal, Winter, Tuxedo)' },
   { icon: Star,           text: 'A Pro badge by your name on the leaderboard' },
 ]
 

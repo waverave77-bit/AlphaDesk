@@ -328,15 +328,18 @@ export default function SettingsPage() {
                   <p className="text-sm font-medium text-white">Mr. Guy Outfit</p>
                   <span className="text-[10px] font-bold uppercase bg-yellow-500/15 text-yellow-400 border border-yellow-500/20 rounded px-1.5 py-0.5">Pro</span>
                 </div>
-                <p className="text-xs text-gray-500 mb-3">Shows on Mr. Guy in lessons and the $100K Challenge.</p>
-                <div className="grid grid-cols-3 gap-2">
+                <p className="text-xs text-gray-500 mb-3">A hat + outfit for Mr. Guy — shows in lessons, the dashboard & the $100K Challenge.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {([
                     { id: null,     name: 'None',   svg: <span className="h-6 w-6 rounded-full border-2 border-gray-600" /> },
-                    { id: 'beanie', name: 'Beanie', svg: (
-                      <svg viewBox="0 0 24 24" className="h-6 w-6"><circle cx="12" cy="4" r="2" fill="#f5f5f5" /><path d="M3 16a9 9 0 0 1 18 0Z" fill="#e05a5a" /><rect x="2" y="15" width="20" height="4" rx="1.5" fill="#c43d3d" /></svg>
+                    { id: 'royal',  name: 'Royal',  svg: (
+                      <svg viewBox="0 0 24 24" className="h-6 w-6"><path d="M3 19V8l4 4 5-7 5 7 4-4v11Z" fill="#ffcf33" stroke="#6a35a8" strokeWidth="1.2" strokeLinejoin="round" /><circle cx="12" cy="13" r="1.4" fill="#e0384e" /></svg>
                     ) },
-                    { id: 'crown',  name: 'Crown',  svg: (
-                      <svg viewBox="0 0 24 24" className="h-6 w-6"><path d="M3 19V8l4 4 5-7 5 7 4-4v11Z" fill="#ffcf33" stroke="#d39e00" strokeWidth="1" strokeLinejoin="round" /><circle cx="12" cy="13" r="1.4" fill="#e0384e" /></svg>
+                    { id: 'winter', name: 'Winter', svg: (
+                      <svg viewBox="0 0 24 24" className="h-6 w-6"><circle cx="12" cy="4" r="2" fill="#f5f5f5" /><path d="M3 16a9 9 0 0 1 18 0Z" fill="#e05a5a" /><rect x="2" y="15" width="20" height="4" rx="1.5" fill="#277a4a" /></svg>
+                    ) },
+                    { id: 'tuxedo', name: 'Tuxedo', svg: (
+                      <svg viewBox="0 0 24 24" className="h-6 w-6"><rect x="2" y="17" width="20" height="3" rx="1" fill="#16161e" /><rect x="7" y="5" width="10" height="13" fill="#16161e" /><rect x="7" y="13" width="10" height="2.5" fill="#6a1a2a" /></svg>
                     ) },
                   ] as { id: string | null; name: string; svg: React.ReactNode }[]).map((o) => {
                     const sel = outfit === o.id
