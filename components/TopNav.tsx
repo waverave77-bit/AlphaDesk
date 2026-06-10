@@ -87,8 +87,9 @@ export default function TopNav() {
   const { isAdmin } = useAdmin()
   const isPro = !!(session?.user as any)?.isPro
 
-  const initials = session?.user?.name
-    ? session.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
+  const displayName = (session?.user as any)?.username || session?.user?.name
+  const initials = displayName
+    ? String(displayName).split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
     : null
 
   const isActive = (href: string) =>

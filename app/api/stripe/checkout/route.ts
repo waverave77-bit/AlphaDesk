@@ -15,6 +15,15 @@ export async function POST(req: Request) {
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_PRO_PRICE_ID) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
   }
+  // Guard against the common env mix-up where STRIPE_SECRET_KEY holds a webhook
+  // secret (whsec_…) or publishable key (pk_…) instead of the real secret key (sk_…).
+  if (!process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
+    console.error('STRIPE_SECRET_KEY is misconfigured — must start with "sk_"')
+    return NextResponse.json(
+      { error: 'Payments are temporarily misconfigured on our end. Please try again later.' },
+      { status: 503 }
+    )
+  }
 
   const session = await getServerSession(authOptions)
   if (!session?.user?.email) {

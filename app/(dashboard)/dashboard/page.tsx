@@ -169,10 +169,9 @@ export default function DashboardPage() {
     setToday(new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }))
   }, [])
 
-  // First name only, capitalised
-  const firstName = session?.user?.name
-    ? session.user.name.split(' ')[0]
-    : null
+  // Prefer the username (the handle the user actually sets) over the legacy `name`.
+  const displayName = (session?.user as any)?.username || session?.user?.name
+  const firstName = displayName ? String(displayName).split(' ')[0] : null
 
   // Market brief
   const [brief, setBrief] = useState<{ text: string; status: string } | null>(null)

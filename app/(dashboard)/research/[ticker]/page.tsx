@@ -246,7 +246,7 @@ export default function StockDetailPage() {
     setLoading(true)
     setLimitReached(false)
     Promise.all([
-      fetch(`/api/stock/${ticker}?context=research`).then(async (r) => {
+      fetch(`/api/stock/${ticker}`).then(async (r) => {
         if (r.status === 429) { setLimitReached(true); return {} }
         return r.json()
       }),

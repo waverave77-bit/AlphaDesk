@@ -63,7 +63,7 @@ const FREE_FEATURES = [
 
 const PRO_FEATURES = [
   { icon: Brain,          text: 'Unlimited Mr. Guy chat — ask as much as you want' },
-  { icon: BarChart2,      text: 'Unlimited AI stock analysis & research lookups' },
+  { icon: BarChart2,      text: 'Unlimited AI stock breakdowns on any stock' },
   { icon: Zap,            text: 'No daily limits on any AI tool — ever' },
   { icon: MessageSquare,  text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear & Reality Check' },
   { icon: Layers,         text: 'A 2nd $100K portfolio to test another strategy' },

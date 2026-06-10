@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { getStockQuote, getHistoricalData, getStockNews, getAnalystData, getEarningsHistory } from '@/lib/yahoo-finance'
-import { checkAILimit } from '@/lib/pro'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { checkIpLimit, getIp } from '@/lib/ratelimit'
@@ -34,15 +33,11 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
       return NextResponse.json({ news })
     }
 
-    // Enforce the daily "research page" limit ONLY for deliberate research-page
-    // views (the deep-dive page sends ?context=research). Plain quote fetches that
-    // power the simulator, dashboard, watchlist and charts must stay unlimited —
-    // gating those here was charging users a "research" every time a price loaded,
-    // which both burned the counter and blocked free users from trading.
-    if (url.searchParams.get('context') === 'research' && session?.user?.email) {
-      const limited = await checkAILimit('research')
-      if (limited) return limited
-    }
+    // NOTE: stock quotes are intentionally unlimited for logged-in users. This is
+    // basic market data that powers the simulator, dashboard, watchlist and charts,
+    // so gating it behind a daily "research" cap (a) blocked free users from trading
+    // once the counter filled and (b) confused people who hadn't opened research.
+    // The expensive AI breakdown stays metered separately via the 'ai-analysis' limit.
 
     // getStockQuote must finish first — it populates the internal analyst cache
     // that getAnalystData reads. Running them in parallel causes a race condition
