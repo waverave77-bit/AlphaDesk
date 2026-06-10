@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { HolidayAtmosphere } from '@/components/HolidayAtmosphere'
+import { useTheme } from '@/components/ThemeProvider'
 
 /* ─── Palette ──────────────────────────────────────────────────────── */
 const N  = null
@@ -167,6 +168,24 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${Math.round(ar+(br-ar)*t)},${Math.round(ag+(bg-ag)*t)},${Math.round(ab+(bb-ab)*t)})`
 }
 
+/* ─── Pro outfits (hat pixels over the head) ───────────────────────── */
+let _activeOutfit: string | null = null   // kept in sync by the component
+const _BD = '#c43d3d', _DO = '#e05a5a', _PO = '#f5f5f5'
+const _GO = '#ffcf33', _GD = '#d39e00', _JW = '#e0384e'
+const OUTFITS: Record<string, [number, number, string][]> = {
+  beanie: [
+    [-3, 9, _PO],
+    [-2, 6, _DO], [-2, 7, _DO], [-2, 8, _DO], [-2, 9, _DO], [-2, 10, _DO], [-2, 11, _DO], [-2, 12, _DO],
+    [-1, 5, _DO], [-1, 6, _DO], [-1, 7, _DO], [-1, 8, _DO], [-1, 9, _DO], [-1, 10, _DO], [-1, 11, _DO], [-1, 12, _DO], [-1, 13, _DO],
+    [0, 4, _BD], [0, 5, _BD], [0, 6, _BD], [0, 7, _BD], [0, 8, _BD], [0, 9, _BD], [0, 10, _BD], [0, 11, _BD], [0, 12, _BD], [0, 13, _BD], [0, 14, _BD],
+  ],
+  crown: [
+    [-2, 5, _GO], [-2, 7, _GO], [-2, 9, _GO], [-2, 11, _GO], [-2, 13, _GO],
+    [-1, 5, _GO], [-1, 6, _GO], [-1, 7, _GO], [-1, 8, _GO], [-1, 9, _JW], [-1, 10, _GO], [-1, 11, _GO], [-1, 12, _GO], [-1, 13, _GO],
+    [0, 5, _GD], [0, 6, _GD], [0, 7, _GD], [0, 8, _GD], [0, 9, _GD], [0, 10, _GD], [0, 11, _GD], [0, 12, _GD], [0, 13, _GD],
+  ],
+}
+
 /* ─── Character renderer ───────────────────────────────────────────── */
 function renderCharacter(
   ctx: CanvasRenderingContext2D,
@@ -202,6 +221,18 @@ function renderCharacter(
 
       if (cx < 0 || cy < 0 || cx+PX > W || cy+PX > H) continue
       ctx.fillStyle = color
+      ctx.fillRect(cx, cy, PX, PX)
+    }
+  }
+
+  // Pro outfit (hat) — only on the normal, fully-dressed character (no colorMap).
+  if (!colorMap && _activeOutfit && OUTFITS[_activeOutfit]) {
+    for (const [hr, hc, hcolor] of OUTFITS[_activeOutfit]) {
+      const dc = dir === -1 ? 19 - hc : hc
+      const cx = eox + dc * PX
+      const cy = oy + hr * PX + (pose.bodyDY + extraBounce) * PX
+      if (cx < 0 || cy < 0 || cx + PX > W || cy + PX > H) continue
+      ctx.fillStyle = hcolor
       ctx.fillRect(cx, cy, PX, PX)
     }
   }
@@ -1175,6 +1206,8 @@ interface Props { marketState?: MarketState; changePercent?: number; holidayPrev
 export default function MarketCharacter({ marketState = 'neutral', changePercent = 0, holidayPreview, bottomOffset = 0 }: Props) {
   // When previewing a holiday, always render as closed state
   if (holidayPreview) marketState = 'closed'
+  const { outfit } = useTheme()
+  _activeOutfit = outfit   // read by renderCharacter's hat layer
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvasW, setCanvasW]   = useState(1440)
   const [viewH,   setViewH]     = useState(900)
