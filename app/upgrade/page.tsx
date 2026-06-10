@@ -71,11 +71,12 @@ const PRO_FEATURES = [
 
 export default function UpgradePage() {
   const [loading, setLoading] = useState(false)
+  const [plan, setPlan] = useState<'monthly' | 'annual'>('monthly')
 
   async function handleUpgrade() {
     setLoading(true)
     try {
-      const res = await fetch('/api/stripe/checkout', { method: 'POST' })
+      const res = await fetch('/api/stripe/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan }) })
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url
@@ -111,8 +112,19 @@ export default function UpgradePage() {
           </div>
           <h1 className="text-5xl font-bold mb-4">Upgrade to Pro</h1>
           <p className="text-xl text-gray-400 max-w-xl mx-auto">
-            All the AI features, unlimited. One flat price.
+            Unlimited AI — Mr. Guy and every tool, no daily caps.
           </p>
+        </div>
+
+        {/* Billing toggle */}
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex items-center rounded-full border border-gray-700 bg-gray-900 p-1">
+            <button onClick={() => setPlan('monthly')} className={cn('px-5 py-2 rounded-full text-sm font-bold transition-colors', plan === 'monthly' ? 'bg-blue-600 text-[#fff]' : 'text-gray-400 hover:text-white')}>Monthly</button>
+            <button onClick={() => setPlan('annual')} className={cn('px-5 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2', plan === 'annual' ? 'bg-blue-600 text-[#fff]' : 'text-gray-400 hover:text-white')}>
+              Annual
+              <span className="text-[10px] font-bold uppercase bg-yellow-500/20 text-yellow-400 rounded px-1.5 py-0.5">2 months free</span>
+            </button>
+          </div>
         </div>
 
         {/* Plans */}
@@ -154,10 +166,10 @@ export default function UpgradePage() {
             <div className="mb-6 mt-3">
               <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Pro</p>
               <div className="flex items-end gap-1">
-                <span className="text-4xl font-bold">$4.99</span>
-                <span className="text-gray-400 mb-1">/month</span>
+                <span className="text-4xl font-bold">{plan === 'annual' ? '$49.99' : '$4.99'}</span>
+                <span className="text-gray-400 mb-1">{plan === 'annual' ? '/year' : '/month'}</span>
               </div>
-              <p className="text-sm text-gray-500 mt-2">Cancel anytime</p>
+              <p className="text-sm text-gray-500 mt-2">{plan === 'annual' ? 'That’s $4.17/mo — 2 months free. Cancel anytime.' : 'Cancel anytime'}</p>
             </div>
 
             <p className="text-sm font-semibold text-gray-300 mb-3">Everything in Free, plus:</p>
@@ -176,11 +188,11 @@ export default function UpgradePage() {
               className={cn(
                 'w-full py-3.5 rounded-xl font-bold text-base transition-all',
                 loading
-                  ? 'bg-blue-600/50 cursor-not-allowed text-white/50'
-                  : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30'
+                  ? 'bg-blue-600/50 cursor-not-allowed text-[#fff]/50'
+                  : 'bg-blue-600 hover:bg-blue-500 text-[#fff] shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30'
               )}
             >
-              {loading ? 'Redirecting…' : 'Get Pro — $4.99/month'}
+              {loading ? 'Redirecting…' : (plan === 'annual' ? 'Get Pro — $49.99/year' : 'Get Pro — $4.99/month')}
             </button>
           </div>
         </div>
