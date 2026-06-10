@@ -37,7 +37,7 @@ async function priceOf(t: string): Promise<{ price: number; name: string } | nul
 }
 
 interface Holding { ticker: string; companyName: string; shares: number; avgCost: number; currentPrice: number; currentValue: number; gainLoss: number; gainLossPct: number }
-interface LbEntry { rank: number; name: string; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean }
+interface LbEntry { rank: number; name: string; gainLoss: number; gainLossPct: number; isMe: boolean; isMrGuy?: boolean; isPro?: boolean }
 type BuyTarget = { ticker: string; name: string; price: number; blurb?: string }
 
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
@@ -356,7 +356,10 @@ export default function GamePage() {
                     {leaderboard.slice(0, 7).map((e) => (
                       <div key={e.rank} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${e.isMe ? 'bg-blue-500/10 border border-blue-500/30' : ''}`}>
                         <span className="w-5 text-center text-sm font-black text-gray-500">{e.rank}</span>
-                        <span className={`flex-1 truncate text-sm font-semibold ${e.isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-200'}`}>{e.name}{e.isMe && ' (you)'}</span>
+                        <span className={`flex items-center gap-1.5 flex-1 min-w-0 text-sm font-semibold ${e.isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-200'}`}>
+                          <span className="truncate">{e.name}{e.isMe && ' (you)'}</span>
+                          {e.isPro && <span className="shrink-0 font-mono font-bold text-[9px] uppercase tracking-wide bg-[#ffd23f] text-[#16130a] border border-[#16130a] rounded px-1 py-px leading-none">Pro</span>}
+                        </span>
                         <div className="text-right shrink-0">
                           <p className={`text-sm font-black ${gainCls(e.gainLoss)}`}>{e.gainLoss >= 0 ? '+' : '-'}{formatCurrency(Math.abs(e.gainLoss))}</p>
                           <p className="text-[10px] text-gray-500 -mt-0.5">{e.gainLossPct >= 0 ? '+' : ''}{e.gainLossPct.toFixed(1)}%</p>

@@ -17,7 +17,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Check, Zap, Brain, BarChart2, MessageSquare, Shield, Star } from 'lucide-react'
+import { Check, Zap, Brain, BarChart2, MessageSquare, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // Mr. Guy pixel head — SVG (works in client components too)
@@ -51,25 +51,22 @@ function MrGuyLogoSvg({ px = 3 }: { px?: number }) {
 }
 
 const FREE_FEATURES = [
+  'All lessons & the learning path',
+  'The $100K Challenge (full access)',
+  'Investing dictionary',
+  'Markets, earnings & watchlist',
   'Stock research (prices may be 15 min delayed)',
-  'Earnings calendar',
-  'Watchlist',
-  'Markets overview',
-  'Finance dictionary',
   '3 Mr. Guy chats per day',
   '2 AI stock analyses per day',
-  '5 Spike Summaries per day',
-  'Smart Money — preview (3 trades)',
-  'Hedge Funds — 1 fund preview',
+  'A few of each AI tool per day',
 ]
 
 const PRO_FEATURES = [
-  { icon: Brain,          text: 'Unlimited Mr. Guy chat — no 3/day cap' },
-  { icon: BarChart2,      text: 'Unlimited AI stock analysis on every research page' },
-  { icon: Zap,            text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear' },
-  { icon: MessageSquare,  text: 'Unlimited Hot Takes, Reality Check, Am I Dumb, BS Checker' },
-  { icon: Star,           text: 'Full Smart Money access — all insider trades & top investors' },
-  { icon: Shield,         text: 'Full Hedge Fund tracker — all funds unlocked' },
+  { icon: Brain,          text: 'Unlimited Mr. Guy chat — ask as much as you want' },
+  { icon: BarChart2,      text: 'Unlimited AI stock analysis & research lookups' },
+  { icon: Zap,            text: 'No daily limits on any AI tool — ever' },
+  { icon: MessageSquare,  text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear & Reality Check' },
+  { icon: Star,           text: 'A Pro badge by your name on the leaderboard' },
 ]
 
 export default function UpgradePage() {

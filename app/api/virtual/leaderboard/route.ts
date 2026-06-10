@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const portfolios = await prisma.virtualPortfolio.findMany({
     include: {
-      user: { select: { name: true, email: true, username: true } },
+      user: { select: { name: true, email: true, username: true, isPro: true } },
       holdings: { select: { ticker: true, companyName: true, shares: true, avgCost: true } },
     },
     take: 100,
@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
       monthlyGainLoss,
       monthlyGainLossPct,
       isMe: p.userId === session!.user!.id,
+      isPro: p.user.isPro ?? false,
       holdings: p.holdings.map(h => ({
         ticker: h.ticker,
         companyName: h.companyName,
