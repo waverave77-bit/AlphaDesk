@@ -26,19 +26,29 @@ export async function POST(req: Request) {
   try { const body = await req.json(); if (body?.plan === 'annual') plan = 'annual' } catch {}
   const price = plan === 'annual' ? ANNUAL_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID!
 
-  const checkoutSession = await getStripe().checkout.sessions.create({
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    customer_email: session.user.email,
-    line_items: [{ price, quantity: 1 }],
-    success_url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=1&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url:  `${process.env.NEXTAUTH_URL}/upgrade?cancelled=1`,
-    metadata: {
-      email: session.user.email.toLowerCase(),
-      userId: (session.user as { id?: string }).id ?? '',
-      plan,
-    },
-  })
+  try {
+    const checkoutSession = await getStripe().checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      customer_email: session.user.email,
+      line_items: [{ price, quantity: 1 }],
+      success_url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=1&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `${process.env.NEXTAUTH_URL}/upgrade?cancelled=1`,
+      metadata: {
+        email: session.user.email.toLowerCase(),
+        userId: (session.user as { id?: string }).id ?? '',
+        plan,
+      },
+    })
 
-  return NextResponse.json({ url: checkoutSession.url })
+    return NextResponse.json({ url: checkoutSession.url })
+  } catch (err: any) {
+    // Surface the real Stripe error (e.g. "No such price: …", test/live mismatch)
+    // instead of a silent 500 that the client can only show as "something went wrong".
+    console.error('Stripe checkout error:', { plan, price, message: err?.message })
+    return NextResponse.json(
+      { error: err?.message || 'Could not start checkout', plan },
+      { status: 500 }
+    )
+  }
 }

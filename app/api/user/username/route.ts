@@ -38,9 +38,11 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: 'That username is already taken.' }, { status: 409 })
   }
 
+  // Keep `name` in sync with `username` — the dashboard greeting and other UI read
+  // `name` from the session token, so updating only `username` left them stale.
   await prisma.user.update({
     where: { email: session.user.email },
-    data: { username: trimmed },
+    data: { username: trimmed, name: trimmed },
   })
 
   return NextResponse.json({ username: trimmed })

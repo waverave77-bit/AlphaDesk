@@ -84,9 +84,11 @@ export default function UpgradePage() {
       if (data.url) {
         window.location.href = data.url
       } else {
-        alert('Something went wrong. Please try again.')
+        console.error('Checkout failed:', data)
+        alert(data.error ? `Couldn’t start checkout: ${data.error}` : 'Something went wrong. Please try again.')
       }
-    } catch {
+    } catch (e) {
+      console.error('Checkout request failed:', e)
       alert('Something went wrong. Please try again.')
     } finally {
       setLoading(false)

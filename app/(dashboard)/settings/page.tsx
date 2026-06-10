@@ -18,7 +18,7 @@ const EXPERIENCE_ICONS: Record<ExperienceLevel, React.ElementType> = {
 }
 
 export default function SettingsPage() {
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
   const isPro = !!(session?.user as any)?.isPro
   const { isDark, accentId, setDark, setAccent, skin, setSkin, outfit, setOutfit } = useTheme()
   const PRO_SKINS = [
@@ -93,6 +93,8 @@ export default function SettingsPage() {
       setUsernameEditing(false)
       setUsernameInput('')
       setUsernameSuccess(true)
+      // Refresh the session token so the new name shows up immediately (dashboard greeting, etc.)
+      updateSession()
       setTimeout(() => setUsernameSuccess(false), 3000)
     } catch {
       setUsernameError('Something went wrong. Try again.')

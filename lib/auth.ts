@@ -51,8 +51,10 @@ export const authOptions: NextAuthOptions = {
         // Read user prefs from DB at sign-in so they're available client-side immediately
         const u = await prisma.user.findUnique({
           where: { id: user.id },
-          select: { isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
+          select: { name: true, username: true, isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
         })
+        if (u?.name) token.name = u.name
+        token.username = u?.username ?? null
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
         token.emailVerified = u?.emailVerified ?? false
@@ -66,8 +68,10 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'update' && token.id) {
         const u = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
+          select: { name: true, username: true, isPro: true, hasOnboarded: true, emailVerified: true, experienceLevel: true, themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
         })
+        if (u?.name) token.name = u.name
+        token.username = u?.username ?? null
         token.isPro = u?.isPro ?? false
         token.hasOnboarded = u?.hasOnboarded ?? false
         token.emailVerified = u?.emailVerified ?? false
@@ -82,6 +86,8 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        if (token.name) session.user.name = token.name as string
+        ;(session.user as any).username = token.username ?? null
         ;(session.user as any).isDemo = token.isDemo ?? false
         ;(session.user as any).isPro = token.isPro ?? false
         ;(session.user as any).hasOnboarded = token.hasOnboarded ?? false

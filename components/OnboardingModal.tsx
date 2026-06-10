@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { TrendingUp, Search, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, Briefcase, BookOpen, Newspaper, Sparkles } from 'lucide-react'
+import { TrendingUp, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, BookOpen, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
@@ -14,16 +14,17 @@ const EXPERIENCE_LEVELS = [
 ]
 
 const GOALS = [
-  { id: 'portfolio', label: 'Try Mr. Guy AI tools', Icon: Bot },
-  { id: 'learn',     label: 'Learn investing basics', Icon: BookOpen },
-  { id: 'markets',   label: 'Follow market news',     Icon: Newspaper },
-  { id: 'research',  label: 'Research stocks',        Icon: Search },
+  { id: 'learn',     label: 'Learn the basics',          Icon: GraduationCap },
+  { id: 'practice',  label: 'Practice with fake money',  Icon: BarChart2 },
+  { id: 'questions', label: 'Get my questions answered', Icon: Bot },
+  { id: 'terms',     label: 'Understand the terms',      Icon: BookOpen },
 ]
 
 const FEATURES = [
-  { icon: Search,   color: 'bg-blue-600/20 border-blue-500/30 text-blue-400',   label: 'Stock Research',      desc: 'Deep-dive any stock with live data, charts, and AI analysis' },
-  { icon: Bot,      color: 'bg-purple-600/20 border-purple-500/30 text-purple-400', label: 'AI Investing Coach', desc: 'Ask anything, powered by live news, explained in plain English' },
-  { icon: BarChart2, color: 'bg-green-600/20 border-green-500/30 text-green-400', label: 'Live Markets',       desc: 'Sector heatmaps, top movers, and the Fear and Greed index' },
+  { icon: GraduationCap, color: 'bg-blue-600/20 border-blue-500/30 text-blue-400',     label: 'Learn',          desc: 'Bite-size lessons that take you from total beginner to confident. Start here.' },
+  { icon: BarChart2,     color: 'bg-green-600/20 border-green-500/30 text-green-400',   label: '$100K Challenge', desc: 'Practice investing with $100,000 in fake money — real market prices, zero risk.' },
+  { icon: Bot,           color: 'bg-purple-600/20 border-purple-500/30 text-purple-400', label: 'Ask Mr. Guy',    desc: 'Your AI buddy. Ask anything about investing and get a plain-English answer.' },
+  { icon: BookOpen,      color: 'bg-amber-600/20 border-amber-500/30 text-amber-400',   label: 'Dictionary',     desc: 'Every confusing term explained simply, the moment you need it.' },
 ]
 
 export default function OnboardingModal() {
@@ -34,12 +35,29 @@ export default function OnboardingModal() {
   const [goals, setGoals] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    // Only show for logged-in users who haven't completed onboarding
-    // Check DB flag (via session) first, fall back to localStorage for backwards compat
+    // Only show for logged-in users who haven't completed onboarding.
+    // Gate purely on the DB flag (carried in the session token) so the behaviour is
+    // identical across devices — relying on localStorage made it re-show in incognito
+    // for accounts that had already finished onboarding.
     if (status !== 'authenticated') return
-    const alreadyDone = (session?.user as any)?.hasOnboarded || localStorage.getItem(STORAGE_KEY)
-    if (!alreadyDone) setVisible(true)
+    if (!(session?.user as any)?.hasOnboarded) setVisible(true)
   }, [status, session])
+
+  // Mark the user as onboarded in the DB + refresh the session token so it won't
+  // show again — used both when finishing the flow and when dismissing it.
+  const persistOnboarded = async () => {
+    localStorage.setItem(STORAGE_KEY, 'true')
+    await fetch('/api/onboarding', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ experience: experience ?? 'beginner', goals: Array.from(goals) }),
+    }).catch(() => {})
+    updateSession()
+  }
+
+  // Closing without finishing (backdrop / Escape) still counts as "seen" so it
+  // doesn't nag on the next page load.
+  const dismiss = () => { setVisible(false); persistOnboarded() }
 
   const complete = async () => {
     localStorage.setItem(STORAGE_KEY, 'true')
@@ -77,7 +95,7 @@ export default function OnboardingModal() {
   useEffect(() => {
     if (!visible) return
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setVisible(false)
+      if (e.key === 'Escape') dismiss()
     }
     document.addEventListener('keydown', handleEsc)
     return () => document.removeEventListener('keydown', handleEsc)
@@ -117,7 +135,7 @@ export default function OnboardingModal() {
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto" onClick={() => setVisible(false)}>
+    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto" onClick={dismiss}>
       <div
         ref={modalRef}
         role="dialog"
@@ -155,13 +173,13 @@ export default function OnboardingModal() {
               </div>
               <div>
                 <h2 id="modal-title" className="text-2xl sm:text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
-                <p className="text-gray-400 mt-3 text-base sm:text-lg leading-relaxed max-w-lg mx-auto">Your personal stock market research and learning platform, built for everyday investors.</p>
+                <p className="text-gray-400 mt-3 text-base sm:text-lg leading-relaxed max-w-lg mx-auto">Learn investing from scratch — fun, bite-size lessons, a $100K practice account, and Mr. Guy to explain anything in plain English.</p>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { Icon: BarChart2, label: 'Live market data' },
-                  { Icon: Bot,       label: 'AI investing coach' },
-                  { Icon: BookOpen,  label: 'Learn as you go' },
+                  { Icon: GraduationCap, label: 'Bite-size lessons' },
+                  { Icon: BarChart2,     label: '$100K practice account' },
+                  { Icon: Bot,           label: 'Ask Mr. Guy anything' },
                 ].map((f) => (
                   <div key={f.label} className="bg-gray-900 rounded-2xl p-3 sm:p-5 border border-gray-800">
                     <f.Icon className="h-6 w-6 text-blue-400 mb-2" />

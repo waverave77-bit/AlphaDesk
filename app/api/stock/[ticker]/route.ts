@@ -34,10 +34,12 @@ export async function GET(req: Request, { params }: { params: { ticker: string }
       return NextResponse.json({ news })
     }
 
-    // Enforce daily research limit for logged-in free users.
-    // Guests are allowed through — the frontend enforces 2 free searches/day via localStorage.
-    const session = await getServerSession(authOptions)
-    if (session?.user?.email) {
+    // Enforce the daily "research page" limit ONLY for deliberate research-page
+    // views (the deep-dive page sends ?context=research). Plain quote fetches that
+    // power the simulator, dashboard, watchlist and charts must stay unlimited —
+    // gating those here was charging users a "research" every time a price loaded,
+    // which both burned the counter and blocked free users from trading.
+    if (url.searchParams.get('context') === 'research' && session?.user?.email) {
       const limited = await checkAILimit('research')
       if (limited) return limited
     }
