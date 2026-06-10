@@ -60,7 +60,7 @@ model User {
   holdings            Holding[]
   watchlistItems      WatchlistItem[]
   alerts              PriceAlert[]
-  virtualPortfolio    VirtualPortfolio?
+  virtualPortfolios   VirtualPortfolio[]
   virtualSeasonRecord VirtualSeasonRecord[]
   weeklyUserPicks     WeeklyUserPick[]
   activity            UserActivity[]
@@ -124,7 +124,8 @@ model PriceAlert {
 
 model VirtualPortfolio {
   id               String           @id @default(cuid())
-  userId           String           @unique
+  userId           String
+  name             String           @default("Main Portfolio")
   cash             Float            @default(100000)
   totalValue       Float            @default(100000)
   season           Int              @default(1)
@@ -135,6 +136,8 @@ model VirtualPortfolio {
   user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   holdings         VirtualHolding[]
   trades           VirtualTrade[]
+
+  @@index([userId])
 }
 
 model VirtualHolding {

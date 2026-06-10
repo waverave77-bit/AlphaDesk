@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
     const monthlyGainLossPct = monthlyBaseline > 0 ? (monthlyGainLoss / monthlyBaseline) * 100 : 0
 
     return {
+      userId: p.userId,
       name: p.user.username || p.user.name || 'Anonymous',
       totalValue: p.totalValue,
       gainLoss: p.totalValue - STARTING_CASH,
@@ -45,12 +46,21 @@ export async function GET(req: NextRequest) {
     }
   })
 
+  // One entry per user — their best portfolio for the active mode (a Pro user
+  // may have 2 portfolios; we don't double-list them on the leaderboard).
+  const metric = (e: typeof entries[number]) => (mode === 'monthly' ? e.monthlyGainLossPct : e.totalValue)
+  const bestByUser = new Map<string, typeof entries[number]>()
+  for (const e of entries) {
+    const prev = bestByUser.get(e.userId)
+    if (!prev || metric(e) > metric(prev)) bestByUser.set(e.userId, e)
+  }
+
   // Sort by the relevant metric
-  const sorted = entries.sort((a, b) =>
+  const sorted = [...bestByUser.values()].sort((a, b) =>
     mode === 'monthly' ? b.monthlyGainLossPct - a.monthlyGainLossPct : b.totalValue - a.totalValue
   ).slice(0, 50)
 
-  const board = sorted.map((e, i) => ({ ...e, rank: i + 1 }))
+  const board = sorted.map(({ userId, ...e }, i) => ({ ...e, rank: i + 1 }))
 
   return NextResponse.json({ board, mode })
 }

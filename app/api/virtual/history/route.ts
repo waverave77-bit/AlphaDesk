@@ -11,8 +11,9 @@ export async function GET() {
 
   try {
     // Try to get portfolio snapshots if the model exists
-    const portfolio = await prisma.virtualPortfolio.findUnique({
+    const portfolio = await prisma.virtualPortfolio.findFirst({
       where: { userId: session.user.id },
+      orderBy: { createdAt: 'asc' },
     })
 
     if (!portfolio) return NextResponse.json({ points: [] })

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { ticker, shares, type } = await req.json()
+  const { ticker, shares, type, portfolioId } = await req.json()
   if (!ticker || !shares || !type) return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   if (shares <= 0) return NextResponse.json({ error: 'Shares must be positive' }, { status: 400 })
 
@@ -20,10 +20,9 @@ export async function POST(req: Request) {
   const companyName = priceData?.quote?.companyName || ticker
   if (!price) return NextResponse.json({ error: 'Could not fetch price for ' + ticker }, { status: 400 })
 
-  const portfolio = await prisma.virtualPortfolio.findUnique({
-    where: { userId: session.user.id },
-    include: { holdings: true },
-  })
+  const portfolio = portfolioId
+    ? await prisma.virtualPortfolio.findFirst({ where: { id: portfolioId, userId: session.user.id }, include: { holdings: true } })
+    : await prisma.virtualPortfolio.findFirst({ where: { userId: session.user.id }, orderBy: { createdAt: 'asc' }, include: { holdings: true } })
   if (!portfolio) return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 })
 
   const cost = price * shares

@@ -17,20 +17,22 @@ function isNewMonth(date: Date) {
   return date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  let portfolio = await prisma.virtualPortfolio.findUnique({
+  let portfolios = await prisma.virtualPortfolio.findMany({
     where: { userId: session.user.id },
+    orderBy: { createdAt: 'asc' },
     include: { holdings: true, trades: { orderBy: { executedAt: 'desc' }, take: 20 } },
   })
 
-  // Create portfolio if first visit
-  if (!portfolio) {
-    portfolio = await prisma.virtualPortfolio.create({
+  // Create the first portfolio on first visit
+  if (portfolios.length === 0) {
+    const created = await prisma.virtualPortfolio.create({
       data: {
         userId: session.user.id,
+        name: 'Main Portfolio',
         cash: STARTING_CASH,
         totalValue: STARTING_CASH,
         season: 1,
@@ -38,15 +40,20 @@ export async function GET() {
         monthlyBaseline: STARTING_CASH,
         monthlyResetAt: new Date(),
       },
-      include: { holdings: true, trades: true },
+      include: { holdings: true, trades: { orderBy: { executedAt: 'desc' }, take: 20 } },
     })
+    portfolios = [created]
   }
 
-  // Fetch live prices for holdings
+  // Pick the active portfolio (by ?portfolioId, else the oldest)
+  const wantedId = new URL(req.url).searchParams.get('portfolioId')
+  const active = portfolios.find((p) => p.id === wantedId) ?? portfolios[0]
+
+  // Fetch live prices for the active portfolio's holdings
   let holdingsWithPrices: any[] = []
-  if (portfolio.holdings.length > 0) {
+  if (active.holdings.length > 0) {
     const priceResults = await Promise.allSettled(
-      portfolio.holdings.map(async (h) => {
+      active.holdings.map(async (h) => {
         const r = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/api/stock/${h.ticker}`, { cache: 'no-store' })
         const data = await r.json()
         const price = data?.quote?.price ?? h.avgCost
@@ -61,9 +68,9 @@ export async function GET() {
     )
     holdingsWithPrices = priceResults.map((r, i) =>
       r.status === 'fulfilled' ? r.value : {
-        ...portfolio!.holdings[i],
-        currentPrice: portfolio!.holdings[i].avgCost,
-        currentValue: portfolio!.holdings[i].avgCost * portfolio!.holdings[i].shares,
+        ...active.holdings[i],
+        currentPrice: active.holdings[i].avgCost,
+        currentValue: active.holdings[i].avgCost * active.holdings[i].shares,
         gainLoss: 0,
         gainLossPct: 0,
       }
@@ -71,35 +78,37 @@ export async function GET() {
   }
 
   const investedValue = holdingsWithPrices.reduce((s, h) => s + h.currentValue, 0)
-  const totalValue = portfolio.cash + investedValue
+  const totalValue = active.cash + investedValue
   const totalGainLoss = totalValue - STARTING_CASH
   const totalGainLossPct = (totalGainLoss / STARTING_CASH) * 100
 
   // Roll over monthly baseline if it's a new month
-  const monthlyResetAt = portfolio.monthlyResetAt ?? new Date(0)
+  const monthlyResetAt = active.monthlyResetAt ?? new Date(0)
   const needsMonthlyReset = isNewMonth(monthlyResetAt)
-  const monthlyBaseline = needsMonthlyReset ? totalValue : (portfolio.monthlyBaseline ?? STARTING_CASH)
-
+  const monthlyBaseline = needsMonthlyReset ? totalValue : (active.monthlyBaseline ?? STARTING_CASH)
   const monthlyGainLoss = totalValue - monthlyBaseline
   const monthlyGainLossPct = monthlyBaseline > 0 ? (monthlyGainLoss / monthlyBaseline) * 100 : 0
 
-  // Persist updated totalValue and monthly baseline if needed
   await prisma.virtualPortfolio.update({
-    where: { id: portfolio.id },
-    data: {
-      totalValue,
-      ...(needsMonthlyReset ? { monthlyBaseline: totalValue, monthlyResetAt: new Date() } : {}),
-    },
+    where: { id: active.id },
+    data: { totalValue, ...(needsMonthlyReset ? { monthlyBaseline: totalValue, monthlyResetAt: new Date() } : {}) },
   })
 
+  const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { isPro: true } })
+
   return NextResponse.json({
-    cash: portfolio.cash,
+    cash: active.cash,
     totalValue,
     totalGainLoss,
     totalGainLossPct,
     monthlyGainLoss,
     monthlyGainLossPct,
     holdings: holdingsWithPrices,
-    trades: portfolio.trades,
+    trades: active.trades,
+    activePortfolioId: active.id,
+    activePortfolioName: active.name,
+    portfolios: portfolios.map((p) => ({ id: p.id, name: p.name })),
+    canAddPortfolio: !!user?.isPro && portfolios.length < 2,
+    isPro: !!user?.isPro,
   })
 }

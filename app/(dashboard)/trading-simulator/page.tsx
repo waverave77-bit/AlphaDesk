@@ -5,7 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { formatCurrency } from '@/lib/utils'
 import { useToast } from '@/hooks/use-toast'
-import { Loader2, Search, X, Trophy, ChevronRight, Shield, Sparkles, Zap } from 'lucide-react'
+import { Loader2, Search, X, Trophy, ChevronRight, Shield, Sparkles, Zap, Plus, Pencil, RotateCcw } from 'lucide-react'
 import { COMPANIES, THEMES } from '@/lib/sim-companies'
 
 const MrGuyMascot = dynamic(() => import('@/components/learn/MrGuyMascot'), { ssr: false })
@@ -68,6 +68,9 @@ export default function GamePage() {
   const [loading, setLoading] = useState(true)
   const [leaderboard, setLeaderboard] = useState<LbEntry[]>([])
   const [prices, setPrices] = useState<Record<string, number>>({})
+  const [portfolios, setPortfolios] = useState<{ id: string; name: string }[]>([])
+  const [activePid, setActivePid] = useState<string | null>(null)
+  const [canAddPortfolio, setCanAddPortfolio] = useState(false)
 
   const [buyTarget, setBuyTarget] = useState<BuyTarget | null>(null)
   const [buyAmount, setBuyAmount] = useState(500)
@@ -82,8 +85,46 @@ export default function GamePage() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ ticker: string; name: string }[]>([])
 
-  const fetchPortfolio = async () => { const d = await fetch('/api/virtual').then((r) => r.json()); setPortfolio(d?.error ? null : d); setLoading(false) }
+  const fetchPortfolio = async (pid?: string) => {
+    const id = pid ?? activePid
+    const d = await fetch('/api/virtual' + (id ? `?portfolioId=${id}` : '')).then((r) => r.json())
+    if (d?.error) { setPortfolio(null); setLoading(false); return }
+    setPortfolio(d)
+    setPortfolios(d.portfolios || [])
+    setActivePid(d.activePortfolioId ?? null)
+    setCanAddPortfolio(!!d.canAddPortfolio)
+    setLoading(false)
+  }
   const fetchLeaderboard = async () => { try { const d = await fetch('/api/virtual/leaderboard?mode=alltime').then((r) => r.json()); setLeaderboard(d.board || []) } catch {} }
+
+  const switchPortfolio = (id: string) => { if (id === activePid) return; setActivePid(id); fetchPortfolio(id) }
+  const createPortfolio = async () => {
+    try {
+      const r = await fetch('/api/virtual/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'create' }) })
+      const d = await r.json()
+      if (!r.ok) {
+        toast(d.upgrade
+          ? { title: 'A 2nd portfolio is a Pro perk', description: 'Upgrade to run two strategies side by side.' }
+          : { title: 'Couldn’t create', description: d.error, variant: 'destructive' })
+        return
+      }
+      toast({ title: 'New portfolio created', description: 'Fresh $100,000 to play with.' })
+      fetchPortfolio(d.id)
+    } catch {}
+  }
+  const renamePortfolio = async (id: string) => {
+    const current = portfolios.find((p) => p.id === id)?.name || ''
+    const name = typeof window !== 'undefined' ? window.prompt('Name this portfolio', current) : null
+    if (!name || !name.trim()) return
+    await fetch('/api/virtual/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'rename', portfolioId: id, name }) })
+    fetchPortfolio(id)
+  }
+  const resetPortfolio = async (id: string) => {
+    if (typeof window !== 'undefined' && !window.confirm('Reset this portfolio to $100,000 and clear all holdings? This can’t be undone.')) return
+    await fetch('/api/virtual/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reset', portfolioId: id }) })
+    toast({ title: 'Portfolio reset', description: 'Back to a clean $100,000.' })
+    fetchPortfolio(id)
+  }
 
   // Load prices on demand (the catalog is ~100 names — never fetch all at once).
   const requested = useRef<Set<string>>(new Set())
@@ -120,7 +161,7 @@ export default function GamePage() {
     setBuying(true)
     const shares = +(buyAmount / buyTarget.price).toFixed(4)
     try {
-      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: buyTarget.ticker, shares, type: 'BUY' }) })
+      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: buyTarget.ticker, shares, type: 'BUY', portfolioId: activePid }) })
       const d = await r.json(); if (!r.ok) throw new Error(d.error)
       toast({ title: 'Boom — you’re an owner!', description: `You put ${formatCurrency(buyAmount)} into ${buyTarget.name}.` })
       setBuyTarget(null); await fetchPortfolio(); fetchLeaderboard()
@@ -136,7 +177,7 @@ export default function GamePage() {
     if (shares <= 0) { toast({ title: 'Pick an amount', description: 'Choose how much you want to sell.', variant: 'destructive' }); return }
     setSelling(sellTarget.ticker)
     try {
-      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: sellTarget.ticker, shares, type: 'SELL' }) })
+      const r = await fetch('/api/virtual/trade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticker: sellTarget.ticker, shares, type: 'SELL', portfolioId: activePid }) })
       const d = await r.json(); if (!r.ok) throw new Error(d.error)
       toast({ title: 'Sold!', description: full ? `You sold all your ${sellTarget.companyName || sellTarget.ticker}.` : `You sold ${formatCurrency(sellAmount)} of ${sellTarget.companyName || sellTarget.ticker}.` })
       setSellTarget(null); await fetchPortfolio(); fetchLeaderboard()
@@ -245,6 +286,32 @@ export default function GamePage() {
         <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-10 text-center text-gray-500">Loading your money…</div>
       ) : (
         <>
+          {/* ── Portfolio switcher ── */}
+          {portfolios.length >= 1 && (
+            <div className="flex items-center gap-2 flex-wrap">
+              {portfolios.map((p) => {
+                const on = p.id === activePid
+                return (
+                  <div key={p.id} className={`flex items-center rounded-full border-2 ${on ? 'bg-[#2563eb] border-[#16130a] text-[#fff]' : 'border-gray-700 text-gray-300'}`}>
+                    <button onClick={() => switchPortfolio(p.id)} className="font-mono font-bold text-sm pl-3.5 pr-2.5 py-1.5">{p.name}</button>
+                    {on && (
+                      <span className="flex items-center gap-0.5 pr-2">
+                        <button onClick={() => renamePortfolio(p.id)} title="Rename" className="p-1 hover:opacity-70"><Pencil className="h-3.5 w-3.5" /></button>
+                        <button onClick={() => resetPortfolio(p.id)} title="Reset to $100k" className="p-1 hover:opacity-70"><RotateCcw className="h-3.5 w-3.5" /></button>
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+              {portfolios.length < 2 && (
+                <button onClick={createPortfolio} className="flex items-center gap-1.5 font-mono font-bold text-sm px-3.5 py-1.5 rounded-full border-2 border-dashed border-gray-600 text-gray-400 hover:text-gray-200 hover:border-gray-400">
+                  <Plus className="h-3.5 w-3.5" /> New portfolio
+                  {!canAddPortfolio && <span className="text-[10px] uppercase bg-[#ffd23f] text-[#16130a] border border-[#16130a] rounded px-1 leading-none">Pro</span>}
+                </button>
+              )}
+            </div>
+          )}
+
           {/* ── Hero ── */}
           <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6">
             <div className="flex flex-col lg:flex-row lg:items-center gap-6">

@@ -17,7 +17,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Check, Zap, Brain, BarChart2, MessageSquare, Star } from 'lucide-react'
+import { Check, Zap, Brain, BarChart2, MessageSquare, Star, Layers } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // Mr. Guy pixel head — SVG (works in client components too)
@@ -66,6 +66,7 @@ const PRO_FEATURES = [
   { icon: BarChart2,      text: 'Unlimited AI stock analysis & research lookups' },
   { icon: Zap,            text: 'No daily limits on any AI tool — ever' },
   { icon: MessageSquare,  text: 'Unlimited Spike Summaries, Report Cards, Bull vs Bear & Reality Check' },
+  { icon: Layers,         text: 'A 2nd $100K portfolio to test another strategy' },
   { icon: Star,           text: 'A Pro badge by your name on the leaderboard' },
 ]
 
