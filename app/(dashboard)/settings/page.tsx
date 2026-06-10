@@ -20,7 +20,7 @@ const EXPERIENCE_ICONS: Record<ExperienceLevel, React.ElementType> = {
 export default function SettingsPage() {
   const { data: session } = useSession()
   const isPro = !!(session?.user as any)?.isPro
-  const { isDark, accentId, setDark, setAccent, skin, setSkin } = useTheme()
+  const { isDark, accentId, setDark, setAccent, skin, setSkin, outfit, setOutfit } = useTheme()
   const PRO_SKINS = [
     { id: 'mint',   name: 'Mint',   canvas: '#e7f7ee', primary: '#0e9f6e', hi: '#ffd23f' },
     { id: 'grape',  name: 'Grape',  canvas: '#f3ecff', primary: '#7c4dff', hi: '#ff8fc7' },
@@ -320,6 +320,39 @@ export default function SettingsPage() {
                     Themes are a <Link href="/upgrade" className="text-blue-400 hover:underline">Pro</Link> perk.
                   </p>
                 )}
+              </div>
+
+              {/* Pro outfits */}
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="text-sm font-medium text-white">Mr. Guy Outfit</p>
+                  <span className="text-[10px] font-bold uppercase bg-yellow-500/15 text-yellow-400 border border-yellow-500/20 rounded px-1.5 py-0.5">Pro</span>
+                </div>
+                <p className="text-xs text-gray-500 mb-3">Shows on Mr. Guy in lessons and the $100K Challenge.</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {([
+                    { id: null,     name: 'None',   svg: <span className="h-6 w-6 rounded-full border-2 border-gray-600" /> },
+                    { id: 'beanie', name: 'Beanie', svg: (
+                      <svg viewBox="0 0 24 24" className="h-6 w-6"><circle cx="12" cy="4" r="2" fill="#f5f5f5" /><path d="M3 16a9 9 0 0 1 18 0Z" fill="#e05a5a" /><rect x="2" y="15" width="20" height="4" rx="1.5" fill="#c43d3d" /></svg>
+                    ) },
+                    { id: 'crown',  name: 'Crown',  svg: (
+                      <svg viewBox="0 0 24 24" className="h-6 w-6"><path d="M3 19V8l4 4 5-7 5 7 4-4v11Z" fill="#ffcf33" stroke="#d39e00" strokeWidth="1" strokeLinejoin="round" /><circle cx="12" cy="13" r="1.4" fill="#e0384e" /></svg>
+                    ) },
+                  ] as { id: string | null; name: string; svg: React.ReactNode }[]).map((o) => {
+                    const sel = outfit === o.id
+                    return (
+                      <button
+                        key={o.name}
+                        onClick={() => { if (o.id === null || isPro) setOutfit(o.id); else window.location.href = '/upgrade' }}
+                        className={cn('flex flex-col items-center gap-1.5 rounded-lg border py-3 transition-all relative', sel ? 'border-blue-500 bg-blue-600/10' : 'border-gray-800 hover:border-gray-600')}
+                      >
+                        {o.svg}
+                        <span className="text-xs text-white flex items-center gap-1">{o.name}{sel && <Check className="h-3 w-3 text-blue-400" />}</span>
+                        {o.id !== null && !isPro && <span className="absolute top-1.5 right-1.5 text-[8px] font-bold uppercase bg-yellow-400 text-gray-950 rounded px-1 leading-tight">Pro</span>}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             </CardContent>
           </Card>

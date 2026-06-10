@@ -31,15 +31,18 @@ interface ThemeContextType {
   isDark: boolean
   accentId: ThemeId
   skin: string | null    // Pro-only light-mode repaint (mint/grape/sunset)
+  outfit: string | null  // Pro-only Mr. Guy outfit (beanie/crown)
   setTheme: (id: ThemeId) => void   // legacy: 'white' = light, anything else = dark+accent
   setDark: (dark: boolean) => void
   setAccent: (id: ThemeId) => void
   setSkin: (s: string | null) => void
+  setOutfit: (o: string | null) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   themeId: 'white', theme: THEMES.find(t => t.id === 'white')!, isDark: false,
-  accentId: 'default', skin: null, setTheme: () => {}, setDark: () => {}, setAccent: () => {}, setSkin: () => {},
+  accentId: 'default', skin: null, outfit: null,
+  setTheme: () => {}, setDark: () => {}, setAccent: () => {}, setSkin: () => {}, setOutfit: () => {},
 })
 
 function applyToDOM(isDark: boolean, accentId: ThemeId) {
@@ -68,6 +71,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDarkState] = useState(false)
   const [accentId, setAccentIdState] = useState<ThemeId>('default')
   const [skin, setSkinState] = useState<string | null>(null)
+  const [outfit, setOutfitState] = useState<string | null>(null)
 
   // Step 1: Apply localStorage immediately on mount to prevent flash
   useEffect(() => {
@@ -82,6 +86,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setSkinState(savedSkin)
       document.documentElement.setAttribute('data-skin', savedSkin)
     }
+    const savedOutfit = localStorage.getItem('mrguy-outfit')
+    if (savedOutfit) setOutfitState(savedOutfit)
   }, [])
 
   // Step 2: Once authenticated, fetch the saved theme straight from the DB —
@@ -132,6 +138,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const setOutfit = (o: string | null) => {
+    setOutfitState(o)
+    if (o) localStorage.setItem('mrguy-outfit', o)
+    else localStorage.removeItem('mrguy-outfit')
+  }
+
   const setAccent = (id: ThemeId) => {
     if (id === 'white') return  // 'white' is not an accent, it's a mode
     setAccentIdState(id)
@@ -154,7 +166,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = THEMES.find(t => t.id === themeId) ?? THEMES[0]
 
   return (
-    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, skin, setTheme, setDark, setAccent, setSkin }}>
+    <ThemeContext.Provider value={{ themeId, theme, isDark, accentId, skin, outfit, setTheme, setDark, setAccent, setSkin, setOutfit }}>
       {children}
     </ThemeContext.Provider>
   )

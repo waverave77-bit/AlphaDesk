@@ -1,5 +1,6 @@
 'use client'
 import { useRef, useEffect } from 'react'
+import { useTheme } from '@/components/ThemeProvider'
 
 /**
  * Full-body, reactive Mr. Guy for the Learn experience.
@@ -52,6 +53,24 @@ const GRID: Color[][] = [
   [SH,SH,SH,SH,SH,SH,SL,N,N,SL,SH,SH,SH,SH,SH,SH,N,N,N,N],
 ]
 
+// ── Pro outfits — hat pixels drawn over the head. [row, col, colour]; row 0 is
+// the top hair row, negative rows sit above the head (in the canvas headroom). ──
+const _BD = '#c43d3d', _DO = '#e05a5a', _PO = '#f5f5f5'   // beanie band / dome / pom
+const _GO = '#ffcf33', _GD = '#d39e00', _JW = '#e0384e'   // crown gold / dark gold / jewel
+const OUTFITS: Record<string, [number, number, string][]> = {
+  beanie: [
+    [-3, 9, _PO],
+    [-2, 6, _DO], [-2, 7, _DO], [-2, 8, _DO], [-2, 9, _DO], [-2, 10, _DO], [-2, 11, _DO], [-2, 12, _DO],
+    [-1, 5, _DO], [-1, 6, _DO], [-1, 7, _DO], [-1, 8, _DO], [-1, 9, _DO], [-1, 10, _DO], [-1, 11, _DO], [-1, 12, _DO], [-1, 13, _DO],
+    [0, 4, _BD], [0, 5, _BD], [0, 6, _BD], [0, 7, _BD], [0, 8, _BD], [0, 9, _BD], [0, 10, _BD], [0, 11, _BD], [0, 12, _BD], [0, 13, _BD], [0, 14, _BD],
+  ],
+  crown: [
+    [-2, 5, _GO], [-2, 7, _GO], [-2, 9, _GO], [-2, 11, _GO], [-2, 13, _GO],
+    [-1, 5, _GO], [-1, 6, _GO], [-1, 7, _GO], [-1, 8, _GO], [-1, 9, _JW], [-1, 10, _GO], [-1, 11, _GO], [-1, 12, _GO], [-1, 13, _GO],
+    [0, 5, _GD], [0, 6, _GD], [0, 7, _GD], [0, 8, _GD], [0, 9, _GD], [0, 10, _GD], [0, 11, _GD], [0, 12, _GD], [0, 13, _GD],
+  ],
+}
+
 export type Mood = 'idle' | 'happy' | 'sad' | 'celebrate' | 'think'
 type Pose = { bodyDY: number; bounce: number; shakeX: number; lArm: number; rArm: number; lLeg: number; rLeg: number }
 
@@ -80,6 +99,9 @@ export default function MrGuyMascot({ mood = 'idle', px = 4, flip = false }: { m
   const ref = useRef<HTMLCanvasElement>(null)
   const moodRef = useRef(mood)
   moodRef.current = mood
+  const { outfit } = useTheme()
+  const outfitRef = useRef(outfit)
+  outfitRef.current = outfit
 
   useEffect(() => {
     const canvas = ref.current
@@ -113,6 +135,18 @@ export default function MrGuyMascot({ mood = 'idle', px = 4, flip = false }: { m
           const isRS = r >= 28 && c >= 9 && c <= 15
           if (isLL || isLS) cx += p.lLeg * px
           if (isRL || isRS) cx += p.rLeg * px
+          if (cx < 0 || cy < 0 || cx + px > W || cy + px > H) continue
+          ctx.fillStyle = color
+          ctx.fillRect(cx, cy, px, px)
+        }
+      }
+      // Pro outfit (hat) — drawn over the head, moving with the body bob.
+      const hat = outfitRef.current ? OUTFITS[outfitRef.current] : null
+      if (hat) {
+        for (const [hr, hc, color] of hat) {
+          const dc = dir === -1 ? 19 - hc : hc
+          const cx = dc * px + p.shakeX * (px / 4)
+          const cy = oy + hr * px + (p.bodyDY + p.bounce) * px
           if (cx < 0 || cy < 0 || cx + px > W || cy + px > H) continue
           ctx.fillStyle = color
           ctx.fillRect(cx, cy, px, px)
