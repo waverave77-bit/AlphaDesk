@@ -213,8 +213,7 @@ export default function LessonPlayer() {
                 <div className="shrink-0 -mb-2"><MrGuyMascot px={3} mood="think" /></div>
                 <div className="bg-white dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-600 shadow-[3px_3px_0_#16130a] dark:shadow-none rounded-2xl px-4 py-3 text-sm font-bold text-[#16130a] dark:text-white relative">
                   {TEACH_INTROS[(idx + lesson.globalOrder) % TEACH_INTROS.length]}
-                  <div className="absolute -left-[9px] bottom-2.5 w-[14px] h-[14px] bg-[#16130a] dark:bg-gray-600 rotate-45" />
-                  <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white dark:bg-gray-800 rotate-45" />
+                  <div className="absolute -left-[7px] bottom-3 w-3 h-3 rotate-45 bg-white dark:bg-gray-800 border-l-2 border-b-2 border-[#16130a] dark:border-gray-600" />
                 </div>
               </div>
               <div className="rounded-3xl overflow-hidden border-2 border-gray-800 shadow-xl">
@@ -256,8 +255,7 @@ export default function LessonPlayer() {
                 <div className="shrink-0 -mb-2"><MrGuyMascot px={3} mood={mood} /></div>
                 <div className="bg-white dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-600 shadow-[3px_3px_0_#16130a] dark:shadow-none rounded-2xl px-4 py-3 text-base font-bold text-[#16130a] dark:text-white relative">
                   {bubbleFor(ex)}
-                  <div className="absolute -left-[9px] bottom-2.5 w-[14px] h-[14px] bg-[#16130a] dark:bg-gray-600 rotate-45" />
-                  <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white dark:bg-gray-800 rotate-45" />
+                  <div className="absolute -left-[7px] bottom-3 w-3 h-3 rotate-45 bg-white dark:bg-gray-800 border-l-2 border-b-2 border-[#16130a] dark:border-gray-600" />
                 </div>
               </div>
               <MatchExercise pairs={ex.pairs} onComplete={(correct) => commit(correct)} />
@@ -271,8 +269,7 @@ export default function LessonPlayer() {
                 <div className="shrink-0 -mb-2"><MrGuyMascot px={3} mood={mood} /></div>
                 <div className="bg-white dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-600 shadow-[3px_3px_0_#16130a] dark:shadow-none rounded-2xl px-4 py-3 text-base font-bold text-[#16130a] dark:text-white relative">
                   {bubbleFor(ex)}
-                  <div className="absolute -left-[9px] bottom-2.5 w-[14px] h-[14px] bg-[#16130a] dark:bg-gray-600 rotate-45" />
-                  <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white dark:bg-gray-800 rotate-45" />
+                  <div className="absolute -left-[7px] bottom-3 w-3 h-3 rotate-45 bg-white dark:bg-gray-800 border-l-2 border-b-2 border-[#16130a] dark:border-gray-600" />
                 </div>
               </div>
 

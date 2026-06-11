@@ -52,7 +52,6 @@ function StatTile({ label, value, cls }: { label: string; value: string; cls: st
 }
 
 function MarketPill({ market }: { market: { status: string; label: string; dayName: string } }) {
-  // Open gets a simple live chip
   if (market.status === 'open') {
     return (
       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-green-500/40 bg-green-500/10 text-green-400 text-xs font-mono font-bold">
@@ -61,38 +60,28 @@ function MarketPill({ market }: { market: { status: string; label: string; dayNa
       </span>
     )
   }
-  // Pre/after get a small subtle chip
-  if (market.status === 'pre' || market.status === 'after') {
-    const label = market.status === 'pre' ? '⏰ Pre-market' : '🌆 After-hours'
-    const cls = market.status === 'pre'
-      ? 'border-yellow-500/40 bg-yellow-500/10 text-yellow-400'
-      : 'border-blue-500/40 bg-blue-500/10 text-blue-400'
+  if (market.status === 'pre') {
     return (
-      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-mono font-bold ${cls}`}>
-        {label}
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-yellow-500/40 bg-yellow-500/10 text-yellow-400 text-xs font-mono font-bold">
+        ⏰ Pre-market
       </span>
     )
   }
-  // Closed / weekend / holiday → fun banner (rendered separately below heading via null here)
-  return null
-}
-
-function MarketClosedBanner({ market }: { market: { status: string; label: string; dayName: string } }) {
-  if (!market || market.status === 'open' || market.status === 'pre' || market.status === 'after') return null
+  if (market.status === 'after') {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-blue-500/40 bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">
+        🌆 After-hours
+      </span>
+    )
+  }
+  // Closed / weekend / holiday — fun compact badge
   const holiday = market.label.replace('Closed · ', '')
-  const { icon, line1, line2 } = market.status === 'weekend'
-    ? { icon: '🛋️', line1: "Weekend mode — Mr. Guy is offline", line2: "Markets reopen Monday at 9:30 AM ET. Your trades still lock in at last price." }
-    : market.status === 'holiday'
-    ? { icon: '🎉', line1: `Holiday — ${holiday}`, line2: "Markets are taking the day off. Trades queue at last price and go through at open." }
-    : { icon: '🌙', line1: "Markets are closed for today", line2: "Trades still go through at last price — a real broker would queue them until 9:30 AM ET." }
+  const icon = market.status === 'weekend' ? '🛋️' : market.status === 'holiday' ? '🎉' : '🌙'
+  const text = market.status === 'weekend' ? 'Weekend' : market.status === 'holiday' ? holiday : 'Closed'
   return (
-    <div className="w-full flex items-center gap-4 rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-yellow-800/60 dark:shadow-none bg-[#ffd23f] dark:bg-amber-900/20 px-4 py-3">
-      <span className="text-2xl shrink-0">{icon}</span>
-      <div className="min-w-0">
-        <p className="font-mono font-bold text-[#16130a] dark:text-amber-200 text-sm leading-snug">{line1}</p>
-        <p className="text-xs text-[#16130a]/70 dark:text-amber-300/60 leading-snug mt-0.5">{line2}</p>
-      </div>
-    </div>
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-[#16130a] dark:border-yellow-700 bg-[#ffd23f] dark:bg-yellow-900/30 text-[#16130a] dark:text-yellow-300 text-xs font-mono font-bold shadow-[2px_2px_0_#16130a] dark:shadow-none">
+      {icon} {text}
+    </span>
   )
 }
 
@@ -342,7 +331,6 @@ export default function GamePage() {
         </h1>
         {market && <MarketPill market={market} />}
       </div>
-      {market && <MarketClosedBanner market={market} />}
 
       {!session && status !== 'loading' ? (
         <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-10 text-center max-w-xl mx-auto">

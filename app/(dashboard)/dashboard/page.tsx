@@ -40,19 +40,36 @@ function formatPrice(n: number | null) {
 
 function MarketStatusBadge({ status }: { status: string }) {
   const isHoliday = status.startsWith('Closed ·')
-  const cfg: Record<string, { box: string; dot: string }> = {
-    'Open':        { box: 'bg-green-500/10 border-green-500/30 text-green-400',    dot: 'bg-green-400' },
-    'Pre-Market':  { box: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400', dot: 'bg-yellow-400' },
-    'After Hours': { box: 'bg-blue-500/10 border-blue-500/30 text-blue-400',       dot: 'bg-blue-400' },
-    'Weekend':     { box: 'bg-gray-500/10 border-gray-500/40 text-gray-400',       dot: 'bg-gray-500' },
-    'Closed':      { box: 'bg-gray-500/10 border-gray-500/40 text-gray-400',       dot: 'bg-gray-500' },
-    'Holiday':     { box: 'bg-purple-500/10 border-purple-500/30 text-purple-400', dot: 'bg-purple-400' },
+  if (status === 'Open') {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-green-500/30 bg-green-500/10 text-green-400 text-xs font-mono font-bold">
+        <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+        Open
+      </span>
+    )
   }
-  const c = isHoliday ? cfg['Holiday'] : (cfg[status] ?? cfg['Closed'])
+  if (status === 'Pre-Market') {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-xs font-mono font-bold">
+        <span className="h-2 w-2 rounded-full bg-yellow-400" />
+        Pre-Market
+      </span>
+    )
+  }
+  if (status === 'After Hours') {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">
+        <span className="h-2 w-2 rounded-full bg-blue-400" />
+        After Hours
+      </span>
+    )
+  }
+  // Closed / Weekend / Holiday — fun compact badge
+  const icon = isHoliday ? '🎉' : status === 'Weekend' ? '🛋️' : '🌙'
+  const label = isHoliday ? status.replace('Closed · ', '') : status
   return (
-    <span className={cn('inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-mono font-bold', c.box)}>
-      <span className={cn('h-2 w-2 rounded-full', c.dot, status === 'Open' && 'animate-pulse')} />
-      {status}
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-[#16130a] dark:border-yellow-700 bg-[#ffd23f] dark:bg-yellow-900/30 text-[#16130a] dark:text-yellow-300 text-xs font-mono font-bold shadow-[2px_2px_0_#16130a] dark:shadow-none">
+      {icon} {label}
     </span>
   )
 }
