@@ -409,7 +409,7 @@ export default function DashboardPage() {
         {/* $100K Challenge — primary */}
         <Link href="/trading-simulator" className="group rounded-3xl p-6 border-2 border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none bg-[#ffd23f] text-[#16130a] flex flex-col min-h-[150px] transition-transform hover:-translate-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#fff] border-2 border-[#16130a]"><Trophy className="h-7 w-7 text-[#16130a]" /></span>
+            <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#16130a] border-2 border-[#16130a]"><Trophy className="h-7 w-7 text-[#ffd23f]" /></span>
             <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </div>
           <div className="mt-auto pt-6">
