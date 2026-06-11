@@ -155,12 +155,20 @@ export default function LessonPlayer() {
     else setPhase('results')
   }
 
-  // Feedback footer detail text.
+  // Feedback footer detail text — shown on every answered question.
   const feedbackDetail = (() => {
     if (!ex || result === null) return null
     if (ex.kind === 'truefalse') return ex.explain
     if (ex.kind === 'scenario') return ex.options.find((o) => o.label === selected)?.reply ?? null
-    if ((ex.kind === 'choice' || ex.kind === 'blank') && result === false) return `Answer: ${correctLabel(ex)}`
+    if (ex.kind === 'choice' || ex.kind === 'blank') {
+      const explanation = ex.explain ?? ''
+      if (result === true) return explanation || null
+      // Wrong: prepend the correct answer then the explanation.
+      const prefix = ex.kind === 'choice'
+        ? `Correct: ${correctLabel(ex)}.`
+        : `The term is: ${correctLabel(ex)}.`
+      return explanation ? `${prefix} ${explanation}` : prefix
+    }
     return null
   })()
   const hypeMsg = combo >= 3 ? BIG_HYPE[combo % BIG_HYPE.length] : HYPE[score % HYPE.length]
@@ -326,7 +334,7 @@ export default function LessonPlayer() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className={`font-black text-lg ${result ? 'text-green-300' : 'text-red-300'}`}>{result ? hypeMsg : WRONG[idx % WRONG.length]}</p>
-                  {feedbackDetail && <p className={`text-sm ${result ? 'text-green-200/80' : 'text-red-200/80'} line-clamp-2`}>{feedbackDetail}</p>}
+                  {feedbackDetail && <p className={`text-sm ${result ? 'text-green-200/80' : 'text-red-200/80'} line-clamp-3 leading-snug`}>{feedbackDetail}</p>}
                 </div>
                 <PushButton variant={result ? 'green' : 'red'} className="px-6 py-3 text-base shrink-0" onClick={advance}>{idx + 1 < exercises.length ? 'Continue' : 'Finish'}</PushButton>
               </div>
