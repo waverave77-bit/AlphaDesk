@@ -6,9 +6,8 @@ import dynamic from 'next/dynamic'
 import {
   Search, Star, Calendar, Activity, TrendingUp, TrendingDown,
   Sparkles, ChevronRight, CheckCircle2, Crown, AlertTriangle,
-  Loader2, Eye, EyeOff, Flame,
+  Loader2, Flame,
 } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
@@ -41,18 +40,18 @@ function formatPrice(n: number | null) {
 
 function MarketStatusBadge({ status }: { status: string }) {
   const isHoliday = status.startsWith('Closed ·')
-  const cfg: Record<string, { bg: string; dot: string; text: string }> = {
-    'Open':        { bg: 'bg-green-500/10 border-green-500/20',   dot: 'bg-green-400',  text: 'text-green-400' },
-    'Pre-Market':  { bg: 'bg-yellow-500/10 border-yellow-500/20', dot: 'bg-yellow-400', text: 'text-yellow-400' },
-    'After Hours': { bg: 'bg-blue-500/10 border-blue-500/20',     dot: 'bg-blue-400',   text: 'text-blue-400' },
-    'Weekend':     { bg: 'bg-gray-500/10 border-gray-600',        dot: 'bg-gray-500',   text: 'text-gray-400' },
-    'Closed':      { bg: 'bg-gray-500/10 border-gray-600',        dot: 'bg-gray-500',   text: 'text-gray-400' },
-    'Holiday':     { bg: 'bg-purple-500/10 border-purple-500/20', dot: 'bg-purple-400', text: 'text-purple-400' },
+  const cfg: Record<string, { box: string; dot: string }> = {
+    'Open':        { box: 'bg-green-500/10 border-green-500/30 text-green-400',    dot: 'bg-green-400' },
+    'Pre-Market':  { box: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400', dot: 'bg-yellow-400' },
+    'After Hours': { box: 'bg-blue-500/10 border-blue-500/30 text-blue-400',       dot: 'bg-blue-400' },
+    'Weekend':     { box: 'bg-gray-500/10 border-gray-500/40 text-gray-400',       dot: 'bg-gray-500' },
+    'Closed':      { box: 'bg-gray-500/10 border-gray-500/40 text-gray-400',       dot: 'bg-gray-500' },
+    'Holiday':     { box: 'bg-purple-500/10 border-purple-500/30 text-purple-400', dot: 'bg-purple-400' },
   }
   const c = isHoliday ? cfg['Holiday'] : (cfg[status] ?? cfg['Closed'])
   return (
-    <span className={cn('inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border', c.bg, c.text)}>
-      <span className={cn('h-1.5 w-1.5 rounded-full', c.dot)} />
+    <span className={cn('inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-mono font-bold', c.box)}>
+      <span className={cn('h-2 w-2 rounded-full', c.dot, status === 'Open' && 'animate-pulse')} />
       {status}
     </span>
   )
@@ -63,12 +62,12 @@ function IndexCard({ label, price, change, changePercent }: {
 }) {
   const pos = (changePercent ?? 0) >= 0
   return (
-    <div className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
-      <span className="text-sm text-slate-500 font-medium">{label}</span>
+    <div className="flex items-center justify-between py-3 border-b border-[#16130a]/10 dark:border-gray-800 last:border-0">
+      <span className="text-sm font-mono font-semibold text-[#16130a]/60 dark:text-gray-400">{label}</span>
       <div className="text-right">
-        <p className="text-sm font-semibold text-slate-900">{formatPrice(price)}</p>
+        <p className="text-sm font-bold text-[#16130a] dark:text-white">{formatPrice(price)}</p>
         {changePercent != null && (
-          <p className={cn('text-xs font-medium', pos ? 'text-green-400' : 'text-red-400')}>
+          <p className={cn('text-xs font-semibold', pos ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400')}>
             {pos ? '+' : ''}{changePercent.toFixed(2)}%
           </p>
         )}
@@ -191,7 +190,7 @@ export default function DashboardPage() {
   const [fearGreed, setFearGreed] = useState<{ score: number; rating: string; vix: number | null; spChange: number | null } | null>(null)
 
   // Roast
-  const [roast, setRoast] = useState<string|null>(null)
+  const [roast, setRoast] = useState<string | null>(null)
   const [roasting, setRoasting] = useState(false)
 
   const getRoast = async () => {
@@ -227,27 +226,6 @@ export default function DashboardPage() {
     setRoasting(false)
   }
 
-  // Panic mode
-  const [panicMode, setPanicMode] = useState(false)
-  const [panicDismissed, setPanicDismissed] = useState(false)
-
-  // Anxiety = inverted fear-greed (fear=high anxiety, greed=low anxiety)
-  // Blended with watchlist performance as a secondary signal
-  const anxietyLevel = (() => {
-    const fgAnxiety = fearGreed ? 100 - fearGreed.score : null
-    const watchlistAnxiety = (() => {
-      if (!watchlist.length) return null
-      const red = watchlist.filter(w => (w.changePercent ?? 0) < 0)
-      const redRatio = red.length / watchlist.length
-      const avgLoss = red.length > 0
-        ? red.reduce((s, w) => s + Math.abs(w.changePercent ?? 0), 0) / red.length
-        : 0
-      return Math.min(100, Math.round(redRatio * 55 + avgLoss * 5))
-    })()
-    if (fgAnxiety !== null && watchlistAnxiety !== null)
-      return Math.round(fgAnxiety * 0.7 + watchlistAnxiety * 0.3)
-    return fgAnxiety ?? watchlistAnxiety ?? 0
-  })()
 
   // Fetch everything in parallel on mount
   useEffect(() => {
@@ -315,14 +293,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-10 relative z-20">
-      {panicMode && !panicDismissed && (
-        <>
-          <style>{`@keyframes pgShake{0%,100%{transform:translate(0,0) rotate(0)}10%{transform:translate(-3px,2px) rotate(-.5deg)}20%{transform:translate(3px,-1px) rotate(.3deg)}30%{transform:translate(-2px,3px) rotate(-.3deg)}40%{transform:translate(2px,-2px) rotate(.5deg)}50%{transform:translate(-1px,1px) rotate(0)}}`}</style>
-          <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:25,
-            background:'radial-gradient(ellipse at center, transparent 30%, rgba(220,38,38,0.25) 100%)',
-            animation:'pgShake .4s ease infinite'}}/>
-        </>
-      )}
       <OnboardingModal />
 
       {/* ── Email verified banner ────────────────────────────────── */}
@@ -379,18 +349,14 @@ export default function DashboardPage() {
       )}
 
       {/* ── Holiday atmosphere (background effects) ─────────── */}
-      {(() => {
-        const holidayName = !panicMode && market?.status === 'holiday'
-          ? market.label.replace('Closed · ', '')
-          : null
-        return holidayName ? <HolidayAtmosphere holiday={holidayName} /> : null
-      })()}
+      {market?.status === 'holiday' && (
+        <HolidayAtmosphere holiday={market.label.replace('Closed · ', '')} />
+      )}
 
       {/* ── Mr. Guy character ────────────────────────────────── */}
       <MarketCharacter
-        changePercent={panicMode ? -99 : (fearGreed?.spChange ?? indices[0]?.changePercent ?? 0)}
+        changePercent={fearGreed?.spChange ?? indices[0]?.changePercent ?? 0}
         marketState={(() => {
-          if (panicMode) return 'bear'
           const s = market?.status
           if (s === 'weekend' || s === 'holiday') return 'closed'
           if (s !== 'open') return 'neutral'
@@ -399,7 +365,7 @@ export default function DashboardPage() {
           if (spx <= -0.5) return 'bear'
           return 'neutral'
         })()}
-        holidayPreview={!panicMode && market?.status === 'holiday'
+        holidayPreview={market?.status === 'holiday'
           ? market.label.replace('Closed · ', '')
           : undefined}
       />
@@ -407,25 +373,16 @@ export default function DashboardPage() {
       {/* ── Hero greeting ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2">
         <div>
-          <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-display text-[#16130a] dark:text-white leading-tight">
             {greeting}{firstName ? `, ${firstName}` : ''}
           </h1>
-          <p className="text-slate-500 mt-1 text-sm">{today}</p>
+          <p className="font-mono text-sm text-[#16130a]/60 dark:text-gray-400 mt-1">{today}</p>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          {market && <MarketStatusBadge status={market.label} />}
-          <button
-            onClick={() => { setPanicMode(!panicMode); setPanicDismissed(false) }}
-            className={cn(
-              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
-              panicMode
-                ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
-                : 'bg-slate-100 border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-500'
-            )}
-          >
-            {panicMode ? <><Eye className="h-3.5 w-3.5" /> Take a peek</> : <><EyeOff className="h-3.5 w-3.5" /> I Can&apos;t Look</>}
-          </button>
-        </div>
+        {market && (
+          <div className="flex items-center gap-2">
+            <MarketStatusBadge status={market.label} />
+          </div>
+        )}
       </div>
 
       {/* ── Jump back in — the fun, action-led hub ─────────────────── */}
@@ -455,166 +412,159 @@ export default function DashboardPage() {
       </div>
       {/* secondary launchers */}
       <div className="grid sm:grid-cols-2 gap-4 -mt-4">
-        <Link href="/chat" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:shadow-none bg-white flex items-center gap-4 transition-transform hover:-translate-y-0.5">
+        <Link href="/chat" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 flex items-center gap-4 transition-transform hover:-translate-y-0.5">
           <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#ff7a59] border-2 border-[#16130a] font-mono font-bold text-[#16130a] shrink-0">AI</span>
           <div className="flex-1 min-w-0">
-            <p className="font-display uppercase text-base text-slate-900">Ask Mr. Guy</p>
-            <p className="font-mono text-xs text-slate-500">Ask anything about a stock or term.</p>
+            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Ask Mr. Guy</p>
+            <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400">Ask anything about a stock or term.</p>
           </div>
-          <ChevronRight className="h-5 w-5 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+          <ChevronRight className="h-5 w-5 text-[#16130a]/40 dark:text-gray-500 group-hover:translate-x-1 transition-transform shrink-0" />
         </Link>
-        <Link href="/dictionary" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:shadow-none bg-white flex items-center gap-4 transition-transform hover:-translate-y-0.5">
+        <Link href="/dictionary" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 flex items-center gap-4 transition-transform hover:-translate-y-0.5">
           <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#2f9bff] border-2 border-[#16130a] font-mono font-bold text-[#16130a] shrink-0">A-Z</span>
           <div className="flex-1 min-w-0">
-            <p className="font-display uppercase text-base text-slate-900">Dictionary</p>
-            <p className="font-mono text-xs text-slate-500">Look up any confusing word.</p>
+            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Dictionary</p>
+            <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400">Look up any confusing word.</p>
           </div>
-          <ChevronRight className="h-5 w-5 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+          <ChevronRight className="h-5 w-5 text-[#16130a]/40 dark:text-gray-500 group-hover:translate-x-1 transition-transform shrink-0" />
         </Link>
       </div>
 
       {/* ── AI Market Brief ───────────────────────────────────────── */}
-      <Card className="border-slate-200 bg-white">
-        <CardContent className="p-4 sm:p-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="h-6 w-6 flex items-center justify-center shrink-0">
-              <MrGuyLogoSvg px={2} />
-            </div>
-            <span className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
-              Mr. Guy Market Recap
-            </span>
+      <div className="rounded-3xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-4 sm:p-6">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="h-6 w-6 flex items-center justify-center shrink-0">
+            <MrGuyLogoSvg px={2} />
           </div>
-          {briefLoading ? (
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-4/5" />
-              <Skeleton className="h-4 w-3/5" />
-            </div>
-          ) : brief?.text ? (
-            <p className="text-slate-700 leading-relaxed text-[15px]">{brief.text}</p>
-          ) : (
-            <p className="text-slate-400 text-sm">Could not load market brief right now.</p>
-          )}
-        </CardContent>
-      </Card>
+          <span className="font-mono font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+            Mr. Guy Market Recap
+          </span>
+        </div>
+        {briefLoading ? (
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-4 w-3/5" />
+          </div>
+        ) : brief?.text ? (
+          <p className="text-[#16130a]/80 dark:text-gray-300 leading-relaxed text-[15px]">{brief.text}</p>
+        ) : (
+          <p className="text-[#16130a]/40 dark:text-gray-500 text-sm">Could not load market brief right now.</p>
+        )}
+      </div>
 
       {/* ── Watchlist + Indices ───────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
 
         {/* Watchlist */}
-        <Card data-char-widget className="border-slate-200 bg-white">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">My Watchlist</p>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={getRoast}
-                  disabled={roasting || watchlist.length === 0}
-                  className="text-xs text-orange-500 hover:text-orange-600 disabled:opacity-40 font-semibold transition-colors flex items-center gap-1"
-                >
-                  {roasting ? '...' : <><Flame className="h-3.5 w-3.5" /> Roast</>}
-                </button>
-                <Link href="/watchlist" className="text-xs text-blue-500 hover:underline">View all</Link>
+        <div data-char-widget className="rounded-3xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-mono font-bold text-xs text-[#16130a]/50 dark:text-gray-400 uppercase tracking-widest">My Watchlist</p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={getRoast}
+                disabled={roasting || watchlist.length === 0}
+                className="text-xs text-orange-500 hover:text-orange-600 disabled:opacity-40 font-bold transition-colors flex items-center gap-1 font-mono"
+              >
+                {roasting ? '...' : <><Flame className="h-3.5 w-3.5" /> Roast</>}
+              </button>
+              <Link href="/watchlist" className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">View all</Link>
+            </div>
+          </div>
+          {watchLoading ? (
+            <div className="space-y-3">
+              {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
+            </div>
+          ) : watchlist.length === 0 ? (
+            <div className="py-6 text-center">
+              <p className="text-sm text-[#16130a]/40 dark:text-gray-500">No stocks on your watchlist yet.</p>
+              <Link href="/research" className="font-mono text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">
+                Search and add some →
+              </Link>
+            </div>
+          ) : (
+            <div>
+              {watchlist.map(({ ticker, price, changePercent }) => {
+                const pos = (changePercent ?? 0) >= 0
+                return (
+                  <Link
+                    key={ticker}
+                    href={`/research/${ticker}`}
+                    className="flex items-center justify-between py-3 border-b border-[#16130a]/10 dark:border-gray-800 last:border-0 hover:bg-[#16130a]/5 dark:hover:bg-gray-800/50 -mx-2 px-2 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      {pos
+                        ? <TrendingUp className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                        : <TrendingDown className="h-3.5 w-3.5 text-red-500 shrink-0" />
+                      }
+                      <span className="text-sm font-bold text-[#16130a] dark:text-white">{ticker}</span>
+                    </div>
+                    <div className="text-right">
+                      {price != null && (
+                        <p className="text-sm font-semibold text-[#16130a] dark:text-white">${formatPrice(price)}</p>
+                      )}
+                      {changePercent != null && (
+                        <p className={cn('text-xs font-semibold', pos ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400')}>
+                          {pos ? '+' : ''}{changePercent.toFixed(2)}%
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+          {roast && (
+            <div className="mt-4 pt-4 border-t border-[#16130a]/10 dark:border-gray-800">
+              <div className="flex items-start gap-2">
+                <div className="shrink-0 mt-0.5"><MrGuyLogoSvg px={2} /></div>
+                <p className="text-sm text-orange-500 dark:text-orange-400 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
               </div>
             </div>
-            {watchLoading ? (
-              <div className="space-y-3">
-                {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
-              </div>
-            ) : watchlist.length === 0 ? (
-              <div className="py-6 text-center">
-                <p className="text-slate-400 text-sm">No stocks on your watchlist yet.</p>
-                <Link href="/research" className="text-blue-500 text-sm hover:underline mt-1 inline-block">
-                  Search and add some →
-                </Link>
-              </div>
-            ) : (
-              <div>
-                {watchlist.map(({ ticker, price, changePercent }) => {
-                  const pos = (changePercent ?? 0) >= 0
-                  return (
-                    <Link
-                      key={ticker}
-                      href={`/research/${ticker}`}
-                      className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        {pos
-                          ? <TrendingUp className="h-3.5 w-3.5 text-green-500 shrink-0" />
-                          : <TrendingDown className="h-3.5 w-3.5 text-red-500 shrink-0" />
-                        }
-                        <span className="text-sm font-bold text-slate-900">{ticker}</span>
-                      </div>
-                      <div className="text-right">
-                        {price != null && (
-                          <p className={cn('text-sm font-semibold', panicMode ? 'text-red-400 blur-sm select-none' : 'text-slate-900')}>{panicMode ? '$???' : `$${formatPrice(price)}`}</p>
-                        )}
-                        {changePercent != null && (
-                          <p className={cn('text-xs font-medium', panicMode ? 'text-slate-400 blur-sm select-none' : pos ? 'text-green-600' : 'text-red-500')}>
-                            {panicMode ? '??%' : `${pos ? '+' : ''}${changePercent.toFixed(2)}%`}
-                          </p>
-                        )}
-                      </div>
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-            {roast && (
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <div className="flex items-start gap-2">
-                  <div className="shrink-0 mt-0.5"><MrGuyLogoSvg px={2} /></div>
-                  <p className="text-sm text-orange-600 leading-relaxed italic">&ldquo;{roast}&rdquo;</p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </div>
 
         {/* Market Indices */}
-        <Card data-char-widget className={cn("border-slate-200 bg-white", panicMode && "blur-sm select-none pointer-events-none")}>
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Market Indices</p>
-              <Link href="/markets" className="text-xs text-blue-500 hover:underline">Full view</Link>
+        <div data-char-widget className="rounded-3xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-mono font-bold text-xs text-[#16130a]/50 dark:text-gray-400 uppercase tracking-widest">Market Indices</p>
+            <Link href="/markets" className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">Full view</Link>
+          </div>
+          <p className="font-mono text-[10px] text-[#16130a]/40 dark:text-gray-500 mb-3">Prices may be delayed up to 15 minutes.</p>
+          {indicesLoading ? (
+            <div className="space-y-3">
+              {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
             </div>
-            <p className="text-[10px] text-slate-400 mb-3">Prices may be delayed up to 15 minutes.</p>
-            {indicesLoading ? (
-              <div className="space-y-3">
-                {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 w-full" />)}
-              </div>
-            ) : (
-              indices.map(idx => <IndexCard key={idx.label} {...idx} />)
-            )}
-          </CardContent>
-        </Card>
+          ) : (
+            indices.map(idx => <IndexCard key={idx.label} {...idx} />)
+          )}
+        </div>
       </div>
 
 
       {/* ── Quick Links ───────────────────────────────────────────── */}
       <div>
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Quick Access</p>
+        <p className="font-mono font-bold text-xs text-[#16130a]/40 dark:text-gray-500 uppercase tracking-widest mb-4">Quick Access</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[...QUICK_LINKS, ...(isAdmin ? ADMIN_LINKS : [])].map(({ href, label, icon: Icon, desc }) => (
             <Link
               key={href}
               href={href}
-              className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all group"
+              className="flex items-start gap-3 p-4 rounded-2xl border-2 border-[#16130a] shadow-[3px_3px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 hover:-translate-y-0.5 transition-transform group"
             >
-              <div className="p-2 rounded-lg bg-slate-100 group-hover:bg-blue-50 transition-colors shrink-0">
-                <Icon className="h-4 w-4 text-slate-500 group-hover:text-blue-600 transition-colors" />
+              <div className="p-2 rounded-xl bg-[#16130a]/8 dark:bg-gray-700/60 shrink-0 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/15 transition-colors">
+                <Icon className="h-4 w-4 text-[#16130a]/60 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">{label}</p>
-                <p className="text-xs text-slate-400 mt-0.5 leading-snug">{desc}</p>
+                <p className="font-display text-sm text-[#16130a] dark:text-white leading-tight">{label}</p>
+                <p className="font-mono text-[11px] text-[#16130a]/50 dark:text-gray-400 mt-1 leading-snug">{desc}</p>
               </div>
             </Link>
           ))}
         </div>
-
       </div>
 
-      <p className="text-xs text-slate-400 text-center">
+      <p className="font-mono text-xs text-[#16130a]/40 dark:text-gray-500 text-center">
         For informational purposes only. Not financial advice.
       </p>
     </div>

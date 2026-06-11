@@ -88,10 +88,10 @@ export default function TickerBar() {
 
   if (loading) {
     return (
-      <div className="h-9 bg-slate-900 border-b border-slate-800 flex items-center px-4">
+      <div className="h-9 bg-[#16130a] dark:bg-gray-950 border-b border-black/20 dark:border-gray-800 flex items-center px-4">
         <div className="flex gap-6 animate-pulse">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-3 w-20 bg-slate-700 rounded" />
+            <div key={i} className="h-3 w-20 bg-white/10 rounded" />
           ))}
         </div>
       </div>
@@ -104,10 +104,10 @@ export default function TickerBar() {
   const doubled = [...items, ...items]
 
   return (
-    <div className="h-9 bg-slate-900 border-b border-slate-800 flex items-center overflow-hidden relative">
+    <div className="h-9 bg-[#16130a] dark:bg-gray-950 border-b border-black/20 dark:border-gray-800 flex items-center overflow-hidden relative">
       {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-900 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-900 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#16130a] dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#16130a] dark:from-gray-950 to-transparent z-10 pointer-events-none" />
 
       <div
         ref={trackRef}
@@ -118,17 +118,17 @@ export default function TickerBar() {
         }}
       >
         {doubled.map((item, i) => (
-          <span key={`${item.key}-${i}`} className="flex items-center gap-2 px-5 border-r border-slate-700 shrink-0 last:border-r-0">
-            <span className="text-xs font-semibold text-slate-400">{item.label}</span>
+          <span key={`${item.key}-${i}`} className="flex items-center gap-2 px-5 border-r border-white/10 shrink-0 last:border-r-0">
+            <span className="text-xs font-mono font-semibold text-white/50">{item.label}</span>
             {item.format === 'feargreed' ? (
-              <span className={cn('text-xs font-bold', getFearGreedColor(item.price))}>
+              <span className={cn('text-xs font-mono font-bold', getFearGreedColor(item.price))}>
                 {formatPrice(item.price, item.format)} · {getFearGreedLabel(item.price)}
               </span>
             ) : (
               <>
-                <span className="text-xs font-bold text-slate-100">{formatPrice(item.price, item.format)}</span>
+                <span className="text-xs font-mono font-bold text-white/90">{formatPrice(item.price, item.format)}</span>
                 <span className={cn(
-                  'text-xs font-semibold',
+                  'text-xs font-mono font-semibold',
                   item.changePercent >= 0 ? 'text-green-400' : 'text-red-400'
                 )}>
                   {item.changePercent >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%
