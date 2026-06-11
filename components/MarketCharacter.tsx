@@ -939,10 +939,10 @@ function PhoneBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number
   return(<>
     <style>{`@keyframes phB{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}`}</style>
     <div style={{position:'fixed',left:charX+20*PX+8,bottom:bottom,
-      background:'rgba(255,255,255,.9)',border:'1px solid rgba(0,0,0,.1)',borderRadius:12,
-      padding:'4px 10px',fontSize:11,fontWeight:700,color:'#333',whiteSpace:'nowrap',
+      background:'#fff',border:'2px solid #16130a',borderRadius:10,
+      padding:'4px 10px',fontSize:11,fontWeight:800,fontFamily:'monospace',color:'#16130a',whiteSpace:'nowrap',
       animation:'phB 1.2s ease-in-out infinite',pointerEvents:'none',zIndex:13,
-      boxShadow:'0 2px 8px rgba(0,0,0,.1)'}}>
+      boxShadow:'3px 3px 0 #16130a'}}>
       <span style={{letterSpacing:3}}>• • •</span>
     </div>
   </>)
@@ -960,17 +960,17 @@ function PerchBubble({charX,charY,viewH}:{charX:number;charY:number;viewH:number
     <style>{`@keyframes pbob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}`}</style>
     <div style={{position:'fixed',left:charX+10*PX,top:charY-52,
       transform:'translateX(-50%)',
-      background:'rgba(255,255,255,.94)',border:'1px solid rgba(0,0,0,.08)',borderRadius:12,
-      padding:'5px 10px',fontSize:13,fontWeight:700,color:'#333',whiteSpace:'nowrap',
+      background:'#fff',border:'2px solid #16130a',borderRadius:10,
+      padding:'5px 10px',fontSize:13,fontWeight:800,fontFamily:'monospace',color:'#16130a',whiteSpace:'nowrap',
       animation:'pbob 1.5s ease-in-out infinite',pointerEvents:'none',zIndex:15,
-      boxShadow:'0 2px 12px rgba(0,0,0,.12)'}}>
+      boxShadow:'3px 3px 0 #16130a'}}>
       👀 what's this?
-      <div style={{position:'absolute',bottom:-8,left:'50%',transform:'translateX(-50%)',width:0,height:0,
+      <div style={{position:'absolute',bottom:-10,left:'50%',transform:'translateX(-50%)',width:0,height:0,
         borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
-        borderTop:'8px solid rgba(0,0,0,.08)'}}/>
-      <div style={{position:'absolute',bottom:-6,left:'50%',transform:'translateX(-50%)',width:0,height:0,
+        borderTop:'10px solid #16130a'}}/>
+      <div style={{position:'absolute',bottom:-7,left:'50%',transform:'translateX(-50%)',width:0,height:0,
         borderLeft:'6px solid transparent',borderRight:'6px solid transparent',
-        borderTop:'7px solid rgba(255,255,255,.94)'}}/>
+        borderTop:'8px solid #fff'}}/>
     </div>
   </>)
 }
@@ -1306,8 +1306,8 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     // ── Scene management ─────────────────────────────────────────
     if(s.prevState !== ms){
       s.sceneIdx=0; s.sceneStartMs=now; s.prevState=ms; s.sceneSnapped=false; s.atPerchTarget=false
-      // Don't teleport charX — let the walk-snap lerp to the new zone naturally
-      s.targetY=groundY; s.charY=groundY; s.faceFlush=0
+      // Don't teleport — let the lerp below move charY to groundY smoothly
+      s.targetY=groundY; s.faceFlush=0
     }
     const cycle=SCENE_CYCLES[ms]
     const cfg=cycle[s.sceneIdx]
@@ -2044,14 +2044,14 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
         <div style={{position:'fixed',left:charXDisp+charPX*10,top:charYDisp-62,
           transform:'translateX(-50%)',
           zIndex:20,pointerEvents:'none',
-          background:'#fff',border:'2px solid #222',borderRadius:12,
-          padding:'6px 14px',fontSize:13,fontWeight:800,color:'#111',whiteSpace:'nowrap',
-          boxShadow:'3px 3px 0 #222',
+          background:'#fff',border:'2px solid #16130a',borderRadius:10,
+          padding:'6px 14px',fontSize:13,fontWeight:800,fontFamily:'monospace',color:'#16130a',whiteSpace:'nowrap',
+          boxShadow:'3px 3px 0 #16130a',
           animation:'bubblePop 2.2s ease forwards'}}>
           {clickBubble}
           <div style={{position:'absolute',bottom:-10,left:'50%',transform:'translateX(-50%)',
             width:0,height:0,borderLeft:'8px solid transparent',borderRight:'8px solid transparent',
-            borderTop:'10px solid #222'}}/>
+            borderTop:'10px solid #16130a'}}/>
           <div style={{position:'absolute',bottom:-7,left:'50%',transform:'translateX(-50%)',
             width:0,height:0,borderLeft:'7px solid transparent',borderRight:'7px solid transparent',
             borderTop:'9px solid #fff'}}/>
