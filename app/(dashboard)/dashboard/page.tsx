@@ -6,13 +6,14 @@ import dynamic from 'next/dynamic'
 import {
   Search, Star, Calendar, Activity, TrendingUp, TrendingDown,
   Sparkles, ChevronRight, CheckCircle2, Crown, AlertTriangle,
-  Loader2, Flame,
+  Loader2, Flame, Trophy,
 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import OnboardingModal from '@/components/OnboardingModal'
 import MarketCharacter from '@/components/MarketCharacter'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
+import MrGuyHead from '@/components/MrGuyHead'
 import { useMarketStatus } from '@/hooks/use-market-status'
 
 const HolidayAtmosphere = dynamic(
@@ -408,7 +409,7 @@ export default function DashboardPage() {
         {/* $100K Challenge — primary */}
         <Link href="/trading-simulator" className="group rounded-3xl p-6 border-2 border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none bg-[#ffd23f] text-[#16130a] flex flex-col min-h-[150px] transition-transform hover:-translate-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#fff] border-2 border-[#16130a]"><MrGuyLogoSvg px={2} /></span>
+            <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#fff] border-2 border-[#16130a]"><Trophy className="h-6 w-6 text-[#16130a]" /></span>
             <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </div>
           <div className="mt-auto pt-6">
@@ -420,7 +421,7 @@ export default function DashboardPage() {
       {/* secondary launchers */}
       <div className="grid sm:grid-cols-2 gap-4 -mt-4">
         <Link href="/chat" className="group rounded-3xl p-5 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 flex items-center gap-4 transition-transform hover:-translate-y-0.5">
-          <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#ff7a59] border-2 border-[#16130a] font-mono font-bold text-[#16130a] shrink-0">AI</span>
+          <span className="flex items-center justify-center h-11 w-11 rounded-xl bg-[#ff7a59] border-2 border-[#16130a] shrink-0"><MrGuyHead px={3} /></span>
           <div className="flex-1 min-w-0">
             <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Ask Mr. Guy</p>
             <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400">Ask anything about a stock or term.</p>
@@ -443,7 +444,7 @@ export default function DashboardPage() {
           <div className="h-6 w-6 flex items-center justify-center shrink-0">
             <MrGuyLogoSvg px={2} />
           </div>
-          <span className="font-mono font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+          <span className="font-mono font-bold text-xs text-[#16130a]/50 dark:text-gray-400 uppercase tracking-widest">
             Mr. Guy Market Recap
           </span>
         </div>
