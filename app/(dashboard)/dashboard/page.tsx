@@ -40,36 +40,26 @@ function formatPrice(n: number | null) {
 
 function MarketStatusBadge({ status }: { status: string }) {
   const isHoliday = status.startsWith('Closed ·')
-  if (status === 'Open') {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-green-500/30 bg-green-500/10 text-green-400 text-xs font-mono font-bold">
-        <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-        Open
-      </span>
-    )
-  }
-  if (status === 'Pre-Market') {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-xs font-mono font-bold">
-        <span className="h-2 w-2 rounded-full bg-yellow-400" />
-        Pre-Market
-      </span>
-    )
-  }
-  if (status === 'After Hours') {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">
-        <span className="h-2 w-2 rounded-full bg-blue-400" />
-        After Hours
-      </span>
-    )
-  }
-  // Closed / Weekend / Holiday — fun compact badge
-  const icon = isHoliday ? '🎉' : status === 'Weekend' ? '🛋️' : '🌙'
+  const base = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-xs font-mono font-bold'
+  if (status === 'Open') return (
+    <span className={`${base} border-green-600 bg-green-500/10 text-green-400 shadow-[2px_2px_0_theme(colors.green.700)]`}>
+      <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" /> Open
+    </span>
+  )
+  if (status === 'Pre-Market') return (
+    <span className={`${base} border-yellow-600 bg-yellow-500/10 text-yellow-400 shadow-[2px_2px_0_theme(colors.yellow.700)]`}>
+      <span className="h-2 w-2 rounded-full bg-yellow-400" /> Pre-Market
+    </span>
+  )
+  if (status === 'After Hours') return (
+    <span className={`${base} border-blue-600 bg-blue-500/10 text-blue-400 shadow-[2px_2px_0_theme(colors.blue.800)]`}>
+      <span className="h-2 w-2 rounded-full bg-blue-400" /> After Hours
+    </span>
+  )
   const label = isHoliday ? status.replace('Closed · ', '') : status
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-[#16130a] dark:border-yellow-700 bg-[#ffd23f] dark:bg-yellow-900/30 text-[#16130a] dark:text-yellow-300 text-xs font-mono font-bold shadow-[2px_2px_0_#16130a] dark:shadow-none">
-      {icon} {label}
+    <span className={`${base} border-[#16130a] dark:border-yellow-700 bg-[#ffd23f] dark:bg-yellow-900/30 text-[#16130a] dark:text-yellow-300 shadow-[2px_2px_0_#16130a] dark:shadow-none`}>
+      <span className="h-2 w-2 rounded-full bg-[#16130a] dark:bg-yellow-400" /> {label}
     </span>
   )
 }
