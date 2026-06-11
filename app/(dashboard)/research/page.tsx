@@ -75,7 +75,7 @@ export default function ResearchPage() {
             <Search className="h-7 w-7 sm:h-10 sm:w-10 text-[#fff]" />
           </div>
           <div className="text-left">
-            <h1 className="font-display uppercase text-3xl sm:text-5xl lg:text-6xl text-[#16130a] dark:text-white tracking-tight">Stock Research</h1>
+            <h1 className="font-display uppercase text-3xl sm:text-5xl lg:text-6xl text-[#16130a] dark:!text-white tracking-tight">Stock Research</h1>
             <p className="font-mono text-sm sm:text-base text-[#16130a]/60 dark:text-gray-400 mt-1.5">Search any stock or ETF for price, analyst ratings, and an AI second opinion.</p>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function ResearchPage() {
         <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="h-5 w-5 text-green-400" />
-            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Top Gainers Today</p>
+            <p className="font-display uppercase text-base text-[#16130a] dark:!text-white">Top Gainers Today</p>
             <span className="ml-auto font-mono text-xs text-[#16130a]/40 dark:text-gray-600">Market data</span>
           </div>
           {loading ? (
@@ -131,7 +131,7 @@ export default function ResearchPage() {
         <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingDown className="h-5 w-5 text-red-400" />
-            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Top Losers Today</p>
+            <p className="font-display uppercase text-base text-[#16130a] dark:!text-white">Top Losers Today</p>
             <span className="ml-auto font-mono text-xs text-[#16130a]/40 dark:text-gray-600">Market data</span>
           </div>
           {loading ? (
@@ -157,14 +157,14 @@ export default function ResearchPage() {
         <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-4 w-4 text-blue-400" />
-            <p className="font-mono font-bold text-sm text-[#16130a] dark:text-white">Live Market Data</p>
+            <p className="font-mono font-bold text-sm text-[#16130a] dark:!text-white">Live Market Data</p>
           </div>
           <p className="text-xs text-[#16130a]/60 dark:text-gray-500">Real-time prices, valuation data, company size, yearly price range, and more from third-party market data providers.</p>
         </div>
         <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <BarChart2 className="h-4 w-4 text-purple-400" />
-            <p className="font-mono font-bold text-sm text-[#16130a] dark:text-white">Analyst Consensus</p>
+            <p className="font-mono font-bold text-sm text-[#16130a] dark:!text-white">Analyst Consensus</p>
           </div>
           <p className="text-xs text-[#16130a]/60 dark:text-gray-500">Wall Street analyst ratings, price targets, and reasoning from professional research coverage.</p>
         </div>

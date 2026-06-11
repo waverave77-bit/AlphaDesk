@@ -406,7 +406,7 @@ export default function StockDetailPage() {
         <div>
           <div className="flex items-center gap-2">
             <LineChart className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
-            <h2 className="font-display uppercase text-lg text-[#16130a] dark:text-white">Wall Street Analysis</h2>
+            <h2 className="font-display uppercase text-lg text-[#16130a] dark:!text-white">Wall Street Analysis</h2>
           </div>
           <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400 mt-1 leading-relaxed">
             Ratings and price targets from professional analysts at major banks who cover this stock for a living.
