@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { GuestLock } from '@/components/GuestGate'
 import ProLimitBanner from '@/components/ProLimitBanner'
-import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, Brain, ExternalLink, Newspaper } from 'lucide-react'
+import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, LineChart, ExternalLink, Newspaper } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -15,7 +15,7 @@ import RedditSentiment from '@/components/research/RedditSentiment'
 import OptionsPanel from '@/components/research/OptionsPanel'
 import SecFilings from '@/components/research/SecFilings'
 import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
-import AIAnalysisPanel from '@/components/portfolio/AIAnalysisPanel'
+import AIAnalysisSection from '@/components/research/AIAnalysisSection'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
 import { useToast } from '@/hooks/use-toast'
@@ -239,7 +239,6 @@ export default function StockDetailPage() {
   const [limitReached, setLimitReached] = useState(false)
   const [watchlisted, setWatchlisted] = useState(false)
   const [watchlistLoading, setWatchlistLoading] = useState(false)
-  const [showAI, setShowAI] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
@@ -372,16 +371,6 @@ export default function StockDetailPage() {
               <LastUpdated time={lastUpdated} />
             </div>
             <div className="flex gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAI(!showAI)}
-                className={showAI ? 'border-blue-600/40 text-blue-400' : ''}
-              >
-                <Brain className="h-4 w-4 text-blue-400" />
-                <span className="hidden sm:inline">AI Analysis</span>
-                <span className="sm:hidden">AI</span>
-              </Button>
               <Button variant="outline" size="sm" onClick={toggleWatchlist} disabled={watchlistLoading}>
                 {watchlisted
                   ? <><StarOff className="h-4 w-4 text-yellow-400" /><span className="hidden sm:inline">Remove</span></>
@@ -393,11 +382,6 @@ export default function StockDetailPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* AI Analysis Panel */}
-      {showAI && (
-        <AIAnalysisPanel type="stock" data={aiData} label={`${quote.ticker}, ${quote.companyName}`} />
-      )}
 
       {/* Chart */}
       <Card>
@@ -417,15 +401,35 @@ export default function StockDetailPage() {
         </CardContent>
       </Card>
 
-      {/* Analyst Card: Rating + Reason + Price Targets */}
-      {analyst && (
-        <AnalystCard
-          analyst={analyst}
-          currentPrice={quote.price}
-          news={news}
-          ticker={quote.ticker}
-        />
-      )}
+      {/* ── Wall Street Analysis ─────────────────────────────────── */}
+      <section className="space-y-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <LineChart className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+            <h2 className="font-display uppercase text-lg text-[#16130a] dark:text-white">Wall Street Analysis</h2>
+          </div>
+          <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400 mt-1 leading-relaxed">
+            Ratings and price targets from professional analysts at major banks who cover this stock for a living.
+          </p>
+        </div>
+        {analyst ? (
+          <AnalystCard
+            analyst={analyst}
+            currentPrice={quote.price}
+            news={news}
+            ticker={quote.ticker}
+          />
+        ) : (
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-sm text-gray-500">No Wall Street analyst coverage available for {quote.ticker}.</p>
+            </CardContent>
+          </Card>
+        )}
+      </section>
+
+      {/* ── AI Analysis (gated) ──────────────────────────────────── */}
+      <AIAnalysisSection data={aiData} label={`${quote.ticker}, ${quote.companyName}`} />
 
       {/* Personalized News Feed — this stock first, then watchlist */}
       <PersonalizedNewsSection ticker={quote.ticker} stockNews={news} />

@@ -71,12 +71,12 @@ export default function ResearchPage() {
       <div className="flex flex-col items-center text-center space-y-6 pt-4 pb-8">
         {/* Icon + heading */}
         <div className="flex items-center gap-4 sm:gap-5">
-          <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-2xl sm:rounded-3xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center shrink-0">
-            <Search className="h-7 w-7 sm:h-10 sm:w-10 text-blue-400" />
+          <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-2xl bg-[#2563eb] border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none flex items-center justify-center shrink-0">
+            <Search className="h-7 w-7 sm:h-10 sm:w-10 text-[#fff]" />
           </div>
           <div className="text-left">
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">Stock Research</h1>
-            <p className="text-sm sm:text-lg text-gray-400 mt-1">Search any stock or ETF for price data, analyst ratings, and more.</p>
+            <h1 className="font-display uppercase text-3xl sm:text-5xl lg:text-6xl text-[#16130a] dark:text-white tracking-tight">Stock Research</h1>
+            <p className="font-mono text-sm sm:text-base text-[#16130a]/60 dark:text-gray-400 mt-1.5">Search any stock or ETF for price, analyst ratings, and an AI second opinion.</p>
           </div>
         </div>
 
@@ -87,12 +87,12 @@ export default function ResearchPage() {
 
         {/* Popular tickers */}
         <div className="flex items-center gap-2 flex-wrap justify-center">
-          <span className="text-sm text-gray-500">Popular:</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-[#16130a]/50 dark:text-gray-500">Popular:</span>
           {POPULAR.map(t => (
             <button
               key={t}
               onClick={() => router.push(`/research/${t}`)}
-              className="px-3 py-1.5 rounded-full bg-gray-800 hover:bg-blue-600/20 hover:text-blue-400 text-sm text-gray-400 border border-gray-700 hover:border-blue-500/40 transition-all"
+              className="px-3 py-1.5 rounded-full border-2 border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900 font-mono font-bold text-sm text-[#16130a] dark:text-gray-200 hover:bg-[#ffd23f] dark:hover:bg-gray-800 transition-colors"
             >
               {t}
             </button>
@@ -103,11 +103,11 @@ export default function ResearchPage() {
       {/* Top Movers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Gainers */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="h-5 w-5 text-green-400" />
-            <p className="text-base font-semibold text-white">Top Gainers Today</p>
-            <span className="ml-auto text-sm text-gray-600">Market data</span>
+            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Top Gainers Today</p>
+            <span className="ml-auto font-mono text-xs text-[#16130a]/40 dark:text-gray-600">Market data</span>
           </div>
           {loading ? (
             <div className="space-y-2">
@@ -128,11 +128,11 @@ export default function ResearchPage() {
         </div>
 
         {/* Losers */}
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingDown className="h-5 w-5 text-red-400" />
-            <p className="text-base font-semibold text-white">Top Losers Today</p>
-            <span className="ml-auto text-sm text-gray-600">Market data</span>
+            <p className="font-display uppercase text-base text-[#16130a] dark:text-white">Top Losers Today</p>
+            <span className="ml-auto font-mono text-xs text-[#16130a]/40 dark:text-gray-600">Market data</span>
           </div>
           {loading ? (
             <div className="space-y-2">
@@ -154,19 +154,19 @@ export default function ResearchPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-4 w-4 text-blue-400" />
-            <p className="text-sm font-medium text-white">Live Market Data</p>
+            <p className="font-mono font-bold text-sm text-[#16130a] dark:text-white">Live Market Data</p>
           </div>
-          <p className="text-xs text-gray-500">Real-time prices, valuation data, company size, yearly price range, and more from third-party market data providers.</p>
+          <p className="text-xs text-[#16130a]/60 dark:text-gray-500">Real-time prices, valuation data, company size, yearly price range, and more from third-party market data providers.</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+        <div className="rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900 p-5">
           <div className="flex items-center gap-2 mb-2">
             <BarChart2 className="h-4 w-4 text-purple-400" />
-            <p className="text-sm font-medium text-white">Analyst Consensus</p>
+            <p className="font-mono font-bold text-sm text-[#16130a] dark:text-white">Analyst Consensus</p>
           </div>
-          <p className="text-xs text-gray-500">Wall Street analyst ratings, price targets, and reasoning from professional research coverage.</p>
+          <p className="text-xs text-[#16130a]/60 dark:text-gray-500">Wall Street analyst ratings, price targets, and reasoning from professional research coverage.</p>
         </div>
       </div>
 

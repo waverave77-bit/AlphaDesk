@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Brain, Loader2, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -29,6 +29,10 @@ interface AIAnalysisPanelProps {
   type: 'stock' | 'portfolio'
   data: any
   label?: string
+  /** Run the analysis automatically on mount (used by the gated research section). */
+  autoRun?: boolean
+  /** Remaining free analyses today — shown in the button. null/undefined = unlimited (Pro). */
+  remaining?: number | null
 }
 
 const MODEL_COLORS: Record<string, string> = {
@@ -61,7 +65,7 @@ function SignalBadge({ signal }: { signal: string }) {
   )
 }
 
-export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelProps) {
+export default function AIAnalysisPanel({ type, data, label, autoRun = false, remaining }: AIAnalysisPanelProps) {
   const [result, setResult] = useState<EnsembleResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -98,6 +102,18 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
     }
   }
 
+  // Auto-run once when mounted via the gated research section (user already clicked "Analyze").
+  useEffect(() => {
+    if (autoRun) runAnalysis()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const analyzeLabel = result
+    ? 'Re-analyze'
+    : typeof remaining === 'number'
+    ? `Analyze (${remaining} left)`
+    : 'Analyze'
+
   const consensusIsBullish = result?.consensusSignal === 'BUY' || result?.consensusSignal === 'STRONG'
   const consensusIsBearish = result?.consensusSignal === 'SELL' || result?.consensusSignal === 'WEAK'
   const agreeCount = consensusIsBullish ? result?.buyCount : consensusIsBearish ? result?.sellCount : result?.holdCount
@@ -124,7 +140,7 @@ export default function AIAnalysisPanel({ type, data, label }: AIAnalysisPanelPr
               disabled={loading}
             >
               {loading ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Brain className="h-3 w-3 mr-1" />}
-              {result ? 'Re-analyze' : 'Analyze'}
+              {analyzeLabel}
             </Button>
           </div>
         </div>
