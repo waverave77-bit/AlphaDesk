@@ -317,7 +317,7 @@ export default function DashboardPage() {
 
       {/* ── Pro upgrade success / failure banner ───────────────── */}
       {showUpgradedBanner && upgradeVerified === null && (
-        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600/80 to-blue-500/80 text-white px-5 py-4 rounded-2xl shadow-lg">
+        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600/80 to-blue-500/80 text-[#fff] px-5 py-4 rounded-2xl shadow-lg">
           <Loader2 className="h-6 w-6 animate-spin shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base">Activating Pro…</p>
@@ -326,7 +326,7 @@ export default function DashboardPage() {
         </div>
       )}
       {showUpgradedBanner && upgradeVerified === true && (
-        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-4 rounded-2xl shadow-lg">
+        <div className="relative flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-[#fff] px-5 py-4 rounded-2xl shadow-lg">
           <Crown className="h-6 w-6 shrink-0" />
           <div className="flex-1">
             <p className="font-bold text-base">Welcome to Pro!</p>
