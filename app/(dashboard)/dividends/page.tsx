@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Search, DollarSign, TrendingUp, Calendar, Award, Info, ChevronDown, ChevronUp, Crown, Lightbulb, Pin, AlertTriangle, Banknote } from 'lucide-react'
+import { Search, DollarSign, TrendingUp, Calendar, Award, Info, ChevronDown, ChevronUp, ChevronRight, Crown, Lightbulb, Pin, AlertTriangle, Banknote } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
@@ -10,11 +10,19 @@ type Tab = typeof TABS[number]
 const YIELD_FILTERS = ['All', '2-4%', '4-6%', '6%+', 'Aristocrats'] as const
 type YieldFilter = typeof YIELD_FILTERS[number]
 
+const EXAMPLES = [
+  { t: 'KO', n: 'Coca-Cola' },
+  { t: 'JNJ', n: 'Johnson & Johnson' },
+  { t: 'T', n: 'AT&T' },
+  { t: 'PEP', n: 'PepsiCo' },
+  { t: 'XOM', n: 'ExxonMobil' },
+  { t: 'O', n: 'Realty Income' },
+]
+
 // ─── Arcade style tokens ──────────────────────────────────────────────────────
 const CARD = 'rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900'
 const CELL = 'rounded-xl border-2 border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900'
 const LABEL = 'font-mono font-bold text-xs uppercase tracking-widest text-[#16130a]/50 dark:text-gray-400'
-const INPUT = 'w-full rounded-xl border-2 border-[#16130a] dark:border-gray-600 bg-white dark:bg-gray-800 text-[#16130a] dark:text-white placeholder:text-[#16130a]/30 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#2563eb] transition-colors'
 
 function pillCls(active: boolean) {
   return cn('text-xs font-mono font-bold px-3 py-1.5 rounded-full border-2 transition-colors flex items-center gap-1',
@@ -99,9 +107,55 @@ function DividendExplainer() {
   )
 }
 
-// ─── Calculator Tab ─────────────────────────────────────────────────────────
+// ─── Top payers preview (shown under the calculator hero) ─────────────────────
 
-function Calculator() {
+function TopPayersPreview({ onSeeAll, onPick }: { onSeeAll: () => void; onPick: (t: string) => void }) {
+  const [stocks, setStocks] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/dividends/screener')
+      .then(r => r.json())
+      .then(d => { setStocks(d.results || []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
+
+  const top = stocks.slice(0, 3)
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2.5">
+        <p className={LABEL}>Top dividend payers</p>
+        <button onClick={onSeeAll} className="font-mono text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline flex items-center gap-0.5">
+          See all <ChevronRight className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">{[0, 1, 2].map(i => <Skeleton key={i} className="h-28 w-full" />)}</div>
+      ) : top.length === 0 ? null : (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {top.map(s => (
+            <button key={s.ticker} onClick={() => onPick(s.ticker)} className={cn(CARD, 'p-4 text-left hover:-translate-y-0.5 transition-transform')}>
+              <div className="flex items-center gap-1.5">
+                <span className="font-display uppercase text-[#16130a] dark:text-white">{s.ticker}</span>
+                {s.isAristocrat && (
+                  <span className="inline-flex items-center gap-1 font-mono font-bold text-[10px] px-1.5 py-0.5 rounded-full bg-[#ffd23f] border-2 border-[#16130a] text-[#16130a]"><Crown className="h-2.5 w-2.5" /> 25+</span>
+                )}
+              </div>
+              <p className="text-xs text-[#16130a]/55 dark:text-gray-500 truncate mt-0.5">{s.companyName}</p>
+              <p className="font-mono font-bold text-2xl text-green-600 dark:text-green-400 mt-2">{pct(s.dividendYield)}</p>
+              <p className="font-mono text-[11px] text-[#16130a]/60 dark:text-gray-400 mt-0.5">${s.annualDividend.toFixed(2)} / yr</p>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Calculator Tab — the paycheck hero ───────────────────────────────────────
+
+function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
   const [query, setQuery] = useState('')
   const [amount, setAmount] = useState('10000')
   const [searchResults, setSearchResults] = useState<{ ticker: string; name: string }[]>([])
@@ -148,213 +202,170 @@ function Calculator() {
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Stock search */}
-        <div>
-          <label className={cn(LABEL, 'mb-1.5 block')}>Pick a stock</label>
-          <div className="relative" ref={searchRef}>
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#16130a]/40 dark:text-gray-500" />
+      {/* HERO — the dividend paycheck */}
+      <div className="rounded-2xl border-2 border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none bg-[#ffd23f] p-5 sm:p-6">
+        <p className="font-mono font-bold text-[11px] uppercase tracking-widest text-[#16130a]/60 mb-3">Your dividend paycheck</p>
+
+        {/* Inputs row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1" ref={searchRef}>
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#16130a]/50" />
             <input
               value={selectedTicker || query}
               onChange={e => { const v = e.target.value; setQuery(v); setSelectedTicker(''); setDivData(null); setShowSearch(true) }}
               onFocus={() => setShowSearch(true)}
-              placeholder="e.g. Coca-Cola or KO"
-              className={cn(INPUT, 'pl-9 pr-10 py-3 text-sm')}
+              placeholder="Pick a stock — e.g. Coca-Cola or KO"
+              className="w-full rounded-xl border-2 border-[#16130a] bg-white text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-9 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             />
             {selectedTicker && (
               <button onClick={() => { setSelectedTicker(''); setQuery(''); setDivData(null) }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#16130a]/40 hover:text-[#16130a] dark:text-gray-500 dark:hover:text-gray-300 text-xs">✕</button>
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#16130a]/50 hover:text-[#16130a] text-xs">✕</button>
             )}
             {searchLoading && !selectedTicker && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#16130a]/40 dark:text-gray-500 animate-pulse">...</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#16130a]/50 animate-pulse">...</span>
             )}
             {showSearch && !selectedTicker && searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-900 border-2 border-[#16130a] dark:border-gray-700 rounded-xl shadow-[4px_4px_0_#16130a] dark:shadow-xl z-50 overflow-hidden">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border-2 border-[#16130a] rounded-xl shadow-[4px_4px_0_#16130a] z-50 overflow-hidden">
                 {searchResults.map(r => (
                   <button key={r.ticker} onClick={() => { setSelectedTicker(r.ticker); setQuery(''); setShowSearch(false) }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#fff8e1] dark:hover:bg-gray-800 transition-colors text-left">
-                    <span className="font-mono text-xs font-bold text-[#2563eb] dark:text-blue-400 w-14 shrink-0">{r.ticker}</span>
-                    <span className="text-sm text-[#16130a]/80 dark:text-gray-300 truncate">{r.name}</span>
+                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#fff8e1] transition-colors text-left">
+                    <span className="font-mono text-xs font-bold text-[#2563eb] w-14 shrink-0">{r.ticker}</span>
+                    <span className="text-sm text-[#16130a]/80 truncate">{r.name}</span>
                   </button>
                 ))}
               </div>
             )}
           </div>
-          <p className="text-xs text-[#16130a]/50 dark:text-gray-500 mt-1.5">Not sure? Try KO, JNJ, or T — these are popular dividend stocks</p>
-        </div>
-
-        {/* Investment amount */}
-        <div>
-          <label className="mb-1.5 flex items-center">
-            <span className={LABEL}>How much would you invest?</span>
-            <Tip text="Enter how much money you'd put into this stock. We'll calculate exactly how much income that would generate each year." />
-          </label>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#16130a]/40 dark:text-gray-500" />
+          <div className="relative sm:w-44">
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#16130a]/50" />
             <input
               type="number" min="1" value={amount}
               onChange={e => setAmount(e.target.value)}
               placeholder="10000"
-              className={cn(INPUT, 'pl-9 pr-4 py-3 text-sm font-mono font-bold')}
+              className="w-full rounded-xl border-2 border-[#16130a] bg-white text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-3 py-3 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             />
           </div>
-          <div className="flex gap-2 mt-2 flex-wrap">
-            {['1000', '5000', '10000', '25000', '50000'].map(a => (
-              <button key={a} onClick={() => setAmount(a)} className={pillCls(amount === a)}>
-                ${parseInt(a).toLocaleString()}
-              </button>
-            ))}
-          </div>
         </div>
-      </div>
+        <div className="flex gap-1.5 mt-2.5 flex-wrap">
+          {['1000', '5000', '10000', '25000', '50000'].map(a => (
+            <button key={a} onClick={() => setAmount(a)}
+              className={cn('text-[11px] font-mono font-bold px-2.5 py-1 rounded-full border-2 transition-colors',
+                amount === a ? 'bg-[#16130a] border-[#16130a] text-white' : 'bg-white/70 border-[#16130a]/30 text-[#16130a]/70 hover:border-[#16130a]')}>
+              ${parseInt(a).toLocaleString()}
+            </button>
+          ))}
+        </div>
 
-      {divLoading && <Skeleton className="h-48 w-full" />}
-
-      {divData && !divLoading && (
-        <>
-          {/* Stock header */}
-          <div className={cn(CARD, 'flex items-center gap-3 p-4')}>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-display uppercase text-[#16130a] dark:text-white text-lg">{divData.ticker}</span>
-                {divData.isAristocrat && (
-                  <span className="font-mono font-bold text-[10px] px-2 py-0.5 rounded-full bg-[#ffd23f] border-2 border-[#16130a] text-[#16130a] flex items-center gap-1">
-                    <Award className="h-3 w-3" /> Aristocrat
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-[#16130a]/60 dark:text-gray-400">{divData.companyName}</p>
+        {/* Result */}
+        <div className="mt-5">
+          {divLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-12 w-48 bg-[#16130a]/10" />
+              <Skeleton className="h-16 w-full bg-[#16130a]/10" />
             </div>
-            <div className="text-right">
-              <p className="font-mono font-bold text-xl text-[#16130a] dark:text-white">{formatCurrency(divData.price ?? 0)}</p>
-              <p className="font-mono font-bold text-sm text-green-600 dark:text-green-400">
-                {divData.dividendYield ? pct(divData.dividendYield) : divData.trailingDividendYield ? pct(divData.trailingDividendYield) : '—'} yield
-              </p>
+          ) : noPays ? (
+            <div className="rounded-xl border-2 border-[#16130a] bg-white p-4">
+              <p className="font-display uppercase text-[#16130a]">{divData.ticker} doesn&apos;t pay a dividend</p>
+              <p className="text-sm text-[#16130a]/60 mt-1">Many companies (especially tech) reinvest profits instead. Try KO, JNJ, T, PEP, or XOM.</p>
             </div>
-          </div>
-
-          {noPays ? (
-            <div className={cn(CARD, 'p-8 text-center')}>
-              <Info className="h-8 w-8 text-[#16130a]/30 dark:text-gray-600 mx-auto mb-2" />
-              <p className="font-display uppercase text-[#16130a] dark:text-white">{divData.ticker} doesn&apos;t pay a dividend</p>
-              <p className="text-[#16130a]/60 dark:text-gray-400 text-sm mt-1">Some companies (like many tech stocks) reinvest profits instead of paying dividends.</p>
-              <p className="text-[#16130a]/40 dark:text-gray-500 text-sm mt-1">Try KO, JNJ, T, PEP, or XOM instead</p>
-            </div>
-          ) : (
+          ) : divData ? (
             <>
-              {/* Income cards */}
-              <div>
-                <p className="text-sm text-[#16130a]/60 dark:text-gray-400 mb-2">
-                  If you invested <span className="font-mono font-bold text-[#16130a] dark:text-white">{formatCurrency(investAmount)}</span> in {divData.ticker}, here&apos;s what you&apos;d earn from dividends alone:
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {/* Annual income — the hero, in brand yellow */}
-                  <div className="rounded-xl border-2 border-[#16130a] shadow-[3px_3px_0_#16130a] dark:shadow-none bg-[#ffd23f] dark:bg-yellow-500/10 dark:border-yellow-700 p-4 text-center">
-                    <p className="font-mono font-bold text-[10px] uppercase tracking-widest text-[#16130a]/60 dark:text-yellow-300/70 mb-1 flex items-center justify-center gap-0.5">
-                      Annual Income<Tip text="The total dividend income you'd receive over a full year. Paid out in quarterly chunks." />
-                    </p>
-                    <p className="font-mono font-bold text-xl text-[#16130a] dark:text-yellow-300">{formatCurrency(annualIncome)}</p>
-                    <p className="text-[10px] text-[#16130a]/50 dark:text-yellow-300/50">total per year</p>
-                  </div>
-                  {[
-                    { label: 'Monthly Income', value: formatCurrency(monthlyIncome), color: 'text-[#2563eb] dark:text-blue-400', sub: 'per month (avg)', tip: 'Most dividends are paid quarterly, so this is your annual amount divided by 12.' },
-                    { label: 'Quarterly Payment', value: formatCurrency(quarterlyIncome), color: 'text-purple-600 dark:text-purple-400', sub: 'every ~3 months', tip: 'The actual cash that would hit your account each quarter (4x per year).' },
-                    { label: 'Yield on Cost', value: `${yieldOnCost.toFixed(2)}%`, color: yieldOnCost >= 4 ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400', sub: 'return on your cash', tip: 'The % return you\'re getting purely from dividends — not counting stock price changes. Higher = more income for your money.' },
-                  ].map(c => (
-                    <div key={c.label} className={cn(CELL, 'p-4 text-center')}>
-                      <p className="font-mono font-bold text-[10px] uppercase tracking-widest text-[#16130a]/50 dark:text-gray-400 mb-1 flex items-center justify-center gap-0.5">
-                        {c.label}<Tip text={c.tip} />
-                      </p>
-                      <p className={cn('font-mono font-bold text-xl', c.color)}>{c.value}</p>
-                      <p className="text-[10px] text-[#16130a]/40 dark:text-gray-500">{c.sub}</p>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="font-mono font-bold text-[40px] sm:text-5xl leading-none text-[#16130a]">{formatCurrency(annualIncome)}</span>
+                <span className="font-mono text-sm text-[#16130a]/60">a year from {divData.ticker}, just for holding</span>
               </div>
-
-              {/* Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className={cn(CARD, 'p-4')}>
-                  <p className={cn(LABEL, 'mb-3')}>Your Position</p>
-                  <div className="space-y-3">
-                    {[
-                      { label: 'Investment', value: formatCurrency(investAmount), tip: 'How much you\'d spend to buy the stock.' },
-                      { label: 'Shares You\'d Own', value: shares.toFixed(4), tip: 'Your investment divided by the current share price. Many brokers let you buy fractional shares.' },
-                      { label: 'Dividend Per Share / Year', value: bestAnnualRate > 0 ? `$${bestAnnualRate.toFixed(4)}` : '—', tip: 'The company pays this amount per share you own each year. Multiply by your shares to get your income.' },
-                      { label: 'Payout Ratio', value: divData.payoutRatio ? pct(divData.payoutRatio) : '—', tip: 'What % of company profits go to dividends. Under 60% is healthy — leaves plenty of room to keep paying and growing the dividend.' },
-                      { label: '5-Year Average Yield', value: divData.fiveYearAvgYield ? `${divData.fiveYearAvgYield.toFixed(2)}%` : '—', tip: 'The average dividend yield over the past 5 years. Useful to see if the current yield is unusually high or low.' },
-                    ].map(row => (
-                      <div key={row.label} className="flex justify-between items-center text-sm border-b-2 border-[#16130a]/8 dark:border-gray-800 last:border-0 pb-2 last:pb-0">
-                        <span className="text-[#16130a]/60 dark:text-gray-400 flex items-center">
-                          {row.label}<Tip text={row.tip} />
-                        </span>
-                        <span className="font-mono font-bold text-[#16130a] dark:text-white">{row.value}</span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="grid grid-cols-3 gap-2.5 mt-4">
+                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                  <p className="font-mono font-bold text-lg text-[#16130a]">{formatCurrency(monthlyIncome)}</p>
+                  <p className="text-[11px] text-[#16130a]/60 mt-0.5">per month</p>
                 </div>
-
-                <div className={cn(CARD, 'p-4')}>
-                  <p className={cn(LABEL, 'mb-3')}>Key Dates</p>
-                  <div className="space-y-4">
-                    {divData.exDividendDate ? (
-                      <div className="p-3 rounded-xl bg-orange-500/10 dark:bg-orange-500/5 border-2 border-orange-500/40 dark:border-orange-500/20">
-                        <p className="font-mono font-bold text-xs text-orange-600 dark:text-orange-300 mb-0.5">Ex-Dividend Date — {divData.exDividendDate}</p>
-                        <p className="text-xs text-[#16130a]/60 dark:text-gray-400 leading-relaxed">
-                          <strong className="text-[#16130a] dark:text-white">This is the deadline.</strong> You must own shares before this date to receive the upcoming dividend. Buy on or after this date and you&apos;ll miss it.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className={cn(CELL, 'p-3')}>
-                        <p className="text-xs text-[#16130a]/50 dark:text-gray-500">Ex-dividend date not available</p>
-                      </div>
-                    )}
-                    {divData.paymentDate ? (
-                      <div className="p-3 rounded-xl bg-green-500/10 dark:bg-green-500/5 border-2 border-green-500/40 dark:border-green-500/20">
-                        <p className="font-mono font-bold text-xs text-green-600 dark:text-green-300 mb-0.5">Payment Date — {divData.paymentDate}</p>
-                        <p className="text-xs text-[#16130a]/60 dark:text-gray-400 leading-relaxed">
-                          This is when the cash actually lands in your brokerage account. Usually a few weeks after the ex-dividend date.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className={cn(CELL, 'p-3')}>
-                        <p className="text-xs text-[#16130a]/50 dark:text-gray-500">Payment date not available</p>
-                      </div>
-                    )}
-                    <p className="text-[10px] text-[#16130a]/40 dark:text-gray-500 leading-relaxed">
-                      Past dividends don&apos;t guarantee future payments. Companies can cut or pause dividends. Not financial advice.
-                    </p>
-                  </div>
+                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                  <p className="font-mono font-bold text-lg text-[#16130a]">{formatCurrency(quarterlyIncome)}</p>
+                  <p className="text-[11px] text-[#16130a]/60 mt-0.5">per quarter</p>
+                </div>
+                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                  <p className="font-mono font-bold text-lg text-green-700">{yieldOnCost.toFixed(2)}%</p>
+                  <p className="text-[11px] text-[#16130a]/60 mt-0.5">yield</p>
                 </div>
               </div>
             </>
+          ) : (
+            <div>
+              <p className="font-display uppercase text-[#16130a] text-lg">Pick a stock to see your paycheck</p>
+              <p className="text-sm text-[#16130a]/60 mt-0.5 mb-3">Popular dividend stocks to try:</p>
+              <div className="flex gap-1.5 flex-wrap">
+                {EXAMPLES.map(({ t, n }) => (
+                  <button key={t} onClick={() => setSelectedTicker(t)} title={n}
+                    className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-white border-2 border-[#16130a] text-[#16130a] hover:bg-[#16130a] hover:text-white transition-colors">
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
-        </>
-      )}
+        </div>
+      </div>
 
-      {!selectedTicker && !divLoading && (
-        <div className="text-center py-10">
-          <DollarSign className="h-12 w-12 text-[#16130a]/20 dark:text-gray-700 mx-auto mb-3" />
-          <p className="font-display uppercase text-[#16130a] dark:text-white">Pick a stock above to see your dividend income</p>
-          <p className="text-[#16130a]/50 dark:text-gray-500 text-sm mt-1">Popular dividend stocks to try:</p>
-          <div className="flex gap-2 justify-center mt-3 flex-wrap">
-            {[
-              { t: 'KO', n: 'Coca-Cola' },
-              { t: 'JNJ', n: 'Johnson & Johnson' },
-              { t: 'T', n: 'AT&T' },
-              { t: 'PEP', n: 'PepsiCo' },
-              { t: 'XOM', n: 'ExxonMobil' },
-              { t: 'O', n: 'Realty Income' },
-            ].map(({ t, n }) => (
-              <button key={t} onClick={() => setSelectedTicker(t)}
-                className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border-2 border-[#16130a]/20 dark:border-gray-600 text-[#16130a]/70 dark:text-gray-300 hover:border-[#2563eb] hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors"
-                title={n}>
-                {t}
-              </button>
-            ))}
+      {/* Details — only once a paying stock is loaded */}
+      {divData && !divLoading && !noPays && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className={cn(CARD, 'p-4')}>
+            <p className={cn(LABEL, 'mb-3')}>Your Position</p>
+            <div className="space-y-3">
+              {[
+                { label: 'Investment', value: formatCurrency(investAmount), tip: 'How much you\'d spend to buy the stock.' },
+                { label: 'Shares You\'d Own', value: shares.toFixed(4), tip: 'Your investment divided by the current share price. Many brokers let you buy fractional shares.' },
+                { label: 'Dividend Per Share / Year', value: bestAnnualRate > 0 ? `$${bestAnnualRate.toFixed(4)}` : '—', tip: 'The company pays this amount per share you own each year. Multiply by your shares to get your income.' },
+                { label: 'Payout Ratio', value: divData.payoutRatio ? pct(divData.payoutRatio) : '—', tip: 'What % of company profits go to dividends. Under 60% is healthy — leaves plenty of room to keep paying and growing the dividend.' },
+                { label: '5-Year Average Yield', value: divData.fiveYearAvgYield ? `${divData.fiveYearAvgYield.toFixed(2)}%` : '—', tip: 'The average dividend yield over the past 5 years. Useful to see if the current yield is unusually high or low.' },
+              ].map(row => (
+                <div key={row.label} className="flex justify-between items-center text-sm border-b-2 border-[#16130a]/8 dark:border-gray-800 last:border-0 pb-2 last:pb-0">
+                  <span className="text-[#16130a]/60 dark:text-gray-400 flex items-center">
+                    {row.label}<Tip text={row.tip} />
+                  </span>
+                  <span className="font-mono font-bold text-[#16130a] dark:text-white">{row.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={cn(CARD, 'p-4')}>
+            <p className={cn(LABEL, 'mb-3')}>Key Dates</p>
+            <div className="space-y-4">
+              {divData.exDividendDate ? (
+                <div className="p-3 rounded-xl bg-orange-500/10 dark:bg-orange-500/5 border-2 border-orange-500/40 dark:border-orange-500/20">
+                  <p className="font-mono font-bold text-xs text-orange-600 dark:text-orange-300 mb-0.5">Ex-Dividend Date — {divData.exDividendDate}</p>
+                  <p className="text-xs text-[#16130a]/60 dark:text-gray-400 leading-relaxed">
+                    <strong className="text-[#16130a] dark:text-white">This is the deadline.</strong> You must own shares before this date to receive the upcoming dividend. Buy on or after this date and you&apos;ll miss it.
+                  </p>
+                </div>
+              ) : (
+                <div className={cn(CELL, 'p-3')}>
+                  <p className="text-xs text-[#16130a]/50 dark:text-gray-500">Ex-dividend date not available</p>
+                </div>
+              )}
+              {divData.paymentDate ? (
+                <div className="p-3 rounded-xl bg-green-500/10 dark:bg-green-500/5 border-2 border-green-500/40 dark:border-green-500/20">
+                  <p className="font-mono font-bold text-xs text-green-600 dark:text-green-300 mb-0.5">Payment Date — {divData.paymentDate}</p>
+                  <p className="text-xs text-[#16130a]/60 dark:text-gray-400 leading-relaxed">
+                    This is when the cash actually lands in your brokerage account. Usually a few weeks after the ex-dividend date.
+                  </p>
+                </div>
+              ) : (
+                <div className={cn(CELL, 'p-3')}>
+                  <p className="text-xs text-[#16130a]/50 dark:text-gray-500">Payment date not available</p>
+                </div>
+              )}
+              <p className="text-[10px] text-[#16130a]/40 dark:text-gray-500 leading-relaxed">
+                Past dividends don&apos;t guarantee future payments. Companies can cut or pause dividends. Not financial advice.
+              </p>
+            </div>
           </div>
         </div>
       )}
+
+      {/* Top payers preview */}
+      <TopPayersPreview onSeeAll={onSeeAll} onPick={setSelectedTicker} />
     </div>
   )
 }
@@ -615,13 +626,10 @@ export default function DividendsPage() {
         <div>
           <h1 className="font-display uppercase text-2xl sm:text-3xl text-[#16130a] dark:text-white leading-none">Dividends</h1>
           <p className="font-mono text-xs text-[#16130a]/60 dark:text-gray-400 mt-1">
-            Get paid just for owning stocks — calculate income, find the best payers, track payments
+            See your dividend paycheck, find the best payers, track payment dates
           </p>
         </div>
       </div>
-
-      {/* Beginner explainer */}
-      <DividendExplainer />
 
       {/* Tabs — arcade segmented control */}
       <div className="inline-flex gap-1 p-1 rounded-2xl border-2 border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900 shadow-[3px_3px_0_#16130a] dark:shadow-none">
@@ -637,9 +645,12 @@ export default function DividendsPage() {
         ))}
       </div>
 
-      {tab === 'Calculator' && <Calculator />}
+      {tab === 'Calculator' && <Calculator onSeeAll={() => setTab('Top Stocks')} />}
       {tab === 'Top Stocks' && <TopStocks />}
       {tab === 'Calendar' && <DividendCalendar />}
+
+      {/* Beginner explainer — learn-more footer */}
+      <DividendExplainer />
     </div>
   )
 }
