@@ -54,10 +54,10 @@ function getRatingBg(rec: string | null) {
 }
 
 function RatingIcon({ rec }: { rec: string | null }) {
-  if (rec === 'strong_buy' || rec === 'buy') return <TrendingUp className="h-8 w-8 text-green-400" />
-  if (rec === 'hold') return <Minus className="h-8 w-8 text-yellow-400" />
-  if (rec === 'sell' || rec === 'underperform' || rec === 'strong_sell') return <TrendingDown className="h-8 w-8 text-red-400" />
-  return <AlertCircle className="h-8 w-8 text-gray-400" />
+  if (rec === 'strong_buy' || rec === 'buy') return <TrendingUp className="h-6 w-6 text-green-400" />
+  if (rec === 'hold') return <Minus className="h-6 w-6 text-yellow-400" />
+  if (rec === 'sell' || rec === 'underperform' || rec === 'strong_sell') return <TrendingDown className="h-6 w-6 text-red-400" />
+  return <AlertCircle className="h-6 w-6 text-gray-400" />
 }
 
 function getReason(analyst: AnalystData, currentPrice: number): string {
@@ -101,22 +101,19 @@ function priceTargetRow(label: string, low: number | null, median: number | null
   const upPct = (((med - current) / current) * 100)
 
   return (
-    <div className="grid grid-cols-4 gap-2 py-2 border-b border-gray-800 last:border-0">
-      <div className="text-sm text-gray-400 font-medium flex items-center">{label}</div>
+    <div className="grid grid-cols-4 gap-2 py-1.5 border-b border-gray-800 last:border-0 items-center">
+      <div className="text-xs text-gray-400 font-medium">{label}</div>
       <div className="text-center">
-        <p className="text-xs text-gray-500 mb-0.5">Low</p>
-        <p className="text-sm font-semibold text-red-400">{low ? `$${low.toFixed(2)}` : '—'}</p>
+        <p className="text-xs font-semibold text-red-400">{low ? `$${low.toFixed(2)}` : '—'}</p>
       </div>
       <div className="text-center">
-        <p className="text-xs text-gray-500 mb-0.5">Median</p>
-        <p className="text-sm font-semibold text-white">{median ? `$${median.toFixed(2)}` : '—'}</p>
-        <p className={cn('text-xs', upPct >= 0 ? 'text-green-400' : 'text-red-400')}>
+        <p className="text-xs font-semibold text-white">{median ? `$${median.toFixed(2)}` : '—'}</p>
+        <p className={cn('text-[10px]', upPct >= 0 ? 'text-green-400' : 'text-red-400')}>
           {upPct >= 0 ? '+' : ''}{upPct.toFixed(1)}%
         </p>
       </div>
       <div className="text-center">
-        <p className="text-xs text-gray-500 mb-0.5">High</p>
-        <p className="text-sm font-semibold text-green-400">{high ? `$${high.toFixed(2)}` : '—'}</p>
+        <p className="text-xs font-semibold text-green-400">{high ? `$${high.toFixed(2)}` : '—'}</p>
       </div>
     </div>
   )
@@ -150,12 +147,12 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
         <CardContent className="p-0 divide-y divide-gray-800">
 
           {/* Section 1: Rating */}
-          <div className={cn('p-5 rounded-t-xl border', getRatingBg(rec))}>
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very bullish, Hold = neutral, Sell = bearish." /></p>
-            <div className="flex items-center gap-4">
+          <div className={cn('p-4 rounded-t-xl border', getRatingBg(rec))}>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-medium flex items-center gap-1">Analyst Consensus <InfoTooltip text="The average rating across all Wall Street analysts who cover this stock. Strong Buy = very bullish, Hold = neutral, Sell = bearish." /></p>
+            <div className="flex items-center gap-3">
               <RatingIcon rec={rec} />
               <div>
-                <p className={cn('text-3xl font-bold', getRatingColor(rec))}>
+                <p className={cn('text-2xl font-bold', getRatingColor(rec))}>
                   {recommendationLabel}
                 </p>
                 {numberOfAnalysts && (
@@ -166,8 +163,8 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
               </div>
             </div>
             {duration && (
-              <div className="flex items-center gap-2 mt-3 bg-gray-800/60 rounded-lg px-3 py-2">
-                <Clock className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center gap-2 mt-2 bg-gray-800/60 rounded-lg px-2.5 py-1.5">
+                <Clock className="h-3 w-3 text-gray-400 flex-shrink-0" />
                 <p className="text-xs text-gray-300">{duration}</p>
               </div>
             )}
@@ -179,8 +176,8 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
               const hold = (analyst.holdCount / total) * 100
               const bear = ((analyst.sellCount + analyst.strongSellCount) / total) * 100
               return (
-                <div className="mt-3">
-                  <div className="flex h-2 rounded-full overflow-hidden gap-0.5">
+                <div className="mt-2">
+                  <div className="flex h-1.5 rounded-full overflow-hidden gap-0.5">
                     <div className="bg-green-500 rounded-l-full" style={{ width: `${bull}%` }} />
                     <div className="bg-yellow-500" style={{ width: `${hold}%` }} />
                     <div className="bg-red-500 rounded-r-full" style={{ width: `${bear}%` }} />
@@ -196,9 +193,9 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
           </div>
 
           {/* Section 2: Reason */}
-          <div className="p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium flex items-center gap-1">Analysis &amp; Reasoning <InfoTooltip text="A summary explaining why analysts have this rating — based on price targets, vote breakdown, and current stock price vs. expected value." /></p>
-            <p className="text-sm text-gray-300 leading-relaxed">{reason}</p>
+          <div className="p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-medium flex items-center gap-1">Analysis &amp; Reasoning <InfoTooltip text="A summary explaining why analysts have this rating — based on price targets, vote breakdown, and current stock price vs. expected value." /></p>
+            <p className="text-sm text-gray-300 leading-normal">{reason}</p>
           </div>
 
           {/* Section 3: Price Targets */}
