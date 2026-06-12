@@ -27,7 +27,7 @@ const LABEL = 'font-mono font-bold text-xs uppercase tracking-widest text-[#1613
 function pillCls(active: boolean) {
   return cn('text-xs font-mono font-bold px-3 py-1.5 rounded-full border-2 transition-colors flex items-center gap-1',
     active
-      ? 'bg-[#16130a] border-[#16130a] text-white dark:bg-white dark:text-[#16130a] dark:border-white'
+      ? 'bg-[#16130a] border-[#16130a] text-[#fff] dark:bg-white dark:text-[#16130a] dark:border-white'
       : 'bg-white dark:bg-gray-800 border-[#16130a]/20 dark:border-gray-600 text-[#16130a]/60 dark:text-gray-400 hover:border-[#16130a] dark:hover:border-gray-400')
 }
 
@@ -51,7 +51,7 @@ function Tip({ text }: { text: string }) {
         <Info className="h-3 w-3 inline" />
       </button>
       {open && (
-        <span className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-56 bg-[#16130a] border-2 border-[#16130a] dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-white leading-relaxed shadow-xl pointer-events-none normal-case tracking-normal font-sans font-normal">
+        <span className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-56 bg-[#16130a] border-2 border-[#16130a] dark:border-gray-600 rounded-lg px-3 py-2 text-xs text-[#fff] leading-relaxed shadow-xl pointer-events-none normal-case tracking-normal font-sans font-normal">
           {text}
         </span>
       )}
@@ -250,7 +250,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
           {['1000', '5000', '10000', '25000', '50000'].map(a => (
             <button key={a} onClick={() => setAmount(a)}
               className={cn('text-[11px] font-mono font-bold px-2.5 py-1 rounded-full border-2 transition-colors',
-                amount === a ? 'bg-[#16130a] border-[#16130a] text-white' : 'bg-white/70 border-[#16130a]/30 text-[#16130a]/70 hover:border-[#16130a]')}>
+                amount === a ? 'bg-[#16130a] border-[#16130a] text-[#fff]' : 'bg-white/70 border-[#16130a]/30 text-[#16130a]/70 hover:border-[#16130a]')}>
               ${parseInt(a).toLocaleString()}
             </button>
           ))}
@@ -296,7 +296,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               <div className="flex gap-1.5 flex-wrap">
                 {EXAMPLES.map(({ t, n }) => (
                   <button key={t} onClick={() => setSelectedTicker(t)} title={n}
-                    className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-white border-2 border-[#16130a] text-[#16130a] hover:bg-[#16130a] hover:text-white transition-colors">
+                    className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-white border-2 border-[#16130a] text-[#16130a] hover:bg-[#16130a] hover:text-[#fff] transition-colors">
                     {t}
                   </button>
                 ))}
@@ -636,7 +636,7 @@ export default function DividendsPage() {
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={cn('px-4 py-2 text-sm font-mono font-bold rounded-xl transition-colors flex items-center gap-1.5',
-              tab === t ? 'bg-[#16130a] text-white dark:bg-white dark:text-[#16130a]' : 'text-[#16130a]/55 dark:text-gray-400 hover:text-[#16130a] dark:hover:text-white')}>
+              tab === t ? 'bg-[#16130a] text-[#fff] dark:bg-white dark:text-[#16130a]' : 'text-[#16130a]/55 dark:text-gray-400 hover:text-[#16130a] dark:hover:text-white')}>
             {t === 'Calculator' && <DollarSign className="h-3.5 w-3.5" />}
             {t === 'Top Stocks' && <TrendingUp className="h-3.5 w-3.5" />}
             {t === 'Calendar' && <Calendar className="h-3.5 w-3.5" />}

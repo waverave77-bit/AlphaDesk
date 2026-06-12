@@ -342,7 +342,7 @@ export default function MarketsPage() {
     <div className="max-w-5xl mx-auto space-y-4">
       <div className="flex items-center gap-3 mb-2">
         <span className="grid place-items-center h-11 w-11 rounded-xl bg-[#2563eb] border-2 border-[#16130a] shadow-[3px_3px_0_#16130a] dark:shadow-none shrink-0">
-          <Activity className="h-6 w-6 text-white" />
+          <Activity className="h-6 w-6 text-[#fff]" />
         </span>
         <div>
           <h1 className="font-display uppercase text-2xl sm:text-3xl text-[#16130a] dark:text-white leading-none">Markets</h1>
