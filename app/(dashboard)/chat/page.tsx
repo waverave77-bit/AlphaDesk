@@ -273,6 +273,43 @@ function MrGuyMessage({ content }: { content: string }) {
   return <div className="space-y-1">{nodes}</div>
 }
 
+// While a reply is streaming we render it FLAT, line-by-line, with stable keys.
+// The full MrGuyMessage renderer groups consecutive lines into cards/pills whose
+// boundaries shift every chunk — that reshuffles React keys and causes the
+// line-by-line flicker. This keeps each line stable until the stream finishes,
+// then MrGuyMessage takes over for the rich layout. One clean swap, no flashing.
+function StreamingMessage({ content }: { content: string }) {
+  const lines = content.split('\n')
+  return (
+    <div className="space-y-1.5">
+      {lines.map((line, i) => {
+        const t = line.trim()
+        if (!t) return <div key={i} className="h-1.5" />
+        if (t === '---' || t === '***' || t === '___')
+          return <div key={i} className="border-t border-gray-700/60 my-2" />
+        if (/^#{1,3}\s/.test(t))
+          return <p key={i} className="text-orange-400 font-black text-xs uppercase tracking-widest mt-3 mb-1">{t.replace(/^#{1,3}\s*/, '')}</p>
+        if (/^[-•]\s/.test(t))
+          return (
+            <div key={i} className="flex gap-2.5 text-white text-[15px] leading-relaxed">
+              <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full bg-orange-400 block" />
+              <span>{renderInline(t.replace(/^[-•]\s*/, ''))}</span>
+            </div>
+          )
+        const num = t.match(/^(\d+)\.\s+(.*)/)
+        if (num)
+          return (
+            <div key={i} className="flex gap-3 text-white text-[15px] leading-relaxed">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[10px] font-bold flex items-center justify-center mt-0.5">{num[1]}</span>
+              <span>{renderInline(num[2])}</span>
+            </div>
+          )
+        return <p key={i} className="text-white text-[15px] leading-relaxed">{renderInline(t)}</p>
+      })}
+    </div>
+  )
+}
+
 // ── Types & constants ─────────────────────────────────────────────────────────
 interface Message { role: 'user' | 'assistant'; content: string }
 type CharState = 'idle' | 'wake' | 'think' | 'talk'
@@ -444,11 +481,13 @@ function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isStreaming, setIsStreaming] = useState(false)
   const [limitReached, setLimitReached] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [experience, setExperience] = useState<string>('beginner')
   const [charState, setCharState] = useState<CharState>('idle')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const charTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -472,11 +511,13 @@ function ChatPage() {
     if (q) { setInput(q); inputRef.current?.focus() }
   }, [searchParams])
 
-  // Only auto-scroll when there are messages
+  // Keep the chat panel pinned to the bottom — scroll ONLY the inner panel,
+  // never the page. Skip the yank if the user has scrolled up to read.
   useEffect(() => {
-    if (messages.length > 0 || loading) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }
+    const el = scrollRef.current
+    if (!el || (messages.length === 0 && !loading)) return
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 160
+    if (nearBottom) el.scrollTop = el.scrollHeight
   }, [messages, loading])
 
   // Drive Mr. Guy character state
@@ -531,6 +572,7 @@ function ChatPage() {
       // Start streaming — add an empty assistant message and fill it in
       setMessages([...updated, { role: 'assistant', content: '' }])
       triggerChar('talk', 1000)
+      setIsStreaming(true)
 
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
@@ -546,7 +588,9 @@ function ChatPage() {
           return next
         })
       }
+      setIsStreaming(false)
     } catch {
+      setIsStreaming(false)
       setMessages([...updated, { role: 'assistant', content: 'Something went wrong. Try again!' }])
     }
     setLoading(false)
@@ -633,7 +677,7 @@ function ChatPage() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
 
             {/* Empty state — Mr. Guy centered, large */}
             {messages.length === 0 && !loading && (
@@ -671,7 +715,9 @@ function ChatPage() {
                   </div>
                 ) : (
                   <div className="flex-1 max-w-[92%] rounded-2xl bg-gray-800 border border-gray-700/60 px-5 py-4 rounded-bl-sm bubble-pop">
-                    <MrGuyMessage content={m.content} />
+                    {isStreaming && i === messages.length - 1
+                      ? <StreamingMessage content={m.content} />
+                      : <MrGuyMessage content={m.content} />}
                   </div>
                 )}
               </div>
