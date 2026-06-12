@@ -314,6 +314,21 @@ body {
 .bg-slate-800.text-white, .bg-slate-900.text-white,
 .bg-black.text-white { color: #fff !important; }
 
+/* ── Ink text that flips to light in dark mode ──────────────────────────────
+   The arcade ink literal .text-[#16130a] is !important-locked above (so Pro
+   skins can repaint it), which ALSO blocks any dark: companion — so
+   `text-[#16130a] dark:text-white` headings never flip and go invisible on the
+   dark canvas. In dark mode, honor the dark: companion when one is present.
+   Bare text-[#16130a] (e.g. ink on a yellow/green sticker, no dark: companion)
+   is intentionally untouched. The 3-class selector outranks the locked literal. */
+.dark .text-\[\#16130a\].dark\:text-white      { color: #f9fafb !important; }
+.dark .text-\[\#16130a\].dark\:text-gray-200   { color: #e5e7eb !important; }
+.dark .text-\[\#16130a\].dark\:text-gray-300   { color: #d1d5db !important; }
+.dark .text-\[\#16130a\].dark\:text-gray-400   { color: #9ca3af !important; }
+.dark .text-\[\#16130a\].dark\:text-gray-500   { color: #6b7280 !important; }
+.dark .text-\[\#16130a\].dark\:text-yellow-300 { color: #fde047 !important; }
+.dark .text-\[\#16130a\].dark\:text-yellow-400 { color: #facc15 !important; }
+
 @layer base {
   /* Smooth scrolling & prevent layout shift from scrollbar gutter */
   html {

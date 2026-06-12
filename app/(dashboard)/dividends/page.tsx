@@ -20,15 +20,15 @@ const EXAMPLES = [
 ]
 
 // ─── Arcade style tokens ──────────────────────────────────────────────────────
-const CARD = 'rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-white dark:bg-gray-900'
-const CELL = 'rounded-xl border-2 border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900'
+const CARD = 'rounded-2xl border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none bg-[#fff] dark:bg-gray-900'
+const CELL = 'rounded-xl border-2 border-[#16130a] dark:border-gray-700 bg-[#fff] dark:bg-gray-900'
 const LABEL = 'font-mono font-bold text-xs uppercase tracking-widest text-[#16130a]/50 dark:text-gray-400'
 
 function pillCls(active: boolean) {
   return cn('text-xs font-mono font-bold px-3 py-1.5 rounded-full border-2 transition-colors flex items-center gap-1',
     active
-      ? 'bg-[#16130a] border-[#16130a] text-[#fff] dark:bg-white dark:text-[#16130a] dark:border-white'
-      : 'bg-white dark:bg-gray-800 border-[#16130a]/20 dark:border-gray-600 text-[#16130a]/60 dark:text-gray-400 hover:border-[#16130a] dark:hover:border-gray-400')
+      ? 'bg-[#16130a] border-[#16130a] text-[#fff] dark:bg-[#fff] dark:text-[#16130a] dark:border-white'
+      : 'bg-[#fff] dark:bg-gray-800 border-[#16130a]/20 dark:border-gray-600 text-[#16130a]/60 dark:text-gray-400 hover:border-[#16130a] dark:hover:border-gray-400')
 }
 
 function formatCurrency(n: number) {
@@ -89,13 +89,13 @@ function DividendExplainer() {
               { term: 'Ex-Dividend Date', plain: 'The cutoff date. You must own the stock BEFORE this date to get the next dividend payment.' },
               { term: 'Payout Ratio', plain: 'What % of profits the company pays out as dividends. Under 60% is generally healthy — leaves room to grow.' },
             ].map(item => (
-              <div key={item.term} className="bg-white dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-700 rounded-xl p-3">
+              <div key={item.term} className="bg-[#fff] dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-700 rounded-xl p-3">
                 <p className="font-mono font-bold text-xs text-[#2563eb] dark:text-blue-400 mb-1">{item.term}</p>
                 <p className="text-xs text-[#16130a]/60 dark:text-gray-400 leading-relaxed">{item.plain}</p>
               </div>
             ))}
           </div>
-          <div className="bg-white dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-700 rounded-xl p-3 flex gap-3 items-start">
+          <div className="bg-[#fff] dark:bg-gray-800 border-2 border-[#16130a] dark:border-gray-700 rounded-xl p-3 flex gap-3 items-start">
             <Pin className="h-5 w-5 text-[#16130a] dark:text-gray-400 shrink-0 mt-0.5" />
             <p className="text-xs text-[#16130a]/70 dark:text-gray-400 leading-relaxed">
               <strong className="text-[#16130a] dark:text-white">Quick tip:</strong> A Dividend Aristocrat is a company that has raised its dividend every single year for 25+ years in a row. These are considered very reliable dividend payers — think Coca-Cola, P&amp;G, or Johnson &amp; Johnson.
@@ -215,7 +215,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               onChange={e => { const v = e.target.value; setQuery(v); setSelectedTicker(''); setDivData(null); setShowSearch(true) }}
               onFocus={() => setShowSearch(true)}
               placeholder="Pick a stock — e.g. Coca-Cola or KO"
-              className="w-full rounded-xl border-2 border-[#16130a] bg-white text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-9 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+              className="w-full rounded-xl border-2 border-[#16130a] bg-[#fff] text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-9 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             />
             {selectedTicker && (
               <button onClick={() => { setSelectedTicker(''); setQuery(''); setDivData(null) }}
@@ -225,7 +225,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#16130a]/50 animate-pulse">...</span>
             )}
             {showSearch && !selectedTicker && searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border-2 border-[#16130a] rounded-xl shadow-[4px_4px_0_#16130a] z-50 overflow-hidden">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-[#fff] border-2 border-[#16130a] rounded-xl shadow-[4px_4px_0_#16130a] z-50 overflow-hidden">
                 {searchResults.map(r => (
                   <button key={r.ticker} onClick={() => { setSelectedTicker(r.ticker); setQuery(''); setShowSearch(false) }}
                     className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#fff8e1] transition-colors text-left">
@@ -242,7 +242,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               type="number" min="1" value={amount}
               onChange={e => setAmount(e.target.value)}
               placeholder="10000"
-              className="w-full rounded-xl border-2 border-[#16130a] bg-white text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-3 py-3 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+              className="w-full rounded-xl border-2 border-[#16130a] bg-[#fff] text-[#16130a] placeholder:text-[#16130a]/40 pl-9 pr-3 py-3 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
             />
           </div>
         </div>
@@ -250,7 +250,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
           {['1000', '5000', '10000', '25000', '50000'].map(a => (
             <button key={a} onClick={() => setAmount(a)}
               className={cn('text-[11px] font-mono font-bold px-2.5 py-1 rounded-full border-2 transition-colors',
-                amount === a ? 'bg-[#16130a] border-[#16130a] text-[#fff]' : 'bg-white/70 border-[#16130a]/30 text-[#16130a]/70 hover:border-[#16130a]')}>
+                amount === a ? 'bg-[#16130a] border-[#16130a] text-[#fff]' : 'bg-[#fff]/70 border-[#16130a]/30 text-[#16130a]/70 hover:border-[#16130a]')}>
               ${parseInt(a).toLocaleString()}
             </button>
           ))}
@@ -264,7 +264,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               <Skeleton className="h-16 w-full bg-[#16130a]/10" />
             </div>
           ) : noPays ? (
-            <div className="rounded-xl border-2 border-[#16130a] bg-white p-4">
+            <div className="rounded-xl border-2 border-[#16130a] bg-[#fff] p-4">
               <p className="font-display uppercase text-[#16130a]">{divData.ticker} doesn&apos;t pay a dividend</p>
               <p className="text-sm text-[#16130a]/60 mt-1">Many companies (especially tech) reinvest profits instead. Try KO, JNJ, T, PEP, or XOM.</p>
             </div>
@@ -275,15 +275,15 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
                 <span className="font-mono text-sm text-[#16130a]/60">a year from {divData.ticker}, just for holding</span>
               </div>
               <div className="grid grid-cols-3 gap-2.5 mt-4">
-                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                <div className="rounded-xl border-2 border-[#16130a] bg-[#fff] p-3 text-center">
                   <p className="font-mono font-bold text-lg text-[#16130a]">{formatCurrency(monthlyIncome)}</p>
                   <p className="text-[11px] text-[#16130a]/60 mt-0.5">per month</p>
                 </div>
-                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                <div className="rounded-xl border-2 border-[#16130a] bg-[#fff] p-3 text-center">
                   <p className="font-mono font-bold text-lg text-[#16130a]">{formatCurrency(quarterlyIncome)}</p>
                   <p className="text-[11px] text-[#16130a]/60 mt-0.5">per quarter</p>
                 </div>
-                <div className="rounded-xl border-2 border-[#16130a] bg-white p-3 text-center">
+                <div className="rounded-xl border-2 border-[#16130a] bg-[#fff] p-3 text-center">
                   <p className="font-mono font-bold text-lg text-green-700">{yieldOnCost.toFixed(2)}%</p>
                   <p className="text-[11px] text-[#16130a]/60 mt-0.5">yield</p>
                 </div>
@@ -296,7 +296,7 @@ function Calculator({ onSeeAll }: { onSeeAll: () => void }) {
               <div className="flex gap-1.5 flex-wrap">
                 {EXAMPLES.map(({ t, n }) => (
                   <button key={t} onClick={() => setSelectedTicker(t)} title={n}
-                    className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-white border-2 border-[#16130a] text-[#16130a] hover:bg-[#16130a] hover:text-[#fff] transition-colors">
+                    className="font-mono text-xs font-bold px-3 py-1.5 rounded-full bg-[#fff] border-2 border-[#16130a] text-[#16130a] hover:bg-[#16130a] hover:text-[#fff] transition-colors">
                     {t}
                   </button>
                 ))}
@@ -564,16 +564,16 @@ function DividendCalendar() {
           {filtered.map(e => (
             <div key={`${e.ticker}-${e.exDate}`} className={cn('rounded-2xl border-2 p-4 transition-colors',
               e.alreadyPassed
-                ? 'opacity-50 border-[#16130a]/20 dark:border-gray-800 bg-white dark:bg-gray-900'
+                ? 'opacity-50 border-[#16130a]/20 dark:border-gray-800 bg-[#fff] dark:bg-gray-900'
                 : e.daysUntilExDate <= 3
                   ? 'border-orange-500 bg-orange-500/10 dark:bg-orange-500/5 shadow-[4px_4px_0_#16130a] dark:shadow-none'
-                  : 'border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900 shadow-[4px_4px_0_#16130a] dark:shadow-none')}>
+                  : 'border-[#16130a] dark:border-gray-700 bg-[#fff] dark:bg-gray-900 shadow-[4px_4px_0_#16130a] dark:shadow-none')}>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-2 items-center">
                 <div className="col-span-2">
                   <div className="flex items-center gap-2">
                     <span className={cn('font-display uppercase', e.alreadyPassed ? 'text-[#16130a]/50 dark:text-gray-500' : 'text-[#16130a] dark:text-white')}>{e.ticker}</span>
                     {e.alreadyPassed && (
-                      <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-white dark:bg-gray-800 border-2 border-[#16130a]/20 dark:border-gray-700 text-[#16130a]/50 dark:text-gray-500">Passed</span>
+                      <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-[#fff] dark:bg-gray-800 border-2 border-[#16130a]/20 dark:border-gray-700 text-[#16130a]/50 dark:text-gray-500">Passed</span>
                     )}
                     {!e.alreadyPassed && e.daysUntilExDate <= 3 && (
                       <span className="font-mono font-bold text-[10px] px-1.5 py-0.5 rounded-full bg-orange-500/15 border-2 border-orange-500/40 text-orange-600 dark:text-orange-400">Act soon!</span>
@@ -632,11 +632,11 @@ export default function DividendsPage() {
       </div>
 
       {/* Tabs — arcade segmented control */}
-      <div className="inline-flex gap-1 p-1 rounded-2xl border-2 border-[#16130a] dark:border-gray-700 bg-white dark:bg-gray-900 shadow-[3px_3px_0_#16130a] dark:shadow-none">
+      <div className="inline-flex gap-1 p-1 rounded-2xl border-2 border-[#16130a] dark:border-gray-700 bg-[#fff] dark:bg-gray-900 shadow-[3px_3px_0_#16130a] dark:shadow-none">
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)}
             className={cn('px-4 py-2 text-sm font-mono font-bold rounded-xl transition-colors flex items-center gap-1.5',
-              tab === t ? 'bg-[#16130a] text-[#fff] dark:bg-white dark:text-[#16130a]' : 'text-[#16130a]/55 dark:text-gray-400 hover:text-[#16130a] dark:hover:text-white')}>
+              tab === t ? 'bg-[#16130a] text-[#fff] dark:bg-[#fff] dark:text-[#16130a]' : 'text-[#16130a]/55 dark:text-gray-400 hover:text-[#16130a] dark:hover:text-white')}>
             {t === 'Calculator' && <DollarSign className="h-3.5 w-3.5" />}
             {t === 'Top Stocks' && <TrendingUp className="h-3.5 w-3.5" />}
             {t === 'Calendar' && <Calendar className="h-3.5 w-3.5" />}
