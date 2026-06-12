@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { GuestLock } from '@/components/GuestGate'
 import ProLimitBanner from '@/components/ProLimitBanner'
-import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, LineChart, ExternalLink, Newspaper } from 'lucide-react'
+import { ArrowLeft, Star, StarOff, TrendingUp, TrendingDown, LineChart, ExternalLink, Newspaper, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +14,6 @@ import AnalystCard from '@/components/research/AnalystCard'
 import RedditSentiment from '@/components/research/RedditSentiment'
 import OptionsPanel from '@/components/research/OptionsPanel'
 import SecFilings from '@/components/research/SecFilings'
-import AddHoldingDialog from '@/components/portfolio/AddHoldingDialog'
 import AIAnalysisSection from '@/components/research/AIAnalysisSection'
 import InfoTooltip from '@/components/InfoTooltip'
 import LastUpdated from '@/components/LastUpdated'
@@ -211,6 +210,84 @@ function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
   )
 }
 
+function BuyInChallengeDialog({ ticker, price }: { ticker: string; price: number }) {
+  const [open, setOpen] = useState(false)
+  const [shares, setShares] = useState('1')
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+
+  const sharesNum = Math.max(0, parseFloat(shares) || 0)
+  const cost = sharesNum * price
+
+  const handleBuy = async () => {
+    if (sharesNum <= 0) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/virtual/trade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker: ticker.toUpperCase(), shares: sharesNum, type: 'BUY' }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      toast({ title: `Bought ${sharesNum} share${sharesNum !== 1 ? 's' : ''} of ${ticker.toUpperCase()}`, description: `$${cost.toFixed(2)} deducted from your $100K Challenge` })
+      setOpen(false)
+      setShares('1')
+    } catch (e: any) {
+      toast({ title: 'Trade failed', description: e.message, variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <Button size="sm" onClick={() => setOpen(true)}
+        className="bg-[#ffd23f] text-[#16130a] border-2 border-[#16130a] hover:bg-[#ffd23f]/90 font-mono font-bold shadow-[2px_2px_0_#16130a]">
+        <TrendingUp className="h-4 w-4" />
+        <span className="hidden sm:inline ml-1.5">Buy in Challenge</span>
+      </Button>
+
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" onClick={() => setOpen(false)}>
+          <div className="bg-white dark:bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
+            <h2 className="font-display uppercase text-lg text-[#16130a] dark:text-white mb-0.5">Buy {ticker.toUpperCase()}</h2>
+            <p className="font-mono text-xs text-[#16130a]/50 dark:text-gray-400 mb-5">Adds shares to your $100K Challenge portfolio</p>
+            <div className="space-y-3 mb-5">
+              <div>
+                <label className="font-mono text-xs uppercase text-[#16130a]/60 dark:text-gray-400 mb-1 block">Shares</label>
+                <input
+                  type="number" min="0.001" step="1" value={shares}
+                  onChange={e => setShares(e.target.value)}
+                  className="w-full rounded-xl border-2 border-[#16130a] dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 font-mono text-sm text-[#16130a] dark:text-white focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div className="flex justify-between font-mono text-sm">
+                <span className="text-[#16130a]/50 dark:text-gray-400">Price per share</span>
+                <span className="font-bold text-[#16130a] dark:text-white">${price.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-mono text-sm border-t border-[#16130a]/10 dark:border-gray-700 pt-3">
+                <span className="text-[#16130a]/50 dark:text-gray-400">Total cost</span>
+                <span className="font-bold text-[#16130a] dark:text-white">${cost.toFixed(2)}</span>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setOpen(false)}
+                className="flex-1 rounded-xl border-2 border-[#16130a] dark:border-gray-600 font-mono font-bold text-sm py-2.5 text-[#16130a] dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                Cancel
+              </button>
+              <button onClick={handleBuy} disabled={loading || sharesNum <= 0}
+                className="flex-1 rounded-xl border-2 border-[#16130a] bg-[#ffd23f] font-mono font-bold text-sm py-2.5 text-[#16130a] shadow-[2px_2px_0_#16130a] hover:bg-[#ffd23f]/90 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Buy'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 export default function StockDetailPage() {
   const { ticker } = useParams<{ ticker: string }>()
   const router = useRouter()
@@ -377,7 +454,7 @@ export default function StockDetailPage() {
                   : <><Star className="h-4 w-4" /><span className="hidden sm:inline">Watchlist</span></>
                 }
               </Button>
-              <AddHoldingDialog onAdded={() => {}} />
+              <BuyInChallengeDialog ticker={quote.ticker} price={quote.price} />
             </div>
           </div>
         </CardContent>

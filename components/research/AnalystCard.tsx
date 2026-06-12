@@ -101,7 +101,7 @@ function priceTargetRow(label: string, low: number | null, median: number | null
   const upPct = (((med - current) / current) * 100)
 
   return (
-    <div className="grid grid-cols-4 gap-3 py-3 border-b border-gray-800 last:border-0">
+    <div className="grid grid-cols-4 gap-2 py-2 border-b border-gray-800 last:border-0">
       <div className="text-sm text-gray-400 font-medium flex items-center">{label}</div>
       <div className="text-center">
         <p className="text-xs text-gray-500 mb-0.5">Low</p>
@@ -202,12 +202,12 @@ export default function AnalystCard({ analyst, currentPrice, news, ticker }: Ana
           </div>
 
           {/* Section 3: Price Targets */}
-          <div className="p-5">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium flex items-center gap-1">Price Targets <InfoTooltip text="Where analysts expect the stock to be at 3, 6, and 12 months. Low = pessimistic forecast, Median = middle estimate, High = most optimistic." /></p>
-            <p className="text-xs text-gray-600 mb-3">Based on 12-month analyst targets, scaled to each horizon</p>
+          <div className="p-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-0.5 font-medium flex items-center gap-1">Price Targets <InfoTooltip text="Where analysts expect the stock to be at 3, 6, and 12 months. Low = pessimistic forecast, Median = middle estimate, High = most optimistic." /></p>
+            <p className="text-xs text-gray-600 mb-2">Based on 12-month analyst targets, scaled to each horizon</p>
             {hasTargets ? (
               <div>
-                <div className="grid grid-cols-4 gap-3 pb-2 border-b border-gray-800">
+                <div className="grid grid-cols-4 gap-2 pb-1 border-b border-gray-800">
                   <div />
                   <div className="text-center text-xs text-gray-500 font-medium">Low</div>
                   <div className="text-center text-xs text-gray-500 font-medium">Median</div>
