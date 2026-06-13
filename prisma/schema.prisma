@@ -42,6 +42,8 @@ model User {
   // ─── Theme preferences ──────────────────────────────────────────────
   themeDark            Boolean   @default(true)
   themeAccent          String    @default("default")
+  themeSkin            String?   // Pro light-mode repaint (mint/grape/sunset)
+  themeOutfit          String?   // Pro Mr. Guy outfit (royal/winter/tuxedo)
   // ───────────────────────────────────────────────────────────────────
 
   // ─── Login streak ───────────────────────────────────────────────────
