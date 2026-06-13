@@ -45,7 +45,7 @@ type BuyTarget = { ticker: string; name: string; price: number; blurb?: string }
 function StatTile({ label, value, cls }: { label: string; value: string; cls: string }) {
   return (
     <div className="bg-black/5 dark:bg-white/5 rounded-2xl px-2 py-3 text-center overflow-hidden">
-      <p className={`text-base font-black ${cls} leading-tight whitespace-nowrap`}>{value}</p>
+      <p className={`text-sm sm:text-base font-black ${cls} leading-tight whitespace-nowrap`}>{value}</p>
       <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide mt-1 truncate">{label}</p>
     </div>
   )
@@ -97,12 +97,115 @@ function ClosedNote({ market, verb }: { market: { status: string; label: string 
 
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-5">
+    <div className="bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-4 sm:p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-black text-white">{title}</h2>
         {action}
       </div>
       {children}
+    </div>
+  )
+}
+
+function DetailStat({ label, value, cls }: { label: string; value: string; cls?: string }) {
+  return (
+    <div className="bg-black/5 dark:bg-white/5 rounded-xl px-2 py-2.5 text-center overflow-hidden">
+      <p className={`text-sm font-black leading-tight whitespace-nowrap ${cls ?? 'text-white'}`}>{value}</p>
+      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide mt-0.5 truncate">{label}</p>
+    </div>
+  )
+}
+
+// Tap an owned stock → this sheet: the graph, your position, high/low while held,
+// and today's range. "heldSince" is the earliest BUY date for the ticker.
+function HoldingDetail({ holding, heldSince, onClose, onSell, onBuyMore }: {
+  holding: Holding
+  heldSince: string | null
+  onClose: () => void
+  onSell: () => void
+  onBuyMore: () => void
+}) {
+  const [quote, setQuote] = useState<any>(null)
+  const [hist, setHist] = useState<{ date: string; close: number }[] | null>(null)
+
+  useEffect(() => {
+    let cancel = false
+    fetch(`/api/stock/${holding.ticker}`).then((r) => r.json()).then((d) => { if (!cancel) setQuote(d?.quote ?? null) }).catch(() => {})
+    fetch(`/api/stock/${holding.ticker}?type=historical&range=1y`)
+      .then((r) => r.json())
+      .then((d) => { if (!cancel) setHist(((d.data || []) as any[]).filter((x) => x.close > 0).map((x) => ({ date: x.date, close: x.close }))) })
+      .catch(() => { if (!cancel) setHist([]) })
+    return () => { cancel = true }
+  }, [holding.ticker])
+
+  // High/low while held: closes since the purchase date. If we can't pin the
+  // held window (no trade date, or it predates our 1Y history), fall back to 1Y.
+  const heldPts = heldSince && hist ? hist.filter((p) => new Date(p.date) >= new Date(heldSince)) : null
+  const closes = ((heldPts && heldPts.length >= 2 ? heldPts : hist) ?? []).map((p) => p.close)
+  const rangeHigh = closes.length ? Math.max(...closes) : null
+  const rangeLow = closes.length ? Math.min(...closes) : null
+  const rangeLabel = heldPts && heldPts.length >= 2 ? 'since you bought' : 'past year'
+  const heldDateLabel = heldSince ? new Date(heldSince).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null
+  const up = holding.gainLoss >= 0
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-md bg-gray-900 border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-5 sm:p-6 max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <CompanyLogo ticker={holding.ticker} size={44} name={holding.companyName} />
+            <div className="min-w-0">
+              <p className="font-black text-white text-lg leading-tight truncate">{holding.companyName || holding.ticker}</p>
+              <p className="text-xs text-gray-500">{holding.ticker} · {formatCurrency(holding.currentPrice)}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-300 shrink-0"><X className="h-5 w-5" /></button>
+        </div>
+
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          {/* Graph */}
+          <MiniChart ticker={holding.ticker} />
+
+          {/* Your position */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Your position</p>
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            <DetailStat label="Shares" value={holding.shares.toFixed(3)} />
+            <DetailStat label="Avg cost" value={formatCurrency(holding.avgCost)} />
+            <DetailStat label="Value now" value={formatCurrency(holding.currentValue)} />
+            <DetailStat label="Total return" value={`${up ? '+' : ''}${holding.gainLossPct.toFixed(1)}%`} cls={gainCls(holding.gainLoss)} />
+          </div>
+          <div className={`rounded-xl px-3 py-2 text-center mb-4 ${up ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
+            <span className={`text-base font-black ${gainCls(holding.gainLoss)}`}>{up ? '+' : ''}{formatCurrency(holding.gainLoss)}</span>
+            <span className="text-xs text-gray-500 ml-2">{up ? 'profit' : 'loss'} so far{heldDateLabel ? ` · since ${heldDateLabel}` : ''}</span>
+          </div>
+
+          {/* High / low while held */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">High &amp; low <span className="text-gray-500 normal-case font-medium">({rangeLabel})</span></p>
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <DetailStat label="High" value={rangeHigh != null ? formatCurrency(rangeHigh) : '—'} cls="text-green-600 dark:text-green-400" />
+            <DetailStat label="Low" value={rangeLow != null ? formatCurrency(rangeLow) : '—'} cls="text-red-600 dark:text-red-400" />
+          </div>
+
+          {/* Today & range */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Today &amp; 52-week range</p>
+          <div className="grid grid-cols-3 gap-2 mb-2">
+            <DetailStat label="Day high" value={quote?.dayHigh != null ? formatCurrency(quote.dayHigh) : '—'} />
+            <DetailStat label="Day low" value={quote?.dayLow != null ? formatCurrency(quote.dayLow) : '—'} />
+            <DetailStat label="Prev close" value={quote?.previousClose != null ? formatCurrency(quote.previousClose) : '—'} />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <DetailStat label="52-wk high" value={quote?.week52High != null ? formatCurrency(quote.week52High) : '—'} />
+            <DetailStat label="52-wk low" value={quote?.week52Low != null ? formatCurrency(quote.week52Low) : '—'} />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="shrink-0 pt-4 flex gap-2">
+          <button onClick={onBuyMore} className="flex-1 bg-blue-600 hover:bg-blue-500 text-[#fff] font-black rounded-2xl py-3" style={{ boxShadow: '0 4px 0 #1d4ed8' }}>Buy more</button>
+          <button onClick={onSell} className="flex-1 bg-red-600 hover:bg-red-500 text-[#fff] font-black rounded-2xl py-3" style={{ boxShadow: '0 4px 0 #b91c1c' }}>Sell</button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -126,6 +229,7 @@ export default function GamePage() {
   const [selling, setSelling] = useState<string | null>(null)
   const [sellTarget, setSellTarget] = useState<Holding | null>(null)
   const [sellAmount, setSellAmount] = useState(0)
+  const [detailTarget, setDetailTarget] = useState<Holding | null>(null)
   const [helperOpen, setHelperOpen] = useState(false)
   const [helperChoice, setHelperChoice] = useState<string | null>(null)
 
@@ -218,6 +322,13 @@ export default function GamePage() {
     setBuying(false)
   }
   const openSell = (h: Holding) => { setSellTarget(h); setSellAmount(h.currentValue) }
+  // Earliest BUY date for a ticker (drives "high/low while held"). Trades are the
+  // active portfolio's most recent 20 — plenty for a beginner sim.
+  const heldSinceFor = (ticker: string): string | null => {
+    const buys = ((portfolio?.trades ?? []) as any[]).filter((t) => t.ticker === ticker && t.type === 'BUY')
+    if (!buys.length) return null
+    return buys.reduce((min: string, t: any) => (t.executedAt < min ? t.executedAt : min), buys[0].executedAt as string)
+  }
   const confirmSell = async () => {
     if (!sellTarget || selling) return
     const full = sellAmount >= sellTarget.currentValue - 0.01
@@ -365,8 +476,8 @@ export default function GamePage() {
           )}
 
           {/* ── Hero ── */}
-          <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-6">
-            <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+          <div className="bg-gray-900 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent border-2 border-[#16130a] shadow-[4px_4px_0_#16130a] dark:border-gray-700 dark:shadow-none rounded-3xl p-4 sm:p-6">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-6">
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <div className="shrink-0 -mb-2 self-end"><MrGuyMascot px={4} mood={pnlPct >= 2 ? 'celebrate' : up ? 'happy' : 'sad'} /></div>
                 <div className="min-w-0">
@@ -446,20 +557,28 @@ export default function GamePage() {
                 ) : (
                   <div className="space-y-3">
                     {holdings.map((h) => (
-                      <div key={h.ticker} className={`${gainTint(h.gainLoss)} rounded-2xl p-4`}>
+                      <div
+                        key={h.ticker}
+                        onClick={() => setDetailTarget(h)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailTarget(h) } }}
+                        className={`${gainTint(h.gainLoss)} rounded-2xl p-4 cursor-pointer hover:brightness-105 active:brightness-110 transition`}
+                      >
                         <div className="flex items-center gap-3">
                           <CompanyLogo ticker={h.ticker} size={48} radius={14} name={h.companyName} />
                           <div className="min-w-0 flex-1">
                             <p className="font-bold text-white truncate text-base">{h.companyName || h.ticker}</p>
                             <p className="text-xs text-gray-500">{h.ticker} · {h.shares.toFixed(2)} shares</p>
                           </div>
+                          <ChevronRight className="h-4 w-4 text-gray-500 shrink-0" />
                         </div>
                         <div className={`flex items-center justify-between mt-3 pt-3 border-t ${h.gainLoss >= 0 ? 'border-green-500/20' : 'border-red-500/20'}`}>
                           <div>
                             <span className="font-black text-white text-lg">{formatCurrency(h.currentValue)}</span>
                             <span className={`ml-2 text-sm font-bold ${gainCls(h.gainLoss)}`}>{h.gainLoss >= 0 ? '+' : ''}{h.gainLossPct.toFixed(1)}%</span>
                           </div>
-                          <button onClick={() => openSell(h)} className="shrink-0 text-sm font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-4 py-2 hover:bg-red-500/10">
+                          <button onClick={(e) => { e.stopPropagation(); openSell(h) }} className="shrink-0 text-sm font-bold text-red-500 dark:text-red-400 border border-red-500/30 rounded-xl px-4 py-2 hover:bg-red-500/10">
                             Sell
                           </button>
                         </div>
@@ -532,6 +651,17 @@ export default function GamePage() {
 
           <p className="text-[11px] text-gray-600 text-center px-4">Virtual money only — not real investing. Prices may be delayed up to 15 minutes.</p>
         </>
+      )}
+
+      {/* ── Owned-stock detail sheet ── */}
+      {detailTarget && (
+        <HoldingDetail
+          holding={detailTarget}
+          heldSince={heldSinceFor(detailTarget.ticker)}
+          onClose={() => setDetailTarget(null)}
+          onSell={() => { const h = detailTarget; setDetailTarget(null); openSell(h) }}
+          onBuyMore={() => { const h = detailTarget; setDetailTarget(null); openBuy(h.ticker, h.companyName) }}
+        />
       )}
 
       {/* ── Buy sheet ── */}
