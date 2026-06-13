@@ -130,11 +130,12 @@ export async function sendProUpgradeEmail(email: string) {
         </p>
         <ul style="color:#555;font-size:14px;line-height:2;padding-left:20px;margin:0 0 28px;">
           <li>💬 <strong>Unlimited Mr. Guy chat</strong> — no more 3/day cap</li>
-          <li>🤖 <strong>Unlimited AI stock analysis</strong> on every research page</li>
-          <li>⚡ <strong>Unlimited Spike Summaries, Report Cards, Bull vs Bear</strong></li>
-          <li>🔍 <strong>Unlimited Reality Check, Am I Dumb, BS Checker</strong></li>
-          <li>👥 <strong>Full Smart Money access</strong> — all insider trades & top investors</li>
-          <li>🏦 <strong>Full Hedge Fund tracker</strong> — all funds unlocked</li>
+          <li>📊 <strong>Unlimited AI stock breakdowns</strong> on any stock</li>
+          <li>⚡ <strong>No daily limits on any AI tool</strong> — Spike Summary, Report Card, Bull vs Bear, Reality Check, and more</li>
+          <li>📈 <strong>A 2nd $100K portfolio</strong> — test a second strategy alongside your first</li>
+          <li>🎨 <strong>Exclusive Mr. Guy colour themes</strong></li>
+          <li>👔 <strong>Mr. Guy outfits</strong> — Royal, Winter, Tuxedo</li>
+          <li>⭐ <strong>Pro badge</strong> on the leaderboard</li>
         </ul>
         <a href="https://mrguyinvests.com/dashboard" style="display:inline-block;background:#2563eb;color:#fff;font-weight:600;font-size:15px;padding:14px 28px;border-radius:10px;text-decoration:none;">
           Go to Dashboard →
