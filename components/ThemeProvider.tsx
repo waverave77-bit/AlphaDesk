@@ -43,7 +43,7 @@ function applyToDOM(isDark: boolean, skin: string | null) {
   }
 }
 
-function saveDB(data: { themeDark?: boolean; themeSkin?: string | null; themeOutfit?: string | null }) {
+function saveDB(data: { themeDark?: boolean }) {
   fetch('/api/user/preferences', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -80,17 +80,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       .then((p) => {
         if (cancelled || !p) return
         const dbDark = p.themeDark ?? true
-        // skin & outfit are Pro cosmetics — the DB is the source of truth so they
-        // follow you across devices instead of living only in this browser.
-        const dbSkin = p.themeSkin ?? null
-        const dbOutfit = p.themeOutfit ?? null
         setIsDarkState(dbDark)
-        setSkinState(dbSkin)
-        setOutfitState(dbOutfit)
-        applyToDOM(dbDark, dbSkin)
+        applyToDOM(dbDark, localStorage.getItem('mrguy-skin'))
         localStorage.setItem('mrguy-dark', String(dbDark))
-        if (dbSkin) localStorage.setItem('mrguy-skin', dbSkin); else localStorage.removeItem('mrguy-skin')
-        if (dbOutfit) localStorage.setItem('mrguy-outfit', dbOutfit); else localStorage.removeItem('mrguy-outfit')
       })
       .catch(() => {})
     return () => { cancelled = true }
@@ -114,9 +106,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (s && isDark) {
       setIsDarkState(false)
       localStorage.setItem('mrguy-dark', 'false')
-      if (session?.user) saveDB({ themeDark: false, themeSkin: s })
-    } else if (session?.user) {
-      saveDB({ themeSkin: s })
+      if (session?.user) saveDB({ themeDark: false })
     }
     applyToDOM(nextDark, s)
   }
@@ -125,7 +115,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setOutfitState(o)
     if (o) localStorage.setItem('mrguy-outfit', o)
     else localStorage.removeItem('mrguy-outfit')
-    if (session?.user) saveDB({ themeOutfit: o })
   }
 
   // 'white' = light mode; anything else = dark.
