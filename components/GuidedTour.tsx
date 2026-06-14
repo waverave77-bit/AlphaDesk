@@ -57,50 +57,51 @@ const STEPS: TourStep[] = [
     idx: 0,
     match: (p) => p === '/dashboard',
     title: "Hey, I'm Mr. Guy",
-    body: "Your AI stock market sidekick. I'll show you around in 60 seconds — it's worth it.",
+    body: "Your investing sidekick. I'll show you around in 60 seconds — it's worth it.",
     nextLabel: "Show me around →",
-    nextHref: '/research',
+    nextHref: '/learn',
   },
   {
     idx: 1,
-    match: (p) => p === '/research',
-    title: "Search any stock",
-    body: "Type any ticker or company name in the search bar. Try AAPL, NVDA, TSLA — whatever you've heard of.",
-    hint: "I'll update automatically once you search.",
-    nextLabel: "Skip ahead →",
-    nextHref: '/research/AAPL',
+    match: (p) => p === '/learn' || p.startsWith('/learn/'),
+    title: "Start here — Learn",
+    body: "Bite-size lessons that take you from zero to confident. Earn XP, build a streak, and it actually sticks. This is the heart of Mr. Guy.",
+    hint: "Five minutes a day is all it takes.",
+    nextLabel: "What's next? →",
+    nextHref: '/trading-simulator',
   },
   {
     idx: 2,
-    match: (p) => p.startsWith('/research/') && p.length > 10,
-    title: "This is the full picture",
-    body: "Live price, chart, and real financials — plus multiple AI models analyzing the stock from different angles. Sentiment, valuation, momentum, risk. Scroll down, it's all there.",
-    hint: "Most sites give you raw numbers. I tell you what they actually mean.",
-    nextLabel: "Show me the AI chat →",
+    match: (p) => p.startsWith('/trading-simulator'),
+    title: "The $100K Challenge",
+    body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, zero risk. Try to beat the S&P 500 and climb the leaderboard.",
+    hint: "The best way to learn investing without risking a cent.",
+    nextLabel: "Show me Mr. Guy →",
     nextHref: '/chat',
   },
   {
     idx: 3,
     match: (p) => p === '/chat' || p.startsWith('/chat?') || p.startsWith('/chat/'),
-    title: "Ask me literally anything",
-    body: "\"Is NVDA overvalued?\" \"Explain this earnings report.\" \"What's a good stock for a beginner?\" Type it in the box below — I'll give you a real answer.",
+    title: "Ask me anything",
+    body: "\"Is NVDA overvalued?\" \"Explain this earnings report.\" \"What's a good first stock?\" Type it in the box below — I'll give you a real, plain-English answer.",
     hint: "I pull live market data, not generic answers.",
-    nextLabel: "What else is there? →",
-    nextHref: '/trading-simulator',
+    nextLabel: "One more thing →",
+    nextHref: '/dictionary',
   },
   {
     idx: 4,
-    match: (p) => p.startsWith('/trading-simulator'),
-    title: "The $100K Challenge",
-    body: "You get $100,000 in virtual cash and invest it like it's real — live prices, real stocks, zero risk. The goal is to beat the S&P 500. Your returns are tracked and you can see how you stack up on the leaderboard.",
-    hint: "Best way to learn investing without risking real money.",
-    nextLabel: "Cool! What else is there? →",
+    match: (p) => p === '/dictionary' || p.startsWith('/dictionary/'),
+    title: "Confused by a term?",
+    body: "P/E ratio? Market cap? Every confusing word explained in plain English. Search it here the moment you get stuck.",
+    hint: "No finance degree required.",
+    nextLabel: "Got it →",
+    nextHref: '/dashboard',
   },
   {
     idx: 5,
-    match: (p) => p.startsWith('/trading-simulator'),
-    title: "You're all set",
-    body: "There's a lot more to explore — bite-sized lessons, the investing dictionary, a markets overview, and earnings calendars. Poke around and find what works for you.",
+    match: (p) => p === '/dashboard',
+    title: "That's the core of it",
+    body: "There's more when you're ready — research any stock, a markets overview, watchlists and earnings. Poke around and find what clicks.",
     hint: "last",
     nextLabel: "Let's go!",
     isLast: true,
@@ -183,11 +184,11 @@ export default function GuidedTour() {
         className="gt-panel fixed bottom-6 right-4 z-[9998]"
         style={{ width: 'min(300px, calc(100vw - 24px))' }}
       >
-        <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
+        <div className="bg-[#fdf3d7] dark:bg-gray-900 border-2 border-[#16130a] dark:border-gray-700 rounded-2xl shadow-[4px_4px_0_#16130a] dark:shadow-2xl dark:shadow-black/60 overflow-hidden">
 
           {/* Progress bar */}
-          <div className="h-0.5 bg-gray-800">
-            <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+          <div className="h-1 bg-[#16130a]/10 dark:bg-gray-800">
+            <div className="h-full bg-[#16130a] dark:bg-blue-500 transition-all duration-500" style={{ width: `${progress}%` }} />
           </div>
 
           {/* Dots + close */}
@@ -195,13 +196,13 @@ export default function GuidedTour() {
             <div className="flex items-center gap-1.5">
               {STEPS.map((_, i) => (
                 <div key={i} className={`rounded-full transition-all duration-300 ${
-                  i === step.idx ? 'w-4 h-1.5 bg-blue-400'
-                  : i < step.idx ? 'w-1.5 h-1.5 bg-blue-700'
-                                 : 'w-1.5 h-1.5 bg-gray-700'
+                  i === step.idx ? 'w-4 h-1.5 bg-[#16130a] dark:bg-blue-400'
+                  : i < step.idx ? 'w-1.5 h-1.5 bg-[#16130a]/40 dark:bg-blue-700'
+                                 : 'w-1.5 h-1.5 bg-[#16130a]/15 dark:bg-gray-700'
                 }`} />
               ))}
             </div>
-            <button onClick={finish} className="text-gray-600 hover:text-gray-400 transition-colors" aria-label="Close tour">
+            <button onClick={finish} className="text-[#16130a]/40 hover:text-[#16130a] dark:text-gray-600 dark:hover:text-gray-400 transition-colors" aria-label="Close tour">
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -213,16 +214,16 @@ export default function GuidedTour() {
                 <MrGuyHead px={4} />
                 <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
                   <span className="animate-ping absolute h-full w-full rounded-full bg-green-400 opacity-60" />
-                  <span className="relative rounded-full h-2.5 w-2.5 bg-green-400 border-2 border-gray-900" />
+                  <span className="relative rounded-full h-2.5 w-2.5 bg-green-400 border-2 border-[#fdf3d7] dark:border-gray-900" />
                 </span>
               </div>
               <div className="flex-1 min-w-0 space-y-2">
-                <p className="text-sm font-bold text-white leading-snug">{step.title}</p>
-                <p className="text-sm text-gray-300 leading-relaxed">{step.body}</p>
+                <p className="font-display text-sm text-[#16130a] dark:text-white leading-snug">{step.title}</p>
+                <p className="text-sm text-[#16130a]/80 dark:text-gray-300 leading-relaxed">{step.body}</p>
                 {step.hint && (
-                  <p className="text-xs text-gray-500 leading-relaxed">
+                  <p className="text-xs text-[#16130a]/50 dark:text-gray-500 leading-relaxed">
                     {step.hint === 'last'
-                      ? <>Need help? <a href="/chat" className="text-blue-400 hover:text-blue-300 underline">Ask Mr. Guy</a> anything.</>
+                      ? <>Need help? <a href="/chat" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">Ask Mr. Guy</a> anything.</>
                       : step.hint
                     }
                   </p>
@@ -235,7 +236,7 @@ export default function GuidedTour() {
           <div className="px-4 pb-4 pt-1 flex flex-col gap-2">
             <button
               onClick={() => handleNext(step)}
-              className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-[#16130a] text-[#ffd23f] hover:bg-[#0f0c06] dark:bg-blue-600 dark:text-[#fff] dark:hover:bg-blue-500 flex items-center justify-center gap-1.5 transition-colors"
             >
               {step.nextLabel}
               {!step.isLast && <ChevronRight className="h-4 w-4" />}
@@ -244,8 +245,8 @@ export default function GuidedTour() {
 
           {/* Skip */}
           {step.idx > 0 && (
-            <div className="border-t border-gray-800 px-4 py-2 text-center">
-              <button onClick={finish} className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
+            <div className="border-t border-[#16130a]/10 dark:border-gray-800 px-4 py-2 text-center">
+              <button onClick={finish} className="text-xs text-[#16130a]/40 hover:text-[#16130a]/70 dark:text-gray-600 dark:hover:text-gray-400 transition-colors">
                 Skip tour
               </button>
             </div>

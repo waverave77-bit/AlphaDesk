@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { TrendingUp, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, BookOpen, Sparkles } from 'lucide-react'
+import { TrendingUp, Bot, BarChart2, ChevronRight, Check, GraduationCap, Award, BookOpen, Sparkles, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
@@ -20,11 +20,14 @@ const GOALS = [
   { id: 'terms',     label: 'Understand the terms',      Icon: BookOpen },
 ]
 
+// Mirrors the primary nav — learning leads, then practice, then the AI buddy,
+// the dictionary, and the deeper research tools for when you graduate.
 const FEATURES = [
-  { icon: GraduationCap, color: 'bg-blue-600/20 border-blue-500/30 text-blue-400',     label: 'Learn',          desc: 'Bite-size lessons that take you from total beginner to confident. Start here.' },
-  { icon: BarChart2,     color: 'bg-green-600/20 border-green-500/30 text-green-400',   label: '$100K Challenge', desc: 'Practice investing with $100,000 in fake money — real market prices, zero risk.' },
-  { icon: Bot,           color: 'bg-purple-600/20 border-purple-500/30 text-purple-400', label: 'Ask Mr. Guy',    desc: 'Your AI buddy. Ask anything about investing and get a plain-English answer.' },
-  { icon: BookOpen,      color: 'bg-amber-600/20 border-amber-500/30 text-amber-400',   label: 'Dictionary',     desc: 'Every confusing term explained simply, the moment you need it.' },
+  { icon: GraduationCap, label: 'Learn',           desc: 'Bite-size lessons with XP and streaks that take you from total beginner to confident. Start here.' },
+  { icon: BarChart2,     label: '$100K Challenge', desc: 'Practice investing with $100,000 in fake money — real market prices, zero risk.' },
+  { icon: Bot,           label: 'Ask Mr. Guy',     desc: 'Your AI buddy. Ask anything about investing and get a plain-English answer.' },
+  { icon: BookOpen,      label: 'Dictionary',      desc: 'Every confusing term explained simply, the moment you need it.' },
+  { icon: Search,        label: 'Research & Markets', desc: 'Dig into any stock and track the whole market — there when you’re ready for it.' },
 ]
 
 export default function OnboardingModal() {
@@ -134,6 +137,13 @@ export default function OnboardingModal() {
 
   if (!visible) return null
 
+  // ── Arcade tokens ───────────────────────────────────────────────────
+  const cardBase = 'border-2 bg-[#fff] dark:bg-gray-900 border-[#16130a]/15 dark:border-gray-700 hover:border-[#16130a]/40 dark:hover:border-gray-600'
+  const cardSel  = 'border-2 border-[#16130a] dark:border-blue-500 bg-[#ffd23f]/25 dark:bg-blue-600/10'
+  const iconBox  = 'h-11 w-11 rounded-xl flex items-center justify-center shrink-0 bg-[#ffd23f] border-2 border-[#16130a] dark:border-gray-700'
+  const primaryBtn = 'bg-[#16130a] text-[#ffd23f] hover:bg-[#0f0c06] dark:bg-blue-600 dark:text-[#fff] dark:hover:bg-blue-700'
+  const backBtn  = 'border-2 border-[#16130a]/25 text-[#16130a]/60 hover:text-[#16130a] hover:border-[#16130a]/50 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white'
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-xl p-4 overflow-y-auto" onClick={dismiss}>
       <div
@@ -141,14 +151,14 @@ export default function OnboardingModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="w-full max-w-3xl bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[90vh] my-auto"
+        className="w-full max-w-3xl bg-[#fdf3d7] dark:bg-gray-950 border-2 border-[#16130a] dark:border-gray-800 rounded-3xl shadow-[8px_8px_0_#16130a] dark:shadow-2xl flex flex-col max-h-[90vh] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
 
         {/* Progress bar */}
-        <div className="h-1.5 bg-gray-800 rounded-t-3xl shrink-0">
+        <div className="h-1.5 bg-[#16130a]/10 dark:bg-gray-800 rounded-t-3xl shrink-0">
           <div
-            className="h-full bg-blue-600 transition-all duration-500 rounded-t-3xl"
+            className="h-full bg-[#16130a] dark:bg-blue-600 transition-all duration-500 rounded-t-3xl"
             style={{ width: `${((step + 1) / 4) * 100}%` }}
           />
         </div>
@@ -156,7 +166,7 @@ export default function OnboardingModal() {
         {/* Step dots — pinned above scroll area */}
         <div className="flex items-center justify-center gap-2 pt-6 px-6 shrink-0">
           {[0,1,2,3].map((i) => (
-            <div key={i} className={cn('h-2.5 rounded-full transition-all duration-300', i === step ? 'w-8 bg-blue-500' : i < step ? 'w-2.5 bg-blue-800' : 'w-2.5 bg-gray-700')} />
+            <div key={i} className={cn('h-2.5 rounded-full transition-all duration-300', i === step ? 'w-8 bg-[#16130a] dark:bg-blue-500' : i < step ? 'w-2.5 bg-[#16130a]/40 dark:bg-blue-800' : 'w-2.5 bg-[#16130a]/15 dark:bg-gray-700')} />
           ))}
         </div>
 
@@ -167,13 +177,13 @@ export default function OnboardingModal() {
           {step === 0 && (
             <div className="text-center space-y-6">
               <div className="flex justify-center">
-                <div className="bg-white border-[3px] border-[#16130a] shadow-[5px_5px_0_#16130a] p-3 inline-flex">
+                <div className="bg-[#fff] border-[3px] border-[#16130a] shadow-[5px_5px_0_#16130a] dark:shadow-none p-3 inline-flex rounded-xl">
                   <MrGuyLogoSvg px={4} />
                 </div>
               </div>
               <div>
-                <h2 id="modal-title" className="text-2xl sm:text-4xl font-extrabold text-white">Welcome to Mr. Guy Invests</h2>
-                <p className="text-gray-400 mt-3 text-base sm:text-lg leading-relaxed max-w-lg mx-auto">Learn investing from scratch — fun, bite-size lessons, a $100K practice account, and Mr. Guy to explain anything in plain English.</p>
+                <h2 id="modal-title" className="font-display text-2xl sm:text-4xl text-[#16130a] dark:text-white">Welcome to Mr. Guy Invests</h2>
+                <p className="text-[#16130a]/60 dark:text-gray-400 mt-3 text-base sm:text-lg leading-relaxed max-w-lg mx-auto">Learn investing from scratch — fun, bite-size lessons, a $100K practice account, and Mr. Guy to explain anything in plain English.</p>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {[
@@ -181,9 +191,11 @@ export default function OnboardingModal() {
                   { Icon: BarChart2,     label: '$100K practice account' },
                   { Icon: Bot,           label: 'Ask Mr. Guy anything' },
                 ].map((f) => (
-                  <div key={f.label} className="bg-gray-900 rounded-2xl p-3 sm:p-5 border border-gray-800">
-                    <f.Icon className="h-6 w-6 text-blue-400 mb-2" />
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium">{f.label}</p>
+                  <div key={f.label} className="bg-[#fff] dark:bg-gray-900 rounded-2xl p-3 sm:p-5 border-2 border-[#16130a]/15 dark:border-gray-800">
+                    <div className="h-9 w-9 rounded-lg bg-[#ffd23f] border-2 border-[#16130a] dark:border-gray-700 flex items-center justify-center mb-2 mx-auto sm:mx-0">
+                      <f.Icon className="h-5 w-5 text-[#16130a]" />
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#16130a]/70 dark:text-gray-400 font-semibold">{f.label}</p>
                   </div>
                 ))}
               </div>
@@ -194,38 +206,38 @@ export default function OnboardingModal() {
           {step === 1 && (
             <div className="space-y-5">
               <div className="text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white">What's your experience level?</h2>
-                <p className="text-gray-500 mt-2 text-base">We'll tailor things to match where you're at</p>
+                <h2 className="font-display text-2xl sm:text-3xl text-[#16130a] dark:text-white">What's your experience level?</h2>
+                <p className="text-[#16130a]/50 dark:text-gray-500 mt-2 text-base">We'll tailor things to match where you're at</p>
               </div>
 
               {/* AI personalization notice */}
-              <div className="flex items-start gap-3 bg-blue-600/10 border border-blue-500/20 rounded-2xl px-4 py-3">
-                <Sparkles className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
-                <p className="text-sm text-blue-300 leading-relaxed">
-                  <strong>This changes how Mr. Guy explains things to you.</strong> Beginners get everything in plain English. Experienced investors get the full technical breakdown. You can change this anytime in Settings.
+              <div className="flex items-start gap-3 bg-[#ffd23f]/25 dark:bg-blue-600/10 border-2 border-[#16130a]/15 dark:border-blue-500/20 rounded-2xl px-4 py-3">
+                <Sparkles className="h-4 w-4 text-[#16130a] dark:text-blue-400 mt-0.5 shrink-0" />
+                <p className="text-sm text-[#16130a]/80 dark:text-blue-300 leading-relaxed">
+                  <strong className="text-[#16130a] dark:text-blue-200">This changes how Mr. Guy explains things to you.</strong> Beginners get everything in plain English. Experienced investors get the full technical breakdown. You can change this anytime in Settings.
                 </p>
               </div>
 
               <div className="space-y-3">
-                {EXPERIENCE_LEVELS.map((lvl) => (
-                  <button
-                    key={lvl.id}
-                    onClick={() => setExperience(lvl.id)}
-                    className={cn(
-                      'w-full flex items-center gap-4 p-4 rounded-2xl border text-left transition-all',
-                      experience === lvl.id ? 'border-blue-500 bg-blue-600/10' : 'border-gray-800 bg-gray-900 hover:border-gray-600'
-                    )}
-                  >
-                    <div className={cn('h-11 w-11 rounded-xl flex items-center justify-center shrink-0', experience === lvl.id ? 'bg-blue-600/20' : 'bg-gray-800')}>
-                      <lvl.Icon className={cn('h-6 w-6', experience === lvl.id ? 'text-blue-400' : 'text-gray-400')} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-white font-bold text-base">{lvl.label}</p>
-                      <p className="text-gray-500 text-sm">{lvl.desc}</p>
-                    </div>
-                    {experience === lvl.id && <Check className="h-6 w-6 text-blue-400 shrink-0" />}
-                  </button>
-                ))}
+                {EXPERIENCE_LEVELS.map((lvl) => {
+                  const sel = experience === lvl.id
+                  return (
+                    <button
+                      key={lvl.id}
+                      onClick={() => setExperience(lvl.id)}
+                      className={cn('w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all', sel ? cardSel : cardBase)}
+                    >
+                      <div className={cn('h-11 w-11 rounded-xl flex items-center justify-center shrink-0 border-2', sel ? 'bg-[#ffd23f] border-[#16130a] dark:border-gray-700' : 'bg-[#16130a]/5 dark:bg-gray-800 border-transparent')}>
+                        <lvl.Icon className={cn('h-6 w-6', sel ? 'text-[#16130a]' : 'text-[#16130a]/50 dark:text-gray-400')} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[#16130a] dark:text-white font-bold text-base">{lvl.label}</p>
+                        <p className="text-[#16130a]/55 dark:text-gray-500 text-sm">{lvl.desc}</p>
+                      </div>
+                      {sel && <Check className="h-6 w-6 text-[#16130a] dark:text-blue-400 shrink-0" />}
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}
@@ -234,8 +246,8 @@ export default function OnboardingModal() {
           {step === 2 && (
             <div className="space-y-5">
               <div className="text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white">What brings you here?</h2>
-                <p className="text-gray-500 mt-2 text-base">Pick everything that applies</p>
+                <h2 className="font-display text-2xl sm:text-3xl text-[#16130a] dark:text-white">What brings you here?</h2>
+                <p className="text-[#16130a]/50 dark:text-gray-500 mt-2 text-base">Pick everything that applies</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {GOALS.map((g) => {
@@ -244,18 +256,15 @@ export default function OnboardingModal() {
                     <button
                       key={g.id}
                       onClick={() => toggleGoal(g.id)}
-                      className={cn(
-                        'flex flex-col items-start gap-3 p-4 rounded-2xl border text-left transition-all',
-                        selected ? 'border-blue-500 bg-blue-600/10' : 'border-gray-800 bg-gray-900 hover:border-gray-600'
-                      )}
+                      className={cn('flex flex-col items-start gap-3 p-4 rounded-2xl text-left transition-all', selected ? cardSel : cardBase)}
                     >
                       <div className="flex items-center justify-between w-full">
-                        <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center', selected ? 'bg-blue-600/20' : 'bg-gray-800')}>
-                          <g.Icon className={cn('h-5 w-5', selected ? 'text-blue-400' : 'text-gray-400')} />
+                        <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center border-2', selected ? 'bg-[#ffd23f] border-[#16130a] dark:border-gray-700' : 'bg-[#16130a]/5 dark:bg-gray-800 border-transparent')}>
+                          <g.Icon className={cn('h-5 w-5', selected ? 'text-[#16130a]' : 'text-[#16130a]/50 dark:text-gray-400')} />
                         </div>
-                        {selected && <Check className="h-5 w-5 text-blue-400" />}
+                        {selected && <Check className="h-5 w-5 text-[#16130a] dark:text-blue-400" />}
                       </div>
-                      <p className="text-sm sm:text-base font-semibold text-white">{g.label}</p>
+                      <p className="text-sm sm:text-base font-semibold text-[#16130a] dark:text-white">{g.label}</p>
                     </button>
                   )
                 })}
@@ -267,26 +276,26 @@ export default function OnboardingModal() {
           {step === 3 && (
             <div className="space-y-5">
               <div className="text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white">Here's what you can do</h2>
-                <p className="text-gray-500 mt-2 text-base">A quick look at the most useful features</p>
+                <h2 className="font-display text-2xl sm:text-3xl text-[#16130a] dark:text-white">Here's what you can do</h2>
+                <p className="text-[#16130a]/50 dark:text-gray-500 mt-2 text-base">A quick look at the most useful features</p>
               </div>
               <div className="space-y-3">
                 {FEATURES.map((f) => {
                   const Icon = f.icon
                   return (
-                    <div key={f.label} className={cn('flex items-start gap-4 p-4 rounded-2xl border border-gray-800 bg-gray-900')}>
-                      <div className={cn('h-11 w-11 rounded-xl flex items-center justify-center shrink-0 border', f.color)}>
-                        <Icon className="h-5 w-5" />
+                    <div key={f.label} className="flex items-start gap-4 p-4 rounded-2xl border-2 border-[#16130a]/15 dark:border-gray-800 bg-[#fff] dark:bg-gray-900">
+                      <div className={iconBox}>
+                        <Icon className="h-5 w-5 text-[#16130a]" />
                       </div>
                       <div>
-                        <p className="text-white font-bold text-base">{f.label}</p>
-                        <p className="text-gray-400 mt-1 text-sm leading-relaxed">{f.desc}</p>
+                        <p className="text-[#16130a] dark:text-white font-bold text-base">{f.label}</p>
+                        <p className="text-[#16130a]/65 dark:text-gray-400 mt-1 text-sm leading-relaxed">{f.desc}</p>
                       </div>
                     </div>
                   )
                 })}
               </div>
-              <p className="text-xs text-gray-600 text-center">Your AI experience level is saved. You can change it anytime in Settings.</p>
+              <p className="text-xs text-[#16130a]/40 dark:text-gray-600 text-center">Your AI experience level is saved. You can change it anytime in Settings.</p>
             </div>
           )}
         </div>
@@ -296,25 +305,25 @@ export default function OnboardingModal() {
           {step === 0 && (
             <button
               onClick={() => setStep(1)}
-              className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-2xl flex items-center justify-center gap-2 transition-colors"
+              className={cn('w-full h-14 text-lg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors', primaryBtn)}
             >
               Get Started <ChevronRight className="h-5 w-5" />
             </button>
           )}
           {step === 1 && (
             <div className="flex gap-3">
-              <button onClick={() => setStep(0)} className="flex-1 h-12 rounded-2xl border border-gray-700 text-gray-400 hover:text-white transition-colors">Back</button>
-              <button onClick={() => setStep(2)} disabled={!experience} className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-semibold rounded-2xl transition-colors">Continue</button>
+              <button onClick={() => setStep(0)} className={cn('flex-1 h-12 rounded-2xl transition-colors', backBtn)}>Back</button>
+              <button onClick={() => setStep(2)} disabled={!experience} className={cn('flex-1 h-12 font-bold rounded-2xl transition-colors disabled:opacity-40', primaryBtn)}>Continue</button>
             </div>
           )}
           {step === 2 && (
             <div className="flex gap-3">
-              <button onClick={() => setStep(1)} className="flex-1 h-12 rounded-2xl border border-gray-700 text-gray-400 hover:text-white transition-colors">Back</button>
-              <button onClick={() => setStep(3)} className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl transition-colors">Continue</button>
+              <button onClick={() => setStep(1)} className={cn('flex-1 h-12 rounded-2xl transition-colors', backBtn)}>Back</button>
+              <button onClick={() => setStep(3)} className={cn('flex-1 h-12 font-bold rounded-2xl transition-colors', primaryBtn)}>Continue</button>
             </div>
           )}
           {step === 3 && (
-            <button onClick={complete} className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors">
+            <button onClick={complete} className={cn('w-full h-14 text-lg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors', primaryBtn)}>
               Start Exploring <ChevronRight className="h-5 w-5" />
             </button>
           )}
