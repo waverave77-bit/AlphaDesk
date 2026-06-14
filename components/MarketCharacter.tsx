@@ -1331,11 +1331,10 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
       drawBed(ctx, W/2, H)
 
       // ── Blanket: shaped path with raised body profile ─────────────
-      // The head is drawn LAST (on top), so the blanket's left edge can tuck UNDER
-      // it freely. On mobile (PX=3) the head sits at headOx=W/2-108; start the
-      // blanket well under the head so it emerges right at the head's edge with no
-      // visible gap (the previous headOx+11*PX still left a gap on-device).
-      const neckX  = isMobile ? Math.round(W/2 - 108 + 4*PX) : Math.round(W/2-62)
+      // Mobile (PX=3): the blanket must meet the head at the neck. Tuned on-device:
+      // headOx+11*PX left a gap (blanket too far right); headOx+4*PX rode up over
+      // the face (too far left). headOx+8*PX sits at the neck — connected, full face.
+      const neckX  = isMobile ? Math.round(W/2 - 108 + 8*PX) : Math.round(W/2-62)
       const bedBot = Math.round(H-8)
       // Blanket left edge goes up to chin height (same y as head center)
       const chinY  = Math.round(H-110)
