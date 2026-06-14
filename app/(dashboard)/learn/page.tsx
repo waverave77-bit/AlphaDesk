@@ -43,6 +43,7 @@ export default function LearnPage() {
   const [board, setBoard] = useState<LbRow[]>([])
   const [loading, setLoading] = useState(true)
   const [showAch, setShowAch] = useState(false)
+  const [showGate, setShowGate] = useState(false)
 
   const go = (href: string) => { sound.tick(); router.push(href) }
 
@@ -158,7 +159,7 @@ export default function LearnPage() {
                             </div>
                           </div>
                         )}
-                        <button disabled={!unlockedNode} onClick={() => go(`/learn/${lesson.id}`)} className="lnode relative z-[1]"
+                        <button disabled={!unlockedNode} onClick={() => progress?.authed ? go(`/learn/${lesson.id}`) : setShowGate(true)} className="lnode relative z-[1]"
                           style={{ width: size, height: size, ['--f' as any]: f, ['--e' as any]: e, ['--ring' as any]: ring, ...(isCurrent ? { animation: 'lpPulseRing 1.8s infinite', borderRadius: '9999px' } : {}) }}
                           aria-label={`${course.title} ${review ? 'review boss' : `lesson ${lesson.index}`}${done ? ' (completed)' : unlockedNode ? '' : ' (locked)'}`}>
                           <span className="lne" />
@@ -204,6 +205,7 @@ export default function LearnPage() {
       </div>
 
       {showAch && <AchievementsModal unlocked={unlocked} onClose={() => setShowAch(false)} />}
+      {showGate && <SignUpGate onClose={() => setShowGate(false)} />}
 
       {loading && <p className="text-center text-gray-600 text-sm mt-4">Loading…</p>}
     </div>
@@ -314,6 +316,36 @@ function AchievementsModal({ unlocked, onClose }: { unlocked: Set<string>; onClo
               </div>
             )
           })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SignUpGate({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-[#fdf3d7] border-2 border-[#16130a] rounded-3xl shadow-[8px_8px_0_#16130a] overflow-hidden">
+        <div className="bg-[#ffd23f] border-b-2 border-[#16130a] px-6 py-5 flex items-center gap-4">
+          <MrGuyHead px={5} />
+          <div>
+            <p className="font-display text-lg leading-tight text-[#16130a]">Start learning</p>
+            <p className="text-sm text-[#16130a]/70 font-semibold">Free account required</p>
+          </div>
+        </div>
+        <div className="px-6 py-6">
+          <p className="text-[#16130a]/80 text-sm leading-relaxed mb-6">
+            Sign up free to start lessons, earn XP, build your streak, and climb the leaderboard. Takes 30 seconds.
+          </p>
+          <Link href="/register" className="block w-full text-center py-3 rounded-xl bg-[#16130a] text-[#ffd23f] font-black tracking-wide hover:bg-[#0f0c06] transition-colors">
+            Create free account →
+          </Link>
+          <Link href="/login" className="block w-full text-center py-2.5 mt-2 rounded-xl border-2 border-[#16130a]/20 text-[#16130a]/60 font-semibold text-sm hover:border-[#16130a]/40 hover:text-[#16130a] transition-colors">
+            Already have an account? Sign in
+          </Link>
+          <button onClick={onClose} className="block w-full text-center mt-3 text-[#16130a]/40 text-xs font-semibold hover:text-[#16130a]/60">
+            maybe later
+          </button>
         </div>
       </div>
     </div>
