@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true, experienceLevel: true },
+      select: { themeDark: true, themeAccent: true, themeSkin: true, themeOutfit: true, loginStreak: true, lastStreakDate: true, experienceLevel: true },
     })
     if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json(user)
@@ -40,7 +40,7 @@ export async function PATCH(req: Request) {
   }
 
   // Only allow whitelisted fields to be updated
-  const allowed = ['themeDark', 'themeAccent', 'loginStreak', 'lastStreakDate']
+  const allowed = ['themeDark', 'themeAccent', 'themeSkin', 'themeOutfit', 'loginStreak', 'lastStreakDate']
   const data: Record<string, unknown> = {}
   for (const key of allowed) {
     if (key in body) data[key] = body[key]
@@ -54,7 +54,7 @@ export async function PATCH(req: Request) {
     const user = await prisma.user.update({
       where: { email: session.user.email },
       data,
-      select: { themeDark: true, themeAccent: true, loginStreak: true, lastStreakDate: true },
+      select: { themeDark: true, themeAccent: true, themeSkin: true, themeOutfit: true, loginStreak: true, lastStreakDate: true },
     })
     return NextResponse.json(user)
   } catch (err) {
