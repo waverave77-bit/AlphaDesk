@@ -188,6 +188,14 @@ export default function PrivacyPage() {
               retention policy applies on our end; xAI&apos;s policies govern their handling.
             </p>
             <p>
+              <strong className="text-white">DeepSeek API</strong> — AI-generated analysis.
+              Certain AI analysis features route queries through DeepSeek&apos;s servers. DeepSeek
+              is operated by a Chinese company and is subject to Chinese data laws, which may
+              include government access to data. The same session-only retention applies on our end;
+              DeepSeek&apos;s policies govern their handling. EEA/UK users should be aware that
+              no EU adequacy decision exists for China.
+            </p>
+            <p>
               <strong className="text-white">Third-party market data providers and SEC EDGAR</strong>{' '}
               — stock prices, financial data, and public regulatory filings. These are read-only
               data sources; we do not share your personal information with them.

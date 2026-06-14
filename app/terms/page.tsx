@@ -135,7 +135,7 @@ export default function TermsPage() {
 
           <p className="text-gray-300 leading-relaxed">
             Several features use artificial intelligence — including models provided by Anthropic (Claude),
-            xAI (Grok), and other AI providers — to generate content. AI-generated content:
+            xAI (Grok), DeepSeek, and other AI providers — to generate content. AI-generated content:
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed ml-2">
             <li>May be inaccurate, incomplete, outdated, or inconsistent</li>
