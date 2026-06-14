@@ -94,8 +94,8 @@ export default function DictionaryPage() {
       {/* Terms */}
       {filtered.length === 0 ? (
         <div className="text-center py-16">
-          <SearchX className=”h-10 w-10 text-[#16130a]/20 dark:text-gray-700 mx-auto mb-3” />
-          <p className=”text-[#16130a]/50 dark:text-gray-500”>No terms match “{search}”.</p>
+          <SearchX className="h-10 w-10 text-[#16130a]/20 dark:text-gray-700 mx-auto mb-3" />
+          <p className="text-[#16130a]/50 dark:text-gray-500">No terms match &ldquo;{search}&rdquo;.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
