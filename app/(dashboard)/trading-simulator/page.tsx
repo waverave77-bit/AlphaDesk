@@ -482,7 +482,7 @@ export default function GamePage() {
                 <div className="shrink-0 -mb-2 self-end"><MrGuyMascot px={4} mood={pnlPct >= 2 ? 'celebrate' : up ? 'happy' : 'sad'} /></div>
                 <div className="min-w-0">
                   <p className="text-[11px] font-black uppercase tracking-widest text-gray-500">Your money</p>
-                  <p className="text-4xl sm:text-5xl font-black text-white leading-none mt-1">{formatCurrency(portfolio?.totalValue ?? 100000)}</p>
+                  <p className="text-3xl sm:text-5xl font-black text-white leading-none mt-1">{formatCurrency(portfolio?.totalValue ?? 100000)}</p>
                   <p className={`text-base font-bold ${gainCls(pnl)} mt-1.5`}>{up ? '▲' : '▼'} {up ? '+' : ''}{formatCurrency(pnl)} ({pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(2)}%)</p>
                   <p className="text-sm text-gray-400 mt-1.5">{take}</p>
                 </div>
@@ -496,9 +496,9 @@ export default function GamePage() {
           </div>
 
           {/* ── Two-column dashboard ── */}
-          <div className="grid lg:grid-cols-5 gap-5 items-start">
+          <div className="grid lg:grid-cols-5 gap-5 items-start min-w-0">
             {/* Buy (main) */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 min-w-0">
               <Section title="Buy a stock">
                 <p className="text-sm text-gray-500 -mt-2 mb-4">Not sure what to buy? Search, pick a category, or tap any company — Mr. Guy explains each one.</p>
                 {/* Prominent search bar */}
@@ -550,7 +550,7 @@ export default function GamePage() {
             </div>
 
             {/* Own + Leaderboard (rail) */}
-            <div className="lg:col-span-2 space-y-5">
+            <div className="lg:col-span-2 min-w-0 space-y-5">
               <Section title="What you own">
                 {holdings.length === 0 ? (
                   <p className="text-gray-500 text-sm text-center py-6">Nothing yet — tap a company to buy your first stock.</p>
