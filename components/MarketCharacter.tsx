@@ -1314,7 +1314,9 @@ export default function MarketCharacter({ marketState = 'neutral', changePercent
     if(cfg.ms<9999999 && now-s.sceneStartMs>cfg.ms){
       s.sceneIdx=(s.sceneIdx+1)%cycle.length; s.sceneStartMs=now; s.sceneSnapped=false; s.atPerchTarget=false
     }
-    const scene = forcedSceneRef.current ?? cycle[s.sceneIdx].scene
+    let scene = forcedSceneRef.current ?? cycle[s.sceneIdx].scene
+    // No sleeping on mobile — Mr. Guy games instead. (Desktop keeps the sleep scene.)
+    if(isMobile && scene==='sleep') scene='gaming'
     if(scene!==s.currentScene){ s.currentScene=scene; setActiveScene(scene) }
 
     // ── Y lerp ───────────────────────────────────────────────────
