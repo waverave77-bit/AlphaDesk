@@ -8,6 +8,7 @@ export interface Term {
   explanation: string
   example?: string
   tip?: string
+  sections?: { heading: string; body: string }[]
 }
 
 export function termToSlug(term: string): string {
@@ -27,7 +28,36 @@ export const TERMS: Term[] = [
   { term: 'Ticker Symbol', category: 'Basics', simple: 'The short code used to identify a stock', explanation: 'Every publicly traded company has a unique abbreviation called a ticker symbol. It\'s how the market identifies that company. You type it into any trading app to find the stock.', example: 'Apple = AAPL, Tesla = TSLA, Google = GOOGL, Microsoft = MSFT.', tip: 'Ticker symbols are always a few letters long — usually 1 to 5 characters.' },
   { term: 'Market Cap', category: 'Basics', simple: 'Total value of a company', explanation: 'Multiply the stock price by the number of shares. That\'s how much the entire company is worth according to the market.', example: 'Stock at $100 × 1 billion shares = $100B market cap', tip: 'Common convention: under ~$2B = small-cap, $2B–$10B = mid-cap, over $10B = large-cap. Definitions vary — Russell and S&P use different thresholds that shift with each index rebalance.' },
   { term: 'Portfolio', category: 'Basics', simple: 'All your investments together', explanation: 'Your portfolio is the collection of all the stocks, ETFs, and other investments you own. Think of it as your investment "bag."', example: 'You own AAPL, TSLA, and NVDA — those 3 together are your portfolio.' },
-  { term: 'Dividend', category: 'Basics', simple: 'Cash a company pays you just for owning their stock', explanation: 'Some companies share their profits with shareholders by paying dividends — usually every 3 months. You don\'t have to do anything to receive them.', example: 'Own 100 shares of Coca-Cola paying $0.46/share = $46 every quarter.', tip: 'Not all stocks pay dividends. Growth companies usually don\'t.' },
+  {
+    term: 'Dividend',
+    category: 'Basics',
+    simple: 'Cash a company pays you just for owning their stock',
+    explanation: 'When a company earns more profit than it needs to reinvest in the business, it can share that money directly with shareholders as dividends. Most dividends are paid in cash, straight into your brokerage account, usually four times a year (quarterly). You don\'t have to sell your shares or do anything — just own the stock on the right date and the money shows up automatically.',
+    example: 'You own 100 shares of Coca-Cola (KO). It pays a quarterly dividend of $0.485 per share. Every three months, $48.50 lands in your brokerage account automatically — that\'s $194 per year just for holding the stock. At a $60 share price, that works out to a 3.2% dividend yield.',
+    tip: 'Not all stocks pay dividends. Fast-growing companies like Amazon reinvest every dollar back into the business instead. Dividends tend to come from mature, stable companies — think utilities, consumer brands, and banks — that generate more cash than they can productively reinvest.',
+    sections: [
+      {
+        heading: 'How dividend payments actually work',
+        body: 'Every dividend has four key dates. The Declaration Date is when the company announces it. The Ex-Dividend Date is the cutoff — you must own the stock before this date to receive the payment. The Record Date is the official list of shareholders (usually one day after the ex-div date). The Payment Date is when the cash actually hits your account. The ex-dividend date is the one that matters most to investors. Miss it by even one day and you won\'t receive that quarter\'s dividend.',
+      },
+      {
+        heading: 'What is dividend yield?',
+        body: 'Dividend yield is the annual dividend payment divided by the current stock price, expressed as a percentage. Formula: Yield = Annual Dividend ÷ Stock Price × 100. Example: a stock that pays $4 per year in dividends and trades at $100 has a 4% yield. A yield of 2–4% is typical for established dividend payers. Yields above 6–7% can look attractive but are often a red flag — they usually mean the stock price has dropped sharply because the company is in trouble, not that the dividend is unusually generous.',
+      },
+      {
+        heading: 'Types of dividends',
+        body: 'Cash dividends are the most common — money deposited directly into your brokerage account. Stock dividends pay you in additional shares instead of cash, which grows your position without requiring cash. Special dividends are one-time payments when a company has an unusually large cash surplus to distribute. REITs (real estate investment trusts) and utility companies tend to pay the highest regular dividends because they\'re legally required or structurally set up to distribute most of their earnings.',
+      },
+      {
+        heading: 'Does paying a dividend lower the stock price?',
+        body: 'Yes — on the ex-dividend date the stock price drops by roughly the dividend amount. If a stock paying a $1 quarterly dividend was trading at $50, it will typically open near $49 on ex-dividend day. This isn\'t a loss for long-term holders — the cash is now in your account and the price usually recovers quickly. Short-term traders sometimes try to buy before the ex-date and sell after, but this rarely works consistently once taxes and trading costs are factored in.',
+      },
+      {
+        heading: 'Are dividends taxable?',
+        body: 'In the US, most dividends from stocks held longer than 60 days are classified as qualified dividends, taxed at the lower long-term capital gains rate (0%, 15%, or 20% depending on your income). Dividends from REITs and some foreign stocks are often taxed as ordinary income at your regular tax rate. Dividends held inside a Roth IRA or 401(k) are not taxed at all — which is a good reason to hold high-dividend stocks in tax-advantaged accounts rather than a regular brokerage.',
+      },
+    ],
+  },
   { term: 'ETF', category: 'Basics', simple: 'A basket of many stocks in one', explanation: 'Instead of buying 500 individual stocks, you buy one ETF that contains all 500. It spreads your risk automatically.', example: 'SPY ETF = owns all 500 companies in the S&P 500.', tip: 'Great for beginners — instant diversification.' },
   { term: 'Index', category: 'Basics', simple: 'A scoreboard for a group of stocks', explanation: 'An index tracks the performance of a specific group of companies. The S&P 500 tracks America\'s 500 biggest companies.', example: 'S&P 500, Dow Jones, and Nasdaq are the three biggest indexes.' },
   { term: 'Bull Market', category: 'Basics', simple: 'When stocks are going up', explanation: 'A bull market is when stock prices are rising and investors are optimistic. Generally means prices are up 20%+ from recent lows.', tip: 'Bulls charge upward — so does the market in a bull market.' },

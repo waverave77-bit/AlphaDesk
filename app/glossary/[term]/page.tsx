@@ -126,6 +126,18 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
           </div>
         )}
 
+        {/* Extended sections (term-specific deep content) */}
+        {term.sections && term.sections.length > 0 && (
+          <div className="space-y-5 mb-5">
+            {term.sections.map((s) => (
+              <div key={s.heading} className="bg-gray-900 border border-gray-800 rounded-2xl p-7">
+                <h2 className="text-lg font-bold text-white mb-4">{s.heading}</h2>
+                <p className="text-gray-300 leading-relaxed text-base">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Tip */}
         {term.tip && (
           <div className="flex gap-4 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl p-7 mb-10">
@@ -141,17 +153,29 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'DefinedTerm',
-              name: term.term,
-              description: term.simple,
-              inDefinedTermSet: {
-                '@type': 'DefinedTermSet',
-                name: 'Mr. Guy Invests Investing Dictionary',
-                url: 'https://mrguyinvests.com/glossary',
-              },
-            }),
+            __html: JSON.stringify(
+              term.sections && term.sections.length > 0
+                ? {
+                    '@context': 'https://schema.org',
+                    '@type': 'FAQPage',
+                    mainEntity: term.sections.map((s) => ({
+                      '@type': 'Question',
+                      name: s.heading,
+                      acceptedAnswer: { '@type': 'Answer', text: s.body },
+                    })),
+                  }
+                : {
+                    '@context': 'https://schema.org',
+                    '@type': 'DefinedTerm',
+                    name: term.term,
+                    description: term.simple,
+                    inDefinedTermSet: {
+                      '@type': 'DefinedTermSet',
+                      name: 'Mr. Guy Invests Investing Dictionary',
+                      url: 'https://mrguyinvests.com/glossary',
+                    },
+                  }
+            ),
           }}
         />
 
