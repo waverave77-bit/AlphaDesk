@@ -35,6 +35,12 @@ export default function PrivacyPage() {
             with, and the rights you have over your data.
           </p>
           <p className="text-gray-300 leading-relaxed mt-3">
+            For data privacy enquiries or to exercise your rights, contact the data controller at:{' '}
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
+            </a>
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
             By using Mr. Guy Invests you agree to the collection and use of information as described in
             this policy. If you do not agree, please do not use the Service.
           </p>
@@ -66,9 +72,18 @@ export default function PrivacyPage() {
               and subscription status — we never see or store your full card number.
             </p>
             <p>
-              <strong className="text-white">Usage analytics:</strong> We collect anonymised
-              information about how you interact with the Service — pages visited, features used,
-              clicks, and session duration — to understand usage patterns and improve the product.
+              <strong className="text-white">Usage analytics:</strong> We collect information about
+              how you interact with the Service in two ways. Vercel Analytics collects anonymised,
+              cookieless page-view data. Additionally, for logged-in users, we record page visits in
+              our own database (the pages you navigate to, timestamps, and your account ID) to
+              understand feature usage and improve the product.
+            </p>
+            <p>
+              <strong className="text-white">Onboarding survey responses:</strong> When you first sign
+              up, we ask about your investing experience level and goals. These responses are stored
+              anonymously — they are not linked to your account — and are used only for aggregate
+              product analytics. Because they are not linked to you, they cannot be attributed to your
+              account and are not removed when you delete your account.
             </p>
             <p>
               <strong className="text-white">IP address and device data:</strong> Our servers and
@@ -108,6 +123,29 @@ export default function PrivacyPage() {
             We do <strong className="text-white">not</strong> sell, rent, or share your personal
             information with third parties for their marketing or advertising purposes.
           </p>
+          <p className="text-gray-300 leading-relaxed mt-3 font-semibold text-white">Legal basis for processing (GDPR)</p>
+          <p className="text-gray-300 leading-relaxed mb-2">
+            If you are located in the EEA or UK, the following legal bases apply:
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-gray-300 border-collapse">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="text-left py-2 pr-4 text-white font-semibold">Processing activity</th>
+                  <th className="text-left py-2 text-white font-semibold">Legal basis</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                <tr><td className="py-2 pr-4">Account creation &amp; authentication</td><td className="py-2">Contract</td></tr>
+                <tr><td className="py-2 pr-4">Portfolio, watchlist &amp; AI features</td><td className="py-2">Contract</td></tr>
+                <tr><td className="py-2 pr-4">Billing &amp; subscription management</td><td className="py-2">Contract</td></tr>
+                <tr><td className="py-2 pr-4">Transactional emails</td><td className="py-2">Contract</td></tr>
+                <tr><td className="py-2 pr-4">Page-level usage analytics</td><td className="py-2">Legitimate interests (improving the Service)</td></tr>
+                <tr><td className="py-2 pr-4">Security logging &amp; fraud prevention</td><td className="py-2">Legitimate interests (protecting the Service)</td></tr>
+                <tr><td className="py-2 pr-4">Legal compliance</td><td className="py-2">Legal obligation</td></tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
         {/* 4. Third-Party Services */}
@@ -150,12 +188,6 @@ export default function PrivacyPage() {
               retention policy applies on our end; xAI&apos;s policies govern their handling.
             </p>
             <p>
-              <strong className="text-white">DeepSeek API</strong> — AI-generated features.
-              Certain AI features route queries through DeepSeek&apos;s servers. The same
-              session-only retention applies on our end; DeepSeek&apos;s policies govern their
-              handling.
-            </p>
-            <p>
               <strong className="text-white">Third-party market data providers and SEC EDGAR</strong>{' '}
               — stock prices, financial data, and public regulatory filings. These are read-only
               data sources; we do not share your personal information with them.
@@ -189,27 +221,57 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        {/* 6. Cookies */}
+        {/* 6. Cookies and Tracking */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-3 mt-10">6. Cookies</h2>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">6. Cookies and Tracking</h2>
           <p className="text-gray-300 leading-relaxed">
-            We use only functional session cookies that are strictly necessary to keep you
-            authenticated while you use the Service (managed via NextAuth.js). We do not use
-            advertising cookies, third-party tracking cookies, or behavioural profiling cookies.
+            We use functional session cookies that are strictly necessary to keep you authenticated
+            while you use the Service (managed via NextAuth.js). We do not use advertising cookies,
+            third-party tracking cookies, or behavioural profiling cookies.
           </p>
           <p className="text-gray-300 leading-relaxed mt-3">
-            Vercel Analytics collects anonymised performance and usage data using privacy-preserving
-            methods that do not require persistent cookies or fingerprinting. No cookie consent
-            banner is displayed because we use only strictly necessary functional cookies.
+            Vercel Analytics collects anonymised performance and page-view data using
+            privacy-preserving methods that do not require persistent cookies or fingerprinting.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            For logged-in users, we also record page navigation events in our own database to
+            understand how features are used (see Section 2). This is first-party tracking tied to
+            your account and is not shared with third parties. You may opt out by contacting us at{' '}
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
+            </a>.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            A cookie notice is displayed on your first visit. You may accept or decline non-essential
+            analytics at any time.
           </p>
         </section>
 
-        {/* 7. Your Rights */}
+        {/* 7. Children's Privacy (COPPA) */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-3 mt-10">7. Your Rights</h2>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">7. Children&apos;s Privacy</h2>
+          <p className="text-gray-300 leading-relaxed">
+            The Service is available to users aged 13 and older. We do not knowingly collect personal
+            information from children under 13. If we become aware that a child under 13 has registered
+            an account, we will promptly delete that account and any associated personal data.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-3">
+            If you are a parent or guardian and believe your child under 13 has created an account,
+            please contact us immediately at{' '}
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
+            </a>{' '}
+            so we can remove the account. Users aged 13–17 should review this Privacy Policy with a
+            parent or guardian.
+          </p>
+        </section>
+
+        {/* 8. Your Rights */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">8. Your Rights</h2>
           <p className="text-gray-300 leading-relaxed mb-3">
             Depending on your location you may have the following rights regarding your personal
-            data. To exercise any of them, contact us at the address in Section 10.
+            data. To exercise any of them, contact us at the address in Section 11.
           </p>
           <div className="space-y-3 text-gray-300 leading-relaxed">
             <p>
@@ -246,9 +308,9 @@ export default function PrivacyPage() {
           </div>
         </section>
 
-        {/* 8. Security */}
+        {/* 9. Security */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-3 mt-10">8. Security</h2>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">9. Security</h2>
           <p className="text-gray-300 leading-relaxed">
             We implement industry-standard security measures including bcrypt password hashing,
             HTTPS encryption on all connections, and JWT-based secure session management. Access to
@@ -261,9 +323,9 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        {/* 9. Changes to This Policy */}
+        {/* 10. Changes to This Policy */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-3 mt-10">9. Changes to This Policy</h2>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">10. Changes to This Policy</h2>
           <p className="text-gray-300 leading-relaxed">
             We may update this Privacy Policy from time to time. When we make material changes we
             will update the effective date at the top of this page and, where appropriate, notify
@@ -272,9 +334,9 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        {/* 10. Contact */}
+        {/* 11. Contact */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-3 mt-10">10. Contact Us</h2>
+          <h2 className="text-xl font-bold text-white mb-3 mt-10">11. Contact Us</h2>
           <p className="text-gray-300 leading-relaxed">
             For privacy-related questions, data deletion requests, or data export requests,
             please contact us at:{' '}

@@ -582,7 +582,7 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-xs text-gray-500">
-                Permanently delete your account and all associated data — watchlist, portfolio, trade history, and alerts. This cannot be undone. Stripe billing records are retained as required by law.
+                Permanently delete your account and all linked data — watchlist, portfolio, trade history, and alerts. This cannot be undone. Stripe billing records are retained as required by law. Anonymous onboarding survey responses are not linked to your account and are not removed.
               </p>
               {!deleteConfirm ? (
                 <Button

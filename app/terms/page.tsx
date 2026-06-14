@@ -57,11 +57,19 @@ export default function TermsPage() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">2. Eligibility</h2>
           <p className="text-gray-300 leading-relaxed">
-            You must be at least <strong className="text-white">18 years of age</strong> to create an
-            account or use the Service. By registering, you represent and warrant that you are 18 or
-            older and have the legal capacity to enter into a binding agreement. If you are accessing the
-            Service on behalf of an organization, you represent that you have authority to bind that
-            organization to these Terms.
+            You must be at least <strong className="text-white">13 years of age</strong> to create an
+            account or use the Service. Users between the ages of 13 and 17 should review these Terms
+            with a parent or guardian before registering. By registering, you represent and warrant that
+            you are 13 or older. If you are accessing the Service on behalf of an organization, you
+            represent that you have authority to bind that organization to these Terms.
+          </p>
+          <p className="text-gray-300 leading-relaxed">
+            We do not knowingly collect personal information from children under 13. If we become aware
+            that a child under 13 has created an account, we will delete that account and its associated
+            data. If you believe a child under 13 has registered, please contact us at{' '}
+            <a href="mailto:support@mrguyinvests.com" className="text-blue-400 hover:underline">
+              support@mrguyinvests.com
+            </a>.
           </p>
           <p className="text-gray-300 leading-relaxed">
             We reserve the right to terminate or suspend accounts that do not meet eligibility
@@ -95,7 +103,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-bold mb-3 mt-8 text-white">4. Not Financial Advice</h2>
           <p className="text-gray-300 leading-relaxed">
             The content on Mr. Guy Invests — including AI-generated analysis, stock grades, market commentary,
-            bull/bear arguments, earnings summaries, insider trade data, hedge fund tracking, and
+            earnings summaries, insider trade data, hedge fund tracking, and
             financial translations — does <strong className="text-white">not</strong> constitute:
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed ml-2">
@@ -127,7 +135,7 @@ export default function TermsPage() {
 
           <p className="text-gray-300 leading-relaxed">
             Several features use artificial intelligence — including models provided by Anthropic (Claude),
-            xAI (Grok), DeepSeek, and other AI providers — to generate content. AI-generated content:
+            xAI (Grok), and other AI providers — to generate content. AI-generated content:
           </p>
           <ul className="list-disc list-inside space-y-2 text-gray-300 leading-relaxed ml-2">
             <li>May be inaccurate, incomplete, outdated, or inconsistent</li>
