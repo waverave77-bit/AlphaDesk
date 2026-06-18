@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { term: string } })
   const desc = `${term.simple}. ${term.explanation.slice(0, 140)}${term.explanation.length > 140 ? '...' : ''}`
 
   return {
-    title: `What is ${term.term}? Simple Definition & Meaning | Mr. Guy Invests`,
+    title: `What is ${term.term}? Definition & Meaning`,
     description: desc,
     keywords: [
       term.term,
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: { params: { term: string } })
       'finance for beginners',
     ],
     openGraph: {
-      title: `What is ${term.term}?, Investing Dictionary`,
+      title: `What is ${term.term}? — Investing Dictionary`,
       description: term.simple,
       type: 'article',
     },

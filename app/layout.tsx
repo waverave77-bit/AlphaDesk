@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_URL ?? 'https://mrguyinvests.com',
+    url: process.env.NEXT_PUBLIC_URL ?? 'https://www.mrguyinvests.com',
     siteName: 'Mr. Guy Invests',
     title: 'Mr. Guy Invests — Learn Investing the Fun Way',
     description: 'Bite-sized lessons, a $100K practice account, and an AI tutor that explains any stock in plain English. Built for total beginners.',

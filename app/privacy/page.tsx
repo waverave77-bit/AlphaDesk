@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Privacy Policy — Mr. Guy Invests',
+  title: 'Privacy Policy',
   description: 'How Mr. Guy Invests collects, uses, and protects your personal information.',
 }
 

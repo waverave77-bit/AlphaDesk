@@ -5,7 +5,7 @@ import { BookOpen, TrendingUp, BarChart2, Shield, Lightbulb, ChevronRight, Searc
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
 export const metadata: Metadata = {
-  title: 'Investing Dictionary, Every Stock Market Term Explained Simply | Mr. Guy Invests',
+  title: 'Investing Dictionary — Stock Market Terms Explained Simply',
   description: `Learn ${TERMS.length} investing and stock market terms in plain English. From stocks and ETFs to P/E ratios and technical analysis, everything explained simply for beginners.`,
   keywords: ['investing dictionary', 'stock market terms', 'finance glossary', 'investing for beginners', 'stock market glossary', 'financial terms explained'],
   openGraph: {
