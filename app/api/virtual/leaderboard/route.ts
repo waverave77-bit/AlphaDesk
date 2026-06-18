@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { getMultipleQuotes } from '@/lib/yahoo-finance'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,17 +23,32 @@ export async function GET(req: NextRequest) {
     take: 100,
   })
 
+  // Recompute every portfolio's value from LIVE prices rather than trusting the
+  // stored totalValue column — that column is only refreshed when a user opens
+  // their own portfolio page, so the leaderboard would otherwise freeze for
+  // anyone who isn't actively browsing. Fetch each unique ticker once, shared
+  // across all portfolios.
+  const tickers = Array.from(new Set(portfolios.flatMap(p => p.holdings.map(h => h.ticker))))
+  const quotes = tickers.length > 0 ? await getMultipleQuotes(tickers) : new Map()
+  const priceFor = (ticker: string, fallback: number) => quotes.get(ticker)?.price ?? fallback
+
   const entries = portfolios.map(p => {
+    const investedValue = p.holdings.reduce(
+      (s, h) => s + priceFor(h.ticker, h.avgCost) * h.shares,
+      0
+    )
+    const liveTotalValue = p.cash + investedValue
+
     const monthlyBaseline = p.monthlyBaseline ?? STARTING_CASH
-    const monthlyGainLoss = p.totalValue - monthlyBaseline
+    const monthlyGainLoss = liveTotalValue - monthlyBaseline
     const monthlyGainLossPct = monthlyBaseline > 0 ? (monthlyGainLoss / monthlyBaseline) * 100 : 0
 
     return {
       userId: p.userId,
       name: p.user.username || p.user.name || 'Anonymous',
-      totalValue: p.totalValue,
-      gainLoss: p.totalValue - STARTING_CASH,
-      gainLossPct: ((p.totalValue - STARTING_CASH) / STARTING_CASH) * 100,
+      totalValue: liveTotalValue,
+      gainLoss: liveTotalValue - STARTING_CASH,
+      gainLossPct: ((liveTotalValue - STARTING_CASH) / STARTING_CASH) * 100,
       monthlyGainLoss,
       monthlyGainLossPct,
       isMe: p.userId === session!.user!.id,
