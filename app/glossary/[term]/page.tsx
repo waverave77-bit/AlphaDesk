@@ -61,10 +61,16 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
   const term = TERMS.find((t) => termToSlug(t.term) === params.term)
   if (!term) notFound()
 
-  const related = TERMS
+  // Deterministic related terms: a STABLE internal link graph helps Google crawl
+  // and index these pages. (Math.random() reshuffled links on every render, so
+  // Google never saw a consistent set of links to follow.) Rotate the start point
+  // by a hash of the slug so each term still surfaces a different-but-fixed set.
+  const pool = TERMS
     .filter((t) => t.category === term.category && t.term !== term.term)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 4)
+    .sort((a, b) => a.term.localeCompare(b.term))
+  const seed = [...termToSlug(term.term)].reduce((s, c) => s + c.charCodeAt(0), 0)
+  const related =
+    pool.length <= 4 ? pool : [0, 1, 2, 3].map((i) => pool[(seed + i) % pool.length])
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -172,10 +178,26 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
                     inDefinedTermSet: {
                       '@type': 'DefinedTermSet',
                       name: 'Mr. Guy Invests Investing Dictionary',
-                      url: 'https://mrguyinvests.com/glossary',
+                      url: 'https://www.mrguyinvests.com/glossary',
                     },
                   }
             ),
+          }}
+        />
+
+        {/* Breadcrumb structured data (Home › Investing Dictionary › term) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mrguyinvests.com' },
+                { '@type': 'ListItem', position: 2, name: 'Investing Dictionary', item: 'https://www.mrguyinvests.com/glossary' },
+                { '@type': 'ListItem', position: 3, name: `What is ${term.term}?`, item: `https://www.mrguyinvests.com/glossary/${termToSlug(term.term)}` },
+              ],
+            }),
           }}
         />
 
