@@ -1,4 +1,11 @@
 import Link from 'next/link'
+import { TERMS, termToSlug } from '@/lib/glossary-terms'
+
+// High-intent beginner terms people actually Google — surfaced from the homepage
+// (our highest-authority page) so Google has strong internal links to crawl them.
+const POPULAR_TERMS = ['Stock', 'ETF', 'Dividend', 'Bull Market', 'Bear Market', 'Index', 'IPO', 'Market Cap', 'Day Trading', 'Blue Chip Stock', 'REIT', 'Compound Interest']
+  .map((name) => TERMS.find((t) => t.term === name))
+  .filter((t): t is (typeof TERMS)[number] => Boolean(t))
 
 // ── Mr. Guy pixel head — SVG version (works in server components) ─────────────
 const N = null
@@ -206,6 +213,22 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Popular dictionary terms — internal links to the glossary */}
+      <section className="px-6 pb-16 max-w-3xl mx-auto">
+        <h2 className="font-display uppercase text-3xl sm:text-4xl text-center mb-3">Confused by a word? Start here.</h2>
+        <p className="font-mono text-sm text-center mb-8">Every investing term explained in plain English — free, no sign-up.</p>
+        <div className="flex flex-wrap justify-center gap-3">
+          {POPULAR_TERMS.map((t) => (
+            <Link key={t.term} href={`/glossary/${termToSlug(t.term)}`} className={`bg-[#fff] font-mono font-bold text-sm px-4 py-2.5 ${sticker} ${stickerHover}`}>
+              {t.term}
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-7">
+          <Btn href="/glossary" variant="white">Browse the full dictionary →</Btn>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="px-6 pb-20 max-w-2xl mx-auto text-center">
         <h2 className="font-display uppercase text-3xl sm:text-4xl mb-4">Go from confused to confident.</h2>
@@ -224,7 +247,11 @@ export default function LandingPage() {
             <span className="font-mono font-bold text-sm uppercase">Mr. Guy Invests</span>
           </div>
           <p className="font-mono text-[11px] opacity-70 max-w-md text-center">{DISCLAIMER}</p>
-          <div className="flex gap-4 font-mono text-xs uppercase">
+          <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center font-mono text-xs uppercase">
+            <Link href="/glossary" className="hover:opacity-70">Dictionary</Link>
+            <Link href="/learn" className="hover:opacity-70">Learn</Link>
+            <Link href="/challenge" className="hover:opacity-70">$100K Challenge</Link>
+            <Link href="/markets" className="hover:opacity-70">Markets</Link>
             <Link href="/privacy" className="hover:opacity-70">Privacy</Link>
             <Link href="/terms" className="hover:opacity-70">Terms</Link>
           </div>
