@@ -16,7 +16,6 @@ export const FREE_LIMITS: Record<string, number> = {
   'bull-vs-bear':  5,
   'hot-take':      999, // one cached take per day — no meaningful limit
   'reality-check': 5,
-  'translator':    999, // effectively unlimited — simple educational tool
   'quant':         3,
   'research':      5,
 }
@@ -45,9 +44,7 @@ export async function currentUserIsPro(): Promise<boolean> {
  *   if (limited) return limited
  */
 /** Features logged-out visitors may try, and how many uses per day. Everything else stays login-only. */
-export const GUEST_LIMITS: Record<string, number> = {
-  'translator': 3,
-}
+export const GUEST_LIMITS: Record<string, number> = {}
 
 export async function checkAILimit(feature: string): Promise<NextResponse | null> {
   const session = await getServerSession(authOptions)

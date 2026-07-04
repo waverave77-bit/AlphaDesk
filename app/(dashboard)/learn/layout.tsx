@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Investing Dictionary — Mr. Guy Invests',
-  description: 'Every finance term explained in plain English. P/E ratio, short interest, market cap, options, and hundreds more — all kept simple.',
+  title: 'Learn Investing — Bite-Sized Lessons',
+  description: 'Go from clueless to confident with bite-sized investing lessons. Earn XP, keep your streak, and level up — no finance degree needed.',
 }
 
 export default function LearnLayout({ children }: { children: React.ReactNode }) {

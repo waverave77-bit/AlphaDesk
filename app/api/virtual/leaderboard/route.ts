@@ -10,7 +10,6 @@ const STARTING_CASH = 100_000
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
   const mode = searchParams.get('mode') === 'monthly' ? 'monthly' : 'alltime'
@@ -51,7 +50,7 @@ export async function GET(req: NextRequest) {
       gainLossPct: ((liveTotalValue - STARTING_CASH) / STARTING_CASH) * 100,
       monthlyGainLoss,
       monthlyGainLossPct,
-      isMe: p.userId === session!.user!.id,
+      isMe: !!session?.user?.id && p.userId === session.user.id,
       isPro: p.user.isPro ?? false,
       holdings: p.holdings.map(h => ({
         ticker: h.ticker,

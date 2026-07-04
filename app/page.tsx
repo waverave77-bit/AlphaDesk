@@ -250,7 +250,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center font-mono text-xs uppercase">
             <Link href="/glossary" className="hover:opacity-70">Dictionary</Link>
             <Link href="/learn" className="hover:opacity-70">Learn</Link>
-            <Link href="/challenge" className="hover:opacity-70">$100K Challenge</Link>
+            <Link href="/trading-simulator" className="hover:opacity-70">$100K Challenge</Link>
             <Link href="/markets" className="hover:opacity-70">Markets</Link>
             <Link href="/privacy" className="hover:opacity-70">Privacy</Link>
             <Link href="/terms" className="hover:opacity-70">Terms</Link>

@@ -289,7 +289,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (status === 'loading') return
-    if (status === 'unauthenticated') { setLoading(false); return }
+    if (status === 'unauthenticated') { setLoading(false); fetchLeaderboard(); fetchCommunityTrades(); return }
     fetchPortfolio(); fetchLeaderboard(); fetchCommunityTrades()
   }, [status])
   // Preview = first 2 of each theme; the full list loads when its chip is active.

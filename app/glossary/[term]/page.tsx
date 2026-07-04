@@ -232,9 +232,9 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
 
         {/* CTA */}
         <div className="mt-16 bg-blue-600/10 border border-blue-600/20 rounded-2xl p-10 text-center">
-          <h2 className="text-2xl font-bold mb-3">Track Real Stocks on Mr. Guy Invests</h2>
+          <h2 className="text-2xl font-bold mb-3">Learn Investing Like a Game</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Free portfolio tracker, AI tutor, hedge fund tracker, everything explained in plain English.
+            Bite-sized lessons, a $100K practice portfolio, and Mr. Guy to explain anything in plain English.
           </p>
           <Link
             href="/register"

@@ -1,14 +1,17 @@
-# AlphaDesk
+# Mr. Guy Invests
 
-A professional investing web app combining a real-time portfolio tracker with an AI-powered stock research tool.
+**Learn investing like a game.** Bite-sized lessons, a $100K practice portfolio, and Mr. Guy — an AI mascot who explains anything about money in plain English. Built for people who were never taught how money works.
+
+Live at [www.mrguyinvests.com](https://www.mrguyinvests.com)
 
 ## Features
 
-- **Portfolio Tracker** — Add/remove holdings with live P&L, allocation pie charts, and performance metrics
-- **Stock Research** — Search any ticker for live prices, fundamentals, interactive charts, and news
-- **AI Analysis** — Claude-powered Buy/Hold/Sell analysis for individual stocks and your whole portfolio
-- **Watchlist** — Save and monitor stocks with live price updates
-- **Dark Theme** — Bloomberg-inspired dark UI with green/red gain/loss coding
+- **Learn the Basics** — bite-sized lessons with XP, streaks, and levels (Duolingo mechanics, but for investing)
+- **$100K Challenge** — trade real stocks at real prices with $100,000 of virtual cash; climb the live leaderboard
+- **Ask Mr. Guy** — AI chat that answers any stock or money question like a smart friend, never like a bank
+- **Investing Dictionary** — every confusing finance term explained simply; public glossary pages are free with no account
+- **Stock Research** — live quotes, charts, fundamentals, news, and AI breakdowns for any ticker
+- **Markets** — live overview of indices, crypto, commodities, sectors, and the Fear & Greed index
 
 ## Tech Stack
 
@@ -16,118 +19,27 @@ A professional investing web app combining a real-time portfolio tracker with an
 |-------|-----------|
 | Framework | Next.js 14 (App Router) |
 | Language | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui primitives |
-| Charts | Recharts |
-| Stock Data | Yahoo Finance (yahoofinance2, no API key needed) |
-| AI | Anthropic Claude API (claude-sonnet-4-20250514) |
-| Database | SQLite via Prisma ORM |
-| Auth | NextAuth.js (email/password) |
+| Styling | Tailwind CSS |
+| Database | PostgreSQL via Prisma ORM |
+| Auth | NextAuth.js (email/password + email verification) |
+| AI | Anthropic Claude API |
+| Stock Data | Yahoo Finance |
+| Payments | Stripe ($4.99/mo Pro tier) |
+| Deployment | Vercel (deploys on push to `main`) |
 
-## Setup
-
-### Prerequisites
-
-- Node.js 20.19+
-- npm
-
-### 1. Install dependencies
+## Local Development
 
 ```bash
-cd alphadesk
 npm install
+npm run dev        # needs .env.local (DATABASE_URL, NEXTAUTH_SECRET, ANTHROPIC_API_KEY, ...)
 ```
 
-### 2. Environment variables
+`npm run build` runs `prisma migrate deploy` first, which requires `DATABASE_URL`. To build without touching the database: `npx next build`.
 
-The `.env.local` file is pre-configured for local development. To enable AI features, add your Anthropic API key:
+## Free vs Pro
 
-```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="your-random-secret-here"
-NEXTAUTH_URL="http://localhost:3000"
-ANTHROPIC_API_KEY="sk-ant-..."   # Required for AI analysis features
-```
-
-Generate a secret with: `openssl rand -base64 32`
-
-### 3. Set up the database
-
-```bash
-# Run migrations (creates dev.db)
-DATABASE_URL="file:./dev.db" npx prisma migrate dev --name init
-
-# Seed with demo account + sample portfolio
-DATABASE_URL="file:./dev.db" npx prisma db seed
-```
-
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Demo Login
-
-| Field | Value |
-|-------|-------|
-| Email | demo@alphadesk.app |
-| Password | demo1234 |
-
-The demo account comes pre-loaded with AAPL, MSFT, NVDA, GOOGL, JPM in the portfolio and TSLA, AMZN, META, V on the watchlist.
-
-## Project Structure
-
-```
-alphadesk/
-├── app/
-│   ├── (auth)/login          # Sign-in page
-│   ├── (auth)/register       # Registration page
-│   ├── (dashboard)/          # Main app (requires auth)
-│   │   ├── page.tsx          # Portfolio Dashboard
-│   │   ├── research/[ticker] # Stock detail + AI analysis
-│   │   ├── watchlist/        # Watchlist with live prices
-│   │   └── settings/         # Account settings
-│   └── api/                  # API routes
-│       ├── stock/[ticker]    # Live quotes + historical data
-│       ├── stock/search      # Ticker search
-│       ├── portfolio/        # Holdings CRUD
-│       ├── watchlist/        # Watchlist CRUD
-│       └── ai-analysis       # Claude AI endpoint
-├── components/
-│   ├── charts/               # Recharts components
-│   ├── portfolio/            # Portfolio UI (table, dialogs, AI panel)
-│   ├── research/             # Stock search
-│   └── ui/                   # Button, Card, Input, Dialog, Toast, etc.
-├── lib/
-│   ├── yahoo-finance.ts      # Yahoo Finance helpers
-│   ├── claude.ts             # Claude AI helpers
-│   ├── auth.ts               # NextAuth config
-│   └── utils.ts              # Formatting utilities
-└── prisma/
-    ├── schema.prisma         # User, Holding, WatchlistItem models
-    └── seed.ts               # Demo data seeder
-```
-
-## AI Analysis
-
-Requires `ANTHROPIC_API_KEY` in `.env.local`. Without it, the analyze buttons show a friendly error.
-
-**Stock Analysis** includes:
-- Executive Summary
-- Strengths & Catalysts  
-- Risks & Weaknesses
-- Valuation Assessment (Overvalued / Fairly Valued / Undervalued)
-- Analyst Verdict (Buy / Hold / Sell with reasoning)
-
-**Portfolio Analysis** includes:
-- Portfolio Health Score
-- Diversification Assessment
-- Top Performers & Losers commentary
-- Risk Analysis
-- Rebalancing Suggestions
+Free: all lessons, the full $100K Challenge, dictionary, markets, watchlist, and daily-limited AI (3 Mr. Guy chats/day, 2 AI stock breakdowns/day). Pro ($4.99/mo): no daily limits, a second $100K portfolio, exclusive themes.
 
 ## Disclaimer
 
-> For informational purposes only. Not financial advice. Always conduct your own research before making investment decisions.
+> For informational and educational purposes only. Not financial advice. Always consult a qualified professional before investing.
