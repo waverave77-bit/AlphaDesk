@@ -1,5 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
@@ -43,10 +44,50 @@ export async function currentUserIsPro(): Promise<boolean> {
  *   const limited = await checkAILimit('chat')
  *   if (limited) return limited
  */
+/** Features logged-out visitors may try, and how many uses per day. Everything else stays login-only. */
+export const GUEST_LIMITS: Record<string, number> = {
+  'translator': 3,
+}
+
 export async function checkAILimit(feature: string): Promise<NextResponse | null> {
   const session = await getServerSession(authOptions)
   if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    const guestLimit = GUEST_LIMITS[feature]
+    if (!guestLimit) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    }
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
+    const jar = cookies()
+    let counts: Record<string, number> = {}
+    try {
+      const raw = jar.get('guest_ai')?.value
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (parsed?.date === today && parsed.counts) counts = parsed.counts
+      }
+    } catch { /* malformed cookie — start fresh */ }
+    const used = counts[feature] ?? 0
+    if (used >= guestLimit) {
+      return NextResponse.json(
+        {
+          error: `That's your ${guestLimit} free tries for today — create a free account (takes 30 seconds) to keep going.`,
+          guest: true,
+          limitReached: true,
+          feature,
+          limit: guestLimit,
+          upgradeUrl: '/register',
+        },
+        { status: 429 }
+      )
+    }
+    counts[feature] = used + 1
+    jar.set('guest_ai', JSON.stringify({ date: today, counts }), {
+      maxAge: 60 * 60 * 48,
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+    })
+    return null
   }
 
   // Admin account always gets unlimited access

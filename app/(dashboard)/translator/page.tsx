@@ -89,7 +89,8 @@ export default function TranslatorPage() {
 
   async function handleTranslate() {
     if (!text.trim()) return
-    if (!session) { setShowGuestModal(true); return }
+    // Guests get a few free tries (enforced server-side) — the signup modal
+    // only appears once the API says the guest allowance is used up.
     setLoading(true)
     setMascotState('thinking')
     setResult(null)
@@ -102,6 +103,7 @@ export default function TranslatorPage() {
         body: JSON.stringify({ text: text.trim(), mode, experience: localStorage.getItem('zg_experience') ?? 'beginner' }),
       })
       const data = await res.json()
+      if (data.guest && data.limitReached) { setShowGuestModal(true); setLoading(false); setMascotState('idle'); return }
       if (data.limitReached) { setLimitReached(true); setLoading(false); setMascotState('idle'); return }
       if (data.emailUnverified) { setError('📧 Verify your email first — check your inbox for the link.'); setLoading(false); setMascotState('error'); setTimeout(() => setMascotState('idle'), 600); return }
       if (data.error) { setError(data.error); setMascotState('error'); setTimeout(() => setMascotState('idle'), 600); return }
