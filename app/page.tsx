@@ -249,6 +249,7 @@ export default function LandingPage() {
           <p className="font-mono text-[11px] opacity-70 max-w-md text-center">{DISCLAIMER}</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center font-mono text-xs uppercase">
             <Link href="/glossary" className="hover:opacity-70">Dictionary</Link>
+            <Link href="/guides" className="hover:opacity-70">Guides</Link>
             <Link href="/learn" className="hover:opacity-70">Learn</Link>
             <Link href="/trading-simulator" className="hover:opacity-70">$100K Challenge</Link>
             <Link href="/markets" className="hover:opacity-70">Markets</Link>

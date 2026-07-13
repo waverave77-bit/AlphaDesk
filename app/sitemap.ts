@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { TERMS, termToSlug } from '@/lib/glossary-terms'
+import { GUIDES } from '@/lib/guides'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_URL ?? 'https://www.mrguyinvests.com'
@@ -12,18 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/register`,          lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
 
     // ── Guest-accessible app pages (real content Google can rank) ──────
+    { url: `${base}/guides`,            lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${base}/trading-simulator`, lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${base}/markets`,           lastModified: now, changeFrequency: 'daily',   priority: 0.8 },
-    { url: `${base}/challenge`,         lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
-    { url: `${base}/bull-vs-bear`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
-    { url: `${base}/translator`,        lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/report-card`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
-    { url: `${base}/hot-take`,          lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
-    { url: `${base}/reality-check`,     lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
-    { url: `${base}/spike-summary`,     lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
     { url: `${base}/earnings`,          lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
-    { url: `${base}/hedgefunds`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
-    { url: `${base}/markets`,           lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
+    { url: `${base}/dividends`,         lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
     { url: `${base}/learn`,             lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/upgrade`,           lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 
@@ -41,5 +35,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority:        0.8,
   }))
 
-  return [...staticRoutes, ...glossaryRoutes]
+  // Long-tail guides — one added per night by the content agent
+  const guideRoutes: MetadataRoute.Sitemap = GUIDES.map(g => ({
+    url:             `${base}/guides/${g.slug}`,
+    lastModified:    new Date(g.date),
+    changeFrequency: 'monthly' as const,
+    priority:        0.8,
+  }))
+
+  return [...staticRoutes, ...glossaryRoutes, ...guideRoutes]
 }
