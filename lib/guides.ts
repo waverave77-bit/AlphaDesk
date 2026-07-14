@@ -120,4 +120,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'roth-ira-vs-401k-which-first',
+    title: 'Roth IRA or 401(k): Which Should You Fund First at Your First Real Job?',
+    metaTitle: 'Roth IRA vs. 401(k): Which to Fund First',
+    description:
+      'New job, first 401(k) enrollment email, and a Roth IRA you keep hearing about — here’s the actual order to fund both so you don’t leave free money on the table.',
+    date: '2026-07-14',
+    category: 'Investing',
+    intro:
+      'Your new employer just sent you a 401(k) enrollment link, and somewhere in the back of your head you remember someone mentioning a Roth IRA too. You don’t need to pick one — you need to fund them in the right order. Get the order wrong and you can genuinely leave thousands of dollars on the table over your career.',
+    sections: [
+      {
+        heading: 'The core difference: taxed now, or taxed later',
+        body: 'A traditional 401(k) is funded with pre-tax money straight from your paycheck — it lowers your taxable income today, and you pay income tax when you withdraw it in retirement. A Roth IRA works in reverse: you fund it with money you’ve already paid tax on, and in exchange it grows completely tax-free — you owe nothing on withdrawals in retirement, not even on decades of gains.\n\nMany employers now also offer a Roth 401(k) option, which uses the same paycheck-deduction mechanics as a traditional 401(k) but with Roth’s after-tax, tax-free-growth treatment. So the real decision isn’t just "Roth or 401(k)" — it’s which account to prioritize, and which tax treatment to pick inside your 401(k) if you have the choice.',
+      },
+      {
+        heading: 'Rule one: always capture the full employer match first',
+        body: 'If your employer offers a 401(k) match — say, 50% of what you contribute up to 6% of your salary — that match is the single best return you will ever be offered on money, full stop. Putting in 6% of your paycheck to get an extra 3% from your employer is an instant, guaranteed 50% return before your investments have done anything at all. No stock, no fund, no strategy beats that.\n\nSkipping the match to prioritize a Roth IRA instead is the most common mistake young earners make. If your employer matches, contribute at least enough to get every dollar of it before you touch anything else.',
+      },
+      {
+        heading: 'After the match, the Roth IRA usually wins',
+        body: 'Once you’ve captured the match, the Roth IRA typically becomes the better next stop, for a few concrete reasons. A 401(k) only lets you invest in whatever short list of funds your employer’s plan offers — sometimes good, sometimes mediocre with high fees. A Roth IRA can be opened at any major brokerage and can hold virtually any stock, ETF, or index fund you want.\n\nRoth IRAs are also more flexible in an emergency: you can withdraw the amount you’ve directly contributed (not the earnings) at any time, for any reason, without taxes or penalties, because you already paid tax on that money. And unlike a traditional 401(k), a Roth IRA never forces required withdrawals during your lifetime — the money can keep compounding tax-free for as long as you leave it alone.\n\nThe catch: the Roth IRA’s annual contribution limit is much smaller than the 401(k)’s — a few thousand dollars a year, adjusted for inflation most years, versus a limit on the 401(k) side that runs roughly three times higher. For most people starting out, that smaller limit isn’t a real constraint yet.',
+      },
+      {
+        heading: 'Where the 401(k) pulls back ahead',
+        body: 'Once you’re maxing out the Roth IRA and still have money left to invest, the 401(k)’s much higher contribution ceiling makes it the next place to put savings. It’s also fully automatic — money leaves your paycheck before you ever see it, which removes the willpower problem entirely.\n\nThere’s a tax-bracket argument too: a traditional 401(k) contribution reduces your taxable income this year. Early in your career, in a lower tax bracket, that deduction is worth less than it will be later when you’re earning more — which is part of why Roth (pay tax now, at your current low rate) tends to make more sense early on, while leaning traditional can make more sense once your income climbs.',
+      },
+      {
+        heading: 'The Roth IRA income limit — the fine print that rarely applies to beginners',
+        body: 'Roth IRA eligibility phases out once your income crosses a fairly high threshold (adjusted yearly, but it starts well into six figures for a single filer). If you’re earning typical entry-level or early-career wages, you’re nowhere near that cutoff, so this isn’t something to worry about yet — just something to know exists for later, when a raise might actually put you near it.',
+      },
+      {
+        heading: 'Your checklist: the funding order',
+        body: '1. Contribute enough to your 401(k) to get the full employer match — this comes before everything else.\n2. Open a Roth IRA (any major brokerage, no employer needed) and contribute up to the annual limit if your income qualifies.\n3. Still have money to invest? Go back and increase your 401(k) contributions past the match, toward its higher limit.\n4. Each time you get a raise, bump your contribution percentage up too, so your savings rate grows with your income instead of staying flat.\n5. Automate all of it — paycheck deduction for the 401(k), a recurring transfer for the Roth IRA — so the right amount moves before you can spend it.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Index Investing', 'Mutual Fund', 'Diversification', 'Dollar-Cost Averaging'],
+    faq: [
+      {
+        q: 'Should I pick Roth or traditional for my 401(k)?',
+        a: 'If your employer offers both, Roth 401(k) tends to make more sense early in your career when you’re likely in a lower tax bracket than you will be later — you pay tax now, at today’s lower rate, and everything grows tax-free after that.',
+      },
+      {
+        q: 'Can I contribute to both a Roth IRA and a 401(k) in the same year?',
+        a: 'Yes — they’re separate accounts with separate limits, and using both is exactly the strategy described above: match first, then Roth IRA, then back to the 401(k).',
+      },
+      {
+        q: 'What happens to my employer match if I leave the job early?',
+        a: 'Matched funds are often subject to a vesting schedule, meaning you may need to stay a certain number of years before the match is fully yours. Check your plan’s vesting schedule before assuming every matched dollar is guaranteed if you might leave soon.',
+      },
+      {
+        q: 'Is a Roth IRA really better than a 401(k) for someone in their 20s?',
+        a: 'Not strictly "better" — they serve different jobs. The Roth IRA usually gives you more investment choice and flexibility, while the 401(k) offers a higher contribution limit and, critically, the employer match. The right approach uses both, in order.',
+      },
+    ],
+  },
 ]
