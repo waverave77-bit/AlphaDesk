@@ -176,4 +176,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'emergency-fund-before-investing',
+    title: 'How Much Emergency Fund Do You Need Before You Start Investing?',
+    metaTitle: 'Emergency Fund Before Investing: How Much You Actually Need',
+    description:
+      'Save first or invest first? Here’s the real order — how big your emergency fund needs to be, where to keep it, and when it’s actually safe to start investing.',
+    date: '2026-07-14',
+    category: 'Saving',
+    intro:
+      'Everyone tells you to “invest early” and everyone tells you to “build an emergency fund” — and almost nobody explains which one comes first. Get the order wrong and a busted laptop, a lost shift, or a fender bender can force you to sell investments at the worst possible moment, or send you reaching for a credit card at 20%+ interest instead. Here’s the actual sequence, with real numbers attached.',
+    sections: [
+      {
+        heading: 'Why the order matters more than the amount',
+        body: 'The stock market and an emergency fund solve two different problems, and mixing them up is where people get hurt. Investments are for money you won’t need for years — they’re allowed to drop 20%, 30%, even more in a bad stretch, because you have time to wait it out. An emergency fund is for money you might need next week, so it has to be there, fully intact, on the day you need it.\n\nIn March 2020 the S&P 500 fell more than 30% in about a month. In 2008 it lost roughly half its value over about a year and a half. Both crashes hit right alongside waves of layoffs — meaning the exact moment a lot of people needed cash most was the exact moment their portfolios were down the most. Anyone who had to sell stocks to cover rent that month locked in the loss permanently. An emergency fund exists so you’re never that person.',
+      },
+      {
+        heading: 'The starter fund: $500–$1,000 before anything else',
+        body: 'You don’t need six months of expenses saved before you’re allowed to invest a single dollar — that would take most young people years and isn’t realistic advice. What you need first is a small starter cushion, commonly recommended in the $500–$1,000 range, sitting in a savings account and untouched.\n\nThat amount won’t cover a job loss, but it covers the stuff that actually happens most: a car repair, a phone screen, a dentist bill, a security deposit. Without it, those normal-life expenses go on a credit card, and credit card interest (often north of 20% APR) will out-cost almost anything the stock market can earn you. Build the starter fund first — it’s the cheapest insurance you’ll ever buy.',
+      },
+      {
+        heading: 'The real target: 3–6 months of essential expenses',
+        body: 'Once the starter fund is in place, the next milestone — usually reached gradually, alongside investing rather than before it — is 3 to 6 months of essential expenses. Essential means rent, groceries, phone, insurance, minimum debt payments — not your whole income, and not takeout and concert tickets.\n\nWhere you land in that 3–6 month range depends on how stable your income is and how big your safety net is. A student living at home with a part-time job and parents who’d catch a real emergency can reasonably aim for the lower end, even 1–2 months. Someone fully on their own with irregular freelance or gig income should aim for the higher end, because their income itself is the risk, not just unexpected expenses.',
+      },
+      {
+        heading: 'Where the fund lives: not your brokerage account',
+        body: 'An emergency fund belongs in a high-yield savings account (HYSA) at an online bank, not in stocks, not in crypto, and not sitting uninvested in a brokerage account either. The whole point is liquidity — being able to withdraw it in a day or two with zero chance the balance is lower than you left it.\n\nA regular checking account at a big brick-and-mortar bank often pays close to nothing in interest, while online high-yield savings accounts have historically paid several times more — money that would otherwise be lost to inflation quietly eating your purchasing power. Look for a bank that’s FDIC-insured, which protects deposits up to $250,000 per depositor, per bank — so for an emergency fund, insurance risk isn’t something you need to worry about.',
+      },
+      {
+        heading: 'Can you build savings and invest at the same time?',
+        body: 'Mostly yes, with one exception that jumps the line: if a job offers a 401(k) match, grab the free match money first — it’s a guaranteed return no savings account can compete with — then redirect focus to finishing the starter fund and the full 3–6 month target before ramping up other investing.\n\nOne overlooked detail: Roth IRA contributions (not the earnings on them) can technically be withdrawn at any time, tax- and penalty-free, since you already paid tax on that money going in. That makes a Roth IRA a legitimate backup layer — but it shouldn’t be your primary emergency fund, because pulling money out during a market downturn means selling investments at a loss and losing years of future tax-free compounding. Treat it as a last resort, not the plan.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Build a $500–$1,000 starter fund in a savings account before investing anything beyond a 401(k) match.\n2. Add up your true essential monthly expenses — rent, food, phone, insurance, minimum debt payments.\n3. Set a target of 3–6 months of that number, scaled toward the lower end if you have a strong safety net, higher if your income is unstable.\n4. Park the fund in an FDIC-insured, high-yield savings account — never in the stock market.\n5. Once the target is hit, redirect that monthly savings amount into investing instead, and let the emergency fund just sit there, boring and untouched, doing its job.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Inflation', 'Diversification', 'Bond', 'Index Investing'],
+    faq: [
+      {
+        q: 'Should I pay off debt, save an emergency fund, or invest first?',
+        a: 'A common order: build a small $500–$1,000 starter fund, grab any employer 401(k) match if you have one, pay down high-interest debt (credit cards, generally anything above ~7–8% interest), then finish the full 3–6 month emergency fund, then invest more seriously.',
+      },
+      {
+        q: 'Is it bad to invest before you have an emergency fund?',
+        a: 'It’s risky rather than strictly “bad” — the danger is being forced to sell investments during a downturn to cover a surprise expense, which locks in a loss instead of letting the market recover.',
+      },
+      {
+        q: 'Where should I keep my emergency fund?',
+        a: 'In an FDIC-insured high-yield savings account at an online bank. It needs to be liquid and stable, not invested — a regular checking account usually pays too little interest, and the stock market can drop right when you need the cash.',
+      },
+      {
+        q: 'Can a Roth IRA be my emergency fund?',
+        a: 'You can technically withdraw your own contributions from a Roth IRA anytime without tax or penalty, but using it as your main emergency fund means risking having to sell investments at a loss during a downturn — better as a backup than a primary plan.',
+      },
+    ],
+  },
 ]
