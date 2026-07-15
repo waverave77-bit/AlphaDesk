@@ -232,4 +232,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'pay-off-student-loans-or-invest-first',
+    title: 'Should You Pay Off Student Loans or Invest First?',
+    metaTitle: 'Student Loans or Investing First? How to Decide',
+    description:
+      'Extra cash and a student loan balance — should it go toward payoff or a Roth IRA? Here’s the actual math, and why the interest rate is the real deciding factor.',
+    date: '2026-07-15',
+    category: 'College Money',
+    intro:
+      'You’ve got a little extra cash after rent and the minimum loan payment, and two people are yelling in your ear — one says “kill the debt,” the other says “time in the market is everything, invest now.” Both are half right. The real answer depends on one number you can look up in five minutes: your interest rate.',
+    sections: [
+      {
+        heading: 'It’s not either/or — it’s a math problem',
+        body: 'Paying off a loan early gives you a guaranteed return equal to that loan’s interest rate, because every dollar of principal you erase is a dollar of interest you’ll never pay. Investing gives you a return that’s historically higher on average — the stock market has returned roughly 10% a year before inflation over long stretches — but that return isn’t guaranteed in any single year, and it can be negative for years at a time.\n\nSo the decision isn’t “debt vs. investing” as a personality trait. It’s comparing a guaranteed number against an uncertain-but-usually-better one, and the size of the gap between them is what should actually move your money.',
+      },
+      {
+        heading: 'Before either one: grab the free money',
+        body: 'If your job offers a 401(k) match, contribute enough to get the full match before sending extra money toward loans or a Roth IRA. A match is often an instant 50%–100% return on whatever you put in — no loan payoff and no stock return can compete with that. This step comes first, full stop, no matter what your loan rate is.',
+      },
+      {
+        heading: 'Federal loans come with safety nets that private loans don’t',
+        body: 'Before deciding where extra cash goes, know what kind of loan you actually have — it changes the calculation. Federal student loans (Direct Loans) come with income-driven repayment plans that cap your monthly payment as a percentage of income, deferment and forbearance options if you lose your job, and — for people working full-time in government or qualifying nonprofit jobs — Public Service Loan Forgiveness, which wipes out the remaining balance tax-free after 10 years of qualifying payments.\n\nPrivate loans typically have none of this. They’re also why refinancing federal loans into a private loan for a lower rate is a bigger decision than it sounds — you’re trading away those federal protections permanently in exchange for a rate, so it only makes sense if you’re confident you won’t need the safety net.',
+      },
+      {
+        heading: 'The interest rate is the real dividing line',
+        body: 'As a general guideline, loans sitting at a high interest rate — the kind of rate you sometimes see on private student loans or unsubsidized loans taken out in higher-rate years — behave like a debt that’s expensive enough that paying it off early is close to a guaranteed win, hard for the market to reliably beat once you account for the uncertainty.\n\nLoans in a more moderate range are more of a genuine toss-up. Over long time horizons the stock market’s historical average return has tended to beat those rates, which is why many young borrowers with lower-rate federal loans choose to invest extra cash instead of rushing to pay off every dollar early. There’s no single cutoff that’s right for everyone — it depends on your rate, your risk tolerance, and how much the guaranteed-payoff feeling of being debt-free is worth to you personally, which is a real, valid factor even if it’s not strictly mathematical.',
+      },
+      {
+        heading: 'Extra payments still count, even if you split the difference',
+        body: 'You don’t have to pick one lane entirely. A common approach: keep making minimum payments on every loan (missing those hurts your credit and can trigger fees no matter the rate), then split whatever’s left over between extra principal payments and a Roth IRA or index fund, weighted toward whichever side your interest rate favors.\n\nOne detail worth knowing: extra payments on a loan should be directed at principal, not just "next month’s payment" — check with your loan servicer that extra payments are actually reducing principal, otherwise some servicers apply them toward future interest first, which barely moves the needle.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Get any employer 401(k) match in full before anything else.\n2. Know what type of loan you have — federal loans carry protections (income-driven repayment, forgiveness options) that are worth factoring in before rushing to pay them off or refinance them away.\n3. Look up your actual interest rate — higher rates lean toward payoff, lower rates lean toward investing.\n4. Keep minimum payments current on every loan no matter what else you’re doing with extra cash.\n5. If you’re unsure, split extra money between extra principal payments and a Roth IRA rather than going all-in on either side.',
+      },
+    ],
+    relatedTerms: ['Index Investing', 'Dollar-Cost Averaging', 'Diversification', 'Inflation', 'Bond'],
+    faq: [
+      {
+        q: 'Is it smarter to pay off student loans or invest in a Roth IRA?',
+        a: 'Compare your loan’s interest rate to what you’d realistically expect from investing. Higher-rate loans usually favor payoff since it’s a guaranteed return; lower-rate loans often favor investing since the market’s long-term average return tends to be higher, though never guaranteed.',
+      },
+      {
+        q: 'Should I refinance my federal student loans for a lower rate?',
+        a: 'Be careful — refinancing federal loans into a private loan permanently gives up income-driven repayment, deferment/forbearance options, and forgiveness programs like PSLF. It can make sense if you’re confident you won’t need those protections, but it’s not a decision to make on rate alone.',
+      },
+      {
+        q: 'What counts as a “high” student loan interest rate?',
+        a: 'There’s no universal cutoff, but many people use roughly 7–8% and above as the range where paying off debt early starts to look like a clearly better guaranteed return than investing, with anything meaningfully lower being more of a genuine toss-up.',
+      },
+    ],
+  },
 ]
