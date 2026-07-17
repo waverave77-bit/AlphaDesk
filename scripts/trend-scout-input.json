@@ -1,5 +1,5 @@
 {
-  "_readme": "Filled in manually after a live scouting session (Claude driving your real logged-in Chrome across TikTok/Instagram/YouTube finance hashtags). The strategist_agent.sh cron job on the droplet reads this file whenever 'collected_at' is newer than its last-processed date, turns the entries into new video-scripts-queue.json script ideas, then waits for the next scouting session. Overwrite this whole file each time you scout \u2014 it's a snapshot, not a running log.",
+  "_readme": "Populated automatically by scripts/scout_watcher.py (runs locally on the Mac, triggered by the dashboard's Run button) as you drop TikTok links and click Run \u2014 real stats/caption/audio pulled straight from TikTok's own page data, audio transcribed locally with Whisper. Now a rolling log (capped at the newest 20 entries), not a one-time snapshot. The strategist_agent.sh cron job on the droplet reads this whenever 'collected_at' is newer than its last-processed date and turns new entries into video-scripts-queue.json script ideas. Entries can also still be added by hand from a live browsing session if useful.",
   "collected_at": "2026-07-16",
   "entries": [
     {
@@ -77,19 +77,6 @@
         "likes": 2422,
         "saves": 1530,
         "shares": 119
-      },
-      "why_it_works": "auto-scraped \u2014 not yet analyzed"
-    },
-    {
-      "platform": "tiktok",
-      "account": "riskanddreward",
-      "format": "auto-scraped \u2014 format/style not yet classified, review before use",
-      "hook_text": "#money #economics #finance ",
-      "audio_note": "spoken audio, transcribed: \"Money wins.\"",
-      "stats": {
-        "likes": 227900,
-        "saves": 31580,
-        "shares": 11700
       },
       "why_it_works": "auto-scraped \u2014 not yet analyzed"
     },
