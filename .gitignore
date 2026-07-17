@@ -36,6 +36,11 @@ __pycache__/
 .scout-venv
 .scout-watcher.log
 
+# droplet-side staging file for performance_analyst_agent.sh (Claude writes
+# here, the wrapper script relocates to /root/secrets/ — see that script
+# for why it can't write to /root/secrets/ directly)
+.growth-learnings-draft.json
+
 # real movie/show clips for the --use-movie-clips option — copyrighted,
 # local rendering use only, must never be committed/pushed
 /stock-footage/movie-clips/*
