@@ -58,6 +58,10 @@ MOVIE_CLIPS_DIR = os.path.join(REPO, "stock-footage", "movie-clips")
 MOVIE_CLIPS_MANIFEST = os.path.join(MOVIE_CLIPS_DIR, "manifest.json")
 WIDTH, HEIGHT = 1080, 1920
 FONT_PATH = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+# Pexels sits behind Cloudflare, which blocks urllib's default
+# "Python-urllib/x.x" User-Agent outright (error code 1010) — a normal
+# browser-like one clears it.
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
 
 def load_env_local():
@@ -81,7 +85,7 @@ def load(path, default):
 
 def pexels_search(query, api_key):
     url = f"https://api.pexels.com/videos/search?query={urllib.parse.quote(query)}&per_page=3&orientation=portrait"
-    req = urllib.request.Request(url, headers={"Authorization": api_key})
+    req = urllib.request.Request(url, headers={"Authorization": api_key, "User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=20) as resp:
         data = json.load(resp)
     videos = data.get("videos", [])
@@ -89,6 +93,12 @@ def pexels_search(query, api_key):
         return None
     files = sorted(videos[0]["video_files"], key=lambda f: f.get("width", 0), reverse=True)
     return files[0]["link"] if files else None
+
+
+def download(url, dest):
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=60) as resp, open(dest, "wb") as f:
+        f.write(resp.read())
 
 
 def find_movie_clip(keyword, manifest):
@@ -121,10 +131,12 @@ def build_testsrc_clip(dest, duration, seed):
 
 
 def render_text_png(text, path):
-    """Bold centered text on a semi-transparent dark box, transparent
-    elsewhere — composited onto the video with ffmpeg's overlay filter.
-    (Our local ffmpeg build has no freetype/drawtext support, so text
-    is rendered here instead of via ffmpeg's own text filter.)"""
+    """Bold centered text with a black outline (no background box) —
+    transparent elsewhere, composited onto the video with ffmpeg's
+    overlay filter. (Our local ffmpeg build has no freetype/drawtext
+    support, so text is rendered here instead of via ffmpeg's own text
+    filter.) The outline keeps it legible over any footage without
+    boxing it in, matching the plain-caption look of the reference clips."""
     img = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(FONT_PATH, 64)
@@ -145,19 +157,12 @@ def render_text_png(text, path):
 
     line_height = 78
     block_height = line_height * len(lines)
-    pad = 30
-    box_top = HEIGHT / 2 - block_height / 2 - pad
-    box_bottom = HEIGHT / 2 + block_height / 2 + pad
-    box_width = max(draw.textlength(l, font=font) for l in lines) + pad * 2
-    box_left = WIDTH / 2 - box_width / 2
-    box_right = WIDTH / 2 + box_width / 2
-    draw.rounded_rectangle([box_left, box_top, box_right, box_bottom],
-                            radius=18, fill=(0, 0, 0, 90))
 
     y = HEIGHT / 2 - block_height / 2
     for line in lines:
         w = draw.textlength(line, font=font)
-        draw.text((WIDTH / 2 - w / 2, y), line, font=font, fill=(255, 255, 255, 255))
+        draw.text((WIDTH / 2 - w / 2, y), line, font=font, fill=(255, 255, 255, 255),
+                   stroke_width=4, stroke_fill=(0, 0, 0, 255))
         y += line_height
 
     img.save(path)
@@ -172,11 +177,14 @@ def assemble(clip_paths, hook_lines, music_path, out_path):
             norm = os.path.join(tmp, f"norm_{i}.mp4")
             subprocess.run([
                 "ffmpeg", "-y", "-i", clip, "-t", str(seg_duration),
-                "-vf", f"scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,crop={WIDTH}:{HEIGHT}",
-                "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", norm,
+                "-vf", f"scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,crop={WIDTH}:{HEIGHT},fps=30,setpts=PTS-STARTPTS",
+                "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30", "-vsync", "cfr", norm,
             ], check=True, capture_output=True)
             normalized.append(norm)
 
+        # Source clips arrive at different frame rates (25/30/60fps) — concat
+        # with "-c copy" corrupts timestamps when segments don't match, so
+        # re-encode at concat time instead of stream-copying.
         concat_list = os.path.join(tmp, "concat.txt")
         with open(concat_list, "w") as f:
             for n in normalized:
@@ -184,7 +192,7 @@ def assemble(clip_paths, hook_lines, music_path, out_path):
         concatenated = os.path.join(tmp, "concat.mp4")
         subprocess.run([
             "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list,
-            "-c", "copy", concatenated,
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30", "-vsync", "cfr", concatenated,
         ], check=True, capture_output=True)
 
         png_paths = []
@@ -265,7 +273,7 @@ def main():
                     continue
                 link = None if args.test else pexels_search(keyword, api_key)
                 if link:
-                    urllib.request.urlretrieve(link, dest)
+                    download(link, dest)
                 else:
                     if not args.test:
                         print(f"  no Pexels result for '{keyword}', using placeholder")
