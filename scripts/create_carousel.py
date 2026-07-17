@@ -20,6 +20,7 @@ and facebook_poster.py both already read).
 import argparse
 import json
 import os
+import random
 import sys
 import urllib.parse
 import urllib.request
@@ -58,14 +59,17 @@ def load(path, default):
 
 
 def pexels_photo_search(query, api_key):
-    url = f"https://api.pexels.com/v1/search?query={urllib.parse.quote(query)}&per_page=3&orientation=portrait"
+    """Picks a random result from the top matches, not always the first —
+    reused keyword phrases would otherwise silently return the identical
+    photo every time."""
+    url = f"https://api.pexels.com/v1/search?query={urllib.parse.quote(query)}&per_page=10&orientation=portrait"
     req = urllib.request.Request(url, headers={"Authorization": api_key, "User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=20) as resp:
         data = json.load(resp)
     photos = data.get("photos", [])
     if not photos:
         return None
-    return photos[0]["src"]["large2x"]
+    return random.choice(photos[:8])["src"]["large2x"]
 
 
 def download(url, dest):

@@ -131,5 +131,43 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 12,
+    "video": "hook-12.mp4",
+    "video_music": "hook-12-music.mp4",
+    "caption": "Locked in isn't a mood, it's a decision. Same amount of hours in the day as everyone else \u2014 the difference is what you do with them.",
+    "hashtags": [
+      "#lockedin",
+      "#mindset",
+      "#investing",
+      "#wealthbuilding",
+      "#discipline"
+    ],
+    "based_on_format": "one-word/short-phrase aspirational template (needm_rari-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 13,
+    "video": "hook-13.mp4",
+    "video_music": "hook-13-music.mp4",
+    "caption": "No plan B means plan A has to work \u2014 so you build the habits now that make sure it does. Start before you feel ready.",
+    "hashtags": [
+      "#noplanb",
+      "#mindset",
+      "#investing",
+      "#wealthbuilding",
+      "#success"
+    ],
+    "based_on_format": "one-word/short-phrase aspirational template (needm_rari-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]

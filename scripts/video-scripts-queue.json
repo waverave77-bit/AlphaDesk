@@ -103,5 +103,75 @@
       "#financialliteracy"
     ],
     "status": "pending"
+  },
+  {
+    "id": 12,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "one-word/short-phrase aspirational template (needm_rari-style)",
+    "hook_lines": [
+      {
+        "text": "Locked in.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "footage_keywords": [
+      "confident businessman walking in suit slow motion",
+      "mercedes benz close up",
+      "bmw driving city night",
+      "man walking in suit city street",
+      "private jet on tarmac",
+      "luxury watch close up wrist",
+      "city skyline at night"
+    ],
+    "mood": "phonk",
+    "caption": "Locked in isn't a mood, it's a decision. Same amount of hours in the day as everyone else \u2014 the difference is what you do with them.",
+    "hashtags": [
+      "#lockedin",
+      "#mindset",
+      "#investing",
+      "#wealthbuilding",
+      "#discipline"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 13,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "one-word/short-phrase aspirational template (needm_rari-style)",
+    "hook_lines": [
+      {
+        "text": "No plan B.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "footage_keywords": [
+      "man walking in suit city street",
+      "stock exchange trading floor wide shot",
+      "confident businessman walking in suit slow motion",
+      "bmw driving city night",
+      "mercedes benz close up",
+      "private jet interior",
+      "wall street bull statue"
+    ],
+    "mood": "phonk",
+    "caption": "No plan B means plan A has to work \u2014 so you build the habits now that make sure it does. Start before you feel ready.",
+    "hashtags": [
+      "#noplanb",
+      "#mindset",
+      "#investing",
+      "#wealthbuilding",
+      "#success"
+    ],
+    "status": "pending"
   }
 ]

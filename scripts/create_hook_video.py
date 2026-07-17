@@ -52,6 +52,7 @@ overrides the rotation with one fixed track for the whole batch.
 import argparse
 import json
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -96,14 +97,19 @@ def load(path, default):
 
 
 def pexels_search(query, api_key):
-    url = f"https://api.pexels.com/videos/search?query={urllib.parse.quote(query)}&per_page=3&orientation=portrait"
+    """Picks a random result from the top matches, not always the first —
+    the same keyword phrase gets reused across many entries, and always
+    taking videos[0] meant identical keywords silently returned the exact
+    same clip every time."""
+    url = f"https://api.pexels.com/videos/search?query={urllib.parse.quote(query)}&per_page=10&orientation=portrait"
     req = urllib.request.Request(url, headers={"Authorization": api_key, "User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=20) as resp:
         data = json.load(resp)
     videos = data.get("videos", [])
     if not videos:
         return None
-    files = sorted(videos[0]["video_files"], key=lambda f: f.get("width", 0), reverse=True)
+    pick = random.choice(videos[:8])
+    files = sorted(pick["video_files"], key=lambda f: f.get("width", 0), reverse=True)
     return files[0]["link"] if files else None
 
 
