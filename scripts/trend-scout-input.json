@@ -105,6 +105,21 @@
         "shares": 3426
       },
       "why_it_works": "auto-scraped \u2014 not yet analyzed"
+    },
+    {
+      "platform": "tiktok",
+      "account": "needm_rari",
+      "post_type": "video",
+      "format": "Format A \u2014 a single one-word punchy phrase ('CEO.') stays on screen over 4-5 fast-cut aspirational/cinematic clips (trading floor, closet, chess, Scarface), matching the needm_rari 'CEO.' template exactly.",
+      "hook_text": "CEO.",
+      "visual_description": "Fast cuts between cinematic movie/aspirational clips: Wall of Street trading floor scene from behind a suited man addressing a crowd, a silhouetted man selecting suits in a walk-in closet, an AI-generated executive pointing at a chessboard in front of seated suits, and Scarface's Tony Montana on the phone with cash stacks on his desk. Moody, dark, high-contrast lighting throughout; consistent bold white centered text with black outline reading 'CEO.' overlaid on every clip.",
+      "audio_note": "spoken audio, transcribed: \"Rus Snow\"",
+      "stats": {
+        "likes": 124200,
+        "saves": 20244,
+        "shares": 4286
+      },
+      "why_it_works": "It reuses a proven viral single-word template ('CEO.', per needm_rari's 122.3K-like example) over slick movie-still power/wealth imagery, delivering pure aspirational vibe with zero teaching, which is exactly the format that drives high likes/saves."
     }
   ]
 }
