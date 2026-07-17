@@ -38,20 +38,26 @@ Real examples that prove this works:
   teaching sequence.
 
 **Rules:**
-- The on-screen text is 2–8 words. Total. Not per-line — total. It is
-  NOT a sequence of hook lines building up a point. It does not
-  explain anything. It does not teach. It is a vibe, a flex, or a
-  one-line fact delivered as a flex (see the S&P 500 example above).
+- The on-screen text is 2–8 words, total — but shorter is better.
+  1-3 words ("Investing.", "Old money.", "CEO.") is the ideal; treat
+  8 as a ceiling, not a target. It is NOT a sequence of hook lines
+  building up a point. It does not explain anything. It does not
+  teach. It is a vibe, a flex, or a one-line fact delivered as a flex
+  (see the S&P 500 example above).
 - Never write anything that sounds like advice, a tip, or a lesson.
   "patience compounds." and "know your net worth number." are WRONG —
   they sound like a financial-literacy caption. "money talks.",
   "CEO.", "the top 1% think differently." are RIGHT — simple, punchy,
   aspirational, almost cliché.
-- Background is 4–6 quick clips cut fast (roughly 1.5–2s each),
-  never one long static shot. Luxury cars, private jets (tarmac or
-  interior), cash (stacks, counting, close-ups), expensive watches,
-  city skylines at night, grand old-money architecture (banks,
-  manors, marble staircases). Aesthetic and cinematic, not stock-photo
+- **Video length: minimum 10 seconds.** The single hook line spans
+  the whole thing (e.g. `start: 0, end: 10`), never just 6. Use 5-6
+  footage_keywords at roughly 2s/clip to fill it — more clips, not
+  slower cuts.
+- Background is those 5-6 quick clips cut fast (~2s each), never one
+  long static shot. Luxury cars, private jets (tarmac or interior),
+  cash (stacks, counting, close-ups), expensive watches, city
+  skylines at night, grand old-money architecture (banks, manors,
+  marble staircases). Aesthetic and cinematic, not stock-photo
   generic.
 - Text rendering: plain bold white text with a thin black outline,
   centered. No background box behind it — the outline alone is what
@@ -78,8 +84,15 @@ one in the same spirit instead.
 
 ## Format B — Useful-info carousel
 
-**A numbered list or a single real, specific, detailed artifact —
-concrete facts you can screenshot and use, not vague advice.**
+**This is an ACTUAL swipeable photo carousel — people swipe through
+slides, it is never a video.** A numbered list or a single real,
+specific, detailed artifact — concrete facts you can screenshot and
+use, not vague advice. (Format A and B look similar on paper — both
+have "hook_lines" and "footage_keywords" — but they render through
+completely different scripts into completely different post types.
+Mixing this up once already produced Format B content as a continuous
+video with sequential text overlays instead of a carousel — don't
+repeat that.)
 
 Real examples:
 - **financeeducationforyou, "Finance Jobs That Can Make You a
@@ -106,10 +119,18 @@ Real examples:
   — never a fabricated "this is my actual X" claim. See the hard rule
   in strategist_agent.sh; that rule stays in force regardless of what
   this guide says about the format being effective.
-- Visual per slide: a relevant photo/still (movie stills are fair
-  game per the earlier copyright discussion — real clips are okay for
-  posts you personally review, stock/generic photos are the safe
-  default for anything fully automated).
+- Visual per slide: **the same luxury/aspirational aesthetic as
+  Format A** (private jets, luxury cars, cash, watches, city
+  skylines, marble/grand architecture) — NOT a literal topic-matching
+  photo (e.g. don't use "financial analyst at desk with monitors" for
+  a finance-jobs slide, or "lawn mower on grass" for a side-hustle
+  slide). The brand's whole visual identity is the luxury aesthetic;
+  Format B just adds a real number per slide on top of it, it doesn't
+  switch to generic literal stock photography. Movie stills are fair
+  game per the earlier copyright discussion for posts personally
+  reviewed, not the fully-automated default.
+- One footage_keyword per slide (1:1 with hook_lines) — each slide
+  is one Pexels-searched luxury photo with that slide's text on it.
 
 ## What NOT to do (learned the hard way)
 
@@ -122,13 +143,28 @@ entirely. Every script is either Format A (one line, fast luxury
 montage) or Format B (a numbered list or one real artifact), never a
 multi-beat explainer.
 
-## Technical execution notes (for create_hook_video.py)
+## Technical execution notes
 
-- Format A: one hook_lines entry spanning the full clip duration,
-  4-6 footage_keywords for fast cuts (not 2-3 — more cuts, faster
-  pacing, matches the reference videos better).
+**Format A entries go in `scripts/video-scripts-queue.json`, rendered
+by `create_hook_video.py` (produces an actual video).**
+- One hook_lines entry spanning the full (10s minimum) duration,
+  5-6 footage_keywords for fast ~2s-per-clip cuts.
 - Text has no background box — plain white with a black outline
   (already the default in render_text_png).
 - Source clips arrive at different native frame rates; the pipeline
   normalizes to 30fps before concatenating (fixed after the first
   sample run produced broken cut timing).
+- Every render also gets a real audio track auto-picked from
+  `stock-footage/audio/` for the Instagram/YouTube copy (TikTok's
+  copy stays silent — its API can't attach a native sound, so those
+  get posted manually with a real in-app sound added by hand).
+
+**Format B entries go in `scripts/carousel-scripts-queue.json` (a
+SEPARATE file — never video-scripts-queue.json), rendered by
+`create_carousel.py` (produces PNG slides + an instagram-queue.json
+entry, no video at all).**
+- hook_lines and footage_keywords must be the same length — one
+  keyword's photo per slide, in order.
+- Each slide gets that beat's text over its own luxury photo, plus a
+  small `@mrguyinvests` handle and page-number (e.g. "2/6") in the
+  corners.
