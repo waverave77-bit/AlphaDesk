@@ -28,6 +28,10 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# venv for scripts/create_hook_video.py (Pillow, local rendering only)
+.hookvideo-venv
+__pycache__/
+
 # vercel
 .vercel
 
