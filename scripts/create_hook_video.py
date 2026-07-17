@@ -21,8 +21,23 @@ are rendered as PNG overlays via Pillow instead):
                                                                         # verifies the ffmpeg
                                                                         # pipeline with placeholder clips
     ./.hookvideo-venv/bin/python scripts/create_hook_video.py --music path/to/track.mp3
+    ./.hookvideo-venv/bin/python scripts/create_hook_video.py --use-movie-clips
 
 One-time setup: python3 -m venv .hookvideo-venv && ./.hookvideo-venv/bin/pip install Pillow
+
+Movie-clip B-roll (optional, --use-movie-clips): some of the best-
+performing examples we scouted use real movie/show footage (Wolf of
+Wall Street, Succession) instead of generic stock. Real clips carry
+copyright/takedown risk, so per-topic use is manual and reviewed, not
+part of the automated pipeline. To use it: drop your own sourced clip
+files into stock-footage/movie-clips/ (gitignored — these files must
+never be committed/pushed, they're for local rendering only) and add
+entries to stock-footage/movie-clips/manifest.json:
+    [{"tags": ["wall street office", "trading floor"],
+      "file": "wolf-of-wall-street-office.mp4", "start": 12, "end": 16}]
+"start"/"end" are the seconds within that source file to extract. With
+--use-movie-clips, each footage_keyword is matched against "tags"
+first (falling back to Pexels/placeholder if nothing matches).
 """
 import argparse
 import json
@@ -39,6 +54,8 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS_QUEUE = os.path.join(REPO, "scripts", "video-scripts-queue.json")
 VIDEOS_QUEUE = os.path.join(REPO, "scripts", "hook-videos-queue.json")
 OUTPUT_DIR = os.path.join(REPO, "public", "hook-videos")
+MOVIE_CLIPS_DIR = os.path.join(REPO, "stock-footage", "movie-clips")
+MOVIE_CLIPS_MANIFEST = os.path.join(MOVIE_CLIPS_DIR, "manifest.json")
 WIDTH, HEIGHT = 1080, 1920
 FONT_PATH = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 
@@ -72,6 +89,24 @@ def pexels_search(query, api_key):
         return None
     files = sorted(videos[0]["video_files"], key=lambda f: f.get("width", 0), reverse=True)
     return files[0]["link"] if files else None
+
+
+def find_movie_clip(keyword, manifest):
+    keyword_words = set(keyword.lower().split())
+    for entry in manifest:
+        for tag in entry.get("tags", []):
+            tag_words = set(tag.lower().split())
+            if keyword_words & tag_words:
+                return entry
+    return None
+
+
+def extract_movie_clip_segment(entry, duration, dest):
+    source = os.path.join(MOVIE_CLIPS_DIR, entry["file"])
+    subprocess.run([
+        "ffmpeg", "-y", "-ss", str(entry["start"]), "-i", source,
+        "-t", str(duration), "-an", dest,
+    ], check=True, capture_output=True)
 
 
 def build_testsrc_clip(dest, duration, seed):
@@ -194,9 +229,12 @@ def main():
     parser.add_argument("--test", action="store_true",
                          help="use placeholder color clips instead of real Pexels footage")
     parser.add_argument("--music", help="optional path to a local music track to mux in")
+    parser.add_argument("--use-movie-clips", action="store_true",
+                         help="prefer local stock-footage/movie-clips/ over Pexels when a tag matches")
     args = parser.parse_args()
 
     load_env_local()
+    movie_manifest = load(MOVIE_CLIPS_MANIFEST, []) if args.use_movie_clips else []
     api_key = os.environ.get("PEXELS_API_KEY")
     if not args.test and not api_key:
         print("PEXELS_API_KEY not set in .env.local — run with --test to verify the "
@@ -219,6 +257,12 @@ def main():
             clip_paths = []
             for i, keyword in enumerate(entry["footage_keywords"]):
                 dest = os.path.join(tmp, f"clip_{i}.mp4")
+                movie_clip = find_movie_clip(keyword, movie_manifest) if args.use_movie_clips else None
+                if movie_clip:
+                    print(f"  using movie clip for '{keyword}': {movie_clip['file']}")
+                    extract_movie_clip_segment(movie_clip, 4, dest)
+                    clip_paths.append(dest)
+                    continue
                 link = None if args.test else pexels_search(keyword, api_key)
                 if link:
                     urllib.request.urlretrieve(link, dest)
