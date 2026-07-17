@@ -79,6 +79,32 @@
         "shares": 119
       },
       "why_it_works": "auto-scraped \u2014 not yet analyzed"
+    },
+    {
+      "platform": "tiktok",
+      "account": "riskanddreward",
+      "format": "auto-scraped \u2014 format/style not yet classified, review before use",
+      "hook_text": "#money #economics #finance ",
+      "audio_note": "spoken audio, transcribed: \"Money wins.\"",
+      "stats": {
+        "likes": 227900,
+        "saves": 31580,
+        "shares": 11700
+      },
+      "why_it_works": "auto-scraped \u2014 not yet analyzed"
+    },
+    {
+      "platform": "tiktok",
+      "account": "youth.investing.network",
+      "format": "auto-scraped \u2014 format/style not yet classified, review before use",
+      "hook_text": "#finance #investmentbanking #wallstreet #investing #jpmorgan ",
+      "audio_note": "spoken audio, transcribed: \"I'll be the best of all, but while I'm in the first of times I'll be the best of all, but while I'm in the first of times I'll be the best of all, but while I'm in the first of times\"",
+      "stats": {
+        "likes": 31600,
+        "saves": 3633,
+        "shares": 1285
+      },
+      "why_it_works": "auto-scraped \u2014 not yet analyzed"
     }
   ]
 }
