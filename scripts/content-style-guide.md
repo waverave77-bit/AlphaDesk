@@ -60,6 +60,22 @@ Real examples that prove this works:
   self-deprecating, never "we're all broke together," never
   teen-coded slang.
 
+**On reusing the exact wording (this is allowed, within limits):**
+A single word or generic short phrase ("CEO.", "money talks.", "money
+wins.") is not copyrightable and is not something platform duplicate-
+detection catches — that detection works on video/audio fingerprints,
+not overlay text, and needm_rari literally runs a whole series
+reusing this exact template with different single words. Reusing
+these trend-template words verbatim is fine, not risky, and normal
+practice. The line is: a longer, specific, "someone clearly wrote
+this" line — like bigclaytz's "POV: i told her i partially own 500
+multibillion dollar companies ($100 in the S&P 500)" — is an actual
+constructed joke/observation, not a generic template word, so that
+one should stay original wording, not copied verbatim. Rule of thumb:
+if it's under ~4 words and generic/aspirational, copy it freely. If
+it's a full constructed sentence or specific joke, write an original
+one in the same spirit instead.
+
 ## Format B — Useful-info carousel
 
 **A numbered list or a single real, specific, detailed artifact —
