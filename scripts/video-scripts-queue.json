@@ -1,147 +1,5 @@
 [
   {
-    "id": 1,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "one-word aspirational template (needm_rari-style)",
-    "hook_lines": [
-      {
-        "text": "Investing.",
-        "start": 0,
-        "end": 15
-      }
-    ],
-    "footage_keywords": [
-      "private jet on tarmac",
-      "mercedes benz close up driving",
-      "luxury watch close up wrist",
-      "stack of cash close up",
-      "city skyline at night",
-      "marble bank lobby interior",
-      "designer watch close up"
-    ],
-    "mood": "moody",
-    "caption": "The market's average annual return over the last 50 years is about 10%. You don't need to time it or beat it \u2014 you need to be in it, consistently, for a long time.",
-    "hashtags": [
-      "#investing",
-      "#investing101",
-      "#wealthbuilding",
-      "#compoundinterest",
-      "#financialliteracy"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 2,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "aspirational two-word template (needm_rari-style)",
-    "hook_lines": [
-      {
-        "text": "Old money.",
-        "start": 0,
-        "end": 15
-      }
-    ],
-    "footage_keywords": [
-      "bmw driving city night",
-      "private jet interior",
-      "credit card close up black card",
-      "marble mansion staircase",
-      "luxury car interior dashboard",
-      "city skyline aerial night",
-      "stack of cash close up"
-    ],
-    "mood": "phonk",
-    "caption": "Old money isn't about the amount \u2014 it's about time in the market. A modest amount invested young and left alone for 30+ years usually beats a much larger amount invested late.",
-    "hashtags": [
-      "#wealthbuilding",
-      "#oldmoney",
-      "#investing101",
-      "#compoundinterest",
-      "#financialfreedom"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 7,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
-    "hook_lines": [
-      {
-        "text": "750 credit score. 19 years old.",
-        "start": 0,
-        "end": 15
-      }
-    ],
-    "footage_keywords": [
-      "wall street street sign",
-      "new york stock exchange facade",
-      "private jet on tarmac",
-      "luxury car close up night",
-      "marble bank interior",
-      "designer watch close up",
-      "city skyline at night",
-      "stock exchange trading floor wide shot"
-    ],
-    "mood": "moody",
-    "caption": "A 750 credit score at 19 isn't luck. It's one card, paid off in full, every single month, for two years straight, with utilization under 10%. Payment history alone is 35% of the score. Start now and the number takes care of itself.",
-    "hashtags": [
-      "#creditscore",
-      "#creditbuilding",
-      "#financialliteracy",
-      "#investing",
-      "#moneytips"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 8,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
-    "hook_lines": [
-      {
-        "text": "3 months of expenses. zero stress.",
-        "start": 0,
-        "end": 15
-      }
-    ],
-    "footage_keywords": [
-      "stock exchange trading floor wide shot",
-      "wall street bull statue",
-      "rainy window city drive",
-      "quiet apartment interior night",
-      "cash stack close up",
-      "city lights bokeh",
-      "bank vault door",
-      "wall street street sign"
-    ],
-    "mood": "moody",
-    "caption": "An emergency fund isn't exciting, but 3 months of essential expenses sitting in a high-yield savings account is the difference between a flat tire being an inconvenience and it being a crisis. Start with $500. Build from there.",
-    "hashtags": [
-      "#emergencyfund",
-      "#savingsaccount",
-      "#financialliteracy",
-      "#investing",
-      "#moneytips"
-    ],
-    "status": "pending"
-  },
-  {
     "id": 9,
     "platform_targets": [
       "tiktok",
@@ -153,15 +11,17 @@
       {
         "text": "Shareholder.",
         "start": 0,
-        "end": 6
+        "end": 15
       }
     ],
     "footage_keywords": [
+      "new york stock exchange facade",
       "stock trading floor wide shot",
       "private jet interior",
       "designer watch close up",
       "city skyline at night",
-      "luxury car interior dashboard"
+      "luxury car interior dashboard",
+      "wall street bull statue"
     ],
     "mood": "phonk",
     "caption": "Every share of stock you own makes you a legal part-owner of that company. Buy one share of a company you actually believe in and you stop being just a customer.",
@@ -186,15 +46,17 @@
       {
         "text": "Analyst.",
         "start": 0,
-        "end": 6
+        "end": 15
       }
     ],
     "footage_keywords": [
+      "wall street street sign",
+      "new york stock exchange facade",
       "skyscraper office window at night",
-      "hands typing on laptop close up",
       "financial district aerial view",
-      "coffee cup on desk at night",
-      "marble lobby entrance"
+      "marble lobby entrance",
+      "private jet on tarmac",
+      "luxury watch close up"
     ],
     "mood": "phonk",
     "caption": "Entry-level financial analyst roles start around $60-75K in most major markets. It's not the ceiling, it's the door in. Learn the terminal, learn the model, and the title stops being aspirational.",
@@ -219,15 +81,17 @@
       {
         "text": "I own Amazon. $50 said so.",
         "start": 0,
-        "end": 6
+        "end": 15
       }
     ],
     "footage_keywords": [
+      "new york stock exchange facade",
       "city skyline at dusk",
       "private jet on tarmac",
       "luxury car close up",
       "marble staircase in mansion",
-      "cash stack close up"
+      "cash stack close up",
+      "wall street bull statue"
     ],
     "mood": "moody",
     "caption": "A single share of an S&P 500 index fund gives you partial ownership in Amazon, Apple, Microsoft, and 497 other companies at once. You don't need $10,000 to own a piece of corporate America. You need an account and $50.",
@@ -237,105 +101,6 @@
       "#sp500",
       "#wealthbuilding",
       "#financialliteracy"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 12,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "real-fact flex line over cinematic footage (bigclaytz-style)",
-    "hook_lines": [
-      {
-        "text": "I own real estate. no mortgage.",
-        "start": 0,
-        "end": 6
-      }
-    ],
-    "footage_keywords": [
-      "grand mansion exterior",
-      "marble staircase interior",
-      "city skyline at night",
-      "luxury car in driveway",
-      "private jet on tarmac"
-    ],
-    "mood": "moody",
-    "caption": "A REIT lets you own a legal share of real, income-producing real estate, apartment buildings, malls, data centers, for the price of one share. No mortgage, no tenants, no maintenance calls. Ownership without the overhead.",
-    "hashtags": [
-      "#realestate",
-      "#reit",
-      "#investing",
-      "#wealthbuilding",
-      "#financialliteracy"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 13,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "aspirational quote over grand imagery (youth.investing.network-style)",
-    "hook_lines": [
-      {
-        "text": "Me in 5 years: financially independent.",
-        "start": 0,
-        "end": 6
-      }
-    ],
-    "footage_keywords": [
-      "private jet interior",
-      "city skyline at sunset",
-      "luxury watch close up",
-      "marble bank lobby",
-      "sports car driving at night"
-    ],
-    "mood": "upbeat",
-    "caption": "Financial independence isn't a job title. It's the point where your investments cover your bills, not your paycheck. Fund it now, one contribution at a time, and 'in 5 years' gets a lot closer than it feels.",
-    "hashtags": [
-      "#financialindependence",
-      "#investing",
-      "#wealthbuilding",
-      "#fire",
-      "#financialliteracy"
-    ],
-    "status": "pending"
-  },
-  {
-    "id": 14,
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "based_on_format": "aspirational quote over grand imagery (youth.investing.network-style)",
-    "hook_lines": [
-      {
-        "text": "The best investors are boring investors.",
-        "start": 0,
-        "end": 6
-      }
-    ],
-    "footage_keywords": [
-      "marble bank building exterior",
-      "grand staircase interior",
-      "city skyscraper aerial at night",
-      "luxury car parked",
-      "private jet on tarmac"
-    ],
-    "mood": "upbeat",
-    "caption": "The best investors aren't chasing hot stocks, they're automating a contribution every paycheck and ignoring the noise for 20 years. Boring, consistent, and it's exactly why it works.",
-    "hashtags": [
-      "#investing",
-      "#wealthbuilding",
-      "#stockmarket",
-      "#financialliteracy",
-      "#longterminvesting"
     ],
     "status": "pending"
   }

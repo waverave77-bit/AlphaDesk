@@ -74,5 +74,62 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 9,
+    "video": "hook-09.mp4",
+    "video_music": "hook-09-music.mp4",
+    "caption": "Every share of stock you own makes you a legal part-owner of that company. Buy one share of a company you actually believe in and you stop being just a customer.",
+    "hashtags": [
+      "#shareholder",
+      "#investing",
+      "#stockmarket",
+      "#wealthbuilding",
+      "#financialliteracy"
+    ],
+    "based_on_format": "one-word aspirational template (needm_rari 'CEO.'-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 10,
+    "video": "hook-10.mp4",
+    "video_music": "hook-10-music.mp4",
+    "caption": "Entry-level financial analyst roles start around $60-75K in most major markets. It's not the ceiling, it's the door in. Learn the terminal, learn the model, and the title stops being aspirational.",
+    "hashtags": [
+      "#analyst",
+      "#financecareers",
+      "#investmentbanking",
+      "#wallstreet",
+      "#financialliteracy"
+    ],
+    "based_on_format": "one-word aspirational template (needm_rari 'CEO.'-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 11,
+    "video": "hook-11.mp4",
+    "video_music": "hook-11-music.mp4",
+    "caption": "A single share of an S&P 500 index fund gives you partial ownership in Amazon, Apple, Microsoft, and 497 other companies at once. You don't need $10,000 to own a piece of corporate America. You need an account and $50.",
+    "hashtags": [
+      "#indexfunds",
+      "#investing",
+      "#sp500",
+      "#wealthbuilding",
+      "#financialliteracy"
+    ],
+    "based_on_format": "real-fact flex line over cinematic footage (bigclaytz-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]
