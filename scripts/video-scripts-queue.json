@@ -94,5 +94,211 @@
     "caption": "You don't need to pick 10 stocks to start investing seriously. The setup professionals recommend most for beginners is one low-cost target-date or total-market index fund — instant diversification, minimal fees. $50 a month clears the bar. The 2026 contribution limit is $7,000/year, so there's plenty of room to grow.",
     "hashtags": ["#rothira", "#investing101", "#indexfunds", "#wealthbuilding", "#personalfinance"],
     "status": "pending"
+  },
+  {
+    "id": 7,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      { "text": "750 credit score. 19 years old.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["luxury car close up", "city skyline at night", "marble bank interior", "private jet tarmac", "watch close up wrist"],
+    "mood": "moody",
+    "caption": "A 750 credit score at 19 isn't luck. It's one card, paid off in full, every single month, for two years straight, with utilization under 10%. Payment history alone is 35% of the score. Start now and the number takes care of itself.",
+    "hashtags": ["#creditscore", "#creditbuilding", "#financialliteracy", "#investing", "#moneytips"],
+    "status": "pending"
+  },
+  {
+    "id": 8,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      { "text": "3 months of expenses. zero stress.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["rainy window city drive", "quiet apartment interior night", "bank vault door", "cash stack close up", "city lights bokeh"],
+    "mood": "moody",
+    "caption": "An emergency fund isn't exciting, but 3 months of essential expenses sitting in a high-yield savings account is the difference between a flat tire being an inconvenience and it being a crisis. Start with $500. Build from there.",
+    "hashtags": ["#emergencyfund", "#savingsaccount", "#financialliteracy", "#investing", "#moneytips"],
+    "status": "pending"
+  },
+  {
+    "id": 9,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "one-word aspirational template (needm_rari 'CEO.'-style)",
+    "hook_lines": [
+      { "text": "Shareholder.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["stock trading floor wide shot", "private jet interior", "designer watch close up", "city skyline at night", "luxury car interior dashboard"],
+    "mood": "phonk",
+    "caption": "Every share of stock you own makes you a legal part-owner of that company. Buy one share of a company you actually believe in and you stop being just a customer.",
+    "hashtags": ["#shareholder", "#investing", "#stockmarket", "#wealthbuilding", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 10,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "one-word aspirational template (needm_rari 'CEO.'-style)",
+    "hook_lines": [
+      { "text": "Analyst.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["skyscraper office window at night", "hands typing on laptop close up", "financial district aerial view", "coffee cup on desk at night", "marble lobby entrance"],
+    "mood": "phonk",
+    "caption": "Entry-level financial analyst roles start around $60-75K in most major markets. It's not the ceiling, it's the door in. Learn the terminal, learn the model, and the title stops being aspirational.",
+    "hashtags": ["#analyst", "#financecareers", "#investmentbanking", "#wallstreet", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 11,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "real-fact flex line over cinematic footage (bigclaytz-style)",
+    "hook_lines": [
+      { "text": "I own Amazon. $50 said so.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["city skyline at dusk", "private jet on tarmac", "luxury car close up", "marble staircase in mansion", "cash stack close up"],
+    "mood": "moody",
+    "caption": "A single share of an S&P 500 index fund gives you partial ownership in Amazon, Apple, Microsoft, and 497 other companies at once. You don't need $10,000 to own a piece of corporate America. You need an account and $50.",
+    "hashtags": ["#indexfunds", "#investing", "#sp500", "#wealthbuilding", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 12,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "real-fact flex line over cinematic footage (bigclaytz-style)",
+    "hook_lines": [
+      { "text": "I own real estate. no mortgage.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["grand mansion exterior", "marble staircase interior", "city skyline at night", "luxury car in driveway", "private jet on tarmac"],
+    "mood": "moody",
+    "caption": "A REIT lets you own a legal share of real, income-producing real estate, apartment buildings, malls, data centers, for the price of one share. No mortgage, no tenants, no maintenance calls. Ownership without the overhead.",
+    "hashtags": ["#realestate", "#reit", "#investing", "#wealthbuilding", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 13,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "aspirational quote over grand imagery (youth.investing.network-style)",
+    "hook_lines": [
+      { "text": "Me in 5 years: financially independent.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["private jet interior", "city skyline at sunset", "luxury watch close up", "marble bank lobby", "sports car driving at night"],
+    "mood": "upbeat",
+    "caption": "Financial independence isn't a job title. It's the point where your investments cover your bills, not your paycheck. Fund it now, one contribution at a time, and 'in 5 years' gets a lot closer than it feels.",
+    "hashtags": ["#financialindependence", "#investing", "#wealthbuilding", "#fire", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 14,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "aspirational quote over grand imagery (youth.investing.network-style)",
+    "hook_lines": [
+      { "text": "The best investors are boring investors.", "start": 0, "end": 6 }
+    ],
+    "footage_keywords": ["marble bank building exterior", "grand staircase interior", "city skyscraper aerial at night", "luxury car parked", "private jet on tarmac"],
+    "mood": "upbeat",
+    "caption": "The best investors aren't chasing hot stocks, they're automating a contribution every paycheck and ignoring the noise for 20 years. Boring, consistent, and it's exactly why it works.",
+    "hashtags": ["#investing", "#wealthbuilding", "#stockmarket", "#financialliteracy", "#longterminvesting"],
+    "status": "pending"
+  },
+  {
+    "id": 15,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "hook_lines": [
+      { "text": "Financial Analyst — $60K-$75K to start", "start": 0, "end": 3 },
+      { "text": "Actuary — $65K-$85K to start", "start": 3, "end": 6 },
+      { "text": "Accountant (CPA track) — $55K-$70K to start", "start": 6, "end": 9 },
+      { "text": "Compliance Analyst — $58K-$72K to start", "start": 9, "end": 12 },
+      { "text": "Wealth Management Associate — $50K-$65K + commission", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["financial analyst at desk with monitors", "actuary with charts and calculator", "accountant reviewing tax documents", "compliance officer reviewing paperwork", "wealth advisor meeting with client"],
+    "mood": "upbeat",
+    "caption": "Entry-level finance doesn't start at $30K. Financial analysts, actuaries, and CPA-track accountants routinely start between $55K and $85K depending on market, before bonuses. The path in isn't glamorous, but the pay floor is higher than most people assume.",
+    "hashtags": ["#financecareers", "#investmentbanking", "#accounting", "#actuary", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 16,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "hook_lines": [
+      { "text": "Rent (1BR, national avg) — ~$1,500/mo", "start": 0, "end": 3 },
+      { "text": "Utilities — ~$150-200/mo", "start": 3, "end": 6 },
+      { "text": "Renters insurance — ~$15-20/mo", "start": 6, "end": 9 },
+      { "text": "Security deposit — 1 month's rent upfront", "start": 9, "end": 12 },
+      { "text": "Internet — ~$50-60/mo", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["small apartment interior", "utility bill on kitchen counter", "insurance document close up", "moving boxes in apartment", "wifi router on desk"],
+    "mood": "lofi",
+    "caption": "Rent is never the whole number. Budget for $1,500 rent and the real monthly floor is closer to $1,700-1,750 once utilities, insurance, and internet are added, plus a full month's rent upfront for the deposit. Know the real total before you sign anything.",
+    "hashtags": ["#firstapartment", "#budgeting", "#rentvsbuy", "#financialliteracy", "#moneymanagement"],
+    "status": "pending"
+  },
+  {
+    "id": 17,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "single real example artifact as proof (tyfinancial-style)",
+    "hook_lines": [
+      { "text": "Example brokerage statement: $2,400 total value", "start": 0, "end": 3 },
+      { "text": "$2,000 in a total market index fund", "start": 3, "end": 6 },
+      { "text": "$400 in cash, uninvested", "start": 6, "end": 9 },
+      { "text": "$18 in dividends, automatically reinvested", "start": 9, "end": 12 },
+      { "text": "Contributions: $200/month for 12 months", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["brokerage app screen close up", "phone showing investment chart", "hand holding phone with stock app", "laptop with investment dashboard", "notebook tracking contributions"],
+    "mood": "lofi",
+    "caption": "This is what a realistic beginner brokerage account looks like after a year of $200/month contributions to a total market index fund: about $2,400 total value, with a small dividend reinvestment already compounding. Nothing flashy, just consistent deposits and time.",
+    "hashtags": ["#investing", "#brokerageaccount", "#indexfunds", "#beginnerinvestor", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 18,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "single real example artifact as proof (tyfinancial-style)",
+    "hook_lines": [
+      { "text": "Example: $27,000 in student loans (nat'l avg)", "start": 0, "end": 3 },
+      { "text": "5.5% interest rate (federal direct loan rate)", "start": 3, "end": 6 },
+      { "text": "Standard 10-year plan: ~$293/month", "start": 6, "end": 9 },
+      { "text": "Total paid by payoff: ~$35,000", "start": 9, "end": 12 },
+      { "text": "That's $8,000 in interest alone", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["student loan statement on laptop", "graduation cap on desk with papers", "calculator with loan documents", "phone loan calculator app", "desk with textbooks and laptop"],
+    "mood": "lofi",
+    "caption": "The average federal student loan balance is around $27,000. At a 5.5% federal interest rate on the standard 10-year plan, that's about $293/month and roughly $8,000 in interest paid on top of what you borrowed. Every semester you skip borrowing for is real money saved later.",
+    "hashtags": ["#studentloans", "#collegedebt", "#financialliteracy", "#budgeting", "#personalfinance"],
+    "status": "pending"
+  },
+  {
+    "id": 19,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "numbered listicle carousel with cost/time/difficulty (plan_pe6-style)",
+    "hook_lines": [
+      { "text": "#5 Investopedia — Free, self-paced, EASY", "start": 0, "end": 3 },
+      { "text": "#4 SEC Investor.gov — Free, 1-2 hrs, EASY", "start": 3, "end": 6 },
+      { "text": "#3 Bogleheads Wiki — Free, self-paced, MEDIUM", "start": 6, "end": 9 },
+      { "text": "#2 Khan Academy Personal Finance — Free, 4 hrs, EASY", "start": 9, "end": 12 },
+      { "text": "#1 Your brokerage's education center — Free, self-paced, EASY", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["laptop with education website", "phone with finance app open", "notebook and laptop studying", "desk with coffee and laptop", "person reading on tablet"],
+    "mood": "upbeat",
+    "caption": "You don't need to spend a dollar to start learning real investing. Investopedia, SEC.gov's Investor.gov, the Bogleheads wiki, and Khan Academy's personal finance course are all free and used by actual professionals to teach the fundamentals. Zero excuse not to start today.",
+    "hashtags": ["#investing101", "#financialliteracy", "#learninvesting", "#personalfinance", "#moneytips"],
+    "status": "pending"
+  },
+  {
+    "id": 20,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "numbered listicle carousel with cost/time/difficulty (plan_pe6-style)",
+    "hook_lines": [
+      { "text": "#5 Credit card balance — avg 24% APR", "start": 0, "end": 3 },
+      { "text": "#4 No emergency fund — 1 in 3 have $0 saved", "start": 3, "end": 6 },
+      { "text": "#3 Skipping 401k match — up to 100% instant return missed", "start": 6, "end": 9 },
+      { "text": "#2 Only minimum payments — turns $5K debt into $12K+ paid", "start": 9, "end": 12 },
+      { "text": "#1 Waiting to invest — a 10-year delay can cost $100K+ by retirement", "start": 12, "end": 15 }
+    ],
+    "footage_keywords": ["credit card statement close up", "empty piggy bank", "401k paperwork on desk", "calculator with debt numbers", "clock and calendar with money"],
+    "mood": "upbeat",
+    "caption": "Small money mistakes compound into real losses. The average credit card APR is around 24%. A third of people have $0 in emergency savings. Skipping an employer 401k match means turning down free money. None of these are secrets, they're just costly to ignore.",
+    "hashtags": ["#moneymistakes", "#financialliteracy", "#creditcarddebt", "#401k", "#personalfinance"],
+    "status": "pending"
   }
 ]
