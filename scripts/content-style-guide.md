@@ -49,8 +49,8 @@ Real examples that prove this works:
   they sound like a financial-literacy caption. "money talks.",
   "CEO.", "the top 1% think differently." are RIGHT — simple, punchy,
   aspirational, almost cliché.
-- **Video length: minimum 10 seconds.** The single hook line spans
-  the whole thing (e.g. `start: 0, end: 10`), never just 6. Use 5-6
+- **Video length: minimum 15 seconds.** The single hook line spans
+  the whole thing (e.g. `start: 0, end: 15`), never shorter. Use 7-8
   footage_keywords at roughly 2s/clip to fill it — more clips, not
   slower cuts.
 - Background is those 5-6 quick clips cut fast (~2s each), never one
@@ -147,8 +147,8 @@ multi-beat explainer.
 
 **Format A entries go in `scripts/video-scripts-queue.json`, rendered
 by `create_hook_video.py` (produces an actual video).**
-- One hook_lines entry spanning the full (10s minimum) duration,
-  5-6 footage_keywords for fast ~2s-per-clip cuts.
+- One hook_lines entry spanning the full (15s minimum) duration,
+  7-8 footage_keywords for fast ~2s-per-clip cuts.
 - Text has no background box — plain white with a black outline
   (already the default in render_text_png).
 - Source clips arrive at different native frame rates; the pipeline
