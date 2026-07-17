@@ -142,6 +142,40 @@ def build_testsrc_clip(dest, duration, seed):
     ], check=True, capture_output=True)
 
 
+def balanced_wrap(draw, text, font, max_width):
+    """Wraps to the fewest lines that fit max_width, picking the split point
+    that minimizes the longest resulting line — a plain greedy fill-then-
+    wrap can strand a single short word alone on its own line (e.g. "750
+    credit score. 19 years" / "old."), which reads badly for a short punchy
+    hook. Falls back to greedy multi-line wrap only if no 2-line split fits."""
+    words = text.split()
+    if not words:
+        return []
+    if draw.textlength(" ".join(words), font=font) <= max_width:
+        return [" ".join(words)]
+
+    best_split, best_max = None, float("inf")
+    for i in range(1, len(words)):
+        line1, line2 = " ".join(words[:i]), " ".join(words[i:])
+        w1, w2 = draw.textlength(line1, font=font), draw.textlength(line2, font=font)
+        if w1 <= max_width and w2 <= max_width and max(w1, w2) < best_max:
+            best_split, best_max = (line1, line2), max(w1, w2)
+    if best_split:
+        return list(best_split)
+
+    lines, current = [], ""
+    for word in words:
+        trial = f"{current} {word}".strip()
+        if draw.textlength(trial, font=font) > max_width and current:
+            lines.append(current)
+            current = word
+        else:
+            current = trial
+    if current:
+        lines.append(current)
+    return lines
+
+
 def render_text_png(text, path):
     """Bold centered text with a black outline (no background box) —
     transparent elsewhere, composited onto the video with ffmpeg's
@@ -153,19 +187,7 @@ def render_text_png(text, path):
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(FONT_PATH, 64)
 
-    # Wrap long lines to ~80% of frame width instead of overflowing it.
-    words = text.split()
-    lines, current = [], ""
-    max_width = WIDTH * 0.8
-    for word in words:
-        trial = f"{current} {word}".strip()
-        if draw.textlength(trial, font=font) > max_width and current:
-            lines.append(current)
-            current = word
-        else:
-            current = trial
-    if current:
-        lines.append(current)
+    lines = balanced_wrap(draw, text, font, WIDTH * 0.8)
 
     line_height = 78
     block_height = line_height * len(lines)

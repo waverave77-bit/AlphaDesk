@@ -81,15 +81,18 @@
       {
         "text": "750 credit score. 19 years old.",
         "start": 0,
-        "end": 6
+        "end": 15
       }
     ],
     "footage_keywords": [
-      "luxury car close up",
-      "city skyline at night",
+      "wall street street sign",
+      "new york stock exchange facade",
+      "private jet on tarmac",
+      "luxury car close up night",
       "marble bank interior",
-      "private jet tarmac",
-      "watch close up wrist"
+      "designer watch close up",
+      "city skyline at night",
+      "stock exchange trading floor wide shot"
     ],
     "mood": "moody",
     "caption": "A 750 credit score at 19 isn't luck. It's one card, paid off in full, every single month, for two years straight, with utilization under 10%. Payment history alone is 35% of the score. Start now and the number takes care of itself.",
@@ -114,15 +117,18 @@
       {
         "text": "3 months of expenses. zero stress.",
         "start": 0,
-        "end": 6
+        "end": 15
       }
     ],
     "footage_keywords": [
+      "stock exchange trading floor wide shot",
+      "wall street bull statue",
       "rainy window city drive",
       "quiet apartment interior night",
-      "bank vault door",
       "cash stack close up",
-      "city lights bokeh"
+      "city lights bokeh",
+      "bank vault door",
+      "wall street street sign"
     ],
     "mood": "moody",
     "caption": "An emergency fund isn't exciting, but 3 months of essential expenses sitting in a high-yield savings account is the difference between a flat tire being an inconvenience and it being a crisis. Start with $500. Build from there.",

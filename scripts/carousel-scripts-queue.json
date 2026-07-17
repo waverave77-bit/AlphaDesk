@@ -234,37 +234,43 @@
     "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
     "hook_lines": [
       {
-        "text": "Financial Analyst \u2014 $60K-$75K to start",
+        "text": "Entry-level finance jobs \u2014 real starting pay",
         "start": 0,
         "end": 3
       },
       {
-        "text": "Actuary \u2014 $65K-$85K to start",
+        "text": "Financial Analyst \u2014 $60K-$75K to start",
         "start": 3,
         "end": 6
       },
       {
-        "text": "Accountant (CPA track) \u2014 $55K-$70K to start",
+        "text": "Actuary \u2014 $65K-$85K to start",
         "start": 6,
         "end": 9
       },
       {
-        "text": "Compliance Analyst \u2014 $58K-$72K to start",
+        "text": "Accountant (CPA track) \u2014 $55K-$70K to start",
         "start": 9,
         "end": 12
       },
       {
-        "text": "Wealth Management Associate \u2014 $50K-$65K + commission",
+        "text": "Compliance Analyst \u2014 $58K-$72K to start",
         "start": 12,
         "end": 15
+      },
+      {
+        "text": "Wealth Management Associate \u2014 $50K-$65K + commission",
+        "start": 15,
+        "end": 18
       }
     ],
     "footage_keywords": [
-      "financial analyst at desk with monitors",
-      "actuary with charts and calculator",
-      "accountant reviewing tax documents",
-      "compliance officer reviewing paperwork",
-      "wealth advisor meeting with client"
+      "new york stock exchange facade",
+      "wall street street sign",
+      "private jet on tarmac",
+      "luxury car close up night",
+      "marble bank lobby interior",
+      "designer watch close up"
     ],
     "mood": "upbeat",
     "caption": "Entry-level finance doesn't start at $30K. Financial analysts, actuaries, and CPA-track accountants routinely start between $55K and $85K depending on market, before bonuses. The path in isn't glamorous, but the pay floor is higher than most people assume.",
@@ -287,32 +293,38 @@
     "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
     "hook_lines": [
       {
-        "text": "Rent (1BR, national avg) \u2014 ~$1,500/mo",
+        "text": "What it actually costs to live alone",
         "start": 0,
         "end": 3
       },
       {
-        "text": "Utilities \u2014 ~$150-200/mo",
+        "text": "Rent (1BR, national avg) \u2014 ~$1,500/mo",
         "start": 3,
         "end": 6
       },
       {
-        "text": "Renters insurance \u2014 ~$15-20/mo",
+        "text": "Utilities \u2014 ~$150-200/mo",
         "start": 6,
         "end": 9
       },
       {
-        "text": "Security deposit \u2014 1 month's rent upfront",
+        "text": "Renters insurance \u2014 ~$15-20/mo",
         "start": 9,
         "end": 12
       },
       {
-        "text": "Internet \u2014 ~$50-60/mo",
+        "text": "Security deposit \u2014 1 month's rent upfront",
         "start": 12,
         "end": 15
+      },
+      {
+        "text": "Internet \u2014 ~$50-60/mo",
+        "start": 15,
+        "end": 18
       }
     ],
     "footage_keywords": [
+      "wall street street sign",
       "private jet on tarmac",
       "luxury car close up night",
       "designer watch close up",
@@ -446,37 +458,43 @@
     "based_on_format": "numbered listicle carousel with cost/time/difficulty (plan_pe6-style)",
     "hook_lines": [
       {
-        "text": "#5 Investopedia \u2014 Free, self-paced, EASY",
+        "text": "Top 5 free ways to learn real investing",
         "start": 0,
         "end": 3
       },
       {
-        "text": "#4 SEC Investor.gov \u2014 Free, 1-2 hrs, EASY",
+        "text": "#5 Investopedia \u2014 Free, self-paced, EASY",
         "start": 3,
         "end": 6
       },
       {
-        "text": "#3 Bogleheads Wiki \u2014 Free, self-paced, MEDIUM",
+        "text": "#4 SEC Investor.gov \u2014 Free, 1-2 hrs, EASY",
         "start": 6,
         "end": 9
       },
       {
-        "text": "#2 Khan Academy Personal Finance \u2014 Free, 4 hrs, EASY",
+        "text": "#3 Bogleheads Wiki \u2014 Free, self-paced, MEDIUM",
         "start": 9,
         "end": 12
       },
       {
-        "text": "#1 Your brokerage's education center \u2014 Free, self-paced, EASY",
+        "text": "#2 Khan Academy Personal Finance \u2014 Free, 4 hrs, EASY",
         "start": 12,
         "end": 15
+      },
+      {
+        "text": "#1 Your brokerage's education center \u2014 Free, self-paced, EASY",
+        "start": 15,
+        "end": 18
       }
     ],
     "footage_keywords": [
-      "laptop with education website",
-      "phone with finance app open",
-      "notebook and laptop studying",
-      "desk with coffee and laptop",
-      "person reading on tablet"
+      "new york stock exchange facade",
+      "stock exchange trading floor wide shot",
+      "private jet on tarmac",
+      "luxury watch close up",
+      "marble bank lobby interior",
+      "city skyline aerial night"
     ],
     "mood": "upbeat",
     "caption": "You don't need to spend a dollar to start learning real investing. Investopedia, SEC.gov's Investor.gov, the Bogleheads wiki, and Khan Academy's personal finance course are all free and used by actual professionals to teach the fundamentals. Zero excuse not to start today.",
@@ -499,32 +517,38 @@
     "based_on_format": "numbered listicle carousel with cost/time/difficulty (plan_pe6-style)",
     "hook_lines": [
       {
-        "text": "#5 Credit card balance \u2014 avg 24% APR",
+        "text": "Top 5 money mistakes costing you thousands",
         "start": 0,
         "end": 3
       },
       {
-        "text": "#4 No emergency fund \u2014 1 in 3 have $0 saved",
+        "text": "#5 Credit card balance \u2014 avg 24% APR",
         "start": 3,
         "end": 6
       },
       {
-        "text": "#3 Skipping 401k match \u2014 up to 100% instant return missed",
+        "text": "#4 No emergency fund \u2014 1 in 3 have $0 saved",
         "start": 6,
         "end": 9
       },
       {
-        "text": "#2 Only minimum payments \u2014 turns $5K debt into $12K+ paid",
+        "text": "#3 Skipping 401k match \u2014 up to 100% instant return missed",
         "start": 9,
         "end": 12
       },
       {
-        "text": "#1 Waiting to invest \u2014 a 10-year delay can cost $100K+ by retirement",
+        "text": "#2 Only minimum payments \u2014 turns $5K debt into $12K+ paid",
         "start": 12,
         "end": 15
+      },
+      {
+        "text": "#1 Waiting to invest \u2014 a 10-year delay can cost $100K+ by retirement",
+        "start": 15,
+        "end": 18
       }
     ],
     "footage_keywords": [
+      "wall street bull statue",
       "bmw driving city night",
       "private jet interior",
       "credit card close up black card",

@@ -91,7 +91,24 @@ def cover_resize(img):
 
 
 def wrap_text(draw, text, font, max_width):
+    """Balanced 2-line wrap — picks the split point that minimizes the
+    longest resulting line, instead of greedily filling the first line
+    (which can strand a lone short word alone on the second line)."""
     words = text.split()
+    if not words:
+        return []
+    if draw.textlength(" ".join(words), font=font) <= max_width:
+        return [" ".join(words)]
+
+    best_split, best_max = None, float("inf")
+    for i in range(1, len(words)):
+        line1, line2 = " ".join(words[:i]), " ".join(words[i:])
+        w1, w2 = draw.textlength(line1, font=font), draw.textlength(line2, font=font)
+        if w1 <= max_width and w2 <= max_width and max(w1, w2) < best_max:
+            best_split, best_max = (line1, line2), max(w1, w2)
+    if best_split:
+        return list(best_split)
+
     lines, current = [], ""
     for word in words:
         trial = f"{current} {word}".strip()

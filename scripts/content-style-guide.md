@@ -53,11 +53,14 @@ Real examples that prove this works:
   the whole thing (e.g. `start: 0, end: 15`), never shorter. Use 7-8
   footage_keywords at roughly 2s/clip to fill it — more clips, not
   slower cuts.
-- Background is those 5-6 quick clips cut fast (~2s each), never one
+- Background is those 7-8 quick clips cut fast (~2s each), never one
   long static shot. Luxury cars, private jets (tarmac or interior),
   cash (stacks, counting, close-ups), expensive watches, city
   skylines at night, grand old-money architecture (banks, manors,
-  marble staircases). Aesthetic and cinematic, not stock-photo
+  marble staircases) — **and Wall Street/financial-district imagery
+  specifically (NYSE facade, Wall Street street sign, trading floor,
+  the bull statue)**, mixed into every clip rotation, not just the
+  generic luxury set. Aesthetic and cinematic, not stock-photo
   generic.
 - Text rendering: plain bold white text with a thin black outline,
   centered. No background box behind it — the outline alone is what
@@ -111,6 +114,15 @@ Real examples:
   detailed thing beats generic advice every time.
 
 **Rules:**
+- **Slide 1 is always a title/hook slide** — e.g. "Top 5 finance jobs
+  that pay the most" — that tells the swiper what the countdown or
+  list actually is, BEFORE the numbered items start. A carousel that
+  opens straight on "#5 Credit card balance — avg 24% APR" with no
+  title has no hook — the swiper has no idea what they're looking at.
+  Every "Top 5 X" or numbered-listicle carousel needs this; a single-
+  real-artifact carousel (tyfinancial-style) is the one exception,
+  since its first line ("Example: $27,000 in student loans") already
+  IS the context-setting title.
 - Each slide is one item: one job, one certification, one fact — with
   a real, specific number attached (pay range, cost, time, percentage).
   No slide should contain generic advice with no number attached.
