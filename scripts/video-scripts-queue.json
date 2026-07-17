@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "id": 1,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      { "text": "your paycheck lied to you.", "start": 0, "end": 3 },
+      { "text": "$15/hr. 40 hours. do the math.", "start": 3, "end": 7 },
+      { "text": "then taxes took a bite.", "start": 7, "end": 11 },
+      { "text": "here's where the rest went.", "start": 11, "end": 14 }
+    ],
+    "footage_keywords": ["city night drive", "empty parking lot dusk", "neon store sign close up", "hands counting cash"],
+    "mood": "moody",
+    "caption": "You worked 40 hours at $15/hr. That's $600. Your check says $487. That's not a mistake — that's federal tax, FICA, and maybe state tax doing their thing before you ever see it. Know the difference between gross and net before you budget a single dollar.",
+    "hashtags": ["#paycheck", "#firstjob", "#taxes101", "#genzmoney", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 2,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      { "text": "you don't need $1,000 to start.", "start": 0, "end": 3 },
+      { "text": "you need $10 and a plan.", "start": 3, "end": 6 },
+      { "text": "compound interest doesn't care about your excuse.", "start": 6, "end": 11 },
+      { "text": "start today. thank yourself at 30.", "start": 11, "end": 15 }
+    ],
+    "footage_keywords": ["coffee shop window rain", "phone banking app close up", "city skyline sunset", "walking downtown sidewalk"],
+    "mood": "moody",
+    "caption": "Waiting for the 'right amount' to start saving is the #1 excuse that costs you the most. $10/week at 18 becomes real money by 30 — not because $10 is magic, but because starting now means time does the heavy lifting. Open the account before you have a reason to.",
+    "hashtags": ["#compoundinterest", "#savingmoney", "#genzfinance", "#startsmall", "#moneytips"],
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "hook_lines": [
+      { "text": "5 side hustles paying real money.", "start": 0, "end": 3 },
+      { "text": "no, not 'become an influencer.'", "start": 3, "end": 6 },
+      { "text": "actual jobs. actual numbers.", "start": 6, "end": 9 },
+      { "text": "keep watching.", "start": 9, "end": 12 }
+    ],
+    "footage_keywords": ["teen mowing lawn", "dog walking park", "tutoring desk laptop", "farmers market stall"],
+    "mood": "upbeat",
+    "caption": "Forget the vague 'start a side hustle' advice. Dog walking: $15-20/walk. Lawn care: $30-50/yard. Tutoring: $20-40/hr. Selling on Depop: 70-90% of listed price after fees. Pick one, start this week, and track every dollar — that's how you build your first real savings.",
+    "hashtags": ["#sidehustle", "#teenmoney", "#summerjob", "#genzmoney", "#makemoney"],
+    "status": "pending"
+  },
+  {
+    "id": 4,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "hook_lines": [
+      { "text": "3 habits, one number each.", "start": 0, "end": 2 },
+      { "text": "habit 1: they track every dollar.", "start": 2, "end": 6 },
+      { "text": "habit 2: they save before they spend.", "start": 6, "end": 10 },
+      { "text": "habit 3: they know their number.", "start": 10, "end": 13 }
+    ],
+    "footage_keywords": ["notebook budget writing close up", "phone calculator app", "piggy bank coins table", "laptop spreadsheet screen"],
+    "mood": "upbeat",
+    "caption": "The difference between people who build wealth and people who don't isn't income — it's habits. Track every dollar for one month. Save the first 10% the second you get paid, not what's 'left over.' Know your net worth number, even if it's small. Small habits compound into big gaps.",
+    "hashtags": ["#moneyhabits", "#budgeting101", "#wealthbuilding", "#genzfinance", "#financialliteracy"],
+    "status": "pending"
+  },
+  {
+    "id": 5,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "single real artifact as proof (tyfinancial-style)",
+    "hook_lines": [
+      { "text": "this is my actual budget spreadsheet.", "start": 0, "end": 3 },
+      { "text": "every category. every real number.", "start": 3, "end": 6 },
+      { "text": "not a template. what I actually spend.", "start": 6, "end": 10 },
+      { "text": "steal this format — link's on my page.", "start": 10, "end": 14 }
+    ],
+    "footage_keywords": ["laptop spreadsheet close up desk", "hand scrolling phone budget app", "desk lamp study night", "coffee cup notebook"],
+    "mood": "lofi",
+    "caption": "Here's my real budget, categories and all — rent, food, subscriptions, savings, the works. I'm not telling you to copy my numbers, I'm showing you the structure so you can build your own. Screenshot this, make your own version, and actually use it.",
+    "hashtags": ["#budgeting", "#realbudget", "#moneytips", "#genzmoney", "#personalfinance"],
+    "status": "pending"
+  },
+  {
+    "id": 6,
+    "platform_targets": ["tiktok", "instagram_reels", "youtube_shorts"],
+    "based_on_format": "single real artifact as proof (tyfinancial-style)",
+    "hook_lines": [
+      { "text": "this is my actual roth ira breakdown.", "start": 0, "end": 3 },
+      { "text": "every fund. every percentage.", "start": 3, "end": 6 },
+      { "text": "started with $50. still building.", "start": 6, "end": 10 },
+      { "text": "full breakdown on my page.", "start": 10, "end": 13 }
+    ],
+    "footage_keywords": ["phone investing app close up", "desk plant laptop morning", "hand holding phone chart screen", "quiet home office"],
+    "mood": "lofi",
+    "caption": "Here's my actual Roth IRA — the funds, the percentages, all of it. I started with $50 because that's what I had, not because it was the 'right' amount. A real portfolio beats a hypothetical one every time. Full breakdown is on my page if you want to build your own.",
+    "hashtags": ["#rothira", "#investing101", "#genzinvesting", "#personalfinance", "#moneytips"],
+    "status": "pending"
+  }
+]
