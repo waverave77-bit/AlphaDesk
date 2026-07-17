@@ -36,5 +36,43 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 7,
+    "video": "hook-07.mp4",
+    "video_music": "hook-07-music.mp4",
+    "caption": "A 750 credit score at 19 isn't luck. It's one card, paid off in full, every single month, for two years straight, with utilization under 10%. Payment history alone is 35% of the score. Start now and the number takes care of itself.",
+    "hashtags": [
+      "#creditscore",
+      "#creditbuilding",
+      "#financialliteracy",
+      "#investing",
+      "#moneytips"
+    ],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 8,
+    "video": "hook-08.mp4",
+    "video_music": "hook-08-music.mp4",
+    "caption": "An emergency fund isn't exciting, but 3 months of essential expenses sitting in a high-yield savings account is the difference between a flat tire being an inconvenience and it being a crisis. Start with $500. Build from there.",
+    "hashtags": [
+      "#emergencyfund",
+      "#savingsaccount",
+      "#financialliteracy",
+      "#investing",
+      "#moneytips"
+    ],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]
