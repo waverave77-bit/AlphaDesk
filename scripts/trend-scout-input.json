@@ -66,6 +66,19 @@
         "shares": 20000
       },
       "why_it_works": "auto-scraped \u2014 not yet analyzed"
+    },
+    {
+      "platform": "tiktok",
+      "account": "plan_pe6",
+      "format": "auto-scraped \u2014 format/style not yet classified, review before use",
+      "hook_text": "#finance #prep #highschool #wharton #certificates",
+      "audio_note": "instrumental/music or no clear speech detected",
+      "stats": {
+        "likes": 2422,
+        "saves": 1530,
+        "shares": 119
+      },
+      "why_it_works": "auto-scraped \u2014 not yet analyzed"
     }
   ]
 }
