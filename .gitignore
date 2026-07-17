@@ -47,6 +47,10 @@ __pycache__/
 !/stock-footage/movie-clips/manifest.json
 !/stock-footage/movie-clips/.gitkeep
 
+# real audio tracks used to mux music into IG/YouTube renders — same
+# copyright consideration as movie-clips, local rendering use only
+/stock-footage/audio/*
+
 # vercel
 .vercel
 

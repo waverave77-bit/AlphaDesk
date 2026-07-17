@@ -38,10 +38,21 @@ entries to stock-footage/movie-clips/manifest.json:
 "start"/"end" are the seconds within that source file to extract. With
 --use-movie-clips, each footage_keyword is matched against "tags"
 first (falling back to Pexels/placeholder if nothing matches).
+
+Audio (stock-footage/audio/, gitignored — same copyright-review
+consideration as movie clips, local rendering only): every render
+produces TWO files — the plain silent one (used for TikTok, which you
+post manually and add a real in-app sound to yourself, since TikTok's
+API has no way to attach one programmatically) and a second
+"-music.mp4" copy with a track muxed in (used by the Instagram and
+YouTube auto-posters). Tracks are picked round-robin from whatever
+files sit in stock-footage/audio/ — drop more in any time. --music
+overrides the rotation with one fixed track for the whole batch.
 """
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -56,6 +67,7 @@ VIDEOS_QUEUE = os.path.join(REPO, "scripts", "hook-videos-queue.json")
 OUTPUT_DIR = os.path.join(REPO, "public", "hook-videos")
 MOVIE_CLIPS_DIR = os.path.join(REPO, "stock-footage", "movie-clips")
 MOVIE_CLIPS_MANIFEST = os.path.join(MOVIE_CLIPS_DIR, "manifest.json")
+AUDIO_DIR = os.path.join(REPO, "stock-footage", "audio")
 WIDTH, HEIGHT = 1080, 1920
 FONT_PATH = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 # Pexels sits behind Cloudflare, which blocks urllib's default
@@ -168,7 +180,23 @@ def render_text_png(text, path):
     img.save(path)
 
 
-def assemble(clip_paths, hook_lines, music_path, out_path):
+def list_audio_tracks():
+    if not os.path.isdir(AUDIO_DIR):
+        return []
+    return sorted(f for f in os.listdir(AUDIO_DIR) if f.lower().endswith((".mp3", ".m4a", ".wav")))
+
+
+def pick_audio_track(entry_id):
+    """Round-robin pick from stock-footage/audio/ — None if the folder's empty."""
+    tracks = list_audio_tracks()
+    if not tracks:
+        return None
+    return os.path.join(AUDIO_DIR, tracks[entry_id % len(tracks)])
+
+
+def build_silent_video(clip_paths, hook_lines, out_path):
+    """Video + text overlay, no audio stream — this is the file TikTok
+    posts get, unmodified, since you add a real in-app sound yourself."""
     total_duration = max(l["end"] for l in hook_lines)
     with tempfile.TemporaryDirectory() as tmp:
         seg_duration = total_duration / len(clip_paths)
@@ -204,8 +232,6 @@ def assemble(clip_paths, hook_lines, music_path, out_path):
         cmd = ["ffmpeg", "-y", "-i", concatenated]
         for png in png_paths:
             cmd += ["-i", png]
-        if music_path:
-            cmd += ["-i", music_path]
 
         filter_parts = []
         last_label = "0:v"
@@ -217,19 +243,22 @@ def assemble(clip_paths, hook_lines, music_path, out_path):
             last_label = out_label
         filter_complex = ";".join(filter_parts)
 
-        cmd += ["-filter_complex", filter_complex, "-map", f"[{last_label}]"]
-        if music_path:
-            audio_idx = len(png_paths) + 1
-            fade_start = max(total_duration - 1.2, 0)
-            cmd += [
-                "-map", f"{audio_idx}:a", "-shortest",
-                "-af", f"afade=t=in:d=0.4,afade=t=out:st={fade_start}:d=1.2",
-            ]
-        cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p"]
-        if music_path:
-            cmd += ["-c:a", "aac"]
-        cmd += [out_path]
+        cmd += ["-filter_complex", filter_complex, "-map", f"[{last_label}]",
+                "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
         subprocess.run(cmd, check=True, capture_output=True)
+    return total_duration
+
+
+def add_music(silent_path, music_path, out_path, total_duration):
+    """Mux a track onto an already-rendered silent video — cheap (video
+    stream is just copied, not re-encoded) since the overlay work is done."""
+    fade_start = max(total_duration - 1.2, 0)
+    subprocess.run([
+        "ffmpeg", "-y", "-i", silent_path, "-i", music_path,
+        "-map", "0:v", "-map", "1:a", "-shortest",
+        "-af", f"afade=t=in:d=0.4,afade=t=out:st={fade_start}:d=1.2",
+        "-c:v", "copy", "-c:a", "aac", out_path,
+    ], check=True, capture_output=True)
 
 
 def main():
@@ -282,18 +311,29 @@ def main():
 
             out_name = f"hook-{entry['id']:02d}.mp4"
             out_path = os.path.join(OUTPUT_DIR, out_name)
-            assemble(clip_paths, entry["hook_lines"], args.music, out_path)
+            total_duration = build_silent_video(clip_paths, entry["hook_lines"], out_path)
+
+            music_name = f"hook-{entry['id']:02d}-music.mp4"
+            music_out_path = os.path.join(OUTPUT_DIR, music_name)
+            track = args.music or pick_audio_track(entry["id"])
+            if track:
+                add_music(out_path, track, music_out_path, total_duration)
+            else:
+                shutil.copy(out_path, music_out_path)
+                print(f"  no track in stock-footage/audio/ — {music_name} is silent too")
 
         videos.append({
             "id": entry["id"],
             "video": out_name,
+            "video_music": music_name,
             "caption": entry["caption"],
             "hashtags": entry.get("hashtags", []),
             "based_on_format": entry.get("based_on_format", ""),
             "platform_targets": entry.get("platform_targets", []),
         })
         json.dump(videos, open(VIDEOS_QUEUE, "w"), indent=2)
-        print(f"  done -> public/hook-videos/{out_name}")
+        print(f"  done -> public/hook-videos/{out_name} (silent, TikTok manual) "
+              f"+ {music_name} (IG/YouTube)")
 
 
 if __name__ == "__main__":
