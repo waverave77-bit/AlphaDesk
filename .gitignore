@@ -32,6 +32,10 @@ yarn-error.log*
 .hookvideo-venv
 __pycache__/
 
+# venv + logs for scripts/scout_watcher.py (Playwright, Whisper — local only)
+.scout-venv
+.scout-watcher.log
+
 # real movie/show clips for the --use-movie-clips option — copyrighted,
 # local rendering use only, must never be committed/pushed
 /stock-footage/movie-clips/*
