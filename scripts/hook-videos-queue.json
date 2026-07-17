@@ -2,115 +2,96 @@
   {
     "id": 1,
     "video": "hook-01.mp4",
-    "caption": "Gross pay and net pay are two different numbers, and only one of them is real money. $600 gross at $15/hr becomes less once federal tax, FICA, and state tax take their share \u2014 before you ever see it. Budget off your actual paycheck, not the number on the offer letter.",
+    "video_music": "hook-01-music.mp4",
+    "caption": "The market's average annual return over the last 50 years is about 10%. You don't need to time it or beat it \u2014 you need to be in it, consistently, for a long time.",
     "hashtags": [
-      "#paycheck",
-      "#firstjob",
-      "#taxes101",
       "#investing",
+      "#investing101",
+      "#wealthbuilding",
+      "#compoundinterest",
       "#financialliteracy"
     ],
-    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "based_on_format": "one-word aspirational template (needm_rari-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",
       "youtube_shorts"
-    ],
-    "video_music": "hook-01-music.mp4"
+    ]
   },
   {
     "id": 2,
     "video": "hook-02.mp4",
-    "caption": "The excuse is always 'I'll start when I have more.' Compound interest doesn't care how much you start with \u2014 it cares how long your money's been working. $10 a week starting today outperforms $50 a week starting five years from now. Time in the market is the actual advantage.",
+    "video_music": "hook-02-music.mp4",
+    "caption": "Old money isn't about the amount \u2014 it's about time in the market. A modest amount invested young and left alone for 30+ years usually beats a much larger amount invested late.",
     "hashtags": [
-      "#compoundinterest",
-      "#investing101",
       "#wealthbuilding",
-      "#startinvesting",
-      "#moneytips"
+      "#oldmoney",
+      "#investing101",
+      "#compoundinterest",
+      "#financialfreedom"
     ],
-    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "based_on_format": "aspirational two-word template (needm_rari-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",
       "youtube_shorts"
-    ],
-    "video_music": "hook-02-music.mp4"
+    ]
   },
   {
     "id": 3,
     "video": "hook-03.mp4",
-    "caption": "Dog walking: $15-20/walk. Lawn care: $30-50/yard. Tutoring: $20-40/hr. Reselling: 70-90% of listed price after fees. These aren't hypothetical \u2014 they're what people are actually earning right now. Pick one, track every dollar, and let it fund your first real savings account.",
+    "video_music": "hook-03-music.mp4",
+    "caption": "Six-figure finance careers aren't reserved for Wall Street legends. Investment banking, hedge funds, private equity, wealth management, and actuarial work all have real entry points with real starting pay \u2014 here's where the money actually is.",
     "hashtags": [
-      "#sidehustle",
-      "#makemoney",
-      "#summerjob",
-      "#investing",
-      "#financialfreedom"
+      "#financejobs",
+      "#highpayingjobs",
+      "#investmentbanking",
+      "#wealthbuilding",
+      "#financialliteracy"
     ],
-    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "based_on_format": "numbered listicle carousel (financeeducationforyou-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",
       "youtube_shorts"
-    ],
-    "video_music": "hook-03-music.mp4"
+    ]
   },
   {
     "id": 4,
     "video": "hook-04.mp4",
-    "caption": "Income isn't what separates people who build wealth from people who don't \u2014 habits are. Track every dollar for a month. Save the first 10% the moment you're paid, not whatever's left over. Know your net worth number even when it's small. These habits compound the same way money does.",
+    "video_music": "hook-04-music.mp4",
+    "caption": "You don't need a business degree to make real extra income. Tutoring, reselling, freelance design, premium dog walking, and car detailing are all real side hustles with real per-hour or per-job pay \u2014 pick one and actually start.",
     "hashtags": [
-      "#moneyhabits",
-      "#wealthbuilding",
-      "#budgeting",
-      "#investing",
-      "#financialliteracy"
+      "#sidehustle",
+      "#makemoney",
+      "#extraincome",
+      "#financialfreedom",
+      "#moneytips"
     ],
-    "based_on_format": "carousel listicle, real-numbers-per-beat (financeeducationforyou-style)",
+    "based_on_format": "numbered listicle carousel (financeeducationforyou-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",
       "youtube_shorts"
-    ],
-    "video_music": "hook-04-music.mp4"
+    ]
   },
   {
     "id": 5,
     "video": "hook-05.mp4",
-    "caption": "Real example: $800/month from a part-time job. $280 covers required expenses, $320 covers everyday spending, and $200 goes straight to savings before it can be spent on anything else. The exact numbers don't matter \u2014 the order does. Pay your needs, cap your wants, save first.",
+    "video_music": "hook-05-music.mp4",
+    "caption": "You don't need a finance degree to prove you know the fundamentals. Free options like Investopedia Academy and SEC.gov's Investor.gov exist alongside paid ones like Bloomberg Market Concepts and the CFA \u2014 pick based on your budget and time, not hype.",
     "hashtags": [
-      "#budgeting",
-      "#moneymanagement",
-      "#investing",
-      "#wealthbuilding",
-      "#personalfinance"
-    ],
-    "based_on_format": "single real artifact as proof (tyfinancial-style)",
-    "platform_targets": [
-      "tiktok",
-      "instagram_reels",
-      "youtube_shorts"
-    ],
-    "video_music": "hook-05-music.mp4"
-  },
-  {
-    "id": 6,
-    "video": "hook-06.mp4",
-    "caption": "You don't need to pick 10 stocks to start investing seriously. The setup professionals recommend most for beginners is one low-cost target-date or total-market index fund \u2014 instant diversification, minimal fees. $50 a month clears the bar. The 2026 contribution limit is $7,000/year, so there's plenty of room to grow.",
-    "hashtags": [
-      "#rothira",
+      "#financecerts",
       "#investing101",
-      "#indexfunds",
+      "#careeradvice",
       "#wealthbuilding",
-      "#personalfinance"
+      "#financialliteracy"
     ],
-    "based_on_format": "single real artifact as proof (tyfinancial-style)",
+    "based_on_format": "numbered listicle carousel with cost/time (plan_pe6-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",
       "youtube_shorts"
-    ],
-    "video_music": "hook-06-music.mp4"
+    ]
   }
 ]
