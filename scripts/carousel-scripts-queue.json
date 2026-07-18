@@ -196,7 +196,7 @@
         "end": 6
       },
       {
-        "text": "2026 contribution limit: $7,000/year",
+        "text": "2026 contribution limit: $7,500/year",
         "start": 6,
         "end": 9
       },
@@ -213,7 +213,7 @@
       "designer watch close up"
     ],
     "mood": "lofi",
-    "caption": "You don't need to pick 10 stocks to start investing seriously. The setup professionals recommend most for beginners is one low-cost target-date or total-market index fund \u2014 instant diversification, minimal fees. $50 a month clears the bar. The 2026 contribution limit is $7,000/year, so there's plenty of room to grow.",
+    "caption": "You don't need to pick 10 stocks to start investing seriously. The setup professionals recommend most for beginners is one low-cost target-date or total-market index fund \u2014 instant diversification, minimal fees. $50 a month clears the bar. The 2026 contribution limit is $7,500/year, so there's plenty of room to grow.",
     "hashtags": [
       "#rothira",
       "#investing101",
@@ -404,27 +404,27 @@
     "based_on_format": "single real example artifact as proof (tyfinancial-style)",
     "hook_lines": [
       {
-        "text": "Example: $27,000 in student loans (nat'l avg)",
+        "text": "Example: $27,000 in student loans",
         "start": 0,
         "end": 3
       },
       {
-        "text": "5.5% interest rate (federal direct loan rate)",
+        "text": "6.52% interest rate (2026-27 federal direct rate)",
         "start": 3,
         "end": 6
       },
       {
-        "text": "Standard 10-year plan: ~$293/month",
+        "text": "Standard 10-year plan: ~$307/month",
         "start": 6,
         "end": 9
       },
       {
-        "text": "Total paid by payoff: ~$35,000",
+        "text": "Total paid by payoff: ~$36,800",
         "start": 9,
         "end": 12
       },
       {
-        "text": "That's $8,000 in interest alone",
+        "text": "That's $9,800 in interest alone",
         "start": 12,
         "end": 15
       }
@@ -437,7 +437,7 @@
       "city skyline aerial night"
     ],
     "mood": "lofi",
-    "caption": "The average federal student loan balance is around $27,000. At a 5.5% federal interest rate on the standard 10-year plan, that's about $293/month and roughly $8,000 in interest paid on top of what you borrowed. Every semester you skip borrowing for is real money saved later.",
+    "caption": "The average federal student loan balance is around $27,000. At a 6.52% federal interest rate on the standard 10-year plan, that's about $307/month and roughly $9,800 in interest paid on top of what you borrowed. Every semester you skip borrowing for is real money saved later.",
     "hashtags": [
       "#studentloans",
       "#collegedebt",
