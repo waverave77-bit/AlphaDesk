@@ -284,4 +284,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-build-credit-with-no-credit-history',
+    title: 'How Do You Build Credit With No Credit History?',
+    metaTitle: 'How to Build Credit With No Credit History: A Real Plan',
+    description:
+      'The credit catch-22 — you need credit to get credit — has actual workarounds. Here’s how to build a score from zero using real, beginner-friendly accounts.',
+    date: '2026-07-18',
+    category: 'Credit',
+    intro:
+      'Nobody hands you a credit score at birth — you build one from nothing, and almost every legit way to start requires "credit" you don’t have yet. That’s the catch-22 everyone complains about. It’s also completely solvable in a semester or two if you use the right tools instead of guessing. Here’s the actual mechanics, not vibes.',
+    sections: [
+      {
+        heading: 'What a credit score actually measures',
+        body: 'A credit score is a three-digit number (300–850 on the two most common scoring models, FICO and VantageScore) that predicts how likely you are to repay borrowed money on time. Lenders use it to decide whether to approve you for a card, a car loan, or an apartment lease — and what interest rate to charge you if they do.\n\nThe number is built from five weighted ingredients: payment history (roughly 35% of a FICO score), amounts owed relative to your limits — called utilization (roughly 30%), length of credit history (roughly 15%), credit mix (roughly 10%), and new credit inquiries (roughly 10%). Notice that the single biggest factor, by a wide margin, is simply not missing payments. Everything else is optimization around the edges.',
+      },
+      {
+        heading: 'The fastest start: become an authorized user',
+        body: 'If a parent or trusted relative has a credit card with a long, clean payment history, they can add you as an authorized user — you get a card with your name on it, but they remain legally responsible for the bill. Most major issuers (Chase, Amex, Discover, Capital One, and others) report the full account history to the credit bureaus under your name too, which means their years of on-time payments can start showing up on your credit report the next reporting cycle.\n\nThis only helps if the primary account is actually in good shape — high balances or missed payments on that card can drag your score down just as easily. Ask to see the card’s utilization and payment record before agreeing to be added, and you don’t even need to carry or use the physical card for it to count.',
+      },
+      {
+        heading: 'Build your own file: secured cards, student cards, and credit-builder loans',
+        body: 'A secured credit card is the standard starting point if nobody can add you as an authorized user. You put down a refundable cash deposit — often $200–$500 — and that becomes your credit limit. You use it like a normal card and pay the bill in full each month; the issuer reports your activity to the bureaus exactly like an unsecured card. After 6–12 months of on-time payments, many issuers upgrade you to a regular unsecured card and refund the deposit.\n\nStudent credit cards are a second option once you’re enrolled in college — they’re unsecured (no deposit) but come with lower limits and are specifically underwritten for people with thin or no credit files.\n\nA credit-builder loan, offered by many credit unions and a few fintech apps, works almost backwards from a normal loan: the "loan" amount sits locked in a savings account while you make fixed monthly payments toward it. Each on-time payment gets reported to the bureaus, and once you’ve paid it off, the money (plus any interest earned) is released to you. It builds payment history without ever requiring you to be extended real credit up front.',
+      },
+      {
+        heading: 'The rules that trip people up before 21',
+        body: 'Under the federal CARD Act, you generally need to be 18 to open a credit card in your own name — and if you’re under 21, card issuers are required to see proof of independent income or a cosigner before approving you. "Independent income" can include a job, but allowance or money from a parent usually doesn’t count on the application.\n\nOnce you do have a card, keep utilization low — using more than about 30% of your limit on any card, even if you pay it off in full every month, can drag your score down because issuers report the balance at your statement closing date, not after you pay. Many people who pay in full still get dinged for this without realizing why. Paying down the balance a few days before the statement closes (not just before the due date) keeps the reported utilization low.',
+      },
+      {
+        heading: 'The myth that won’t die: does checking your own score hurt it?',
+        body: 'No — and this is worth repeating because it stops people from ever looking. Checking your own credit score or report is called a soft inquiry, and it has zero effect on your score, no matter how often you do it. Apps from your bank, Credit Karma, and similar free tools all use soft pulls.\n\nWhat does cause a small, temporary dip is a hard inquiry — when a lender checks your credit because you formally applied for a new account (a card, a loan, an apartment in some states). A single hard inquiry typically costs a few points and its effect fades within a few months, though it stays visible on your report for about two years. Applying for five credit cards in a week is a real problem; checking your own score every day is not.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Ask a parent or relative with a clean, low-balance card if you can be added as an authorized user — the easiest, fastest option if it’s available.\n2. No authorized-user option? Open a secured card or student card and treat it like debit — never spend more than you can pay off in full.\n3. Set every card to autopay the full statement balance so you never miss a due date by accident.\n4. Keep reported utilization under 30% (ideally under 10%) by paying down balances before the statement closing date, not just the due date.\n5. Check your score for free as often as you want — it’s a soft inquiry and never lowers it.\n6. Avoid applying for multiple new accounts in a short window — each application is a hard inquiry that dings you slightly.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'How long does it take to build a credit score from nothing?',
+        a: 'Scoring models generally need at least 6 months of reported activity on at least one account before they can generate a score. A usable score for most purposes typically takes 6–12 months of consistent on-time payments.',
+      },
+      {
+        q: 'Does checking your credit score lower it?',
+        a: 'No. Checking your own score or report is a soft inquiry and never affects your score, no matter how often you do it. Only hard inquiries — triggered when you apply for new credit — cause a small, temporary dip.',
+      },
+      {
+        q: 'Is a secured credit card worth it if I have no credit history?',
+        a: 'Yes, for most people it’s the most reliable starting point. You get a real credit card that reports to all three bureaus, and after months of on-time payments many issuers refund your deposit and upgrade you to an unsecured card.',
+      },
+      {
+        q: 'Can I build credit without a credit card?',
+        a: 'Yes — credit-builder loans (offered by many credit unions and some fintech apps) and, in some cases, rent or subscription reporting services let you build payment history without ever carrying a card.',
+      },
+    ],
+  },
 ]
