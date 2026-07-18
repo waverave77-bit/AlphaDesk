@@ -50,18 +50,31 @@ Real examples that prove this works:
   "CEO.", "the top 1% think differently." are RIGHT — simple, punchy,
   aspirational, almost cliché.
 - **Video length: minimum 15 seconds.** The single hook line spans
-  the whole thing (e.g. `start: 0, end: 15`), never shorter. Use 7-8
-  footage_keywords at roughly 2s/clip to fill it — more clips, not
-  slower cuts.
-- Background is those 7-8 quick clips cut fast (~2s each), never one
-  long static shot. Luxury cars, private jets (tarmac or interior),
-  cash (stacks, counting, close-ups), expensive watches, city
-  skylines at night, grand old-money architecture (banks, manors,
-  marble staircases) — **and Wall Street/financial-district imagery
-  specifically (NYSE facade, Wall Street street sign, trading floor,
-  the bull statue)**, mixed into every clip rotation, not just the
-  generic luxury set. Aesthetic and cinematic, not stock-photo
-  generic.
+  the whole thing (e.g. `start: 0, end: 15`), never shorter. Use
+  10-12 footage_keywords at roughly 1.3-1.5s/clip to fill it — fast,
+  more cuts than a first instinct suggests.
+- **Footage keywords MUST come only from these categories** (learned
+  the hard way — vaguer/lifestyle keywords like "confident businessman
+  walking," "celebration party," "yacht party," or "cigar smoking"
+  kept pulling irrelevant Pexels matches: a street market, a Christmas
+  party, a random picnic. Concrete objects search far more reliably
+  than abstract vibes):
+  - **Cars:** mercedes benz close up, bmw driving city night, luxury
+    car interior dashboard, luxury car close up night, sports car
+    driving at night, luxury car convoy driving
+  - **Money:** cash stack close up, hands counting cash close up,
+    stack of hundred dollar bills, money counting machine close up
+  - **Planes:** private jet on tarmac, private jet interior
+  - **Watches:** luxury watch close up wrist, designer watch close up,
+    rolex watch close up
+  - **Gold:** gold bars stacked close up, gold bullion close up
+  - **Stocks/Wall Street:** new york stock exchange facade, wall
+    street street sign, stock exchange trading floor wide shot, wall
+    street bull statue, stock market ticker screen close up
+  Pick a fresh mix of 10-12 from this list per entry — don't reuse the
+  exact same set every time (the renderer already randomizes which
+  Pexels result it picks per keyword, but varying the keywords
+  themselves matters more for a video not looking repetitive).
 - Text rendering: plain bold white text with a thin black outline,
   centered. No background box behind it — the outline alone is what
   keeps it legible.
@@ -160,7 +173,9 @@ multi-beat explainer.
 **Format A entries go in `scripts/video-scripts-queue.json`, rendered
 by `create_hook_video.py` (produces an actual video).**
 - One hook_lines entry spanning the full (15s minimum) duration,
-  7-8 footage_keywords for fast ~2s-per-clip cuts.
+  10-12 footage_keywords for fast ~1.3-1.5s-per-clip cuts, drawn only
+  from the approved cars/money/planes/watches/gold/Wall-Street list
+  above.
 - Text has no background box — plain white with a black outline
   (already the default in render_text_png).
 - Source clips arrive at different native frame rates; the pipeline

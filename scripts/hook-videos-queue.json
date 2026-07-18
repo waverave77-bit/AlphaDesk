@@ -60,11 +60,11 @@
     "id": 8,
     "video": "hook-08.mp4",
     "video_music": "hook-08-music.mp4",
-    "caption": "An emergency fund isn't exciting, but 3 months of essential expenses sitting in a high-yield savings account is the difference between a flat tire being an inconvenience and it being a crisis. Start with $500. Build from there.",
+    "caption": "An emergency fund isn't about being paranoid \u2014 it's about not having one bad month turn into one bad year. 3 months of essential expenses, sitting somewhere boring and liquid, is what actually buys you options.",
     "hashtags": [
       "#emergencyfund",
-      "#savingsaccount",
       "#financialliteracy",
+      "#personalfinance",
       "#investing",
       "#moneytips"
     ],
@@ -183,6 +183,44 @@
       "#success"
     ],
     "based_on_format": "cinematic aesthetic edit, fast NYC finance-district cuts (riskanddreward/ole_pters-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 15,
+    "video": "hook-15.mp4",
+    "video_music": "hook-15-music.mp4",
+    "caption": "We made it isn't the finish line \u2014 it's the moment the work you put in stops being invisible. Keep going.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#success",
+      "#hustle",
+      "#mindset"
+    ],
+    "based_on_format": "cinematic aesthetic edit, trading-floor/celebration excess energy (riskanddreward-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 16,
+    "video": "hook-16.mp4",
+    "video_music": "hook-16-music.mp4",
+    "caption": "Built to win doesn't mean it was easy \u2014 it means you kept showing up on the days it didn't feel like it yet.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#success",
+      "#mindset",
+      "#hustle"
+    ],
+    "based_on_format": "cinematic aesthetic edit, trading-floor/celebration excess energy (riskanddreward-style)",
     "platform_targets": [
       "tiktok",
       "instagram_reels",

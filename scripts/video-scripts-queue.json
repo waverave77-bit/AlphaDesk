@@ -1,5 +1,161 @@
 [
   {
+    "id": 1,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "one-word aspirational template (needm_rari-style)",
+    "hook_lines": [
+      {
+        "text": "Investing.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "moody",
+    "caption": "The market's average annual return over the last 50 years is about 10%. You don't need to time it or beat it \u2014 you need to be in it, consistently, for a long time.",
+    "hashtags": [
+      "#investing",
+      "#investing101",
+      "#wealthbuilding",
+      "#compoundinterest",
+      "#financialliteracy"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "sports car driving at night",
+      "wall street street sign",
+      "luxury car interior dashboard",
+      "stack of hundred dollar bills",
+      "luxury car close up night",
+      "gold bars stacked close up",
+      "rolex watch close up",
+      "hands counting cash close up",
+      "private jet on tarmac",
+      "cash stack close up",
+      "new york stock exchange facade"
+    ]
+  },
+  {
+    "id": 2,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "aspirational two-word template (needm_rari-style)",
+    "hook_lines": [
+      {
+        "text": "Old money.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "phonk",
+    "caption": "Old money isn't about the amount \u2014 it's about time in the market. A modest amount invested young and left alone for 30+ years usually beats a much larger amount invested late.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#oldmoney",
+      "#investing101",
+      "#compoundinterest",
+      "#financialfreedom"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "bmw driving city night",
+      "luxury car interior dashboard",
+      "wall street bull statue",
+      "private jet interior",
+      "luxury car convoy driving",
+      "money counting machine close up",
+      "stack of hundred dollar bills",
+      "gold bullion close up",
+      "luxury car close up night",
+      "rolex watch close up",
+      "mercedes benz close up"
+    ]
+  },
+  {
+    "id": 7,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      {
+        "text": "750 credit score. 19 years old.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "moody",
+    "caption": "A 750 credit score at 19 isn't luck. It's one card, paid off in full, every single month, for two years straight, with utilization under 10%. Payment history alone is 35% of the score. Start now and the number takes care of itself.",
+    "hashtags": [
+      "#creditscore",
+      "#creditbuilding",
+      "#financialliteracy",
+      "#investing",
+      "#moneytips"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "private jet on tarmac",
+      "sports car driving at night",
+      "luxury watch close up wrist",
+      "bmw driving city night",
+      "luxury car interior dashboard",
+      "luxury car close up night",
+      "private jet interior",
+      "money counting machine close up",
+      "mercedes benz close up",
+      "stack of hundred dollar bills",
+      "gold bullion close up"
+    ]
+  },
+  {
+    "id": 8,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "cinematic aesthetic edit (riskanddreward-style)",
+    "hook_lines": [
+      {
+        "text": "3 months of expenses. zero stress.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "moody",
+    "caption": "An emergency fund isn't about being paranoid \u2014 it's about not having one bad month turn into one bad year. 3 months of essential expenses, sitting somewhere boring and liquid, is what actually buys you options.",
+    "hashtags": [
+      "#emergencyfund",
+      "#financialliteracy",
+      "#personalfinance",
+      "#investing",
+      "#moneytips"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "hands counting cash close up",
+      "private jet interior",
+      "luxury watch close up wrist",
+      "sports car driving at night",
+      "cash stack close up",
+      "bmw driving city night",
+      "luxury car interior dashboard",
+      "gold bars stacked close up",
+      "luxury car close up night",
+      "stock exchange trading floor wide shot",
+      "stack of hundred dollar bills"
+    ]
+  },
+  {
     "id": 9,
     "platform_targets": [
       "tiktok",
@@ -15,13 +171,17 @@
       }
     ],
     "footage_keywords": [
-      "new york stock exchange facade",
-      "stock trading floor wide shot",
+      "rolex watch close up",
+      "stock exchange trading floor wide shot",
       "private jet interior",
-      "designer watch close up",
-      "city skyline at night",
-      "luxury car interior dashboard",
-      "wall street bull statue"
+      "stack of hundred dollar bills",
+      "sports car driving at night",
+      "luxury car convoy driving",
+      "mercedes benz close up",
+      "gold bullion close up",
+      "wall street street sign",
+      "hands counting cash close up",
+      "money counting machine close up"
     ],
     "mood": "phonk",
     "caption": "Every share of stock you own makes you a legal part-owner of that company. Buy one share of a company you actually believe in and you stop being just a customer.",
@@ -51,12 +211,16 @@
     ],
     "footage_keywords": [
       "wall street street sign",
-      "new york stock exchange facade",
-      "skyscraper office window at night",
-      "financial district aerial view",
-      "marble lobby entrance",
-      "private jet on tarmac",
-      "luxury watch close up"
+      "bmw driving city night",
+      "designer watch close up",
+      "gold bars stacked close up",
+      "mercedes benz close up",
+      "cash stack close up",
+      "rolex watch close up",
+      "stock exchange trading floor wide shot",
+      "hands counting cash close up",
+      "sports car driving at night",
+      "private jet on tarmac"
     ],
     "mood": "phonk",
     "caption": "Entry-level financial analyst roles start around $60-75K in most major markets. It's not the ceiling, it's the door in. Learn the terminal, learn the model, and the title stops being aspirational.",
@@ -85,13 +249,17 @@
       }
     ],
     "footage_keywords": [
+      "rolex watch close up",
       "new york stock exchange facade",
-      "city skyline at dusk",
-      "private jet on tarmac",
-      "luxury car close up",
-      "marble staircase in mansion",
+      "stock market ticker screen close up",
+      "stock exchange trading floor wide shot",
+      "gold bullion close up",
       "cash stack close up",
-      "wall street bull statue"
+      "luxury car convoy driving",
+      "luxury watch close up wrist",
+      "stack of hundred dollar bills",
+      "hands counting cash close up",
+      "private jet on tarmac"
     ],
     "mood": "moody",
     "caption": "A single share of an S&P 500 index fund gives you partial ownership in Amazon, Apple, Microsoft, and 497 other companies at once. You don't need $10,000 to own a piece of corporate America. You need an account and $50.",
@@ -120,13 +288,17 @@
       }
     ],
     "footage_keywords": [
-      "confident businessman walking in suit slow motion",
-      "mercedes benz close up",
-      "bmw driving city night",
-      "man walking in suit city street",
-      "private jet on tarmac",
+      "gold bars stacked close up",
+      "stack of hundred dollar bills",
+      "gold bullion close up",
+      "private jet interior",
+      "sports car driving at night",
       "luxury watch close up wrist",
-      "city skyline at night"
+      "mercedes benz close up",
+      "luxury car convoy driving",
+      "hands counting cash close up",
+      "new york stock exchange facade",
+      "private jet on tarmac"
     ],
     "mood": "phonk",
     "caption": "Locked in isn't a mood, it's a decision. Same amount of hours in the day as everyone else \u2014 the difference is what you do with them.",
@@ -155,13 +327,17 @@
       }
     ],
     "footage_keywords": [
-      "man walking in suit city street",
+      "stack of hundred dollar bills",
+      "money counting machine close up",
+      "luxury car convoy driving",
+      "hands counting cash close up",
+      "sports car driving at night",
+      "wall street street sign",
       "stock exchange trading floor wide shot",
-      "confident businessman walking in suit slow motion",
+      "luxury car interior dashboard",
       "bmw driving city night",
-      "mercedes benz close up",
-      "private jet interior",
-      "wall street bull statue"
+      "stock market ticker screen close up",
+      "luxury car close up night"
     ],
     "mood": "phonk",
     "caption": "No plan B means plan A has to work \u2014 so you build the habits now that make sure it does. Start before you feel ready.",
@@ -190,13 +366,17 @@
       }
     ],
     "footage_keywords": [
-      "penthouse lounge city view at dusk",
-      "jp morgan building sign at night",
-      "wall street street sign",
-      "new york stock exchange facade",
-      "private jet on tarmac",
       "luxury car close up night",
-      "designer watch close up"
+      "stock exchange trading floor wide shot",
+      "gold bullion close up",
+      "hands counting cash close up",
+      "stack of hundred dollar bills",
+      "new york stock exchange facade",
+      "money counting machine close up",
+      "private jet interior",
+      "bmw driving city night",
+      "private jet on tarmac",
+      "wall street street sign"
     ],
     "mood": "moody",
     "caption": "Untouchable isn't luck. It's what it looks like when the work already got done before anyone was watching.",
@@ -206,6 +386,84 @@
       "#mindset",
       "#financialfreedom",
       "#success"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 15,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "cinematic aesthetic edit, trading-floor/celebration excess energy (riskanddreward-style)",
+    "hook_lines": [
+      {
+        "text": "We made it.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "footage_keywords": [
+      "cash stack close up",
+      "mercedes benz close up",
+      "gold bullion close up",
+      "bmw driving city night",
+      "luxury car convoy driving",
+      "hands counting cash close up",
+      "wall street bull statue",
+      "gold bars stacked close up",
+      "luxury watch close up wrist",
+      "private jet on tarmac",
+      "luxury car interior dashboard"
+    ],
+    "mood": "hiphop",
+    "caption": "We made it isn't the finish line \u2014 it's the moment the work you put in stops being invisible. Keep going.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#success",
+      "#hustle",
+      "#mindset"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 16,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "cinematic aesthetic edit, trading-floor/celebration excess energy (riskanddreward-style)",
+    "hook_lines": [
+      {
+        "text": "Built to win.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "footage_keywords": [
+      "private jet interior",
+      "gold bars stacked close up",
+      "wall street bull statue",
+      "money counting machine close up",
+      "designer watch close up",
+      "hands counting cash close up",
+      "rolex watch close up",
+      "mercedes benz close up",
+      "cash stack close up",
+      "private jet on tarmac",
+      "stock market ticker screen close up"
+    ],
+    "mood": "upbeat",
+    "caption": "Built to win doesn't mean it was easy \u2014 it means you kept showing up on the days it didn't feel like it yet.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#success",
+      "#mindset",
+      "#hustle"
     ],
     "status": "pending"
   }
