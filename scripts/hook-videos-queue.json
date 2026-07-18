@@ -169,5 +169,24 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 14,
+    "video": "hook-14.mp4",
+    "video_music": "hook-14-music.mp4",
+    "caption": "Untouchable isn't luck. It's what it looks like when the work already got done before anyone was watching.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#mindset",
+      "#financialfreedom",
+      "#success"
+    ],
+    "based_on_format": "cinematic aesthetic edit, fast NYC finance-district cuts (riskanddreward/ole_pters-style)",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]

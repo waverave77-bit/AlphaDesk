@@ -173,5 +173,40 @@
       "#success"
     ],
     "status": "pending"
+  },
+  {
+    "id": 14,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "cinematic aesthetic edit, fast NYC finance-district cuts (riskanddreward/ole_pters-style)",
+    "hook_lines": [
+      {
+        "text": "Untouchable.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "footage_keywords": [
+      "penthouse lounge city view at dusk",
+      "jp morgan building sign at night",
+      "wall street street sign",
+      "new york stock exchange facade",
+      "private jet on tarmac",
+      "luxury car close up night",
+      "designer watch close up"
+    ],
+    "mood": "moody",
+    "caption": "Untouchable isn't luck. It's what it looks like when the work already got done before anyone was watching.",
+    "hashtags": [
+      "#wealthbuilding",
+      "#investing",
+      "#mindset",
+      "#financialfreedom",
+      "#success"
+    ],
+    "status": "pending"
   }
 ]
