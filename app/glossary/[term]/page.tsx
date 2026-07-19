@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TERMS, termToSlug, type Category } from '@/lib/glossary-terms'
+import { GUIDES } from '@/lib/guides'
 import { BookOpen, Lightbulb, TrendingUp, BarChart2, Shield, ChevronRight, ArrowLeft } from 'lucide-react'
 import MrGuyLogoSvg from '@/components/MrGuyLogoSvg'
 
@@ -60,6 +61,11 @@ export async function generateMetadata({ params }: { params: { term: string } })
 export default function GlossaryTermPage({ params }: { params: { term: string } }) {
   const term = TERMS.find((t) => termToSlug(t.term) === params.term)
   if (!term) notFound()
+
+  const coveringGuides = GUIDES
+    .filter((g) => g.relatedTerms.includes(term.term))
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 3)
 
   // Deterministic related terms: a STABLE internal link graph helps Google crawl
   // and index these pages. (Math.random() reshuffled links on every render, so
@@ -151,6 +157,27 @@ export default function GlossaryTermPage({ params }: { params: { term: string } 
             <div>
               <p className="text-sm font-bold text-yellow-300 mb-1">Pro Tip</p>
               <p className="text-yellow-800 dark:text-yellow-200/80 leading-relaxed text-sm">{term.tip}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Guides that reference this term — the reverse of the guide pages'
+            "Terms used in this guide" links, so the internal link graph runs
+            both directions (108 term pages funneling into the guides). */}
+        {coveringGuides.length > 0 && (
+          <div className="mb-10">
+            <h2 className="text-lg font-bold text-white mb-4">Guides that use this term</h2>
+            <div className="space-y-3">
+              {coveringGuides.map((g) => (
+                <Link
+                  key={g.slug}
+                  href={`/guides/${g.slug}`}
+                  className="group flex items-center justify-between bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-2xl px-6 py-4 transition-colors"
+                >
+                  <span className="font-medium group-hover:text-blue-400 transition-colors">{g.title}</span>
+                  <ChevronRight className="h-4 w-4 text-gray-600 shrink-0" />
+                </Link>
+              ))}
             </div>
           </div>
         )}

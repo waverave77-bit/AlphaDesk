@@ -37,7 +37,16 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     .map((name) => TERMS.find((t) => t.term === name))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
 
-  const otherGuides = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3)
+  // Relevance-ranked internal links: same-category guides first (newest first),
+  // then fill from the rest by recency. A plain slice(0,3) meant every guide
+  // linked the SAME first three array entries — early guides hoarded all the
+  // internal links while newer daily guides got none pointing at them.
+  const others = GUIDES.filter((g) => g.slug !== guide.slug)
+  const byDate = (a: (typeof GUIDES)[number], b: (typeof GUIDES)[number]) => b.date.localeCompare(a.date)
+  const otherGuides = [
+    ...others.filter((g) => g.category === guide.category).sort(byDate),
+    ...others.filter((g) => g.category !== guide.category).sort(byDate),
+  ].slice(0, 3)
   const base = 'https://www.mrguyinvests.com'
 
   return (
