@@ -340,4 +340,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-529-plan-worth-it',
+    title: 'What Is a 529 Plan, and Is It Actually Worth It for College Savings?',
+    metaTitle: '529 Plan Explained: How It Works and Whether It’s Worth It',
+    description:
+      'A 529 plan grows college savings tax-free — but only if you use it right. Here’s how the tax break works, what counts as a qualified expense, and what happens if plans change.',
+    date: '2026-07-20',
+    category: 'College Money',
+    intro:
+      'Somebody — a parent, a grandparent, maybe you — opened a "529" for college and you’ve been nodding along ever since without really knowing what it does. Here’s the actual mechanics: what the tax break is worth, what you’re allowed to spend it on, and what happens to the money if life doesn’t go according to plan.',
+    sections: [
+      {
+        heading: 'What a 529 plan actually is',
+        body: 'A 529 plan is a state-sponsored investment account built specifically for education costs. You put money in, it gets invested — usually in a mix of mutual funds or index funds, often in an "age-based" portfolio that automatically shifts from stocks toward bonds as college gets closer — and it grows over time, same as any other investment account.\n\nThe difference is the tax treatment on the way out. Withdrawals used for qualified education expenses come out completely federal-tax-free, including all the growth. Every state offers at least one 529 plan, and — this trips people up — you’re not required to use your own state’s plan. You can open a 529 in Utah while living in Texas and use the money at a college in New York. The plan’s home state barely matters; where the student ends up going to school doesn’t need to match it either.',
+      },
+      {
+        heading: 'The tax break, in two layers',
+        body: 'Layer one, federal: contributions are not federally tax-deductible — this money goes in after-tax, like a Roth account. But once it’s in, it grows completely tax-free, and qualified withdrawals owe no federal tax on any of the gains. Compounding that’s never taxed, for 10, 15, 18 years, adds up.\n\nLayer two, state: many states offer their own income tax deduction or credit for contributions, on top of the federal treatment — but usually only if you contribute to that state’s own plan. A handful of states offer the deduction no matter which state’s plan you use, and a few states have no state income tax at all, making the question moot. Before picking a plan, it’s worth checking what your own state actually offers, since that deduction is essentially free money layered on top of the federal benefit.\n\n529s also get a special gifting rule: normally, gifts above the annual per-person gift-tax exclusion (an amount that adjusts most years, generally in the high five-figure range for a couple) can trigger paperwork with the IRS. 529 plans let a contributor "superfund" the account — front-loading five years’ worth of that annual exclusion in one lump sum without it counting against their lifetime gift tax exemption. It’s a specific tool for grandparents or relatives who want to drop a large one-time gift in early.',
+      },
+      {
+        heading: 'What counts as a qualified expense (and what doesn’t)',
+        body: 'Qualified higher-education expenses cover more than just tuition: room and board (if enrolled at least half-time), required fees, books, supplies, and even a computer if it’s needed for coursework. It applies to community college, trade and vocational schools, and graduate programs — not just traditional four-year universities.\n\nA less-known piece: up to $10,000 per year, per student, can also be used tax-free for K-12 tuition at a public, private, or religious school — the "529" isn’t exclusively a college account, even though that’s how almost everyone talks about it.\n\nWhat doesn’t count: transportation, health insurance, and application or testing fees (SAT/ACT prep, application fees) generally aren’t qualified expenses. Withdraw money for a non-qualified expense and the earnings portion of that withdrawal (not your original contributions) owes ordinary income tax, plus a 10% federal penalty on top.',
+      },
+      {
+        heading: 'What if your kid doesn’t go to college, or gets a scholarship?',
+        body: 'This is the objection everyone raises before opening one, and it’s more solvable than people think. First, a 529 has no expiration date and the beneficiary can be changed at any time to another family member — a sibling, a cousin, even the account owner themselves — with no tax consequence. Plans change; the account doesn’t have to sit frozen.\n\nSecond, if the beneficiary gets a scholarship, the 10% penalty is waived on a withdrawal up to the scholarship amount — you’d still owe ordinary income tax on the earnings portion, but not the extra penalty. The account isn’t punishing you for winning free money.\n\nThird, since a 2024 rule change, unused 529 funds can be rolled directly into a Roth IRA for the same beneficiary — up to $35,000 over that person’s lifetime — without the usual early-withdrawal tax or penalty. The catches: the 529 account must have existed for at least 15 years, contributions made in the last five years generally aren’t eligible for the rollover, and each year’s rollover still counts against that year’s normal Roth IRA contribution limit. It’s not a blank check, but it means "unused college money" no longer has to mean "wasted money."',
+      },
+      {
+        heading: 'How a 529 affects financial aid',
+        body: 'A 529 owned by a parent counts as a parental asset on the FAFSA, and parental assets are assessed at a fairly gentle rate — generally a small single-digit percentage of the account’s value counted toward the student’s expected contribution each year, far lower than the rate applied to assets held directly in the student’s own name.\n\nGrandparent-owned 529 accounts used to be treated more harshly under old FAFSA rules, but recent FAFSA simplification changed that: distributions from a grandparent-owned 529 no longer have to be reported as student income. That was a real fix — it used to quietly tank aid eligibility the year a grandparent’s account got tapped, and most families never saw it coming.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check whether your state offers an income tax deduction or credit for 529 contributions, and whether it requires using your own state’s plan.\n2. Pick a plan with low fees and a sensible age-based portfolio — you’re not trying to beat the market here, just grow money tax-free on a predictable timeline.\n3. Automate contributions, even small ones — time in the account matters more than the size of any single deposit.\n4. Keep receipts and records of qualified expenses (tuition statements, room and board costs) in case a withdrawal is ever questioned.\n5. If the original beneficiary doesn’t use all the money, remember your options before assuming it’s wasted: change the beneficiary, use the scholarship exception, or roll up to $35,000 into a Roth IRA once the account is old enough.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Index Investing', 'Mutual Fund', 'Diversification'],
+    faq: [
+      {
+        q: 'What happens to a 529 plan if my kid doesn’t go to college?',
+        a: 'You have options — change the beneficiary to another family member with no tax hit, use the scholarship exception to skip the penalty (though earnings are still taxed), or roll up to $35,000 over the beneficiary’s lifetime into a Roth IRA if the account is at least 15 years old.',
+      },
+      {
+        q: 'Is a 529 plan better than a regular savings account for college?',
+        a: 'For money you’re confident will go toward education, yes — the tax-free growth on qualified withdrawals is hard to beat. The tradeoff is flexibility: pulling money out for non-education expenses triggers income tax plus a 10% penalty on the earnings.',
+      },
+      {
+        q: 'Do grandparents’ 529 contributions hurt financial aid?',
+        a: 'Not as much as they used to. Under simplified FAFSA rules, distributions from a grandparent-owned 529 no longer count as student income, removing what used to be a common aid-eligibility surprise.',
+      },
+      {
+        q: 'Do I have to use my own state’s 529 plan?',
+        a: 'No — you can open and use any state’s 529 plan for a school in any state. The main reason to stick with your own state’s plan is if it offers a state income tax deduction that’s only available for in-state plans.',
+      },
+    ],
+  },
 ]
