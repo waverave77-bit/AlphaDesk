@@ -396,4 +396,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-credit-card-interest-actually-works',
+    title: 'How Does Credit Card Interest Actually Work — and Why Is the Minimum Payment a Trap?',
+    metaTitle: 'How Credit Card Interest Works (and the Minimum Payment Trap)',
+    description:
+      'Credit card interest compounds daily, not monthly — and the minimum payment is designed to keep you paying for years. Here’s the actual math.',
+    date: '2026-07-21',
+    category: 'Credit',
+    intro:
+      'You paid the minimum, the balance barely moved, and you can’t figure out why. It’s not bad luck — it’s how the math is built. Here’s exactly how credit card interest is calculated, why the grace period is the only real “free” window you get, and why the minimum payment is one of the worst deals in personal finance if you don’t understand it.',
+    sections: [
+      {
+        heading: 'APR isn’t the number that hits your balance — the daily rate is',
+        body: 'Your card’s Annual Percentage Rate (APR) is the yearly sticker number, but issuers don’t charge it once a year. They divide it by 365 to get a daily periodic rate, then apply that rate to your balance every single day and add it to what you owe — a process called daily compounding.\n\nSay your APR is 24%. Divide by 365 and the daily rate is about 0.066%. On a $1,000 balance, day one adds roughly $0.66 in interest. That doesn’t sound like much, but tomorrow’s interest is calculated on $1,000.66, not $1,000 — interest earning interest, working against you instead of for you. Over a full statement cycle, this is why the number on your bill is always a little higher than a simple "APR ÷ 12" monthly estimate would suggest.',
+      },
+      {
+        heading: 'The grace period: the only way to pay $0 in interest',
+        body: 'Almost every credit card gives you a grace period — typically around 21 to 25 days between the end of your statement and the payment due date — during which no interest is charged on new purchases, but only if you paid last month’s statement balance in full.\n\nThis is the single most important switch in how credit cards work: pay the full statement balance every month, and you use the card’s convenience for free. Carry any balance past the due date, and the grace period disappears — interest starts accruing daily on new purchases immediately, with no free window, until you pay the full balance again for a full cycle.',
+      },
+      {
+        heading: 'Why the minimum payment is designed to keep you paying',
+        body: 'Most issuers set the minimum payment as whichever is larger: a small percentage of your balance (commonly in the 1%–3% range) or a flat floor (often around $25–$35). That percentage-based structure is the trap — as your balance shrinks, so does your required payment, which stretches payoff out for years.\n\nHere’s the shape of it: a $3,000 balance at a 24% APR, paying only the minimum each month, can easily take well over a decade to clear and cost more in interest than the original purchases were worth. Federal law actually forces issuers to show you this — the CARD Act of 2009 requires every statement to include a "Minimum Payment Warning" box disclosing how many years it would take to pay off the balance at the minimum, the total interest you’d pay doing that, and what a fixed payment would need to be to clear it in 3 years instead. Read that box. It’s the most honest number on the entire statement.',
+      },
+      {
+        heading: 'Cash advances break even these rules',
+        body: 'Using a credit card to withdraw cash is a different, worse product wearing the same card. Cash advances usually carry their own higher APR than purchases, charge an upfront fee (often 3%–5% of the amount, or a flat minimum), and — critically — get no grace period at all. Interest starts compounding the moment the cash advance posts, even if you pay your bill in full that month.\n\nThe same is often true of using a credit card to pay for things like a cash equivalent — buying gift cards, wiring money, or funding certain payment apps can sometimes be coded as a cash advance without you realizing it until the fee shows up.',
+      },
+      {
+        heading: 'How to actually get ahead of it',
+        body: 'If you’re carrying a balance, paying more than the minimum every month is the single highest-leverage move you can make — every extra dollar above the minimum goes straight at principal, which shrinks the balance that tomorrow’s interest is calculated on. Two common strategies for tackling more than one card: the avalanche method (pay extra toward whichever card has the highest APR first, mathematically the fastest and cheapest) and the snowball method (pay extra toward the smallest balance first, for the psychological win of closing an account sooner). Both work — avalanche saves more money, snowball keeps more people motivated enough to finish.\n\nIf a balance already feels unmanageable, a 0% APR balance transfer card (usually with a transfer fee of 3%–5% of the amount moved) can pause interest for a promotional window, often 12–18 months, giving you a real shot at paying down principal instead of treading water.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pay your full statement balance, not just the minimum, every single cycle to keep the interest-free grace period alive.\n2. If you can’t pay in full, pay as far above the minimum as you can — every extra dollar attacks principal directly.\n3. Find the "Minimum Payment Warning" box on your statement and actually read the years-to-payoff number.\n4. Never treat a credit card as a source of cash — cash advances skip the grace period and add extra fees on top of a higher APR.\n5. Carrying multiple balances? Pick avalanche (highest APR first) if you want the cheapest path, or snowball (smallest balance first) if you need momentum to stay motivated.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'Does credit card interest compound daily or monthly?',
+        a: 'Daily. Issuers divide your APR by 365 to get a daily periodic rate, apply it to your balance every day, and add that interest to the balance the next day’s calculation is based on — which is why paying late even by a few days adds up faster than a simple monthly estimate suggests.',
+      },
+      {
+        q: 'Why did my balance barely go down after I paid the minimum?',
+        a: 'Because most of that payment covered the interest that had already accrued, leaving only a small amount to reduce the actual principal — and since the minimum is often a small percentage of the balance, it shrinks along with the balance, stretching payoff out for years.',
+      },
+      {
+        q: 'Is it bad to only pay the minimum on a credit card?',
+        a: 'If you can pay more, yes — paying only the minimum on a revolving balance is one of the most expensive ways to borrow money that exists, often costing more in interest over time than the original purchases. Check your statement’s Minimum Payment Warning box for the exact years and dollars it would take.',
+      },
+      {
+        q: 'What is a credit card grace period?',
+        a: 'The window — typically about 21 to 25 days — between your statement closing and your payment due date, during which no interest accrues on new purchases, but only if you paid the previous statement balance in full. Carry a balance and the grace period disappears until you pay in full again.',
+      },
+    ],
+  },
 ]
