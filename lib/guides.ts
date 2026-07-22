@@ -452,4 +452,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'taxes-on-gig-work-1099-income',
+    title: 'Do You Have to Pay Taxes on DoorDash, Uber, or Freelance Income?',
+    metaTitle: '1099 Gig Work Taxes: DoorDash, Uber & Freelance Explained',
+    description:
+      'Gig apps don’t withhold taxes like a real job does — you owe self-employment tax and have to pay it yourself, often quarterly. Here’s exactly how much and when.',
+    date: '2026-07-22',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your DoorDash or Uber app shows you making decent money, and nothing ever seems to come out of it — which feels like a win until tax season, when you realize the IRS still wants its cut and nobody withheld it for you. Gig and freelance income is taxed differently from a W-2 job in almost every way: no automatic withholding, an extra tax most employees never think about, and a payment schedule that can come four times a year instead of once. Here’s the actual mechanics, with real numbers.',
+    sections: [
+      {
+        heading: 'Why nothing gets withheld — you’re not an employee',
+        body: 'When you drive for Uber, deliver for DoorDash, or freelance for clients, the company doesn’t treat you as an employee — you’re an independent contractor. That distinction is the whole ballgame: employers withhold taxes from a W-2 paycheck automatically, but nobody withholds anything from a 1099 payment. The full amount just lands in your account, taxes and all still your responsibility.\n\nIf a single platform or client pays you $600 or more in a year, they’re required to send you a 1099-NEC form in January summarizing what they paid you — but that form is just a record. You owe tax on every dollar of gig or freelance income you earn, even from platforms that never send you a form because you stayed under their reporting threshold.',
+      },
+      {
+        heading: 'The self-employment tax: FICA’s evil twin',
+        body: 'On a W-2 job, you and your employer each pay half of Social Security and Medicare taxes — 7.65% comes out of your paycheck, and your employer quietly pays the other 7.65% on top. As a 1099 worker, there’s no employer half. You’re both the employee and the employer, so you owe the whole thing yourself: a 15.3% self-employment tax (12.4% Social Security + 2.9% Medicare) on your net self-employment earnings, on top of regular income tax.\n\nThere’s one break built in: you get to deduct half of that self-employment tax — the “employer-equivalent” portion — from your taxable income when you file. It doesn’t erase the tax, but it softens the hit a little.',
+      },
+      {
+        heading: 'The $400 rule: when you legally owe money',
+        body: 'Regular federal income tax only kicks in once your total income clears the standard deduction, same as a W-2 job. Self-employment tax works completely differently — and has a much lower bar. If your net self-employment earnings (what you made minus legitimate business expenses) hit $400 or more in a year, you’re required to file a return and pay self-employment tax, even if your income is otherwise too low to owe any income tax at all.\n\nThat $400 threshold catches a lot of people off guard. A summer of casual freelancing or a few months of weekend deliveries can clear it easily, which means “I barely made anything” doesn’t exempt you from filing the way it might with a small W-2 paycheck.',
+      },
+      {
+        heading: 'Quarterly estimated taxes: pay-as-you-go, not once a year',
+        body: 'Because nothing gets withheld along the way, the IRS expects gig and freelance workers who’ll owe a meaningful amount to pay estimated taxes four times a year rather than in one lump sum the following April — roughly in mid-April, mid-June, mid-September, and mid-January, though exact dates shift slightly when they land on a weekend or holiday. Skip this and wait until you file, and you can owe an underpayment penalty on top of the tax itself, even if you pay the full balance by the deadline.\n\nThe practical fix most gig workers use: every time you get paid, immediately set aside a percentage — commonly cited in the 25–30% range to cover both self-employment tax and income tax — into a separate savings account you don’t touch. Treat that slice as never having been yours in the first place, and the quarterly payment stops being a scramble.',
+      },
+      {
+        heading: 'The upside: deductions W-2 employees don’t get',
+        body: 'Being 1099 isn’t all downside. Because you’re running a small business in the IRS’s eyes, you can deduct legitimate business expenses from your income before either tax applies — for a driver or delivery worker, that often includes mileage (the IRS sets a standard per-mile rate each year that you can use instead of tracking actual gas and maintenance costs), a hot bag or phone mount, and the business-use portion of your phone bill. For a freelancer, it might mean software subscriptions, a portion of home internet, or equipment bought specifically for the work.\n\nKeep records as you go — a simple mileage log or spreadsheet is enough — because deductions you can’t document if questioned don’t hold up. One more upside: 1099 income counts as earned income just like a W-2 paycheck, which means it qualifies you to contribute to a Roth IRA, and if you treat the gig work as a real small business, you may also have access to self-employed retirement accounts like a SEP-IRA with much higher contribution limits than a regular Roth.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Every time you get paid, transfer 25–30% into a separate savings account earmarked for taxes — never spend from it.\n2. Track mileage and business expenses as you go, not from memory in April.\n3. If you expect to owe a meaningful amount, pay quarterly estimated taxes rather than waiting until the annual deadline.\n4. Save every 1099-NEC you receive, but remember you owe tax on all gig income even from platforms that don’t send you one.\n5. Since it counts as earned income, route some of it into a Roth IRA — gig money still gets the same decades of tax-free compounding as a W-2 paycheck.\n6. If your gig income grows into a real side business, talk to a tax professional about a SEP-IRA and whether an LLC or additional deductions make sense.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Liquidity'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on DoorDash or Uber income?',
+        a: 'Yes. Gig platforms classify you as an independent contractor, not an employee, so no taxes are withheld — you’re responsible for reporting and paying both income tax and self-employment tax yourself.',
+      },
+      {
+        q: 'What is self-employment tax?',
+        a: 'A 15.3% tax covering Social Security and Medicare that self-employed and gig workers pay themselves, since there’s no employer to cover the other half the way there is on a W-2 job. It applies once your net self-employment earnings reach $400 in a year.',
+      },
+      {
+        q: 'Do I owe taxes if a gig platform never sent me a 1099?',
+        a: 'Yes. Platforms are only required to send a 1099-NEC once they’ve paid you $600 or more in a year, but you owe tax on all your gig or freelance income regardless of whether you receive a form.',
+      },
+      {
+        q: 'How much should I set aside from gig income for taxes?',
+        a: 'A commonly used rule of thumb is 25–30% of each payment, covering both self-employment tax and income tax, moved into a separate savings account so it’s never mixed in with spending money.',
+      },
+    ],
+  },
 ]
