@@ -508,4 +508,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-buy-now-pay-later-affect-credit-score',
+    title: 'Does Buy Now, Pay Later (Klarna, Afterpay) Affect Your Credit Score?',
+    metaTitle: 'Does BNPL (Klarna, Afterpay) Affect Your Credit Score?',
+    description:
+      'Splitting purchases into four payments feels harmless — but the credit impact of Klarna, Afterpay, and Affirm is more one-sided than most people realize.',
+    date: '2026-07-23',
+    category: 'Credit',
+    intro:
+      'You checked out with Klarna or Afterpay, split an $80 pair of sneakers into four $20 payments, and paid every single one on time — so why didn’t your credit score budge? Buy Now, Pay Later feels like a credit product, gets marketed next to your credit card options at checkout, and even involves something called a “credit check.” But the way it actually touches your credit score is lopsided in a way almost nobody explains upfront.',
+    sections: [
+      {
+        heading: 'How “Pay in 4” actually works',
+        body: 'The most common BNPL structure — used by Klarna, Afterpay, Sezzle, and PayPal’s Pay in 4 — splits a purchase into four equal payments, one due at checkout and the other three every two weeks after that, with no interest charged if you pay on schedule. Signing up typically only involves a soft credit check, the kind that doesn’t affect your score, which is part of why approval is fast and available to people with thin or no credit history.\n\nLonger BNPL plans — Affirm’s multi-month financing, or Klarna’s and Afterpay’s pay-in-30/monthly options — work differently. These can charge real interest (sometimes a meaningful APR) and may involve a harder credit check, more like a traditional loan application. Read the terms before you check the box; “buy now, pay later” isn’t always the interest-free version you’re picturing.',
+      },
+      {
+        heading: 'The uncomfortable truth: paying on time usually doesn’t help your score',
+        body: 'A traditional credit card reports your payment history to Equifax, Experian, and TransUnion every month — on-time payments are literally what builds your credit score over time. Most short-term “Pay in 4” BNPL loans have historically not been reported to the major bureaus at all, meaning months of perfect, responsible payments can do nothing for your credit file.\n\nThis is shifting: credit bureaus have been building ways to incorporate BNPL activity, and FICO has developed newer scoring models specifically designed to factor it in. But adoption varies by lender and isn’t universal yet, so don’t plan on Pay-in-4 as your credit-building strategy the way you would a secured card or credit-builder loan — check the specific provider’s current policy before assuming it counts.',
+      },
+      {
+        heading: 'The part that CAN hurt you: missed payments and collections',
+        body: 'Here’s the asymmetry that catches people off guard: even when on-time payments don’t help your score, missed payments can absolutely hurt it. If you fall behind, most BNPL providers charge a late fee, and if the balance stays unpaid, many will eventually send the debt to a third-party collections agency. A collections account reported to the bureaus is one of the more damaging things that can appear on a credit report, and it can stick around for years.\n\nSo the risk profile is one-sided: pay on time, and it’s often invisible to your credit file; miss payments, and it can show up as real, lasting credit damage. That’s a worse deal than a credit card, where good behavior is rewarded just as visibly as bad behavior is punished.',
+      },
+      {
+        heading: 'The “phantom debt” problem',
+        body: 'A credit card gives you one statement and one running balance you can check anytime. BNPL doesn’t work that way — there’s no shared ledger across apps, so three $20 payments due this week from three different BNPL apps don’t show up anywhere together. Each provider only sees its own slice of what you owe.\n\nThis makes it deceptively easy to stack more obligations than you realize, especially since each individual purchase feels small. Consumer researchers and regulators have flagged this “phantom debt” pattern as one of the biggest practical risks of BNPL — not that any single payment plan is dangerous, but that several of them running at once, invisible to each other, can quietly eat a chunk of every paycheck.',
+      },
+      {
+        heading: 'Regulatory protections are still catching up',
+        body: 'Because BNPL is newer than credit cards, it hasn’t always come with the same legal protections — like guaranteed dispute rights if a purchase arrives broken or never shows up. Regulators have been working to close that gap; in 2024 the Consumer Financial Protection Bureau issued guidance aimed at extending credit-card-style consumer protections to certain Pay-in-4 loans. The exact protections and how consistently they’re enforced have continued to evolve since then, so treat BNPL purchase protection as generally weaker and less standardized than a credit card’s until you’ve checked the specific provider’s policy.',
+      },
+      {
+        heading: 'Your checklist before you tap “Pay in 4”',
+        body: '1. Check whether the specific plan reports to credit bureaus — don’t assume on-time payments are building your credit.\n2. Only use BNPL for a purchase you could pay for in cash today; it’s a payment-timing tool, not a way to afford something you can’t.\n3. Track every open BNPL plan yourself (a notes app or spreadsheet works) since no single app shows your total obligations across providers.\n4. Turn on autopay or calendar reminders for every installment — a missed payment is the one thing that can genuinely hurt your credit.\n5. Read the late-fee and interest terms before checking out, especially for longer financing plans that aren’t simple 4-payment splits.\n6. If you’re trying to actually build credit, use a secured card, student card, or credit-builder loan instead — those are designed and reported for exactly that purpose.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does Klarna or Afterpay build your credit score?',
+        a: 'Usually not, at least not yet. Most short-term Pay-in-4 plans haven’t traditionally been reported to the major credit bureaus, so on-time payments often don’t help your score — though bureau and lender policies on this are evolving, so it’s worth checking the specific provider.',
+      },
+      {
+        q: 'Can Buy Now, Pay Later hurt your credit score?',
+        a: 'Yes, if you miss payments. Unpaid BNPL balances are commonly sent to collections agencies, and a collections account on your credit report can significantly damage your score, even if on-time payments on the same plan never helped it.',
+      },
+      {
+        q: 'Is Buy Now, Pay Later the same as a credit card?',
+        a: 'No. BNPL is typically a separate short-term installment loan tied to one purchase, often interest-free if paid on time, with a soft credit check at signup. A credit card is a revolving line of credit that reports monthly activity to the bureaus and generally comes with more standardized consumer protections.',
+      },
+      {
+        q: 'How many Buy Now, Pay Later plans can you have at once?',
+        a: 'There’s no built-in limit, and no single app shows you your total balance across other BNPL providers — which is exactly the risk. Track your own open plans manually so small payments across multiple apps don’t add up to more than you can cover.',
+      },
+    ],
+  },
 ]
