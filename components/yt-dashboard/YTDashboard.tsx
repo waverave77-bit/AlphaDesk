@@ -33,6 +33,14 @@ type ModelStats = Record<
   { count: number; totalViews: number; totalLikes: number; totalComments: number; avgViews: number; avgLikes: number }
 >
 
+type DraftItem = {
+  videoId: string
+  model: string | null
+  loserName: string
+  title: string
+  postedAt: string
+}
+
 type RosterCharacter = { name: string; franchise: string; themeColor: string }
 
 const CHANNEL_ID = 'UCdz-4eCUd3VjAC0zvzjhgRQ'
@@ -308,6 +316,84 @@ function AlertsPanel({ alerts }: { alerts: { title: string; message: string; at:
   )
 }
 
+function DraftsPanel({
+  drafts,
+  publishingId,
+  onPublish,
+}: {
+  drafts: DraftItem[]
+  publishingId: string | null
+  onPublish: (videoId: string) => void
+}) {
+  const [confirmId, setConfirmId] = useState<string | null>(null)
+  const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => {
+    if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
+  }, [])
+
+  function handleClick(videoId: string) {
+    if (confirmId === videoId) {
+      if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
+      setConfirmId(null)
+      onPublish(videoId)
+      return
+    }
+    setConfirmId(videoId)
+    confirmTimeout.current = setTimeout(() => setConfirmId(null), 4000)
+  }
+
+  if (drafts.length === 0) return null
+
+  return (
+    <div className="mt-8 rounded-lg border border-amber-400/20 bg-amber-400/[0.04] p-4">
+      <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-amber-300/70">
+        Drafts — unlisted test uploads, not public until you publish
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {drafts.map((d) => (
+          <div key={d.videoId} className="overflow-hidden rounded-lg border border-white/10 bg-black/30">
+            <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`}
+                alt={d.title}
+                className="aspect-video w-full object-cover opacity-90"
+              />
+            </a>
+            <div className="p-3">
+              <div className="line-clamp-2 text-xs font-semibold text-white/80">{d.title}</div>
+              <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-white/40">
+                {d.model && (
+                  <span
+                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+                      d.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
+                    }`}
+                  >
+                    {d.model}
+                  </span>
+                )}
+                <span>{relativeTime(d.postedAt)}</span>
+              </div>
+              <button
+                onClick={() => handleClick(d.videoId)}
+                disabled={publishingId === d.videoId}
+                className={`mt-2 w-full rounded-md border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
+                  confirmId === d.videoId
+                    ? 'border-amber-400 bg-amber-400/20 text-amber-200'
+                    : 'border-emerald-400/50 bg-emerald-400/10 text-emerald-300 hover:border-emerald-400'
+                }`}
+              >
+                {publishingId === d.videoId ? 'Publishing…' : confirmId === d.videoId ? 'Confirm publish?' : '✓ Publish'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ModelStatsRow({ modelStats }: { modelStats: ModelStats }) {
   const entries = Object.entries(modelStats)
   if (entries.length === 0) return null
@@ -446,6 +532,8 @@ export default function YTDashboard() {
   const [videosNotConfigured, setVideosNotConfigured] = useState(false)
   const [videosUnreachable, setVideosUnreachable] = useState(false)
   const [videoSort, setVideoSort] = useState<VideoSort>('recent')
+  const [drafts, setDrafts] = useState<DraftItem[]>([])
+  const [publishingDraftId, setPublishingDraftId] = useState<string | null>(null)
   const [roster, setRoster] = useState<RosterCharacter[] | null>(null)
   const [charA, setCharA] = useState('')
   const [charB, setCharB] = useState('')
@@ -485,22 +573,55 @@ export default function YTDashboard() {
     }
   }, [])
 
+  const fetchDrafts = useCallback(async () => {
+    try {
+      const res = await fetch('/api/yt-dashboard/drafts', { cache: 'no-store' })
+      const data = await res.json()
+      if (res.ok) setDrafts(data.drafts ?? [])
+    } catch {
+      // silent — drafts are a nice-to-have panel, not worth a whole error state
+    }
+  }, [])
+
+  const publishDraft = useCallback(
+    async (videoId: string) => {
+      setPublishingDraftId(videoId)
+      try {
+        const res = await fetch('/api/yt-dashboard/drafts/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoId }),
+        })
+        if (res.ok) {
+          await fetchDrafts()
+          fetchVideos()
+        }
+      } finally {
+        setPublishingDraftId(null)
+      }
+    },
+    [fetchDrafts, fetchVideos]
+  )
+
   useEffect(() => {
     fetchStatus()
     fetchVideos()
+    fetchDrafts()
     fetch('/api/yt-dashboard/roster')
       .then((r) => r.json())
       .then((d) => setRoster(d.characters ?? []))
       .catch(() => setRoster([]))
     const statusInterval = setInterval(fetchStatus, 15000)
     const videosInterval = setInterval(fetchVideos, 60000)
+    const draftsInterval = setInterval(fetchDrafts, 30000)
     const clockInterval = setInterval(() => setNow(new Date()), 1000)
     return () => {
       clearInterval(statusInterval)
       clearInterval(videosInterval)
+      clearInterval(draftsInterval)
       clearInterval(clockInterval)
     }
-  }, [fetchStatus, fetchVideos])
+  }, [fetchStatus, fetchVideos, fetchDrafts])
 
   useEffect(
     () => () => {
@@ -776,6 +897,8 @@ export default function YTDashboard() {
             <AlertsPanel alerts={status?.recentAlerts ?? []} />
           </div>
         </div>
+
+        <DraftsPanel drafts={drafts} publishingId={publishingDraftId} onPublish={publishDraft} />
 
         <VideoGrid
           videos={videos}
