@@ -46,6 +46,12 @@ const config: Config = {
         'blink-cursor': { '0%,49%': { opacity: '1' }, '50%,100%': { opacity: '0' } },
         'flicker-glow': { '0%,100%': { opacity: '1' }, '92%': { opacity: '1' }, '93%': { opacity: '0.4' }, '94%': { opacity: '1' }, '96%': { opacity: '0.6' }, '97%': { opacity: '1' } },
         'gauge-fill': { from: { width: '0%' }, to: { width: 'var(--fill, 0%)' } },
+        'radar-spin': { from: { transform: 'rotate(0deg)' }, to: { transform: 'rotate(360deg)' } },
+        'tile-in': {
+          '0%': { opacity: '0', transform: 'translateY(14px) scale(0.97)', filter: 'blur(2px)' },
+          '60%': { opacity: '1', transform: 'translateY(-2px) scale(1.005)', filter: 'blur(0)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -59,6 +65,8 @@ const config: Config = {
         'blink-cursor': 'blink-cursor 1s step-end infinite',
         'flicker-glow': 'flicker-glow 4s ease-in-out infinite',
         'gauge-fill': 'gauge-fill 1.2s cubic-bezier(0.16,1,0.3,1) forwards',
+        'radar-spin': 'radar-spin 7s linear infinite',
+        'tile-in': 'tile-in 0.5s cubic-bezier(0.16,1,0.3,1) both',
       },
     },
   },

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-export async function POST(req: Request) {
+export async function POST() {
   const session = await getServerSession(authOptions)
   if (session?.user?.email !== process.env.ADMIN_EMAIL) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -14,15 +14,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Dashboard not fully configured' }, { status: 500 })
   }
 
-  const body = await req.json().catch(() => ({}))
-  const characterA = typeof body?.characterA === 'string' ? body.characterA : undefined
-  const characterB = typeof body?.characterB === 'string' ? body.characterB : undefined
-
   try {
-    const res = await fetch(`${base}/trigger`, {
+    const res = await fetch(`${base}/pause`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ characterA, characterB, dryRun: !!body?.dryRun }),
+      headers: { Authorization: `Bearer ${secret}` },
       signal: AbortSignal.timeout(8000),
     })
     const data = await res.json().catch(() => ({}))
