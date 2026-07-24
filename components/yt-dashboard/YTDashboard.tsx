@@ -766,11 +766,8 @@ export default function YTDashboard() {
 
           <HudTile label="Active Model" accent="#f472b6" delayMs={60}>
             <div className="text-lg font-bold uppercase text-fuchsia-300">{modelDisplay}</div>
-            <div className="mt-2 flex gap-1.5">
-              <span className={`h-1.5 flex-1 rounded-full ${status?.lastModelUsed === 'kling' ? 'bg-fuchsia-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]' : 'bg-white/10'}`} />
-              <span className={`h-1.5 flex-1 rounded-full ${status?.lastModelUsed === 'vidu' ? 'bg-fuchsia-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]' : 'bg-white/10'}`} />
-            </div>
-            <div className="mt-1 text-[10px] text-white/30">Kling ⇄ Vidu rotation</div>
+            <div className="mt-2 h-1.5 w-full rounded-full bg-fuchsia-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]" />
+            <div className="mt-1 text-[10px] text-white/30">~$1.12/video</div>
           </HudTile>
 
           <HudTile label="Next Auto-Launch" accent="#ffd400" delayMs={120}>
