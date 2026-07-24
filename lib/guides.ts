@@ -564,4 +564,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-to-401k-when-you-switch-jobs',
+    title: 'What Happens to Your 401(k) When You Quit or Switch Jobs?',
+    metaTitle: '401(k) After You Switch Jobs: Rollover, Cash Out, or Leave It?',
+    description:
+      'Quitting doesn’t erase your 401(k) — but what you do next (rollover, cash out, or leave it) can cost or save you thousands. Here’s the actual mechanics.',
+    date: '2026-07-24',
+    category: 'Investing',
+    intro:
+      'You’re leaving a job — or already gone — and there’s a 401(k) balance sitting there that nobody explained what to do with. The money doesn’t disappear, but the choice you make next (or don’t make, since doing nothing is itself a choice) can cost you a chunk of it in taxes and penalties, or quietly keep growing tax-advantaged for another 40 years. Here’s exactly how it works.',
+    sections: [
+      {
+        heading: 'Your four options, ranked from best to worst for most people',
+        body: 'When you leave a job, you generally have four moves available for an old 401(k): roll it into your new employer’s 401(k) (if the new plan accepts incoming rollovers), roll it into an IRA of your own, leave it right where it is with the old employer, or cash it out. The first three all keep the money tax-advantaged and growing — you’re choosing where it lives, not whether it survives. The fourth, cashing out, is almost always the worst option financially, for reasons in the next section.\n\nRolling into an IRA is often the most popular choice because it gives you the widest investment menu — a workplace 401(k) usually limits you to a short list of funds the plan picked, while an IRA at any major brokerage can hold nearly any stock, ETF, or index fund. Leaving it with your old employer is the "do nothing" option, and it’s fine short-term, but old 401(k)s are easy to lose track of — multiple job changes over a career can leave you with several forgotten accounts at old employers you barely remember.',
+      },
+      {
+        heading: 'The vesting trap: your match might not fully be yours yet',
+        body: 'The money you personally contributed from your paycheck is always 100% yours the moment it lands in the account, no matter when you leave. Your employer’s matching contributions are a different story — many plans attach a vesting schedule to the match, meaning you only fully own it after working there a certain number of years.\n\nTwo common structures: cliff vesting (you own 0% of the match until a specific anniversary — often 3 years — at which point you own 100% all at once) and graded vesting (you own a rising percentage each year, for example 20% per year until fully vested at year 5). Quit before you’re vested and the unvested portion of the match is forfeited back to the plan — it was never fully yours to keep. Before you give notice, it’s worth checking your plan’s vesting schedule and your vesting percentage; timing a departure by even a few weeks can sometimes mean the difference between keeping or losing thousands in match money.',
+      },
+      {
+        heading: 'Why a direct rollover beats an indirect rollover',
+        body: 'When you do roll money into a new 401(k) or an IRA, how the money moves matters as much as where it goes. A direct rollover (sometimes called a trustee-to-trustee transfer) moves the money straight from the old plan to the new account without ever passing through your hands — no taxes withheld, no strings attached.\n\nAn indirect rollover is riskier: the old plan cuts you a check, but by law it must first withhold 20% for federal taxes — even though the whole thing is still supposed to be tax-free if handled correctly. You then have 60 days to deposit the full original balance (including the 20% that was withheld, which you’d have to cover out of pocket temporarily) into a new retirement account. Miss the 60-day window, or fail to make up the withheld 20%, and the shortfall gets treated as a taxable distribution — plus a 10% early withdrawal penalty if you’re under 59½. Always ask for a direct rollover; it removes this entire risk.',
+      },
+      {
+        heading: 'The real cost of cashing out early',
+        body: 'Cashing out an old 401(k) instead of rolling it over feels like free money showing up in your bank account, but it’s one of the most expensive financial decisions a young worker can make. The withdrawal counts as ordinary taxable income for the year, and if you’re under 59½, the IRS adds a 10% early withdrawal penalty on top of that income tax — before the mandatory 20% federal withholding mentioned above even gets reconciled at tax time.\n\nRun the math on a modest example: cash out $10,000 from an old 401(k) at 24. Between income tax and the 10% penalty, a meaningful chunk of it can vanish immediately — and that’s before counting the decades of tax-advantaged compounding you just gave up. At a long-term average return of roughly 10% a year, that $10,000 left alone could double roughly every 7 years — turning into something like $80,000–$160,000 by a typical retirement age, money that a cash-out this year converts into a fraction of that, spent long before it had the chance to grow.',
+      },
+      {
+        heading: 'If your balance is small, the plan might move it without asking',
+        body: 'There’s one wrinkle worth knowing even if you plan to do nothing: federal rules let an employer’s plan automatically force out small balances after you leave. If your vested balance is $1,000 or less, the plan can simply cash it out and mail you a check (with taxes withheld, same as above). If it’s more than $1,000 but under a threshold of $7,000, the plan can instead automatically roll it into an IRA opened in your name at a provider it chooses — usually parked in a low-yield, ultra-conservative fund — if you don’t respond to their notice within a set window.\n\nThat auto-rollover IRA isn’t a scam, but it’s rarely the best home for your money long-term. If you get a letter from an old employer’s plan about your balance, it’s worth acting on it yourself — rolling into an IRA or new 401(k) of your own choosing — rather than letting the default happen and forgetting where the money ended up.',
+      },
+      {
+        heading: 'Your checklist when you leave a job',
+        body: '1. Check your vesting schedule before you give notice — you might be close to fully owning match money you’d otherwise forfeit.\n2. Decide where the old 401(k) is going: new employer’s plan, an IRA, or (short-term only) staying put.\n3. Always request a direct (trustee-to-trustee) rollover — never let a check get cut to you personally if you can avoid it.\n4. If a check does come to you, redeposit the full amount — including any withheld 20% you cover yourself — within 60 days to avoid taxes and penalties.\n5. Don’t cash out to cover short-term expenses; the combined tax hit and penalty plus lost decades of compounding make it one of the most expensive ways to raise cash.\n6. Watch for a force-out notice on small balances (under $7,000) from an old employer’s plan, and redirect it yourself instead of letting the default rollover happen.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Compound Interest', 'Diversification', 'Index Investing'],
+    faq: [
+      {
+        q: 'Do I lose my 401(k) if I quit my job?',
+        a: 'No — your own contributions are always 100% yours. But any employer match may be subject to a vesting schedule, and if you leave before you’re fully vested, the unvested portion of the match is forfeited back to the plan.',
+      },
+      {
+        q: 'Should I roll over my 401(k) or leave it with my old employer?',
+        a: 'Rolling it into a new employer’s plan or an IRA usually gives you more control and a wider investment menu, and it’s easier to keep track of than accounts scattered across old employers. Leaving it in place is fine short-term but easy to lose track of over multiple job changes.',
+      },
+      {
+        q: 'What happens if I cash out my old 401(k) instead of rolling it over?',
+        a: 'You’ll owe ordinary income tax on the full amount, plus a 10% early withdrawal penalty if you’re under 59½, and the plan is required to withhold 20% upfront. On top of the immediate tax hit, you lose decades of potential tax-advantaged compounding.',
+      },
+      {
+        q: 'Can my old employer force my 401(k) out without my permission?',
+        a: 'Yes, for small balances. Under federal rules, balances of $1,000 or less can be cashed out automatically, and balances up to $7,000 can be automatically rolled into an IRA chosen by the plan if you don’t respond to their notice — so it’s worth acting on your own instead of leaving it to default.',
+      },
+    ],
+  },
 ]
