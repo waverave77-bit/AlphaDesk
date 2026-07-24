@@ -394,6 +394,29 @@ function DraftsPanel({
   )
 }
 
+function TopPerformersPanel({ characters }: { characters: string[] }) {
+  if (characters.length === 0) return null
+  return (
+    <div className="mb-4 rounded-lg border border-emerald-400/20 bg-emerald-400/5 p-4">
+      <div className="mb-2 text-[10px] uppercase tracking-[0.25em] text-emerald-300/70">
+        Feeding the Idea Generator — Top Performers
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {characters.map((name) => (
+          <span
+            key={name}
+            className="rounded-full border px-3 py-1 text-xs font-bold"
+            style={{ borderColor: colorFor(name), color: colorFor(name) }}
+          >
+            {name}
+          </span>
+        ))}
+      </div>
+      <div className="mt-2 text-[10px] text-white/30">Characters from your top 3 real videos by views — the generator is told to lean into them</div>
+    </div>
+  )
+}
+
 function ModelStatsRow({ modelStats }: { modelStats: ModelStats }) {
   const entries = Object.entries(modelStats)
   if (entries.length === 0) return null
@@ -529,6 +552,7 @@ export default function YTDashboard() {
   const [statusError, setStatusError] = useState<string | null>(null)
   const [videos, setVideos] = useState<VideoItem[] | null>(null)
   const [modelStats, setModelStats] = useState<ModelStats>({})
+  const [topPerformers, setTopPerformers] = useState<string[]>([])
   const [videosNotConfigured, setVideosNotConfigured] = useState(false)
   const [videosUnreachable, setVideosUnreachable] = useState(false)
   const [videoSort, setVideoSort] = useState<VideoSort>('recent')
@@ -566,6 +590,7 @@ export default function YTDashboard() {
       if (!res.ok) throw new Error(data?.error ?? 'failed')
       setVideos(data.videos ?? [])
       setModelStats(data.modelStats ?? {})
+      setTopPerformers(data.topPerformers ?? [])
       setVideosNotConfigured(data.configured === false)
       setVideosUnreachable(false)
     } catch {
@@ -896,6 +921,10 @@ export default function YTDashboard() {
         </div>
 
         <DraftsPanel drafts={drafts} publishingId={publishingDraftId} onPublish={publishDraft} />
+
+        <div className="mt-8">
+          <TopPerformersPanel characters={topPerformers} />
+        </div>
 
         <VideoGrid
           videos={videos}
