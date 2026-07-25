@@ -13,6 +13,8 @@ type StatusResponse = {
   recentMatchups: string[]
   recentAlerts: { title: string; message: string; at: string }[]
   lastLogLines: string[]
+  queuedDraftsCount: number
+  heldDraftsCount: number
   checkedAt: string
 }
 
@@ -39,6 +41,7 @@ type DraftItem = {
   loserName: string
   title: string
   postedAt: string
+  held: boolean
 }
 
 type RosterCharacter = { name: string; franchise: string; themeColor: string }
@@ -320,10 +323,14 @@ function DraftsPanel({
   drafts,
   publishingId,
   onPublish,
+  holdBusyId,
+  onHold,
 }: {
   drafts: DraftItem[]
   publishingId: string | null
   onPublish: (videoId: string) => void
+  holdBusyId: string | null
+  onHold: (videoId: string, held: boolean) => void
 }) {
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -348,11 +355,16 @@ function DraftsPanel({
   return (
     <div className="mt-8 rounded-lg border border-amber-400/20 bg-amber-400/[0.04] p-4">
       <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-amber-300/70">
-        Drafts — unlisted test uploads, not public until you publish
+        Drafts — unlisted, queued for the next scheduled run unless held
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {drafts.map((d) => (
-          <div key={d.videoId} className="overflow-hidden rounded-lg border border-white/10 bg-black/30">
+          <div
+            key={d.videoId}
+            className={`overflow-hidden rounded-lg border bg-black/30 ${
+              d.held ? 'border-white/10 opacity-60' : 'border-emerald-400/20'
+            }`}
+          >
             <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -363,7 +375,7 @@ function DraftsPanel({
             </a>
             <div className="p-3">
               <div className="line-clamp-2 text-xs font-semibold text-white/80">{d.title}</div>
-              <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-white/40">
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/40">
                 {d.model && (
                   <span
                     className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
@@ -373,6 +385,13 @@ function DraftsPanel({
                     {d.model}
                   </span>
                 )}
+                <span
+                  className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+                    d.held ? 'bg-white/10 text-white/40' : 'bg-emerald-400/20 text-emerald-300'
+                  }`}
+                >
+                  {d.held ? 'held' : 'queued'}
+                </span>
                 <span>{relativeTime(d.postedAt)}</span>
               </div>
               <button
@@ -384,7 +403,14 @@ function DraftsPanel({
                     : 'border-emerald-400/50 bg-emerald-400/10 text-emerald-300 hover:border-emerald-400'
                 }`}
               >
-                {publishingId === d.videoId ? 'Publishing…' : confirmId === d.videoId ? 'Confirm publish?' : '✓ Publish'}
+                {publishingId === d.videoId ? 'Publishing…' : confirmId === d.videoId ? 'Confirm publish?' : '✓ Publish now'}
+              </button>
+              <button
+                onClick={() => onHold(d.videoId, !d.held)}
+                disabled={holdBusyId === d.videoId}
+                className="mt-1.5 w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white/50 transition-colors hover:border-white/25 disabled:opacity-40"
+              >
+                {holdBusyId === d.videoId ? 'Updating…' : d.held ? '↩ Add back to queue' : '✕ Don’t post'}
               </button>
             </div>
           </div>
@@ -558,10 +584,10 @@ export default function YTDashboard() {
   const [videoSort, setVideoSort] = useState<VideoSort>('recent')
   const [drafts, setDrafts] = useState<DraftItem[]>([])
   const [publishingDraftId, setPublishingDraftId] = useState<string | null>(null)
+  const [holdBusyId, setHoldBusyId] = useState<string | null>(null)
   const [roster, setRoster] = useState<RosterCharacter[] | null>(null)
   const [charA, setCharA] = useState('')
   const [charB, setCharB] = useState('')
-  const [dryRun, setDryRun] = useState(false)
   const [now, setNow] = useState(() => new Date())
   const [triggerState, setTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
   const [pauseBusy, setPauseBusy] = useState(false)
@@ -628,6 +654,26 @@ export default function YTDashboard() {
     [fetchDrafts, fetchVideos]
   )
 
+  const holdDraft = useCallback(
+    async (videoId: string, held: boolean) => {
+      setHoldBusyId(videoId)
+      try {
+        const res = await fetch('/api/yt-dashboard/drafts/hold', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoId, held }),
+        })
+        if (res.ok) {
+          await fetchDrafts()
+          fetchStatus()
+        }
+      } finally {
+        setHoldBusyId(null)
+      }
+    },
+    [fetchDrafts, fetchStatus]
+  )
+
   useEffect(() => {
     fetchStatus()
     fetchVideos()
@@ -672,19 +718,20 @@ export default function YTDashboard() {
         const res = await fetch('/api/yt-dashboard/trigger', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ characterA: charA || undefined, characterB: charB || undefined, dryRun }),
+          body: JSON.stringify({ characterA: charA || undefined, characterB: charB || undefined }),
         })
         const data = await res.json()
         if (!res.ok) throw new Error(data?.error ?? 'failed')
         setTriggerState('sent')
         setTimeout(() => setTriggerState('idle'), 3000)
         fetchStatus()
+        fetchDrafts()
       } catch {
         setTriggerState('error')
         setTimeout(() => setTriggerState('idle'), 3000)
       }
     }
-  }, [triggerState, fetchStatus, pickerIncomplete, charA, charB, dryRun])
+  }, [triggerState, fetchStatus, fetchDrafts, pickerIncomplete, charA, charB])
 
   const togglePause = useCallback(async () => {
     setPauseBusy(true)
@@ -839,10 +886,10 @@ export default function YTDashboard() {
               ))}
             </select>
           </div>
-          <label className="mt-3 flex items-center gap-2 text-xs text-white/60">
-            <input type="checkbox" checked={dryRun} onChange={(e) => setDryRun(e.target.checked)} className="accent-cyan-400" />
-            Dry run — upload unlisted for review, don&apos;t publish or comment
-          </label>
+          <p className="mt-3 text-[11px] text-white/40">
+            Generates normally and lands as an unlisted draft below — nothing posts live from here. It publishes
+            automatically on the next scheduled run, or hit Publish now on the draft.
+          </p>
           {pickerIncomplete && <p className="mt-2 text-[11px] text-amber-300/80">Pick both characters, or leave both on Random.</p>}
         </div>
 
@@ -871,10 +918,8 @@ export default function YTDashboard() {
               : triggerState === 'error'
               ? '⚠ Launch Failed — Retry'
               : triggerState === 'confirm'
-              ? `Confirm? ~$0.60–$1.50 in render cost${dryRun ? ' (dry run)' : ''}`
-              : dryRun
-              ? '⚡ Launch Dry Run'
-              : '⚡ Launch New Battle'}
+              ? 'Confirm? ~$0.60–$1.50 in render cost — saved as a draft'
+              : '⚡ Generate Draft'}
           </button>
           {triggerState === 'confirm' && <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>}
         </div>
@@ -906,6 +951,14 @@ export default function YTDashboard() {
               )
             })}
           </div>
+          <p className="mt-3 text-[11px] text-white/40">
+            {status && status.queuedDraftsCount > 0
+              ? `${status.queuedDraftsCount} draft${status.queuedDraftsCount === 1 ? '' : 's'} queued — the next scheduled run posts from the queue instead of generating.`
+              : 'Queue is empty — the next scheduled run generates and posts a fresh video.'}
+            {status && status.heldDraftsCount > 0
+              ? ` (${status.heldDraftsCount} held draft${status.heldDraftsCount === 1 ? '' : 's'} not counted.)`
+              : ''}
+          </p>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-7">
@@ -920,7 +973,13 @@ export default function YTDashboard() {
           </div>
         </div>
 
-        <DraftsPanel drafts={drafts} publishingId={publishingDraftId} onPublish={publishDraft} />
+        <DraftsPanel
+          drafts={drafts}
+          publishingId={publishingDraftId}
+          onPublish={publishDraft}
+          holdBusyId={holdBusyId}
+          onHold={holdDraft}
+        />
 
         <div className="mt-8">
           <TopPerformersPanel characters={topPerformers} />
