@@ -620,4 +620,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-a-high-yield-savings-account-work',
+    title: 'How Does a High-Yield Savings Account Work, and How Much Will You Actually Earn?',
+    metaTitle: 'High-Yield Savings Accounts Explained: APY, FDIC & Real Numbers',
+    description:
+      'A HYSA can pay far more interest than a regular bank account — here’s how APY, compounding, and FDIC insurance actually work, with real numbers attached.',
+    date: '2026-07-25',
+    category: 'Saving',
+    intro:
+      'Your regular bank account pays next to nothing in interest, and someone told you to move your savings to a “high-yield” account instead — but nobody explained what’s actually different about it, or whether your money is even safe there. Here’s the real mechanics: how the rate is set, what APY actually means, and what protects your cash if the bank itself runs into trouble.',
+    sections: [
+      {
+        heading: 'Why a “high-yield” account pays so much more than your bank',
+        body: 'A regular savings account at a big brick-and-mortar bank — the kind with branches on every corner — has historically paid next to nothing, often a small fraction of a percent (something like 0.01%–0.05% APY), no matter how much cash sits in it. That’s not because your money isn’t doing anything for the bank; it’s doing plenty. The bank takes deposits, lends them out at much higher rates through mortgages and credit cards, and keeps the spread between what it pays you and what it earns on your money.\n\nHigh-yield savings accounts (HYSAs), almost always offered by online-only banks, skip the branches and pass more of that spread back to you. Without real estate, tellers, or vaults to pay for, they can afford an APY that’s historically run several times higher than a traditional bank’s — sometimes ten times higher or more, depending on where interest rates stand at the time. On $5,000 sitting untouched for a year, the difference between a 0.05% APY and a 4% APY is roughly $2.50 versus $200 — same money, same risk, wildly different outcome.',
+      },
+      {
+        heading: 'APY vs. a plain interest rate — the number that actually matters',
+        body: 'The number to compare between accounts is APY — Annual Percentage Yield — not a bare interest rate. APY already bakes in compounding, meaning it accounts for the fact that the interest you earn this month starts earning its own interest next month. An account advertising a 4% APY, compounded daily, turns $1,000 left untouched into a little more than $1,040 after a full year — not just $1,000 plus a flat $40, because every day’s interest gets added back to the balance the next day’s calculation is based on.\n\nThis is the mirror image of how credit card debt compounds against you — the same daily-compounding math, just running in your favor instead of the bank’s. It’s also why comparing two accounts by their advertised APY is a fair, apples-to-apples comparison, while comparing raw interest rates without knowing how often they compound isn’t.',
+      },
+      {
+        heading: 'Where the rate actually comes from: the Federal Reserve, not the bank’s mood',
+        body: 'HYSA rates aren’t fixed, and the bank isn’t setting them based on how generous it feels — they move largely because of the Federal Reserve’s federal funds rate, the rate banks charge each other for short-term loans. When the Fed raises rates to fight inflation, HYSA APYs tend to climb right along with it. When the Fed cuts rates — usually because inflation has cooled or the economy needs support — HYSA APYs drift back down.\n\nThat means the “high” in high-yield is relative to the current rate environment, not a permanent promise. An account paying a strong APY today could be paying meaningfully less in a year if the Fed has been cutting — that’s not the bank quietly shortchanging you, it’s the whole system resetting. Check your rate every few months rather than assuming the number you signed up with is locked in forever.',
+      },
+      {
+        heading: 'Is the money actually safe? FDIC insurance, explained',
+        body: 'The safety question is separate from the rate question, and it has a clean answer: as long as the bank is FDIC-insured (or, for credit unions, NCUA-insured — the credit union equivalent), your deposits are protected up to $250,000 per depositor, per bank, per ownership category, even if the bank itself fails. That protection is backed by the federal government, and it applies exactly the same way to an online-only bank as it does to the branch on Main Street.\n\nBefore opening an account anywhere, confirm FDIC or NCUA coverage — most legitimate banks display the logo on their site, and any bank can be looked up directly through the FDIC’s BankFind tool. A savings app or fintech company that isn’t itself a bank usually holds your money at a partner bank behind the scenes, so check that the actual bank holding the deposits is insured, not just the name on the app’s homepage.',
+      },
+      {
+        heading: 'HYSA vs. CD vs. money market fund — which one for which goal',
+        body: 'A HYSA isn’t the only place to park cash, and the right choice depends on how soon the money might be needed. A certificate of deposit (CD) usually pays a fixed rate that can run a bit higher than a HYSA, but locks the money up for a set term — say, 12 months — and charges an early withdrawal penalty (often several months’ worth of interest) if it’s touched before the term ends. CDs make sense for money with a known, specific timeline where early access isn’t a concern.\n\nA money market fund (not the same thing as a bank’s “money market account”) is a type of mutual fund that invests in extremely short-term, low-risk debt. It isn’t FDIC-insured, though it’s historically been very stable, and it’s commonly the default spot uninvested cash sits inside a brokerage account.\n\nFor an emergency fund or money that might be needed on short notice, a HYSA is usually the right call: no lockup, FDIC insurance, and a rate that still meaningfully beats a checking account. Save CDs for cash on a fixed timeline, and leave brokerage cash in a money market fund only when it’s genuinely about to be invested.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Compare accounts by APY, not a bare interest rate — APY already accounts for compounding.\n2. Confirm the bank is FDIC-insured (or NCUA-insured for a credit union) before depositing anything.\n3. Expect the rate to move with the Federal Reserve — check it every few months instead of assuming it’s fixed.\n4. Use a HYSA for money that might be needed on short notice, like an emergency fund, and save CDs for cash on a fixed timeline.\n5. Watch for teaser rates — some accounts advertise a high introductory APY that drops after a few months, so read the fine print before opening one.\n6. Keep balances at any single bank under the $250,000 FDIC limit if you ever have that much cash to protect.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Inflation', 'Compound Interest', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'What’s a good APY for a high-yield savings account?',
+        a: 'There’s no fixed target, since rates move with the Federal Reserve — but a HYSA should meaningfully beat a traditional bank’s, which has often paid as little as 0.01%–0.05%. Compare a few online banks’ current APYs before choosing one.',
+      },
+      {
+        q: 'Is money in a high-yield savings account safe?',
+        a: 'Yes, as long as the bank is FDIC-insured (or NCUA-insured for a credit union) — deposits are protected up to $250,000 per depositor, per bank, backed by the federal government.',
+      },
+      {
+        q: 'Is a high-yield savings account the same as investing?',
+        a: 'No. A HYSA is a bank deposit account with a government-backed guarantee — it can’t lose value, but its long-term returns are historically far below what a diversified stock portfolio has returned over decades.',
+      },
+      {
+        q: 'Do I have to pay taxes on interest earned in a HYSA?',
+        a: 'Yes — interest earned is taxed as ordinary income, and the bank will send a 1099-INT form if the account earns $10 or more in a year.',
+      },
+    ],
+  },
 ]
