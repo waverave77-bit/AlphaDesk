@@ -18,6 +18,19 @@ type StatusResponse = {
   checkedAt: string
 }
 
+// The "paper trail" — real per-video reasoning (Gemini's justification for
+// the pick, the posted description, the on-screen dialogue lines) that used
+// to be generated and thrown away. Optional/nullable throughout since
+// videos logged before this feature simply don't have it.
+type PaperTrail = {
+  justification?: string | null
+  description?: string | null
+  winnerLine?: string | null
+  loserLine?: string | null
+  setting?: string | null
+  pickMethod?: string | null
+}
+
 type VideoItem = {
   id: string
   title: string
@@ -28,7 +41,7 @@ type VideoItem = {
   comments: number
   model: string | null
   dryRun: boolean
-}
+} & PaperTrail
 
 type ModelStats = Record<
   string,
@@ -42,7 +55,7 @@ type DraftItem = {
   title: string
   postedAt: string
   held: boolean
-}
+} & PaperTrail
 
 type RosterCharacter = { name: string; franchise: string; themeColor: string }
 
@@ -359,62 +372,93 @@ function DraftsPanel({
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {drafts.map((d) => (
-          <div
+          <DraftCard
             key={d.videoId}
-            className={`overflow-hidden rounded-lg border bg-black/30 ${
-              d.held ? 'border-white/10 opacity-60' : 'border-emerald-400/20'
+            d={d}
+            publishing={publishingId === d.videoId}
+            confirming={confirmId === d.videoId}
+            holdBusy={holdBusyId === d.videoId}
+            onPublishClick={() => handleClick(d.videoId)}
+            onHold={() => onHold(d.videoId, !d.held)}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function DraftCard({
+  d,
+  publishing,
+  confirming,
+  holdBusy,
+  onPublishClick,
+  onHold,
+}: {
+  d: DraftItem
+  publishing: boolean
+  confirming: boolean
+  holdBusy: boolean
+  onPublishClick: () => void
+  onHold: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`overflow-hidden rounded-lg border bg-black/30 ${d.held ? 'border-white/10 opacity-60' : 'border-emerald-400/20'}`}>
+      <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`}
+          alt={d.title}
+          className="aspect-video w-full object-cover opacity-90"
+        />
+      </a>
+      <div className="p-3">
+        <div className="line-clamp-2 text-xs font-semibold text-white/80">{d.title}</div>
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/40">
+          {d.model && (
+            <span
+              className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+                d.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
+              }`}
+            >
+              {d.model}
+            </span>
+          )}
+          <span
+            className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+              d.held ? 'bg-white/10 text-white/40' : 'bg-emerald-400/20 text-emerald-300'
             }`}
           >
-            <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`}
-                alt={d.title}
-                className="aspect-video w-full object-cover opacity-90"
-              />
-            </a>
-            <div className="p-3">
-              <div className="line-clamp-2 text-xs font-semibold text-white/80">{d.title}</div>
-              <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/40">
-                {d.model && (
-                  <span
-                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                      d.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
-                    }`}
-                  >
-                    {d.model}
-                  </span>
-                )}
-                <span
-                  className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                    d.held ? 'bg-white/10 text-white/40' : 'bg-emerald-400/20 text-emerald-300'
-                  }`}
-                >
-                  {d.held ? 'held' : 'queued'}
-                </span>
-                <span>{relativeTime(d.postedAt)}</span>
-              </div>
-              <button
-                onClick={() => handleClick(d.videoId)}
-                disabled={publishingId === d.videoId}
-                className={`mt-2 w-full rounded-md border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
-                  confirmId === d.videoId
-                    ? 'border-amber-400 bg-amber-400/20 text-amber-200'
-                    : 'border-emerald-400/50 bg-emerald-400/10 text-emerald-300 hover:border-emerald-400'
-                }`}
-              >
-                {publishingId === d.videoId ? 'Publishing…' : confirmId === d.videoId ? 'Confirm publish?' : '✓ Publish now'}
-              </button>
-              <button
-                onClick={() => onHold(d.videoId, !d.held)}
-                disabled={holdBusyId === d.videoId}
-                className="mt-1.5 w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white/50 transition-colors hover:border-white/25 disabled:opacity-40"
-              >
-                {holdBusyId === d.videoId ? 'Updating…' : d.held ? '↩ Add back to queue' : '✕ Don’t post'}
-              </button>
-            </div>
-          </div>
-        ))}
+            {d.held ? 'held' : 'queued'}
+          </span>
+          <span>{relativeTime(d.postedAt)}</span>
+        </div>
+        <button
+          onClick={onPublishClick}
+          disabled={publishing}
+          className={`mt-2 w-full rounded-md border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
+            confirming
+              ? 'border-amber-400 bg-amber-400/20 text-amber-200'
+              : 'border-emerald-400/50 bg-emerald-400/10 text-emerald-300 hover:border-emerald-400'
+          }`}
+        >
+          {publishing ? 'Publishing…' : confirming ? 'Confirm publish?' : '✓ Publish now'}
+        </button>
+        <button
+          onClick={onHold}
+          disabled={holdBusy}
+          className="mt-1.5 w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white/50 transition-colors hover:border-white/25 disabled:opacity-40"
+        >
+          {holdBusy ? 'Updating…' : d.held ? '↩ Add back to queue' : '✕ Don’t post'}
+        </button>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="mt-1.5 w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-white/40 transition-colors hover:border-white/25 hover:text-white/60"
+        >
+          {open ? '▴ Hide paper trail' : '▾ Paper trail'}
+        </button>
+        {open && <PaperTrailPanel item={d} />}
       </div>
     </div>
   )
@@ -471,6 +515,84 @@ const VIDEO_SORTS = [
   { key: 'engagement', label: 'Top Engagement' },
 ] as const
 type VideoSort = (typeof VIDEO_SORTS)[number]['key']
+
+function PaperTrailPanel({ item }: { item: PaperTrail }) {
+  const rows: { label: string; value: string }[] = []
+  if (item.pickMethod) rows.push({ label: 'Pick Method', value: item.pickMethod })
+  if (item.setting) rows.push({ label: 'Setting', value: item.setting })
+  if (item.justification) rows.push({ label: 'Reasoning', value: item.justification })
+  if (item.description) rows.push({ label: 'Description', value: item.description })
+  if (item.winnerLine) rows.push({ label: 'Winner Line', value: `"${item.winnerLine}"` })
+  if (item.loserLine) rows.push({ label: 'Loser Line', value: `"${item.loserLine}"` })
+
+  if (rows.length === 0) {
+    return (
+      <div className="mt-2 rounded border border-white/10 bg-black/40 p-2.5 text-[10px] text-white/30">
+        No paper trail logged — posted before this feature.
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-2 space-y-2 rounded border border-white/10 bg-black/40 p-2.5">
+      {rows.map((r) => (
+        <div key={r.label}>
+          <div className="text-[9px] font-bold uppercase tracking-widest text-emerald-300/60">{r.label}</div>
+          <div className="text-[11px] leading-snug text-white/70">{r.value}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function VideoCard({ v }: { v: VideoItem }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/30 transition-colors hover:border-cyan-400/40">
+      <a href={`https://youtube.com/shorts/${v.id}`} target="_blank" rel="noopener noreferrer">
+        {v.thumbnail && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={v.thumbnail} alt={v.title} className="aspect-video w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />
+        )}
+      </a>
+      <div className="p-3">
+        <a
+          href={`https://youtube.com/shorts/${v.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="line-clamp-2 block text-xs font-semibold text-white/80 hover:text-cyan-200"
+        >
+          {v.title}
+        </a>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] text-white/40">
+          <span>👁 {formatNum(v.views)}</span>
+          <span>❤ {formatNum(v.likes)}</span>
+          <span>💬 {formatNum(v.comments)}</span>
+        </div>
+        <div className="mt-1.5 flex items-center gap-1.5">
+          {v.model && (
+            <span
+              className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
+                v.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
+              }`}
+            >
+              {v.model}
+            </span>
+          )}
+          {v.dryRun && <span className="rounded bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white/50">dry run</span>}
+          <span className="text-[10px] text-white/30">{relativeTime(v.publishedAt)}</span>
+        </div>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="mt-2 w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-white/40 transition-colors hover:border-white/25 hover:text-white/60"
+        >
+          {open ? '▴ Hide paper trail' : '▾ Paper trail'}
+        </button>
+        {open && <PaperTrailPanel item={v} />}
+      </div>
+    </div>
+  )
+}
 
 function VideoGrid({
   videos,
@@ -532,39 +654,7 @@ function VideoGrid({
           <ModelStatsRow modelStats={modelStats} />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {sorted.map((v) => (
-              <a
-                key={v.id}
-                href={`https://youtube.com/shorts/${v.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/30 transition-colors hover:border-cyan-400/40"
-              >
-                {v.thumbnail && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={v.thumbnail} alt={v.title} className="aspect-video w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />
-                )}
-                <div className="p-3">
-                  <div className="line-clamp-2 text-xs font-semibold text-white/80">{v.title}</div>
-                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] text-white/40">
-                    <span>👁 {formatNum(v.views)}</span>
-                    <span>❤ {formatNum(v.likes)}</span>
-                    <span>💬 {formatNum(v.comments)}</span>
-                  </div>
-                  <div className="mt-1.5 flex items-center gap-1.5">
-                    {v.model && (
-                      <span
-                        className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                          v.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
-                        }`}
-                      >
-                        {v.model}
-                      </span>
-                    )}
-                    {v.dryRun && <span className="rounded bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white/50">dry run</span>}
-                    <span className="text-[10px] text-white/30">{relativeTime(v.publishedAt)}</span>
-                  </div>
-                </div>
-              </a>
+              <VideoCard key={v.id} v={v} />
             ))}
           </div>
         </>
