@@ -676,4 +676,64 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'will-a-raise-put-me-in-a-higher-tax-bracket',
+    title: 'Will a Raise Put You in a Higher Tax Bracket and Actually Shrink Your Paycheck?',
+    metaTitle: 'Raise & Tax Brackets: Can a Raise Ever Lower Your Take-Home Pay?',
+    description:
+      'A raise can never shrink your paycheck because of “moving up a bracket” — that’s a myth about how marginal tax rates work. Here’s the real math.',
+    date: '2026-07-26',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You’re about to take a raise or a shift with more hours, and someone — a coworker, a relative, a comment section — warns you it might bump you into a higher tax bracket and leave you with less take-home pay than before. It’s one of the most repeated myths in personal finance, and it’s backwards. Here’s how marginal tax brackets actually work, and the one real (but different) situation where extra income genuinely can cost you money.',
+    sections: [
+      {
+        heading: 'The myth: “a raise pushed me into a higher bracket, so now I take home less”',
+        body: 'This is not how the US federal income tax system works, and it’s worth killing the idea completely before it stops you from taking a raise or extra shift. The federal system doesn’t apply one tax rate to your whole income based on which bracket you land in — it’s a marginal system, meaning each bracket’s rate only applies to the slice of income that falls inside that bracket.\n\nSo getting a raise that pushes you from, say, a 12% bracket into a 22% bracket doesn’t mean your entire income suddenly gets taxed at 22%. It means only the new dollars above that bracket line get taxed at 22% — every dollar you were already earning keeps being taxed exactly the way it was before. A raise can never make your paycheck smaller through this mechanism. At worst, it means your next dollars are taxed a bit more, but you always keep more than you had before.',
+      },
+      {
+        heading: 'How marginal brackets actually stack, with an illustrative example',
+        body: 'The US currently uses seven federal income tax brackets, with rates running from 10% up to 37%. The exact dollar cutoffs for each bracket shift a little every year because they’re adjusted for inflation, so always check the current IRS tables rather than memorizing a number — but the mechanism itself never changes.\n\nHere’s the shape of it with simple, illustrative round numbers (not this year’s exact cutoffs): say the 10% bracket covers your first chunk of taxable income, the 12% bracket covers the next chunk after that, and so on up the ladder. If a raise moves $2,000 of your income from the 12% bracket into the 22% bracket, you don’t pay 22% on your whole salary — you pay 22% on that $2,000, and everything below it is taxed exactly as it was. You still net roughly $1,560 of that $2,000 after federal tax, instead of the full $2,000 — but that’s still $1,560 more than you had before the raise, not less.',
+      },
+      {
+        heading: '“Effective rate” vs. “marginal rate” — the two numbers people mix up',
+        body: 'Your marginal rate is the rate charged on your next dollar of income — the bracket you’re “in.” Your effective rate is your total tax bill divided by your total income, which blends every bracket you passed through on the way up, plus deductions. Your effective rate is always lower than your marginal rate once you’re past the first bracket, because a chunk of your income is still being taxed at the lower rates below it.\n\nThis is the exact confusion behind the bracket myth: people hear “I’m in the 22% bracket now” and assume 22% is being taken off their whole paycheck, when in reality their effective rate — what they actually pay as a share of total income — is meaningfully lower, because it blends in all the cheaper brackets below it too.',
+      },
+      {
+        heading: 'FICA doesn’t work like brackets at all',
+        body: 'The other lines on your paycheck — Social Security and Medicare, together called FICA — don’t use graduated brackets the way income tax does. Social Security is a flat 6.2% on wages, but only up to an annual wage base limit that’s adjusted each year; above that cap, the 6.2% simply stops being withheld for the rest of the year, which is part of why very high earners sometimes notice a bigger paycheck late in December.\n\nMedicare is a flat 1.45% with no cap at all — every dollar you earn owes it, no matter how much you make. There’s one exception that adds, not subtracts: once your income crosses $200,000 in a year (for a single filer), an Additional Medicare Tax of 0.9% kicks in on the amount above that threshold. Like everything else here, it only applies to the income above the line, not your whole paycheck.',
+      },
+      {
+        heading: 'Where a bonus can genuinely feel smaller — and why it evens out',
+        body: 'There’s a real reason bonuses sometimes feel over-taxed, and it’s not a bracket myth — it’s a withholding rule. The IRS allows employers to withhold supplemental wages (bonuses, commissions, some overtime payouts) at a flat rate — commonly 22% federally for amounts under $1 million in a year — instead of using your regular paycheck’s withholding formula. If your regular paycheck normally withholds less than 22%, that bonus can look like it got hit harder.\n\nThat flat rate is only withholding, not your actual final tax bill. When you file your return, all your income — regular pay and bonuses together — gets combined and taxed under the normal marginal brackets described above. If too much was withheld from the bonus, you get the difference back as part of your refund; you’re never actually stuck paying the flat 22% permanently.',
+      },
+      {
+        heading: 'The one place extra income can genuinely cost you: benefit cliffs',
+        body: 'The bracket myth is false, but there’s a real phenomenon that sounds similar: a “benefits cliff.” Certain income-based programs — some Affordable Care Act insurance subsidies, financial aid formulas, income-driven student loan repayment plans, and some state assistance programs — use income thresholds that aren’t marginal. Crossing one can reduce or eliminate a subsidy or benefit all at once, rather than phasing it out gradually.\n\nThis is worth knowing about, but it’s a completely different mechanism from “tax brackets,” and it applies to a fairly specific set of programs — not to ordinary income tax withholding. If you’re close to a known threshold for financial aid or a subsidized program, it’s worth checking that program’s specific rules; it’s not a reason to turn down a raise or extra work hours in general.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Remember: marginal tax brackets only tax the income inside each bracket, never your whole paycheck at the top rate.\n2. A raise can lower how much of the raise you keep, but it can never make your total take-home pay go down.\n3. Don’t confuse your marginal rate (the rate on your next dollar) with your effective rate (your real overall rate) — they’re never the same number once you’re past the first bracket.\n4. If a bonus withholding looks high, don’t panic — it’s usually a flat supplemental withholding rate, reconciled (and often refunded) when you file.\n5. Before turning down extra income out of fear, check whether you’re near an actual benefits cliff (financial aid, subsidies, income-driven loan payments) — that’s the real place income thresholds can bite, not ordinary income tax.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Inflation', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Can a raise ever make your paycheck smaller?',
+        a: 'No. The US federal income tax system is marginal — only the income within each bracket is taxed at that bracket’s rate. A raise might mean your new dollars are taxed a bit more, but you always keep more money overall than before the raise.',
+      },
+      {
+        q: 'What’s the difference between marginal tax rate and effective tax rate?',
+        a: 'Your marginal rate is the tax rate applied to your next dollar of income — the bracket you’re currently in. Your effective rate is your total tax bill divided by your total income, blending every lower bracket you passed through. Effective rate is always lower than marginal rate once you’re past the first bracket.',
+      },
+      {
+        q: 'Why does my bonus get taxed more than my regular paycheck?',
+        a: 'It’s usually not taxed at a higher rate permanently — employers commonly withhold a flat rate (often 22% federally) on bonuses instead of your regular paycheck’s formula. When you file your taxes, bonus income and regular income combine and get taxed under the normal brackets, and any over-withholding comes back as part of your refund.',
+      },
+      {
+        q: 'Is there any situation where earning more money actually costs you money?',
+        a: 'Ordinary income tax brackets, no. But certain income-based programs — some ACA subsidies, financial aid, income-driven student loan plans — use non-marginal thresholds called “benefits cliffs,” where crossing a line can reduce or remove a benefit all at once. That’s a program-specific issue, not how income tax brackets work.',
+      },
+    ],
+  },
 ]
