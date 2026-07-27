@@ -736,4 +736,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'debit-card-vs-credit-card-difference',
+    title: 'Debit Card or Credit Card: What’s the Real Difference, and Which Should You Get First?',
+    metaTitle: 'Debit vs. Credit Card: The Real Difference (and Which First)',
+    description:
+      'Debit and credit cards look identical at checkout but work completely differently — whose money moves, what builds your credit, and who’s liable for fraud.',
+    date: '2026-07-27',
+    category: 'Credit',
+    intro:
+      'They’re the same size, the same chip, the same tap-to-pay — and functionally almost nothing alike. One spends money you already have; the other spends a bank’s money that you promise to pay back. That single difference cascades into everything else: whether it builds your credit, how you’re protected from fraud, and how each one can quietly cost you money if you’re not paying attention.',
+    sections: [
+      {
+        heading: 'The core difference: whose money is actually moving',
+        body: 'A debit card is wired directly to your checking account. Swipe it, and the money leaves your account within a day or two — you’re spending cash you already have. There’s no borrowing involved, so there’s no way to owe interest on a debit purchase.\n\nA credit card is a line of credit issued by a bank. Swipe it, and the bank pays the merchant on your behalf — you now owe that amount to the bank. Pay the full statement balance by the due date and it costs you nothing extra. Carry a balance past that date and it starts accruing interest, often at a steep APR. Same tap, completely different mechanism underneath.',
+      },
+      {
+        heading: 'Only one of them builds your credit score',
+        body: 'This is the detail that actually matters for your future: debit card activity is almost never reported to the three credit bureaus (Equifax, Experian, TransUnion), because you’re not borrowing anything — there’s nothing for a bureau to track. You can use a debit card responsibly for ten years and it will do essentially nothing for your credit score.\n\nA credit card, used well, is one of the main tools most people use to build credit. Every month, the issuer reports your balance and whether you paid on time to all three bureaus — that payment history is roughly 35% of a FICO score, the single biggest factor in the whole formula. Skip credit cards entirely and you can reach your mid-20s still showing up as “no credit history” to a landlord or lender, which can be just as much of a red flag as bad credit.',
+      },
+      {
+        heading: 'The fraud-protection gap nobody explains at checkout',
+        body: 'If your card number gets stolen, the legal protections are not the same, and the gap is bigger than most people realize. Debit card fraud is covered by the Electronic Fund Transfer Act: report it within 2 business days of noticing and your liability is capped at $50. Wait longer — up to 60 days after your statement is sent — and the cap jumps to $500. Wait past 60 days and you can be on the hook for the entire amount, with no legal cap at all. And because it’s your checking account, the money is already gone while the dispute gets investigated, which can mean a rent or grocery payment bounces in the meantime.\n\nCredit card fraud works in your favor by comparison. Under the Fair Credit Billing Act, your maximum legal liability for unauthorized charges is $50, and every major network — Visa, Mastercard, Amex, Discover — layers a $0 liability policy on top of that, so in practice you almost never pay a cent. Just as important: it’s the bank’s money on the line while the charge is disputed, not yours, so nothing drains out of your own account while it’s sorted out.',
+      },
+      {
+        heading: 'Where each one can quietly cost you money',
+        body: 'Debit cards carry overdraft risk. Spend more than your checking balance and, unless you’ve opted out of overdraft coverage, the bank can approve the purchase anyway and charge a fee — commonly in the $30–$35 range per occurrence, and if multiple transactions trip it in one day, those fees can stack fast. Opting out of overdraft coverage fixes this — the card simply declines instead of trapping you into a fee.\n\nCredit cards carry interest risk. Carry a balance past the due date and the issuer charges interest — often north of 20% APR — calculated daily on whatever you owe. Minimum payments are structured to shrink slowly, which is exactly how a $1,000 balance turns into years of payments if you only ever pay the minimum. The fix here is just as simple in principle: pay the full statement balance every month, and the interest rate becomes irrelevant because you never actually borrow anything for more than a few weeks at a time.',
+      },
+      {
+        heading: 'So which should you actually get first?',
+        body: 'You don’t have to choose — most people end up using both for different jobs, but the order matters. A debit card is the safer starting point for day-to-day spending as a teenager, since it’s tied to money you already have and there’s no way to rack up debt on it. Many banks offer teen checking accounts with a linked debit card and parental controls starting around age 13–16.\n\nA credit card becomes relevant once you have (or a parent is willing to co-sign or add you as an authorized user for) some form of income, generally starting at 18. If you can get added as an authorized user on a parent’s well-managed card, or qualify for a secured or student card, starting to build credit in your late teens or early twenties gives that 15%-of-your-score “length of credit history” factor years of a head start over waiting until you need an apartment or a car loan and have nothing on file.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Use a debit card for everyday spending you can fully afford — it can’t put you into debt.\n2. Once you have income (or a willing co-signer/authorized-user option), open a credit card specifically to build history — not to spend more than you would otherwise.\n3. Set every credit card to autopay the full statement balance, so interest never becomes a factor.\n4. Opt out of debit card overdraft coverage so a shortfall declines instead of triggering a fee.\n5. Check your bank and card statements regularly — for debit, report anything wrong within 2 days if you can, since the liability cap gets worse the longer you wait.\n6. Never treat a credit card’s limit as spending money — it’s borrowed money with your name and your future credit score attached to it.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Does using a debit card build your credit score?',
+        a: 'No. Debit card activity is almost never reported to the credit bureaus, since you’re spending your own money rather than borrowing. Building credit generally requires a product that reports to Equifax, Experian, and TransUnion, like a credit card or credit-builder loan.',
+      },
+      {
+        q: 'Is a debit card or credit card safer if my card gets stolen?',
+        a: 'Credit cards offer stronger practical protection. Federal law caps your liability at $50 either way, but debit fraud can cost up to $500 (or more) if you don’t report it within 60 days, and the money leaves your checking account immediately. Credit card networks also layer on $0 liability policies, and it’s the bank’s money at risk during a dispute, not yours.',
+      },
+      {
+        q: 'Should a teenager get a debit card or a credit card first?',
+        a: 'A debit card, usually through a teen checking account with parental controls, is the standard starting point since it can’t create debt. A credit card becomes relevant once there’s income or a parent willing to add you as an authorized user or co-signer, typically in the later teen years.',
+      },
+      {
+        q: 'What happens if I overdraft my debit card?',
+        a: 'If you haven’t opted out of overdraft coverage, the bank can approve the purchase anyway and charge a fee, commonly in the $30–$35 range per occurrence. Opting out means the transaction is simply declined instead, which avoids the fee entirely.',
+      },
+    ],
+  },
 ]
