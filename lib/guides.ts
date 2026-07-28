@@ -792,4 +792,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-on-venmo-cash-app-money',
+    title: 'Do You Have to Pay Taxes on Venmo, Cash App, or PayPal Money?',
+    metaTitle: 'Venmo & Cash App Taxes: What’s Actually Taxable',
+    description:
+      'Splitting rent isn’t taxable, but selling stuff for profit is — here’s how the Venmo/Cash App 1099-K rules actually work, and what you really owe tax on.',
+    date: '2026-07-28',
+    category: 'Paychecks & Taxes',
+    intro:
+      'A friend Venmos you for their half of dinner, or your parents send you rent money through Cash App, and then tax season rolls around and someone panics about a “$600 rule” they saw online. Here’s the actual mechanics: what these apps report to the IRS, what you actually owe tax on, and why those are two very different questions.',
+    sections: [
+      {
+        heading: 'The 1099-K panic, explained',
+        body: 'Payment apps like Venmo, PayPal, and Cash App are classified by the IRS as “third-party settlement organizations.” Once your payments for goods and services on one of these apps cross a certain dollar threshold in a calendar year, the app is required to send you (and the IRS) a Form 1099-K summarizing what it processed under your account.\n\nThat threshold has been a moving target for several years running. A 2021 law originally set it to drop sharply from an older $20,000-and-200-transactions rule down to just $600 total — and the IRS has delayed, phased in, and adjusted that change multiple times since, with Congress also weighing in on where it should ultimately land. Because the exact number keeps shifting year to year, don’t trust a figure from an old article — check IRS.gov or the app’s own help page for whatever threshold applies to the current tax year.\n\nHere’s the part almost nobody explains clearly: the 1099-K threshold only controls when a form gets sent to you. It has nothing to do with whether the underlying money is actually taxable. That’s a completely separate question, and it’s the one that actually matters.',
+      },
+      {
+        heading: 'The real rule: what was the money for?',
+        body: 'Every payment app now asks you to tag a transaction as “friends and family” (personal) or “goods and services” (business) when money changes hands — and that tag is the whole ballgame.\n\nMoney that changes hands for personal reasons is never taxable income, no matter how large it is or whether a 1099-K shows up. Your roommate paying you back for their half of the electric bill, your parents sending money for a plane ticket home, a friend Venmoing you for concert tickets you covered — none of that is income. It’s just money moving between people, the same as if they’d handed you cash.\n\nMoney you receive for goods or services — freelance design work, tutoring, selling something you made, getting paid for a side gig — is taxable income, exactly the same as if you’d been paid by check or direct deposit. The app you used to receive it doesn’t change that. This is the same principle behind how gig and freelance income gets taxed — Venmo and Cash App are just another way that money can land in your account.',
+      },
+      {
+        heading: 'Selling your own stuff: usually not taxable, with one exception',
+        body: 'A lot of the false alarm around this topic comes from people selling their own used belongings — an old phone, clothes, furniture — through apps like Venmo, Facebook Marketplace, or Poshmark, and worrying the payment counts as taxable income.\n\nFor most personal items, it doesn’t. If you sell something for less than you originally paid for it — true of almost everything you personally own and use — there’s no taxable gain, because you sold it at a loss, not a profit. The IRS doesn’t tax money that was never a gain in the first place.\n\nThe exception is selling a personal item for more than you paid for it — a collectible that appreciated, concert tickets resold above face value, sneakers flipped for a profit. In that specific case, the profit (sale price minus what you originally paid) is taxable, reported the same way as any other capital gain. And if reselling becomes a regular, repeated activity rather than the occasional garage-sale item, the IRS can treat it as a business instead of casual selling — which brings in self-employment tax on top of income tax, the same $400 net-earnings threshold that applies to any other gig work.',
+      },
+      {
+        heading: 'What to do if you get a 1099-K for money that wasn’t actually income',
+        body: 'Because personal payments and business payments both flow through the same app, a 1099-K can sometimes lump in money that was never actually taxable — a roommate’s rent reimbursement that got mistagged, for instance. Getting the form doesn’t automatically mean you owe tax on the full amount shown.\n\nWhat it does mean is you need to account for it on your tax return rather than just ignoring it, since the IRS also gets a copy and expects the numbers to line up. If part of a 1099-K total wasn’t actually income, your return includes a way to report the 1099-K amount and then back out the non-taxable portion, with a brief explanation. This is exactly why it matters to tag transactions correctly as “friends and family” in the apps in the first place — it keeps the form itself accurate and saves you the cleanup later.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Always tag personal payments — rent splits, reimbursements, gifts — as “friends and family,” not “goods and services,” so they don’t get mixed into a 1099-K by mistake.\n2. Remember: getting a 1099-K doesn’t automatically mean you owe tax on the full amount — it’s a reporting form, not a bill.\n3. If you’re paid through an app for freelance work, tutoring, or a side hustle, treat it exactly like gig income — track it, and know the $400 self-employment filing threshold applies.\n4. Selling your own used stuff for less than you paid isn’t taxable; selling for a profit is, even if it’s just one collectible or a resold pair of sneakers.\n5. Keep basic records — what something cost, what it sold for, what a payment was actually for — so you’re not guessing at tax time.\n6. Check the current-year 1099-K reporting threshold on IRS.gov before assuming a number you saw online is still accurate.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on money my parents send me through Venmo?',
+        a: 'No. Personal transfers — gifts, allowance, reimbursements from family or friends — are never taxable income, regardless of the amount or whether a 1099-K gets issued.',
+      },
+      {
+        q: 'What is a 1099-K and why did I get one?',
+        a: 'It’s a form payment apps send when your “goods and services” payments cross the IRS reporting threshold for the year. Getting one doesn’t automatically mean the full amount is taxable — personal payments that got mistagged can be backed out on your return.',
+      },
+      {
+        q: 'Do I owe taxes if I sell my old phone or clothes on Venmo?',
+        a: 'Usually not — selling personal items for less than you originally paid isn’t a taxable gain. If you sell something for more than you paid, like a collectible or resold tickets, that profit is taxable.',
+      },
+      {
+        q: 'Is Venmo income the same as a regular paycheck for tax purposes?',
+        a: 'If it’s payment for work — freelancing, tutoring, a side hustle — yes, it’s taxable income just like a regular paycheck, and if net earnings hit $400 in a year, it also triggers self-employment tax, same as any other 1099 income.',
+      },
+    ],
+  },
 ]
