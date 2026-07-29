@@ -676,4 +676,172 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'will-a-raise-put-me-in-a-higher-tax-bracket',
+    title: 'Will a Raise Put You in a Higher Tax Bracket and Actually Shrink Your Paycheck?',
+    metaTitle: 'Raise & Tax Brackets: Can a Raise Ever Lower Your Take-Home Pay?',
+    description:
+      'A raise can never shrink your paycheck because of “moving up a bracket” — that’s a myth about how marginal tax rates work. Here’s the real math.',
+    date: '2026-07-26',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You’re about to take a raise or a shift with more hours, and someone — a coworker, a relative, a comment section — warns you it might bump you into a higher tax bracket and leave you with less take-home pay than before. It’s one of the most repeated myths in personal finance, and it’s backwards. Here’s how marginal tax brackets actually work, and the one real (but different) situation where extra income genuinely can cost you money.',
+    sections: [
+      {
+        heading: 'The myth: “a raise pushed me into a higher bracket, so now I take home less”',
+        body: 'This is not how the US federal income tax system works, and it’s worth killing the idea completely before it stops you from taking a raise or extra shift. The federal system doesn’t apply one tax rate to your whole income based on which bracket you land in — it’s a marginal system, meaning each bracket’s rate only applies to the slice of income that falls inside that bracket.\n\nSo getting a raise that pushes you from, say, a 12% bracket into a 22% bracket doesn’t mean your entire income suddenly gets taxed at 22%. It means only the new dollars above that bracket line get taxed at 22% — every dollar you were already earning keeps being taxed exactly the way it was before. A raise can never make your paycheck smaller through this mechanism. At worst, it means your next dollars are taxed a bit more, but you always keep more than you had before.',
+      },
+      {
+        heading: 'How marginal brackets actually stack, with an illustrative example',
+        body: 'The US currently uses seven federal income tax brackets, with rates running from 10% up to 37%. The exact dollar cutoffs for each bracket shift a little every year because they’re adjusted for inflation, so always check the current IRS tables rather than memorizing a number — but the mechanism itself never changes.\n\nHere’s the shape of it with simple, illustrative round numbers (not this year’s exact cutoffs): say the 10% bracket covers your first chunk of taxable income, the 12% bracket covers the next chunk after that, and so on up the ladder. If a raise moves $2,000 of your income from the 12% bracket into the 22% bracket, you don’t pay 22% on your whole salary — you pay 22% on that $2,000, and everything below it is taxed exactly as it was. You still net roughly $1,560 of that $2,000 after federal tax, instead of the full $2,000 — but that’s still $1,560 more than you had before the raise, not less.',
+      },
+      {
+        heading: '“Effective rate” vs. “marginal rate” — the two numbers people mix up',
+        body: 'Your marginal rate is the rate charged on your next dollar of income — the bracket you’re “in.” Your effective rate is your total tax bill divided by your total income, which blends every bracket you passed through on the way up, plus deductions. Your effective rate is always lower than your marginal rate once you’re past the first bracket, because a chunk of your income is still being taxed at the lower rates below it.\n\nThis is the exact confusion behind the bracket myth: people hear “I’m in the 22% bracket now” and assume 22% is being taken off their whole paycheck, when in reality their effective rate — what they actually pay as a share of total income — is meaningfully lower, because it blends in all the cheaper brackets below it too.',
+      },
+      {
+        heading: 'FICA doesn’t work like brackets at all',
+        body: 'The other lines on your paycheck — Social Security and Medicare, together called FICA — don’t use graduated brackets the way income tax does. Social Security is a flat 6.2% on wages, but only up to an annual wage base limit that’s adjusted each year; above that cap, the 6.2% simply stops being withheld for the rest of the year, which is part of why very high earners sometimes notice a bigger paycheck late in December.\n\nMedicare is a flat 1.45% with no cap at all — every dollar you earn owes it, no matter how much you make. There’s one exception that adds, not subtracts: once your income crosses $200,000 in a year (for a single filer), an Additional Medicare Tax of 0.9% kicks in on the amount above that threshold. Like everything else here, it only applies to the income above the line, not your whole paycheck.',
+      },
+      {
+        heading: 'Where a bonus can genuinely feel smaller — and why it evens out',
+        body: 'There’s a real reason bonuses sometimes feel over-taxed, and it’s not a bracket myth — it’s a withholding rule. The IRS allows employers to withhold supplemental wages (bonuses, commissions, some overtime payouts) at a flat rate — commonly 22% federally for amounts under $1 million in a year — instead of using your regular paycheck’s withholding formula. If your regular paycheck normally withholds less than 22%, that bonus can look like it got hit harder.\n\nThat flat rate is only withholding, not your actual final tax bill. When you file your return, all your income — regular pay and bonuses together — gets combined and taxed under the normal marginal brackets described above. If too much was withheld from the bonus, you get the difference back as part of your refund; you’re never actually stuck paying the flat 22% permanently.',
+      },
+      {
+        heading: 'The one place extra income can genuinely cost you: benefit cliffs',
+        body: 'The bracket myth is false, but there’s a real phenomenon that sounds similar: a “benefits cliff.” Certain income-based programs — some Affordable Care Act insurance subsidies, financial aid formulas, income-driven student loan repayment plans, and some state assistance programs — use income thresholds that aren’t marginal. Crossing one can reduce or eliminate a subsidy or benefit all at once, rather than phasing it out gradually.\n\nThis is worth knowing about, but it’s a completely different mechanism from “tax brackets,” and it applies to a fairly specific set of programs — not to ordinary income tax withholding. If you’re close to a known threshold for financial aid or a subsidized program, it’s worth checking that program’s specific rules; it’s not a reason to turn down a raise or extra work hours in general.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Remember: marginal tax brackets only tax the income inside each bracket, never your whole paycheck at the top rate.\n2. A raise can lower how much of the raise you keep, but it can never make your total take-home pay go down.\n3. Don’t confuse your marginal rate (the rate on your next dollar) with your effective rate (your real overall rate) — they’re never the same number once you’re past the first bracket.\n4. If a bonus withholding looks high, don’t panic — it’s usually a flat supplemental withholding rate, reconciled (and often refunded) when you file.\n5. Before turning down extra income out of fear, check whether you’re near an actual benefits cliff (financial aid, subsidies, income-driven loan payments) — that’s the real place income thresholds can bite, not ordinary income tax.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Inflation', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Can a raise ever make your paycheck smaller?',
+        a: 'No. The US federal income tax system is marginal — only the income within each bracket is taxed at that bracket’s rate. A raise might mean your new dollars are taxed a bit more, but you always keep more money overall than before the raise.',
+      },
+      {
+        q: 'What’s the difference between marginal tax rate and effective tax rate?',
+        a: 'Your marginal rate is the tax rate applied to your next dollar of income — the bracket you’re currently in. Your effective rate is your total tax bill divided by your total income, blending every lower bracket you passed through. Effective rate is always lower than marginal rate once you’re past the first bracket.',
+      },
+      {
+        q: 'Why does my bonus get taxed more than my regular paycheck?',
+        a: 'It’s usually not taxed at a higher rate permanently — employers commonly withhold a flat rate (often 22% federally) on bonuses instead of your regular paycheck’s formula. When you file your taxes, bonus income and regular income combine and get taxed under the normal brackets, and any over-withholding comes back as part of your refund.',
+      },
+      {
+        q: 'Is there any situation where earning more money actually costs you money?',
+        a: 'Ordinary income tax brackets, no. But certain income-based programs — some ACA subsidies, financial aid, income-driven student loan plans — use non-marginal thresholds called “benefits cliffs,” where crossing a line can reduce or remove a benefit all at once. That’s a program-specific issue, not how income tax brackets work.',
+      },
+    ],
+  },
+  {
+    slug: 'debit-card-vs-credit-card-difference',
+    title: 'Debit Card or Credit Card: What’s the Real Difference, and Which Should You Get First?',
+    metaTitle: 'Debit vs. Credit Card: The Real Difference (and Which First)',
+    description:
+      'Debit and credit cards look identical at checkout but work completely differently — whose money moves, what builds your credit, and who’s liable for fraud.',
+    date: '2026-07-27',
+    category: 'Credit',
+    intro:
+      'They’re the same size, the same chip, the same tap-to-pay — and functionally almost nothing alike. One spends money you already have; the other spends a bank’s money that you promise to pay back. That single difference cascades into everything else: whether it builds your credit, how you’re protected from fraud, and how each one can quietly cost you money if you’re not paying attention.',
+    sections: [
+      {
+        heading: 'The core difference: whose money is actually moving',
+        body: 'A debit card is wired directly to your checking account. Swipe it, and the money leaves your account within a day or two — you’re spending cash you already have. There’s no borrowing involved, so there’s no way to owe interest on a debit purchase.\n\nA credit card is a line of credit issued by a bank. Swipe it, and the bank pays the merchant on your behalf — you now owe that amount to the bank. Pay the full statement balance by the due date and it costs you nothing extra. Carry a balance past that date and it starts accruing interest, often at a steep APR. Same tap, completely different mechanism underneath.',
+      },
+      {
+        heading: 'Only one of them builds your credit score',
+        body: 'This is the detail that actually matters for your future: debit card activity is almost never reported to the three credit bureaus (Equifax, Experian, TransUnion), because you’re not borrowing anything — there’s nothing for a bureau to track. You can use a debit card responsibly for ten years and it will do essentially nothing for your credit score.\n\nA credit card, used well, is one of the main tools most people use to build credit. Every month, the issuer reports your balance and whether you paid on time to all three bureaus — that payment history is roughly 35% of a FICO score, the single biggest factor in the whole formula. Skip credit cards entirely and you can reach your mid-20s still showing up as “no credit history” to a landlord or lender, which can be just as much of a red flag as bad credit.',
+      },
+      {
+        heading: 'The fraud-protection gap nobody explains at checkout',
+        body: 'If your card number gets stolen, the legal protections are not the same, and the gap is bigger than most people realize. Debit card fraud is covered by the Electronic Fund Transfer Act: report it within 2 business days of noticing and your liability is capped at $50. Wait longer — up to 60 days after your statement is sent — and the cap jumps to $500. Wait past 60 days and you can be on the hook for the entire amount, with no legal cap at all. And because it’s your checking account, the money is already gone while the dispute gets investigated, which can mean a rent or grocery payment bounces in the meantime.\n\nCredit card fraud works in your favor by comparison. Under the Fair Credit Billing Act, your maximum legal liability for unauthorized charges is $50, and every major network — Visa, Mastercard, Amex, Discover — layers a $0 liability policy on top of that, so in practice you almost never pay a cent. Just as important: it’s the bank’s money on the line while the charge is disputed, not yours, so nothing drains out of your own account while it’s sorted out.',
+      },
+      {
+        heading: 'Where each one can quietly cost you money',
+        body: 'Debit cards carry overdraft risk. Spend more than your checking balance and, unless you’ve opted out of overdraft coverage, the bank can approve the purchase anyway and charge a fee — commonly in the $30–$35 range per occurrence, and if multiple transactions trip it in one day, those fees can stack fast. Opting out of overdraft coverage fixes this — the card simply declines instead of trapping you into a fee.\n\nCredit cards carry interest risk. Carry a balance past the due date and the issuer charges interest — often north of 20% APR — calculated daily on whatever you owe. Minimum payments are structured to shrink slowly, which is exactly how a $1,000 balance turns into years of payments if you only ever pay the minimum. The fix here is just as simple in principle: pay the full statement balance every month, and the interest rate becomes irrelevant because you never actually borrow anything for more than a few weeks at a time.',
+      },
+      {
+        heading: 'So which should you actually get first?',
+        body: 'You don’t have to choose — most people end up using both for different jobs, but the order matters. A debit card is the safer starting point for day-to-day spending as a teenager, since it’s tied to money you already have and there’s no way to rack up debt on it. Many banks offer teen checking accounts with a linked debit card and parental controls starting around age 13–16.\n\nA credit card becomes relevant once you have (or a parent is willing to co-sign or add you as an authorized user for) some form of income, generally starting at 18. If you can get added as an authorized user on a parent’s well-managed card, or qualify for a secured or student card, starting to build credit in your late teens or early twenties gives that 15%-of-your-score “length of credit history” factor years of a head start over waiting until you need an apartment or a car loan and have nothing on file.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Use a debit card for everyday spending you can fully afford — it can’t put you into debt.\n2. Once you have income (or a willing co-signer/authorized-user option), open a credit card specifically to build history — not to spend more than you would otherwise.\n3. Set every credit card to autopay the full statement balance, so interest never becomes a factor.\n4. Opt out of debit card overdraft coverage so a shortfall declines instead of triggering a fee.\n5. Check your bank and card statements regularly — for debit, report anything wrong within 2 days if you can, since the liability cap gets worse the longer you wait.\n6. Never treat a credit card’s limit as spending money — it’s borrowed money with your name and your future credit score attached to it.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Does using a debit card build your credit score?',
+        a: 'No. Debit card activity is almost never reported to the credit bureaus, since you’re spending your own money rather than borrowing. Building credit generally requires a product that reports to Equifax, Experian, and TransUnion, like a credit card or credit-builder loan.',
+      },
+      {
+        q: 'Is a debit card or credit card safer if my card gets stolen?',
+        a: 'Credit cards offer stronger practical protection. Federal law caps your liability at $50 either way, but debit fraud can cost up to $500 (or more) if you don’t report it within 60 days, and the money leaves your checking account immediately. Credit card networks also layer on $0 liability policies, and it’s the bank’s money at risk during a dispute, not yours.',
+      },
+      {
+        q: 'Should a teenager get a debit card or a credit card first?',
+        a: 'A debit card, usually through a teen checking account with parental controls, is the standard starting point since it can’t create debt. A credit card becomes relevant once there’s income or a parent willing to add you as an authorized user or co-signer, typically in the later teen years.',
+      },
+      {
+        q: 'What happens if I overdraft my debit card?',
+        a: 'If you haven’t opted out of overdraft coverage, the bank can approve the purchase anyway and charge a fee, commonly in the $30–$35 range per occurrence. Opting out means the transaction is simply declined instead, which avoids the fee entirely.',
+      },
+    ],
+  },
+  {
+    slug: 'do-you-pay-taxes-on-venmo-cash-app-money',
+    title: 'Do You Have to Pay Taxes on Venmo, Cash App, or PayPal Money?',
+    metaTitle: 'Venmo & Cash App Taxes: What’s Actually Taxable',
+    description:
+      'Splitting rent isn’t taxable, but selling stuff for profit is — here’s how the Venmo/Cash App 1099-K rules actually work, and what you really owe tax on.',
+    date: '2026-07-28',
+    category: 'Paychecks & Taxes',
+    intro:
+      'A friend Venmos you for their half of dinner, or your parents send you rent money through Cash App, and then tax season rolls around and someone panics about a “$600 rule” they saw online. Here’s the actual mechanics: what these apps report to the IRS, what you actually owe tax on, and why those are two very different questions.',
+    sections: [
+      {
+        heading: 'The 1099-K panic, explained',
+        body: 'Payment apps like Venmo, PayPal, and Cash App are classified by the IRS as “third-party settlement organizations.” Once your payments for goods and services on one of these apps cross a certain dollar threshold in a calendar year, the app is required to send you (and the IRS) a Form 1099-K summarizing what it processed under your account.\n\nThat threshold has been a moving target for several years running. A 2021 law originally set it to drop sharply from an older $20,000-and-200-transactions rule down to just $600 total — and the IRS has delayed, phased in, and adjusted that change multiple times since, with Congress also weighing in on where it should ultimately land. Because the exact number keeps shifting year to year, don’t trust a figure from an old article — check IRS.gov or the app’s own help page for whatever threshold applies to the current tax year.\n\nHere’s the part almost nobody explains clearly: the 1099-K threshold only controls when a form gets sent to you. It has nothing to do with whether the underlying money is actually taxable. That’s a completely separate question, and it’s the one that actually matters.',
+      },
+      {
+        heading: 'The real rule: what was the money for?',
+        body: 'Every payment app now asks you to tag a transaction as “friends and family” (personal) or “goods and services” (business) when money changes hands — and that tag is the whole ballgame.\n\nMoney that changes hands for personal reasons is never taxable income, no matter how large it is or whether a 1099-K shows up. Your roommate paying you back for their half of the electric bill, your parents sending money for a plane ticket home, a friend Venmoing you for concert tickets you covered — none of that is income. It’s just money moving between people, the same as if they’d handed you cash.\n\nMoney you receive for goods or services — freelance design work, tutoring, selling something you made, getting paid for a side gig — is taxable income, exactly the same as if you’d been paid by check or direct deposit. The app you used to receive it doesn’t change that. This is the same principle behind how gig and freelance income gets taxed — Venmo and Cash App are just another way that money can land in your account.',
+      },
+      {
+        heading: 'Selling your own stuff: usually not taxable, with one exception',
+        body: 'A lot of the false alarm around this topic comes from people selling their own used belongings — an old phone, clothes, furniture — through apps like Venmo, Facebook Marketplace, or Poshmark, and worrying the payment counts as taxable income.\n\nFor most personal items, it doesn’t. If you sell something for less than you originally paid for it — true of almost everything you personally own and use — there’s no taxable gain, because you sold it at a loss, not a profit. The IRS doesn’t tax money that was never a gain in the first place.\n\nThe exception is selling a personal item for more than you paid for it — a collectible that appreciated, concert tickets resold above face value, sneakers flipped for a profit. In that specific case, the profit (sale price minus what you originally paid) is taxable, reported the same way as any other capital gain. And if reselling becomes a regular, repeated activity rather than the occasional garage-sale item, the IRS can treat it as a business instead of casual selling — which brings in self-employment tax on top of income tax, the same $400 net-earnings threshold that applies to any other gig work.',
+      },
+      {
+        heading: 'What to do if you get a 1099-K for money that wasn’t actually income',
+        body: 'Because personal payments and business payments both flow through the same app, a 1099-K can sometimes lump in money that was never actually taxable — a roommate’s rent reimbursement that got mistagged, for instance. Getting the form doesn’t automatically mean you owe tax on the full amount shown.\n\nWhat it does mean is you need to account for it on your tax return rather than just ignoring it, since the IRS also gets a copy and expects the numbers to line up. If part of a 1099-K total wasn’t actually income, your return includes a way to report the 1099-K amount and then back out the non-taxable portion, with a brief explanation. This is exactly why it matters to tag transactions correctly as “friends and family” in the apps in the first place — it keeps the form itself accurate and saves you the cleanup later.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Always tag personal payments — rent splits, reimbursements, gifts — as “friends and family,” not “goods and services,” so they don’t get mixed into a 1099-K by mistake.\n2. Remember: getting a 1099-K doesn’t automatically mean you owe tax on the full amount — it’s a reporting form, not a bill.\n3. If you’re paid through an app for freelance work, tutoring, or a side hustle, treat it exactly like gig income — track it, and know the $400 self-employment filing threshold applies.\n4. Selling your own used stuff for less than you paid isn’t taxable; selling for a profit is, even if it’s just one collectible or a resold pair of sneakers.\n5. Keep basic records — what something cost, what it sold for, what a payment was actually for — so you’re not guessing at tax time.\n6. Check the current-year 1099-K reporting threshold on IRS.gov before assuming a number you saw online is still accurate.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on money my parents send me through Venmo?',
+        a: 'No. Personal transfers — gifts, allowance, reimbursements from family or friends — are never taxable income, regardless of the amount or whether a 1099-K gets issued.',
+      },
+      {
+        q: 'What is a 1099-K and why did I get one?',
+        a: 'It’s a form payment apps send when your “goods and services” payments cross the IRS reporting threshold for the year. Getting one doesn’t automatically mean the full amount is taxable — personal payments that got mistagged can be backed out on your return.',
+      },
+      {
+        q: 'Do I owe taxes if I sell my old phone or clothes on Venmo?',
+        a: 'Usually not — selling personal items for less than you originally paid isn’t a taxable gain. If you sell something for more than you paid, like a collectible or resold tickets, that profit is taxable.',
+      },
+      {
+        q: 'Is Venmo income the same as a regular paycheck for tax purposes?',
+        a: 'If it’s payment for work — freelancing, tutoring, a side hustle — yes, it’s taxable income just like a regular paycheck, and if net earnings hit $400 in a year, it also triggers self-employment tax, same as any other 1099 income.',
+      },
+    ],
+  },
 ]
