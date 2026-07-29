@@ -8,8 +8,9 @@ type StatusResponse = {
   cronSchedule: string
   cronFields: string | null
   lastModelUsed: string
-  estimatedReplicateRemaining: number
-  replicateTotalLoaded: number
+  viduBalanceUsd: number | null
+  viduCreditsRemaining: number | null
+  viduTotalLoaded: number
   recentMatchups: string[]
   recentAlerts: { title: string; message: string; at: string }[]
   lastLogLines: string[]
@@ -856,10 +857,11 @@ export default function YTDashboard() {
   )
 
   const countdownMs = useMemo(() => msUntilNextRun(now, status?.cronFields ?? null), [now, status?.cronFields])
-  const remainingDisplay = useScramble(status?.estimatedReplicateRemaining ?? 0, 2, 800)
+  const remainingDisplay = useScramble(status?.viduBalanceUsd ?? 0, 2, 800)
   const battlesDisplay = useScramble(status?.recentMatchups.length ?? 0, 0, 600)
 
-  const fuelPct = status ? Math.max(0, Math.min(100, (status.estimatedReplicateRemaining / status.replicateTotalLoaded) * 100)) : 0
+  const fuelPct =
+    status?.viduBalanceUsd != null ? Math.max(0, Math.min(100, (status.viduBalanceUsd / status.viduTotalLoaded) * 100)) : 0
   const fuelColor = fuelPct > 50 ? '#39ff14' : fuelPct > 20 ? '#ffd400' : '#ff3b3b'
   const modelDisplay = status?.lastModelUsed === 'kling' ? 'Kling v3' : status?.lastModelUsed === 'vidu' ? 'Vidu Q3 Pro' : status?.lastModelUsed ?? '—'
   const activeCronPreset = Object.entries(CRON_PRESETS).find(([, fields]) => fields === status?.cronFields)?.[0] ?? null
@@ -918,18 +920,20 @@ export default function YTDashboard() {
         </header>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          <HudTile label="Replicate Fuel" accent="#22d3ee" delayMs={0}>
-            <div className="text-2xl font-bold tabular-nums text-cyan-300">${remainingDisplay}</div>
+          <HudTile label="Vidu Fuel" accent="#22d3ee" delayMs={0}>
+            <div className="text-2xl font-bold tabular-nums text-cyan-300">{status?.viduBalanceUsd != null ? `$${remainingDisplay}` : '—'}</div>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
               <div className="h-full rounded-full transition-[width] duration-1000" style={{ width: `${fuelPct}%`, background: fuelColor, boxShadow: `0 0 10px ${fuelColor}` }} />
             </div>
-            <div className="mt-1 text-[10px] text-white/30">of ${status?.replicateTotalLoaded ?? '—'} loaded</div>
+            <div className="mt-1 text-[10px] text-white/30">
+              {status?.viduCreditsRemaining != null ? `${status.viduCreditsRemaining} credits` : 'balance check failed'} · of ${status?.viduTotalLoaded ?? '—'} loaded
+            </div>
           </HudTile>
 
           <HudTile label="Active Model" accent="#f472b6" delayMs={60}>
             <div className="text-lg font-bold uppercase text-fuchsia-300">{modelDisplay}</div>
             <div className="mt-2 h-1.5 w-full rounded-full bg-fuchsia-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]" />
-            <div className="mt-1 text-[10px] text-white/30">~$1.12/video</div>
+            <div className="mt-1 text-[10px] text-white/30">~$0.68/video · direct Vidu API</div>
           </HudTile>
 
           <HudTile label="Next Auto-Launch" accent="#ffd400" delayMs={120}>
