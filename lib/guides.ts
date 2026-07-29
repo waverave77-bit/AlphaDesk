@@ -844,4 +844,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'roth-ira-vs-traditional-ira-difference',
+    title: 'Roth IRA vs. Traditional IRA: What’s the Real Difference, and Which Should You Open First?',
+    metaTitle: 'Roth IRA vs. Traditional IRA: The Real Difference Explained',
+    description:
+      'Both hold the same stocks and funds — the difference is when you pay tax. Here’s how contribution limits, income rules, and withdrawals actually compare.',
+    date: '2026-07-29',
+    category: 'Investing',
+    intro:
+      'You’ve heard “open a Roth IRA” a hundred times, and somewhere along the way someone mentioned a “Traditional IRA” too, like you’re already supposed to know the difference. Both are just accounts — same brokerage, same stocks and index funds inside — and the entire difference comes down to one choice: pay tax on the money now, or pay tax on it later.',
+    sections: [
+      {
+        heading: 'Same account, opposite tax bet',
+        body: 'An IRA (Individual Retirement Account) isn’t an investment itself — it’s a tax-advantaged wrapper you open at a brokerage and then fill with stocks, ETFs, or index funds, exactly like a regular brokerage account. A Traditional IRA and a Roth IRA are two flavors of that same wrapper, and the only structural difference between them is which side of the tax bill you pay.\n\nA Traditional IRA is funded with pre-tax (or tax-deductible) money — it can lower your taxable income the year you contribute — and you pay ordinary income tax when you withdraw it in retirement. A Roth IRA is funded with money you’ve already paid tax on, and in exchange it grows completely tax-free — you owe nothing when you withdraw it later, not even on decades of gains. Same investments, same brokerage, opposite ends of the tax timeline.',
+      },
+      {
+        heading: 'Contribution limits — and they’re shared, not separate',
+        body: 'The IRS sets one combined annual contribution limit that applies across both a Traditional and a Roth IRA together, not per account. In recent tax years that limit has been $7,000 a year ($8,000 if you’re 50 or older), adjusted for inflation every so often rather than every single year. Put $4,000 into a Roth and you can only add $3,000 more to a Traditional IRA that same year — the two accounts share one ceiling.\n\nThat combined limit is separate from a 401(k)’s limit, which runs several times higher — so having a 401(k) at work doesn’t reduce how much you can also put into an IRA on the side.',
+      },
+      {
+        heading: 'The income rules that decide which one you’re even allowed to use',
+        body: 'A Traditional IRA has no income limit on contributing — anyone with earned income can put money in. But the tax deduction on those contributions phases out at higher incomes if you (or your spouse) are also covered by a workplace retirement plan like a 401(k). Below that phase-out range, contributions are fully deductible; above it, you can still contribute, you just don’t get the upfront tax break.\n\nA Roth IRA works the opposite way: there’s no deduction to lose since you never got one, but eligibility to contribute directly phases out entirely once your income crosses a fairly high threshold (adjusted most years, but it starts well into six figures for a single filer). For most students and early-career earners, this ceiling is nowhere close — it becomes relevant later, once raises start stacking up.',
+      },
+      {
+        heading: 'Required withdrawals: one forces your hand, one never does',
+        body: 'A Traditional IRA comes with Required Minimum Distributions (RMDs) — starting at a set age in retirement (currently 73), the IRS forces you to start withdrawing a calculated minimum amount each year, whether you need the money or not, and taxes it as ordinary income when you do. Skip an RMD and the penalty is steep.\n\nA Roth IRA has no RMDs at all during the original owner’s lifetime. The money can sit and keep compounding tax-free for as long as you want — even into your 90s — which is part of why a Roth is often the more flexible account to leave alone the longest, or to pass on to an heir who then inherits it tax-free too.',
+      },
+      {
+        heading: 'Getting money out early: one is far more forgiving',
+        body: 'If life happens before retirement, the two accounts treat you very differently. Withdraw earnings from a Traditional IRA before age 59½ and you generally owe ordinary income tax on the amount plus a 10% early withdrawal penalty, with only a short list of IRS-approved exceptions (a first home purchase up to a lifetime cap, certain education expenses, and a few others).\n\nA Roth IRA is more forgiving because you already paid tax on your contributions going in: you can withdraw the amount you’ve personally contributed (not the investment earnings) at any age, for any reason, with zero tax and zero penalty. Touch the earnings portion early, though, and the same age-59½-plus-exceptions rules generally apply as they do to a Traditional IRA. This flexibility is why some people treat Roth contributions as a legitimate backup emergency layer, even though it shouldn’t be the primary plan.',
+      },
+      {
+        heading: 'Your checklist: which one should you actually open?',
+        body: '1. If your income is low now and likely to rise later in your career, lean Roth — you’re paying tax at today’s lower rate instead of a probably-higher future rate.\n2. If you’re in a high tax bracket right now and expect a lower one in retirement, a Traditional IRA’s upfront deduction carries more weight.\n3. Check whether you’re covered by a workplace plan — it can phase out your Traditional IRA deduction at higher incomes, which tips the decision toward Roth.\n4. Confirm you’re under the Roth income limit before assuming it’s available to you — most students and early-career earners are nowhere close to it.\n5. Remember the contribution limit is shared across both accounts — decide how to split it, don’t assume you get the full limit in each.\n6. When genuinely unsure, Roth is the common default for young, lower-income earners — it locks in today’s tax rate on money that has decades left to grow.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Diversification', 'Index Investing', '401(k)'],
+    faq: [
+      {
+        q: 'Can I have both a Roth IRA and a Traditional IRA?',
+        a: 'Yes — you can contribute to both in the same year, as long as your total contributions across both accounts don’t exceed the combined annual limit.',
+      },
+      {
+        q: 'Which is better for a college student or first job, Roth or Traditional IRA?',
+        a: 'Most financial advisors default to Roth for young, lower-income earners, since you’re likely paying tax on the contribution at one of the lowest rates you’ll ever be in, and the money then grows tax-free for decades.',
+      },
+      {
+        q: 'Do I have to take money out of a Roth IRA at a certain age?',
+        a: 'No — Roth IRAs have no Required Minimum Distributions during the original owner’s lifetime, unlike Traditional IRAs, which force withdrawals starting at age 73.',
+      },
+      {
+        q: 'Can I withdraw money from an IRA before retirement without a penalty?',
+        a: 'From a Roth IRA, yes — you can withdraw your own contributions (not earnings) anytime, tax- and penalty-free. From a Traditional IRA, early withdrawals are generally taxed as income plus a 10% penalty, with only a short list of IRS-approved exceptions.',
+      },
+    ],
+  },
 ]
