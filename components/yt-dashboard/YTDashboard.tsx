@@ -235,10 +235,14 @@ function TypedLine({ text, instant, className }: { text: string; instant: boolea
 }
 
 function TerminalPanel({ lines, unreachable }: { lines: string[]; unreachable: boolean }) {
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const seenRef = useRef<Set<string>>(new Set())
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ block: 'end' })
+    // Scroll only this panel's own log, not the page — scrollIntoView() walks
+    // up every scrollable ancestor including the window, which was yanking
+    // the whole dashboard back up on every 15s status poll.
+    const el = containerRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [lines])
 
   return (
@@ -249,7 +253,7 @@ function TerminalPanel({ lines, unreachable }: { lines: string[]; unreachable: b
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
         <span className="ml-2 text-[10px] uppercase tracking-widest text-white/30">pipeline.log</span>
       </div>
-      <div className="max-h-72 flex-1 overflow-y-auto p-3 text-[11px] leading-relaxed">
+      <div ref={containerRef} className="max-h-72 flex-1 overflow-y-auto p-3 text-[11px] leading-relaxed">
         {unreachable ? (
           <div className="text-red-400/70">⚠ Cannot reach droplet — log unavailable</div>
         ) : lines.length === 0 ? (
@@ -262,7 +266,6 @@ function TerminalPanel({ lines, unreachable }: { lines: string[]; unreachable: b
           })
         )}
         <span className="inline-block h-3 w-1.5 translate-y-0.5 bg-cyan-400 animate-blink-cursor" />
-        <div ref={bottomRef} />
       </div>
     </div>
   )
@@ -281,8 +284,10 @@ function Avatar({ name }: { name: string }) {
   )
 }
 
+const BATTLE_LOG_MAX = 7
+
 function BattleLogPanel({ matchups }: { matchups: string[] }) {
-  const items = [...matchups].reverse()
+  const items = [...matchups].reverse().slice(0, BATTLE_LOG_MAX)
   return (
     <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
       <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Battle Log</div>
