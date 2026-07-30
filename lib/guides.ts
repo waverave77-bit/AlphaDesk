@@ -900,4 +900,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-the-50-30-20-budget-rule',
+    title: 'What Is the 50/30/20 Budget Rule, and Does It Actually Work on a First Paycheck?',
+    metaTitle: '50/30/20 Budget Rule Explained: Does It Work on Entry-Level Pay?',
+    description:
+      'The 50/30/20 rule splits your paycheck into needs, wants, and savings — but it assumes rent doesn’t eat half your check. Here’s how to actually use it.',
+    date: '2026-07-30',
+    category: 'Saving',
+    intro:
+      'Someone told you to “follow the 50/30/20 rule” and it sounded reasonable until you actually did the math on your own paycheck and the numbers didn’t come close to lining up. The rule itself is solid — it’s just usually taught without the fine print. Here’s what it actually says, what counts in each bucket, and what to do when your real paycheck doesn’t fit it.',
+    sections: [
+      {
+        heading: 'What the rule actually says',
+        body: 'The 50/30/20 rule is a simple budgeting framework popularized by Elizabeth Warren (yes, the senator — she co-wrote a personal finance book, "All Your Worth," before running for office) with her daughter Amelia Warren Tyagi. It splits your take-home pay — what actually lands in your account after taxes, not your gross salary — into three buckets: 50% toward needs, 30% toward wants, and 20% toward savings and debt payoff.\n\nThat “after-tax” detail matters more than people realize. If you calculate the split off your gross pay instead of what you actually receive, every bucket ends up too big, and the whole budget feels broken by the second week of the month. Always start from the number that actually hits your bank account.',
+      },
+      {
+        heading: 'The 50%: needs — smaller than people think',
+        body: '“Needs” means the expenses you’d still have to pay even if your income dropped tomorrow: rent, utilities, groceries, insurance, minimum debt payments, and transportation to work or school. It does not mean everything that feels necessary in the moment.\n\nA streaming subscription, a coffee habit, a car payment on a nicer car than you need, and a phone upgrade all feel like needs day-to-day, but they belong in the next bucket. The test isn’t “would I miss this” — it’s “would I go without shelter, food, or my job if I cut it.” Being honest about that line is most of what makes this budget actually work.',
+      },
+      {
+        heading: 'The 30%: wants — the bucket that’s supposed to flex',
+        body: 'Wants are everything that improves your life but isn’t required to keep it running: eating out, entertainment, hobbies, subscriptions beyond the basics, travel, and upgraded versions of things you already have a cheaper option for. This bucket exists on purpose — a budget with zero room for fun rarely survives contact with real life.\n\nThe 30% is also the easiest bucket to quietly let grow past its share, since individual purchases here are usually small enough not to register. A $12 subscription here, a $20 delivery fee there — none of it feels significant until you total a month of it up.',
+      },
+      {
+        heading: 'The 20%: savings and debt — the bucket that actually builds wealth',
+        body: 'This is the bucket that matters most long-term, and it covers three things, roughly in priority order: an emergency fund if you don’t already have one, extra payments on any high-interest debt (credit cards especially), and retirement or investing contributions — a Roth IRA, or a 401(k) up to at least the full employer match if one’s offered.\n\nA useful mental shortcut: if a debt’s interest rate is higher than what you could reasonably expect to earn investing, paying it down early belongs ahead of investing inside this same 20% bucket. Once high-interest debt is gone and a starter emergency fund exists, this bucket shifts mostly toward long-term investing — and every year you keep that up, it compounds.',
+      },
+      {
+        heading: 'Why it doesn’t fit an entry-level paycheck — and how to adapt it',
+        body: 'The honest problem with the 50/30/20 rule: it was designed around a median household income, and on a minimum-wage or entry-level paycheck, rent alone can chew through a much bigger share than 50% — sometimes all of it — before groceries or insurance even enter the picture. If that’s your situation, the rule isn’t broken and neither are you; the ratio just needs to flex to match reality.\n\nThe fix isn’t to abandon the framework, it’s to treat 50/30/20 as a target to grow into rather than a rule to hit immediately. A more honest starting split for a tight paycheck might look like 70/20/10, or even 80/10/10, with the “wants” bucket doing most of the shrinking since it’s the only one that’s actually optional. What matters is protecting some percentage for the savings bucket, even a small one — 5% put toward savings consistently beats a “perfect” 20% you never actually hit. As income rises with raises or a better job, shift the ratio back toward 50/30/20 a few points at a time rather than trying to force it all at once.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Calculate your split from take-home (after-tax) pay, never your gross salary.\n2. List your true needs first — rent, utilities, groceries, insurance, minimum debt payments, transportation — and total them.\n3. If needs already eat more than half your paycheck, don’t force the 30/20 split — shrink the wants bucket first and protect whatever percentage you can for savings.\n4. Inside the savings bucket, prioritize in order: starter emergency fund, any employer 401(k) match, high-interest debt payoff, then a Roth IRA or other investing.\n5. Automate the savings bucket — a recurring transfer the day you get paid — so it happens before “wants” spending has a chance to eat it.\n6. Revisit the ratio every time your income changes; the goal is to grow toward 50/30/20 over time, not hit it perfectly on day one.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Roth IRA', 'Inflation'],
+    faq: [
+      {
+        q: 'Is the 50/30/20 rule based on gross or net income?',
+        a: 'Net (take-home) income — what actually lands in your bank account after taxes. Calculating it off your gross salary makes every bucket too big and the budget feel impossible to hit.',
+      },
+      {
+        q: 'What if my rent alone is more than 50% of my paycheck?',
+        a: 'That’s common on an entry-level or minimum-wage income, and it doesn’t mean the budget failed — it means the ratio needs to shift. Shrink the “wants” bucket first, protect whatever percentage you can for savings even if it’s small, and move the ratio back toward 50/30/20 as your income grows.',
+      },
+      {
+        q: 'Do retirement contributions count as part of the 20%?',
+        a: 'Yes. The 20% bucket covers savings and debt payoff together — emergency fund, extra payments on high-interest debt, and retirement or investing contributions like a Roth IRA or 401(k) all live inside it.',
+      },
+      {
+        q: 'What counts as a “want” versus a “need”?',
+        a: 'A need is something you’d still have to pay for even with a much smaller income — housing, groceries, utilities, insurance, minimum debt payments. Everything that makes life more comfortable but isn’t required to keep it running — dining out, entertainment, subscriptions, upgrades — is a want, even if it feels essential day-to-day.',
+      },
+    ],
+  },
 ]
