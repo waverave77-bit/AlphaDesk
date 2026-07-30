@@ -62,8 +62,20 @@ type RosterCharacter = { name: string; franchise: string; themeColor: string }
 
 const CHANNEL_ID = 'UCdz-4eCUd3VjAC0zvzjhgRQ'
 const DROPLET_LABEL = '167.172.147.89:3001'
-const CRON_PRESETS: Record<string, string> = { daily: '0 9 * * *', '3x-week': '0 9 * * 1,3,5', weekly: '0 9 * * 1' }
+// Day-of-week portion only now — the hour is independently configurable
+// (see CRON_HOUR_PRESETS below), matching statusServer.js's split of
+// preset (day pattern) vs hour as two separately-settable fields.
+const CRON_DAY_PATTERNS: Record<string, string> = { daily: '* * *', '3x-week': '* * 1,3,5', weekly: '* * 1' }
 const CRON_LABELS: Record<string, string> = { daily: 'Daily', '3x-week': '3x/Week', weekly: 'Weekly' }
+// UTC offsets assume US Eastern Daylight Time (UTC-4, roughly Mar-Nov) —
+// this is a small personal-project dashboard, not worth building real DST
+// handling for; re-pick during EST months if it matters.
+const CRON_HOUR_PRESETS: { label: string; hourUtc: number }[] = [
+  { label: '9 AM ET', hourUtc: 13 },
+  { label: '12 PM ET', hourUtc: 16 },
+  { label: '3 PM ET', hourUtc: 19 },
+  { label: '6 PM ET', hourUtc: 22 },
+]
 
 // Display-only lookup, duplicated (not imported) from matchup-shorts'
 // characterRoster.js on purpose — the automation project stays fully
@@ -688,6 +700,8 @@ export default function YTDashboard() {
   const [triggerState, setTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
   const [pauseBusy, setPauseBusy] = useState(false)
   const [cronConfirmPreset, setCronConfirmPreset] = useState<string | null>(null)
+  const [cronConfirmHour, setCronConfirmHour] = useState<number | null>(null)
+  const cronConfirmHourTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [cronBusy, setCronBusy] = useState(false)
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cronConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -794,6 +808,7 @@ export default function YTDashboard() {
     () => () => {
       if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
       if (cronConfirmTimeout.current) clearTimeout(cronConfirmTimeout.current)
+      if (cronConfirmHourTimeout.current) clearTimeout(cronConfirmHourTimeout.current)
     },
     []
   )
@@ -861,6 +876,27 @@ export default function YTDashboard() {
     [cronConfirmPreset, fetchStatus]
   )
 
+  const requestCronHourChange = useCallback(
+    (hourUtc: number) => {
+      if (cronConfirmHour === hourUtc) {
+        if (cronConfirmHourTimeout.current) clearTimeout(cronConfirmHourTimeout.current)
+        setCronConfirmHour(null)
+        setCronBusy(true)
+        fetch('/api/yt-dashboard/cron', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hour: hourUtc }),
+        })
+          .then(() => fetchStatus())
+          .finally(() => setCronBusy(false))
+        return
+      }
+      setCronConfirmHour(hourUtc)
+      cronConfirmHourTimeout.current = setTimeout(() => setCronConfirmHour(null), 4000)
+    },
+    [cronConfirmHour, fetchStatus]
+  )
+
   const countdownMs = useMemo(() => msUntilNextRun(now, status?.cronFields ?? null), [now, status?.cronFields])
   const remainingDisplay = useScramble(status?.viduBalanceUsd ?? 0, 2, 800)
   const battlesDisplay = useScramble(status?.recentMatchups.length ?? 0, 0, 600)
@@ -869,7 +905,13 @@ export default function YTDashboard() {
     status?.viduBalanceUsd != null ? Math.max(0, Math.min(100, (status.viduBalanceUsd / status.viduTotalLoaded) * 100)) : 0
   const fuelColor = fuelPct > 50 ? '#39ff14' : fuelPct > 20 ? '#ffd400' : '#ff3b3b'
   const modelDisplay = status?.lastModelUsed === 'kling' ? 'Kling v3' : status?.lastModelUsed === 'vidu' ? 'Vidu Q3 Pro' : status?.lastModelUsed ?? '—'
-  const activeCronPreset = Object.entries(CRON_PRESETS).find(([, fields]) => fields === status?.cronFields)?.[0] ?? null
+  // cronFields is "0 <hour> <dom> <month> <dow>" — day pattern is always
+  // "* * <dow>" (dom/month never used), matching CRON_DAY_PATTERNS' shape.
+  const cronParts = status?.cronFields?.trim().split(/\s+/) ?? null
+  const activeCronPreset = cronParts
+    ? Object.entries(CRON_DAY_PATTERNS).find(([, p]) => p === `* * ${cronParts[4]}`)?.[0] ?? null
+    : null
+  const activeCronHourUtc = cronParts ? Number(cronParts[1]) : null
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-[#03040a] font-mono text-white selection:bg-cyan-500/30">
@@ -1029,7 +1071,7 @@ export default function YTDashboard() {
             <span className="text-white/30">{status?.cronSchedule ?? '—'}</span>
           </div>
           <div className="flex gap-2">
-            {Object.keys(CRON_PRESETS).map((preset) => {
+            {Object.keys(CRON_DAY_PATTERNS).map((preset) => {
               const active = activeCronPreset === preset
               const confirming = cronConfirmPreset === preset
               return (
@@ -1046,6 +1088,29 @@ export default function YTDashboard() {
                   }`}
                 >
                   {confirming ? 'Confirm?' : CRON_LABELS[preset]}
+                </button>
+              )
+            })}
+          </div>
+          <div className="mb-3 mt-4 text-[10px] uppercase tracking-[0.25em] text-white/40">Posting Time (ET)</div>
+          <div className="flex gap-2">
+            {CRON_HOUR_PRESETS.map(({ label, hourUtc }) => {
+              const active = activeCronHourUtc === hourUtc
+              const confirming = cronConfirmHour === hourUtc
+              return (
+                <button
+                  key={hourUtc}
+                  onClick={() => requestCronHourChange(hourUtc)}
+                  disabled={cronBusy}
+                  className={`flex-1 rounded-md border px-3 py-2 text-[11px] uppercase tracking-widest transition-colors disabled:opacity-40 ${
+                    confirming
+                      ? 'border-amber-400 bg-amber-400/20 text-amber-200'
+                      : active
+                      ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200'
+                      : 'border-white/15 text-white/50 hover:border-white/30'
+                  }`}
+                >
+                  {confirming ? 'Confirm?' : label}
                 </button>
               )
             })}

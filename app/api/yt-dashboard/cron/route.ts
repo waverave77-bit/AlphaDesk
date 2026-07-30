@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const res = await fetch(`${base}/cron`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ preset: body?.preset }),
+      body: JSON.stringify({ preset: body?.preset, hour: body?.hour }),
       signal: AbortSignal.timeout(8000),
     })
     const data = await res.json().catch(() => ({}))
