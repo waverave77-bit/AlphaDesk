@@ -356,15 +356,30 @@ function DraftsPanel({
   onPublish,
   holdBusyId,
   onHold,
+  onReorder,
 }: {
   drafts: DraftItem[]
   publishingId: string | null
   onPublish: (videoId: string) => void
   holdBusyId: string | null
   onHold: (videoId: string, held: boolean) => void
+  onReorder: (videoIds: string[]) => void
 }) {
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [order, setOrder] = useState<string[]>(() => drafts.map((d) => d.videoId))
+  const [dragId, setDragId] = useState<string | null>(null)
+
+  // Resync local drag order only when the actual SET of draft ids changes
+  // (publish/hold/a fresh draft altered membership) — keying on the joined
+  // id list rather than the drafts array itself means a background 30s
+  // refetch that returns the same ids in the same order doesn't fight an
+  // in-progress or just-completed drag.
+  const idsKey = drafts.map((d) => d.videoId).join(',')
+  useEffect(() => {
+    setOrder(drafts.map((d) => d.videoId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idsKey])
 
   useEffect(() => () => {
     if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
@@ -381,15 +396,32 @@ function DraftsPanel({
     confirmTimeout.current = setTimeout(() => setConfirmId(null), 4000)
   }
 
+  function handleDrop(targetId: string) {
+    const draggedId = dragId
+    setDragId(null)
+    if (!draggedId || draggedId === targetId) return
+    const from = order.indexOf(draggedId)
+    const to = order.indexOf(targetId)
+    if (from === -1 || to === -1) return
+    const next = [...order]
+    next.splice(from, 1)
+    next.splice(to, 0, draggedId)
+    setOrder(next)
+    onReorder(next)
+  }
+
   if (drafts.length === 0) return null
+
+  const byId = new Map(drafts.map((d) => [d.videoId, d]))
+  const orderedDrafts = order.map((id) => byId.get(id)).filter((d): d is DraftItem => !!d)
 
   return (
     <div className="mt-8 rounded-lg border border-amber-400/20 bg-amber-400/[0.04] p-4">
       <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-amber-300/70">
-        Drafts — unlisted, queued for the next scheduled run unless held
+        Drafts — unlisted, queued for the next scheduled run unless held. Drag a card to reorder the queue.
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {drafts.map((d) => (
+        {orderedDrafts.map((d) => (
           <DraftCard
             key={d.videoId}
             d={d}
@@ -398,6 +430,11 @@ function DraftsPanel({
             holdBusy={holdBusyId === d.videoId}
             onPublishClick={() => handleClick(d.videoId)}
             onHold={() => onHold(d.videoId, !d.held)}
+            dragging={dragId === d.videoId}
+            onDragStart={() => setDragId(d.videoId)}
+            onDragOverCard={(e) => e.preventDefault()}
+            onDropCard={() => handleDrop(d.videoId)}
+            onDragEnd={() => setDragId(null)}
           />
         ))}
       </div>
@@ -412,6 +449,11 @@ function DraftCard({
   holdBusy,
   onPublishClick,
   onHold,
+  dragging,
+  onDragStart,
+  onDragOverCard,
+  onDropCard,
+  onDragEnd,
 }: {
   d: DraftItem
   publishing: boolean
@@ -419,11 +461,25 @@ function DraftCard({
   holdBusy: boolean
   onPublishClick: () => void
   onHold: () => void
+  dragging: boolean
+  onDragStart: () => void
+  onDragOverCard: (e: React.DragEvent<HTMLDivElement>) => void
+  onDropCard: () => void
+  onDragEnd: () => void
 }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className={`overflow-hidden rounded-lg border bg-black/30 ${d.held ? 'border-white/10 opacity-60' : 'border-emerald-400/20'}`}>
-      <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer">
+    <div
+      draggable
+      onDragStart={onDragStart}
+      onDragOver={onDragOverCard}
+      onDrop={onDropCard}
+      onDragEnd={onDragEnd}
+      className={`cursor-grab overflow-hidden rounded-lg border bg-black/30 transition-opacity active:cursor-grabbing ${
+        dragging ? 'opacity-30' : d.held ? 'opacity-60' : ''
+      } ${d.held ? 'border-white/10' : 'border-emerald-400/20'}`}
+    >
+      <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer" draggable={false}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`}
@@ -782,6 +838,25 @@ export default function YTDashboard() {
       }
     },
     [fetchDrafts, fetchStatus]
+  )
+
+  // No busy/confirm state here on purpose — DraftsPanel already applies the
+  // new order optimistically the instant a card is dropped, so this just
+  // needs to persist it. fetchDrafts() afterward reconciles with the
+  // authoritative (queueOrder-sorted) order from the droplet.
+  const reorderDrafts = useCallback(
+    async (videoIds: string[]) => {
+      try {
+        await fetch('/api/yt-dashboard/drafts/reorder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoIds }),
+        })
+      } finally {
+        fetchDrafts()
+      }
+    },
+    [fetchDrafts]
   )
 
   useEffect(() => {
@@ -1143,6 +1218,7 @@ export default function YTDashboard() {
           onPublish={publishDraft}
           holdBusyId={holdBusyId}
           onHold={holdDraft}
+          onReorder={reorderDrafts}
         />
 
         <div className="mt-8">
