@@ -956,4 +956,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'are-scholarships-and-grants-taxable',
+    title: 'Are Scholarships and Grants Taxable? What You Actually Owe the IRS',
+    metaTitle: 'Are Scholarships and Grants Taxable? The IRS Rules Explained',
+    description:
+      'Scholarship money isn’t automatically tax-free — the IRS only exempts the part spent on tuition and required course costs. Here’s exactly where the line falls.',
+    date: '2026-07-31',
+    category: 'College Money',
+    intro:
+      'A financial aid letter shows up with scholarship and grant money attached, and it feels like the one part of college that’s simply free — no strings, no tax form, no catch. Mostly true, but not entirely: the IRS draws a specific, narrow line around what counts as tax-free, and a chunk of “free” money can quietly become taxable income depending on exactly what it pays for.',
+    sections: [
+      {
+        heading: 'The basic rule: tax-free, but only for qualified expenses',
+        body: 'The IRS treats a scholarship or grant as tax-free income only when two things are both true: you’re a degree candidate at an eligible school, and the money goes toward “qualified education expenses.” That phrase has a specific, narrow meaning — tuition and fees required for enrollment, plus books, supplies, and equipment required of every student taking the course.\n\nMeet both conditions and the scholarship doesn’t show up on your tax return at all — not as income, not as a deduction, nothing. It’s the cleanest kind of financial aid there is: money that funds your education without the IRS ever asking for a cut.',
+      },
+      {
+        heading: 'What’s not qualified — where it quietly becomes taxable',
+        body: 'The part almost nobody explains at financial aid orientation: anything a scholarship covers beyond tuition and required course materials is taxable income, even though it never arrives looking like a paycheck. Room and board is the big one — a scholarship that includes a housing stipend or a meal plan allowance makes that portion taxable, full stop.\n\nTravel, a laptop that isn’t specifically required for your coursework, health insurance, and optional equipment fall into the same taxable bucket. It doesn’t matter whether the school pays your dorm directly or hands you a check — if the money was allocated to a non-qualified expense, that slice counts as income for the year you received it, and you’re expected to report it even though nobody withheld tax on it for you.',
+      },
+      {
+        heading: 'When the scholarship comes with strings attached',
+        body: 'Some scholarships and fellowships require you to do something in exchange — teach a section, grade papers, work in a research lab. The IRS draws a hard line here: any part of an award that’s payment for teaching, research, or other services required as a condition of getting the money is taxable compensation, regardless of what you spend it on. It doesn’t matter that the same check also funds your tuition — the “services” portion gets carved out and taxed like a paycheck.\n\nSchools that pay this way often report it on a W-2 alongside actual withholding, the same as any job. If yours doesn’t, you’re still responsible for reporting it — check with your financial aid or payroll office about how a specific award is classified before assuming it’s all tax-free.',
+      },
+      {
+        heading: 'Work-study, Pell Grants, and other look-alikes',
+        body: 'Federal Work-Study money isn’t a scholarship — it’s a paycheck for an actual job, on campus or through an approved employer, and it’s taxed like one: reported on a W-2, subject to income tax like any wages. One quirk worth knowing: students enrolled at least half-time who work for their own school are often exempt from FICA (Social Security and Medicare) tax on those specific wages under an IRS student exception — ask your payroll office whether it applies to your job.\n\nPell Grants and other need-based federal grants follow the exact same qualified-expense rule as any other scholarship: tax-free when the money goes to tuition, fees, and required course materials, taxable when it covers room, board, or other living costs. A Pell Grant isn’t automatically tax-free just because it’s need-based aid rather than a merit scholarship.',
+      },
+      {
+        heading: '529 plans, and actually filing a return',
+        body: 'If you’re also drawing from a 529 plan, a tax-free scholarship doesn’t force you to waste the account. You can withdraw an amount equal to the scholarship from the 529 without owing the usual 10% penalty on non-qualified withdrawals — the earnings portion of that withdrawal still owes ordinary income tax, but the penalty specifically gets waived up to the scholarship amount.\n\nOn the filing side: if any part of your scholarship is taxable and wasn’t already reported on a W-2, the IRS still expects you to include it as income on your return — tax software will walk you through exactly where it goes, since there’s a specific spot set aside for this situation. Whether you’re required to file at all still comes down to your total income for the year against the standard deduction, same as any other income — but a large taxable scholarship can be enough on its own to push a student over that line.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up what your scholarships and grants actually covered — tuition and required fees, books, and supplies are tax-free; room, board, and travel are not.\n2. Check whether any award requires teaching, research, or other work in exchange — that portion is taxable compensation no matter what it’s spent on.\n3. If you have Federal Work-Study income, expect a W-2 and treat it like any other job’s wages.\n4. Ask your school’s financial aid or payroll office exactly how each award is classified — don’t guess.\n5. If you also use a 529 plan, remember you can withdraw up to the scholarship amount without the 10% penalty, though earnings are still taxed.\n6. Keep a simple record each year of what each award paid for, so you’re not reconstructing it from memory at tax time.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on my scholarship?',
+        a: 'Only on the part that doesn’t go toward tuition, fees, and required course materials. Money from the same award that covers room, board, travel, or other living expenses is taxable income.',
+      },
+      {
+        q: 'Is a Pell Grant taxable?',
+        a: 'It follows the same rule as any other scholarship — tax-free when used for tuition and required course expenses, taxable when it covers room, board, or other living costs, regardless of it being need-based aid.',
+      },
+      {
+        q: 'Do I owe taxes on Federal Work-Study money?',
+        a: 'Yes — Work-Study is a job, not a scholarship, so it’s reported on a W-2 and taxed like any other paycheck. Some student employees are exempt from FICA taxes on it under a specific IRS rule for enrolled students, but income tax still applies.',
+      },
+      {
+        q: 'What happens if my scholarship requires me to teach or do research?',
+        a: 'Whatever portion of the award pays for that teaching or research work is taxable compensation no matter how it’s spent — treated like wages, separate from the tax-free treatment that applies to tuition-only scholarship money.',
+      },
+    ],
+  },
 ]
