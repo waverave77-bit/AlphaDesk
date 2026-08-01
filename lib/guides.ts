@@ -89,7 +89,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'The line that probably DOES come back: federal withholding',
-        body: 'The "Federal Income Tax" line on your stub is not a bill — it’s an estimate. Your employer guesses what you might owe for the year (based on the W-4 form you filled out on day one) and sends a slice of each check to the IRS in advance.\n\nHere’s what matters for most teens: the federal standard deduction is around $15,000. If your total income for the whole year is under that — true for almost every part-time or summer job — your actual federal income tax bill is $0. Every dollar that was withheld was an overpayment.\n\nOverpayments don’t come back automatically. You have to file a tax return.',
+        body: 'The "Federal Income Tax" line on your stub is not a bill — it’s an estimate. Your employer guesses what you might owe for the year (based on the W-4 form you filled out on day one) and sends a slice of each check to the IRS in advance.\n\nHere’s what matters for most teens: the federal standard deduction is around $16,100. If your total income for the whole year is under that — true for almost every part-time or summer job — your actual federal income tax bill is $0. Every dollar that was withheld was an overpayment.\n\nOverpayments don’t come back automatically. You have to file a tax return.',
       },
       {
         heading: 'The move: file a tax return in January (yes, even as a teenager)',
@@ -112,7 +112,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: 'Do teenagers get all their taxes back?',
-        a: 'Teens who earn less than the federal standard deduction (~$15,000/year) owe $0 federal income tax, so all federal income tax withheld comes back as a refund — but only if they file a return. Social Security and Medicare are never refunded.',
+        a: 'Teens who earn less than the federal standard deduction (~$16,100/year) owe $0 federal income tax, so all federal income tax withheld comes back as a refund — but only if they file a return. Social Security and Medicare are never refunded.',
       },
       {
         q: 'Do I have to file taxes for a summer job?',
@@ -861,7 +861,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'Contribution limits — and they’re shared, not separate',
-        body: 'The IRS sets one combined annual contribution limit that applies across both a Traditional and a Roth IRA together, not per account. In recent tax years that limit has been $7,000 a year ($8,000 if you’re 50 or older), adjusted for inflation every so often rather than every single year. Put $4,000 into a Roth and you can only add $3,000 more to a Traditional IRA that same year — the two accounts share one ceiling.\n\nThat combined limit is separate from a 401(k)’s limit, which runs several times higher — so having a 401(k) at work doesn’t reduce how much you can also put into an IRA on the side.',
+        body: 'The IRS sets one combined annual contribution limit that applies across both a Traditional and a Roth IRA together, not per account. In recent tax years that limit has been $7,500 a year ($8,600 if you’re 50 or older), adjusted for inflation every so often rather than every single year. Put $4,000 into a Roth and you can only add $3,500 more to a Traditional IRA that same year — the two accounts share one ceiling.\n\nThat combined limit is separate from a 401(k)’s limit, which runs several times higher — so having a 401(k) at work doesn’t reduce how much you can also put into an IRA on the side.',
       },
       {
         heading: 'The income rules that decide which one you’re even allowed to use',
