@@ -1012,4 +1012,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'hsa-vs-fsa-difference',
+    title: 'HSA vs. FSA: What’s the Difference, and Which Should You Actually Pick at Open Enrollment?',
+    metaTitle: 'HSA vs. FSA: The Real Difference (and Which to Pick)',
+    description:
+      'An HSA rolls over and can be invested tax-free forever — an FSA usually can’t. Here’s how each account actually works, and which fits your health plan.',
+    date: '2026-08-01',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Open enrollment throws two boxes at you — HSA and FSA — both promising to save you money on healthcare with pre-tax dollars, and the form assumes you already know the difference. You don’t need to be an insurance expert to get this right. You need one fact about your health plan and one rule about what happens to unused money — everything else follows from those two things.',
+    sections: [
+      {
+        heading: 'The one question that decides everything: what kind of health plan are you on?',
+        body: 'An HSA (Health Savings Account) and an FSA (Flexible Spending Account) both let you set aside money, tax-free, for medical costs — copays, prescriptions, dental work, glasses. But which one you’re even offered comes down to a single detail: an HSA is only available if you’re enrolled in a High-Deductible Health Plan (HDHP), a plan with a higher deductible and usually a lower monthly premium than a typical PPO. An FSA has no such requirement — it’s offered alongside almost any employer health plan.\n\nSo the real first question at open enrollment isn’t “HSA or FSA” — it’s “am I on an HDHP.” If you are, you likely get a choice between the two (though rarely both at once — more on that below). If you’re on a traditional PPO or HMO, an FSA is probably your only option, and this decision makes itself.',
+      },
+      {
+        heading: 'The FSA: real tax savings, but “use it or lose it”',
+        body: 'An FSA lets you set aside pre-tax money straight from your paycheck, typically capped somewhere in the low thousands per year — the IRS adjusts the exact limit periodically, so check your plan’s current cap during enrollment rather than trusting a number from an old article. That money comes out before income tax and FICA are calculated, so routing a few thousand dollars through an FSA can save you several hundred dollars in tax over the year, depending on your bracket.\n\nThe catch is the one every FSA horror story is about: the money is generally “use it or lose it.” Whatever you don’t spend on qualified medical expenses by the end of the plan year gets forfeited back to your employer — no rollover, no refund, no exceptions for “I forgot.” Many employers soften this with either a short grace period (commonly a couple of extra months to spend down the balance) or a small carryover allowance into the next year, but not both, and neither is guaranteed — check your specific plan’s rules before deciding how much to contribute.\n\nBecause of that deadline pressure, the smart way to use an FSA is to estimate your actual expected medical spending for the year — contacts, a known prescription, a planned dental procedure — and fund close to that number, not the max just because it’s tax-free.',
+      },
+      {
+        heading: 'The HSA: the “triple tax advantage” account that doubles as a retirement account',
+        body: 'An HSA is the more powerful of the two, and it’s not close. Contributions go in pre-tax (or tax-deductible if you contribute outside payroll), the balance grows completely tax-free while invested, and withdrawals for qualified medical expenses are also tax-free — three tax breaks stacked on the same dollar, which is why advisors sometimes call it the only true “triple tax advantage” account in the entire tax code. Even a Roth IRA only gets two of those three breaks.\n\nUnlike an FSA, HSA money never expires and never gets clawed back — whatever you don’t spend this year just keeps sitting in the account, still yours, still growing. Contribution limits for individual coverage have generally run a bit over $4,000 a year in recent years, with family-coverage limits close to double that, plus an extra catch-up amount once you turn 55 — all adjusted for inflation periodically, so pull the exact current-year numbers from IRS.gov or your plan provider rather than assuming last year’s figures still apply.\n\nHere’s the part most people never use: once your HSA balance crosses a threshold set by your specific provider (often somewhere in the $1,000–$2,000 range), you can invest the rest in mutual funds or ETFs, exactly like a 401(k) or Roth IRA. Left alone and invested for 20–30 years, an HSA can compound into a genuinely large sum — one that’s still completely tax-free when spent on medical costs, which, by retirement age, most people have plenty of.',
+      },
+      {
+        heading: 'Portability: one account moves with you, one usually doesn’t',
+        body: 'This is one of the sharpest practical differences. An HSA belongs to you personally, not your employer — it’s your account at whatever bank or brokerage holds it, the same way a Roth IRA is yours regardless of who you work for. Change jobs, change health plans, even go a year without HDHP coverage, and the money already in your HSA stays exactly where it is, still tax-free, still yours to spend on medical costs whenever you need to (you just can’t contribute more unless you’re back on a qualifying HDHP).\n\nAn FSA is tied to your employer’s plan. Leave the job mid-year and, in most cases, you forfeit whatever’s left — there’s no “rolling it into your next employer’s FSA.” Some plans offer COBRA continuation for a limited window, but it’s rarely worth the cost for a small remaining balance. The practical lesson: don’t overfund an FSA in a year you’re expecting to change jobs, since a leftover balance is money you’re very unlikely to see again.',
+      },
+      {
+        heading: 'The under-65 penalty — and why HSAs reward patience',
+        body: 'Spend HSA money on a qualified medical expense at any age and it’s entirely tax-free — no penalty, no catch. Spend it on something non-medical before age 65, though, and it’s treated harshly: the withdrawal counts as ordinary taxable income, plus a 20% penalty on top — steeper than the 10% early-withdrawal hit on a traditional IRA or 401(k).\n\nOnce you turn 65, that penalty disappears entirely. Non-medical withdrawals after 65 are still taxed as ordinary income, but the extra 20% goes away — which means at that point the account effectively behaves like a traditional IRA, except every dollar spent on medical costs (which, realistically, is a lot of retirement spending) is still completely tax-free on top of that. It’s a rare setup for a retirement-adjacent account: one that only gets more flexible with age, never less.',
+      },
+      {
+        heading: 'Your checklist for open enrollment',
+        body: '1. Check whether your health plan qualifies as a High-Deductible Health Plan (HDHP) — that single fact determines HSA eligibility.\n2. If you’re HSA-eligible, lean toward it over an FSA for money you don’t expect to need this year — it never expires and can be invested.\n3. If you only have FSA access, estimate your actual expected medical spending for the year and fund close to that number, not the max.\n4. Ask your HSA provider what balance unlocks investing, and move money past cash once you clear that threshold.\n5. Changing jobs mid-year? Don’t overfund an FSA — a leftover balance is usually forfeited the day you leave.\n6. Keep medical receipts even for years afterward — you can reimburse yourself from an HSA for a past qualified expense at any point, as long as it happened after the account was opened.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'Can I have both an HSA and an FSA at the same time?',
+        a: 'Generally no — enrolling in a full-purpose FSA typically makes you ineligible to contribute to an HSA for that plan year. Some employers offer a “limited-purpose FSA” covering only dental and vision, which is specifically designed to pair with an HSA — ask your benefits team if that option exists.',
+      },
+      {
+        q: 'What happens to unused FSA money at the end of the year?',
+        a: 'In most cases it’s forfeited back to your employer — FSAs are generally “use it or lose it.” Some plans offer a short grace period or a small carryover amount into the next year, but check your specific plan, since neither is guaranteed.',
+      },
+      {
+        q: 'Is HSA money gone if I don’t use it this year?',
+        a: 'No — unlike an FSA, HSA balances roll over completely, year after year, for as long as you have the account. There’s no deadline to spend it.',
+      },
+      {
+        q: 'Can I invest the money in my HSA?',
+        a: 'Yes — once your balance crosses a threshold set by your provider (often in the $1,000–$2,000 range), most HSAs let you invest the rest in mutual funds or ETFs, where it can grow tax-free for decades, just like a retirement account.',
+      },
+    ],
+  },
 ]
