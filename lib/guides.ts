@@ -1068,4 +1068,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-fafsa-work-when-to-file',
+    title: 'What Is the FAFSA, and When Should You Actually File It?',
+    metaTitle: 'How the FAFSA Works: Deadlines, Assets & What Counts',
+    description:
+      'The FAFSA unlocks grants, work-study, and federal loans — but only if you file it right and early. Here’s what actually counts as income and assets, and when to submit.',
+    date: '2026-08-02',
+    category: 'College Money',
+    intro:
+      'Someone told you to “just fill out the FAFSA” without explaining what it actually does, what counts against you, or why filing in October beats filing in March. It’s not a loan application and it’s not optional if you want any shot at federal money for school. Here’s the real mechanics — what it unlocks, what it counts, and the timing mistake that quietly costs students real aid every year.',
+    sections: [
+      {
+        heading: 'What the FAFSA actually unlocks',
+        body: 'The Free Application for Federal Student Aid (FAFSA) is the form that determines what federal financial aid you qualify for — Pell Grants (money you don’t pay back), federal work-study, and federal student loans (Direct Subsidized and Unsubsidized). "Free" is in the name for a reason: filing it never costs anything, and anyone who tries to charge you for it is targeting a website that isn’t the real one.\n\nIt doesn’t stop at federal money. Most states use your FAFSA data to award their own grants, and most colleges require it before handing out their own institutional scholarships and need-based aid — even merit aid, in some cases. Skipping the FAFSA because you assume your family "makes too much" is one of the most common ways students leave money on the table, since some aid (unsubsidized loans, some merit-based college aid) isn’t income-limited at all.',
+      },
+      {
+        heading: 'The number it produces: the Student Aid Index (SAI)',
+        body: 'The FAFSA runs your family’s financial information through a federal formula and spits out a number called the Student Aid Index (SAI) — the figure colleges use to decide how much aid you’re eligible for. This replaced an older number called the Expected Family Contribution (EFC) starting with the 2024–25 award year, as part of a broader FAFSA simplification overhaul.\n\nA lower SAI generally means more eligibility for need-based aid — and unlike the old EFC, the SAI can actually go negative, which signals especially high financial need. One real change worth knowing: the old formula gave a discount to families with more than one kid in college at the same time, splitting the expected contribution between them. That multiple-student discount is gone under the SAI formula, which means families with two or three kids in college simultaneously can see less aid per student than they would have under the old rules.',
+      },
+      {
+        heading: 'What counts as an asset — and what doesn’t',
+        body: 'Not all money is treated equally on the FAFSA, and knowing the difference before you file can matter. Retirement accounts — a 401(k), a traditional or Roth IRA, a pension — are not counted as assets at all, no matter the balance. The value of the family’s primary home is also excluded. This is a big reason financial advisors sometimes suggest maxing out retirement contributions before a student’s FAFSA years, since money moved into a retirement account stops counting against aid eligibility (income earned that year still counts, just not the resulting balance).\n\nWhat does count: checking and savings balances, taxable brokerage accounts, and 529 college savings plans. A 529 owned by a parent (or the student) counts as a parent asset and is assessed at a fairly gentle rate. A custodial account in the student’s own name — like a UGMA/UTMA — counts as a student asset instead, which the formula weighs far more heavily than parent assets, often assessing a much larger share of the balance each year. That’s one reason a 529 is generally treated more favorably for aid purposes than a custodial brokerage account holding the same dollar amount.',
+      },
+      {
+        heading: 'Dependent vs. independent: whose information even goes on the form',
+        body: 'Most undergraduates are considered "dependent" students for FAFSA purposes, which means a parent’s income and assets are reported on the form regardless of who’s actually paying tuition or where the student lives. Being financially independent from your parents in real life doesn’t automatically make you "independent" on the FAFSA — the criteria are specific: you’re 24 or older, married, a graduate student, a veteran, financially supporting your own children, an orphan or ward of the court, or a few other narrowly defined situations.\n\nIf none of those apply, expect to need a parent’s tax and asset information to complete the form — including if your parents are divorced, in which case the FAFSA generally wants information from whichever parent you lived with more over the past year, not necessarily whichever parent claims you on taxes.',
+      },
+      {
+        heading: 'Timing: why filing early beats filing "on time"',
+        body: 'The FAFSA for a given award year typically opens for submissions months before that school year starts, and while the exact opening date has shifted around in recent cycles due to the simplification rollout, the underlying rule hasn’t changed: some aid is limited and awarded on a first-come, first-served basis, both by states and by individual colleges. Filing the day it opens instead of waiting until a few weeks before your college’s deadline can be the difference between getting a state or institutional grant and missing it entirely, even with identical financial information.\n\nEvery state and college also sets its own FAFSA deadline, often well ahead of the federal deadline (which sits much later in the award year). The federal deadline is effectively a formality for most students — the real deadlines that matter are your state’s and your school’s, and they’re usually earlier than people expect. Look them up directly rather than assuming you have until summer.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. File the FAFSA as soon as it opens for your award year — don’t wait for your college’s deadline, since some aid runs out.\n2. Check whether you’re a dependent or independent student under the FAFSA’s specific rules, not your personal sense of independence.\n3. Gather parent (or your own, if independent) tax returns, bank statements, and investment account balances before starting the form.\n4. Know that retirement accounts and home equity don’t count as assets — taxable brokerage, savings, and custodial accounts do.\n5. List every college you’re considering on the form, even ones you’re unsure about — it costs nothing to add them and unlocks their aid packages.\n6. File every year you’re in school — the FAFSA isn’t a one-time application, and your aid can change as your family’s financial picture does.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Liquidity', 'Mutual Fund'],
+    faq: [
+      {
+        q: 'Do I need to file the FAFSA if my family makes too much money?',
+        a: 'Filing is still worth it even at higher incomes — some aid, like unsubsidized federal loans and certain merit-based college scholarships, isn’t need-based or income-limited, and many colleges require a FAFSA on file before awarding any aid at all, including merit money.',
+      },
+      {
+        q: 'Does a 529 plan hurt my financial aid more than a savings account?',
+        a: 'No — a 529 owned by a parent is assessed at the same parental-asset rate as a regular savings or brokerage account. What hurts aid more is a custodial account (UGMA/UTMA) in the student’s own name, since student assets are weighted more heavily than parent assets in the aid formula.',
+      },
+      {
+        q: 'What’s the difference between the SAI and the old EFC?',
+        a: 'The Student Aid Index (SAI) replaced the Expected Family Contribution (EFC) starting with the 2024–25 award year. The biggest practical change: the SAI can go negative to signal extra-high need, and it removed the old discount for having multiple children in college at the same time.',
+      },
+      {
+        q: 'Am I considered a dependent or independent student on the FAFSA?',
+        a: 'Most undergraduates are dependent by default, meaning parent financial information is required regardless of living situation. You’re generally independent only if you meet specific criteria — 24 or older, married, a grad student, a veteran, supporting your own children, or a few other defined cases — not simply because you support yourself day to day.',
+      },
+    ],
+  },
 ]
