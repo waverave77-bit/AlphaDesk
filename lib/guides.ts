@@ -1124,4 +1124,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'credit-score-needed-to-rent-an-apartment',
+    title: 'What Credit Score Do You Need to Rent Your First Apartment?',
+    metaTitle: 'Credit Score Needed to Rent an Apartment (and What to Do With None)',
+    description:
+      'Landlords check more than your credit score — here’s the score range that actually gets you approved, the income rule they use, and what to do with zero credit history.',
+    date: '2026-08-03',
+    category: 'Credit',
+    intro:
+      'You found the apartment, you can afford the rent, and then the application asks for a credit check — and suddenly you’re not sure if your score (or your total lack of one) is about to get you rejected. There’s no single national cutoff, but landlords and property managers use a fairly consistent set of numbers behind the scenes. Here’s what they’re actually looking at.',
+    sections: [
+      {
+        heading: 'Landlords check three things, not just your score',
+        body: 'A rental application usually runs through a screening service (like a TransUnion or Experian product built for landlords) that pulls three separate pieces: your credit report and score, your income, and your rental history — plus often a background and eviction check. A weak spot in one area can sometimes be offset by strength in another, which is why two applicants with the same credit score can get very different answers from the same landlord.\n\nCredit matters because it’s the closest thing to a track record a stranger can check in five minutes: have you reliably paid bills on time, and how much of your available credit are you already using? A landlord reading your credit report isn’t judging your character — they’re estimating the odds you’ll pay rent on time for the next 12 months.',
+      },
+      {
+        heading: 'The score ranges that actually move the decision',
+        body: 'Both major scoring models (FICO and VantageScore) run 300–850, and the commonly used bands are roughly: below 580 is Poor, 580–669 is Fair, 670–739 is Good, 740–799 is Very Good, and 800+ is Exceptional. There’s no federal rule that sets a rental cutoff, but in practice most individual landlords and property management companies look for something in the high 600s or better before approving an application without extra conditions.\n\nBelow that, you’re not automatically rejected — you’re more likely to be approved with a condition attached: a cosigner, a larger security deposit, or paying a couple months of rent upfront. Large corporate apartment complexes tend to have a stated minimum score written into their screening policy; individual landlords renting out one unit are often more flexible and willing to weigh the whole application.',
+      },
+      {
+        heading: 'The income rule: 3x the rent, roughly',
+        body: 'Most screening criteria lean at least as hard on income as they do on credit. A very common standard is that your gross monthly income (before taxes) should be about three times the monthly rent. On a $1,500/month apartment, that works out to roughly $4,500/month, or $54,000/year, in gross income.\n\nIf you’re under that ratio — common for a first apartment on an entry-level salary — a guarantor or cosigner (usually a parent) who does meet the income and credit bar can get the application approved. The cosigner isn’t just a formality: they’re legally on the hook for the rent if you can’t pay, so it’s worth having a real conversation about that before asking.',
+      },
+      {
+        heading: 'What happens with zero credit history (not bad credit — no file at all)',
+        body: 'Having no credit history is a different problem than having bad credit, and it’s the more common situation for a first-time renter straight out of high school or college. A "thin file" (fewer than a handful of reported accounts, or none at all) sometimes can’t even generate a score, which shows up on a screening report as blank rather than low.\n\nLandlords react to a blank file in different ways — some treat it neutrally and lean harder on income and references, others treat it as a risk signal simply because there’s nothing to check. If you’re in this spot, come to the application with backup: proof of steady income (pay stubs, an offer letter), a letter of recommendation from a previous landlord if you’ve ever rented informally, or a willing cosigner. Offering to pay first and last month’s rent upfront, where legal in your state, can also make an application with no credit history much more attractive to a landlord on the fence.',
+      },
+      {
+        heading: 'The move most renters don’t know about: rent can build your credit',
+        body: 'Paying rent on time for years used to do nothing for your credit score, because most landlords never reported it to the bureaus. That’s changed — services like Experian Boost let you add rent payments (along with utility and streaming bills) directly to your Experian credit file for free, and some property managers now report rent payments to one or more bureaus automatically as part of their standard lease.\n\nIf your building doesn’t report rent automatically, third-party rent-reporting services can do it for a monthly fee, sometimes also back-reporting up to a couple years of past on-time payments. It’s worth checking before you assume years of responsible renting are invisible to your credit file.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pull your own credit score before applying (a free soft check through your bank or Credit Karma) so you know which band you’re in.\n2. Calculate the 3x rent income rule for any apartment you’re considering — most screening criteria use something close to this.\n3. If your score or income falls short, line up a cosigner in advance instead of scrambling after a rejection.\n4. Ask what the specific building’s minimum score or income requirement is before you pay an application fee — corporate complexes are usually upfront about it.\n5. Once you’re in a lease, check whether your rent payments are being reported to the credit bureaus, and sign up for a rent-reporting service (like Experian Boost) if they aren’t.\n6. Keep every other credit account current — a strong score built from a starter credit card makes the next apartment application easier too.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'What credit score do you need to rent an apartment?',
+        a: 'There’s no universal number, but most landlords and property managers look for a score in the high 600s or better to approve an application without extra conditions. Below that, approval is still possible, often with a cosigner or a larger deposit.',
+      },
+      {
+        q: 'Can you rent an apartment with no credit history?',
+        a: 'Yes — a blank file isn’t the same as bad credit, and many landlords will lean on income, rental references, and a cosigner instead. Coming prepared with proof of steady income and a willing cosigner makes a thin-file application much stronger.',
+      },
+      {
+        q: 'Does paying rent on time build your credit score?',
+        a: 'Not automatically — most landlords don’t report rent to the credit bureaus on their own. Services like Experian Boost let you manually add rent payments to your credit file for free, and some property managers now report automatically as part of the lease.',
+      },
+      {
+        q: 'How much income do you need to rent an apartment?',
+        a: 'A common screening standard is roughly three times the monthly rent in gross monthly income. For a $1,500/month apartment, that’s about $4,500/month, or $54,000/year, before taxes.',
+      },
+    ],
+  },
 ]
