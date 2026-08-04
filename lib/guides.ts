@@ -1180,4 +1180,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-on-tips',
+    title: 'Do You Have to Pay Taxes on Tips? How the New “No Tax on Tips” Law Actually Works',
+    metaTitle: 'Taxes on Tips: FICA, Reporting Rules & the No Tax on Tips Deduction',
+    description:
+      'Tips are taxable income, and FICA still applies even under the new “No Tax on Tips” law — here’s exactly how tip reporting, minimum wage, and the deduction work.',
+    date: '2026-08-04',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your tip jar looks like free money — nobody’s watching, nobody’s withholding anything, and it feels almost like a gift. It isn’t. Tips are taxable wages under IRS rules, and a new federal law nicknamed “No Tax on Tips” changed part of that picture starting with the 2025 tax year without erasing it. Here’s exactly what changed, what didn’t, and what it means for a server, bartender, barista, or delivery driver’s actual paycheck.',
+    sections: [
+      {
+        heading: 'What actually counts as a tip, and who has to report it',
+        body: 'Any payment that’s optional, decided by the customer rather than the business, and not built into the price counts as a tip in the IRS’s eyes — cash left on a table, a card tip added at checkout, a share from a pooled tip jar, even a non-cash tip like event tickets. It doesn’t matter whether it’s $3 or $300: all of it is taxable income, exactly like your hourly wage.\n\nIf you work a job where tipping is common — serving, bartending, delivery, salons, valet — you’re required to keep a running record of your tips and report any month where you received $20 or more to your employer, usually by the 10th of the following month. Your employer then adds that reported amount to your W-2 alongside your regular wages and withholds income tax and FICA on the combined total. Skipping this step doesn’t make the tips any less taxable — it just shifts the responsibility for reporting them onto you when you file, and consistently underreporting cash tips is a real audit risk, not a harmless shortcut.',
+      },
+      {
+        heading: 'The tipped minimum wage — and why your hourly rate looks so low',
+        body: 'A lot of tipped jobs pay a base hourly wage far below the regular minimum wage. Federal law allows employers to pay tipped workers as little as $2.13 an hour, using a “tip credit” that assumes tips will make up the rest of the gap to reach the standard federal minimum wage of $7.25 an hour. Plenty of states set their own, higher tipped minimum wage, and a handful require the full state minimum wage to be paid in cash no matter how much you make in tips — so check your specific state’s rules rather than assuming $2.13 applies everywhere.\n\nThere’s a real protection built into the system: if your hourly wage plus your actual tips for a pay period don’t add up to at least the regular minimum wage, your employer is legally required to make up the difference. That rule exists specifically because tip income is unpredictable — a dead Tuesday shift shouldn’t leave you earning less than minimum wage for the week.',
+      },
+      {
+        heading: 'FICA still applies — tips aren’t “off the books”',
+        body: 'Just like a regular paycheck, tip income owes Social Security and Medicare taxes — 7.65% combined, the same FICA rate charged on any other wage. Because that gets withheld based on what you actually report, cash tips you never report never get FICA withheld either, which might sound like a shortcut, but it also means those tips never count toward your future Social Security earnings record, and skipping required reporting is technically tax evasion, not a gray area.\n\nThere’s also a specific rule for larger restaurants and similar establishments: if the tips employees collectively report add up to less than 8% of the location’s gross receipts, the employer may be required to “allocate” additional tip income across workers to close the gap, and that allocated amount also becomes taxable on their W-2 — one more reason under-the-table cash tips tend to catch up with people eventually.',
+      },
+      {
+        heading: 'The new “No Tax on Tips” deduction — what it actually does',
+        body: 'Starting with the 2025 tax year, a new federal law created a temporary deduction specifically for tip income, widely nicknamed “No Tax on Tips.” It lets eligible workers deduct qualified tips — up to $25,000 a year — from their federal taxable income, and unlike most deductions, you don’t have to itemize to claim it. The deduction is currently scheduled to run only through the 2028 tax year unless Congress extends it, so it’s worth treating as temporary rather than a permanent fixture of the tax code.\n\nA few real limits are worth knowing before assuming it automatically applies. It only covers occupations the Treasury Department has published as customarily and regularly tipped — mostly food service, bartending, salons, and similar service roles — so not every side hustle that occasionally nets a tip qualifies. The deduction also phases out at higher incomes, shrinking for single filers earning above roughly $150,000 a year (about $300,000 for joint filers) and disappearing above a higher cutoff. For most teen and young-adult tipped workers, income is nowhere near that range, so the eligibility list and the reporting requirement matter far more than the phase-out.',
+      },
+      {
+        heading: 'What the new deduction does NOT change',
+        body: '“No Tax on Tips” only affects federal income tax. It does nothing to Social Security or Medicare — FICA still gets withheld from every dollar of reported tip income exactly as before. Most states with their own income tax haven’t automatically adopted a matching break either, so state tax on tips may still apply depending on where you live and work; check your specific state’s rules rather than assuming the federal change covers everything.\n\nIt also doesn’t remove the underlying requirement to report tips to your employer in the first place — you still need to track and report $20-or-more months exactly like before. The deduction changes what you owe when you file; it doesn’t change what you have to disclose along the way.\n\nHere’s the detail that matters most for a lot of teens: the federal standard deduction already shields income up to a fairly high threshold — currently in the $16,000-plus range for a single filer — from any federal income tax at all. If your total income for the year, tips and wages combined, is already under that threshold, you likely owed $0 in federal income tax before this law existed, so the new tip deduction may not change your actual tax bill much. It helps most for workers earning enough that some of their tip income would otherwise have been taxed.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Keep a running log of tips — cash and card — even if your employer’s system already tracks card tips automatically.\n2. Report any month with $20 or more in tips to your employer by the deadline (usually the 10th of the next month) so it lands on your W-2 correctly.\n3. Don’t assume “No Tax on Tips” means tips are tax-free — FICA still applies, and many states still tax tip income on top of that.\n4. Check whether your job is on the Treasury’s list of qualifying tipped occupations before assuming the new federal deduction applies to you.\n5. If your total income is already under the standard deduction, you may already owe $0 federal income tax regardless of this law — file anyway to get any withheld amount refunded.\n6. Since tip income counts as earned income, it can fund a Roth IRA just like regular wages — a legitimate way to turn a slow shift’s cash tips into decades of tax-free compounding.\n7. File a return every year you earn tip income, even if it feels small — it’s the only way to reconcile what was withheld against what you actually owed.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Do you have to pay taxes on cash tips?',
+        a: 'Yes. All tips are taxable income regardless of whether they’re cash, card, or split from a pooled jar. If you receive $20 or more in tips in a month, you’re required to report them to your employer so they can be included on your W-2.',
+      },
+      {
+        q: 'What is the “No Tax on Tips” deduction?',
+        a: 'A temporary federal deduction, in effect starting with the 2025 tax year through 2028 unless extended, that lets eligible tipped workers deduct up to $25,000 of qualified tips from their federal taxable income without needing to itemize.',
+      },
+      {
+        q: 'Does the No Tax on Tips law mean my tips are completely tax-free?',
+        a: 'No. It only removes federal income tax on qualified tips up to the cap, for eligible occupations. Social Security and Medicare taxes still apply to all reported tips, and most states still tax tip income under their own rules.',
+      },
+      {
+        q: 'What happens if my tips plus my hourly wage don’t add up to minimum wage?',
+        a: 'Your employer is legally required to make up the difference so you earn at least the regular minimum wage for the pay period — that protection exists specifically because tip income is unpredictable shift to shift.',
+      },
+    ],
+  },
 ]
