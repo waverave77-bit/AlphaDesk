@@ -1236,4 +1236,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-a-car-loan-work-with-no-credit-history',
+    title: 'How Does a Car Loan Work When You Have No Credit History?',
+    metaTitle: 'First Car Loan With No Credit: APR, Terms & Down Payments',
+    description:
+      'Buying your first car with no credit history? Here’s how auto loan APR, loan term, and down payments actually work — and the traps that quietly cost the most.',
+    date: '2026-08-05',
+    category: 'Credit',
+    intro:
+      'You need a car to get to work, work is how you build credit, and every loan application wants credit you don’t have yet — the same catch-22 as your first credit card, except this time the monthly payment is a lot bigger. Here’s exactly how an auto loan is priced, why your rate can vary by a factor of three or more depending on your credit file, and which parts of the deal are designed to quietly cost you the most.',
+    sections: [
+      {
+        heading: 'How the loan is actually structured',
+        body: 'The amount you finance — the principal — is the car’s price (plus tax, title, and registration fees) minus your down payment and any trade-in value. That principal gets an interest rate (APR) and a loan term, usually stated in months: 36, 48, 60, 72, sometimes 84.\n\nThe term length changes more than your monthly payment — it changes the total interest you pay. A $20,000 loan at 8% APR over 60 months runs about $406/month and costs roughly $4,300 in interest by payoff. Stretch that same loan to 72 months and the payment drops to around $351/month, which feels easier — but total interest climbs to roughly $5,250, because you’re paying interest for a full year longer. Same car, same rate, an extra $950 just for taking longer to pay it off.',
+      },
+      {
+        heading: 'Why your credit score moves the rate more than anything else',
+        body: 'Lenders sort borrowers into FICO score bands — roughly: Poor (below 580), Fair (580–669), Good (670–739), Very Good (740–799), Exceptional (800–850) — and price auto loans almost entirely off which band you land in. Someone with excellent credit typically qualifies for a rate near the lender’s advertised best APR. Someone with no credit history or a low score can be quoted a rate several times higher, sometimes well into the double digits, because the lender is pricing in the risk that they don’t yet have a track record for.\n\nWith zero credit history, a lot of lenders won’t approve you solo at any rate — which is why a cosigner (a parent or relative with an established credit history) is the standard workaround. Adding one can be the difference between approval and denial, or between a reasonable rate and a punishing one. The tradeoff: your cosigner is fully on the hook for the loan if you miss payments, and it shows up on their credit report too, so it’s not a favor to ask for casually.',
+      },
+      {
+        heading: 'The 20/4/10 rule: a sane way to size what you can afford',
+        body: 'A commonly cited rule of thumb for car buying is 20/4/10: put at least 20% down, finance for no more than 4 years (48 months), and keep your total monthly vehicle costs — loan payment plus insurance — under 10% of your gross monthly income.\n\nIt’s not a law, and plenty of reasonable people stretch one of the three numbers. But it’s a useful gut check specifically because dealerships and lenders will happily approve you for far more car than this rule would allow — approval isn’t the same thing as affordable, and the F&I (finance) office makes more money the bigger your loan is.',
+      },
+      {
+        heading: 'Get preapproved before you set foot on a lot',
+        body: 'Applying for financing through your own bank or a credit union before you go car shopping gives you a real APR quote in hand, based on your actual credit file, with no pressure attached. Credit unions in particular are often worth checking first — they’re member-owned rather than profit-driven, and frequently beat both bank and dealer rates for exactly the kind of thin-credit-file borrower a first-time buyer usually is.\n\nDealerships can also arrange financing, but the rate they quote you isn’t always the rate the lender actually approved — dealers are legally allowed to mark up the wholesale rate a lender offers them and keep the difference as profit, a practice regulators have scrutinized for years. Walking in with a preapproved rate gives you a number to beat and takes that markup off the table, or at least makes it visible.',
+      },
+      {
+        heading: 'The traps: long terms, negative equity, and bundled add-ons',
+        body: 'A new car commonly loses something like 20% of its value in the first year alone and keeps depreciating by a meaningful chunk annually after that. Pair fast depreciation with a long loan term and a small down payment, and it’s easy to end up "underwater" — owing more on the loan than the car is worth — for years at a stretch. That’s a real problem if the car is totaled or you need to sell it, because insurance only pays out what the car is worth, not what you still owe. GAP insurance exists specifically to cover that gap, and it’s worth asking about if you’re financing with little down.\n\nThe other trap shows up in the finance office: extended warranties, paint protection, and other add-ons are often pitched as small monthly increases, but they get rolled into the loan principal — meaning you pay interest on the warranty for the life of the loan, not just its sticker price. These are almost always negotiable or declinable; nothing about them is required to get the loan approved.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your credit score and know your FICO band before you shop — it tells you roughly what rate range to expect.\n2. Get preapproved through a bank or credit union first, so you walk in with a rate to beat instead of trusting the dealer’s first offer.\n3. Aim for the 20/4/10 rule as a starting point — 20% down, 48-month term or shorter, total vehicle costs under 10% of gross income.\n4. If you have no credit history, ask a parent or relative about cosigning — understand it makes them fully liable if you miss a payment.\n5. Watch for add-ons (extended warranties, paint protection) getting rolled into the loan principal — you can decline or negotiate almost all of them.\n6. Make every payment on time — an auto loan is installment credit, and on-time payments build your score and diversify your credit file beyond just cards.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Can you get a car loan with absolutely no credit history?',
+        a: 'Often yes, but expect either a cosigner requirement or a noticeably higher APR than someone with an established credit file. Credit unions and some manufacturer first-time-buyer programs tend to be more flexible than traditional banks for exactly this situation.',
+      },
+      {
+        q: 'How much of a down payment do I need for my first car loan?',
+        a: 'There’s no hard minimum, but putting down at least 10–20% (in line with the 20/4/10 rule) lowers your monthly payment, cuts total interest, and reduces the risk of owing more than the car is worth.',
+      },
+      {
+        q: 'Is a 72- or 84-month car loan a bad idea?',
+        a: 'It lowers your monthly payment but usually costs meaningfully more in total interest and keeps you "underwater" — owing more than the car is worth — for longer, since cars depreciate faster than a long loan pays down principal early on. A 48–60 month term is generally the safer range.',
+      },
+      {
+        q: 'Does making car payments actually build credit?',
+        a: 'Yes — an auto loan is reported as installment credit, which is different from revolving credit cards. On-time payments build payment history and add to your credit mix, both real factors in your score, as long as you don’t miss a due date.',
+      },
+    ],
+  },
 ]
