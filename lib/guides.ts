@@ -1292,4 +1292,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-miss-a-student-loan-payment',
+    title: 'What Actually Happens If You Miss a Student Loan Payment?',
+    metaTitle: 'What Happens If You Miss a Student Loan Payment?',
+    description:
+      'Missing one payment isn’t the end of the world — ignoring it is. Here’s the real timeline from late fee to default, and how to fix it before it gets there.',
+    date: '2026-08-06',
+    category: 'College Money',
+    intro:
+      'You missed a payment — maybe you forgot, maybe you just didn’t have it — and now you’re wondering how bad this actually is. The honest answer: one missed payment is recoverable and pretty common. What turns it into a real problem is silence. Here’s the actual timeline, what each stage costs you, and how to get out of it at any point along the way.',
+    sections: [
+      {
+        heading: 'Days 1–89: late, but usually still fixable quietly',
+        body: 'Miss your due date and most servicers charge a late fee within the first week or two, but the missed payment generally isn’t reported to the credit bureaus right away. This window — before it hits your credit report — is the cheapest and easiest time to fix things, because your options are still wide open: pay what’s owed, or call your servicer and ask about deferment, forbearance, or switching to an income-driven repayment plan before the next due date arrives.\n\nThe one thing that doesn’t pause during this window is interest — unless your loan is subsidized and you’re in an approved deferment, interest keeps accruing on the balance the entire time, so the longer it sits unpaid, the more you eventually owe.',
+      },
+      {
+        heading: 'Day 90: it shows up on your credit report',
+        body: 'Once a payment is roughly 90 days past due, servicers typically report it to all three credit bureaus as delinquent. This is the point where the damage becomes visible to anyone who pulls your credit — a lender, a landlord, sometimes an employer — and it can knock a real chunk off your score, especially if your credit was otherwise clean.\n\nA single 90-day-late mark doesn’t ruin you permanently; it fades in impact over time and drops off your report entirely after about seven years. But it’s also the clearest possible signal that the earlier, quieter fixes (a quick call to your servicer) were the better move, and that you’re now on a clock.',
+      },
+      {
+        heading: 'Day 270: federal loans go into default',
+        body: 'For federal Direct Loans, going about 270 days — roughly nine months — without a payment moves the loan into default, and that’s a different category of problem entirely. The full remaining balance can become due immediately (called acceleration). You lose access to deferment, forbearance, and income-driven repayment plans until you get out of default. You become ineligible for additional federal financial aid. And the government can collect without ever taking you to court: wages can be garnished, tax refunds withheld, and even a portion of Social Security benefits taken, all through the Treasury Offset Program. Collection costs can also get added on top of what you already owe.\n\nDefault is the stage worth doing everything possible to avoid — not because it’s unrecoverable, but because every option becomes slower, more expensive, and more forceful once you’re in it.',
+      },
+      {
+        heading: 'Getting out of default: rehabilitation vs. consolidation',
+        body: 'If a federal loan does default, there are two standard ways back out. Loan rehabilitation means agreeing with your servicer on a reasonable, income-based monthly payment and making around nine of them on time within a set window — after which the default is removed from your credit history (though the late payments leading up to it still show). Loan consolidation rolls the defaulted loan into a new Direct Consolidation Loan and can resolve the default in as little as one payment, which is faster — but it doesn’t erase the default notation from your credit report the way rehabilitation does.\n\nNeither path is instant, and both restore your eligibility for federal aid, deferment, and income-driven plans once complete. The point is: default is a door you can walk back out of, it just takes longer to reopen than it took to walk through.',
+      },
+      {
+        heading: 'Private loans play by different, harsher rules',
+        body: 'Everything above describes federal Direct Loans, which come with government-mandated protections. Private student loans have none of that built in — the servicer sets its own definition of default, and it can trigger after just a handful of missed payments, sometimes faster than the federal timeline. There’s no Treasury Offset process, but private lenders can send the debt to collections or sue for the full balance, including accrued interest and fees.\n\nIf a private loan has a cosigner — common for a first loan with no credit history — a missed payment hits their credit report too, and they’re just as legally responsible for the debt as you are. If things are going sideways on a cosigned loan, telling your cosigner before the servicer does is the decent move, and it gives them a chance to help you find a fix.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before you miss a payment, call your servicer — ask about deferment, forbearance, or an income-driven repayment plan; this is always cheaper than fixing it after the fact.\n2. Already missed one? Get current within the next few weeks, well before the 90-day mark where it hits your credit report.\n3. Never ignore calls or letters from your servicer or a collector — every conversation is a chance to set up an alternative arrangement instead of drifting toward default.\n4. Already in default on a federal loan? Ask about rehabilitation (removes the default mark, takes longer) or consolidation (faster, but the default notation stays).\n5. Have a cosigner on a private loan? Tell them what’s happening — their credit and their legal liability are both tied to your payments.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'How many days late does a student loan payment have to be before it hurts my credit?',
+        a: 'Generally around 90 days past due, which is when servicers typically report the delinquency to all three credit bureaus. Before that point, a quick fix or a call to your servicer usually keeps it off your credit report entirely.',
+      },
+      {
+        q: 'What counts as default on a federal student loan?',
+        a: 'For federal Direct Loans, default is generally triggered after about 270 days (roughly nine months) with no payment. It brings serious consequences — acceleration of the full balance, loss of deferment and income-driven repayment options, and collection tools like wage garnishment and tax refund offset.',
+      },
+      {
+        q: 'Can you recover from federal student loan default?',
+        a: 'Yes. Loan rehabilitation (a series of on-time payments over several months) removes the default from your credit history, while consolidation resolves default faster but leaves the default notation on your report. Both restore eligibility for federal aid and repayment plans.',
+      },
+      {
+        q: 'Do private student loans have the same missed-payment timeline as federal loans?',
+        a: 'No. Private lenders set their own default terms, which can trigger much sooner than the federal 270-day timeline, and they lack government protections like income-driven repayment or Treasury Offset in place of a lawsuit. If there’s a cosigner, a missed payment affects their credit and liability too.',
+      },
+    ],
+  },
 ]
