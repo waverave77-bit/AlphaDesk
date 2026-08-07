@@ -1348,4 +1348,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-overdraft-your-bank-account',
+    title: 'What Actually Happens If You Overdraft Your Bank Account?',
+    metaTitle: 'What Happens If You Overdraft Your Bank Account? Fees & Fixes',
+    description:
+      'A $6 coffee on a $4 balance can trigger a $35 fee — or nothing at all, depending on one setting. Here’s exactly how overdrafts work and how to avoid the fee.',
+    date: '2026-08-07',
+    category: 'Saving',
+    intro:
+      'Your card gets approved for a $6 coffee even though your balance was sitting at $4, and two days later a $35 fee shows up out of nowhere. It feels random, but it isn’t — whether that purchase goes through, and whether it costs you anything, comes down to one setting most people never touch. Here’s exactly how overdrafts work, what the fee actually is, and how to make sure it never happens to you again.',
+    sections: [
+      {
+        heading: 'What "overdrafting" actually means',
+        body: 'Overdrafting means spending more than what’s in your checking account. When that happens, your bank has exactly two options: cover the transaction anyway and let your balance go negative (called "paying" the overdraft), or reject the transaction outright (called "declining" it). Which one happens — and whether it costs you anything — depends on the type of transaction and whether you’ve opted into what banks call "standard overdraft coverage."\n\nIf the bank pays it, you now owe them the negative amount plus a fee. If it declines, the purchase simply doesn’t go through — awkward at the register, but free.',
+      },
+      {
+        heading: 'The fee — and how fast it multiplies',
+        body: 'Overdraft fees commonly run in the $30–$35 range per transaction at banks that still charge them. The part that catches people off guard is that it’s per transaction, not per day — buy a coffee, then gas, then groceries while your balance is negative, and some banks will charge that fee three separate times, up to a daily cap many set around 3 to 5 fees. A handful of small purchases against a shortfall of ten or twenty dollars can turn into $100+ in fees alone.\n\nSome banks also add an extended overdraft fee — an extra daily or per-period charge if your balance stays negative for several days. The trend recently has moved the other way, though: several major banks and most online-only banks (Capital One and Ally among them) have eliminated overdraft fees entirely or added a small no-fee negative-balance buffer, so it’s worth actually checking your own bank’s current policy instead of assuming the worst.',
+      },
+      {
+        heading: 'The opt-in rule that protects your debit card (Regulation E)',
+        body: 'Federal rules — specifically an amendment to Regulation E that took effect in 2010 — require your bank to get your affirmative opt-in before it can charge an overdraft fee on two specific transaction types: one-time debit card purchases and ATM withdrawals. If you never opted in, those transactions are simply declined at no cost when your balance can’t cover them. No opt-in, no fee, full stop.\n\nThe catch is that this protection doesn’t extend to everything. Checks, ACH payments (rent, autopay bills, subscriptions), and recurring debit charges aren’t covered by the opt-in rule — banks can still pay those and charge you an overdraft fee whether or not you ever opted into anything, because bouncing a rent check causes its own problems the bank is often trying to help you avoid (for a price).',
+      },
+      {
+        heading: 'Overdraft fee vs. NSF fee — not the same thing',
+        body: 'A non-sufficient funds (NSF) fee, sometimes called a "returned item" fee, is overdraft’s less-forgiving cousin. It happens when the bank declines to cover a check or ACH payment instead of paying it — the transaction bounces, you still owe the merchant or landlord, and the merchant may separately charge you their own returned-payment fee on top of whatever your bank charges.\n\nRegulators pushed hard against multiple and "double-dipping" NSF fees in recent years, and a number of major banks eliminated NSF fees entirely around 2022 — another detail worth checking directly with your own bank rather than assuming.',
+      },
+      {
+        heading: 'It usually skips your credit report — but can still follow you',
+        body: 'A one-off overdraft generally doesn’t show up on your credit report with Equifax, Experian, or TransUnion the way a missed loan payment would — checking accounts aren’t typically reported to those bureaus at all. But if a negative balance goes unpaid long enough that the bank closes the account and writes it off, they can report it to ChexSystems, a separate consumer reporting agency that banks check before approving new checking accounts.\n\nA ChexSystems mark can make it hard to open a new account at most major banks for up to five years, sometimes pushing you into a restricted "second chance" account with fewer features. It’s a much longer-lasting consequence than the $35 fee that started it.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your account settings for "standard overdraft coverage" — opt out if you’d rather have a purchase declined for free than pay a $30+ fee.\n2. Turn on low-balance text or push alerts so you find out before you swipe, not after.\n3. Link a savings account as backup overdraft protection — the transfer fee is usually a flat few dollars, far cheaper than a standard overdraft fee, and some banks offer it free.\n4. Keep a small buffer — even $20–$50 sitting untouched in checking absorbs most everyday overdraft situations.\n5. Already overdrawn? Pay it back as fast as possible — extended overdraft fees can keep adding up the longer the balance stays negative.\n6. If your bank still charges heavy overdraft and NSF fees, compare it against banks that have dropped them — it’s a real, ongoing cost difference.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Federal Reserve', 'Credit Rating', 'Inflation'],
+    faq: [
+      {
+        q: 'Does overdrafting hurt your credit score?',
+        a: 'Not directly — checking account activity generally isn’t reported to the three major credit bureaus. But an unpaid negative balance that gets written off can be reported to ChexSystems, which can block you from opening a new bank account elsewhere for years.',
+      },
+      {
+        q: 'Can a debit card purchase overdraft my account without my permission?',
+        a: 'Not for one-time debit card purchases or ATM withdrawals — federal Regulation E requires you to opt into standard overdraft coverage before a bank can charge a fee on those. Without opting in, the transaction is just declined for free.',
+      },
+      {
+        q: 'What’s the difference between an overdraft fee and an NSF fee?',
+        a: 'An overdraft fee is charged when the bank pays a transaction anyway and lets your balance go negative. An NSF (non-sufficient funds) fee is charged when the bank instead declines a check or ACH payment — the transaction bounces and you still owe the payment, plus possibly a separate fee from the merchant.',
+      },
+      {
+        q: 'How do I avoid overdraft fees for good?',
+        a: 'Opt out of standard overdraft coverage so debit and ATM transactions just decline instead of costing you money, set up low-balance alerts, link a savings account for cheaper backup transfers, and consider a bank that has eliminated overdraft fees entirely if you find yourself running tight often.',
+      },
+    ],
+  },
 ]
