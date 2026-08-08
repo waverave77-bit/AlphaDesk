@@ -1404,4 +1404,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-buy-your-first-stock',
+    title: 'How Do You Actually Buy Your First Stock? A Step-by-Step Guide',
+    metaTitle: 'How to Buy Your First Stock: A Step-by-Step Beginner Guide',
+    description:
+      'Account’s funded, ticker’s typed in, and now there are buttons you don’t recognize. Here’s exactly what a market order, a limit order, and a fractional share actually do.',
+    date: '2026-08-08',
+    category: 'Investing',
+    intro:
+      'You’ve opened a brokerage account, money’s sitting in it, and you’ve pulled up a stock — and now there’s a wall of unfamiliar buttons standing between you and actually owning something. Market order? Limit order? Shares? Here’s exactly what each piece does, in the order you’ll actually hit them.',
+    sections: [
+      {
+        heading: 'Step 1: fund the account before you can buy anything',
+        body: 'Buying a stock requires settled cash sitting in your brokerage account first — you can’t place a trade against money that isn’t there yet. Most brokerages fund via a bank transfer (ACH), which is typically free but takes one to a few business days to fully clear, though many apps let you start trading with an "instant deposit" against a portion of that transfer before it officially settles.\n\nIf you’re under 18, this account is a custodial account opened by a parent or guardian — the mechanics of buying and selling inside it work exactly the same as an adult account, you just don’t have sole legal control until you reach the age of majority in your state.',
+      },
+      {
+        heading: 'Step 2: decide what you’re actually buying — and type the right ticker',
+        body: 'Every publicly traded company or fund has a ticker symbol, a short code you search to pull up its trading page — AAPL for Apple, VOO for a popular S&P 500 ETF. Typing the wrong ticker is a real beginner mistake, since some codes look alike (there’s a real difference between a company’s common stock and a similarly-named fund), so double-check the full company name shown next to the ticker before you go further.\n\nThis is also the moment to decide between a single company’s stock and an ETF. A stock is a bet on one company; an ETF like a total-market or S&P 500 fund spreads that same dollar across hundreds of companies at once. Most beginner-focused advice, including the rest of the guides on this site, leans toward starting with a broad ETF and treating individual stock picks as a smaller, separate slice of a portfolio — not because individual stocks are forbidden, but because a single company’s bad quarter can’t sink a fund holding hundreds of others.',
+      },
+      {
+        heading: 'Step 3: market order vs. limit order — the choice that actually matters',
+        body: 'When you hit "buy," you’ll be asked to pick an order type, and this is the one decision that genuinely changes your outcome. A market order buys immediately at the best price currently available — fast and simple, and fine for large, heavily-traded stocks and ETFs where the price barely moves between the moment you click and the moment it fills.\n\nA limit order lets you set the maximum price you’re willing to pay. If the stock is trading above your limit, the order simply waits — it might fill a minute later, or it might never fill at all if the price never comes back down. Limit orders matter most for stocks that trade less often, where the bid-ask spread (the gap between what buyers are offering and what sellers are asking) can be wide enough that a market order fills at a noticeably worse price than what you saw on screen a second earlier.\n\nFor a beginner buying a well-known stock or a major ETF during regular market hours (9:30 AM–4 PM ET), a market order is usually fine. Trading outside those hours, or in a smaller, thinly-traded stock, is exactly when a limit order earns its keep.',
+      },
+      {
+        heading: 'Step 4: you don’t need the full share price — fractional shares',
+        body: 'A single share of a company trading at $900 used to be a hard stop for anyone without $900 to spend. Most major brokerages (Fidelity, Schwab, Robinhood, and others) now let you buy a fractional share instead — you enter a dollar amount, say $25, and you receive exactly 25/900ths of a share, along with a proportional slice of any future dividends or gains.\n\nThis is what actually makes "invest what you can" realistic advice instead of a platitude — $20 a week into a fractional share of a broad ETF is a completely legitimate way to start, and it removes the old excuse that investing requires hundreds of dollars up front to even place a first trade.',
+      },
+      {
+        heading: 'Step 5: what happens after you click buy',
+        body: 'Once an order fills, the shares show up in your account’s holdings almost immediately, but the trade itself takes a short window to officially settle — in the US, stock trades settle one business day after the trade date (known as T+1). Until it settles, that cash is technically still tied up in the transaction.\n\nThis matters most in a cash account (as opposed to a margin account): if you buy a stock and sell it again before the cash from a prior sale has settled, repeatedly, it can trigger what’s called a good-faith violation, and enough of those in a rolling 12-month period can get your account temporarily restricted to trading with only fully settled cash. It’s not a beginner trap you’re likely to hit by buying and holding, but it’s exactly the kind of thing that catches people who start buying and selling the same day.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Fund the account and wait for the transfer to clear (or use instant deposit if your brokerage offers it).\n2. Search the exact ticker symbol and confirm the full company or fund name before buying.\n3. Decide stock vs. ETF — a broad ETF is the standard starting point; individual stocks are a smaller add-on, not the whole plan.\n4. Use a market order for large, liquid stocks and ETFs during regular market hours; use a limit order for anything thinly traded or when trading outside those hours.\n5. Use fractional shares if the full share price is more than you want to put in at once — there’s no minimum share count required to start.\n6. After the order fills, leave it alone. The goal on day one is owning something, not trading it the same afternoon.',
+      },
+    ],
+    relatedTerms: ['Stock', 'ETF', 'Market Order', 'Limit Order', 'Broker', 'Bid-Ask Spread'],
+    faq: [
+      {
+        q: 'What’s the difference between a market order and a limit order?',
+        a: 'A market order buys immediately at the current best available price. A limit order only fills at a price you set or better, which protects you from a bad fill but might mean the order never executes if the price doesn’t reach your limit.',
+      },
+      {
+        q: 'Do you need a lot of money to buy your first stock?',
+        a: 'No — most major brokerages now offer fractional shares, letting you buy a dollar amount (even $5 or $10) of an expensive stock instead of needing the full share price up front.',
+      },
+      {
+        q: 'How long does it take for a stock purchase to settle?',
+        a: 'In the US, stock trades settle one business day after the trade date (T+1). The shares appear in your account right after the order fills, but the cash side of the transaction isn’t fully final until settlement.',
+      },
+      {
+        q: 'Should a beginner buy individual stocks or an ETF first?',
+        a: 'Most beginner-focused guidance favors starting with a broad, low-cost ETF, since it spreads risk across hundreds of companies instead of resting on one. Individual stocks can be added later as a smaller slice of a portfolio once the basics feel comfortable.',
+      },
+    ],
+  },
 ]
