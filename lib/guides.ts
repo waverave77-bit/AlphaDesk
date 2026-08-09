@@ -1460,4 +1460,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-when-you-sell-stock',
+    title: 'Do You Pay Taxes When You Sell Stock? Capital Gains Explained',
+    metaTitle: 'Do You Pay Taxes When You Sell Stock? Capital Gains Tax Basics',
+    description:
+      'Your portfolio is up and you’re thinking about cashing out — here’s exactly when the IRS gets a cut, how much, and the one-year rule that can cut your tax bill in half.',
+    date: '2026-08-09',
+    category: 'Investing',
+    intro:
+      'Your first stock is up 30% and you’re tempted to lock it in — but before you hit sell, it helps to know what the IRS actually does with that gain. The short version: you only owe tax the moment you sell, and how long you held the stock changes your tax bill more than almost anything else you control.',
+    sections: [
+      {
+        heading: 'No sale, no tax — gains on paper don’t count yet',
+        body: 'If a stock you own goes up in value, that’s called an unrealized gain, and unrealized gains are not taxed. You could watch a stock triple in value and owe the IRS nothing, as long as you never sell. The tax bill only shows up the moment you sell and turn that gain into cash — at which point it becomes a realized gain, and realized gains are what actually get taxed.\n\nThis is why "I don’t want to sell because of the taxes" is a real, legitimate consideration for long-term investors — selling isn’t just a market decision, it’s a tax decision too. It’s also why buy-and-hold investing has a quiet tax advantage built in: a portfolio you never touch generates zero capital gains tax, no matter how much it grows.',
+      },
+      {
+        heading: 'The one-year line: short-term vs. long-term capital gains',
+        body: 'How long you held the stock before selling determines which tax rules apply, and the cutoff is exactly one year. Sell a stock you’ve held for one year or less, and the profit is a short-term capital gain — taxed at your regular income tax rate, the same rate that applies to your paycheck. Sell after holding it for more than one year, and the profit is a long-term capital gain, taxed at a separate, lower set of rates.\n\nThe gap between the two can be large. Someone in a higher income tax bracket might pay double or more in tax on a short-term gain compared to the exact same dollar amount held just a few extra months to cross the one-year mark. There’s no special filing required to get long-term treatment — your brokerage tracks your purchase date automatically and reports it to the IRS on Form 1099-B when you sell.',
+      },
+      {
+        heading: 'How much tax you actually owe',
+        body: 'Short-term gains stack on top of your other income and get taxed at your ordinary income tax bracket — the same brackets that tax your wages.\n\nLong-term gains use their own separate rate schedule, generally 0%, 15%, or 20%, depending on your total taxable income for the year. The income cutoffs for each bracket adjust for inflation every year, but the practical takeaway for a student or early-career earner is this: if your total taxable income for the year is fairly low, a meaningful chunk of your long-term gains — sometimes all of them — can fall into that 0% bracket. Selling a long-term winner during a low-income year (a gap semester, a light-hours year) can genuinely mean owing nothing on the gain.\n\nYour gain, either way, is calculated as sale price minus cost basis — cost basis being what you originally paid for the shares (plus any reinvested dividends that bought more shares along the way). Only the profit is taxed, never the whole sale amount.',
+      },
+      {
+        heading: 'Losses aren’t just bad news — they can offset gains',
+        body: 'If a stock you sell is worth less than you paid for it, that’s a capital loss, and losses aren’t just a bummer — they’re a tax tool. Capital losses first offset capital gains dollar for dollar, so if you have a $2,000 gain on one stock and a $2,000 loss on another in the same year, they cancel out and you owe nothing on either.\n\nIf your losses exceed your gains for the year, up to $3,000 of the leftover loss can be deducted against your ordinary income (wages, freelance income, etc.), and any loss beyond that carries forward to future tax years indefinitely until it’s used up. Deliberately selling losers to capture this benefit is called tax-loss harvesting.\n\nOne rule to know before harvesting a loss on purpose: the wash-sale rule blocks you from claiming the loss if you buy the same stock (or a "substantially identical" one) within 30 days before or after the sale — a 61-day window in total. Sell a losing stock and buy it right back the next morning, and the IRS disallows the loss entirely.',
+      },
+      {
+        heading: 'The accounts where none of this applies',
+        body: 'Capital gains tax only applies inside a regular taxable brokerage account. Buy and sell as much as you want inside a Roth IRA or traditional IRA, or a 401(k), and you owe zero capital gains tax on any of it, no matter how short-term the trade or how large the gain — that’s the core benefit those accounts are built around. A Roth account goes a step further: even withdrawals in retirement, including all the growth, come out completely tax-free.\n\nThis is part of why the standard order of operations — max any 401(k) match, then a Roth IRA, then a taxable brokerage account — matters beyond just contribution limits. Trades inside the tax-advantaged accounts are consequence-free in a way a regular brokerage account never is.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before selling a winner, check the purchase date — waiting past the one-year mark can meaningfully cut the tax rate on the gain.\n2. Remember unrealized gains owe nothing — you only trigger tax by actually selling.\n3. If you’re selling losers on purpose to offset gains, don’t buy the same stock back within 30 days, or the wash-sale rule cancels the deduction.\n4. Keep trades inside a Roth IRA or 401(k) when the goal is active buying and selling — capital gains tax doesn’t apply there at all.\n5. Your brokerage sends a 1099-B each year summarizing your sales — that’s the document your tax software or preparer uses to calculate what you owe.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Index Investing', 'Tax-Loss Harvesting', 'Dividend', 'Dollar-Cost Averaging', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I owe taxes if my stock goes up but I don’t sell it?',
+        a: 'No. Gains only become taxable when you sell — an unrealized gain on a stock you still hold isn’t taxed no matter how large it grows.',
+      },
+      {
+        q: 'What’s the difference between short-term and long-term capital gains?',
+        a: 'It comes down to how long you held the stock. One year or less before selling is a short-term gain, taxed at your regular income tax rate. More than one year is a long-term gain, taxed at lower rates that can be as low as 0% for lower-income filers.',
+      },
+      {
+        q: 'Can I use stock losses to lower my tax bill?',
+        a: 'Yes. Losses first offset any capital gains you have dollar for dollar, and up to $3,000 of extra loss beyond that can offset your ordinary income each year, with any remainder carried forward to future years.',
+      },
+      {
+        q: 'Do I pay capital gains tax on stocks in a Roth IRA?',
+        a: 'No. Trades inside a Roth IRA (or traditional IRA or 401(k)) aren’t subject to capital gains tax at all — that tax-free treatment is a core reason those accounts exist.',
+      },
+    ],
+  },
 ]
