@@ -1516,4 +1516,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-a-cd-certificate-of-deposit-work',
+    title: 'How Does a CD (Certificate of Deposit) Work, and Is It Worth It?',
+    metaTitle: 'How a CD (Certificate of Deposit) Works — And When It Beats a HYSA',
+    description:
+      'A relative told you to “put it in a CD” — here’s exactly what that locks up, what early withdrawal actually costs, and when it beats a savings account.',
+    date: '2026-08-10',
+    category: 'Saving',
+    intro:
+      'A relative or a bank app keeps nudging you toward a “CD” and you’ve nodded along without knowing what it actually does. A certificate of deposit is one of the safest, most boring places to park money — and sometimes one of the most useful. Here’s exactly what you’re trading away, what it costs to break that trade early, and when a CD actually beats just leaving cash in savings.',
+    sections: [
+      {
+        heading: 'What a CD actually is',
+        body: 'A certificate of deposit is a savings account with two things locked in up front: the interest rate and the timeline. You deposit a lump sum, agree not to touch it for a set term — commonly anywhere from a few months to five years — and in exchange the bank or credit union pays you a fixed rate for that entire term, guaranteed, regardless of what happens to interest rates elsewhere in the meantime.\n\nLike a regular savings account, a CD held at an FDIC-insured bank (or an NCUA-insured credit union) is insured up to $250,000 per depositor, per institution — so the safety profile is essentially identical to cash in the bank. The difference is entirely about access: a savings account lets you withdraw anytime, a CD does not, and that trade is the entire point of the product.',
+      },
+      {
+        heading: 'CD vs. a high-yield savings account: the trade you’re making',
+        body: 'A high-yield savings account (HYSA) gives you a variable rate — it can rise or fall over time, usually tracking broader interest-rate trends — but your money stays fully liquid, withdrawable whenever you want. A CD gives you a fixed rate for the whole term in exchange for giving up that access.\n\nThat trade-off cuts both ways depending on where rates are headed. If rates are expected to fall, locking in today’s rate with a CD protects you from watching your future savings-account yield drift downward. If rates are expected to rise, a CD can leave you stuck earning less than a HYSA would be paying by the time your CD matures. Nobody can predict rate moves reliably, which is exactly why CDs are best used for money you’ve already decided you won’t need during the term — not as a bet on where rates are going.',
+      },
+      {
+        heading: 'The catch: early withdrawal penalties',
+        body: 'Break a CD before its term ends and the bank charges an early withdrawal penalty — typically calculated as a chunk of the interest you would have earned, not a flat fee. A common structure is something like a few months of interest for a shorter-term CD (under a year) and closer to six months to a year of interest for a longer-term CD, though the exact formula is set by each bank and spelled out in the account disclosure before you open it.\n\nThe part that surprises people: if you withdraw early enough, the penalty can eat into your original deposit, not just the interest you earned — because if you haven’t earned enough interest yet to cover the penalty, the bank pulls the difference from your principal. This is exactly why a CD is the wrong home for an emergency fund. Emergency money needs to be reachable in a day or two with zero chance of losing a dollar of it; a CD guarantees neither.',
+      },
+      {
+        heading: 'CD laddering: getting some flexibility back',
+        body: 'A CD ladder solves the “what if I need some of this money sooner” problem without giving up the higher locked-in rate entirely. Instead of putting all your cash into one CD, you split it across several CDs with staggered maturity dates — say, 3-month, 6-month, 9-month, and 12-month terms.\n\nAs each CD matures, you either withdraw that portion penalty-free or roll it into a new long-term CD to keep the ladder going. The result is a recurring stream of access points — money becomes available every few months — while most of your balance still earns CD-level rates instead of sitting in savings the whole time.',
+      },
+      {
+        heading: 'Is CD interest taxable?',
+        body: 'Yes. Interest earned on a CD held in a regular account is taxed as ordinary income in the year it’s earned — the same tax treatment as interest from a regular savings account, not the lower rate that applies to long-term stock gains. The bank sends you (and the IRS) a Form 1099-INT if your interest for the year exceeds a small threshold, and you owe tax on it even if you haven’t touched a dollar of the CD yet, since the interest is considered earned annually regardless of whether you’ve withdrawn it.\n\nOne detail worth knowing: some retirement accounts (like an IRA) can hold a CD instead of stocks, which shelters that interest from annual taxation the same way it shelters any other investment inside the account — though the tradeoff is the same early-withdrawal restrictions the IRA itself already carries.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Never put emergency-fund money in a CD — keep that in a liquid, penalty-free HYSA instead.\n2. Only lock up money in a CD that you’re confident you won’t need before the term ends.\n3. Compare the CD’s fixed rate against a current HYSA rate before committing — sometimes the liquid option pays just as well with none of the lock-up.\n4. Read the early withdrawal penalty in the account disclosure before you deposit a dollar, not after.\n5. If you want higher rates without losing all access, build a CD ladder instead of one single lump-sum CD.\n6. Remember CD interest is taxed as ordinary income every year it’s earned, whether or not you withdraw it.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Inflation', 'Federal Reserve', 'Bond'],
+    faq: [
+      {
+        q: 'Is a CD better than a savings account?',
+        a: 'It depends on the rate environment and how soon you might need the money. A CD can pay a higher, guaranteed fixed rate for its term, but a high-yield savings account keeps your money fully accessible. If there’s any chance you’ll need the cash before the term ends, the savings account is the safer choice.',
+      },
+      {
+        q: 'What happens if I withdraw from a CD early?',
+        a: 'You pay an early withdrawal penalty, usually calculated as a few months to a year’s worth of interest depending on the CD’s term. If you haven’t earned enough interest yet to cover it, the penalty can also eat into your original deposit.',
+      },
+      {
+        q: 'Are CDs safe?',
+        a: 'Yes — CDs at FDIC-insured banks or NCUA-insured credit unions are insured up to $250,000 per depositor, per institution, the same protection as a regular savings account. The risk with a CD isn’t losing money to the bank; it’s losing access to your own cash during the term.',
+      },
+      {
+        q: 'What is a CD ladder?',
+        a: 'A strategy of splitting your money across multiple CDs with staggered maturity dates instead of one single CD. It gives you regular access points as each CD matures while most of your balance still earns CD-level rates.',
+      },
+    ],
+  },
 ]
