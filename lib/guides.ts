@@ -1572,4 +1572,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-closing-a-credit-card-hurt-your-credit-score',
+    title: 'Does Closing a Credit Card Hurt Your Credit Score?',
+    metaTitle: 'Does Closing a Credit Card Hurt Your Credit Score?',
+    description:
+      'You paid off the card — should you close it? Here’s how closing a credit card actually affects your utilization ratio and account age, and when it’s fine.',
+    date: '2026-08-11',
+    category: 'Credit',
+    intro:
+      'You finally paid off the card, and closing it feels like the responsible move — one less temptation, one less thing to manage. Sometimes that’s true. But closing a credit card can quietly ding your score in ways that have nothing to do with how responsible you’ve been. Here’s the actual mechanism, so you can decide with the real math instead of a gut feeling.',
+    sections: [
+      {
+        heading: 'The short answer: it can, but it’s not automatic',
+        body: 'Closing a credit card doesn’t hurt your score as a rule — it hurts your score if it changes two specific numbers: your overall credit utilization and the average age of your accounts. Close a card that barely moves either number and you’ll likely see little to no effect. Close the wrong card and you can watch your score drop by a real, visible amount within a single billing cycle.',
+      },
+      {
+        heading: 'Utilization ratio: your available credit disappears with the card',
+        body: 'Credit utilization — the percentage of your total available credit that you’re currently using — is roughly 30% of a FICO score, second only to payment history. It’s calculated across all your cards combined, not just the one you’re thinking about closing.\n\nSay you have two cards: a $2,000 limit with a $200 balance, and a $3,000 limit with $0 balance. Total available credit is $5,000, total balance is $200, so utilization is 4% — excellent. Close the $3,000-limit card and your available credit drops to $2,000 while your balance is still $200, which pushes utilization to 10%. Nothing about your spending changed; the denominator just got smaller. Close a card while carrying real balances elsewhere and the jump can be much bigger than that.',
+      },
+      {
+        heading: 'Average account age: your oldest card is worth more than your newest one',
+        body: 'Length of credit history makes up roughly 15% of a FICO score, and it’s measured partly by the average age of all your open accounts. Closing your oldest card doesn’t erase its history overnight — a closed account in good standing can still show on your credit report for up to 10 years — but once it eventually drops off, your average age takes a real hit, since that account no longer counts toward the average at all.\n\nThis is why the card to be most cautious about closing is usually your first one, not your newest. Closing a card you opened eight months ago barely moves your average age. Closing the card you’ve had since you were 18 can meaningfully lower it, especially if your other accounts are much newer.',
+      },
+      {
+        heading: 'When closing a card is actually fine — or the right move',
+        body: 'None of this means you should keep every card open forever. Closing makes sense when: the card charges an annual fee you’re not getting value from and the issuer won’t waive it; the card is relatively new, so it isn’t carrying much utilization or age weight; you’re worried about overspending and genuinely need the temptation removed; or the card was compromised by fraud and needs to be shut down for security reasons regardless of score impact.\n\nA temporary dip is also not permanent. Utilization is recalculated every month based on your current balances and limits, so if you close a card and your score drops from a utilization spike, paying down balances or getting a limit increase elsewhere can recover most of it within a cycle or two.',
+      },
+      {
+        heading: 'The move most people don’t know about: ask for a product change instead',
+        body: 'If the real problem is an annual fee, call the issuer and ask about a "product change" (sometimes called downgrading) to a no-annual-fee version of the same card family, rather than closing the account outright. Done correctly, this keeps the account number, the credit limit, and the account’s original open date intact — which means your utilization and average age are untouched, and you stop paying the fee.\n\nNot every issuer offers this on every card, and it’s not guaranteed to preserve every detail perfectly, but it’s always worth asking before you hit "close account." It’s the closest thing credit cards have to a free lunch.',
+      },
+      {
+        heading: 'Your checklist before closing a card',
+        body: '1. Check whether it’s your oldest card — if so, ask about a product change to a no-fee version instead of closing it.\n2. Add up your total credit limit across all cards and estimate your utilization after the card is gone — if it jumps well above 30%, pay down other balances first or reconsider.\n3. Only proceed with an annual-fee card if the issuer won’t waive the fee and a no-fee downgrade isn’t offered.\n4. If it’s a newer card with a low limit, closing it is usually low-risk to your score either way.\n5. Never close a card just to avoid temptation if the real fix is simpler — freezing the card, removing it from saved payment methods, or leaving it at home works without touching your score at all.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Does closing a credit card hurt your credit score right away?',
+        a: 'It can, within the next billing cycle — mainly by raising your overall utilization ratio (less available credit against the same balances) and, over the long run, lowering your average account age once the closed account eventually drops off your report.',
+      },
+      {
+        q: 'Is it bad to close a credit card I never use?',
+        a: 'Not necessarily. If it’s a newer card with a low limit and no annual fee, closing it usually has a small effect. If it’s your oldest card or one with a high limit, keeping it open (even unused, with maybe one small purchase a year to avoid inactivity closure) usually helps your score more than closing it.',
+      },
+      {
+        q: 'Should I close a credit card after paying it off?',
+        a: 'Not automatically. Paying it off is the important part — the balance is what affects utilization and interest, not whether the account stays open. Many people are better off keeping a paid-off card open and unused than closing it.',
+      },
+      {
+        q: 'Can I downgrade a credit card instead of closing it?',
+        a: 'Often, yes. Ask your issuer about a "product change" to a no-annual-fee version of the same card. Done successfully, it can keep your credit limit and original account age intact while dropping the fee — better for your score than closing outright.',
+      },
+    ],
+  },
 ]
