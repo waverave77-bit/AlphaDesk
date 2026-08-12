@@ -1628,4 +1628,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-cosign-a-loan',
+    title: 'What Happens If You Cosign a Loan and the Other Person Stops Paying?',
+    metaTitle: 'What Happens If You Cosign a Loan? The Real Risks Explained',
+    description:
+      'Cosigning isn’t a favor with no downside — it’s taking on equal legal responsibility for someone else’s debt. Here’s what actually happens if they miss a payment.',
+    date: '2026-08-12',
+    category: 'Credit',
+    intro:
+      'A friend, partner, or family member asks you to cosign a car loan, an apartment lease, or a private student loan because they don’t have enough credit history to qualify alone. It can feel like a small favor — sign a form, help them out. It isn’t. The moment you cosign, you’re not vouching for someone; you’re legally on the hook for every dollar they borrow, exactly as if you’d taken out the loan yourself.',
+    sections: [
+      {
+        heading: 'What cosigning actually means (it’s not a reference)',
+        body: 'A cosigner isn’t a character witness. When you cosign a loan, lease, or credit account, you become equally, legally responsible for the full balance — not a portion of it, and not just "if things get really bad." If the primary borrower pays $0 of a $20,000 auto loan, the lender can come after you for the full $20,000, the same way it would come after the person who actually drove the car off the lot.\n\nLenders ask for a cosigner specifically because the primary borrower’s credit history, income, or debt-to-income ratio isn’t strong enough to qualify alone. Your job as cosigner is to be the backup that makes the loan safe enough for the lender to approve — which means, by definition, the lender already sees real risk the primary borrower can’t handle it solo.',
+      },
+      {
+        heading: 'Why teens and young adults get asked to cosign — or need one',
+        body: 'Cosigners show up constantly in a young person’s financial life, usually in one of these forms: a first car loan, when a new driver has no credit history to qualify for reasonable rates alone; a private student loan, since most private lenders require a cosigner for undergrads with little to no income or credit (federal loans generally don’t require one); an apartment lease, when a college student’s income doesn’t meet a landlord’s minimum — cosigning a lease works the same way as cosigning debt, equal legal responsibility for the rent; and, less often today, a credit card, since federal law under the CARD Act requires anyone under 21 to show independent income or have a cosigner before an issuer can approve them, though many issuers now lean on proof-of-income requirements instead of accepting cosigners at all.\n\nIn every case, the arrangement exists because the primary applicant couldn’t get approved — or couldn’t get approved at a decent rate — on their own credit.',
+      },
+      {
+        heading: 'When a payment is missed, both credit reports take the hit',
+        body: 'Because the loan is reported to the credit bureaus under both names, a payment that’s 30+ days late shows up on the cosigner’s credit report exactly the way it shows up on the primary borrower’s — even though the cosigner never touched the money and might not find out about the missed payment until they check their own score. Payment history is the single biggest factor in a FICO score (roughly 35% of it), so a handful of late payments on a cosigned loan can do real damage to a credit file that otherwise looked clean.\n\nIf the account goes to collections or default, the lender can generally pursue the cosigner directly for the full remaining balance — through collections calls, a lawsuit, or wage garnishment in some states — without necessarily exhausting every option against the primary borrower first. Surveys of cosigners have repeatedly found that a meaningful share end up making at least one payment themselves after the primary borrower fell behind — this isn’t a rare edge case, it’s a documented, common outcome.',
+      },
+      {
+        heading: 'It affects you even if nothing ever goes wrong',
+        body: 'This is the part people miss: cosigning changes your credit profile the day you sign, whether or not the other person ever misses a payment. The full loan balance counts against your debt-to-income ratio the same as if you’d borrowed it yourself, which can lower how much you’re able to borrow for your own car, apartment, or eventually a mortgage. A large auto loan or private student loan balance sitting on your credit report can be the difference between an approval and a denial when you go to rent your own place a year later.\n\nIt can also weigh on your credit utilization and average account age calculations, which is why even a cosigned account with a spotless payment record isn’t truly "free" — it’s still debt on your file, just debt you’re not the one paying down yet.',
+      },
+      {
+        heading: 'Can a cosigner get off the loan later?',
+        body: 'Sometimes, but it’s not automatic — you can’t just ask to be removed. Some private student loans and auto loans offer a "cosigner release" after the primary borrower makes a set number of consecutive, on-time payments (commonly somewhere in the 12–48 month range, depending on the lender) and can show they now qualify for the loan on their own income and credit. The primary borrower has to apply for that release; it doesn’t happen automatically even after years of perfect payments.\n\nThe more common way a cosigner comes off a loan is refinancing — the primary borrower takes out a brand-new loan in their name only and uses it to pay off the old cosigned one. That only works once their credit and income are strong enough to qualify solo. Until one of those two things happens, the cosigner’s name — and liability — stays on the account.',
+      },
+      {
+        heading: 'Before you cosign anything',
+        body: '1. Read the loan or lease terms yourself — don’t rely on a summary from the person asking you to sign.\n2. Ask directly whether the loan offers a cosigner release, and under what conditions.\n3. Only cosign an amount you could actually afford to repay in full yourself, since that’s the real exposure you’re taking on.\n4. Ask to be added to online account access so you can monitor payments directly instead of finding out about a missed one from your own credit report.\n5. Know that "just this once" or "I’ll definitely pay it" isn’t a legal protection — only the loan’s written release terms are.\n6. If you’re the one asking someone to cosign, treat their credit like it’s literally your own debt, because as far as the credit bureaus are concerned, it is.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does cosigning a loan show up on my credit report?',
+        a: 'Yes — the account appears on both the cosigner’s and the primary borrower’s credit reports, and the full balance counts toward the cosigner’s debt just as if they’d borrowed it themselves.',
+      },
+      {
+        q: 'Can I remove myself as a cosigner without the other person’s help?',
+        a: 'No. You generally need either a cosigner release (offered by some lenders after a set number of on-time payments) or for the primary borrower to refinance the loan in their name alone — a cosigner can’t unilaterally exit the agreement.',
+      },
+      {
+        q: 'What’s the difference between a cosigner and a guarantor?',
+        a: 'A cosigner is equally responsible for the debt from day one, and the lender can pursue them directly the moment a payment is missed. A guarantor typically only has to pay after the lender has already tried and failed to collect from the primary borrower — a subtly weaker, but still real, obligation.',
+      },
+      {
+        q: 'Is it safer to cosign a car loan than a private student loan?',
+        a: 'Both carry real credit risk, but private student loans tend to be riskier long-term commitments — they’re often larger, hard to discharge in bankruptcy, and can follow both names for a decade or more if payments go sideways.',
+      },
+    ],
+  },
 ]
