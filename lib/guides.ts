@@ -89,7 +89,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'The line that probably DOES come back: federal withholding',
-        body: 'The "Federal Income Tax" line on your stub is not a bill — it’s an estimate. Your employer guesses what you might owe for the year (based on the W-4 form you filled out on day one) and sends a slice of each check to the IRS in advance.\n\nHere’s what matters for most teens: the federal standard deduction is around $15,000. If your total income for the whole year is under that — true for almost every part-time or summer job — your actual federal income tax bill is $0. Every dollar that was withheld was an overpayment.\n\nOverpayments don’t come back automatically. You have to file a tax return.',
+        body: 'The "Federal Income Tax" line on your stub is not a bill — it’s an estimate. Your employer guesses what you might owe for the year (based on the W-4 form you filled out on day one) and sends a slice of each check to the IRS in advance.\n\nHere’s what matters for most teens: the federal standard deduction is around $16,100. If your total income for the whole year is under that — true for almost every part-time or summer job — your actual federal income tax bill is $0. Every dollar that was withheld was an overpayment.\n\nOverpayments don’t come back automatically. You have to file a tax return.',
       },
       {
         heading: 'The move: file a tax return in January (yes, even as a teenager)',
@@ -112,7 +112,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: 'Do teenagers get all their taxes back?',
-        a: 'Teens who earn less than the federal standard deduction (~$15,000/year) owe $0 federal income tax, so all federal income tax withheld comes back as a refund — but only if they file a return. Social Security and Medicare are never refunded.',
+        a: 'Teens who earn less than the federal standard deduction (~$16,100/year) owe $0 federal income tax, so all federal income tax withheld comes back as a refund — but only if they file a return. Social Security and Medicare are never refunded.',
       },
       {
         q: 'Do I have to file taxes for a summer job?',
@@ -861,7 +861,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'Contribution limits — and they’re shared, not separate',
-        body: 'The IRS sets one combined annual contribution limit that applies across both a Traditional and a Roth IRA together, not per account. In recent tax years that limit has been $7,000 a year ($8,000 if you’re 50 or older), adjusted for inflation every so often rather than every single year. Put $4,000 into a Roth and you can only add $3,000 more to a Traditional IRA that same year — the two accounts share one ceiling.\n\nThat combined limit is separate from a 401(k)’s limit, which runs several times higher — so having a 401(k) at work doesn’t reduce how much you can also put into an IRA on the side.',
+        body: 'The IRS sets one combined annual contribution limit that applies across both a Traditional and a Roth IRA together, not per account. In recent tax years that limit has been $7,500 a year ($8,600 if you’re 50 or older), adjusted for inflation every so often rather than every single year. Put $4,000 into a Roth and you can only add $3,500 more to a Traditional IRA that same year — the two accounts share one ceiling.\n\nThat combined limit is separate from a 401(k)’s limit, which runs several times higher — so having a 401(k) at work doesn’t reduce how much you can also put into an IRA on the side.',
       },
       {
         heading: 'The income rules that decide which one you’re even allowed to use',
@@ -953,6 +953,734 @@ export const GUIDES: Guide[] = [
       {
         q: 'What counts as a “want” versus a “need”?',
         a: 'A need is something you’d still have to pay for even with a much smaller income — housing, groceries, utilities, insurance, minimum debt payments. Everything that makes life more comfortable but isn’t required to keep it running — dining out, entertainment, subscriptions, upgrades — is a want, even if it feels essential day-to-day.',
+      },
+    ],
+  },
+  {
+    slug: 'are-scholarships-and-grants-taxable',
+    title: 'Are Scholarships and Grants Taxable? What You Actually Owe the IRS',
+    metaTitle: 'Are Scholarships and Grants Taxable? The IRS Rules Explained',
+    description:
+      'Scholarship money isn’t automatically tax-free — the IRS only exempts the part spent on tuition and required course costs. Here’s exactly where the line falls.',
+    date: '2026-07-31',
+    category: 'College Money',
+    intro:
+      'A financial aid letter shows up with scholarship and grant money attached, and it feels like the one part of college that’s simply free — no strings, no tax form, no catch. Mostly true, but not entirely: the IRS draws a specific, narrow line around what counts as tax-free, and a chunk of “free” money can quietly become taxable income depending on exactly what it pays for.',
+    sections: [
+      {
+        heading: 'The basic rule: tax-free, but only for qualified expenses',
+        body: 'The IRS treats a scholarship or grant as tax-free income only when two things are both true: you’re a degree candidate at an eligible school, and the money goes toward “qualified education expenses.” That phrase has a specific, narrow meaning — tuition and fees required for enrollment, plus books, supplies, and equipment required of every student taking the course.\n\nMeet both conditions and the scholarship doesn’t show up on your tax return at all — not as income, not as a deduction, nothing. It’s the cleanest kind of financial aid there is: money that funds your education without the IRS ever asking for a cut.',
+      },
+      {
+        heading: 'What’s not qualified — where it quietly becomes taxable',
+        body: 'The part almost nobody explains at financial aid orientation: anything a scholarship covers beyond tuition and required course materials is taxable income, even though it never arrives looking like a paycheck. Room and board is the big one — a scholarship that includes a housing stipend or a meal plan allowance makes that portion taxable, full stop.\n\nTravel, a laptop that isn’t specifically required for your coursework, health insurance, and optional equipment fall into the same taxable bucket. It doesn’t matter whether the school pays your dorm directly or hands you a check — if the money was allocated to a non-qualified expense, that slice counts as income for the year you received it, and you’re expected to report it even though nobody withheld tax on it for you.',
+      },
+      {
+        heading: 'When the scholarship comes with strings attached',
+        body: 'Some scholarships and fellowships require you to do something in exchange — teach a section, grade papers, work in a research lab. The IRS draws a hard line here: any part of an award that’s payment for teaching, research, or other services required as a condition of getting the money is taxable compensation, regardless of what you spend it on. It doesn’t matter that the same check also funds your tuition — the “services” portion gets carved out and taxed like a paycheck.\n\nSchools that pay this way often report it on a W-2 alongside actual withholding, the same as any job. If yours doesn’t, you’re still responsible for reporting it — check with your financial aid or payroll office about how a specific award is classified before assuming it’s all tax-free.',
+      },
+      {
+        heading: 'Work-study, Pell Grants, and other look-alikes',
+        body: 'Federal Work-Study money isn’t a scholarship — it’s a paycheck for an actual job, on campus or through an approved employer, and it’s taxed like one: reported on a W-2, subject to income tax like any wages. One quirk worth knowing: students enrolled at least half-time who work for their own school are often exempt from FICA (Social Security and Medicare) tax on those specific wages under an IRS student exception — ask your payroll office whether it applies to your job.\n\nPell Grants and other need-based federal grants follow the exact same qualified-expense rule as any other scholarship: tax-free when the money goes to tuition, fees, and required course materials, taxable when it covers room, board, or other living costs. A Pell Grant isn’t automatically tax-free just because it’s need-based aid rather than a merit scholarship.',
+      },
+      {
+        heading: '529 plans, and actually filing a return',
+        body: 'If you’re also drawing from a 529 plan, a tax-free scholarship doesn’t force you to waste the account. You can withdraw an amount equal to the scholarship from the 529 without owing the usual 10% penalty on non-qualified withdrawals — the earnings portion of that withdrawal still owes ordinary income tax, but the penalty specifically gets waived up to the scholarship amount.\n\nOn the filing side: if any part of your scholarship is taxable and wasn’t already reported on a W-2, the IRS still expects you to include it as income on your return — tax software will walk you through exactly where it goes, since there’s a specific spot set aside for this situation. Whether you’re required to file at all still comes down to your total income for the year against the standard deduction, same as any other income — but a large taxable scholarship can be enough on its own to push a student over that line.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up what your scholarships and grants actually covered — tuition and required fees, books, and supplies are tax-free; room, board, and travel are not.\n2. Check whether any award requires teaching, research, or other work in exchange — that portion is taxable compensation no matter what it’s spent on.\n3. If you have Federal Work-Study income, expect a W-2 and treat it like any other job’s wages.\n4. Ask your school’s financial aid or payroll office exactly how each award is classified — don’t guess.\n5. If you also use a 529 plan, remember you can withdraw up to the scholarship amount without the 10% penalty, though earnings are still taxed.\n6. Keep a simple record each year of what each award paid for, so you’re not reconstructing it from memory at tax time.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on my scholarship?',
+        a: 'Only on the part that doesn’t go toward tuition, fees, and required course materials. Money from the same award that covers room, board, travel, or other living expenses is taxable income.',
+      },
+      {
+        q: 'Is a Pell Grant taxable?',
+        a: 'It follows the same rule as any other scholarship — tax-free when used for tuition and required course expenses, taxable when it covers room, board, or other living costs, regardless of it being need-based aid.',
+      },
+      {
+        q: 'Do I owe taxes on Federal Work-Study money?',
+        a: 'Yes — Work-Study is a job, not a scholarship, so it’s reported on a W-2 and taxed like any other paycheck. Some student employees are exempt from FICA taxes on it under a specific IRS rule for enrolled students, but income tax still applies.',
+      },
+      {
+        q: 'What happens if my scholarship requires me to teach or do research?',
+        a: 'Whatever portion of the award pays for that teaching or research work is taxable compensation no matter how it’s spent — treated like wages, separate from the tax-free treatment that applies to tuition-only scholarship money.',
+      },
+    ],
+  },
+  {
+    slug: 'hsa-vs-fsa-difference',
+    title: 'HSA vs. FSA: What’s the Difference, and Which Should You Actually Pick at Open Enrollment?',
+    metaTitle: 'HSA vs. FSA: The Real Difference (and Which to Pick)',
+    description:
+      'An HSA rolls over and can be invested tax-free forever — an FSA usually can’t. Here’s how each account actually works, and which fits your health plan.',
+    date: '2026-08-01',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Open enrollment throws two boxes at you — HSA and FSA — both promising to save you money on healthcare with pre-tax dollars, and the form assumes you already know the difference. You don’t need to be an insurance expert to get this right. You need one fact about your health plan and one rule about what happens to unused money — everything else follows from those two things.',
+    sections: [
+      {
+        heading: 'The one question that decides everything: what kind of health plan are you on?',
+        body: 'An HSA (Health Savings Account) and an FSA (Flexible Spending Account) both let you set aside money, tax-free, for medical costs — copays, prescriptions, dental work, glasses. But which one you’re even offered comes down to a single detail: an HSA is only available if you’re enrolled in a High-Deductible Health Plan (HDHP), a plan with a higher deductible and usually a lower monthly premium than a typical PPO. An FSA has no such requirement — it’s offered alongside almost any employer health plan.\n\nSo the real first question at open enrollment isn’t “HSA or FSA” — it’s “am I on an HDHP.” If you are, you likely get a choice between the two (though rarely both at once — more on that below). If you’re on a traditional PPO or HMO, an FSA is probably your only option, and this decision makes itself.',
+      },
+      {
+        heading: 'The FSA: real tax savings, but “use it or lose it”',
+        body: 'An FSA lets you set aside pre-tax money straight from your paycheck, typically capped somewhere in the low thousands per year — the IRS adjusts the exact limit periodically, so check your plan’s current cap during enrollment rather than trusting a number from an old article. That money comes out before income tax and FICA are calculated, so routing a few thousand dollars through an FSA can save you several hundred dollars in tax over the year, depending on your bracket.\n\nThe catch is the one every FSA horror story is about: the money is generally “use it or lose it.” Whatever you don’t spend on qualified medical expenses by the end of the plan year gets forfeited back to your employer — no rollover, no refund, no exceptions for “I forgot.” Many employers soften this with either a short grace period (commonly a couple of extra months to spend down the balance) or a small carryover allowance into the next year, but not both, and neither is guaranteed — check your specific plan’s rules before deciding how much to contribute.\n\nBecause of that deadline pressure, the smart way to use an FSA is to estimate your actual expected medical spending for the year — contacts, a known prescription, a planned dental procedure — and fund close to that number, not the max just because it’s tax-free.',
+      },
+      {
+        heading: 'The HSA: the “triple tax advantage” account that doubles as a retirement account',
+        body: 'An HSA is the more powerful of the two, and it’s not close. Contributions go in pre-tax (or tax-deductible if you contribute outside payroll), the balance grows completely tax-free while invested, and withdrawals for qualified medical expenses are also tax-free — three tax breaks stacked on the same dollar, which is why advisors sometimes call it the only true “triple tax advantage” account in the entire tax code. Even a Roth IRA only gets two of those three breaks.\n\nUnlike an FSA, HSA money never expires and never gets clawed back — whatever you don’t spend this year just keeps sitting in the account, still yours, still growing. Contribution limits for individual coverage have generally run a bit over $4,000 a year in recent years, with family-coverage limits close to double that, plus an extra catch-up amount once you turn 55 — all adjusted for inflation periodically, so pull the exact current-year numbers from IRS.gov or your plan provider rather than assuming last year’s figures still apply.\n\nHere’s the part most people never use: once your HSA balance crosses a threshold set by your specific provider (often somewhere in the $1,000–$2,000 range), you can invest the rest in mutual funds or ETFs, exactly like a 401(k) or Roth IRA. Left alone and invested for 20–30 years, an HSA can compound into a genuinely large sum — one that’s still completely tax-free when spent on medical costs, which, by retirement age, most people have plenty of.',
+      },
+      {
+        heading: 'Portability: one account moves with you, one usually doesn’t',
+        body: 'This is one of the sharpest practical differences. An HSA belongs to you personally, not your employer — it’s your account at whatever bank or brokerage holds it, the same way a Roth IRA is yours regardless of who you work for. Change jobs, change health plans, even go a year without HDHP coverage, and the money already in your HSA stays exactly where it is, still tax-free, still yours to spend on medical costs whenever you need to (you just can’t contribute more unless you’re back on a qualifying HDHP).\n\nAn FSA is tied to your employer’s plan. Leave the job mid-year and, in most cases, you forfeit whatever’s left — there’s no “rolling it into your next employer’s FSA.” Some plans offer COBRA continuation for a limited window, but it’s rarely worth the cost for a small remaining balance. The practical lesson: don’t overfund an FSA in a year you’re expecting to change jobs, since a leftover balance is money you’re very unlikely to see again.',
+      },
+      {
+        heading: 'The under-65 penalty — and why HSAs reward patience',
+        body: 'Spend HSA money on a qualified medical expense at any age and it’s entirely tax-free — no penalty, no catch. Spend it on something non-medical before age 65, though, and it’s treated harshly: the withdrawal counts as ordinary taxable income, plus a 20% penalty on top — steeper than the 10% early-withdrawal hit on a traditional IRA or 401(k).\n\nOnce you turn 65, that penalty disappears entirely. Non-medical withdrawals after 65 are still taxed as ordinary income, but the extra 20% goes away — which means at that point the account effectively behaves like a traditional IRA, except every dollar spent on medical costs (which, realistically, is a lot of retirement spending) is still completely tax-free on top of that. It’s a rare setup for a retirement-adjacent account: one that only gets more flexible with age, never less.',
+      },
+      {
+        heading: 'Your checklist for open enrollment',
+        body: '1. Check whether your health plan qualifies as a High-Deductible Health Plan (HDHP) — that single fact determines HSA eligibility.\n2. If you’re HSA-eligible, lean toward it over an FSA for money you don’t expect to need this year — it never expires and can be invested.\n3. If you only have FSA access, estimate your actual expected medical spending for the year and fund close to that number, not the max.\n4. Ask your HSA provider what balance unlocks investing, and move money past cash once you clear that threshold.\n5. Changing jobs mid-year? Don’t overfund an FSA — a leftover balance is usually forfeited the day you leave.\n6. Keep medical receipts even for years afterward — you can reimburse yourself from an HSA for a past qualified expense at any point, as long as it happened after the account was opened.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'Can I have both an HSA and an FSA at the same time?',
+        a: 'Generally no — enrolling in a full-purpose FSA typically makes you ineligible to contribute to an HSA for that plan year. Some employers offer a “limited-purpose FSA” covering only dental and vision, which is specifically designed to pair with an HSA — ask your benefits team if that option exists.',
+      },
+      {
+        q: 'What happens to unused FSA money at the end of the year?',
+        a: 'In most cases it’s forfeited back to your employer — FSAs are generally “use it or lose it.” Some plans offer a short grace period or a small carryover amount into the next year, but check your specific plan, since neither is guaranteed.',
+      },
+      {
+        q: 'Is HSA money gone if I don’t use it this year?',
+        a: 'No — unlike an FSA, HSA balances roll over completely, year after year, for as long as you have the account. There’s no deadline to spend it.',
+      },
+      {
+        q: 'Can I invest the money in my HSA?',
+        a: 'Yes — once your balance crosses a threshold set by your provider (often in the $1,000–$2,000 range), most HSAs let you invest the rest in mutual funds or ETFs, where it can grow tax-free for decades, just like a retirement account.',
+      },
+    ],
+  },
+  {
+    slug: 'how-does-fafsa-work-when-to-file',
+    title: 'What Is the FAFSA, and When Should You Actually File It?',
+    metaTitle: 'How the FAFSA Works: Deadlines, Assets & What Counts',
+    description:
+      'The FAFSA unlocks grants, work-study, and federal loans — but only if you file it right and early. Here’s what actually counts as income and assets, and when to submit.',
+    date: '2026-08-02',
+    category: 'College Money',
+    intro:
+      'Someone told you to “just fill out the FAFSA” without explaining what it actually does, what counts against you, or why filing in October beats filing in March. It’s not a loan application and it’s not optional if you want any shot at federal money for school. Here’s the real mechanics — what it unlocks, what it counts, and the timing mistake that quietly costs students real aid every year.',
+    sections: [
+      {
+        heading: 'What the FAFSA actually unlocks',
+        body: 'The Free Application for Federal Student Aid (FAFSA) is the form that determines what federal financial aid you qualify for — Pell Grants (money you don’t pay back), federal work-study, and federal student loans (Direct Subsidized and Unsubsidized). "Free" is in the name for a reason: filing it never costs anything, and anyone who tries to charge you for it is targeting a website that isn’t the real one.\n\nIt doesn’t stop at federal money. Most states use your FAFSA data to award their own grants, and most colleges require it before handing out their own institutional scholarships and need-based aid — even merit aid, in some cases. Skipping the FAFSA because you assume your family "makes too much" is one of the most common ways students leave money on the table, since some aid (unsubsidized loans, some merit-based college aid) isn’t income-limited at all.',
+      },
+      {
+        heading: 'The number it produces: the Student Aid Index (SAI)',
+        body: 'The FAFSA runs your family’s financial information through a federal formula and spits out a number called the Student Aid Index (SAI) — the figure colleges use to decide how much aid you’re eligible for. This replaced an older number called the Expected Family Contribution (EFC) starting with the 2024–25 award year, as part of a broader FAFSA simplification overhaul.\n\nA lower SAI generally means more eligibility for need-based aid — and unlike the old EFC, the SAI can actually go negative, which signals especially high financial need. One real change worth knowing: the old formula gave a discount to families with more than one kid in college at the same time, splitting the expected contribution between them. That multiple-student discount is gone under the SAI formula, which means families with two or three kids in college simultaneously can see less aid per student than they would have under the old rules.',
+      },
+      {
+        heading: 'What counts as an asset — and what doesn’t',
+        body: 'Not all money is treated equally on the FAFSA, and knowing the difference before you file can matter. Retirement accounts — a 401(k), a traditional or Roth IRA, a pension — are not counted as assets at all, no matter the balance. The value of the family’s primary home is also excluded. This is a big reason financial advisors sometimes suggest maxing out retirement contributions before a student’s FAFSA years, since money moved into a retirement account stops counting against aid eligibility (income earned that year still counts, just not the resulting balance).\n\nWhat does count: checking and savings balances, taxable brokerage accounts, and 529 college savings plans. A 529 owned by a parent (or the student) counts as a parent asset and is assessed at a fairly gentle rate. A custodial account in the student’s own name — like a UGMA/UTMA — counts as a student asset instead, which the formula weighs far more heavily than parent assets, often assessing a much larger share of the balance each year. That’s one reason a 529 is generally treated more favorably for aid purposes than a custodial brokerage account holding the same dollar amount.',
+      },
+      {
+        heading: 'Dependent vs. independent: whose information even goes on the form',
+        body: 'Most undergraduates are considered "dependent" students for FAFSA purposes, which means a parent’s income and assets are reported on the form regardless of who’s actually paying tuition or where the student lives. Being financially independent from your parents in real life doesn’t automatically make you "independent" on the FAFSA — the criteria are specific: you’re 24 or older, married, a graduate student, a veteran, financially supporting your own children, an orphan or ward of the court, or a few other narrowly defined situations.\n\nIf none of those apply, expect to need a parent’s tax and asset information to complete the form — including if your parents are divorced, in which case the FAFSA generally wants information from whichever parent you lived with more over the past year, not necessarily whichever parent claims you on taxes.',
+      },
+      {
+        heading: 'Timing: why filing early beats filing "on time"',
+        body: 'The FAFSA for a given award year typically opens for submissions months before that school year starts, and while the exact opening date has shifted around in recent cycles due to the simplification rollout, the underlying rule hasn’t changed: some aid is limited and awarded on a first-come, first-served basis, both by states and by individual colleges. Filing the day it opens instead of waiting until a few weeks before your college’s deadline can be the difference between getting a state or institutional grant and missing it entirely, even with identical financial information.\n\nEvery state and college also sets its own FAFSA deadline, often well ahead of the federal deadline (which sits much later in the award year). The federal deadline is effectively a formality for most students — the real deadlines that matter are your state’s and your school’s, and they’re usually earlier than people expect. Look them up directly rather than assuming you have until summer.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. File the FAFSA as soon as it opens for your award year — don’t wait for your college’s deadline, since some aid runs out.\n2. Check whether you’re a dependent or independent student under the FAFSA’s specific rules, not your personal sense of independence.\n3. Gather parent (or your own, if independent) tax returns, bank statements, and investment account balances before starting the form.\n4. Know that retirement accounts and home equity don’t count as assets — taxable brokerage, savings, and custodial accounts do.\n5. List every college you’re considering on the form, even ones you’re unsure about — it costs nothing to add them and unlocks their aid packages.\n6. File every year you’re in school — the FAFSA isn’t a one-time application, and your aid can change as your family’s financial picture does.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Liquidity', 'Mutual Fund'],
+    faq: [
+      {
+        q: 'Do I need to file the FAFSA if my family makes too much money?',
+        a: 'Filing is still worth it even at higher incomes — some aid, like unsubsidized federal loans and certain merit-based college scholarships, isn’t need-based or income-limited, and many colleges require a FAFSA on file before awarding any aid at all, including merit money.',
+      },
+      {
+        q: 'Does a 529 plan hurt my financial aid more than a savings account?',
+        a: 'No — a 529 owned by a parent is assessed at the same parental-asset rate as a regular savings or brokerage account. What hurts aid more is a custodial account (UGMA/UTMA) in the student’s own name, since student assets are weighted more heavily than parent assets in the aid formula.',
+      },
+      {
+        q: 'What’s the difference between the SAI and the old EFC?',
+        a: 'The Student Aid Index (SAI) replaced the Expected Family Contribution (EFC) starting with the 2024–25 award year. The biggest practical change: the SAI can go negative to signal extra-high need, and it removed the old discount for having multiple children in college at the same time.',
+      },
+      {
+        q: 'Am I considered a dependent or independent student on the FAFSA?',
+        a: 'Most undergraduates are dependent by default, meaning parent financial information is required regardless of living situation. You’re generally independent only if you meet specific criteria — 24 or older, married, a grad student, a veteran, supporting your own children, or a few other defined cases — not simply because you support yourself day to day.',
+      },
+    ],
+  },
+  {
+    slug: 'credit-score-needed-to-rent-an-apartment',
+    title: 'What Credit Score Do You Need to Rent Your First Apartment?',
+    metaTitle: 'Credit Score Needed to Rent an Apartment (and What to Do With None)',
+    description:
+      'Landlords check more than your credit score — here’s the score range that actually gets you approved, the income rule they use, and what to do with zero credit history.',
+    date: '2026-08-03',
+    category: 'Credit',
+    intro:
+      'You found the apartment, you can afford the rent, and then the application asks for a credit check — and suddenly you’re not sure if your score (or your total lack of one) is about to get you rejected. There’s no single national cutoff, but landlords and property managers use a fairly consistent set of numbers behind the scenes. Here’s what they’re actually looking at.',
+    sections: [
+      {
+        heading: 'Landlords check three things, not just your score',
+        body: 'A rental application usually runs through a screening service (like a TransUnion or Experian product built for landlords) that pulls three separate pieces: your credit report and score, your income, and your rental history — plus often a background and eviction check. A weak spot in one area can sometimes be offset by strength in another, which is why two applicants with the same credit score can get very different answers from the same landlord.\n\nCredit matters because it’s the closest thing to a track record a stranger can check in five minutes: have you reliably paid bills on time, and how much of your available credit are you already using? A landlord reading your credit report isn’t judging your character — they’re estimating the odds you’ll pay rent on time for the next 12 months.',
+      },
+      {
+        heading: 'The score ranges that actually move the decision',
+        body: 'Both major scoring models (FICO and VantageScore) run 300–850, and the commonly used bands are roughly: below 580 is Poor, 580–669 is Fair, 670–739 is Good, 740–799 is Very Good, and 800+ is Exceptional. There’s no federal rule that sets a rental cutoff, but in practice most individual landlords and property management companies look for something in the high 600s or better before approving an application without extra conditions.\n\nBelow that, you’re not automatically rejected — you’re more likely to be approved with a condition attached: a cosigner, a larger security deposit, or paying a couple months of rent upfront. Large corporate apartment complexes tend to have a stated minimum score written into their screening policy; individual landlords renting out one unit are often more flexible and willing to weigh the whole application.',
+      },
+      {
+        heading: 'The income rule: 3x the rent, roughly',
+        body: 'Most screening criteria lean at least as hard on income as they do on credit. A very common standard is that your gross monthly income (before taxes) should be about three times the monthly rent. On a $1,500/month apartment, that works out to roughly $4,500/month, or $54,000/year, in gross income.\n\nIf you’re under that ratio — common for a first apartment on an entry-level salary — a guarantor or cosigner (usually a parent) who does meet the income and credit bar can get the application approved. The cosigner isn’t just a formality: they’re legally on the hook for the rent if you can’t pay, so it’s worth having a real conversation about that before asking.',
+      },
+      {
+        heading: 'What happens with zero credit history (not bad credit — no file at all)',
+        body: 'Having no credit history is a different problem than having bad credit, and it’s the more common situation for a first-time renter straight out of high school or college. A "thin file" (fewer than a handful of reported accounts, or none at all) sometimes can’t even generate a score, which shows up on a screening report as blank rather than low.\n\nLandlords react to a blank file in different ways — some treat it neutrally and lean harder on income and references, others treat it as a risk signal simply because there’s nothing to check. If you’re in this spot, come to the application with backup: proof of steady income (pay stubs, an offer letter), a letter of recommendation from a previous landlord if you’ve ever rented informally, or a willing cosigner. Offering to pay first and last month’s rent upfront, where legal in your state, can also make an application with no credit history much more attractive to a landlord on the fence.',
+      },
+      {
+        heading: 'The move most renters don’t know about: rent can build your credit',
+        body: 'Paying rent on time for years used to do nothing for your credit score, because most landlords never reported it to the bureaus. That’s changed — services like Experian Boost let you add rent payments (along with utility and streaming bills) directly to your Experian credit file for free, and some property managers now report rent payments to one or more bureaus automatically as part of their standard lease.\n\nIf your building doesn’t report rent automatically, third-party rent-reporting services can do it for a monthly fee, sometimes also back-reporting up to a couple years of past on-time payments. It’s worth checking before you assume years of responsible renting are invisible to your credit file.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pull your own credit score before applying (a free soft check through your bank or Credit Karma) so you know which band you’re in.\n2. Calculate the 3x rent income rule for any apartment you’re considering — most screening criteria use something close to this.\n3. If your score or income falls short, line up a cosigner in advance instead of scrambling after a rejection.\n4. Ask what the specific building’s minimum score or income requirement is before you pay an application fee — corporate complexes are usually upfront about it.\n5. Once you’re in a lease, check whether your rent payments are being reported to the credit bureaus, and sign up for a rent-reporting service (like Experian Boost) if they aren’t.\n6. Keep every other credit account current — a strong score built from a starter credit card makes the next apartment application easier too.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'What credit score do you need to rent an apartment?',
+        a: 'There’s no universal number, but most landlords and property managers look for a score in the high 600s or better to approve an application without extra conditions. Below that, approval is still possible, often with a cosigner or a larger deposit.',
+      },
+      {
+        q: 'Can you rent an apartment with no credit history?',
+        a: 'Yes — a blank file isn’t the same as bad credit, and many landlords will lean on income, rental references, and a cosigner instead. Coming prepared with proof of steady income and a willing cosigner makes a thin-file application much stronger.',
+      },
+      {
+        q: 'Does paying rent on time build your credit score?',
+        a: 'Not automatically — most landlords don’t report rent to the credit bureaus on their own. Services like Experian Boost let you manually add rent payments to your credit file for free, and some property managers now report automatically as part of the lease.',
+      },
+      {
+        q: 'How much income do you need to rent an apartment?',
+        a: 'A common screening standard is roughly three times the monthly rent in gross monthly income. For a $1,500/month apartment, that’s about $4,500/month, or $54,000/year, before taxes.',
+      },
+    ],
+  },
+  {
+    slug: 'do-you-pay-taxes-on-tips',
+    title: 'Do You Have to Pay Taxes on Tips? How the New “No Tax on Tips” Law Actually Works',
+    metaTitle: 'Taxes on Tips: FICA, Reporting Rules & the No Tax on Tips Deduction',
+    description:
+      'Tips are taxable income, and FICA still applies even under the new “No Tax on Tips” law — here’s exactly how tip reporting, minimum wage, and the deduction work.',
+    date: '2026-08-04',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your tip jar looks like free money — nobody’s watching, nobody’s withholding anything, and it feels almost like a gift. It isn’t. Tips are taxable wages under IRS rules, and a new federal law nicknamed “No Tax on Tips” changed part of that picture starting with the 2025 tax year without erasing it. Here’s exactly what changed, what didn’t, and what it means for a server, bartender, barista, or delivery driver’s actual paycheck.',
+    sections: [
+      {
+        heading: 'What actually counts as a tip, and who has to report it',
+        body: 'Any payment that’s optional, decided by the customer rather than the business, and not built into the price counts as a tip in the IRS’s eyes — cash left on a table, a card tip added at checkout, a share from a pooled tip jar, even a non-cash tip like event tickets. It doesn’t matter whether it’s $3 or $300: all of it is taxable income, exactly like your hourly wage.\n\nIf you work a job where tipping is common — serving, bartending, delivery, salons, valet — you’re required to keep a running record of your tips and report any month where you received $20 or more to your employer, usually by the 10th of the following month. Your employer then adds that reported amount to your W-2 alongside your regular wages and withholds income tax and FICA on the combined total. Skipping this step doesn’t make the tips any less taxable — it just shifts the responsibility for reporting them onto you when you file, and consistently underreporting cash tips is a real audit risk, not a harmless shortcut.',
+      },
+      {
+        heading: 'The tipped minimum wage — and why your hourly rate looks so low',
+        body: 'A lot of tipped jobs pay a base hourly wage far below the regular minimum wage. Federal law allows employers to pay tipped workers as little as $2.13 an hour, using a “tip credit” that assumes tips will make up the rest of the gap to reach the standard federal minimum wage of $7.25 an hour. Plenty of states set their own, higher tipped minimum wage, and a handful require the full state minimum wage to be paid in cash no matter how much you make in tips — so check your specific state’s rules rather than assuming $2.13 applies everywhere.\n\nThere’s a real protection built into the system: if your hourly wage plus your actual tips for a pay period don’t add up to at least the regular minimum wage, your employer is legally required to make up the difference. That rule exists specifically because tip income is unpredictable — a dead Tuesday shift shouldn’t leave you earning less than minimum wage for the week.',
+      },
+      {
+        heading: 'FICA still applies — tips aren’t “off the books”',
+        body: 'Just like a regular paycheck, tip income owes Social Security and Medicare taxes — 7.65% combined, the same FICA rate charged on any other wage. Because that gets withheld based on what you actually report, cash tips you never report never get FICA withheld either, which might sound like a shortcut, but it also means those tips never count toward your future Social Security earnings record, and skipping required reporting is technically tax evasion, not a gray area.\n\nThere’s also a specific rule for larger restaurants and similar establishments: if the tips employees collectively report add up to less than 8% of the location’s gross receipts, the employer may be required to “allocate” additional tip income across workers to close the gap, and that allocated amount also becomes taxable on their W-2 — one more reason under-the-table cash tips tend to catch up with people eventually.',
+      },
+      {
+        heading: 'The new “No Tax on Tips” deduction — what it actually does',
+        body: 'Starting with the 2025 tax year, a new federal law created a temporary deduction specifically for tip income, widely nicknamed “No Tax on Tips.” It lets eligible workers deduct qualified tips — up to $25,000 a year — from their federal taxable income, and unlike most deductions, you don’t have to itemize to claim it. The deduction is currently scheduled to run only through the 2028 tax year unless Congress extends it, so it’s worth treating as temporary rather than a permanent fixture of the tax code.\n\nA few real limits are worth knowing before assuming it automatically applies. It only covers occupations the Treasury Department has published as customarily and regularly tipped — mostly food service, bartending, salons, and similar service roles — so not every side hustle that occasionally nets a tip qualifies. The deduction also phases out at higher incomes, shrinking for single filers earning above roughly $150,000 a year (about $300,000 for joint filers) and disappearing above a higher cutoff. For most teen and young-adult tipped workers, income is nowhere near that range, so the eligibility list and the reporting requirement matter far more than the phase-out.',
+      },
+      {
+        heading: 'What the new deduction does NOT change',
+        body: '“No Tax on Tips” only affects federal income tax. It does nothing to Social Security or Medicare — FICA still gets withheld from every dollar of reported tip income exactly as before. Most states with their own income tax haven’t automatically adopted a matching break either, so state tax on tips may still apply depending on where you live and work; check your specific state’s rules rather than assuming the federal change covers everything.\n\nIt also doesn’t remove the underlying requirement to report tips to your employer in the first place — you still need to track and report $20-or-more months exactly like before. The deduction changes what you owe when you file; it doesn’t change what you have to disclose along the way.\n\nHere’s the detail that matters most for a lot of teens: the federal standard deduction already shields income up to a fairly high threshold — currently in the $16,000-plus range for a single filer — from any federal income tax at all. If your total income for the year, tips and wages combined, is already under that threshold, you likely owed $0 in federal income tax before this law existed, so the new tip deduction may not change your actual tax bill much. It helps most for workers earning enough that some of their tip income would otherwise have been taxed.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Keep a running log of tips — cash and card — even if your employer’s system already tracks card tips automatically.\n2. Report any month with $20 or more in tips to your employer by the deadline (usually the 10th of the next month) so it lands on your W-2 correctly.\n3. Don’t assume “No Tax on Tips” means tips are tax-free — FICA still applies, and many states still tax tip income on top of that.\n4. Check whether your job is on the Treasury’s list of qualifying tipped occupations before assuming the new federal deduction applies to you.\n5. If your total income is already under the standard deduction, you may already owe $0 federal income tax regardless of this law — file anyway to get any withheld amount refunded.\n6. Since tip income counts as earned income, it can fund a Roth IRA just like regular wages — a legitimate way to turn a slow shift’s cash tips into decades of tax-free compounding.\n7. File a return every year you earn tip income, even if it feels small — it’s the only way to reconcile what was withheld against what you actually owed.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Do you have to pay taxes on cash tips?',
+        a: 'Yes. All tips are taxable income regardless of whether they’re cash, card, or split from a pooled jar. If you receive $20 or more in tips in a month, you’re required to report them to your employer so they can be included on your W-2.',
+      },
+      {
+        q: 'What is the “No Tax on Tips” deduction?',
+        a: 'A temporary federal deduction, in effect starting with the 2025 tax year through 2028 unless extended, that lets eligible tipped workers deduct up to $25,000 of qualified tips from their federal taxable income without needing to itemize.',
+      },
+      {
+        q: 'Does the No Tax on Tips law mean my tips are completely tax-free?',
+        a: 'No. It only removes federal income tax on qualified tips up to the cap, for eligible occupations. Social Security and Medicare taxes still apply to all reported tips, and most states still tax tip income under their own rules.',
+      },
+      {
+        q: 'What happens if my tips plus my hourly wage don’t add up to minimum wage?',
+        a: 'Your employer is legally required to make up the difference so you earn at least the regular minimum wage for the pay period — that protection exists specifically because tip income is unpredictable shift to shift.',
+      },
+    ],
+  },
+  {
+    slug: 'how-does-a-car-loan-work-with-no-credit-history',
+    title: 'How Does a Car Loan Work When You Have No Credit History?',
+    metaTitle: 'First Car Loan With No Credit: APR, Terms & Down Payments',
+    description:
+      'Buying your first car with no credit history? Here’s how auto loan APR, loan term, and down payments actually work — and the traps that quietly cost the most.',
+    date: '2026-08-05',
+    category: 'Credit',
+    intro:
+      'You need a car to get to work, work is how you build credit, and every loan application wants credit you don’t have yet — the same catch-22 as your first credit card, except this time the monthly payment is a lot bigger. Here’s exactly how an auto loan is priced, why your rate can vary by a factor of three or more depending on your credit file, and which parts of the deal are designed to quietly cost you the most.',
+    sections: [
+      {
+        heading: 'How the loan is actually structured',
+        body: 'The amount you finance — the principal — is the car’s price (plus tax, title, and registration fees) minus your down payment and any trade-in value. That principal gets an interest rate (APR) and a loan term, usually stated in months: 36, 48, 60, 72, sometimes 84.\n\nThe term length changes more than your monthly payment — it changes the total interest you pay. A $20,000 loan at 8% APR over 60 months runs about $406/month and costs roughly $4,300 in interest by payoff. Stretch that same loan to 72 months and the payment drops to around $351/month, which feels easier — but total interest climbs to roughly $5,250, because you’re paying interest for a full year longer. Same car, same rate, an extra $950 just for taking longer to pay it off.',
+      },
+      {
+        heading: 'Why your credit score moves the rate more than anything else',
+        body: 'Lenders sort borrowers into FICO score bands — roughly: Poor (below 580), Fair (580–669), Good (670–739), Very Good (740–799), Exceptional (800–850) — and price auto loans almost entirely off which band you land in. Someone with excellent credit typically qualifies for a rate near the lender’s advertised best APR. Someone with no credit history or a low score can be quoted a rate several times higher, sometimes well into the double digits, because the lender is pricing in the risk that they don’t yet have a track record for.\n\nWith zero credit history, a lot of lenders won’t approve you solo at any rate — which is why a cosigner (a parent or relative with an established credit history) is the standard workaround. Adding one can be the difference between approval and denial, or between a reasonable rate and a punishing one. The tradeoff: your cosigner is fully on the hook for the loan if you miss payments, and it shows up on their credit report too, so it’s not a favor to ask for casually.',
+      },
+      {
+        heading: 'The 20/4/10 rule: a sane way to size what you can afford',
+        body: 'A commonly cited rule of thumb for car buying is 20/4/10: put at least 20% down, finance for no more than 4 years (48 months), and keep your total monthly vehicle costs — loan payment plus insurance — under 10% of your gross monthly income.\n\nIt’s not a law, and plenty of reasonable people stretch one of the three numbers. But it’s a useful gut check specifically because dealerships and lenders will happily approve you for far more car than this rule would allow — approval isn’t the same thing as affordable, and the F&I (finance) office makes more money the bigger your loan is.',
+      },
+      {
+        heading: 'Get preapproved before you set foot on a lot',
+        body: 'Applying for financing through your own bank or a credit union before you go car shopping gives you a real APR quote in hand, based on your actual credit file, with no pressure attached. Credit unions in particular are often worth checking first — they’re member-owned rather than profit-driven, and frequently beat both bank and dealer rates for exactly the kind of thin-credit-file borrower a first-time buyer usually is.\n\nDealerships can also arrange financing, but the rate they quote you isn’t always the rate the lender actually approved — dealers are legally allowed to mark up the wholesale rate a lender offers them and keep the difference as profit, a practice regulators have scrutinized for years. Walking in with a preapproved rate gives you a number to beat and takes that markup off the table, or at least makes it visible.',
+      },
+      {
+        heading: 'The traps: long terms, negative equity, and bundled add-ons',
+        body: 'A new car commonly loses something like 20% of its value in the first year alone and keeps depreciating by a meaningful chunk annually after that. Pair fast depreciation with a long loan term and a small down payment, and it’s easy to end up "underwater" — owing more on the loan than the car is worth — for years at a stretch. That’s a real problem if the car is totaled or you need to sell it, because insurance only pays out what the car is worth, not what you still owe. GAP insurance exists specifically to cover that gap, and it’s worth asking about if you’re financing with little down.\n\nThe other trap shows up in the finance office: extended warranties, paint protection, and other add-ons are often pitched as small monthly increases, but they get rolled into the loan principal — meaning you pay interest on the warranty for the life of the loan, not just its sticker price. These are almost always negotiable or declinable; nothing about them is required to get the loan approved.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your credit score and know your FICO band before you shop — it tells you roughly what rate range to expect.\n2. Get preapproved through a bank or credit union first, so you walk in with a rate to beat instead of trusting the dealer’s first offer.\n3. Aim for the 20/4/10 rule as a starting point — 20% down, 48-month term or shorter, total vehicle costs under 10% of gross income.\n4. If you have no credit history, ask a parent or relative about cosigning — understand it makes them fully liable if you miss a payment.\n5. Watch for add-ons (extended warranties, paint protection) getting rolled into the loan principal — you can decline or negotiate almost all of them.\n6. Make every payment on time — an auto loan is installment credit, and on-time payments build your score and diversify your credit file beyond just cards.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Can you get a car loan with absolutely no credit history?',
+        a: 'Often yes, but expect either a cosigner requirement or a noticeably higher APR than someone with an established credit file. Credit unions and some manufacturer first-time-buyer programs tend to be more flexible than traditional banks for exactly this situation.',
+      },
+      {
+        q: 'How much of a down payment do I need for my first car loan?',
+        a: 'There’s no hard minimum, but putting down at least 10–20% (in line with the 20/4/10 rule) lowers your monthly payment, cuts total interest, and reduces the risk of owing more than the car is worth.',
+      },
+      {
+        q: 'Is a 72- or 84-month car loan a bad idea?',
+        a: 'It lowers your monthly payment but usually costs meaningfully more in total interest and keeps you "underwater" — owing more than the car is worth — for longer, since cars depreciate faster than a long loan pays down principal early on. A 48–60 month term is generally the safer range.',
+      },
+      {
+        q: 'Does making car payments actually build credit?',
+        a: 'Yes — an auto loan is reported as installment credit, which is different from revolving credit cards. On-time payments build payment history and add to your credit mix, both real factors in your score, as long as you don’t miss a due date.',
+      },
+    ],
+  },
+  {
+    slug: 'what-happens-if-you-miss-a-student-loan-payment',
+    title: 'What Actually Happens If You Miss a Student Loan Payment?',
+    metaTitle: 'What Happens If You Miss a Student Loan Payment?',
+    description:
+      'Missing one payment isn’t the end of the world — ignoring it is. Here’s the real timeline from late fee to default, and how to fix it before it gets there.',
+    date: '2026-08-06',
+    category: 'College Money',
+    intro:
+      'You missed a payment — maybe you forgot, maybe you just didn’t have it — and now you’re wondering how bad this actually is. The honest answer: one missed payment is recoverable and pretty common. What turns it into a real problem is silence. Here’s the actual timeline, what each stage costs you, and how to get out of it at any point along the way.',
+    sections: [
+      {
+        heading: 'Days 1–89: late, but usually still fixable quietly',
+        body: 'Miss your due date and most servicers charge a late fee within the first week or two, but the missed payment generally isn’t reported to the credit bureaus right away. This window — before it hits your credit report — is the cheapest and easiest time to fix things, because your options are still wide open: pay what’s owed, or call your servicer and ask about deferment, forbearance, or switching to an income-driven repayment plan before the next due date arrives.\n\nThe one thing that doesn’t pause during this window is interest — unless your loan is subsidized and you’re in an approved deferment, interest keeps accruing on the balance the entire time, so the longer it sits unpaid, the more you eventually owe.',
+      },
+      {
+        heading: 'Day 90: it shows up on your credit report',
+        body: 'Once a payment is roughly 90 days past due, servicers typically report it to all three credit bureaus as delinquent. This is the point where the damage becomes visible to anyone who pulls your credit — a lender, a landlord, sometimes an employer — and it can knock a real chunk off your score, especially if your credit was otherwise clean.\n\nA single 90-day-late mark doesn’t ruin you permanently; it fades in impact over time and drops off your report entirely after about seven years. But it’s also the clearest possible signal that the earlier, quieter fixes (a quick call to your servicer) were the better move, and that you’re now on a clock.',
+      },
+      {
+        heading: 'Day 270: federal loans go into default',
+        body: 'For federal Direct Loans, going about 270 days — roughly nine months — without a payment moves the loan into default, and that’s a different category of problem entirely. The full remaining balance can become due immediately (called acceleration). You lose access to deferment, forbearance, and income-driven repayment plans until you get out of default. You become ineligible for additional federal financial aid. And the government can collect without ever taking you to court: wages can be garnished, tax refunds withheld, and even a portion of Social Security benefits taken, all through the Treasury Offset Program. Collection costs can also get added on top of what you already owe.\n\nDefault is the stage worth doing everything possible to avoid — not because it’s unrecoverable, but because every option becomes slower, more expensive, and more forceful once you’re in it.',
+      },
+      {
+        heading: 'Getting out of default: rehabilitation vs. consolidation',
+        body: 'If a federal loan does default, there are two standard ways back out. Loan rehabilitation means agreeing with your servicer on a reasonable, income-based monthly payment and making around nine of them on time within a set window — after which the default is removed from your credit history (though the late payments leading up to it still show). Loan consolidation rolls the defaulted loan into a new Direct Consolidation Loan and can resolve the default in as little as one payment, which is faster — but it doesn’t erase the default notation from your credit report the way rehabilitation does.\n\nNeither path is instant, and both restore your eligibility for federal aid, deferment, and income-driven plans once complete. The point is: default is a door you can walk back out of, it just takes longer to reopen than it took to walk through.',
+      },
+      {
+        heading: 'Private loans play by different, harsher rules',
+        body: 'Everything above describes federal Direct Loans, which come with government-mandated protections. Private student loans have none of that built in — the servicer sets its own definition of default, and it can trigger after just a handful of missed payments, sometimes faster than the federal timeline. There’s no Treasury Offset process, but private lenders can send the debt to collections or sue for the full balance, including accrued interest and fees.\n\nIf a private loan has a cosigner — common for a first loan with no credit history — a missed payment hits their credit report too, and they’re just as legally responsible for the debt as you are. If things are going sideways on a cosigned loan, telling your cosigner before the servicer does is the decent move, and it gives them a chance to help you find a fix.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before you miss a payment, call your servicer — ask about deferment, forbearance, or an income-driven repayment plan; this is always cheaper than fixing it after the fact.\n2. Already missed one? Get current within the next few weeks, well before the 90-day mark where it hits your credit report.\n3. Never ignore calls or letters from your servicer or a collector — every conversation is a chance to set up an alternative arrangement instead of drifting toward default.\n4. Already in default on a federal loan? Ask about rehabilitation (removes the default mark, takes longer) or consolidation (faster, but the default notation stays).\n5. Have a cosigner on a private loan? Tell them what’s happening — their credit and their legal liability are both tied to your payments.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'How many days late does a student loan payment have to be before it hurts my credit?',
+        a: 'Generally around 90 days past due, which is when servicers typically report the delinquency to all three credit bureaus. Before that point, a quick fix or a call to your servicer usually keeps it off your credit report entirely.',
+      },
+      {
+        q: 'What counts as default on a federal student loan?',
+        a: 'For federal Direct Loans, default is generally triggered after about 270 days (roughly nine months) with no payment. It brings serious consequences — acceleration of the full balance, loss of deferment and income-driven repayment options, and collection tools like wage garnishment and tax refund offset.',
+      },
+      {
+        q: 'Can you recover from federal student loan default?',
+        a: 'Yes. Loan rehabilitation (a series of on-time payments over several months) removes the default from your credit history, while consolidation resolves default faster but leaves the default notation on your report. Both restore eligibility for federal aid and repayment plans.',
+      },
+      {
+        q: 'Do private student loans have the same missed-payment timeline as federal loans?',
+        a: 'No. Private lenders set their own default terms, which can trigger much sooner than the federal 270-day timeline, and they lack government protections like income-driven repayment or Treasury Offset in place of a lawsuit. If there’s a cosigner, a missed payment affects their credit and liability too.',
+      },
+    ],
+  },
+  {
+    slug: 'what-happens-if-you-overdraft-your-bank-account',
+    title: 'What Actually Happens If You Overdraft Your Bank Account?',
+    metaTitle: 'What Happens If You Overdraft Your Bank Account? Fees & Fixes',
+    description:
+      'A $6 coffee on a $4 balance can trigger a $35 fee — or nothing at all, depending on one setting. Here’s exactly how overdrafts work and how to avoid the fee.',
+    date: '2026-08-07',
+    category: 'Saving',
+    intro:
+      'Your card gets approved for a $6 coffee even though your balance was sitting at $4, and two days later a $35 fee shows up out of nowhere. It feels random, but it isn’t — whether that purchase goes through, and whether it costs you anything, comes down to one setting most people never touch. Here’s exactly how overdrafts work, what the fee actually is, and how to make sure it never happens to you again.',
+    sections: [
+      {
+        heading: 'What "overdrafting" actually means',
+        body: 'Overdrafting means spending more than what’s in your checking account. When that happens, your bank has exactly two options: cover the transaction anyway and let your balance go negative (called "paying" the overdraft), or reject the transaction outright (called "declining" it). Which one happens — and whether it costs you anything — depends on the type of transaction and whether you’ve opted into what banks call "standard overdraft coverage."\n\nIf the bank pays it, you now owe them the negative amount plus a fee. If it declines, the purchase simply doesn’t go through — awkward at the register, but free.',
+      },
+      {
+        heading: 'The fee — and how fast it multiplies',
+        body: 'Overdraft fees commonly run in the $30–$35 range per transaction at banks that still charge them. The part that catches people off guard is that it’s per transaction, not per day — buy a coffee, then gas, then groceries while your balance is negative, and some banks will charge that fee three separate times, up to a daily cap many set around 3 to 5 fees. A handful of small purchases against a shortfall of ten or twenty dollars can turn into $100+ in fees alone.\n\nSome banks also add an extended overdraft fee — an extra daily or per-period charge if your balance stays negative for several days. The trend recently has moved the other way, though: several major banks and most online-only banks (Capital One and Ally among them) have eliminated overdraft fees entirely or added a small no-fee negative-balance buffer, so it’s worth actually checking your own bank’s current policy instead of assuming the worst.',
+      },
+      {
+        heading: 'The opt-in rule that protects your debit card (Regulation E)',
+        body: 'Federal rules — specifically an amendment to Regulation E that took effect in 2010 — require your bank to get your affirmative opt-in before it can charge an overdraft fee on two specific transaction types: one-time debit card purchases and ATM withdrawals. If you never opted in, those transactions are simply declined at no cost when your balance can’t cover them. No opt-in, no fee, full stop.\n\nThe catch is that this protection doesn’t extend to everything. Checks, ACH payments (rent, autopay bills, subscriptions), and recurring debit charges aren’t covered by the opt-in rule — banks can still pay those and charge you an overdraft fee whether or not you ever opted into anything, because bouncing a rent check causes its own problems the bank is often trying to help you avoid (for a price).',
+      },
+      {
+        heading: 'Overdraft fee vs. NSF fee — not the same thing',
+        body: 'A non-sufficient funds (NSF) fee, sometimes called a "returned item" fee, is overdraft’s less-forgiving cousin. It happens when the bank declines to cover a check or ACH payment instead of paying it — the transaction bounces, you still owe the merchant or landlord, and the merchant may separately charge you their own returned-payment fee on top of whatever your bank charges.\n\nRegulators pushed hard against multiple and "double-dipping" NSF fees in recent years, and a number of major banks eliminated NSF fees entirely around 2022 — another detail worth checking directly with your own bank rather than assuming.',
+      },
+      {
+        heading: 'It usually skips your credit report — but can still follow you',
+        body: 'A one-off overdraft generally doesn’t show up on your credit report with Equifax, Experian, or TransUnion the way a missed loan payment would — checking accounts aren’t typically reported to those bureaus at all. But if a negative balance goes unpaid long enough that the bank closes the account and writes it off, they can report it to ChexSystems, a separate consumer reporting agency that banks check before approving new checking accounts.\n\nA ChexSystems mark can make it hard to open a new account at most major banks for up to five years, sometimes pushing you into a restricted "second chance" account with fewer features. It’s a much longer-lasting consequence than the $35 fee that started it.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your account settings for "standard overdraft coverage" — opt out if you’d rather have a purchase declined for free than pay a $30+ fee.\n2. Turn on low-balance text or push alerts so you find out before you swipe, not after.\n3. Link a savings account as backup overdraft protection — the transfer fee is usually a flat few dollars, far cheaper than a standard overdraft fee, and some banks offer it free.\n4. Keep a small buffer — even $20–$50 sitting untouched in checking absorbs most everyday overdraft situations.\n5. Already overdrawn? Pay it back as fast as possible — extended overdraft fees can keep adding up the longer the balance stays negative.\n6. If your bank still charges heavy overdraft and NSF fees, compare it against banks that have dropped them — it’s a real, ongoing cost difference.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Federal Reserve', 'Credit Rating', 'Inflation'],
+    faq: [
+      {
+        q: 'Does overdrafting hurt your credit score?',
+        a: 'Not directly — checking account activity generally isn’t reported to the three major credit bureaus. But an unpaid negative balance that gets written off can be reported to ChexSystems, which can block you from opening a new bank account elsewhere for years.',
+      },
+      {
+        q: 'Can a debit card purchase overdraft my account without my permission?',
+        a: 'Not for one-time debit card purchases or ATM withdrawals — federal Regulation E requires you to opt into standard overdraft coverage before a bank can charge a fee on those. Without opting in, the transaction is just declined for free.',
+      },
+      {
+        q: 'What’s the difference between an overdraft fee and an NSF fee?',
+        a: 'An overdraft fee is charged when the bank pays a transaction anyway and lets your balance go negative. An NSF (non-sufficient funds) fee is charged when the bank instead declines a check or ACH payment — the transaction bounces and you still owe the payment, plus possibly a separate fee from the merchant.',
+      },
+      {
+        q: 'How do I avoid overdraft fees for good?',
+        a: 'Opt out of standard overdraft coverage so debit and ATM transactions just decline instead of costing you money, set up low-balance alerts, link a savings account for cheaper backup transfers, and consider a bank that has eliminated overdraft fees entirely if you find yourself running tight often.',
+      },
+    ],
+  },
+  {
+    slug: 'how-to-buy-your-first-stock',
+    title: 'How Do You Actually Buy Your First Stock? A Step-by-Step Guide',
+    metaTitle: 'How to Buy Your First Stock: A Step-by-Step Beginner Guide',
+    description:
+      'Account’s funded, ticker’s typed in, and now there are buttons you don’t recognize. Here’s exactly what a market order, a limit order, and a fractional share actually do.',
+    date: '2026-08-08',
+    category: 'Investing',
+    intro:
+      'You’ve opened a brokerage account, money’s sitting in it, and you’ve pulled up a stock — and now there’s a wall of unfamiliar buttons standing between you and actually owning something. Market order? Limit order? Shares? Here’s exactly what each piece does, in the order you’ll actually hit them.',
+    sections: [
+      {
+        heading: 'Step 1: fund the account before you can buy anything',
+        body: 'Buying a stock requires settled cash sitting in your brokerage account first — you can’t place a trade against money that isn’t there yet. Most brokerages fund via a bank transfer (ACH), which is typically free but takes one to a few business days to fully clear, though many apps let you start trading with an "instant deposit" against a portion of that transfer before it officially settles.\n\nIf you’re under 18, this account is a custodial account opened by a parent or guardian — the mechanics of buying and selling inside it work exactly the same as an adult account, you just don’t have sole legal control until you reach the age of majority in your state.',
+      },
+      {
+        heading: 'Step 2: decide what you’re actually buying — and type the right ticker',
+        body: 'Every publicly traded company or fund has a ticker symbol, a short code you search to pull up its trading page — AAPL for Apple, VOO for a popular S&P 500 ETF. Typing the wrong ticker is a real beginner mistake, since some codes look alike (there’s a real difference between a company’s common stock and a similarly-named fund), so double-check the full company name shown next to the ticker before you go further.\n\nThis is also the moment to decide between a single company’s stock and an ETF. A stock is a bet on one company; an ETF like a total-market or S&P 500 fund spreads that same dollar across hundreds of companies at once. Most beginner-focused advice, including the rest of the guides on this site, leans toward starting with a broad ETF and treating individual stock picks as a smaller, separate slice of a portfolio — not because individual stocks are forbidden, but because a single company’s bad quarter can’t sink a fund holding hundreds of others.',
+      },
+      {
+        heading: 'Step 3: market order vs. limit order — the choice that actually matters',
+        body: 'When you hit "buy," you’ll be asked to pick an order type, and this is the one decision that genuinely changes your outcome. A market order buys immediately at the best price currently available — fast and simple, and fine for large, heavily-traded stocks and ETFs where the price barely moves between the moment you click and the moment it fills.\n\nA limit order lets you set the maximum price you’re willing to pay. If the stock is trading above your limit, the order simply waits — it might fill a minute later, or it might never fill at all if the price never comes back down. Limit orders matter most for stocks that trade less often, where the bid-ask spread (the gap between what buyers are offering and what sellers are asking) can be wide enough that a market order fills at a noticeably worse price than what you saw on screen a second earlier.\n\nFor a beginner buying a well-known stock or a major ETF during regular market hours (9:30 AM–4 PM ET), a market order is usually fine. Trading outside those hours, or in a smaller, thinly-traded stock, is exactly when a limit order earns its keep.',
+      },
+      {
+        heading: 'Step 4: you don’t need the full share price — fractional shares',
+        body: 'A single share of a company trading at $900 used to be a hard stop for anyone without $900 to spend. Most major brokerages (Fidelity, Schwab, Robinhood, and others) now let you buy a fractional share instead — you enter a dollar amount, say $25, and you receive exactly 25/900ths of a share, along with a proportional slice of any future dividends or gains.\n\nThis is what actually makes "invest what you can" realistic advice instead of a platitude — $20 a week into a fractional share of a broad ETF is a completely legitimate way to start, and it removes the old excuse that investing requires hundreds of dollars up front to even place a first trade.',
+      },
+      {
+        heading: 'Step 5: what happens after you click buy',
+        body: 'Once an order fills, the shares show up in your account’s holdings almost immediately, but the trade itself takes a short window to officially settle — in the US, stock trades settle one business day after the trade date (known as T+1). Until it settles, that cash is technically still tied up in the transaction.\n\nThis matters most in a cash account (as opposed to a margin account): if you buy a stock and sell it again before the cash from a prior sale has settled, repeatedly, it can trigger what’s called a good-faith violation, and enough of those in a rolling 12-month period can get your account temporarily restricted to trading with only fully settled cash. It’s not a beginner trap you’re likely to hit by buying and holding, but it’s exactly the kind of thing that catches people who start buying and selling the same day.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Fund the account and wait for the transfer to clear (or use instant deposit if your brokerage offers it).\n2. Search the exact ticker symbol and confirm the full company or fund name before buying.\n3. Decide stock vs. ETF — a broad ETF is the standard starting point; individual stocks are a smaller add-on, not the whole plan.\n4. Use a market order for large, liquid stocks and ETFs during regular market hours; use a limit order for anything thinly traded or when trading outside those hours.\n5. Use fractional shares if the full share price is more than you want to put in at once — there’s no minimum share count required to start.\n6. After the order fills, leave it alone. The goal on day one is owning something, not trading it the same afternoon.',
+      },
+    ],
+    relatedTerms: ['Stock', 'ETF', 'Market Order', 'Limit Order', 'Broker', 'Bid-Ask Spread'],
+    faq: [
+      {
+        q: 'What’s the difference between a market order and a limit order?',
+        a: 'A market order buys immediately at the current best available price. A limit order only fills at a price you set or better, which protects you from a bad fill but might mean the order never executes if the price doesn’t reach your limit.',
+      },
+      {
+        q: 'Do you need a lot of money to buy your first stock?',
+        a: 'No — most major brokerages now offer fractional shares, letting you buy a dollar amount (even $5 or $10) of an expensive stock instead of needing the full share price up front.',
+      },
+      {
+        q: 'How long does it take for a stock purchase to settle?',
+        a: 'In the US, stock trades settle one business day after the trade date (T+1). The shares appear in your account right after the order fills, but the cash side of the transaction isn’t fully final until settlement.',
+      },
+      {
+        q: 'Should a beginner buy individual stocks or an ETF first?',
+        a: 'Most beginner-focused guidance favors starting with a broad, low-cost ETF, since it spreads risk across hundreds of companies instead of resting on one. Individual stocks can be added later as a smaller slice of a portfolio once the basics feel comfortable.',
+      },
+    ],
+  },
+  {
+    slug: 'do-you-pay-taxes-when-you-sell-stock',
+    title: 'Do You Pay Taxes When You Sell Stock? Capital Gains Explained',
+    metaTitle: 'Do You Pay Taxes When You Sell Stock? Capital Gains Tax Basics',
+    description:
+      'Your portfolio is up and you’re thinking about cashing out — here’s exactly when the IRS gets a cut, how much, and the one-year rule that can cut your tax bill in half.',
+    date: '2026-08-09',
+    category: 'Investing',
+    intro:
+      'Your first stock is up 30% and you’re tempted to lock it in — but before you hit sell, it helps to know what the IRS actually does with that gain. The short version: you only owe tax the moment you sell, and how long you held the stock changes your tax bill more than almost anything else you control.',
+    sections: [
+      {
+        heading: 'No sale, no tax — gains on paper don’t count yet',
+        body: 'If a stock you own goes up in value, that’s called an unrealized gain, and unrealized gains are not taxed. You could watch a stock triple in value and owe the IRS nothing, as long as you never sell. The tax bill only shows up the moment you sell and turn that gain into cash — at which point it becomes a realized gain, and realized gains are what actually get taxed.\n\nThis is why "I don’t want to sell because of the taxes" is a real, legitimate consideration for long-term investors — selling isn’t just a market decision, it’s a tax decision too. It’s also why buy-and-hold investing has a quiet tax advantage built in: a portfolio you never touch generates zero capital gains tax, no matter how much it grows.',
+      },
+      {
+        heading: 'The one-year line: short-term vs. long-term capital gains',
+        body: 'How long you held the stock before selling determines which tax rules apply, and the cutoff is exactly one year. Sell a stock you’ve held for one year or less, and the profit is a short-term capital gain — taxed at your regular income tax rate, the same rate that applies to your paycheck. Sell after holding it for more than one year, and the profit is a long-term capital gain, taxed at a separate, lower set of rates.\n\nThe gap between the two can be large. Someone in a higher income tax bracket might pay double or more in tax on a short-term gain compared to the exact same dollar amount held just a few extra months to cross the one-year mark. There’s no special filing required to get long-term treatment — your brokerage tracks your purchase date automatically and reports it to the IRS on Form 1099-B when you sell.',
+      },
+      {
+        heading: 'How much tax you actually owe',
+        body: 'Short-term gains stack on top of your other income and get taxed at your ordinary income tax bracket — the same brackets that tax your wages.\n\nLong-term gains use their own separate rate schedule, generally 0%, 15%, or 20%, depending on your total taxable income for the year. The income cutoffs for each bracket adjust for inflation every year, but the practical takeaway for a student or early-career earner is this: if your total taxable income for the year is fairly low, a meaningful chunk of your long-term gains — sometimes all of them — can fall into that 0% bracket. Selling a long-term winner during a low-income year (a gap semester, a light-hours year) can genuinely mean owing nothing on the gain.\n\nYour gain, either way, is calculated as sale price minus cost basis — cost basis being what you originally paid for the shares (plus any reinvested dividends that bought more shares along the way). Only the profit is taxed, never the whole sale amount.',
+      },
+      {
+        heading: 'Losses aren’t just bad news — they can offset gains',
+        body: 'If a stock you sell is worth less than you paid for it, that’s a capital loss, and losses aren’t just a bummer — they’re a tax tool. Capital losses first offset capital gains dollar for dollar, so if you have a $2,000 gain on one stock and a $2,000 loss on another in the same year, they cancel out and you owe nothing on either.\n\nIf your losses exceed your gains for the year, up to $3,000 of the leftover loss can be deducted against your ordinary income (wages, freelance income, etc.), and any loss beyond that carries forward to future tax years indefinitely until it’s used up. Deliberately selling losers to capture this benefit is called tax-loss harvesting.\n\nOne rule to know before harvesting a loss on purpose: the wash-sale rule blocks you from claiming the loss if you buy the same stock (or a "substantially identical" one) within 30 days before or after the sale — a 61-day window in total. Sell a losing stock and buy it right back the next morning, and the IRS disallows the loss entirely.',
+      },
+      {
+        heading: 'The accounts where none of this applies',
+        body: 'Capital gains tax only applies inside a regular taxable brokerage account. Buy and sell as much as you want inside a Roth IRA or traditional IRA, or a 401(k), and you owe zero capital gains tax on any of it, no matter how short-term the trade or how large the gain — that’s the core benefit those accounts are built around. A Roth account goes a step further: even withdrawals in retirement, including all the growth, come out completely tax-free.\n\nThis is part of why the standard order of operations — max any 401(k) match, then a Roth IRA, then a taxable brokerage account — matters beyond just contribution limits. Trades inside the tax-advantaged accounts are consequence-free in a way a regular brokerage account never is.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before selling a winner, check the purchase date — waiting past the one-year mark can meaningfully cut the tax rate on the gain.\n2. Remember unrealized gains owe nothing — you only trigger tax by actually selling.\n3. If you’re selling losers on purpose to offset gains, don’t buy the same stock back within 30 days, or the wash-sale rule cancels the deduction.\n4. Keep trades inside a Roth IRA or 401(k) when the goal is active buying and selling — capital gains tax doesn’t apply there at all.\n5. Your brokerage sends a 1099-B each year summarizing your sales — that’s the document your tax software or preparer uses to calculate what you owe.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Index Investing', 'Tax-Loss Harvesting', 'Dividend', 'Dollar-Cost Averaging', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I owe taxes if my stock goes up but I don’t sell it?',
+        a: 'No. Gains only become taxable when you sell — an unrealized gain on a stock you still hold isn’t taxed no matter how large it grows.',
+      },
+      {
+        q: 'What’s the difference between short-term and long-term capital gains?',
+        a: 'It comes down to how long you held the stock. One year or less before selling is a short-term gain, taxed at your regular income tax rate. More than one year is a long-term gain, taxed at lower rates that can be as low as 0% for lower-income filers.',
+      },
+      {
+        q: 'Can I use stock losses to lower my tax bill?',
+        a: 'Yes. Losses first offset any capital gains you have dollar for dollar, and up to $3,000 of extra loss beyond that can offset your ordinary income each year, with any remainder carried forward to future years.',
+      },
+      {
+        q: 'Do I pay capital gains tax on stocks in a Roth IRA?',
+        a: 'No. Trades inside a Roth IRA (or traditional IRA or 401(k)) aren’t subject to capital gains tax at all — that tax-free treatment is a core reason those accounts exist.',
+      },
+    ],
+  },
+  {
+    slug: 'how-does-a-cd-certificate-of-deposit-work',
+    title: 'How Does a CD (Certificate of Deposit) Work, and Is It Worth It?',
+    metaTitle: 'How a CD (Certificate of Deposit) Works — And When It Beats a HYSA',
+    description:
+      'A relative told you to “put it in a CD” — here’s exactly what that locks up, what early withdrawal actually costs, and when it beats a savings account.',
+    date: '2026-08-10',
+    category: 'Saving',
+    intro:
+      'A relative or a bank app keeps nudging you toward a “CD” and you’ve nodded along without knowing what it actually does. A certificate of deposit is one of the safest, most boring places to park money — and sometimes one of the most useful. Here’s exactly what you’re trading away, what it costs to break that trade early, and when a CD actually beats just leaving cash in savings.',
+    sections: [
+      {
+        heading: 'What a CD actually is',
+        body: 'A certificate of deposit is a savings account with two things locked in up front: the interest rate and the timeline. You deposit a lump sum, agree not to touch it for a set term — commonly anywhere from a few months to five years — and in exchange the bank or credit union pays you a fixed rate for that entire term, guaranteed, regardless of what happens to interest rates elsewhere in the meantime.\n\nLike a regular savings account, a CD held at an FDIC-insured bank (or an NCUA-insured credit union) is insured up to $250,000 per depositor, per institution — so the safety profile is essentially identical to cash in the bank. The difference is entirely about access: a savings account lets you withdraw anytime, a CD does not, and that trade is the entire point of the product.',
+      },
+      {
+        heading: 'CD vs. a high-yield savings account: the trade you’re making',
+        body: 'A high-yield savings account (HYSA) gives you a variable rate — it can rise or fall over time, usually tracking broader interest-rate trends — but your money stays fully liquid, withdrawable whenever you want. A CD gives you a fixed rate for the whole term in exchange for giving up that access.\n\nThat trade-off cuts both ways depending on where rates are headed. If rates are expected to fall, locking in today’s rate with a CD protects you from watching your future savings-account yield drift downward. If rates are expected to rise, a CD can leave you stuck earning less than a HYSA would be paying by the time your CD matures. Nobody can predict rate moves reliably, which is exactly why CDs are best used for money you’ve already decided you won’t need during the term — not as a bet on where rates are going.',
+      },
+      {
+        heading: 'The catch: early withdrawal penalties',
+        body: 'Break a CD before its term ends and the bank charges an early withdrawal penalty — typically calculated as a chunk of the interest you would have earned, not a flat fee. A common structure is something like a few months of interest for a shorter-term CD (under a year) and closer to six months to a year of interest for a longer-term CD, though the exact formula is set by each bank and spelled out in the account disclosure before you open it.\n\nThe part that surprises people: if you withdraw early enough, the penalty can eat into your original deposit, not just the interest you earned — because if you haven’t earned enough interest yet to cover the penalty, the bank pulls the difference from your principal. This is exactly why a CD is the wrong home for an emergency fund. Emergency money needs to be reachable in a day or two with zero chance of losing a dollar of it; a CD guarantees neither.',
+      },
+      {
+        heading: 'CD laddering: getting some flexibility back',
+        body: 'A CD ladder solves the “what if I need some of this money sooner” problem without giving up the higher locked-in rate entirely. Instead of putting all your cash into one CD, you split it across several CDs with staggered maturity dates — say, 3-month, 6-month, 9-month, and 12-month terms.\n\nAs each CD matures, you either withdraw that portion penalty-free or roll it into a new long-term CD to keep the ladder going. The result is a recurring stream of access points — money becomes available every few months — while most of your balance still earns CD-level rates instead of sitting in savings the whole time.',
+      },
+      {
+        heading: 'Is CD interest taxable?',
+        body: 'Yes. Interest earned on a CD held in a regular account is taxed as ordinary income in the year it’s earned — the same tax treatment as interest from a regular savings account, not the lower rate that applies to long-term stock gains. The bank sends you (and the IRS) a Form 1099-INT if your interest for the year exceeds a small threshold, and you owe tax on it even if you haven’t touched a dollar of the CD yet, since the interest is considered earned annually regardless of whether you’ve withdrawn it.\n\nOne detail worth knowing: some retirement accounts (like an IRA) can hold a CD instead of stocks, which shelters that interest from annual taxation the same way it shelters any other investment inside the account — though the tradeoff is the same early-withdrawal restrictions the IRA itself already carries.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Never put emergency-fund money in a CD — keep that in a liquid, penalty-free HYSA instead.\n2. Only lock up money in a CD that you’re confident you won’t need before the term ends.\n3. Compare the CD’s fixed rate against a current HYSA rate before committing — sometimes the liquid option pays just as well with none of the lock-up.\n4. Read the early withdrawal penalty in the account disclosure before you deposit a dollar, not after.\n5. If you want higher rates without losing all access, build a CD ladder instead of one single lump-sum CD.\n6. Remember CD interest is taxed as ordinary income every year it’s earned, whether or not you withdraw it.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Inflation', 'Federal Reserve', 'Bond'],
+    faq: [
+      {
+        q: 'Is a CD better than a savings account?',
+        a: 'It depends on the rate environment and how soon you might need the money. A CD can pay a higher, guaranteed fixed rate for its term, but a high-yield savings account keeps your money fully accessible. If there’s any chance you’ll need the cash before the term ends, the savings account is the safer choice.',
+      },
+      {
+        q: 'What happens if I withdraw from a CD early?',
+        a: 'You pay an early withdrawal penalty, usually calculated as a few months to a year’s worth of interest depending on the CD’s term. If you haven’t earned enough interest yet to cover it, the penalty can also eat into your original deposit.',
+      },
+      {
+        q: 'Are CDs safe?',
+        a: 'Yes — CDs at FDIC-insured banks or NCUA-insured credit unions are insured up to $250,000 per depositor, per institution, the same protection as a regular savings account. The risk with a CD isn’t losing money to the bank; it’s losing access to your own cash during the term.',
+      },
+      {
+        q: 'What is a CD ladder?',
+        a: 'A strategy of splitting your money across multiple CDs with staggered maturity dates instead of one single CD. It gives you regular access points as each CD matures while most of your balance still earns CD-level rates.',
+      },
+    ],
+  },
+  {
+    slug: 'does-closing-a-credit-card-hurt-your-credit-score',
+    title: 'Does Closing a Credit Card Hurt Your Credit Score?',
+    metaTitle: 'Does Closing a Credit Card Hurt Your Credit Score?',
+    description:
+      'You paid off the card — should you close it? Here’s how closing a credit card actually affects your utilization ratio and account age, and when it’s fine.',
+    date: '2026-08-11',
+    category: 'Credit',
+    intro:
+      'You finally paid off the card, and closing it feels like the responsible move — one less temptation, one less thing to manage. Sometimes that’s true. But closing a credit card can quietly ding your score in ways that have nothing to do with how responsible you’ve been. Here’s the actual mechanism, so you can decide with the real math instead of a gut feeling.',
+    sections: [
+      {
+        heading: 'The short answer: it can, but it’s not automatic',
+        body: 'Closing a credit card doesn’t hurt your score as a rule — it hurts your score if it changes two specific numbers: your overall credit utilization and the average age of your accounts. Close a card that barely moves either number and you’ll likely see little to no effect. Close the wrong card and you can watch your score drop by a real, visible amount within a single billing cycle.',
+      },
+      {
+        heading: 'Utilization ratio: your available credit disappears with the card',
+        body: 'Credit utilization — the percentage of your total available credit that you’re currently using — is roughly 30% of a FICO score, second only to payment history. It’s calculated across all your cards combined, not just the one you’re thinking about closing.\n\nSay you have two cards: a $2,000 limit with a $200 balance, and a $3,000 limit with $0 balance. Total available credit is $5,000, total balance is $200, so utilization is 4% — excellent. Close the $3,000-limit card and your available credit drops to $2,000 while your balance is still $200, which pushes utilization to 10%. Nothing about your spending changed; the denominator just got smaller. Close a card while carrying real balances elsewhere and the jump can be much bigger than that.',
+      },
+      {
+        heading: 'Average account age: your oldest card is worth more than your newest one',
+        body: 'Length of credit history makes up roughly 15% of a FICO score, and it’s measured partly by the average age of all your open accounts. Closing your oldest card doesn’t erase its history overnight — a closed account in good standing can still show on your credit report for up to 10 years — but once it eventually drops off, your average age takes a real hit, since that account no longer counts toward the average at all.\n\nThis is why the card to be most cautious about closing is usually your first one, not your newest. Closing a card you opened eight months ago barely moves your average age. Closing the card you’ve had since you were 18 can meaningfully lower it, especially if your other accounts are much newer.',
+      },
+      {
+        heading: 'When closing a card is actually fine — or the right move',
+        body: 'None of this means you should keep every card open forever. Closing makes sense when: the card charges an annual fee you’re not getting value from and the issuer won’t waive it; the card is relatively new, so it isn’t carrying much utilization or age weight; you’re worried about overspending and genuinely need the temptation removed; or the card was compromised by fraud and needs to be shut down for security reasons regardless of score impact.\n\nA temporary dip is also not permanent. Utilization is recalculated every month based on your current balances and limits, so if you close a card and your score drops from a utilization spike, paying down balances or getting a limit increase elsewhere can recover most of it within a cycle or two.',
+      },
+      {
+        heading: 'The move most people don’t know about: ask for a product change instead',
+        body: 'If the real problem is an annual fee, call the issuer and ask about a "product change" (sometimes called downgrading) to a no-annual-fee version of the same card family, rather than closing the account outright. Done correctly, this keeps the account number, the credit limit, and the account’s original open date intact — which means your utilization and average age are untouched, and you stop paying the fee.\n\nNot every issuer offers this on every card, and it’s not guaranteed to preserve every detail perfectly, but it’s always worth asking before you hit "close account." It’s the closest thing credit cards have to a free lunch.',
+      },
+      {
+        heading: 'Your checklist before closing a card',
+        body: '1. Check whether it’s your oldest card — if so, ask about a product change to a no-fee version instead of closing it.\n2. Add up your total credit limit across all cards and estimate your utilization after the card is gone — if it jumps well above 30%, pay down other balances first or reconsider.\n3. Only proceed with an annual-fee card if the issuer won’t waive the fee and a no-fee downgrade isn’t offered.\n4. If it’s a newer card with a low limit, closing it is usually low-risk to your score either way.\n5. Never close a card just to avoid temptation if the real fix is simpler — freezing the card, removing it from saved payment methods, or leaving it at home works without touching your score at all.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Does closing a credit card hurt your credit score right away?',
+        a: 'It can, within the next billing cycle — mainly by raising your overall utilization ratio (less available credit against the same balances) and, over the long run, lowering your average account age once the closed account eventually drops off your report.',
+      },
+      {
+        q: 'Is it bad to close a credit card I never use?',
+        a: 'Not necessarily. If it’s a newer card with a low limit and no annual fee, closing it usually has a small effect. If it’s your oldest card or one with a high limit, keeping it open (even unused, with maybe one small purchase a year to avoid inactivity closure) usually helps your score more than closing it.',
+      },
+      {
+        q: 'Should I close a credit card after paying it off?',
+        a: 'Not automatically. Paying it off is the important part — the balance is what affects utilization and interest, not whether the account stays open. Many people are better off keeping a paid-off card open and unused than closing it.',
+      },
+      {
+        q: 'Can I downgrade a credit card instead of closing it?',
+        a: 'Often, yes. Ask your issuer about a "product change" to a no-annual-fee version of the same card. Done successfully, it can keep your credit limit and original account age intact while dropping the fee — better for your score than closing outright.',
+      },
+    ],
+  },
+  {
+    slug: 'what-happens-if-you-cosign-a-loan',
+    title: 'What Happens If You Cosign a Loan and the Other Person Stops Paying?',
+    metaTitle: 'What Happens If You Cosign a Loan? The Real Risks Explained',
+    description:
+      'Cosigning isn’t a favor with no downside — it’s taking on equal legal responsibility for someone else’s debt. Here’s what actually happens if they miss a payment.',
+    date: '2026-08-12',
+    category: 'Credit',
+    intro:
+      'A friend, partner, or family member asks you to cosign a car loan, an apartment lease, or a private student loan because they don’t have enough credit history to qualify alone. It can feel like a small favor — sign a form, help them out. It isn’t. The moment you cosign, you’re not vouching for someone; you’re legally on the hook for every dollar they borrow, exactly as if you’d taken out the loan yourself.',
+    sections: [
+      {
+        heading: 'What cosigning actually means (it’s not a reference)',
+        body: 'A cosigner isn’t a character witness. When you cosign a loan, lease, or credit account, you become equally, legally responsible for the full balance — not a portion of it, and not just "if things get really bad." If the primary borrower pays $0 of a $20,000 auto loan, the lender can come after you for the full $20,000, the same way it would come after the person who actually drove the car off the lot.\n\nLenders ask for a cosigner specifically because the primary borrower’s credit history, income, or debt-to-income ratio isn’t strong enough to qualify alone. Your job as cosigner is to be the backup that makes the loan safe enough for the lender to approve — which means, by definition, the lender already sees real risk the primary borrower can’t handle it solo.',
+      },
+      {
+        heading: 'Why teens and young adults get asked to cosign — or need one',
+        body: 'Cosigners show up constantly in a young person’s financial life, usually in one of these forms: a first car loan, when a new driver has no credit history to qualify for reasonable rates alone; a private student loan, since most private lenders require a cosigner for undergrads with little to no income or credit (federal loans generally don’t require one); an apartment lease, when a college student’s income doesn’t meet a landlord’s minimum — cosigning a lease works the same way as cosigning debt, equal legal responsibility for the rent; and, less often today, a credit card, since federal law under the CARD Act requires anyone under 21 to show independent income or have a cosigner before an issuer can approve them, though many issuers now lean on proof-of-income requirements instead of accepting cosigners at all.\n\nIn every case, the arrangement exists because the primary applicant couldn’t get approved — or couldn’t get approved at a decent rate — on their own credit.',
+      },
+      {
+        heading: 'When a payment is missed, both credit reports take the hit',
+        body: 'Because the loan is reported to the credit bureaus under both names, a payment that’s 30+ days late shows up on the cosigner’s credit report exactly the way it shows up on the primary borrower’s — even though the cosigner never touched the money and might not find out about the missed payment until they check their own score. Payment history is the single biggest factor in a FICO score (roughly 35% of it), so a handful of late payments on a cosigned loan can do real damage to a credit file that otherwise looked clean.\n\nIf the account goes to collections or default, the lender can generally pursue the cosigner directly for the full remaining balance — through collections calls, a lawsuit, or wage garnishment in some states — without necessarily exhausting every option against the primary borrower first. Surveys of cosigners have repeatedly found that a meaningful share end up making at least one payment themselves after the primary borrower fell behind — this isn’t a rare edge case, it’s a documented, common outcome.',
+      },
+      {
+        heading: 'It affects you even if nothing ever goes wrong',
+        body: 'This is the part people miss: cosigning changes your credit profile the day you sign, whether or not the other person ever misses a payment. The full loan balance counts against your debt-to-income ratio the same as if you’d borrowed it yourself, which can lower how much you’re able to borrow for your own car, apartment, or eventually a mortgage. A large auto loan or private student loan balance sitting on your credit report can be the difference between an approval and a denial when you go to rent your own place a year later.\n\nIt can also weigh on your credit utilization and average account age calculations, which is why even a cosigned account with a spotless payment record isn’t truly "free" — it’s still debt on your file, just debt you’re not the one paying down yet.',
+      },
+      {
+        heading: 'Can a cosigner get off the loan later?',
+        body: 'Sometimes, but it’s not automatic — you can’t just ask to be removed. Some private student loans and auto loans offer a "cosigner release" after the primary borrower makes a set number of consecutive, on-time payments (commonly somewhere in the 12–48 month range, depending on the lender) and can show they now qualify for the loan on their own income and credit. The primary borrower has to apply for that release; it doesn’t happen automatically even after years of perfect payments.\n\nThe more common way a cosigner comes off a loan is refinancing — the primary borrower takes out a brand-new loan in their name only and uses it to pay off the old cosigned one. That only works once their credit and income are strong enough to qualify solo. Until one of those two things happens, the cosigner’s name — and liability — stays on the account.',
+      },
+      {
+        heading: 'Before you cosign anything',
+        body: '1. Read the loan or lease terms yourself — don’t rely on a summary from the person asking you to sign.\n2. Ask directly whether the loan offers a cosigner release, and under what conditions.\n3. Only cosign an amount you could actually afford to repay in full yourself, since that’s the real exposure you’re taking on.\n4. Ask to be added to online account access so you can monitor payments directly instead of finding out about a missed one from your own credit report.\n5. Know that "just this once" or "I’ll definitely pay it" isn’t a legal protection — only the loan’s written release terms are.\n6. If you’re the one asking someone to cosign, treat their credit like it’s literally your own debt, because as far as the credit bureaus are concerned, it is.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does cosigning a loan show up on my credit report?',
+        a: 'Yes — the account appears on both the cosigner’s and the primary borrower’s credit reports, and the full balance counts toward the cosigner’s debt just as if they’d borrowed it themselves.',
+      },
+      {
+        q: 'Can I remove myself as a cosigner without the other person’s help?',
+        a: 'No. You generally need either a cosigner release (offered by some lenders after a set number of on-time payments) or for the primary borrower to refinance the loan in their name alone — a cosigner can’t unilaterally exit the agreement.',
+      },
+      {
+        q: 'What’s the difference between a cosigner and a guarantor?',
+        a: 'A cosigner is equally responsible for the debt from day one, and the lender can pursue them directly the moment a payment is missed. A guarantor typically only has to pay after the lender has already tried and failed to collect from the primary borrower — a subtly weaker, but still real, obligation.',
+      },
+      {
+        q: 'Is it safer to cosign a car loan than a private student loan?',
+        a: 'Both carry real credit risk, but private student loans tend to be riskier long-term commitments — they’re often larger, hard to discharge in bankruptcy, and can follow both names for a decade or more if payments go sideways.',
       },
     ],
   },
