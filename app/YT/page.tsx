@@ -1,12 +1,12 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { notFound } from 'next/navigation'
-import YTDashboard from '@/components/yt-dashboard/YTDashboard'
+import DashboardTabs from '@/components/yt-dashboard/DashboardTabs'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'PowerScale Command Center',
+  title: 'Content Command Center',
   robots: { index: false, follow: false },
 }
 
@@ -16,5 +16,5 @@ export default async function YTPage() {
     notFound()
   }
 
-  return <YTDashboard />
+  return <DashboardTabs />
 }
