@@ -1684,4 +1684,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-do-stock-dividends-work-are-they-taxed',
+    title: 'How Do Stock Dividends Work, and Are They Taxed?',
+    metaTitle: 'How Stock Dividends Work and How They’re Taxed',
+    description:
+      'A company you own stock in just paid a dividend — here’s where that cash actually comes from, the dates that determine if you get paid, and what the IRS takes.',
+    date: '2026-08-13',
+    category: 'Investing',
+    intro:
+      'You check your brokerage app and there’s a small cash deposit you didn’t ask for — a dividend. It feels like free money, and in a real sense it is, but it comes with rules about timing and taxes that most people never look up until the deposit shows up. Here’s where that cash actually comes from, the dates that decide whether you get paid, and what you’ll owe the IRS on it.',
+    sections: [
+      {
+        heading: 'Where the cash actually comes from',
+        body: 'A dividend is a direct cash payment from a company to its shareholders, funded out of profit the company doesn’t need to reinvest in the business. Not every company pays one — fast-growing companies like Amazon have historically plowed every dollar back into the business instead, since reinvesting can grow the stock price faster than a cash payout would. Dividends tend to come from bigger, more mature companies — think Coca-Cola, Johnson & Johnson, or a big bank — that generate more cash than they can productively spend growing further.\n\nYou don’t have to do anything to get paid. If you own the stock on the right date (more on that below), the cash lands in your brokerage account automatically, usually once a quarter. A company that pays $0.50 per share, four times a year, on a stock you own 100 shares of, sends you $200 over the year without you selling a single share.',
+      },
+      {
+        heading: 'The four dates that decide if you get paid',
+        body: 'Every dividend runs through the same sequence. The declaration date is when the company’s board announces the payment and the amount. The ex-dividend date is the one that actually matters to you — you must have bought the stock before this date to receive the payment; buy on or after it and you get nothing this round, even if you buy the very next day. The record date, usually a day after the ex-dividend date, is when the company officially checks its list of shareholders. The payment date is when the cash actually hits your account, often two to four weeks later.\n\nOne mechanical quirk worth knowing: on the ex-dividend date, the stock price typically drops by roughly the dividend amount at the open. A $50 stock paying a $0.50 dividend often opens near $49.50. That’s not a loss — the value just shifted from the share price into cash in your account — but it explains why the stock chart shows a small dip right around every payment.',
+      },
+      {
+        heading: 'Yes, dividends are taxed — even if you never sell',
+        body: 'Unlike a stock’s unrealized gains, which aren’t taxed until you sell, dividend cash is taxable income the year it’s paid to you, whether you spend it, save it, or automatically reinvest it into more shares. Your broker sends you (and the IRS) a Form 1099-DIV each January listing everything you were paid.\n\nMost dividends from regular US stocks and funds held for a minimum period are classified as "qualified dividends" and taxed at the lower long-term capital gains rates — 0%, 15%, or 20% depending on your total income — rather than your regular income tax rate. The holding-period rule is specific: you generally need to have held the stock for more than 60 days during the 121-day window centered on the ex-dividend date. Miss that window (for example, by buying right before the ex-date and selling right after) and that dividend gets taxed as ordinary income instead, at your regular tax bracket.\n\nSome dividends never qualify for the lower rate no matter how long you hold them — REIT (real estate investment trust) dividends are the most common example, since REITs are structured to avoid paying corporate tax themselves, which shifts more of the tax burden onto you as ordinary income.',
+      },
+      {
+        heading: 'The one move that makes dividend taxes disappear',
+        body: 'Dividends earned inside a Roth IRA aren’t taxed at all — not when they’re paid, and not later, since qualified Roth withdrawals in retirement are completely tax-free. Dividends inside a traditional 401(k) or traditional IRA are tax-deferred — you don’t owe anything the year they’re paid, only later when you withdraw money in retirement, taxed as ordinary income at that point.\n\nThis is why dividend-heavy stocks and REITs are often better held inside a retirement account than a regular taxable brokerage account: the same dividend that costs you a chunk in taxes every year in a taxable account costs you nothing (Roth) or nothing yet (traditional) inside a retirement account. If you’re holding both index funds and individual dividend payers across different account types, it’s worth thinking about which goes where.',
+      },
+      {
+        heading: 'The yield trap: why a huge dividend can be a red flag',
+        body: 'Dividend yield is the annual dividend divided by the stock price — a $2/year dividend on a $50 stock is a 4% yield. A yield in the 2–4% range is typical for an established dividend payer. When you see a stock yielding 8%, 10%, or more, the instinct is excitement, but it’s usually a warning sign instead: the stock price has often fallen sharply because the company is in real trouble, which mechanically inflates the yield even though the dividend itself hasn’t gotten more generous. Companies in serious distress frequently cut or eliminate the dividend entirely soon after, which is called a "dividend cut" and typically tanks the stock further on top of losing the income.\n\nA reliable dividend payer is one that has kept paying — and ideally slowly raising — its dividend through both good years and recessions, not one with the flashiest current yield.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Buy before the ex-dividend date if you want that quarter’s payment — buying on or after it means waiting for the next cycle.\n2. Check your 1099-DIV each January — dividends are taxable the year they’re paid, even if you reinvested every dollar.\n3. Hold dividend stocks for more than 60 days around the ex-dividend date if you want the lower "qualified" tax rate instead of ordinary income rates.\n4. Consider holding high-dividend stocks and REITs inside a Roth IRA or 401(k) rather than a taxable brokerage account, where the dividend income avoids or defers tax entirely.\n5. Treat an unusually high yield as a signal to investigate, not celebrate — check whether the price crashed rather than the dividend growing.\n6. Turn on DRIP (automatic dividend reinvestment) if you’re investing for the long term — it’s free at most brokers and puts every payment straight back to work compounding.',
+      },
+    ],
+    relatedTerms: ['Dividend', 'Yield', 'DRIP', 'Roth IRA', 'REIT', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on dividends if I reinvest them?',
+        a: 'Yes. Reinvesting a dividend through a DRIP still counts as taxable income the year it’s paid — the IRS treats it as if you received the cash and then chose to buy more shares with it, even though you never saw the money land as spendable cash.',
+      },
+      {
+        q: 'What’s the difference between a qualified and non-qualified dividend?',
+        a: 'A qualified dividend is taxed at the lower long-term capital gains rates (0%, 15%, or 20%) because you met the required holding period around the ex-dividend date. A non-qualified (ordinary) dividend — including most REIT dividends — is taxed at your regular income tax rate instead.',
+      },
+      {
+        q: 'Why did the stock price drop right after paying a dividend?',
+        a: 'On the ex-dividend date, the price typically falls by roughly the dividend amount, since that value has effectively moved out of the stock and into your cash balance. It’s not a real loss — you now hold the cash instead.',
+      },
+      {
+        q: 'Are dividends taxed in a Roth IRA?',
+        a: 'No. Dividends earned inside a Roth IRA are never taxed, as long as you follow the account’s normal withdrawal rules — which is a major reason dividend-paying stocks and REITs are often better held in a Roth than in a regular taxable brokerage account.',
+      },
+    ],
+  },
 ]
