@@ -1740,4 +1740,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-much-money-do-you-need-to-start-investing',
+    title: 'How Much Money Do You Actually Need to Start Investing?',
+    metaTitle: 'How Much Money Do You Need to Start Investing? (Less Than You Think)',
+    description:
+      'The idea that you need thousands of dollars to start investing is outdated. Here’s how fractional shares, $0 account minimums, and small amounts actually work.',
+    date: '2026-08-14',
+    category: 'Investing',
+    intro:
+      'Somewhere along the way you got the idea that investing is for people with a spare few thousand dollars sitting around — so you’ve been waiting to have "enough" before you start. That number was never real for most brokers, and it’s even less real now. Here’s what it actually costs to open an account and buy your first investment, and why waiting for a bigger pile of cash usually costs you more than it saves.',
+    sections: [
+      {
+        heading: 'The old rule doesn’t apply anymore',
+        body: 'Decades ago, mutual funds routinely required a $1,000–$3,000 minimum just to open a position, and buying individual stocks meant paying a flat commission of $5–$10 per trade — which made investing $20 at a time pointless, since the fee alone would eat a huge chunk of it. That’s the version of investing a lot of adults grew up with, and it’s where the "you need real money to start" idea comes from.\n\nAlmost none of that is true anymore. Every major US brokerage (Fidelity, Schwab, Vanguard, and others) has eliminated trading commissions on US stocks and ETFs, and most have dropped account minimums to $0. The barrier that used to exist has mostly been engineered away — what’s left is more about habits than access.',
+      },
+      {
+        heading: 'Fractional shares mean the share price doesn’t matter',
+        body: 'A single share of a well-known company or fund can cost anywhere from a few dollars to several hundred, or even several thousand for a handful of the priciest stocks — which used to mean you needed that full amount just to own one share. Fractional shares fixed this: most major brokers now let you buy a dollar amount instead of a share count, and they’ll sell you 0.014 of a share if that’s what $20 buys.\n\nThat means you can build a diversified position in a broad index fund with as little as $1, buying a literal sliver of every company in the fund. The mechanics of ownership — voting rights on full shares aside — work basically the same as owning whole shares: your slice grows or shrinks with the fund, and any dividends get paid out proportionally.',
+      },
+      {
+        heading: 'What actually costs money: fees, not the price of entry',
+        body: 'Since account minimums and commissions are mostly gone, the real cost that’s left to watch is the expense ratio — the annual fee a fund charges, taken automatically out of the fund’s returns rather than billed to you directly. It’s expressed as a percentage of what you have invested.\n\nSome of the largest, broadest index funds charge among the lowest expense ratios in the industry — commonly well under 0.10% per year — while actively managed mutual funds can charge ten times that or more. On $1,000 invested, a fund charging 0.03% costs about $0.30 a year; a fund charging 1% costs $10 a year on the same balance, and that gap compounds against you every year you hold it. For a beginner, a low-cost, broad index fund is usually the more sensible starting point than an actively managed fund promising to beat the market — most active funds don’t, after fees, over long stretches.',
+      },
+      {
+        heading: 'Small and consistent beats big and occasional',
+        body: 'Investing $25 a month starting today builds a habit and puts time to work, which matters more for a beginner than the size of any single deposit. Dollar-cost averaging — investing a fixed amount on a regular schedule regardless of what the market is doing that day — means you automatically buy more shares when prices dip and fewer when they’re expensive, without having to guess when the "right" time to invest is.\n\nWaiting to invest until you’ve saved up a bigger lump sum feels responsible, but it has a real cost: every month spent waiting is a month that money wasn’t in the market growing. Time in the market, not the size of your first deposit, is what compound growth actually needs.',
+      },
+      {
+        heading: 'One thing to check before you deposit anything',
+        body: 'A $0 minimum to open an account doesn’t always mean $0 to actually invest — some individual mutual funds still carry their own minimum initial investment, sometimes $500 to $3,000, even inside a brokerage account with no minimum of its own. ETFs and fractional shares of stocks don’t have this problem, which is part of why they’re the more beginner-friendly starting point over traditional mutual funds.\n\nAlso confirm the account type before funding it. A taxable brokerage account, a custodial account (if you’re a minor), and a Roth IRA (if you have earned income) all have $0 minimums at most major brokers, but they’re taxed differently — worth knowing which one you’re actually opening.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pick a major brokerage with no account minimum and no commission on stock/ETF trades — that’s the standard now, not a special deal.\n2. Confirm fractional shares are supported so the share price of what you want to buy doesn’t block you.\n3. Start with a broad, low-cost index fund or ETF rather than picking individual stocks with your first few dollars.\n4. Check the expense ratio before buying — aim low, since fees compound against you the same way returns compound for you.\n5. Automate a small, regular deposit (even $10–$25) instead of waiting to invest a lump sum "once you have more."\n6. If you’re eyeing a specific mutual fund, check its minimum initial investment separately — some still require hundreds of dollars even inside a $0-minimum account.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Index Investing', 'Compound Interest', 'Dollar-Cost Averaging', 'Broker', 'Mutual Fund'],
+    faq: [
+      {
+        q: 'Can you start investing with just $1?',
+        a: 'Yes. Most major brokers now support fractional shares with no account minimum, so $1 can buy a small slice of an ETF or stock. The bigger factor for beginners is usually the fund’s expense ratio and how consistently you keep investing, not the size of the first deposit.',
+      },
+      {
+        q: 'Do you need a lot of money to open a brokerage account?',
+        a: 'No — nearly every major US brokerage has dropped its account minimum to $0. Some individual mutual funds still set their own minimum initial investment (sometimes hundreds of dollars), but ETFs and fractional shares don’t have that requirement.',
+      },
+      {
+        q: 'Is it worth investing small amounts like $20 a month?',
+        a: 'Yes. Consistency and time matter more than the size of any single deposit — a fixed monthly amount invested through dollar-cost averaging builds both a habit and a position, and the money has more years to compound the earlier it starts.',
+      },
+      {
+        q: 'What’s the cheapest way to start investing as a beginner?',
+        a: 'A commission-free brokerage account with no minimum, holding a broad, low-cost index fund or ETF bought in fractional shares. That combination minimizes both the upfront cost of entry and the ongoing fee drag from expense ratios.',
+      },
+    ],
+  },
 ]
