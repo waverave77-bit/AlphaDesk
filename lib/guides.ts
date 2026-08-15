@@ -1796,4 +1796,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'subsidized-vs-unsubsidized-student-loans',
+    title: 'What’s the Difference Between Subsidized and Unsubsidized Student Loans?',
+    metaTitle: 'Subsidized vs. Unsubsidized Student Loans: The Real Difference',
+    description:
+      'Subsidized and unsubsidized federal student loans look nearly identical on your aid letter — but one quietly costs more. Here’s the real difference, with real numbers.',
+    date: '2026-08-15',
+    category: 'College Money',
+    intro:
+      'Your financial aid letter probably lists “Direct Subsidized Loan” and “Direct Unsubsidized Loan” right next to each other, in the same font, for similar-looking amounts — so it’s easy to assume they’re basically the same thing with a fancier name. They’re not. One of them starts costing you money the day it’s disbursed; the other doesn’t charge you a cent of interest until you’re out of school. Here’s exactly what splits them, how much you’re allowed to borrow of each, and the one habit that keeps an unsubsidized balance from quietly growing behind your back.',
+    sections: [
+      {
+        heading: 'The one-line difference: who pays the interest while you’re in school',
+        body: 'Both are federal loans, both come from the same FAFSA application, and on paper they look almost identical — same servicer, same repayment options, sometimes even the same interest rate. The difference that actually matters shows up long before graduation: with a Direct Subsidized Loan, the federal government pays the interest that accrues while you’re enrolled at least half-time, during your six-month grace period after leaving school, and during any period of deferment. With a Direct Unsubsidized Loan, interest starts accruing the day the money is disbursed — while you’re still in class, whether you’re making payments or not.\n\nSubsidized loans are also need-based: you only qualify if your FAFSA shows financial need, and your school decides how much you’re eligible for. Unsubsidized loans have no income or need requirement at all — anyone who qualifies for federal aid can borrow them, which is why almost every undergrad ends up with at least some unsubsidized debt even if they also have subsidized loans.',
+      },
+      {
+        heading: 'How much you’re actually allowed to borrow',
+        body: 'Both loan types share the same annual borrowing limits, but the limits cap how much of that total can be subsidized. For a dependent undergraduate, first-year students can generally borrow up to $5,500 total, with no more than $3,500 of that subsidized. Second-year limits rise to $6,500 (up to $4,500 subsidized), and third year and beyond tops out around $7,500 per year (up to $5,500 subsidized). Independent students — and dependent students whose parents are denied a PLUS loan — typically get higher limits, mostly in the unsubsidized category.\n\nThere’s also a lifetime cap, called the aggregate limit, that’s historically run around $31,000 total for dependent undergrads, with no more than roughly $23,000 of that subsidized. Hit that number and every additional dollar you borrow federally has to be unsubsidized, a PLUS loan, or private debt. These figures are set by federal law rather than adjusted every year, so confirm the current numbers at StudentAid.gov before assuming they match what an older sibling or friend borrowed.',
+      },
+      {
+        heading: 'What "capitalization" means, and why it quietly grows your balance',
+        body: 'Because unsubsidized loans accrue interest from day one, you have a choice most students don’t realize they’re making: pay that interest as it accrues, or let it pile up and get added to your principal later. That add-on is called capitalization, and it typically happens when your grace period ends and the loan enters repayment.\n\nSay you borrow a few thousand dollars in unsubsidized loans as a freshman and never pay a cent of interest until you graduate four years later. That interest has been quietly accruing the whole time, and when it capitalizes it can add real money to your balance in one jump — and every payment afterward is calculated on that new, larger number, meaning you’re now paying interest on interest that already accrued. Subsidized loans never do this while you’re in school, because the government is covering that interest instead of letting it build.\n\nEven small interest-only payments while you’re still enrolled — the kind of thing you can often manage for $10–$25 a month — keep an unsubsidized balance from growing before repayment even starts. It’s optional, but it’s one of the few high-leverage moves available to a student with little or no income yet.',
+      },
+      {
+        heading: 'Grad school and PLUS loans: subsidized mostly disappears',
+        body: 'If you’re headed to graduate or professional school, know this now: subsidized loans aren’t available to grad students at all — that option was eliminated for graduate and professional borrowers on loans first disbursed after July 1, 2012. Every federal loan a grad student takes out is unsubsidized, plus there’s the Grad PLUS loan for costs beyond the standard unsubsidized limit, which requires a credit check and generally carries a higher interest rate and an origination fee.\n\nParent PLUS loans, taken out by a parent on an undergrad’s behalf, are unsubsidized too, and interest starts accruing immediately no matter when the parent begins repaying. None of this means something went wrong in your aid process — it’s just how the subsidized/unsubsidized split is structured at every level above undergrad.',
+      },
+      {
+        heading: 'The interest rate: same loan type, different year, different rate',
+        body: 'Federal student loan interest rates are fixed for the life of each individual loan, but they’re not fixed across years — the rate resets every July 1 based on financial market yields plus a set margin, with a legal cap on how high it can go. That means two students borrowing the exact same Direct Unsubsidized Loan a year apart can end up locked into different rates for a decade or more, purely based on when they borrowed.\n\nSubsidized and unsubsidized loans for undergrads share the same interest rate in any given year — the subsidy is entirely about who pays the interest while you’re in school, not about getting a cheaper rate. Grad-level unsubsidized loans and PLUS loans carry their own, typically higher, rates set the same way. You can’t shop around or negotiate a federal student loan rate the way you might with a private lender — it’s the same number for everyone borrowing that loan type that year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your financial aid offer letter for the split between subsidized and unsubsidized amounts — don’t assume a lump "student loan" line is all one type.\n2. Borrow subsidized first if you’re offered both — it’s strictly the better deal since no interest builds while you’re in school.\n3. If you’re carrying unsubsidized loans, consider paying the interest as it accrues, even in small amounts, so it doesn’t capitalize into your principal at graduation.\n4. Track your borrowing against the aggregate limits so you’re not caught off guard when subsidized eligibility runs out.\n5. Grad school bound? Budget for unsubsidized-only borrowing, and compare Grad PLUS terms carefully since they require a credit check and carry their own rate and fees.\n6. Before relying on any specific dollar figure, confirm current limits and rates at StudentAid.gov — they’re set by law and do change.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Inflation', 'Federal Reserve', 'Bond', 'Credit Rating'],
+    faq: [
+      {
+        q: 'Is a subsidized or unsubsidized student loan better?',
+        a: 'Subsidized is strictly better when you qualify for it — the government pays your interest while you’re in school, so nothing accrues before repayment starts. Unsubsidized loans aren’t bad, they’re just not need-based and start accruing interest immediately.',
+      },
+      {
+        q: 'Do unsubsidized loans accrue interest while you’re in school?',
+        a: 'Yes — from the day the loan is disbursed, whether you’re taking classes or not. If that interest isn’t paid, it capitalizes (gets added to your principal) when the loan enters repayment, so future interest is calculated on a larger balance.',
+      },
+      {
+        q: 'Can graduate students get subsidized loans?',
+        a: 'No. Subsidized loans have been unavailable to graduate and professional students since loans first disbursed after July 1, 2012 — grad borrowing is limited to unsubsidized federal loans and Grad PLUS loans.',
+      },
+      {
+        q: 'How much can I borrow in subsidized loans?',
+        a: 'It depends on your year in school and dependency status, and the numbers are set by federal law rather than adjusted yearly. Check your school’s aid letter and StudentAid.gov for your exact eligibility and the current annual and lifetime caps.',
+      },
+    ],
+  },
 ]
