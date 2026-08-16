@@ -1852,4 +1852,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'index-fund-expense-ratio-cost-over-time',
+    title: 'How Much Does an Index Fund’s Expense Ratio Actually Cost You Over Time?',
+    metaTitle: 'Index Fund Expense Ratios Explained: The Real Long-Term Cost',
+    description:
+      'A 0.03% fee looks like nothing next to a 1% fee — until you compound it for 30 years. Here’s the real dollar cost of expense ratios, with actual numbers.',
+    date: '2026-08-16',
+    category: 'Investing',
+    intro:
+      'Every fund you can buy — an ETF, an index fund, a mutual fund sitting inside your 401(k) — charges an annual fee called an expense ratio, and it never shows up as a line item on any statement you’ll ever see. It’s just quietly subtracted before you get your return. On paper the numbers look tiny, 0.03% versus 1.00%, which is exactly why almost nobody stops to do the math. Do it once, and you’ll never skip reading a fund’s expense ratio again.',
+    sections: [
+      {
+        heading: 'What an expense ratio actually is',
+        body: 'An expense ratio is a fund’s annual operating cost, expressed as a percentage of the money you have invested in it, covering things like paying the fund’s managers, trading costs, and administrative overhead. You never write a check for it and it never appears as a withdrawal — instead, the fund’s share price is calculated each day after that cost has already been deducted. A fund charging a 0.50% expense ratio effectively shaves off a tiny sliver of your balance every single day, small enough that you’d never notice any one day of it.\n\nThat invisibility is exactly the problem. A trading commission is a number you see and feel once. An expense ratio is a number you have to go looking for — usually buried in a fund’s prospectus or "fund facts" page — and it works against you in the background for as long as you hold the fund, whether the market goes up or down that year.',
+      },
+      {
+        heading: 'The real math: what a 1% fee costs over 30 years',
+        body: 'Say you invest $10,000 in a fund, never add another dollar, and the market returns its long-term historical average of roughly 10% a year before fees. In a fund charging a 0.03% expense ratio — typical for a broad, low-cost S&P 500 index fund — your money grows at close to that full 10% and turns into roughly $173,000 after 30 years.\n\nPut that same $10,000 into a fund charging a 1% expense ratio — an ordinary fee for many actively managed mutual funds — and your net return drops to about 9% a year. After 30 years that becomes roughly $133,000. Same starting amount, same market, same 30 years — a fee difference that looks like "under 1%" on a fund’s fact sheet costs you around $40,000. The fund manager didn’t have to do anything wrong to cause that gap; the fee alone was compounding against you the entire time.',
+      },
+      {
+        heading: 'Where high fees hide',
+        body: 'Broad-market index ETFs and mutual funds from the big low-cost providers — the kind that simply own the whole S&P 500 or the total US stock market — routinely charge somewhere in the 0.03%–0.10% range, and a few charge close to nothing. Actively managed mutual funds, where a manager is trying to beat the market by picking individual investments, often charge somewhere in the 0.5%–1.5% range, sometimes more, since you’re also paying for the research team and trading activity behind the strategy.\n\nSome older mutual funds also charge a "load" — a sales commission on top of the ongoing expense ratio, sometimes several percent of what you invest, taken either when you buy (front-end load) or when you sell (back-end load). A load isn’t a yearly fee, but it’s an instant hit to your return before the money has done anything at all. And inside a 401(k), you don’t always get to choose freely — your employer’s plan may only offer a short list of funds, some of which can carry meaningfully higher expense ratios than what you’d find on your own in a personal brokerage account. It’s worth checking your plan’s fund lineup specifically for this, since the fee comes straight out of your retirement balance either way.',
+      },
+      {
+        heading: 'Higher fees don’t reliably buy you higher returns',
+        body: 'The uncomfortable finding behind decades of fund research is that funds charging higher fees don’t, on average, deliver higher returns to make up for it. Most actively managed funds underperform a comparable low-cost index fund over long stretches once fees are counted — not necessarily because the managers are bad at their jobs, but because consistently beating the market is extremely hard, and the fee is a guaranteed drag that has to be overcome before a manager’s skill even shows up in your return.\n\nThat’s not a universal rule — some actively managed funds do outperform in a given stretch — but it’s the reason a low expense ratio is one of the only things about a fund’s future you can actually know for certain in advance. Nobody can guarantee a fund will beat the market next year. Everybody can guarantee its expense ratio will be deducted from your balance next year, market performance aside.',
+      },
+      {
+        heading: 'Where to actually find the number',
+        body: 'Every fund publishes its expense ratio in its prospectus and fact sheet, and every major brokerage app shows it on the fund’s summary page before you buy — look for "expense ratio" or "net expense ratio" listed as a percentage. If you have a 401(k), the number is usually sitting in your plan’s fund menu or a fee disclosure document your employer is required to provide, and it’s worth the five minutes to actually open it.\n\nA useful gut-check: if a fund’s expense ratio is meaningfully above 0.20% and it isn’t doing something genuinely specialized — a narrow sector bet, an active strategy you’ve deliberately chosen, international exposure that costs more to manage — it’s worth asking exactly what you’re paying the extra amount for.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Look up the expense ratio before buying any fund — it’s on the fund’s summary page in every major brokerage app.\n2. For broad index exposure (S&P 500, total US market, total international), expect somewhere around 0.03%–0.10% — treat anything much higher as a fee you should be able to explain.\n3. Check your 401(k)’s fund menu specifically — employer plans sometimes only offer higher-cost options, and the fee still comes out of your retirement money.\n4. Watch for sales loads on older mutual funds — a one-time commission on top of the ongoing expense ratio.\n5. Don’t assume a higher fee means better management — most actively managed funds underperform a comparable low-cost index fund over long stretches once fees are counted.\n6. When comparing two similar funds, run the numbers over your actual time horizon — even a fee gap under 1% compounds into real money over 20–30 years.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Mutual Fund', 'Index Investing', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'What is a good expense ratio for an index fund?',
+        a: 'For a broad market index fund — one tracking the S&P 500 or the total US stock market — a good expense ratio is typically in the 0.03%–0.10% range from a major low-cost provider. Meaningfully higher than that, and you should know exactly what you’re paying extra for.',
+      },
+      {
+        q: 'Do I have to pay the expense ratio separately?',
+        a: 'No — you never write a check for it. It’s deducted automatically from the fund’s assets before its daily share price is calculated, so it quietly reduces your return instead of showing up as a withdrawal.',
+      },
+      {
+        q: 'Is a 1% expense ratio bad?',
+        a: 'It’s high relative to low-cost index fund alternatives, and it compounds — on $10,000 held for 30 years, the difference between a 0.03% fund and a 1% fund can be around $40,000, assuming both track a similar underlying market return.',
+      },
+      {
+        q: 'Do actively managed funds ever beat index funds after fees?',
+        a: 'Some do in a given year or stretch, but most don’t consistently outperform a comparable low-cost index fund over long periods once fees are counted — which is why fees are one of the few things about a fund’s future performance you can actually control.',
+      },
+    ],
+  },
 ]
