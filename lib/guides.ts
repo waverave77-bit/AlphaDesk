@@ -1908,4 +1908,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-do-i-bonds-work-are-they-worth-it',
+    title: 'How Do I Bonds Work, and Are They Worth Buying?',
+    metaTitle: 'Series I Savings Bonds Explained: Rates, Rules, and Limits',
+    description:
+      'I bonds are US government savings bonds with a rate that adjusts for inflation. Here’s how the rate is set, the 12-month lock-up, and the real limits.',
+    date: '2026-08-17',
+    category: 'Saving',
+    intro:
+      'An I bond is a savings bond backed by the US government, and its whole pitch is right there in the name — the interest rate moves with inflation, so your money is designed to keep up with rising prices instead of quietly losing value to them. That makes I bonds one of the very few "boring but genuinely useful" ideas in personal finance — but the rules around buying and cashing them out are stricter than a regular savings account, and skipping past them is how people end up locked out of money they needed.',
+    sections: [
+      {
+        heading: 'What an I bond actually is',
+        body: 'An I bond ("I" for inflation) is a savings bond issued directly by the US Treasury. When you buy one, you’re lending money to the federal government, and in exchange it pays you interest for up to 30 years. Because it’s backed by the US government, an I bond carries essentially no risk of the issuer defaulting — the tradeoff for that safety is a lower expected long-term return than stocks, which is normal for a bond.\n\nI bonds are meant for money you want to protect from inflation over a period of at least a year, not money you’re trying to grow aggressively. Think of them as a specialized alternative to a savings account or CD, not a stand-in for investing in the stock market.',
+      },
+      {
+        heading: 'How the interest rate is actually set',
+        body: 'An I bond’s interest rate has two parts that combine into a "composite rate." The fixed rate is set when you buy the bond and stays the same for the entire 30 years you hold it. The inflation rate is based on the Consumer Price Index and resets every six months, in May and November, so it moves up or down as inflation does. Add the two together (with a small formula adjustment) and you get the rate your bond actually earns for the next six months.\n\nBecause the inflation piece resets twice a year, the rate you see advertised today is not locked in for the life of the bond — only the fixed-rate portion is. Interest compounds semiannually, meaning every six months the interest you’ve earned gets added to your bond’s value and starts earning interest itself. The exact current rate is published on TreasuryDirect.gov and changes on a set schedule, so check there rather than relying on a number you saw somewhere else.',
+      },
+      {
+        heading: 'The catch: your money is locked up for at least a year',
+        body: 'This is the part people skip past. Once you buy an I bond, you cannot cash it out at all for the first 12 months — not for an emergency, not for anything. There’s no early-withdrawal workaround like there sometimes is with a CD.\n\nEven after the 1-year mark, there’s a second penalty: if you cash out an I bond before you’ve held it for 5 years, you forfeit the last 3 months of interest as a penalty. Hold it for at least 5 years and there’s no penalty at all. This makes I bonds a poor fit for your actual emergency fund — money you might need on short notice belongs in a high-yield savings account instead, where it stays fully accessible.',
+      },
+      {
+        heading: 'How much you can actually buy, and where',
+        body: 'I bonds aren’t sold through a regular brokerage — you buy them directly from the US government at TreasuryDirect.gov, where you open a free account tied to your Social Security number. Electronic I bonds are capped at $10,000 per person per calendar year. You can also buy up to an additional $5,000 in paper I bonds, but only by using part of a federal tax refund to do so.\n\nThat $10,000 limit is per person, not per household, so a family of four could each open their own TreasuryDirect account and collectively buy up to $40,000 a year in electronic I bonds. A minor can own I bonds too, through a linked account a parent manages, similar to how a custodial brokerage account works.',
+      },
+      {
+        heading: 'How I bonds are taxed',
+        body: 'I bond interest is completely exempt from state and local income tax, which is a real advantage over a regular high-yield savings account if you live somewhere with high state taxes. At the federal level, you have a choice: most people defer paying any federal tax on the interest until they cash the bond out or it reaches its 30-year maturity, whichever comes first, letting the interest compound tax-free in the meantime.\n\nThere’s also a lesser-known break: if you use the bond proceeds to pay for qualified higher education expenses in the year you cash them out, the interest can be entirely federal-tax-free — but this benefit phases out above certain income levels and comes with specific eligibility rules, so it’s worth confirming the current thresholds on the IRS website before counting on it.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Only put in money you’re confident you won’t need for at least 12 months — that’s a hard lock, not a suggestion.\n2. If you might need the money between 1 and 5 years out, know you’ll lose the last 3 months of interest if you cash out early.\n3. Open a free account directly at TreasuryDirect.gov — you don’t need a broker.\n4. Check the current composite rate on TreasuryDirect before buying, since the inflation portion resets every May and November.\n5. Keep true emergency-fund money in a high-yield savings account instead — I bonds are for money you can set aside, not money you might need next week.\n6. Remember the $10,000/year electronic limit is per person, so each family member with their own account has their own cap.',
+      },
+    ],
+    relatedTerms: ['Bond', 'Inflation', 'Yield', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Are I bonds a good investment for beginners?',
+        a: 'They’re a solid option for money you want to protect from inflation and won’t need for at least a year — but they’re not a substitute for investing in the stock market, where long-term returns are historically much higher.',
+      },
+      {
+        q: 'Can you lose money on an I bond?',
+        a: 'No — I bonds are backed by the US government and their value never decreases. The only "cost" is the 3-month interest penalty if you cash one out before holding it 5 years, or losing access entirely for the first 12 months.',
+      },
+      {
+        q: 'How much can I buy in I bonds per year?',
+        a: 'Up to $10,000 per person per calendar year in electronic I bonds through TreasuryDirect, plus up to $5,000 more in paper I bonds if you use a federal tax refund to buy them.',
+      },
+      {
+        q: 'Are I bonds better than a high-yield savings account?',
+        a: 'It depends on your timeline. I bonds often win on rate and are exempt from state and local tax, but the money is locked up for a full year with no exceptions. A high-yield savings account stays liquid, which makes it the better home for an actual emergency fund.',
+      },
+    ],
+  },
 ]
