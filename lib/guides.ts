@@ -1964,4 +1964,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-credit-utilization-ideal-percentage',
+    title: 'What Is Credit Utilization, and How Much of Your Limit Should You Actually Use?',
+    metaTitle: 'Credit Utilization Explained: The Ideal Percentage to Aim For',
+    description:
+      'Credit utilization is the single fastest-moving piece of your credit score — here’s exactly how it’s calculated, the ideal percentage, and the timing trick that lowers it for free.',
+    date: '2026-08-18',
+    category: 'Credit',
+    intro:
+      'You pay your credit card off in full every single month and never miss a due date — so why does your score still bounce around? The answer is almost always credit utilization: how much of your available credit you’re using at the moment your card reports to the bureaus. It’s the second-biggest factor in most scoring models, right behind payment history, and unlike payment history it can swing in either direction within a single billing cycle. Here’s exactly how it works and how to keep it working for you.',
+    sections: [
+      {
+        heading: 'What "utilization" actually means',
+        body: 'Credit utilization is your credit card balance divided by your credit limit, expressed as a percentage. A card with a $1,000 limit and a $200 balance is at 20% utilization. Simple enough — but there are two versions of this number that both matter: per-card utilization (each individual card’s balance over its own limit) and overall utilization (all your card balances added together, divided by all your limits added together).\n\nScoring models look at both. A single maxed-out card can drag your score down even if every other card sits untouched, because that one card’s per-card ratio is ugly on its own — so spreading a balance across multiple cards instead of loading up one can genuinely help, all else equal.',
+      },
+      {
+        heading: 'The numbers people actually aim for',
+        body: 'The widely cited rule of thumb is to stay under 30% utilization, and it’s a reasonable danger line — go above it and it’s a visible drag on most scores. But 30% isn’t actually the target, it’s closer to the edge of the cliff. People with the strongest scores tend to run utilization in the single digits, often under 10%, and using literally 0% every month isn’t automatically better than a small amount — some scoring models actually want to see a little bit of usage, since it shows you’re an active borrower rather than a dormant account.\n\nThe practical target most people land on: use your cards normally, but aim to report somewhere under 10% of your total limit when your statement closes. That’s a range, not a hard cutoff — there’s no single universal number where a score suddenly "unlocks," and different scoring models weigh utilization slightly differently.',
+      },
+      {
+        heading: 'The date that actually matters: statement closing, not due date',
+        body: 'Here’s the detail that trips almost everyone up: your utilization is calculated from the balance on your statement closing date — not your due date, and not whatever your balance happens to be today. That closing-date balance is what typically gets reported to the credit bureaus, whether or not you’ve paid it off yet.\n\nSo you can pay your full statement balance on time, every time, and still show up as "high utilization" if you happened to run a big purchase through the card right before that statement closed. The fix is a timing move, not a spending change: check your statement closing date (it’s on your last statement or in your card’s app) and make a payment a few days before it hits, so the balance that actually gets reported is small — even if you’re going to pay the rest off by the due date anyway.',
+      },
+      {
+        heading: 'Two levers that lower utilization without paying down a cent',
+        body: 'Because utilization is a ratio, you can improve it by changing either side of the fraction. Paying down balances is the obvious one, but raising your available credit works just as well mathematically: if you have a $1,000 balance on a $2,000 limit (50% utilization) and your limit gets bumped to $5,000, that same $1,000 balance is now 20% utilization — with no change in spending at all.\n\nMost issuers let you request a credit limit increase online, sometimes with no hard inquiry if you’ve had the card a while and paid on time. Keeping old cards open matters for the same reason: closing a card removes its limit from your overall available credit, which can push your ratio up even if your balances didn’t change — see the “does closing a card hurt your score” guide for the mechanics of that specific tradeoff.',
+      },
+      {
+        heading: 'Why utilization is different from your other big scoring factor',
+        body: 'Payment history — whether you’ve paid on time — builds up over years and a single late payment can shadow your report for a long time. Utilization is the opposite: it’s a snapshot, recalculated every time a new statement closes, with no memory of what it was last month. That’s good news and bad news. Good, because a maxed-out card from three statements ago has zero effect on your score today once it’s paid down and reported lower. Bad, because a single expensive month — a plane ticket, a laptop repair — can knock several points off your score the moment that statement closes, even if you pay it off completely a week later.\n\nThis is exactly why utilization is the fastest lever you have if you need to raise your score quickly, say before applying for an apartment or a car loan: paying a balance down before the statement closes can move your score within a single reporting cycle, something payment history can never do that fast.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up all your card balances and all your card limits, and calculate your overall utilization right now — most banking apps show it, or do the division yourself.\n2. Find each card’s statement closing date, not its due date — that’s the number that gets reported.\n3. If a card is going to close with a high balance, make a payment a few days before the closing date to bring the reported number down.\n4. Aim for under 10% overall utilization if you’re optimizing for score, and treat 30% as a hard ceiling, not a target.\n5. Consider requesting a credit limit increase on an older, well-paid card — it lowers your ratio without you spending less.\n6. Keep old, no-fee cards open and lightly used rather than closing them, since closing one removes its limit from your available credit.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'What is a good credit utilization percentage?',
+        a: 'Under 30% is the commonly cited ceiling, but the strongest scores are usually associated with utilization in the single digits — often under 10%. There’s no universal magic number, but lower is consistently better up to a point, and using a small amount tends to score better than using none at all.',
+      },
+      {
+        q: 'Does credit utilization reset every month?',
+        a: 'Yes — it’s recalculated each time a card’s statement closes, based on the balance at that moment. Unlike payment history, a high-utilization month has no lasting effect once a lower balance is reported the next cycle.',
+      },
+      {
+        q: 'Does paying off my credit card in full still hurt my utilization?',
+        a: 'It can, if you pay after the statement closes rather than before. The balance reported to the bureaus is usually your statement closing balance — paying it off by the due date clears the debt, but the higher number may already have been reported that cycle.',
+      },
+      {
+        q: 'Does asking for a credit limit increase hurt your score?',
+        a: 'It might cause a small, temporary dip if the issuer runs a hard inquiry to approve it, but the resulting drop in utilization (same balance, bigger limit) often outweighs that dip within a month or two. Some issuers offer limit increases with only a soft inquiry — worth asking before you request one.',
+      },
+    ],
+  },
 ]
