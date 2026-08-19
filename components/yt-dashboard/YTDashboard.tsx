@@ -148,23 +148,6 @@ function useScramble(target: number, decimals = 2, durationMs = 800) {
   return display
 }
 
-function useMouseGlow() {
-  const [pos, setPos] = useState({ x: -500, y: -500 })
-  useEffect(() => {
-    let raf = 0
-    function handleMove(e: MouseEvent) {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => setPos({ x: e.clientX, y: e.clientY }))
-    }
-    window.addEventListener('mousemove', handleMove)
-    return () => {
-      window.removeEventListener('mousemove', handleMove)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
-  return pos
-}
-
 function StatusPill({ lockActive, paused, unreachable }: { lockActive?: boolean; paused?: boolean; unreachable: boolean }) {
   if (unreachable) {
     return (
@@ -197,7 +180,6 @@ function StatusPill({ lockActive, paused, unreachable }: { lockActive?: boolean;
 function HudTile({
   label,
   accent,
-  delayMs = 0,
   children,
 }: {
   label: string
@@ -206,15 +188,11 @@ function HudTile({
   children: React.ReactNode
 }) {
   return (
-    <div
-      className="relative animate-tile-in rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm transition-colors hover:border-white/20"
-      style={{ animationDelay: `${delayMs}ms` }}
-    >
-      <span className="absolute -left-px -top-px h-3 w-3 border-l-2 border-t-2" style={{ borderColor: accent }} />
-      <span className="absolute -right-px -top-px h-3 w-3 border-r-2 border-t-2" style={{ borderColor: accent }} />
-      <span className="absolute -left-px -bottom-px h-3 w-3 border-l-2 border-b-2" style={{ borderColor: accent }} />
-      <span className="absolute -right-px -bottom-px h-3 w-3 border-r-2 border-b-2" style={{ borderColor: accent }} />
-      <div className="text-[10px] uppercase tracking-[0.25em] text-white/40">{label}</div>
+    <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4 transition-colors hover:border-white/20">
+      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.15em] text-white/45">
+        <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
+        {label}
+      </div>
       <div className="mt-2">{children}</div>
     </div>
   )
@@ -302,7 +280,7 @@ function BattleLogPanel({ matchups }: { matchups: string[] }) {
   const items = [...matchups].reverse().slice(0, BATTLE_LOG_MAX)
   return (
     <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-      <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Battle Log</div>
+      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Battle Log</div>
       {items.length === 0 ? (
         <div className="py-8 text-center text-xs text-white/30">No battles recorded yet</div>
       ) : (
@@ -335,7 +313,7 @@ function AlertsPanel({ alerts }: { alerts: { title: string; message: string; at:
   const items = alerts.slice(0, ALERT_HISTORY_MAX)
   return (
     <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-      <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Alert History</div>
+      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Alert History</div>
       {items.length === 0 ? (
         <div className="py-8 text-center text-xs text-white/30">No alerts — all clear</div>
       ) : (
@@ -686,6 +664,8 @@ function VideoGrid({
   sort: VideoSort
   onSortChange: (s: VideoSort) => void
 }) {
+  const [query, setQuery] = useState('')
+
   const sorted = useMemo(() => {
     if (!videos) return null
     const arr = [...videos]
@@ -695,22 +675,37 @@ function VideoGrid({
     return arr
   }, [videos, sort])
 
+  const filtered = useMemo(() => {
+    if (!sorted) return sorted
+    const q = query.trim().toLowerCase()
+    if (!q) return sorted
+    return sorted.filter((v) => v.title.toLowerCase().includes(q))
+  }, [sorted, query])
+
   return (
-    <div className="mt-8">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div className="text-[10px] uppercase tracking-[0.25em] text-white/40">Recent Deploys</div>
-        <div className="flex gap-1.5">
-          {VIDEO_SORTS.map((s) => (
-            <button
-              key={s.key}
-              onClick={() => onSortChange(s.key)}
-              className={`rounded-full border px-3 py-1 text-[10px] uppercase tracking-widest transition-colors ${
-                sort === s.key ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200' : 'border-white/10 text-white/40 hover:border-white/25'
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
+    <div className="mt-10">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Recent Deploys</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="🔍 Search by character…"
+            className="w-40 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[11px] text-white/70 outline-none placeholder:text-white/30 focus:border-cyan-400/50 sm:w-48"
+          />
+          <div className="flex gap-1.5">
+            {VIDEO_SORTS.map((s) => (
+              <button
+                key={s.key}
+                onClick={() => onSortChange(s.key)}
+                className={`rounded-full border px-3 py-1 text-[11px] uppercase tracking-wide transition-colors ${
+                  sort === s.key ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200' : 'border-white/10 text-white/40 hover:border-white/25'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -726,11 +721,13 @@ function VideoGrid({
         </div>
       ) : sorted.length === 0 ? (
         <div className="rounded-lg border border-white/10 bg-white/[0.03] p-8 text-center text-xs text-white/30">No videos posted yet</div>
+      ) : filtered && filtered.length === 0 ? (
+        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-8 text-center text-xs text-white/30">No videos match &ldquo;{query}&rdquo;</div>
       ) : (
         <>
           <ModelStatsRow modelStats={modelStats} />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {sorted.map((v) => (
+            {filtered!.map((v) => (
               <VideoCard key={v.id} v={v} />
             ))}
           </div>
@@ -761,6 +758,10 @@ export default function YTDashboard() {
   const [charA1, setCharA1] = useState('')
   const [charB1, setCharB1] = useState('')
   const [now, setNow] = useState(() => new Date())
+  // Which of the two launch panels is showing — a single toggle instead of
+  // two always-visible stacked sections, so comparing/switching between them
+  // doesn't require scrolling past a whole extra picker+button every time.
+  const [launchMode, setLaunchMode] = useState<'multi' | 'single'>('multi')
   const [triggerState, setTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
   const [singleTriggerState, setSingleTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
   const [pauseBusy, setPauseBusy] = useState(false)
@@ -771,7 +772,6 @@ export default function YTDashboard() {
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const singleConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cronConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const mouse = useMouseGlow()
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -1040,44 +1040,29 @@ export default function YTDashboard() {
   const activeCronHourUtc = cronParts ? Number(cronParts[1]) : null
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#03040a] font-mono text-white selection:bg-cyan-500/30">
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#05060c] font-mono text-white selection:bg-cyan-500/30">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-[32rem] w-[32rem] animate-blob-float rounded-full bg-cyan-500/20 blur-[120px]" />
-        <div className="absolute -right-40 top-1/3 h-[32rem] w-[32rem] animate-blob-float rounded-full bg-fuchsia-500/20 blur-[120px]" style={{ animationDelay: '3s' }} />
-        <div className="absolute bottom-0 left-1/3 h-[28rem] w-[28rem] animate-blob-float rounded-full bg-amber-400/10 blur-[120px]" style={{ animationDelay: '6s' }} />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:44px_44px]" />
-        <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_3px)]" />
-        <div className="absolute left-0 right-0 h-24 animate-scan-sweep bg-gradient-to-b from-cyan-400/0 via-cyan-400/10 to-cyan-400/0" />
-        <div className="absolute -right-24 -top-24 h-72 w-72 opacity-20">
-          <div
-            className="h-full w-full animate-radar-spin rounded-full"
-            style={{ background: 'conic-gradient(from 0deg, transparent 0%, rgba(34,211,238,0.7) 6%, transparent 18%)' }}
-          />
-        </div>
-        <div
-          className="absolute inset-0 transition-[background] duration-300"
-          style={{ background: `radial-gradient(600px circle at ${mouse.x}px ${mouse.y}px, rgba(34,211,238,0.06), transparent 40%)` }}
-        />
+        <div className="absolute -top-40 left-1/2 h-[36rem] w-[60rem] -translate-x-1/2 rounded-full bg-cyan-500/[0.07] blur-[140px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-cyan-400/70">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_2px_rgba(34,211,238,0.8)]" />
+            <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-cyan-400/70">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan-400" />
               {now.toUTCString().slice(17, 25)} UTC
             </div>
-            <h1 className="animate-flicker-glow bg-gradient-to-r from-cyan-300 via-white to-fuchsia-400 bg-clip-text font-display text-4xl tracking-tight text-transparent [text-shadow:0_0_40px_rgba(34,211,238,0.35)] sm:text-6xl">
-              POWERSCALE
+            <h1 className="bg-gradient-to-r from-cyan-300 via-white to-fuchsia-400 bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
+              PowerScale
             </h1>
-            <p className="mt-1 text-xs uppercase tracking-[0.35em] text-white/40">Command Center</p>
+            <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/40">Command Center</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <StatusPill lockActive={status?.lockActive} paused={status?.automationPaused} unreachable={!!statusError} />
             <button
               onClick={togglePause}
               disabled={pauseBusy || !status}
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-white/70 transition-colors hover:border-slate-300/50 hover:text-slate-200 disabled:opacity-40"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-wide text-white/70 transition-colors hover:border-slate-300/50 hover:text-slate-200 disabled:opacity-40"
             >
               {status?.automationPaused ? '▶ Resume Automation' : '⏸ Pause Automation'}
             </button>
@@ -1085,7 +1070,7 @@ export default function YTDashboard() {
               href="https://youtube.com/@powerscaleshorts"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-white/70 transition-colors hover:border-cyan-400/50 hover:text-cyan-300"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-wide text-white/70 transition-colors hover:border-cyan-400/50 hover:text-cyan-300"
             >
               @powerscaleshorts ↗
             </a>
@@ -1093,174 +1078,201 @@ export default function YTDashboard() {
         </header>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          <HudTile label="Vidu Fuel" accent="#22d3ee" delayMs={0}>
+          <HudTile label="Vidu Fuel" accent="#22d3ee">
             <div className="text-2xl font-bold tabular-nums text-cyan-300">{status?.viduBalanceUsd != null ? `$${remainingDisplay}` : '—'}</div>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full transition-[width] duration-1000" style={{ width: `${fuelPct}%`, background: fuelColor, boxShadow: `0 0 10px ${fuelColor}` }} />
+              <div className="h-full rounded-full transition-[width] duration-1000" style={{ width: `${fuelPct}%`, background: fuelColor }} />
             </div>
-            <div className="mt-1 text-[10px] text-white/30">
-              {status?.viduCreditsRemaining != null ? `${status.viduCreditsRemaining} credits` : 'balance check failed'} · of ${status?.viduTotalLoaded ?? '—'} loaded
+            <div className="mt-1 text-xs text-white/35">
+              {status?.viduCreditsRemaining != null ? `${status.viduCreditsRemaining} credits` : 'balance check failed'} of ${status?.viduTotalLoaded ?? '—'}
             </div>
           </HudTile>
 
-          <HudTile label="Active Model" accent="#f472b6" delayMs={60}>
+          <HudTile label="Active Model" accent="#f472b6">
             <div className="text-lg font-bold uppercase text-fuchsia-300">{modelDisplay}</div>
-            <div className="mt-2 h-1.5 w-full rounded-full bg-fuchsia-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]" />
-            <div className="mt-1 text-[10px] text-white/30">~$0.68/video · direct Vidu API</div>
+            <div className="mt-1 text-xs text-white/35">~$0.68–$0.90/video · direct Vidu API</div>
           </HudTile>
 
-          <HudTile label="Next Auto-Launch" accent="#ffd400" delayMs={120}>
+          <HudTile label="Next Auto-Launch" accent="#ffd400">
             <div className="text-2xl font-bold tabular-nums text-amber-300">{status?.automationPaused ? '—:—:—' : formatCountdown(countdownMs)}</div>
-            <div className="mt-1 text-[10px] text-white/30">{status?.automationPaused ? 'paused' : status?.cronSchedule ?? '—'}</div>
+            <div className="mt-1 text-xs text-white/35">{status?.automationPaused ? 'paused' : status?.cronSchedule ?? '—'}</div>
           </HudTile>
 
-          <HudTile label="Recent Battles" accent="#39ff14" delayMs={180}>
+          <HudTile label="Recent Battles" accent="#39ff14">
             <div className="text-2xl font-bold tabular-nums text-lime-300">{battlesDisplay}</div>
-            <div className="mt-1 text-[10px] text-white/30">last 15 tracked</div>
+            <div className="mt-1 text-xs text-white/35">last 15 tracked</div>
           </HudTile>
 
-          <HudTile label="Last Checked" accent="#94a3b8" delayMs={240}>
+          <HudTile label="Last Checked" accent="#94a3b8">
             <div className="text-sm font-bold text-white/70">{status ? relativeTime(status.checkedAt) : '—'}</div>
-            <div className="mt-1 text-[10px] text-white/30">auto-refresh 15s</div>
+            <div className="mt-1 text-xs text-white/35">auto-refresh 15s</div>
           </HudTile>
         </div>
 
-        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-          <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Manual Launch — 3-Clip (Reference Images)</div>
-          <div className="grid grid-cols-2 gap-3">
-            <select
-              value={charA}
-              onChange={(e) => setCharA(e.target.value)}
-              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
-            >
-              <option value="">🎲 Random</option>
-              {roster?.map((c) => (
-                <option key={c.name} value={c.name} disabled={c.name === charB}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={charB}
-              onChange={(e) => setCharB(e.target.value)}
-              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
-            >
-              <option value="">🎲 Random</option>
-              {roster?.map((c) => (
-                <option key={c.name} value={c.name} disabled={c.name === charA}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Launch a Battle</div>
+            <div className="flex gap-1 rounded-full border border-white/10 bg-black/30 p-1">
+              <button
+                onClick={() => setLaunchMode('multi')}
+                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide transition-colors ${
+                  launchMode === 'multi' ? 'bg-cyan-400/20 text-cyan-200' : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                3-Clip
+              </button>
+              <button
+                onClick={() => setLaunchMode('single')}
+                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide transition-colors ${
+                  launchMode === 'single' ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                1-Clip
+              </button>
+            </div>
           </div>
-          <p className="mt-3 text-[11px] text-white/40">
-            3 stitched clips (intro / fight / finish) using each character&apos;s reference image plus a background
-            reference when the setting has one. Generates normally and lands as an unlisted draft below — nothing
-            posts live from here. It publishes automatically on the next scheduled run, or hit Publish now on the draft.
+
+          {launchMode === 'multi' ? (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <select
+                  value={charA}
+                  onChange={(e) => setCharA(e.target.value)}
+                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
+                >
+                  <option value="">🎲 Random</option>
+                  {roster?.map((c) => (
+                    <option key={c.name} value={c.name} disabled={c.name === charB}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={charB}
+                  onChange={(e) => setCharB(e.target.value)}
+                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
+                >
+                  <option value="">🎲 Random</option>
+                  {roster?.map((c) => (
+                    <option key={c.name} value={c.name} disabled={c.name === charA}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-white/40">
+                3 stitched clips (intro / fight / finish) using each character&apos;s reference image plus a background
+                reference when the setting has one. ~$0.90/video.
+              </p>
+              {pickerIncomplete && <p className="mt-2 text-xs text-amber-300/80">Pick both characters, or leave both on Random.</p>}
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <select
+                  value={charA1}
+                  onChange={(e) => setCharA1(e.target.value)}
+                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
+                >
+                  <option value="">🎲 Random</option>
+                  {singleRoster?.map((c) => (
+                    <option key={c.name} value={c.name} disabled={c.name === charB1}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={charB1}
+                  onChange={(e) => setCharB1(e.target.value)}
+                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
+                >
+                  <option value="">🎲 Random</option>
+                  {singleRoster?.map((c) => (
+                    <option key={c.name} value={c.name} disabled={c.name === charA1}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-white/40">
+                One continuous clip from text only — no reference images. Sukuna is left out of this roster; his
+                likeness needs a reference image to look right. ~$0.68/video.
+              </p>
+              {singlePickerIncomplete && <p className="mt-2 text-xs text-amber-300/80">Pick both characters, or leave both on Random.</p>}
+            </>
+          )}
+
+          <p className="mt-3 text-[11px] text-white/30">
+            Lands as an unlisted draft below — nothing posts live from here. It publishes automatically on the next
+            scheduled run, or hit Publish now on the draft.
           </p>
-          {pickerIncomplete && <p className="mt-2 text-[11px] text-amber-300/80">Pick both characters, or leave both on Random.</p>}
         </div>
 
         <div className="mt-6 flex flex-col items-center gap-3">
-          <button
-            onClick={handleTrigger}
-            disabled={status?.lockActive || triggerState === 'sending' || pickerIncomplete}
-            className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
-              status?.lockActive || pickerIncomplete
-                ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
-                : triggerState === 'confirm'
-                ? 'border border-amber-400 bg-amber-400/20 text-amber-200 shadow-[0_0_30px_rgba(251,191,36,0.4)]'
+          {launchMode === 'multi' ? (
+            <button
+              onClick={handleTrigger}
+              disabled={status?.lockActive || triggerState === 'sending' || pickerIncomplete}
+              className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
+                status?.lockActive || pickerIncomplete
+                  ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
+                  : triggerState === 'confirm'
+                  ? 'border border-amber-400 bg-amber-400/20 text-amber-200'
+                  : triggerState === 'sent'
+                  ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
+                  : triggerState === 'error'
+                  ? 'border border-red-400 bg-red-400/20 text-red-200'
+                  : 'border border-cyan-400/60 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-cyan-100 hover:scale-[1.03]'
+              }`}
+            >
+              {status?.lockActive
+                ? '🔒 Rendering In Progress'
+                : triggerState === 'sending'
+                ? 'Launching…'
                 : triggerState === 'sent'
-                ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
+                ? '✅ Battle Launched'
                 : triggerState === 'error'
-                ? 'border border-red-400 bg-red-400/20 text-red-200'
-                : 'border border-cyan-400/60 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-cyan-100 shadow-[0_0_30px_rgba(34,211,238,0.35)] hover:scale-[1.03] hover:shadow-[0_0_45px_rgba(34,211,238,0.55)]'
-            }`}
-          >
-            {status?.lockActive
-              ? '🔒 Rendering In Progress'
-              : triggerState === 'sending'
-              ? 'Launching…'
-              : triggerState === 'sent'
-              ? '✅ Battle Launched'
-              : triggerState === 'error'
-              ? '⚠ Launch Failed — Retry'
-              : triggerState === 'confirm'
-              ? 'Confirm? ~$0.90 in render cost — saved as a draft'
-              : '⚡ Generate 3-Clip Draft'}
-          </button>
-          {triggerState === 'confirm' && <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>}
-        </div>
-
-        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-          <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Manual Launch — 1-Clip (Text Only)</div>
-          <div className="grid grid-cols-2 gap-3">
-            <select
-              value={charA1}
-              onChange={(e) => setCharA1(e.target.value)}
-              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
+                ? '⚠ Launch Failed — Retry'
+                : triggerState === 'confirm'
+                ? 'Confirm? ~$0.90 in render cost — saved as a draft'
+                : '⚡ Generate 3-Clip Draft'}
+            </button>
+          ) : (
+            <button
+              onClick={handleSingleTrigger}
+              disabled={status?.lockActive || singleTriggerState === 'sending' || singlePickerIncomplete}
+              className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
+                status?.lockActive || singlePickerIncomplete
+                  ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
+                  : singleTriggerState === 'confirm'
+                  ? 'border border-amber-400 bg-amber-400/20 text-amber-200'
+                  : singleTriggerState === 'sent'
+                  ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
+                  : singleTriggerState === 'error'
+                  ? 'border border-red-400 bg-red-400/20 text-red-200'
+                  : 'border border-white/30 bg-white/10 text-white/80 hover:scale-[1.03] hover:border-white/50'
+              }`}
             >
-              <option value="">🎲 Random</option>
-              {singleRoster?.map((c) => (
-                <option key={c.name} value={c.name} disabled={c.name === charB1}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={charB1}
-              onChange={(e) => setCharB1(e.target.value)}
-              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
-            >
-              <option value="">🎲 Random</option>
-              {singleRoster?.map((c) => (
-                <option key={c.name} value={c.name} disabled={c.name === charA1}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <p className="mt-3 text-[11px] text-white/40">
-            The original single continuous clip, generated from text only — no character reference images and no
-            background reference image. Sukuna is left out of this roster; his likeness needs a reference image to
-            look right. Lands as an unlisted draft below, same as the 3-clip path.
-          </p>
-          {singlePickerIncomplete && <p className="mt-2 text-[11px] text-amber-300/80">Pick both characters, or leave both on Random.</p>}
-        </div>
-
-        <div className="mt-6 flex flex-col items-center gap-3">
-          <button
-            onClick={handleSingleTrigger}
-            disabled={status?.lockActive || singleTriggerState === 'sending' || singlePickerIncomplete}
-            className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
-              status?.lockActive || singlePickerIncomplete
-                ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
-                : singleTriggerState === 'confirm'
-                ? 'border border-amber-400 bg-amber-400/20 text-amber-200 shadow-[0_0_30px_rgba(251,191,36,0.4)]'
+              {status?.lockActive
+                ? '🔒 Rendering In Progress'
+                : singleTriggerState === 'sending'
+                ? 'Launching…'
                 : singleTriggerState === 'sent'
-                ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
+                ? '✅ Battle Launched'
                 : singleTriggerState === 'error'
-                ? 'border border-red-400 bg-red-400/20 text-red-200'
-                : 'border border-white/30 bg-white/10 text-white/80 hover:scale-[1.03] hover:border-white/50'
-            }`}
-          >
-            {status?.lockActive
-              ? '🔒 Rendering In Progress'
-              : singleTriggerState === 'sending'
-              ? 'Launching…'
-              : singleTriggerState === 'sent'
-              ? '✅ Battle Launched'
-              : singleTriggerState === 'error'
-              ? '⚠ Launch Failed — Retry'
-              : singleTriggerState === 'confirm'
-              ? 'Confirm? ~$0.68 in render cost — saved as a draft'
-              : '🎬 Generate 1-Clip Draft'}
-          </button>
-          {singleTriggerState === 'confirm' && <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>}
+                ? '⚠ Launch Failed — Retry'
+                : singleTriggerState === 'confirm'
+                ? 'Confirm? ~$0.68 in render cost — saved as a draft'
+                : '🎬 Generate 1-Clip Draft'}
+            </button>
+          )}
+          {(launchMode === 'multi' ? triggerState : singleTriggerState) === 'confirm' && (
+            <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>
+          )}
         </div>
 
         <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-          <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-white/40">
+          <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.15em] text-white/50">
             <span>Posting Schedule</span>
             <span className="text-white/30">{status?.cronSchedule ?? '—'}</span>
           </div>
@@ -1286,7 +1298,7 @@ export default function YTDashboard() {
               )
             })}
           </div>
-          <div className="mb-3 mt-4 text-[10px] uppercase tracking-[0.25em] text-white/40">Posting Time (ET)</div>
+          <div className="mb-3 mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Posting Time (ET)</div>
           <div className="flex gap-2">
             {CRON_HOUR_PRESETS.map(({ label, hourUtc }) => {
               const active = activeCronHourUtc === hourUtc
