@@ -2020,4 +2020,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'checking-vs-savings-account-difference',
+    title: 'Checking vs. Savings Account: What’s the Real Difference, and Do You Need Both?',
+    metaTitle: 'Checking vs. Savings Account: The Real Difference Explained',
+    description:
+      'Checking and savings accounts aren’t interchangeable — here’s how interest, access rules, and fees actually differ, and why most people end up needing both.',
+    date: '2026-08-19',
+    category: 'Saving',
+    intro:
+      'You opened a bank account and got asked "checking or savings?" without much explanation of what that choice actually locks in. They can look nearly identical in an app — same bank, same login, same little balance number — but they’re built for opposite jobs, and using the wrong one for the wrong money quietly costs you. Here’s what actually separates them.',
+    sections: [
+      {
+        heading: 'What each account is actually built for',
+        body: 'A checking account is built for movement. It’s where your paycheck lands, where your debit card pulls from, and where bills get paid — money is expected to flow in and out of it constantly, often dozens of times a month. A savings account is built for standing still. It’s designed to hold money you’re not touching right now — an emergency fund, money saved for a car, a semester’s tuition — and banks structure both the rules and the rewards around that difference.\n\nThink of checking as your wallet and savings as the drawer you don’t open every day. Using a savings account like a checking account (swiping a linked debit card from it constantly) works against its whole design; using checking as your only savings spot means real money is sitting somewhere earning close to nothing.',
+      },
+      {
+        heading: 'The interest gap is bigger than most people realize',
+        body: 'Most checking accounts pay little to no interest — often 0% or a token 0.01% APY — because the bank expects the balance to churn too fast for interest to matter to either side. Savings accounts are built to pay more, and the gap between a basic savings account and a high-yield savings account (HYSA) at an online bank can be dramatic: a traditional bank’s savings account has often paid a small fraction of a percent, while HYSAs have paid several times more depending on where the Federal Reserve has set rates.\n\nOn $3,000 sitting for a year, the difference between 0.05% and a decent HYSA rate can be a couple dollars versus well over a hundred — same money, same safety, radically different outcome just from picking the right account type. See the HYSA guide for the full mechanics of how that rate is set.',
+      },
+      {
+        heading: 'Access rules: why savings accounts sometimes cap withdrawals',
+        body: 'Checking accounts come with a debit card, paper checks, and unlimited transfers — they’re meant to be used constantly. Savings accounts have historically been more restricted: for decades, federal Regulation D capped certain types of savings withdrawals and transfers (things like online transfers, phone transfers, and preauthorized payments) at six per month. The Federal Reserve suspended that federal limit in 2020, but plenty of banks still enforce a similar cap on their own and charge an "excess withdrawal" fee if you go over it — so check your specific bank’s rules rather than assuming unlimited free transfers.\n\nThis isn’t really a restriction to fight against. It’s a nudge in the direction the account is designed for: money that sits, rather than money that moves every few days.',
+      },
+      {
+        heading: 'The fees that quietly drain each account',
+        body: 'Checking accounts are where overdraft fees live — spend more than your balance and, unless you’ve opted out of overdraft coverage, the bank can approve the purchase anyway and charge a fee commonly in the $30–$35 range. Both account types can also carry a monthly maintenance fee, often somewhere in the $5–$15 range, though most banks waive it automatically if you keep a minimum balance, set up direct deposit, or are under a certain age — many "student" or "teen" checking and savings accounts waive these fees entirely regardless of balance.\n\nBefore opening either account, look specifically for the words "no monthly fee" or "fee waived with direct deposit" in the account terms. There’s rarely a good reason to pay a bank monthly just to hold your own money.',
+      },
+      {
+        heading: 'How many accounts you actually need',
+        body: 'A simple, effective starting setup is two accounts: one checking account for spending and bill-paying, and one separate savings account (ideally a HYSA) for your emergency fund and short-term goals. Keeping them at separate institutions isn’t required, but keeping them physically separate in the app — different account, not just a mental label — makes it much harder to casually spend savings, since it usually takes an extra transfer step instead of a single tap.\n\nAs goals multiply, some people add a second or third savings account (or "buckets" within one) to separate, say, a car fund from an emergency fund from vacation money. That’s optional polish. The two-account split — one for flow, one for storage — is the part that actually matters.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Use checking for anything you spend regularly: bills, debit card purchases, day-to-day money.\n2. Use a separate savings account — ideally a HYSA — for money you’re not touching this month, like an emergency fund.\n3. Confirm both accounts are FDIC-insured (or NCUA-insured for a credit union) before depositing anything.\n4. Look for "no monthly fee" terms, or confirm your minimum balance or direct deposit actually qualifies for the waiver.\n5. Opt out of overdraft coverage on checking so a shortfall declines instead of costing you $30+.\n6. Check whether your bank still caps monthly savings transfers — some do, some don’t, since the federal Regulation D limit was suspended in 2020.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Can I use a savings account like a checking account?',
+        a: 'Technically, but it works against how the account is designed. Some banks still cap monthly withdrawals or transfers and charge an excess-withdrawal fee, and savings accounts usually don’t come with a linked debit card for everyday spending the way checking does.',
+      },
+      {
+        q: 'Why does my checking account pay almost no interest?',
+        a: 'Checking accounts are built for money that moves constantly, so banks generally don’t offer meaningful interest on the balance. Savings accounts, and especially high-yield savings accounts, are built to hold money that sits — that’s where the real interest is.',
+      },
+      {
+        q: 'Do I need both a checking and a savings account?',
+        a: 'For most people, yes. Checking handles spending and bills; savings holds money you’re not touching right now, like an emergency fund. Splitting the two makes it harder to accidentally spend money you meant to save.',
+      },
+      {
+        q: 'Is my money safe in either type of account?',
+        a: 'Yes, as long as the bank is FDIC-insured (or NCUA-insured for a credit union) — both checking and savings deposits are protected up to $250,000 per depositor, per bank, backed by the federal government.',
+      },
+    ],
+  },
 ]
