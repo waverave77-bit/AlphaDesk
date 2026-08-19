@@ -1684,4 +1684,340 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-do-stock-dividends-work-are-they-taxed',
+    title: 'How Do Stock Dividends Work, and Are They Taxed?',
+    metaTitle: 'How Stock Dividends Work and How They’re Taxed',
+    description:
+      'A company you own stock in just paid a dividend — here’s where that cash actually comes from, the dates that determine if you get paid, and what the IRS takes.',
+    date: '2026-08-13',
+    category: 'Investing',
+    intro:
+      'You check your brokerage app and there’s a small cash deposit you didn’t ask for — a dividend. It feels like free money, and in a real sense it is, but it comes with rules about timing and taxes that most people never look up until the deposit shows up. Here’s where that cash actually comes from, the dates that decide whether you get paid, and what you’ll owe the IRS on it.',
+    sections: [
+      {
+        heading: 'Where the cash actually comes from',
+        body: 'A dividend is a direct cash payment from a company to its shareholders, funded out of profit the company doesn’t need to reinvest in the business. Not every company pays one — fast-growing companies like Amazon have historically plowed every dollar back into the business instead, since reinvesting can grow the stock price faster than a cash payout would. Dividends tend to come from bigger, more mature companies — think Coca-Cola, Johnson & Johnson, or a big bank — that generate more cash than they can productively spend growing further.\n\nYou don’t have to do anything to get paid. If you own the stock on the right date (more on that below), the cash lands in your brokerage account automatically, usually once a quarter. A company that pays $0.50 per share, four times a year, on a stock you own 100 shares of, sends you $200 over the year without you selling a single share.',
+      },
+      {
+        heading: 'The four dates that decide if you get paid',
+        body: 'Every dividend runs through the same sequence. The declaration date is when the company’s board announces the payment and the amount. The ex-dividend date is the one that actually matters to you — you must have bought the stock before this date to receive the payment; buy on or after it and you get nothing this round, even if you buy the very next day. The record date, usually a day after the ex-dividend date, is when the company officially checks its list of shareholders. The payment date is when the cash actually hits your account, often two to four weeks later.\n\nOne mechanical quirk worth knowing: on the ex-dividend date, the stock price typically drops by roughly the dividend amount at the open. A $50 stock paying a $0.50 dividend often opens near $49.50. That’s not a loss — the value just shifted from the share price into cash in your account — but it explains why the stock chart shows a small dip right around every payment.',
+      },
+      {
+        heading: 'Yes, dividends are taxed — even if you never sell',
+        body: 'Unlike a stock’s unrealized gains, which aren’t taxed until you sell, dividend cash is taxable income the year it’s paid to you, whether you spend it, save it, or automatically reinvest it into more shares. Your broker sends you (and the IRS) a Form 1099-DIV each January listing everything you were paid.\n\nMost dividends from regular US stocks and funds held for a minimum period are classified as "qualified dividends" and taxed at the lower long-term capital gains rates — 0%, 15%, or 20% depending on your total income — rather than your regular income tax rate. The holding-period rule is specific: you generally need to have held the stock for more than 60 days during the 121-day window centered on the ex-dividend date. Miss that window (for example, by buying right before the ex-date and selling right after) and that dividend gets taxed as ordinary income instead, at your regular tax bracket.\n\nSome dividends never qualify for the lower rate no matter how long you hold them — REIT (real estate investment trust) dividends are the most common example, since REITs are structured to avoid paying corporate tax themselves, which shifts more of the tax burden onto you as ordinary income.',
+      },
+      {
+        heading: 'The one move that makes dividend taxes disappear',
+        body: 'Dividends earned inside a Roth IRA aren’t taxed at all — not when they’re paid, and not later, since qualified Roth withdrawals in retirement are completely tax-free. Dividends inside a traditional 401(k) or traditional IRA are tax-deferred — you don’t owe anything the year they’re paid, only later when you withdraw money in retirement, taxed as ordinary income at that point.\n\nThis is why dividend-heavy stocks and REITs are often better held inside a retirement account than a regular taxable brokerage account: the same dividend that costs you a chunk in taxes every year in a taxable account costs you nothing (Roth) or nothing yet (traditional) inside a retirement account. If you’re holding both index funds and individual dividend payers across different account types, it’s worth thinking about which goes where.',
+      },
+      {
+        heading: 'The yield trap: why a huge dividend can be a red flag',
+        body: 'Dividend yield is the annual dividend divided by the stock price — a $2/year dividend on a $50 stock is a 4% yield. A yield in the 2–4% range is typical for an established dividend payer. When you see a stock yielding 8%, 10%, or more, the instinct is excitement, but it’s usually a warning sign instead: the stock price has often fallen sharply because the company is in real trouble, which mechanically inflates the yield even though the dividend itself hasn’t gotten more generous. Companies in serious distress frequently cut or eliminate the dividend entirely soon after, which is called a "dividend cut" and typically tanks the stock further on top of losing the income.\n\nA reliable dividend payer is one that has kept paying — and ideally slowly raising — its dividend through both good years and recessions, not one with the flashiest current yield.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Buy before the ex-dividend date if you want that quarter’s payment — buying on or after it means waiting for the next cycle.\n2. Check your 1099-DIV each January — dividends are taxable the year they’re paid, even if you reinvested every dollar.\n3. Hold dividend stocks for more than 60 days around the ex-dividend date if you want the lower "qualified" tax rate instead of ordinary income rates.\n4. Consider holding high-dividend stocks and REITs inside a Roth IRA or 401(k) rather than a taxable brokerage account, where the dividend income avoids or defers tax entirely.\n5. Treat an unusually high yield as a signal to investigate, not celebrate — check whether the price crashed rather than the dividend growing.\n6. Turn on DRIP (automatic dividend reinvestment) if you’re investing for the long term — it’s free at most brokers and puts every payment straight back to work compounding.',
+      },
+    ],
+    relatedTerms: ['Dividend', 'Yield', 'DRIP', 'Roth IRA', 'REIT', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Do I have to pay taxes on dividends if I reinvest them?',
+        a: 'Yes. Reinvesting a dividend through a DRIP still counts as taxable income the year it’s paid — the IRS treats it as if you received the cash and then chose to buy more shares with it, even though you never saw the money land as spendable cash.',
+      },
+      {
+        q: 'What’s the difference between a qualified and non-qualified dividend?',
+        a: 'A qualified dividend is taxed at the lower long-term capital gains rates (0%, 15%, or 20%) because you met the required holding period around the ex-dividend date. A non-qualified (ordinary) dividend — including most REIT dividends — is taxed at your regular income tax rate instead.',
+      },
+      {
+        q: 'Why did the stock price drop right after paying a dividend?',
+        a: 'On the ex-dividend date, the price typically falls by roughly the dividend amount, since that value has effectively moved out of the stock and into your cash balance. It’s not a real loss — you now hold the cash instead.',
+      },
+      {
+        q: 'Are dividends taxed in a Roth IRA?',
+        a: 'No. Dividends earned inside a Roth IRA are never taxed, as long as you follow the account’s normal withdrawal rules — which is a major reason dividend-paying stocks and REITs are often better held in a Roth than in a regular taxable brokerage account.',
+      },
+    ],
+  },
+  {
+    slug: 'how-much-money-do-you-need-to-start-investing',
+    title: 'How Much Money Do You Actually Need to Start Investing?',
+    metaTitle: 'How Much Money Do You Need to Start Investing? (Less Than You Think)',
+    description:
+      'The idea that you need thousands of dollars to start investing is outdated. Here’s how fractional shares, $0 account minimums, and small amounts actually work.',
+    date: '2026-08-14',
+    category: 'Investing',
+    intro:
+      'Somewhere along the way you got the idea that investing is for people with a spare few thousand dollars sitting around — so you’ve been waiting to have "enough" before you start. That number was never real for most brokers, and it’s even less real now. Here’s what it actually costs to open an account and buy your first investment, and why waiting for a bigger pile of cash usually costs you more than it saves.',
+    sections: [
+      {
+        heading: 'The old rule doesn’t apply anymore',
+        body: 'Decades ago, mutual funds routinely required a $1,000–$3,000 minimum just to open a position, and buying individual stocks meant paying a flat commission of $5–$10 per trade — which made investing $20 at a time pointless, since the fee alone would eat a huge chunk of it. That’s the version of investing a lot of adults grew up with, and it’s where the "you need real money to start" idea comes from.\n\nAlmost none of that is true anymore. Every major US brokerage (Fidelity, Schwab, Vanguard, and others) has eliminated trading commissions on US stocks and ETFs, and most have dropped account minimums to $0. The barrier that used to exist has mostly been engineered away — what’s left is more about habits than access.',
+      },
+      {
+        heading: 'Fractional shares mean the share price doesn’t matter',
+        body: 'A single share of a well-known company or fund can cost anywhere from a few dollars to several hundred, or even several thousand for a handful of the priciest stocks — which used to mean you needed that full amount just to own one share. Fractional shares fixed this: most major brokers now let you buy a dollar amount instead of a share count, and they’ll sell you 0.014 of a share if that’s what $20 buys.\n\nThat means you can build a diversified position in a broad index fund with as little as $1, buying a literal sliver of every company in the fund. The mechanics of ownership — voting rights on full shares aside — work basically the same as owning whole shares: your slice grows or shrinks with the fund, and any dividends get paid out proportionally.',
+      },
+      {
+        heading: 'What actually costs money: fees, not the price of entry',
+        body: 'Since account minimums and commissions are mostly gone, the real cost that’s left to watch is the expense ratio — the annual fee a fund charges, taken automatically out of the fund’s returns rather than billed to you directly. It’s expressed as a percentage of what you have invested.\n\nSome of the largest, broadest index funds charge among the lowest expense ratios in the industry — commonly well under 0.10% per year — while actively managed mutual funds can charge ten times that or more. On $1,000 invested, a fund charging 0.03% costs about $0.30 a year; a fund charging 1% costs $10 a year on the same balance, and that gap compounds against you every year you hold it. For a beginner, a low-cost, broad index fund is usually the more sensible starting point than an actively managed fund promising to beat the market — most active funds don’t, after fees, over long stretches.',
+      },
+      {
+        heading: 'Small and consistent beats big and occasional',
+        body: 'Investing $25 a month starting today builds a habit and puts time to work, which matters more for a beginner than the size of any single deposit. Dollar-cost averaging — investing a fixed amount on a regular schedule regardless of what the market is doing that day — means you automatically buy more shares when prices dip and fewer when they’re expensive, without having to guess when the "right" time to invest is.\n\nWaiting to invest until you’ve saved up a bigger lump sum feels responsible, but it has a real cost: every month spent waiting is a month that money wasn’t in the market growing. Time in the market, not the size of your first deposit, is what compound growth actually needs.',
+      },
+      {
+        heading: 'One thing to check before you deposit anything',
+        body: 'A $0 minimum to open an account doesn’t always mean $0 to actually invest — some individual mutual funds still carry their own minimum initial investment, sometimes $500 to $3,000, even inside a brokerage account with no minimum of its own. ETFs and fractional shares of stocks don’t have this problem, which is part of why they’re the more beginner-friendly starting point over traditional mutual funds.\n\nAlso confirm the account type before funding it. A taxable brokerage account, a custodial account (if you’re a minor), and a Roth IRA (if you have earned income) all have $0 minimums at most major brokers, but they’re taxed differently — worth knowing which one you’re actually opening.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pick a major brokerage with no account minimum and no commission on stock/ETF trades — that’s the standard now, not a special deal.\n2. Confirm fractional shares are supported so the share price of what you want to buy doesn’t block you.\n3. Start with a broad, low-cost index fund or ETF rather than picking individual stocks with your first few dollars.\n4. Check the expense ratio before buying — aim low, since fees compound against you the same way returns compound for you.\n5. Automate a small, regular deposit (even $10–$25) instead of waiting to invest a lump sum "once you have more."\n6. If you’re eyeing a specific mutual fund, check its minimum initial investment separately — some still require hundreds of dollars even inside a $0-minimum account.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Index Investing', 'Compound Interest', 'Dollar-Cost Averaging', 'Broker', 'Mutual Fund'],
+    faq: [
+      {
+        q: 'Can you start investing with just $1?',
+        a: 'Yes. Most major brokers now support fractional shares with no account minimum, so $1 can buy a small slice of an ETF or stock. The bigger factor for beginners is usually the fund’s expense ratio and how consistently you keep investing, not the size of the first deposit.',
+      },
+      {
+        q: 'Do you need a lot of money to open a brokerage account?',
+        a: 'No — nearly every major US brokerage has dropped its account minimum to $0. Some individual mutual funds still set their own minimum initial investment (sometimes hundreds of dollars), but ETFs and fractional shares don’t have that requirement.',
+      },
+      {
+        q: 'Is it worth investing small amounts like $20 a month?',
+        a: 'Yes. Consistency and time matter more than the size of any single deposit — a fixed monthly amount invested through dollar-cost averaging builds both a habit and a position, and the money has more years to compound the earlier it starts.',
+      },
+      {
+        q: 'What’s the cheapest way to start investing as a beginner?',
+        a: 'A commission-free brokerage account with no minimum, holding a broad, low-cost index fund or ETF bought in fractional shares. That combination minimizes both the upfront cost of entry and the ongoing fee drag from expense ratios.',
+      },
+    ],
+  },
+  {
+    slug: 'subsidized-vs-unsubsidized-student-loans',
+    title: 'What’s the Difference Between Subsidized and Unsubsidized Student Loans?',
+    metaTitle: 'Subsidized vs. Unsubsidized Student Loans: The Real Difference',
+    description:
+      'Subsidized and unsubsidized federal student loans look nearly identical on your aid letter — but one quietly costs more. Here’s the real difference, with real numbers.',
+    date: '2026-08-15',
+    category: 'College Money',
+    intro:
+      'Your financial aid letter probably lists “Direct Subsidized Loan” and “Direct Unsubsidized Loan” right next to each other, in the same font, for similar-looking amounts — so it’s easy to assume they’re basically the same thing with a fancier name. They’re not. One of them starts costing you money the day it’s disbursed; the other doesn’t charge you a cent of interest until you’re out of school. Here’s exactly what splits them, how much you’re allowed to borrow of each, and the one habit that keeps an unsubsidized balance from quietly growing behind your back.',
+    sections: [
+      {
+        heading: 'The one-line difference: who pays the interest while you’re in school',
+        body: 'Both are federal loans, both come from the same FAFSA application, and on paper they look almost identical — same servicer, same repayment options, sometimes even the same interest rate. The difference that actually matters shows up long before graduation: with a Direct Subsidized Loan, the federal government pays the interest that accrues while you’re enrolled at least half-time, during your six-month grace period after leaving school, and during any period of deferment. With a Direct Unsubsidized Loan, interest starts accruing the day the money is disbursed — while you’re still in class, whether you’re making payments or not.\n\nSubsidized loans are also need-based: you only qualify if your FAFSA shows financial need, and your school decides how much you’re eligible for. Unsubsidized loans have no income or need requirement at all — anyone who qualifies for federal aid can borrow them, which is why almost every undergrad ends up with at least some unsubsidized debt even if they also have subsidized loans.',
+      },
+      {
+        heading: 'How much you’re actually allowed to borrow',
+        body: 'Both loan types share the same annual borrowing limits, but the limits cap how much of that total can be subsidized. For a dependent undergraduate, first-year students can generally borrow up to $5,500 total, with no more than $3,500 of that subsidized. Second-year limits rise to $6,500 (up to $4,500 subsidized), and third year and beyond tops out around $7,500 per year (up to $5,500 subsidized). Independent students — and dependent students whose parents are denied a PLUS loan — typically get higher limits, mostly in the unsubsidized category.\n\nThere’s also a lifetime cap, called the aggregate limit, that’s historically run around $31,000 total for dependent undergrads, with no more than roughly $23,000 of that subsidized. Hit that number and every additional dollar you borrow federally has to be unsubsidized, a PLUS loan, or private debt. These figures are set by federal law rather than adjusted every year, so confirm the current numbers at StudentAid.gov before assuming they match what an older sibling or friend borrowed.',
+      },
+      {
+        heading: 'What "capitalization" means, and why it quietly grows your balance',
+        body: 'Because unsubsidized loans accrue interest from day one, you have a choice most students don’t realize they’re making: pay that interest as it accrues, or let it pile up and get added to your principal later. That add-on is called capitalization, and it typically happens when your grace period ends and the loan enters repayment.\n\nSay you borrow a few thousand dollars in unsubsidized loans as a freshman and never pay a cent of interest until you graduate four years later. That interest has been quietly accruing the whole time, and when it capitalizes it can add real money to your balance in one jump — and every payment afterward is calculated on that new, larger number, meaning you’re now paying interest on interest that already accrued. Subsidized loans never do this while you’re in school, because the government is covering that interest instead of letting it build.\n\nEven small interest-only payments while you’re still enrolled — the kind of thing you can often manage for $10–$25 a month — keep an unsubsidized balance from growing before repayment even starts. It’s optional, but it’s one of the few high-leverage moves available to a student with little or no income yet.',
+      },
+      {
+        heading: 'Grad school and PLUS loans: subsidized mostly disappears',
+        body: 'If you’re headed to graduate or professional school, know this now: subsidized loans aren’t available to grad students at all — that option was eliminated for graduate and professional borrowers on loans first disbursed after July 1, 2012. Every federal loan a grad student takes out is unsubsidized, plus there’s the Grad PLUS loan for costs beyond the standard unsubsidized limit, which requires a credit check and generally carries a higher interest rate and an origination fee.\n\nParent PLUS loans, taken out by a parent on an undergrad’s behalf, are unsubsidized too, and interest starts accruing immediately no matter when the parent begins repaying. None of this means something went wrong in your aid process — it’s just how the subsidized/unsubsidized split is structured at every level above undergrad.',
+      },
+      {
+        heading: 'The interest rate: same loan type, different year, different rate',
+        body: 'Federal student loan interest rates are fixed for the life of each individual loan, but they’re not fixed across years — the rate resets every July 1 based on financial market yields plus a set margin, with a legal cap on how high it can go. That means two students borrowing the exact same Direct Unsubsidized Loan a year apart can end up locked into different rates for a decade or more, purely based on when they borrowed.\n\nSubsidized and unsubsidized loans for undergrads share the same interest rate in any given year — the subsidy is entirely about who pays the interest while you’re in school, not about getting a cheaper rate. Grad-level unsubsidized loans and PLUS loans carry their own, typically higher, rates set the same way. You can’t shop around or negotiate a federal student loan rate the way you might with a private lender — it’s the same number for everyone borrowing that loan type that year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your financial aid offer letter for the split between subsidized and unsubsidized amounts — don’t assume a lump "student loan" line is all one type.\n2. Borrow subsidized first if you’re offered both — it’s strictly the better deal since no interest builds while you’re in school.\n3. If you’re carrying unsubsidized loans, consider paying the interest as it accrues, even in small amounts, so it doesn’t capitalize into your principal at graduation.\n4. Track your borrowing against the aggregate limits so you’re not caught off guard when subsidized eligibility runs out.\n5. Grad school bound? Budget for unsubsidized-only borrowing, and compare Grad PLUS terms carefully since they require a credit check and carry their own rate and fees.\n6. Before relying on any specific dollar figure, confirm current limits and rates at StudentAid.gov — they’re set by law and do change.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Inflation', 'Federal Reserve', 'Bond', 'Credit Rating'],
+    faq: [
+      {
+        q: 'Is a subsidized or unsubsidized student loan better?',
+        a: 'Subsidized is strictly better when you qualify for it — the government pays your interest while you’re in school, so nothing accrues before repayment starts. Unsubsidized loans aren’t bad, they’re just not need-based and start accruing interest immediately.',
+      },
+      {
+        q: 'Do unsubsidized loans accrue interest while you’re in school?',
+        a: 'Yes — from the day the loan is disbursed, whether you’re taking classes or not. If that interest isn’t paid, it capitalizes (gets added to your principal) when the loan enters repayment, so future interest is calculated on a larger balance.',
+      },
+      {
+        q: 'Can graduate students get subsidized loans?',
+        a: 'No. Subsidized loans have been unavailable to graduate and professional students since loans first disbursed after July 1, 2012 — grad borrowing is limited to unsubsidized federal loans and Grad PLUS loans.',
+      },
+      {
+        q: 'How much can I borrow in subsidized loans?',
+        a: 'It depends on your year in school and dependency status, and the numbers are set by federal law rather than adjusted yearly. Check your school’s aid letter and StudentAid.gov for your exact eligibility and the current annual and lifetime caps.',
+      },
+    ],
+  },
+  {
+    slug: 'index-fund-expense-ratio-cost-over-time',
+    title: 'How Much Does an Index Fund’s Expense Ratio Actually Cost You Over Time?',
+    metaTitle: 'Index Fund Expense Ratios Explained: The Real Long-Term Cost',
+    description:
+      'A 0.03% fee looks like nothing next to a 1% fee — until you compound it for 30 years. Here’s the real dollar cost of expense ratios, with actual numbers.',
+    date: '2026-08-16',
+    category: 'Investing',
+    intro:
+      'Every fund you can buy — an ETF, an index fund, a mutual fund sitting inside your 401(k) — charges an annual fee called an expense ratio, and it never shows up as a line item on any statement you’ll ever see. It’s just quietly subtracted before you get your return. On paper the numbers look tiny, 0.03% versus 1.00%, which is exactly why almost nobody stops to do the math. Do it once, and you’ll never skip reading a fund’s expense ratio again.',
+    sections: [
+      {
+        heading: 'What an expense ratio actually is',
+        body: 'An expense ratio is a fund’s annual operating cost, expressed as a percentage of the money you have invested in it, covering things like paying the fund’s managers, trading costs, and administrative overhead. You never write a check for it and it never appears as a withdrawal — instead, the fund’s share price is calculated each day after that cost has already been deducted. A fund charging a 0.50% expense ratio effectively shaves off a tiny sliver of your balance every single day, small enough that you’d never notice any one day of it.\n\nThat invisibility is exactly the problem. A trading commission is a number you see and feel once. An expense ratio is a number you have to go looking for — usually buried in a fund’s prospectus or "fund facts" page — and it works against you in the background for as long as you hold the fund, whether the market goes up or down that year.',
+      },
+      {
+        heading: 'The real math: what a 1% fee costs over 30 years',
+        body: 'Say you invest $10,000 in a fund, never add another dollar, and the market returns its long-term historical average of roughly 10% a year before fees. In a fund charging a 0.03% expense ratio — typical for a broad, low-cost S&P 500 index fund — your money grows at close to that full 10% and turns into roughly $173,000 after 30 years.\n\nPut that same $10,000 into a fund charging a 1% expense ratio — an ordinary fee for many actively managed mutual funds — and your net return drops to about 9% a year. After 30 years that becomes roughly $133,000. Same starting amount, same market, same 30 years — a fee difference that looks like "under 1%" on a fund’s fact sheet costs you around $40,000. The fund manager didn’t have to do anything wrong to cause that gap; the fee alone was compounding against you the entire time.',
+      },
+      {
+        heading: 'Where high fees hide',
+        body: 'Broad-market index ETFs and mutual funds from the big low-cost providers — the kind that simply own the whole S&P 500 or the total US stock market — routinely charge somewhere in the 0.03%–0.10% range, and a few charge close to nothing. Actively managed mutual funds, where a manager is trying to beat the market by picking individual investments, often charge somewhere in the 0.5%–1.5% range, sometimes more, since you’re also paying for the research team and trading activity behind the strategy.\n\nSome older mutual funds also charge a "load" — a sales commission on top of the ongoing expense ratio, sometimes several percent of what you invest, taken either when you buy (front-end load) or when you sell (back-end load). A load isn’t a yearly fee, but it’s an instant hit to your return before the money has done anything at all. And inside a 401(k), you don’t always get to choose freely — your employer’s plan may only offer a short list of funds, some of which can carry meaningfully higher expense ratios than what you’d find on your own in a personal brokerage account. It’s worth checking your plan’s fund lineup specifically for this, since the fee comes straight out of your retirement balance either way.',
+      },
+      {
+        heading: 'Higher fees don’t reliably buy you higher returns',
+        body: 'The uncomfortable finding behind decades of fund research is that funds charging higher fees don’t, on average, deliver higher returns to make up for it. Most actively managed funds underperform a comparable low-cost index fund over long stretches once fees are counted — not necessarily because the managers are bad at their jobs, but because consistently beating the market is extremely hard, and the fee is a guaranteed drag that has to be overcome before a manager’s skill even shows up in your return.\n\nThat’s not a universal rule — some actively managed funds do outperform in a given stretch — but it’s the reason a low expense ratio is one of the only things about a fund’s future you can actually know for certain in advance. Nobody can guarantee a fund will beat the market next year. Everybody can guarantee its expense ratio will be deducted from your balance next year, market performance aside.',
+      },
+      {
+        heading: 'Where to actually find the number',
+        body: 'Every fund publishes its expense ratio in its prospectus and fact sheet, and every major brokerage app shows it on the fund’s summary page before you buy — look for "expense ratio" or "net expense ratio" listed as a percentage. If you have a 401(k), the number is usually sitting in your plan’s fund menu or a fee disclosure document your employer is required to provide, and it’s worth the five minutes to actually open it.\n\nA useful gut-check: if a fund’s expense ratio is meaningfully above 0.20% and it isn’t doing something genuinely specialized — a narrow sector bet, an active strategy you’ve deliberately chosen, international exposure that costs more to manage — it’s worth asking exactly what you’re paying the extra amount for.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Look up the expense ratio before buying any fund — it’s on the fund’s summary page in every major brokerage app.\n2. For broad index exposure (S&P 500, total US market, total international), expect somewhere around 0.03%–0.10% — treat anything much higher as a fee you should be able to explain.\n3. Check your 401(k)’s fund menu specifically — employer plans sometimes only offer higher-cost options, and the fee still comes out of your retirement money.\n4. Watch for sales loads on older mutual funds — a one-time commission on top of the ongoing expense ratio.\n5. Don’t assume a higher fee means better management — most actively managed funds underperform a comparable low-cost index fund over long stretches once fees are counted.\n6. When comparing two similar funds, run the numbers over your actual time horizon — even a fee gap under 1% compounds into real money over 20–30 years.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Mutual Fund', 'Index Investing', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'What is a good expense ratio for an index fund?',
+        a: 'For a broad market index fund — one tracking the S&P 500 or the total US stock market — a good expense ratio is typically in the 0.03%–0.10% range from a major low-cost provider. Meaningfully higher than that, and you should know exactly what you’re paying extra for.',
+      },
+      {
+        q: 'Do I have to pay the expense ratio separately?',
+        a: 'No — you never write a check for it. It’s deducted automatically from the fund’s assets before its daily share price is calculated, so it quietly reduces your return instead of showing up as a withdrawal.',
+      },
+      {
+        q: 'Is a 1% expense ratio bad?',
+        a: 'It’s high relative to low-cost index fund alternatives, and it compounds — on $10,000 held for 30 years, the difference between a 0.03% fund and a 1% fund can be around $40,000, assuming both track a similar underlying market return.',
+      },
+      {
+        q: 'Do actively managed funds ever beat index funds after fees?',
+        a: 'Some do in a given year or stretch, but most don’t consistently outperform a comparable low-cost index fund over long periods once fees are counted — which is why fees are one of the few things about a fund’s future performance you can actually control.',
+      },
+    ],
+  },
+  {
+    slug: 'how-do-i-bonds-work-are-they-worth-it',
+    title: 'How Do I Bonds Work, and Are They Worth Buying?',
+    metaTitle: 'Series I Savings Bonds Explained: Rates, Rules, and Limits',
+    description:
+      'I bonds are US government savings bonds with a rate that adjusts for inflation. Here’s how the rate is set, the 12-month lock-up, and the real limits.',
+    date: '2026-08-17',
+    category: 'Saving',
+    intro:
+      'An I bond is a savings bond backed by the US government, and its whole pitch is right there in the name — the interest rate moves with inflation, so your money is designed to keep up with rising prices instead of quietly losing value to them. That makes I bonds one of the very few "boring but genuinely useful" ideas in personal finance — but the rules around buying and cashing them out are stricter than a regular savings account, and skipping past them is how people end up locked out of money they needed.',
+    sections: [
+      {
+        heading: 'What an I bond actually is',
+        body: 'An I bond ("I" for inflation) is a savings bond issued directly by the US Treasury. When you buy one, you’re lending money to the federal government, and in exchange it pays you interest for up to 30 years. Because it’s backed by the US government, an I bond carries essentially no risk of the issuer defaulting — the tradeoff for that safety is a lower expected long-term return than stocks, which is normal for a bond.\n\nI bonds are meant for money you want to protect from inflation over a period of at least a year, not money you’re trying to grow aggressively. Think of them as a specialized alternative to a savings account or CD, not a stand-in for investing in the stock market.',
+      },
+      {
+        heading: 'How the interest rate is actually set',
+        body: 'An I bond’s interest rate has two parts that combine into a "composite rate." The fixed rate is set when you buy the bond and stays the same for the entire 30 years you hold it. The inflation rate is based on the Consumer Price Index and resets every six months, in May and November, so it moves up or down as inflation does. Add the two together (with a small formula adjustment) and you get the rate your bond actually earns for the next six months.\n\nBecause the inflation piece resets twice a year, the rate you see advertised today is not locked in for the life of the bond — only the fixed-rate portion is. Interest compounds semiannually, meaning every six months the interest you’ve earned gets added to your bond’s value and starts earning interest itself. The exact current rate is published on TreasuryDirect.gov and changes on a set schedule, so check there rather than relying on a number you saw somewhere else.',
+      },
+      {
+        heading: 'The catch: your money is locked up for at least a year',
+        body: 'This is the part people skip past. Once you buy an I bond, you cannot cash it out at all for the first 12 months — not for an emergency, not for anything. There’s no early-withdrawal workaround like there sometimes is with a CD.\n\nEven after the 1-year mark, there’s a second penalty: if you cash out an I bond before you’ve held it for 5 years, you forfeit the last 3 months of interest as a penalty. Hold it for at least 5 years and there’s no penalty at all. This makes I bonds a poor fit for your actual emergency fund — money you might need on short notice belongs in a high-yield savings account instead, where it stays fully accessible.',
+      },
+      {
+        heading: 'How much you can actually buy, and where',
+        body: 'I bonds aren’t sold through a regular brokerage — you buy them directly from the US government at TreasuryDirect.gov, where you open a free account tied to your Social Security number. Electronic I bonds are capped at $10,000 per person per calendar year. You can also buy up to an additional $5,000 in paper I bonds, but only by using part of a federal tax refund to do so.\n\nThat $10,000 limit is per person, not per household, so a family of four could each open their own TreasuryDirect account and collectively buy up to $40,000 a year in electronic I bonds. A minor can own I bonds too, through a linked account a parent manages, similar to how a custodial brokerage account works.',
+      },
+      {
+        heading: 'How I bonds are taxed',
+        body: 'I bond interest is completely exempt from state and local income tax, which is a real advantage over a regular high-yield savings account if you live somewhere with high state taxes. At the federal level, you have a choice: most people defer paying any federal tax on the interest until they cash the bond out or it reaches its 30-year maturity, whichever comes first, letting the interest compound tax-free in the meantime.\n\nThere’s also a lesser-known break: if you use the bond proceeds to pay for qualified higher education expenses in the year you cash them out, the interest can be entirely federal-tax-free — but this benefit phases out above certain income levels and comes with specific eligibility rules, so it’s worth confirming the current thresholds on the IRS website before counting on it.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Only put in money you’re confident you won’t need for at least 12 months — that’s a hard lock, not a suggestion.\n2. If you might need the money between 1 and 5 years out, know you’ll lose the last 3 months of interest if you cash out early.\n3. Open a free account directly at TreasuryDirect.gov — you don’t need a broker.\n4. Check the current composite rate on TreasuryDirect before buying, since the inflation portion resets every May and November.\n5. Keep true emergency-fund money in a high-yield savings account instead — I bonds are for money you can set aside, not money you might need next week.\n6. Remember the $10,000/year electronic limit is per person, so each family member with their own account has their own cap.',
+      },
+    ],
+    relatedTerms: ['Bond', 'Inflation', 'Yield', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Are I bonds a good investment for beginners?',
+        a: 'They’re a solid option for money you want to protect from inflation and won’t need for at least a year — but they’re not a substitute for investing in the stock market, where long-term returns are historically much higher.',
+      },
+      {
+        q: 'Can you lose money on an I bond?',
+        a: 'No — I bonds are backed by the US government and their value never decreases. The only "cost" is the 3-month interest penalty if you cash one out before holding it 5 years, or losing access entirely for the first 12 months.',
+      },
+      {
+        q: 'How much can I buy in I bonds per year?',
+        a: 'Up to $10,000 per person per calendar year in electronic I bonds through TreasuryDirect, plus up to $5,000 more in paper I bonds if you use a federal tax refund to buy them.',
+      },
+      {
+        q: 'Are I bonds better than a high-yield savings account?',
+        a: 'It depends on your timeline. I bonds often win on rate and are exempt from state and local tax, but the money is locked up for a full year with no exceptions. A high-yield savings account stays liquid, which makes it the better home for an actual emergency fund.',
+      },
+    ],
+  },
+  {
+    slug: 'what-is-credit-utilization-ideal-percentage',
+    title: 'What Is Credit Utilization, and How Much of Your Limit Should You Actually Use?',
+    metaTitle: 'Credit Utilization Explained: The Ideal Percentage to Aim For',
+    description:
+      'Credit utilization is the single fastest-moving piece of your credit score — here’s exactly how it’s calculated, the ideal percentage, and the timing trick that lowers it for free.',
+    date: '2026-08-18',
+    category: 'Credit',
+    intro:
+      'You pay your credit card off in full every single month and never miss a due date — so why does your score still bounce around? The answer is almost always credit utilization: how much of your available credit you’re using at the moment your card reports to the bureaus. It’s the second-biggest factor in most scoring models, right behind payment history, and unlike payment history it can swing in either direction within a single billing cycle. Here’s exactly how it works and how to keep it working for you.',
+    sections: [
+      {
+        heading: 'What "utilization" actually means',
+        body: 'Credit utilization is your credit card balance divided by your credit limit, expressed as a percentage. A card with a $1,000 limit and a $200 balance is at 20% utilization. Simple enough — but there are two versions of this number that both matter: per-card utilization (each individual card’s balance over its own limit) and overall utilization (all your card balances added together, divided by all your limits added together).\n\nScoring models look at both. A single maxed-out card can drag your score down even if every other card sits untouched, because that one card’s per-card ratio is ugly on its own — so spreading a balance across multiple cards instead of loading up one can genuinely help, all else equal.',
+      },
+      {
+        heading: 'The numbers people actually aim for',
+        body: 'The widely cited rule of thumb is to stay under 30% utilization, and it’s a reasonable danger line — go above it and it’s a visible drag on most scores. But 30% isn’t actually the target, it’s closer to the edge of the cliff. People with the strongest scores tend to run utilization in the single digits, often under 10%, and using literally 0% every month isn’t automatically better than a small amount — some scoring models actually want to see a little bit of usage, since it shows you’re an active borrower rather than a dormant account.\n\nThe practical target most people land on: use your cards normally, but aim to report somewhere under 10% of your total limit when your statement closes. That’s a range, not a hard cutoff — there’s no single universal number where a score suddenly "unlocks," and different scoring models weigh utilization slightly differently.',
+      },
+      {
+        heading: 'The date that actually matters: statement closing, not due date',
+        body: 'Here’s the detail that trips almost everyone up: your utilization is calculated from the balance on your statement closing date — not your due date, and not whatever your balance happens to be today. That closing-date balance is what typically gets reported to the credit bureaus, whether or not you’ve paid it off yet.\n\nSo you can pay your full statement balance on time, every time, and still show up as "high utilization" if you happened to run a big purchase through the card right before that statement closed. The fix is a timing move, not a spending change: check your statement closing date (it’s on your last statement or in your card’s app) and make a payment a few days before it hits, so the balance that actually gets reported is small — even if you’re going to pay the rest off by the due date anyway.',
+      },
+      {
+        heading: 'Two levers that lower utilization without paying down a cent',
+        body: 'Because utilization is a ratio, you can improve it by changing either side of the fraction. Paying down balances is the obvious one, but raising your available credit works just as well mathematically: if you have a $1,000 balance on a $2,000 limit (50% utilization) and your limit gets bumped to $5,000, that same $1,000 balance is now 20% utilization — with no change in spending at all.\n\nMost issuers let you request a credit limit increase online, sometimes with no hard inquiry if you’ve had the card a while and paid on time. Keeping old cards open matters for the same reason: closing a card removes its limit from your overall available credit, which can push your ratio up even if your balances didn’t change — see the “does closing a card hurt your score” guide for the mechanics of that specific tradeoff.',
+      },
+      {
+        heading: 'Why utilization is different from your other big scoring factor',
+        body: 'Payment history — whether you’ve paid on time — builds up over years and a single late payment can shadow your report for a long time. Utilization is the opposite: it’s a snapshot, recalculated every time a new statement closes, with no memory of what it was last month. That’s good news and bad news. Good, because a maxed-out card from three statements ago has zero effect on your score today once it’s paid down and reported lower. Bad, because a single expensive month — a plane ticket, a laptop repair — can knock several points off your score the moment that statement closes, even if you pay it off completely a week later.\n\nThis is exactly why utilization is the fastest lever you have if you need to raise your score quickly, say before applying for an apartment or a car loan: paying a balance down before the statement closes can move your score within a single reporting cycle, something payment history can never do that fast.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up all your card balances and all your card limits, and calculate your overall utilization right now — most banking apps show it, or do the division yourself.\n2. Find each card’s statement closing date, not its due date — that’s the number that gets reported.\n3. If a card is going to close with a high balance, make a payment a few days before the closing date to bring the reported number down.\n4. Aim for under 10% overall utilization if you’re optimizing for score, and treat 30% as a hard ceiling, not a target.\n5. Consider requesting a credit limit increase on an older, well-paid card — it lowers your ratio without you spending less.\n6. Keep old, no-fee cards open and lightly used rather than closing them, since closing one removes its limit from your available credit.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'What is a good credit utilization percentage?',
+        a: 'Under 30% is the commonly cited ceiling, but the strongest scores are usually associated with utilization in the single digits — often under 10%. There’s no universal magic number, but lower is consistently better up to a point, and using a small amount tends to score better than using none at all.',
+      },
+      {
+        q: 'Does credit utilization reset every month?',
+        a: 'Yes — it’s recalculated each time a card’s statement closes, based on the balance at that moment. Unlike payment history, a high-utilization month has no lasting effect once a lower balance is reported the next cycle.',
+      },
+      {
+        q: 'Does paying off my credit card in full still hurt my utilization?',
+        a: 'It can, if you pay after the statement closes rather than before. The balance reported to the bureaus is usually your statement closing balance — paying it off by the due date clears the debt, but the higher number may already have been reported that cycle.',
+      },
+      {
+        q: 'Does asking for a credit limit increase hurt your score?',
+        a: 'It might cause a small, temporary dip if the issuer runs a hard inquiry to approve it, but the resulting drop in utilization (same balance, bigger limit) often outweighs that dip within a month or two. Some issuers offer limit increases with only a soft inquiry — worth asking before you request one.',
+      },
+    ],
+  },
 ]
