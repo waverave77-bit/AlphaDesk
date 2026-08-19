@@ -19,12 +19,17 @@ export async function POST(req: Request) {
   const characterB = typeof body?.characterB === 'string' ? body.characterB : undefined
   const model = typeof body?.model === 'string' ? body.model : undefined
   const extraInput = body?.extraInput && typeof body.extraInput === 'object' ? body.extraInput : undefined
+  // "singleshot" forces the old single-shot text2video path (see the 1-Clip
+  // launcher in YTDashboard.tsx) — multishot is the default on the droplet
+  // now whenever a matchup is eligible, so this is the only value worth
+  // forwarding explicitly.
+  const renderMode = body?.renderMode === 'singleshot' ? 'singleshot' : undefined
 
   try {
     const res = await fetch(`${base}/trigger`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ characterA, characterB, model, extraInput }),
+      body: JSON.stringify({ characterA, characterB, model, extraInput, renderMode }),
       signal: AbortSignal.timeout(8000),
     })
     const data = await res.json().catch(() => ({}))

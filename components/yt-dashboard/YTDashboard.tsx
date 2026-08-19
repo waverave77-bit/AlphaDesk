@@ -755,14 +755,21 @@ export default function YTDashboard() {
   const [roster, setRoster] = useState<RosterCharacter[] | null>(null)
   const [charA, setCharA] = useState('')
   const [charB, setCharB] = useState('')
+  // Separate picker state for the 1-clip (singleshot) launcher below — kept
+  // independent from charA/charB (the 3-clip/multishot picker) so picking a
+  // character for one mode doesn't affect the other.
+  const [charA1, setCharA1] = useState('')
+  const [charB1, setCharB1] = useState('')
   const [now, setNow] = useState(() => new Date())
   const [triggerState, setTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
+  const [singleTriggerState, setSingleTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
   const [pauseBusy, setPauseBusy] = useState(false)
   const [cronConfirmPreset, setCronConfirmPreset] = useState<string | null>(null)
   const [cronConfirmHour, setCronConfirmHour] = useState<number | null>(null)
   const cronConfirmHourTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [cronBusy, setCronBusy] = useState(false)
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const singleConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cronConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mouse = useMouseGlow()
 
@@ -885,6 +892,7 @@ export default function YTDashboard() {
   useEffect(
     () => () => {
       if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
+      if (singleConfirmTimeout.current) clearTimeout(singleConfirmTimeout.current)
       if (cronConfirmTimeout.current) clearTimeout(cronConfirmTimeout.current)
       if (cronConfirmHourTimeout.current) clearTimeout(cronConfirmHourTimeout.current)
     },
@@ -892,6 +900,13 @@ export default function YTDashboard() {
   )
 
   const pickerIncomplete = (!!charA && !charB) || (!charA && !!charB)
+  // Sukuna is excluded from the 1-clip roster specifically — he's the
+  // character with real, documented "doesn't look right" YouTube comments
+  // ("Temu Sukuna") from before reference images existed, and the 1-clip
+  // path never uses reference images (see handleSingleTrigger below), so
+  // there's nothing here to keep his likeness on-model.
+  const singleRoster = useMemo(() => roster?.filter((c) => c.name !== 'Sukuna') ?? null, [roster])
+  const singlePickerIncomplete = (!!charA1 && !charB1) || (!charA1 && !!charB1)
 
   const handleTrigger = useCallback(async () => {
     if (pickerIncomplete) return
@@ -921,6 +936,39 @@ export default function YTDashboard() {
       }
     }
   }, [triggerState, fetchStatus, fetchDrafts, pickerIncomplete, charA, charB])
+
+  // 1-clip launcher — forces the old single-shot text2video path via
+  // renderMode: 'singleshot' (multishot is the default everywhere else now,
+  // see matchup-shorts/src/runPipeline.js). No reference images or
+  // background images are ever used on this path.
+  const handleSingleTrigger = useCallback(async () => {
+    if (singlePickerIncomplete) return
+    if (singleTriggerState === 'idle') {
+      setSingleTriggerState('confirm')
+      singleConfirmTimeout.current = setTimeout(() => setSingleTriggerState('idle'), 4500)
+      return
+    }
+    if (singleTriggerState === 'confirm') {
+      if (singleConfirmTimeout.current) clearTimeout(singleConfirmTimeout.current)
+      setSingleTriggerState('sending')
+      try {
+        const res = await fetch('/api/yt-dashboard/trigger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ characterA: charA1 || undefined, characterB: charB1 || undefined, renderMode: 'singleshot' }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data?.error ?? 'failed')
+        setSingleTriggerState('sent')
+        setTimeout(() => setSingleTriggerState('idle'), 3000)
+        fetchStatus()
+        fetchDrafts()
+      } catch {
+        setSingleTriggerState('error')
+        setTimeout(() => setSingleTriggerState('idle'), 3000)
+      }
+    }
+  }, [singleTriggerState, fetchStatus, fetchDrafts, singlePickerIncomplete, charA1, charB1])
 
   const togglePause = useCallback(async () => {
     setPauseBusy(true)
@@ -1078,7 +1126,7 @@ export default function YTDashboard() {
         </div>
 
         <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-          <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Manual Launch Setup</div>
+          <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Manual Launch — 3-Clip (Reference Images)</div>
           <div className="grid grid-cols-2 gap-3">
             <select
               value={charA}
@@ -1106,8 +1154,9 @@ export default function YTDashboard() {
             </select>
           </div>
           <p className="mt-3 text-[11px] text-white/40">
-            Generates normally and lands as an unlisted draft below — nothing posts live from here. It publishes
-            automatically on the next scheduled run, or hit Publish now on the draft.
+            3 stitched clips (intro / fight / finish) using each character&apos;s reference image plus a background
+            reference when the setting has one. Generates normally and lands as an unlisted draft below — nothing
+            posts live from here. It publishes automatically on the next scheduled run, or hit Publish now on the draft.
           </p>
           {pickerIncomplete && <p className="mt-2 text-[11px] text-amber-300/80">Pick both characters, or leave both on Random.</p>}
         </div>
@@ -1137,10 +1186,77 @@ export default function YTDashboard() {
               : triggerState === 'error'
               ? '⚠ Launch Failed — Retry'
               : triggerState === 'confirm'
-              ? 'Confirm? ~$0.60–$1.50 in render cost — saved as a draft'
-              : '⚡ Generate Draft'}
+              ? 'Confirm? ~$0.90 in render cost — saved as a draft'
+              : '⚡ Generate 3-Clip Draft'}
           </button>
           {triggerState === 'confirm' && <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>}
+        </div>
+
+        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
+          <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-white/40">Manual Launch — 1-Clip (Text Only)</div>
+          <div className="grid grid-cols-2 gap-3">
+            <select
+              value={charA1}
+              onChange={(e) => setCharA1(e.target.value)}
+              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
+            >
+              <option value="">🎲 Random</option>
+              {singleRoster?.map((c) => (
+                <option key={c.name} value={c.name} disabled={c.name === charB1}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <select
+              value={charB1}
+              onChange={(e) => setCharB1(e.target.value)}
+              className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs text-white/80 outline-none focus:border-cyan-400/60"
+            >
+              <option value="">🎲 Random</option>
+              {singleRoster?.map((c) => (
+                <option key={c.name} value={c.name} disabled={c.name === charA1}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="mt-3 text-[11px] text-white/40">
+            The original single continuous clip, generated from text only — no character reference images and no
+            background reference image. Sukuna is left out of this roster; his likeness needs a reference image to
+            look right. Lands as an unlisted draft below, same as the 3-clip path.
+          </p>
+          {singlePickerIncomplete && <p className="mt-2 text-[11px] text-amber-300/80">Pick both characters, or leave both on Random.</p>}
+        </div>
+
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <button
+            onClick={handleSingleTrigger}
+            disabled={status?.lockActive || singleTriggerState === 'sending' || singlePickerIncomplete}
+            className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
+              status?.lockActive || singlePickerIncomplete
+                ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
+                : singleTriggerState === 'confirm'
+                ? 'border border-amber-400 bg-amber-400/20 text-amber-200 shadow-[0_0_30px_rgba(251,191,36,0.4)]'
+                : singleTriggerState === 'sent'
+                ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
+                : singleTriggerState === 'error'
+                ? 'border border-red-400 bg-red-400/20 text-red-200'
+                : 'border border-white/30 bg-white/10 text-white/80 hover:scale-[1.03] hover:border-white/50'
+            }`}
+          >
+            {status?.lockActive
+              ? '🔒 Rendering In Progress'
+              : singleTriggerState === 'sending'
+              ? 'Launching…'
+              : singleTriggerState === 'sent'
+              ? '✅ Battle Launched'
+              : singleTriggerState === 'error'
+              ? '⚠ Launch Failed — Retry'
+              : singleTriggerState === 'confirm'
+              ? 'Confirm? ~$0.68 in render cost — saved as a draft'
+              : '🎬 Generate 1-Clip Draft'}
+          </button>
+          {singleTriggerState === 'confirm' && <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>}
         </div>
 
         <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
