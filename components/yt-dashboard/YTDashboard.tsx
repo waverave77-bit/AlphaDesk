@@ -2,6 +2,21 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+// Rewritten from scratch 2026-08-19. The backend contract is untouched —
+// every type, endpoint, request body and response shape below is identical
+// to the previous version. Only the presentation changed:
+//   - One long scroll of ~10 always-visible panels became 4 named sections
+//     (Launch / Queue / Library / System), so the thing you came to do is
+//     never more than one click away.
+//   - Render mode (3-clip vs 1-clip) became a property of ONE launch form
+//     rather than two separate stacked forms with duplicate pickers — you
+//     pick who fights, then pick how it renders.
+//   - Dropped the decorative layer (floating blobs, scanlines, radar sweep,
+//     cursor glow, digit scramble, typewriter log) — it was animation
+//     competing with the data rather than communicating anything.
+
+/* ------------------------------------------------------------------ types */
+
 type StatusResponse = {
   lockActive: boolean
   automationPaused: boolean
@@ -60,22 +75,49 @@ type DraftItem = {
 
 type RosterCharacter = { name: string; franchise: string; themeColor: string }
 
+type TriggerState = 'idle' | 'confirm' | 'sending' | 'sent' | 'error'
+type LaunchMode = 'multi' | 'single'
+
+/* -------------------------------------------------------------- constants */
+
 const CHANNEL_ID = 'UCdz-4eCUd3VjAC0zvzjhgRQ'
 const DROPLET_LABEL = '167.172.147.89:3001'
-// Day-of-week portion only now — the hour is independently configurable
-// (see CRON_HOUR_PRESETS below), matching statusServer.js's split of
-// preset (day pattern) vs hour as two separately-settable fields.
+
+// Day-of-week portion only — the hour is independently configurable (see
+// CRON_HOUR_PRESETS), matching statusServer.js's split of preset (day
+// pattern) vs hour as two separately-settable fields.
 const CRON_DAY_PATTERNS: Record<string, string> = { daily: '* * *', '3x-week': '* * 1,3,5', weekly: '* * 1' }
-const CRON_LABELS: Record<string, string> = { daily: 'Daily', '3x-week': '3x/Week', weekly: 'Weekly' }
+const CRON_LABELS: Record<string, string> = { daily: 'Daily', '3x-week': '3× / week', weekly: 'Weekly' }
 // UTC offsets assume US Eastern Daylight Time (UTC-4, roughly Mar-Nov) —
 // this is a small personal-project dashboard, not worth building real DST
 // handling for; re-pick during EST months if it matters.
 const CRON_HOUR_PRESETS: { label: string; hourUtc: number }[] = [
-  { label: '9 AM ET', hourUtc: 13 },
-  { label: '12 PM ET', hourUtc: 16 },
-  { label: '3 PM ET', hourUtc: 19 },
-  { label: '6 PM ET', hourUtc: 22 },
+  { label: '9 AM', hourUtc: 13 },
+  { label: '12 PM', hourUtc: 16 },
+  { label: '3 PM', hourUtc: 19 },
+  { label: '6 PM', hourUtc: 22 },
 ]
+
+// Real confirmed costs from the droplet's own logged `credits` field:
+// 3-clip multishot = 2s + 10s + 3s beats at 720p ≈ $0.90 total; 1-clip
+// singleshot = one 15s call at 540p ≈ $0.68.
+const MODE_INFO: Record<LaunchMode, { label: string; cost: string; blurb: string }> = {
+  multi: {
+    label: '3 clips',
+    cost: '$0.90',
+    blurb: 'Intro, fight and finish rendered separately, using each character’s reference image plus the setting’s background image. Sharper likenesses, better pacing.',
+  },
+  single: {
+    label: '1 clip',
+    cost: '$0.68',
+    blurb: 'The original single continuous take, generated from text only — no reference images. Cheaper, but likenesses drift more.',
+  },
+}
+
+// Sukuna is excluded from 1-clip specifically: he's the character with real
+// "doesn't look right" comments on the channel ("Temu Sukuna") from before
+// reference images existed, and 1-clip never uses a reference image.
+const SINGLE_MODE_EXCLUDED = 'Sukuna'
 
 // Display-only lookup, duplicated (not imported) from matchup-shorts'
 // characterRoster.js on purpose — the automation project stays fully
@@ -87,10 +129,13 @@ const CHARACTER_COLORS: Record<string, string> = {
   Frieza: '#A020F0', Herobrine: '#39FF14', Sukuna: '#B22222', Zeno: '#87CEFA',
   Ichigo: '#FF4500', Luffy: '#FF0000', Zoro: '#228B22', Vegeta: '#4169E1',
   Kratos: '#8B0000', Naruto: '#FFA500', 'All Might': '#1E90FF', Beerus: '#9370DB',
+  Mahoraga: '#8B7355', Garou: '#B0C4DE',
 }
 function colorFor(name: string) {
   return CHARACTER_COLORS[name?.trim()] ?? '#67e8f9'
 }
+
+/* ---------------------------------------------------------------- helpers */
 
 function msUntilNextRun(now: Date, cronFields: string | null) {
   // Only handles the simple "at HH:00 UTC" presets this dashboard offers —
@@ -100,13 +145,16 @@ function msUntilNextRun(now: Date, cronFields: string | null) {
   if (next.getTime() <= now.getTime()) next.setUTCDate(next.getUTCDate() + 1)
   return next.getTime() - now.getTime()
 }
+
 function formatCountdown(ms: number) {
   const total = Math.max(0, Math.floor(ms / 1000))
-  const h = Math.floor(total / 3600).toString().padStart(2, '0')
-  const m = Math.floor((total % 3600) / 60).toString().padStart(2, '0')
-  const s = Math.floor(total % 60).toString().padStart(2, '0')
-  return `${h}:${m}:${s}`
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  if (h > 0) return `${h}h ${m}m`
+  const s = Math.floor(total % 60)
+  return `${m}m ${s}s`
 }
+
 function relativeTime(iso: string) {
   const diffMs = Date.now() - new Date(iso).getTime()
   const mins = Math.floor(diffMs / 60000)
@@ -116,309 +164,311 @@ function relativeTime(iso: string) {
   if (hrs < 24) return `${hrs}h ago`
   return `${Math.floor(hrs / 24)}d ago`
 }
+
 function formatNum(n: number) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`
   return `${n}`
 }
 
-// Slot-machine style: random digits that settle left-to-right into the real
-// value, instead of just counting up numerically.
-function useScramble(target: number, decimals = 2, durationMs = 800) {
-  const finalStr = target.toFixed(decimals)
-  const [display, setDisplay] = useState(finalStr)
-  useEffect(() => {
-    let raf: number
-    const start = performance.now()
-    function tick(t: number) {
-      const p = Math.min(1, (t - start) / durationMs)
-      const settled = Math.floor(finalStr.length * p)
-      let out = ''
-      for (let i = 0; i < finalStr.length; i++) {
-        const ch = finalStr[i]
-        out += !/[0-9]/.test(ch) || i < settled ? ch : Math.floor(Math.random() * 10).toString()
-      }
-      setDisplay(out)
-      if (p < 1) raf = requestAnimationFrame(tick)
-      else setDisplay(finalStr)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [finalStr, durationMs])
-  return display
+/* ------------------------------------------------------------- primitives */
+
+function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <div className={`rounded-xl border border-white/10 bg-white/[0.035] ${className}`}>{children}</div>
 }
 
-function StatusPill({ lockActive, paused, unreachable }: { lockActive?: boolean; paused?: boolean; unreachable: boolean }) {
-  if (unreachable) {
-    return (
-      <span className="flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs uppercase tracking-widest text-red-300">
-        <span className="h-2 w-2 rounded-full bg-red-400 animate-pulse" /> Connection Lost
-      </span>
-    )
-  }
-  if (lockActive) {
-    return (
-      <span className="flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2 text-xs uppercase tracking-widest text-amber-300">
-        <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" /> In Combat — Rendering
-      </span>
-    )
-  }
-  if (paused) {
-    return (
-      <span className="flex items-center gap-2 rounded-full border border-slate-400/40 bg-slate-400/10 px-4 py-2 text-xs uppercase tracking-widest text-slate-300">
-        <span className="h-2 w-2 rounded-full bg-slate-400" /> Automation Paused
-      </span>
-    )
-  }
+function CardTitle({ children, right, accent = '#22d3ee' }: { children: React.ReactNode; right?: React.ReactNode; accent?: string }) {
   return (
-    <span className="flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-xs uppercase tracking-widest text-emerald-300">
-      <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.7)]" /> Standing By
-    </span>
-  )
-}
-
-function HudTile({
-  label,
-  accent,
-  children,
-}: {
-  label: string
-  accent: string
-  delayMs?: number
-  children: React.ReactNode
-}) {
-  return (
-    <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4 transition-colors hover:border-white/20">
-      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.15em] text-white/45">
-        <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-        {label}
-      </div>
-      <div className="mt-2">{children}</div>
+    <div className="mb-4 flex items-center justify-between gap-3">
+      <h2 className="flex items-center gap-2 text-sm font-semibold text-white/90">
+        <span className="h-3.5 w-1 rounded-full" style={{ background: accent }} />
+        {children}
+      </h2>
+      {right}
     </div>
   )
 }
 
-function lineColor(line: string) {
-  const l = line.toLowerCase()
-  if (l.includes('error') || l.includes('fail')) return 'text-red-400'
-  if (l.includes('uploaded') || l.includes('success') || l.includes('posted')) return 'text-emerald-400'
-  return 'text-white/50'
+function Empty({ children }: { children: React.ReactNode }) {
+  return <div className="rounded-lg border border-dashed border-white/10 px-4 py-10 text-center text-sm text-white/35">{children}</div>
 }
 
-function TypedLine({ text, instant, className }: { text: string; instant: boolean; className: string }) {
-  const [shown, setShown] = useState(instant ? text : '')
-  useEffect(() => {
-    if (instant) {
-      setShown(text)
-      return
-    }
-    let i = 0
-    const id = setInterval(() => {
-      i += 1
-      setShown(text.slice(0, i))
-      if (i >= text.length) clearInterval(id)
-    }, 12)
-    return () => clearInterval(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text])
-  return <div className={className}>{shown}</div>
+function Chip({ tone = 'neutral', children }: { tone?: 'neutral' | 'good' | 'warn' | 'info'; children: React.ReactNode }) {
+  const tones = {
+    neutral: 'bg-white/10 text-white/50',
+    good: 'bg-emerald-400/15 text-emerald-300',
+    warn: 'bg-amber-400/15 text-amber-300',
+    info: 'bg-cyan-400/15 text-cyan-300',
+  }
+  return <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tones[tone]}`}>{children}</span>
 }
 
-function TerminalPanel({ lines, unreachable }: { lines: string[]; unreachable: boolean }) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const seenRef = useRef<Set<string>>(new Set())
-  useEffect(() => {
-    // Scroll only this panel's own log, not the page — scrollIntoView() walks
-    // up every scrollable ancestor including the window, which was yanking
-    // the whole dashboard back up on every 15s status poll.
-    const el = containerRef.current
-    if (el) el.scrollTop = el.scrollHeight
-  }, [lines])
-
-  return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-black/40 backdrop-blur-sm">
-      <div className="flex items-center gap-1.5 border-b border-white/10 bg-white/[0.03] px-3 py-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
-        <span className="ml-2 text-[10px] uppercase tracking-widest text-white/30">pipeline.log</span>
-      </div>
-      <div ref={containerRef} className="max-h-72 flex-1 overflow-y-auto p-3 text-[11px] leading-relaxed">
-        {unreachable ? (
-          <div className="text-red-400/70">⚠ Cannot reach droplet — log unavailable</div>
-        ) : lines.length === 0 ? (
-          <div className="text-white/30">Waiting for output…</div>
-        ) : (
-          lines.map((line, i) => {
-            const instant = seenRef.current.has(line)
-            seenRef.current.add(line)
-            return <TypedLine key={`${i}-${line}`} text={line} instant={instant} className={lineColor(line)} />
-          })
-        )}
-        <span className="inline-block h-3 w-1.5 translate-y-0.5 bg-cyan-400 animate-blink-cursor" />
-      </div>
-    </div>
-  )
-}
-
-function Avatar({ name }: { name: string }) {
+function Avatar({ name, size = 20 }: { name: string; size?: number }) {
   const color = colorFor(name)
-  const initial = name.trim().charAt(0).toUpperCase()
   return (
     <span
-      className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-black"
-      style={{ background: color, boxShadow: `0 0 8px ${color}99` }}
+      className="inline-flex shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-black"
+      style={{ background: color, width: size, height: size }}
     >
-      {initial}
+      {name.trim().charAt(0).toUpperCase()}
     </span>
   )
 }
 
-const BATTLE_LOG_MAX = 7
+/* ------------------------------------------------------------- status bar */
 
-function BattleLogPanel({ matchups }: { matchups: string[] }) {
-  const items = [...matchups].reverse().slice(0, BATTLE_LOG_MAX)
+function StatusBadge({ lockActive, paused, unreachable }: { lockActive?: boolean; paused?: boolean; unreachable: boolean }) {
+  const cfg = unreachable
+    ? { dot: 'bg-red-400', ring: 'border-red-500/40 bg-red-500/10 text-red-300', text: 'Offline', pulse: true }
+    : lockActive
+    ? { dot: 'bg-amber-400', ring: 'border-amber-400/40 bg-amber-400/10 text-amber-300', text: 'Rendering', pulse: true }
+    : paused
+    ? { dot: 'bg-slate-400', ring: 'border-slate-400/40 bg-slate-400/10 text-slate-300', text: 'Paused', pulse: false }
+    : { dot: 'bg-emerald-400', ring: 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300', text: 'Ready', pulse: false }
+
   return (
-    <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Battle Log</div>
-      {items.length === 0 ? (
-        <div className="py-8 text-center text-xs text-white/30">No battles recorded yet</div>
-      ) : (
-        <div className="space-y-2">
-          {items.map((pair, i) => {
-            const [a, b] = pair.split(' vs ')
-            return (
-              <div key={i} className="flex items-center gap-2 rounded-md border border-white/5 bg-black/20 px-3 py-2 text-sm">
-                <span className="flex flex-1 items-center justify-end gap-1.5 truncate text-right font-bold" style={{ color: colorFor(a) }}>
-                  {a}
-                  <Avatar name={a} />
-                </span>
-                <span className="shrink-0 text-[10px] font-bold text-white/30">VS</span>
-                <span className="flex flex-1 items-center gap-1.5 truncate font-bold" style={{ color: colorFor(b) }}>
-                  <Avatar name={b} />
-                  {b}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium ${cfg.ring}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot} ${cfg.pulse ? 'animate-pulse' : ''}`} />
+      {cfg.text}
+    </span>
   )
 }
 
-const ALERT_HISTORY_MAX = 3
+function StatStrip({ status, countdownMs }: { status: StatusResponse | null; countdownMs: number }) {
+  const balance = status?.viduBalanceUsd
+  const pct = balance != null && status ? Math.max(0, Math.min(100, (balance / status.viduTotalLoaded) * 100)) : 0
+  const low = balance != null && balance < 2
 
-function AlertsPanel({ alerts }: { alerts: { title: string; message: string; at: string }[] }) {
-  const items = alerts.slice(0, ALERT_HISTORY_MAX)
+  const items = [
+    {
+      label: 'Balance',
+      icon: '◈',
+      // Balance is the one stat that changes meaning as it drops, so its
+      // accent tracks the value rather than being fixed like the others.
+      accent: low ? '#f87171' : pct > 50 ? '#34d399' : '#fbbf24',
+      value: balance != null ? `$${balance.toFixed(2)}` : '—',
+      sub: status?.viduCreditsRemaining != null ? `${status.viduCreditsRemaining} credits left` : 'check failed',
+      bar: pct,
+    },
+    {
+      label: 'Next post',
+      icon: '◷',
+      accent: '#fbbf24',
+      value: status?.automationPaused ? 'Paused' : formatCountdown(countdownMs),
+      sub: status?.automationPaused ? 'automation off' : status?.cronSchedule ?? '—',
+    },
+    {
+      label: 'In queue',
+      icon: '▦',
+      accent: '#22d3ee',
+      value: `${status?.queuedDraftsCount ?? 0}`,
+      sub: status?.heldDraftsCount ? `${status.heldDraftsCount} held back` : 'drafts ready to post',
+    },
+    {
+      label: 'Synced',
+      icon: '◉',
+      accent: '#c084fc',
+      value: status ? relativeTime(status.checkedAt) : '—',
+      sub: 'refreshes every 15s',
+    },
+  ]
+
   return (
-    <div className="h-full rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Alert History</div>
-      {items.length === 0 ? (
-        <div className="py-8 text-center text-xs text-white/30">No alerts — all clear</div>
-      ) : (
-        <div className="space-y-2">
-          {items.map((a, i) => (
-            <div key={i} className="rounded-md border border-amber-400/20 bg-amber-400/5 px-3 py-2">
-              <div className="text-xs font-semibold text-amber-200">{a.title}</div>
-              <div className="mt-0.5 line-clamp-2 text-[11px] text-white/50">{a.message}</div>
-              <div className="mt-1 text-[10px] text-white/30">{relativeTime(a.at)}</div>
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {items.map((it) => (
+        <div
+          key={it.label}
+          className="relative overflow-hidden rounded-xl border p-4 transition-colors"
+          style={{ borderColor: `${it.accent}33`, background: `linear-gradient(160deg, ${it.accent}14, rgba(255,255,255,0.02) 55%)` }}
+        >
+          <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full blur-2xl" style={{ background: `${it.accent}40` }} />
+          <div className="relative flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide" style={{ color: it.accent }}>
+            <span aria-hidden>{it.icon}</span>
+            {it.label}
+          </div>
+          <div className="relative mt-1.5 text-2xl font-semibold tabular-nums text-white/95">{it.value}</div>
+          {it.bar != null && (
+            <div className="relative mt-2 h-1 w-full overflow-hidden rounded-full bg-black/40">
+              <div
+                className="h-full rounded-full transition-[width] duration-700"
+                style={{ width: `${it.bar}%`, background: it.accent, boxShadow: `0 0 8px ${it.accent}` }}
+              />
             </div>
-          ))}
+          )}
+          <div className="relative mt-1.5 text-xs text-white/45">{it.sub}</div>
         </div>
-      )}
+      ))}
     </div>
   )
 }
 
-function DraftsPanel({
-  drafts,
-  publishingId,
-  onPublish,
-  holdBusyId,
-  onHold,
-  onReorder,
+/* ---------------------------------------------------------- launch section */
+
+function LaunchPanel({
+  roster,
+  lockActive,
+  state,
+  onLaunch,
 }: {
-  drafts: DraftItem[]
-  publishingId: string | null
-  onPublish: (videoId: string) => void
-  holdBusyId: string | null
-  onHold: (videoId: string, held: boolean) => void
-  onReorder: (videoIds: string[]) => void
+  roster: RosterCharacter[] | null
+  lockActive: boolean
+  state: TriggerState
+  onLaunch: (mode: LaunchMode, a: string, b: string) => void
 }) {
-  const [confirmId, setConfirmId] = useState<string | null>(null)
-  const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [order, setOrder] = useState<string[]>(() => drafts.map((d) => d.videoId))
-  const [dragId, setDragId] = useState<string | null>(null)
+  const [mode, setMode] = useState<LaunchMode>('multi')
+  const [charA, setCharA] = useState('')
+  const [charB, setCharB] = useState('')
 
-  // Resync local drag order only when the actual SET of draft ids changes
-  // (publish/hold/a fresh draft altered membership) — keying on the joined
-  // id list rather than the drafts array itself means a background 30s
-  // refetch that returns the same ids in the same order doesn't fight an
-  // in-progress or just-completed drag.
-  const idsKey = drafts.map((d) => d.videoId).join(',')
-  useEffect(() => {
-    setOrder(drafts.map((d) => d.videoId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idsKey])
-
-  useEffect(() => () => {
-    if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
-  }, [])
-
-  function handleClick(videoId: string) {
-    if (confirmId === videoId) {
-      if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
-      setConfirmId(null)
-      onPublish(videoId)
-      return
+  // Mode is a rendering choice, not a different matchup — the picks carry
+  // across when you switch. The one exception is the character 1-clip can't
+  // render well, who gets cleared rather than silently sent anyway.
+  const selectMode = (next: LaunchMode) => {
+    setMode(next)
+    if (next === 'single') {
+      if (charA === SINGLE_MODE_EXCLUDED) setCharA('')
+      if (charB === SINGLE_MODE_EXCLUDED) setCharB('')
     }
-    setConfirmId(videoId)
-    confirmTimeout.current = setTimeout(() => setConfirmId(null), 4000)
   }
 
-  function handleDrop(targetId: string) {
-    const draggedId = dragId
-    setDragId(null)
-    if (!draggedId || draggedId === targetId) return
-    const from = order.indexOf(draggedId)
-    const to = order.indexOf(targetId)
-    if (from === -1 || to === -1) return
-    const next = [...order]
-    next.splice(from, 1)
-    next.splice(to, 0, draggedId)
-    setOrder(next)
-    onReorder(next)
-  }
+  const options = useMemo(() => {
+    if (!roster) return null
+    return mode === 'single' ? roster.filter((c) => c.name !== SINGLE_MODE_EXCLUDED) : roster
+  }, [roster, mode])
 
-  if (drafts.length === 0) return null
+  const incomplete = (!!charA && !charB) || (!charA && !!charB)
+  const info = MODE_INFO[mode]
+  const disabled = lockActive || state === 'sending' || incomplete
 
-  const byId = new Map(drafts.map((d) => [d.videoId, d]))
-  const orderedDrafts = order.map((id) => byId.get(id)).filter((d): d is DraftItem => !!d)
+  const buttonLabel = lockActive
+    ? 'Rendering in progress…'
+    : state === 'sending'
+    ? 'Starting…'
+    : state === 'sent'
+    ? 'Started — check the Queue'
+    : state === 'error'
+    ? 'Failed — click to retry'
+    : state === 'confirm'
+    ? `Confirm — spend ${info.cost}`
+    : `Generate ${info.label}`
+
+  const buttonTone =
+    disabled && !lockActive
+      ? 'cursor-not-allowed bg-white/5 text-white/25'
+      : lockActive
+      ? 'cursor-not-allowed bg-white/5 text-white/30'
+      : state === 'confirm'
+      ? 'bg-amber-400 text-black hover:bg-amber-300'
+      : state === 'sent'
+      ? 'bg-emerald-400 text-black'
+      : state === 'error'
+      ? 'bg-red-400 text-black hover:bg-red-300'
+      : 'bg-cyan-400 text-black hover:bg-cyan-300'
 
   return (
-    <div className="mt-8 rounded-lg border border-amber-400/20 bg-amber-400/[0.04] p-4">
-      <div className="mb-3 text-[10px] uppercase tracking-[0.25em] text-amber-300/70">
-        Drafts — unlisted, queued for the next scheduled run unless held. Drag a card to reorder the queue.
+    <Card className="p-5">
+      <CardTitle
+        right={
+          <div className="flex rounded-lg border border-white/10 bg-black/30 p-0.5">
+            {(['multi', 'single'] as LaunchMode[]).map((m) => (
+              <button
+                key={m}
+                onClick={() => selectMode(m)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  mode === m ? 'bg-cyan-400/20 text-cyan-200 shadow-[inset_0_0_0_1px_rgba(34,211,238,0.4)]' : 'text-white/45 hover:text-white/75'
+                }`}
+              >
+                {MODE_INFO[m].label}
+              </button>
+            ))}
+          </div>
+        }
+      >
+        New battle
+      </CardTitle>
+
+      <div className="flex items-center gap-3">
+        <div className="min-w-0 flex-1">
+          <select
+            value={charA}
+            onChange={(e) => setCharA(e.target.value)}
+            className="w-full rounded-lg border bg-black/40 px-3 py-2.5 text-sm font-medium outline-none transition-colors focus:border-cyan-400/60"
+            style={charA ? { borderColor: `${colorFor(charA)}88`, color: colorFor(charA) } : { borderColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)' }}
+          >
+            <option value="" style={{ color: '#fff' }}>
+              Random
+            </option>
+            {options?.map((c) => (
+              <option key={c.name} value={c.name} disabled={c.name === charB} style={{ color: '#fff' }}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <span className="shrink-0 text-xs font-bold text-white/30">VS</span>
+        <div className="min-w-0 flex-1">
+          <select
+            value={charB}
+            onChange={(e) => setCharB(e.target.value)}
+            className="w-full rounded-lg border bg-black/40 px-3 py-2.5 text-sm font-medium outline-none transition-colors focus:border-cyan-400/60"
+            style={charB ? { borderColor: `${colorFor(charB)}88`, color: colorFor(charB) } : { borderColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)' }}
+          >
+            <option value="" style={{ color: '#fff' }}>
+              Random
+            </option>
+            {options?.map((c) => (
+              <option key={c.name} value={c.name} disabled={c.name === charA} style={{ color: '#fff' }}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {orderedDrafts.map((d) => (
-          <DraftCard
-            key={d.videoId}
-            d={d}
-            publishing={publishingId === d.videoId}
-            confirming={confirmId === d.videoId}
-            holdBusy={holdBusyId === d.videoId}
-            onPublishClick={() => handleClick(d.videoId)}
-            onHold={() => onHold(d.videoId, !d.held)}
-            dragging={dragId === d.videoId}
-            onDragStart={() => setDragId(d.videoId)}
-            onDragOverCard={(e) => e.preventDefault()}
-            onDropCard={() => handleDrop(d.videoId)}
-            onDragEnd={() => setDragId(null)}
-          />
-        ))}
-      </div>
+
+      <p className="mt-3 text-xs leading-relaxed text-white/40">{info.blurb}</p>
+      {mode === 'single' && (
+        <p className="mt-1.5 text-xs text-white/30">{SINGLE_MODE_EXCLUDED} is left out here — his likeness needs a reference image.</p>
+      )}
+      {incomplete && <p className="mt-2 text-xs text-amber-300/90">Pick both fighters, or leave both on Random.</p>}
+
+      <button
+        onClick={() => onLaunch(mode, charA, charB)}
+        disabled={disabled}
+        className={`mt-4 w-full rounded-lg px-4 py-3 text-sm font-semibold transition-colors ${buttonTone}`}
+      >
+        {buttonLabel}
+      </button>
+
+      <p className="mt-2.5 text-center text-xs text-white/30">
+        {state === 'confirm'
+          ? 'Click again to confirm — this spends real money.'
+          : 'Saves as an unlisted draft. Nothing goes public until you publish it or the next scheduled run picks it up.'}
+      </p>
+    </Card>
+  )
+}
+
+/* ----------------------------------------------------------- queue section */
+
+function PaperTrailBody({ item }: { item: PaperTrail }) {
+  const rows: { label: string; value: string }[] = []
+  if (item.pickMethod) rows.push({ label: 'Picked by', value: item.pickMethod })
+  if (item.setting) rows.push({ label: 'Setting', value: item.setting })
+  if (item.justification) rows.push({ label: 'Reasoning', value: item.justification })
+  if (item.description) rows.push({ label: 'Description', value: item.description })
+  if (item.winnerLine) rows.push({ label: 'Winner line', value: `“${item.winnerLine}”` })
+  if (item.loserLine) rows.push({ label: 'Loser line', value: `“${item.loserLine}”` })
+
+  if (rows.length === 0) {
+    return <div className="mt-2 rounded-lg bg-black/40 p-3 text-xs text-white/30">No paper trail — posted before this was recorded.</div>
+  }
+  return (
+    <div className="mt-2 space-y-2.5 rounded-lg bg-black/40 p-3">
+      {rows.map((r) => (
+        <div key={r.label}>
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-cyan-300/60">{r.label}</div>
+          <div className="mt-0.5 text-xs leading-snug text-white/65">{r.value}</div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -456,158 +506,179 @@ function DraftCard({
       onDragOver={onDragOverCard}
       onDrop={onDropCard}
       onDragEnd={onDragEnd}
-      className={`cursor-grab overflow-hidden rounded-lg border bg-black/30 transition-opacity active:cursor-grabbing ${
-        dragging ? 'opacity-30' : d.held ? 'opacity-60' : ''
-      } ${d.held ? 'border-white/10' : 'border-emerald-400/20'}`}
+      className={`overflow-hidden rounded-xl border bg-white/[0.03] transition-opacity ${dragging ? 'opacity-30' : d.held ? 'opacity-55' : ''} ${
+        d.held ? 'border-white/10' : 'border-white/10 hover:border-white/20'
+      }`}
     >
       <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer" draggable={false}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`}
-          alt={d.title}
-          className="aspect-video w-full object-cover opacity-90"
-        />
+        <img src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`} alt={d.title} className="aspect-video w-full object-cover" />
       </a>
       <div className="p-3">
-        <div className="line-clamp-2 text-xs font-semibold text-white/80">{d.title}</div>
-        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/40">
-          {d.model && (
-            <span
-              className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                d.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
-              }`}
-            >
-              {d.model}
-            </span>
-          )}
-          <span
-            className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-              d.held ? 'bg-white/10 text-white/40' : 'bg-emerald-400/20 text-emerald-300'
+        <div className="flex items-start gap-2">
+          <span className="mt-0.5 cursor-grab select-none text-white/25 active:cursor-grabbing" title="Drag to reorder">
+            ⠿
+          </span>
+          <div className="line-clamp-2 flex-1 text-xs font-medium leading-snug text-white/80">{d.title}</div>
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {d.held ? <Chip>held</Chip> : <Chip tone="good">queued</Chip>}
+          {d.model && <Chip tone="info">{d.model}</Chip>}
+          <span className="text-xs text-white/30">{relativeTime(d.postedAt)}</span>
+        </div>
+
+        <div className="mt-3 flex gap-1.5">
+          <button
+            onClick={onPublishClick}
+            disabled={publishing}
+            className={`flex-1 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors disabled:opacity-40 ${
+              confirming ? 'bg-amber-400 text-black' : 'bg-emerald-400/15 text-emerald-300 hover:bg-emerald-400/25'
             }`}
           >
-            {d.held ? 'held' : 'queued'}
-          </span>
-          <span>{relativeTime(d.postedAt)}</span>
+            {publishing ? 'Publishing…' : confirming ? 'Confirm?' : 'Publish now'}
+          </button>
+          <button
+            onClick={onHold}
+            disabled={holdBusy}
+            className="rounded-lg bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/50 transition-colors hover:bg-white/10 disabled:opacity-40"
+            title={d.held ? 'Put back in the queue' : 'Keep this out of the queue'}
+          >
+            {holdBusy ? '…' : d.held ? 'Requeue' : 'Hold'}
+          </button>
         </div>
-        <button
-          onClick={onPublishClick}
-          disabled={publishing}
-          className={`mt-2 w-full rounded-md border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
-            confirming
-              ? 'border-amber-400 bg-amber-400/20 text-amber-200'
-              : 'border-emerald-400/50 bg-emerald-400/10 text-emerald-300 hover:border-emerald-400'
-          }`}
-        >
-          {publishing ? 'Publishing…' : confirming ? 'Confirm publish?' : '✓ Publish now'}
-        </button>
-        <button
-          onClick={onHold}
-          disabled={holdBusy}
-          className="mt-1.5 w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white/50 transition-colors hover:border-white/25 disabled:opacity-40"
-        >
-          {holdBusy ? 'Updating…' : d.held ? '↩ Add back to queue' : '✕ Don’t post'}
-        </button>
+
         <button
           onClick={() => setOpen((o) => !o)}
-          className="mt-1.5 w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-white/40 transition-colors hover:border-white/25 hover:text-white/60"
+          className="mt-1.5 w-full rounded-lg px-2 py-1 text-[11px] font-medium text-white/35 transition-colors hover:bg-white/5 hover:text-white/60"
         >
-          {open ? '▴ Hide paper trail' : '▾ Paper trail'}
+          {open ? 'Hide details' : 'Details'}
         </button>
-        {open && <PaperTrailPanel item={d} />}
+        {open && <PaperTrailBody item={d} />}
       </div>
     </div>
   )
 }
 
-function TopPerformersPanel({ characters }: { characters: string[] }) {
-  if (characters.length === 0) return null
+function QueueSection({
+  drafts,
+  publishingId,
+  onPublish,
+  holdBusyId,
+  onHold,
+  onReorder,
+}: {
+  drafts: DraftItem[]
+  publishingId: string | null
+  onPublish: (videoId: string) => void
+  holdBusyId: string | null
+  onHold: (videoId: string, held: boolean) => void
+  onReorder: (videoIds: string[]) => void
+}) {
+  const [confirmId, setConfirmId] = useState<string | null>(null)
+  const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [order, setOrder] = useState<string[]>(() => drafts.map((d) => d.videoId))
+  const [dragId, setDragId] = useState<string | null>(null)
+
+  // Resync local drag order only when the actual SET of draft ids changes
+  // (publish/hold/a fresh draft altered membership) — keying on the joined
+  // id list rather than the drafts array itself means a background 30s
+  // refetch that returns the same ids in the same order doesn't fight an
+  // in-progress or just-completed drag.
+  const idsKey = drafts.map((d) => d.videoId).join(',')
+  useEffect(() => {
+    setOrder(drafts.map((d) => d.videoId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idsKey])
+
+  useEffect(
+    () => () => {
+      if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
+    },
+    []
+  )
+
+  function handleClick(videoId: string) {
+    if (confirmId === videoId) {
+      if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
+      setConfirmId(null)
+      onPublish(videoId)
+      return
+    }
+    setConfirmId(videoId)
+    confirmTimeout.current = setTimeout(() => setConfirmId(null), 4000)
+  }
+
+  function handleDrop(targetId: string) {
+    const draggedId = dragId
+    setDragId(null)
+    if (!draggedId || draggedId === targetId) return
+    const from = order.indexOf(draggedId)
+    const to = order.indexOf(targetId)
+    if (from === -1 || to === -1) return
+    const next = [...order]
+    next.splice(from, 1)
+    next.splice(to, 0, draggedId)
+    setOrder(next)
+    onReorder(next)
+  }
+
+  const byId = new Map(drafts.map((d) => [d.videoId, d]))
+  const ordered = order.map((id) => byId.get(id)).filter((d): d is DraftItem => !!d)
+
   return (
-    <div className="mb-4 rounded-lg border border-emerald-400/20 bg-emerald-400/5 p-4">
-      <div className="mb-2 text-[10px] uppercase tracking-[0.25em] text-emerald-300/70">
-        Feeding the Idea Generator — Top Performers
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {characters.map((name) => (
-          <span
-            key={name}
-            className="rounded-full border px-3 py-1 text-xs font-bold"
-            style={{ borderColor: colorFor(name), color: colorFor(name) }}
-          >
-            {name}
-          </span>
-        ))}
-      </div>
-      <div className="mt-2 text-[10px] text-white/30">Characters from your top 3 real videos by views — the generator is told to lean into them</div>
-    </div>
+    <Card className="p-5">
+      <CardTitle accent="#22d3ee" right={<span className="text-xs text-white/35">Drag to reorder</span>}>Draft queue</CardTitle>
+      {ordered.length === 0 ? (
+        <Empty>
+          Nothing queued. The next scheduled run will generate a fresh video instead of posting from here.
+        </Empty>
+      ) : (
+        <>
+          <p className="mb-4 text-xs text-white/40">
+            Unlisted until published. The next scheduled run takes the top one that isn’t held.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {ordered.map((d) => (
+              <DraftCard
+                key={d.videoId}
+                d={d}
+                publishing={publishingId === d.videoId}
+                confirming={confirmId === d.videoId}
+                holdBusy={holdBusyId === d.videoId}
+                onPublishClick={() => handleClick(d.videoId)}
+                onHold={() => onHold(d.videoId, !d.held)}
+                dragging={dragId === d.videoId}
+                onDragStart={() => setDragId(d.videoId)}
+                onDragOverCard={(e) => e.preventDefault()}
+                onDropCard={() => handleDrop(d.videoId)}
+                onDragEnd={() => setDragId(null)}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </Card>
   )
 }
 
-function ModelStatsRow({ modelStats }: { modelStats: ModelStats }) {
-  const entries = Object.entries(modelStats)
-  if (entries.length === 0) return null
-  return (
-    <div className="mb-4 grid grid-cols-2 gap-3">
-      {entries.map(([model, s]) => (
-        <div
-          key={model}
-          className={`rounded-lg border px-4 py-3 ${model === 'kling' ? 'border-fuchsia-400/30 bg-fuchsia-400/5' : 'border-cyan-400/30 bg-cyan-400/5'}`}
-        >
-          <div className={`text-[10px] font-bold uppercase tracking-widest ${model === 'kling' ? 'text-fuchsia-300' : 'text-cyan-300'}`}>
-            {model} · {s.count} video{s.count === 1 ? '' : 's'}
-          </div>
-          <div className="mt-1 text-sm text-white/70">
-            avg {formatNum(s.avgViews)} views · avg {s.avgLikes} likes
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
+/* --------------------------------------------------------- library section */
 
 const VIDEO_SORTS = [
   { key: 'recent', label: 'Recent' },
-  { key: 'views', label: 'Top Views' },
-  { key: 'engagement', label: 'Top Engagement' },
+  { key: 'views', label: 'Views' },
+  { key: 'engagement', label: 'Engagement' },
 ] as const
 type VideoSort = (typeof VIDEO_SORTS)[number]['key']
-
-function PaperTrailPanel({ item }: { item: PaperTrail }) {
-  const rows: { label: string; value: string }[] = []
-  if (item.pickMethod) rows.push({ label: 'Pick Method', value: item.pickMethod })
-  if (item.setting) rows.push({ label: 'Setting', value: item.setting })
-  if (item.justification) rows.push({ label: 'Reasoning', value: item.justification })
-  if (item.description) rows.push({ label: 'Description', value: item.description })
-  if (item.winnerLine) rows.push({ label: 'Winner Line', value: `"${item.winnerLine}"` })
-  if (item.loserLine) rows.push({ label: 'Loser Line', value: `"${item.loserLine}"` })
-
-  if (rows.length === 0) {
-    return (
-      <div className="mt-2 rounded border border-white/10 bg-black/40 p-2.5 text-[10px] text-white/30">
-        No paper trail logged — posted before this feature.
-      </div>
-    )
-  }
-
-  return (
-    <div className="mt-2 space-y-2 rounded border border-white/10 bg-black/40 p-2.5">
-      {rows.map((r) => (
-        <div key={r.label}>
-          <div className="text-[9px] font-bold uppercase tracking-widest text-emerald-300/60">{r.label}</div>
-          <div className="text-[11px] leading-snug text-white/70">{r.value}</div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 function VideoCard({ v }: { v: VideoItem }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/30 transition-colors hover:border-cyan-400/40">
-      <a href={`https://youtube.com/shorts/${v.id}`} target="_blank" rel="noopener noreferrer">
+    <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] transition-colors hover:border-white/20">
+      <a href={`https://youtube.com/shorts/${v.id}`} target="_blank" rel="noopener noreferrer" className="block">
         {v.thumbnail && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={v.thumbnail} alt={v.title} className="aspect-video w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />
+          <img src={v.thumbnail} alt={v.title} className="aspect-video w-full object-cover" />
         )}
       </a>
       <div className="p-3">
@@ -615,129 +686,335 @@ function VideoCard({ v }: { v: VideoItem }) {
           href={`https://youtube.com/shorts/${v.id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="line-clamp-2 block text-xs font-semibold text-white/80 hover:text-cyan-200"
+          className="line-clamp-2 block text-xs font-medium leading-snug text-white/80 hover:text-cyan-200"
         >
           {v.title}
         </a>
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] text-white/40">
-          <span>👁 {formatNum(v.views)}</span>
-          <span>❤ {formatNum(v.likes)}</span>
-          <span>💬 {formatNum(v.comments)}</span>
+        <div className="mt-2 flex items-center gap-3 text-xs tabular-nums text-white/45">
+          <span title="views">👁 {formatNum(v.views)}</span>
+          <span title="likes">♥ {formatNum(v.likes)}</span>
+          <span title="comments">💬 {formatNum(v.comments)}</span>
         </div>
-        <div className="mt-1.5 flex items-center gap-1.5">
-          {v.model && (
-            <span
-              className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                v.model === 'kling' ? 'bg-fuchsia-400/20 text-fuchsia-300' : 'bg-cyan-400/20 text-cyan-300'
-              }`}
-            >
-              {v.model}
-            </span>
-          )}
-          {v.dryRun && <span className="rounded bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white/50">dry run</span>}
-          <span className="text-[10px] text-white/30">{relativeTime(v.publishedAt)}</span>
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {v.model && <Chip tone="info">{v.model}</Chip>}
+          {v.dryRun && <Chip>unlisted</Chip>}
+          <span className="text-xs text-white/30">{relativeTime(v.publishedAt)}</span>
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="mt-2 w-full rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-white/40 transition-colors hover:border-white/25 hover:text-white/60"
+          className="mt-2 w-full rounded-lg px-2 py-1 text-[11px] font-medium text-white/35 transition-colors hover:bg-white/5 hover:text-white/60"
         >
-          {open ? '▴ Hide paper trail' : '▾ Paper trail'}
+          {open ? 'Hide details' : 'Details'}
         </button>
-        {open && <PaperTrailPanel item={v} />}
+        {open && <PaperTrailBody item={v} />}
       </div>
     </div>
   )
 }
 
-function VideoGrid({
+function LibrarySection({
   videos,
   modelStats,
+  topPerformers,
   notConfigured,
   unreachable,
-  sort,
-  onSortChange,
 }: {
   videos: VideoItem[] | null
   modelStats: ModelStats
+  topPerformers: string[]
   notConfigured: boolean
   unreachable: boolean
-  sort: VideoSort
-  onSortChange: (s: VideoSort) => void
 }) {
+  const [sort, setSort] = useState<VideoSort>('recent')
   const [query, setQuery] = useState('')
 
-  const sorted = useMemo(() => {
+  const shown = useMemo(() => {
     if (!videos) return null
-    const arr = [...videos]
+    let arr = [...videos]
+    const q = query.trim().toLowerCase()
+    if (q) arr = arr.filter((v) => v.title.toLowerCase().includes(q))
     if (sort === 'views') arr.sort((a, b) => b.views - a.views)
     else if (sort === 'engagement') arr.sort((a, b) => b.likes + b.comments - (a.likes + a.comments))
     else arr.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     return arr
-  }, [videos, sort])
+  }, [videos, sort, query])
 
-  const filtered = useMemo(() => {
-    if (!sorted) return sorted
-    const q = query.trim().toLowerCase()
-    if (!q) return sorted
-    return sorted.filter((v) => v.title.toLowerCase().includes(q))
-  }, [sorted, query])
+  const modelEntries = Object.entries(modelStats)
 
   return (
-    <div className="mt-10">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Recent Deploys</div>
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="🔍 Search by character…"
-            className="w-40 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[11px] text-white/70 outline-none placeholder:text-white/30 focus:border-cyan-400/50 sm:w-48"
-          />
-          <div className="flex gap-1.5">
-            {VIDEO_SORTS.map((s) => (
-              <button
-                key={s.key}
-                onClick={() => onSortChange(s.key)}
-                className={`rounded-full border px-3 py-1 text-[11px] uppercase tracking-wide transition-colors ${
-                  sort === s.key ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200' : 'border-white/10 text-white/40 hover:border-white/25'
-                }`}
-              >
-                {s.label}
-              </button>
+    <div className="space-y-4">
+      {(modelEntries.length > 0 || topPerformers.length > 0) && (
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {modelEntries.length > 0 && (
+            <Card className="p-5">
+              <CardTitle accent="#c084fc">Model performance</CardTitle>
+              <div className="space-y-2">
+                {modelEntries.map(([model, s]) => (
+                  <div key={model} className="flex items-center justify-between rounded-lg bg-black/25 px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <Chip tone="info">{model}</Chip>
+                      <span className="text-xs text-white/40">
+                        {s.count} video{s.count === 1 ? '' : 's'}
+                      </span>
+                    </div>
+                    <div className="text-xs tabular-nums text-white/65">
+                      {formatNum(s.avgViews)} avg views · {s.avgLikes} avg likes
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+          {topPerformers.length > 0 && (
+            <Card className="p-5">
+              <CardTitle accent="#34d399">Top characters</CardTitle>
+              <div className="flex flex-wrap gap-2">
+                {topPerformers.map((name) => (
+                  <span
+                    key={name}
+                    className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium"
+                    style={{ borderColor: `${colorFor(name)}66`, color: colorFor(name) }}
+                  >
+                    <Avatar name={name} size={16} />
+                    {name}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-white/35">
+                Pulled from your top 3 videos by views — the idea generator is told to lean into these.
+              </p>
+            </Card>
+          )}
+        </div>
+      )}
+
+      <Card className="p-5">
+        <CardTitle
+          right={
+            <div className="flex items-center gap-2">
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search…"
+                className="w-28 rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white/75 outline-none transition-colors placeholder:text-white/25 focus:border-cyan-400/50 sm:w-40"
+              />
+              <div className="flex rounded-lg border border-white/10 bg-black/30 p-0.5">
+                {VIDEO_SORTS.map((s) => (
+                  <button
+                    key={s.key}
+                    onClick={() => setSort(s.key)}
+                    className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                      sort === s.key ? 'bg-white/15 text-white/95' : 'text-white/45 hover:text-white/75'
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          }
+        >
+          Published videos
+        </CardTitle>
+
+        {notConfigured || unreachable ? (
+          <Empty>Live stats unavailable{unreachable ? ' — can’t reach the droplet' : ''}</Empty>
+        ) : shown === null ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-video animate-pulse rounded-xl bg-white/5" />
             ))}
           </div>
-        </div>
-      </div>
-
-      {notConfigured || unreachable ? (
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-8 text-center text-xs text-white/30">
-          📡 Live video stats unavailable{unreachable ? ' — droplet unreachable' : ''}
-        </div>
-      ) : sorted === null ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="aspect-video animate-pulse rounded-lg bg-white/5" />
-          ))}
-        </div>
-      ) : sorted.length === 0 ? (
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-8 text-center text-xs text-white/30">No videos posted yet</div>
-      ) : filtered && filtered.length === 0 ? (
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-8 text-center text-xs text-white/30">No videos match &ldquo;{query}&rdquo;</div>
-      ) : (
-        <>
-          <ModelStatsRow modelStats={modelStats} />
+        ) : shown.length === 0 ? (
+          <Empty>{query ? `Nothing matches “${query}”` : 'No videos published yet'}</Empty>
+        ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {filtered!.map((v) => (
+            {shown.map((v) => (
               <VideoCard key={v.id} v={v} />
             ))}
           </div>
-        </>
-      )}
+        )}
+      </Card>
     </div>
   )
 }
 
+/* ---------------------------------------------------------- system section */
+
+function lineTone(line: string) {
+  const l = line.toLowerCase()
+  if (l.includes('error') || l.includes('fail')) return 'text-red-400'
+  if (l.includes('uploaded') || l.includes('success') || l.includes('posted') || l.includes('done')) return 'text-emerald-400'
+  return 'text-white/45'
+}
+
+function SystemSection({
+  status,
+  statusError,
+  activeCronPreset,
+  activeCronHourUtc,
+  cronBusy,
+  cronConfirmPreset,
+  cronConfirmHour,
+  onCronPreset,
+  onCronHour,
+}: {
+  status: StatusResponse | null
+  statusError: string | null
+  activeCronPreset: string | null
+  activeCronHourUtc: number | null
+  cronBusy: boolean
+  cronConfirmPreset: string | null
+  cronConfirmHour: number | null
+  onCronPreset: (p: string) => void
+  onCronHour: (h: number) => void
+}) {
+  const logRef = useRef<HTMLDivElement>(null)
+  // Memoised so the `?? []` fallback doesn't mint a fresh array on every
+  // render and re-fire the auto-scroll effect below on renders where the log
+  // didn't actually change.
+  const lines = useMemo(() => status?.lastLogLines ?? [], [status?.lastLogLines])
+
+  useEffect(() => {
+    // Scroll only this panel's own log, not the page — scrollIntoView() walks
+    // up every scrollable ancestor including the window, which used to yank
+    // the whole dashboard back up on every 15s status poll.
+    const el = logRef.current
+    if (el) el.scrollTop = el.scrollHeight
+  }, [lines])
+
+  const alerts = status?.recentAlerts ?? []
+  const matchups = [...(status?.recentMatchups ?? [])].reverse().slice(0, 8)
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-5">
+        <CardTitle accent="#fbbf24" right={<span className="text-xs text-white/35">{status?.cronSchedule ?? '—'}</span>}>Posting schedule</CardTitle>
+        <div className="mb-2 text-xs font-medium uppercase tracking-wide text-white/40">How often</div>
+        <div className="flex gap-2">
+          {Object.keys(CRON_DAY_PATTERNS).map((preset) => {
+            const active = activeCronPreset === preset
+            const confirming = cronConfirmPreset === preset
+            return (
+              <button
+                key={preset}
+                onClick={() => onCronPreset(preset)}
+                disabled={cronBusy}
+                className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-colors disabled:opacity-40 ${
+                  confirming ? 'bg-amber-400 text-black' : active ? 'bg-cyan-400/20 text-cyan-200' : 'bg-white/5 text-white/50 hover:bg-white/10'
+                }`}
+              >
+                {confirming ? 'Confirm?' : CRON_LABELS[preset]}
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="mb-2 mt-4 text-xs font-medium uppercase tracking-wide text-white/40">What time (ET)</div>
+        <div className="flex gap-2">
+          {CRON_HOUR_PRESETS.map(({ label, hourUtc }) => {
+            const active = activeCronHourUtc === hourUtc
+            const confirming = cronConfirmHour === hourUtc
+            return (
+              <button
+                key={hourUtc}
+                onClick={() => onCronHour(hourUtc)}
+                disabled={cronBusy}
+                className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-colors disabled:opacity-40 ${
+                  confirming ? 'bg-amber-400 text-black' : active ? 'bg-cyan-400/20 text-cyan-200' : 'bg-white/5 text-white/50 hover:bg-white/10'
+                }`}
+              >
+                {confirming ? 'Confirm?' : label}
+              </button>
+            )
+          })}
+        </div>
+        <p className="mt-3 text-xs text-white/35">Click a button twice to change it — a bad edit here silently stops all future posting.</p>
+      </Card>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card className="overflow-hidden">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
+            <span className="text-sm font-semibold text-white/85">Pipeline log</span>
+            <span className="font-mono text-[10px] text-white/25">{DROPLET_LABEL}</span>
+          </div>
+          <div ref={logRef} className="max-h-64 overflow-y-auto p-3 font-mono text-[11px] leading-relaxed">
+            {statusError ? (
+              <div className="text-red-400/70">Can’t reach the droplet — log unavailable</div>
+            ) : lines.length === 0 ? (
+              <div className="text-white/25">Waiting for output…</div>
+            ) : (
+              lines.map((line, i) => (
+                <div key={`${i}-${line}`} className={lineTone(line)}>
+                  {line}
+                </div>
+              ))
+            )}
+          </div>
+        </Card>
+
+        <Card className="p-5">
+          <CardTitle accent="#fbbf24">Alerts</CardTitle>
+          {alerts.length === 0 ? (
+            <Empty>No alerts — all clear</Empty>
+          ) : (
+            <div className="space-y-2">
+              {alerts.slice(0, 4).map((a, i) => (
+                <div key={i} className="rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-2.5">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <div className="text-xs font-semibold text-amber-200">{a.title}</div>
+                    <div className="shrink-0 text-[10px] text-white/30">{relativeTime(a.at)}</div>
+                  </div>
+                  <div className="mt-1 line-clamp-2 text-xs text-white/50">{a.message}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <Card className="p-5">
+        <CardTitle accent="#f472b6">Recent matchups</CardTitle>
+        {matchups.length === 0 ? (
+          <Empty>No battles recorded yet</Empty>
+        ) : (
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {matchups.map((pair, i) => {
+              const [a, b] = pair.split(' vs ')
+              return (
+                <div key={i} className="flex items-center gap-2 rounded-lg bg-black/25 px-3 py-2 text-sm">
+                  <span className="flex flex-1 items-center justify-end gap-1.5 truncate text-right font-medium" style={{ color: colorFor(a) }}>
+                    {a}
+                    <Avatar name={a} size={18} />
+                  </span>
+                  <span className="shrink-0 text-[10px] font-bold text-white/25">VS</span>
+                  <span className="flex flex-1 items-center gap-1.5 truncate font-medium" style={{ color: colorFor(b) }}>
+                    <Avatar name={b} size={18} />
+                    {b}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </Card>
+    </div>
+  )
+}
+
+/* -------------------------------------------------------------------- page */
+
+const SECTIONS = [
+  { key: 'launch', label: 'Launch' },
+  { key: 'queue', label: 'Queue' },
+  { key: 'library', label: 'Library' },
+  { key: 'system', label: 'System' },
+] as const
+type SectionKey = (typeof SECTIONS)[number]['key']
+
 export default function YTDashboard() {
+  const [section, setSection] = useState<SectionKey>('launch')
+
   const [status, setStatus] = useState<StatusResponse | null>(null)
   const [statusError, setStatusError] = useState<string | null>(null)
   const [videos, setVideos] = useState<VideoItem[] | null>(null)
@@ -745,33 +1022,20 @@ export default function YTDashboard() {
   const [topPerformers, setTopPerformers] = useState<string[]>([])
   const [videosNotConfigured, setVideosNotConfigured] = useState(false)
   const [videosUnreachable, setVideosUnreachable] = useState(false)
-  const [videoSort, setVideoSort] = useState<VideoSort>('recent')
   const [drafts, setDrafts] = useState<DraftItem[]>([])
   const [publishingDraftId, setPublishingDraftId] = useState<string | null>(null)
   const [holdBusyId, setHoldBusyId] = useState<string | null>(null)
   const [roster, setRoster] = useState<RosterCharacter[] | null>(null)
-  const [charA, setCharA] = useState('')
-  const [charB, setCharB] = useState('')
-  // Separate picker state for the 1-clip (singleshot) launcher below — kept
-  // independent from charA/charB (the 3-clip/multishot picker) so picking a
-  // character for one mode doesn't affect the other.
-  const [charA1, setCharA1] = useState('')
-  const [charB1, setCharB1] = useState('')
   const [now, setNow] = useState(() => new Date())
-  // Which of the two launch panels is showing — a single toggle instead of
-  // two always-visible stacked sections, so comparing/switching between them
-  // doesn't require scrolling past a whole extra picker+button every time.
-  const [launchMode, setLaunchMode] = useState<'multi' | 'single'>('multi')
-  const [triggerState, setTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
-  const [singleTriggerState, setSingleTriggerState] = useState<'idle' | 'confirm' | 'sending' | 'sent' | 'error'>('idle')
+  const [triggerState, setTriggerState] = useState<TriggerState>('idle')
   const [pauseBusy, setPauseBusy] = useState(false)
   const [cronConfirmPreset, setCronConfirmPreset] = useState<string | null>(null)
   const [cronConfirmHour, setCronConfirmHour] = useState<number | null>(null)
-  const cronConfirmHourTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [cronBusy, setCronBusy] = useState(false)
+
   const confirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const singleConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cronConfirmTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const cronConfirmHourTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -850,7 +1114,7 @@ export default function YTDashboard() {
     [fetchDrafts, fetchStatus]
   )
 
-  // No busy/confirm state here on purpose — DraftsPanel already applies the
+  // No busy/confirm state here on purpose — QueueSection already applies the
   // new order optimistically the instant a card is dropped, so this just
   // needs to persist it. fetchDrafts() afterward reconciles with the
   // authoritative (queueOrder-sorted) order from the droplet.
@@ -892,37 +1156,35 @@ export default function YTDashboard() {
   useEffect(
     () => () => {
       if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
-      if (singleConfirmTimeout.current) clearTimeout(singleConfirmTimeout.current)
       if (cronConfirmTimeout.current) clearTimeout(cronConfirmTimeout.current)
       if (cronConfirmHourTimeout.current) clearTimeout(cronConfirmHourTimeout.current)
     },
     []
   )
 
-  const pickerIncomplete = (!!charA && !charB) || (!charA && !!charB)
-  // Sukuna is excluded from the 1-clip roster specifically — he's the
-  // character with real, documented "doesn't look right" YouTube comments
-  // ("Temu Sukuna") from before reference images existed, and the 1-clip
-  // path never uses reference images (see handleSingleTrigger below), so
-  // there's nothing here to keep his likeness on-model.
-  const singleRoster = useMemo(() => roster?.filter((c) => c.name !== 'Sukuna') ?? null, [roster])
-  const singlePickerIncomplete = (!!charA1 && !charB1) || (!charA1 && !!charB1)
-
-  const handleTrigger = useCallback(async () => {
-    if (pickerIncomplete) return
-    if (triggerState === 'idle') {
-      setTriggerState('confirm')
-      confirmTimeout.current = setTimeout(() => setTriggerState('idle'), 4500)
-      return
-    }
-    if (triggerState === 'confirm') {
+  // One handler for both render modes — only the renderMode in the body
+  // differs. 'singleshot' forces the old single-clip text2video path;
+  // omitting renderMode lets the droplet use its default (multishot when the
+  // matchup is eligible). See matchup-shorts/src/runPipeline.js.
+  const launch = useCallback(
+    async (mode: LaunchMode, charA: string, charB: string) => {
+      if (triggerState === 'idle' || triggerState === 'error') {
+        setTriggerState('confirm')
+        confirmTimeout.current = setTimeout(() => setTriggerState('idle'), 4500)
+        return
+      }
+      if (triggerState !== 'confirm') return
       if (confirmTimeout.current) clearTimeout(confirmTimeout.current)
       setTriggerState('sending')
       try {
         const res = await fetch('/api/yt-dashboard/trigger', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ characterA: charA || undefined, characterB: charB || undefined }),
+          body: JSON.stringify({
+            characterA: charA || undefined,
+            characterB: charB || undefined,
+            renderMode: mode === 'single' ? 'singleshot' : undefined,
+          }),
         })
         const data = await res.json()
         if (!res.ok) throw new Error(data?.error ?? 'failed')
@@ -932,43 +1194,11 @@ export default function YTDashboard() {
         fetchDrafts()
       } catch {
         setTriggerState('error')
-        setTimeout(() => setTriggerState('idle'), 3000)
+        setTimeout(() => setTriggerState('idle'), 4000)
       }
-    }
-  }, [triggerState, fetchStatus, fetchDrafts, pickerIncomplete, charA, charB])
-
-  // 1-clip launcher — forces the old single-shot text2video path via
-  // renderMode: 'singleshot' (multishot is the default everywhere else now,
-  // see matchup-shorts/src/runPipeline.js). No reference images or
-  // background images are ever used on this path.
-  const handleSingleTrigger = useCallback(async () => {
-    if (singlePickerIncomplete) return
-    if (singleTriggerState === 'idle') {
-      setSingleTriggerState('confirm')
-      singleConfirmTimeout.current = setTimeout(() => setSingleTriggerState('idle'), 4500)
-      return
-    }
-    if (singleTriggerState === 'confirm') {
-      if (singleConfirmTimeout.current) clearTimeout(singleConfirmTimeout.current)
-      setSingleTriggerState('sending')
-      try {
-        const res = await fetch('/api/yt-dashboard/trigger', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ characterA: charA1 || undefined, characterB: charB1 || undefined, renderMode: 'singleshot' }),
-        })
-        const data = await res.json()
-        if (!res.ok) throw new Error(data?.error ?? 'failed')
-        setSingleTriggerState('sent')
-        setTimeout(() => setSingleTriggerState('idle'), 3000)
-        fetchStatus()
-        fetchDrafts()
-      } catch {
-        setSingleTriggerState('error')
-        setTimeout(() => setSingleTriggerState('idle'), 3000)
-      }
-    }
-  }, [singleTriggerState, fetchStatus, fetchDrafts, singlePickerIncomplete, charA1, charB1])
+    },
+    [triggerState, fetchStatus, fetchDrafts]
+  )
 
   const togglePause = useCallback(async () => {
     setPauseBusy(true)
@@ -1024,13 +1254,7 @@ export default function YTDashboard() {
   )
 
   const countdownMs = useMemo(() => msUntilNextRun(now, status?.cronFields ?? null), [now, status?.cronFields])
-  const remainingDisplay = useScramble(status?.viduBalanceUsd ?? 0, 2, 800)
-  const battlesDisplay = useScramble(status?.recentMatchups.length ?? 0, 0, 600)
 
-  const fuelPct =
-    status?.viduBalanceUsd != null ? Math.max(0, Math.min(100, (status.viduBalanceUsd / status.viduTotalLoaded) * 100)) : 0
-  const fuelColor = fuelPct > 50 ? '#39ff14' : fuelPct > 20 ? '#ffd400' : '#ff3b3b'
-  const modelDisplay = status?.lastModelUsed === 'kling' ? 'Kling v3' : status?.lastModelUsed === 'vidu' ? 'Vidu Q3 Pro' : status?.lastModelUsed ?? '—'
   // cronFields is "0 <hour> <dom> <month> <dow>" — day pattern is always
   // "* * <dow>" (dom/month never used), matching CRON_DAY_PATTERNS' shape.
   const cronParts = status?.cronFields?.trim().split(/\s+/) ?? null
@@ -1039,334 +1263,131 @@ export default function YTDashboard() {
     : null
   const activeCronHourUtc = cronParts ? Number(cronParts[1]) : null
 
+  const queueCount = drafts.filter((d) => !d.held).length
+  const alertCount = status?.recentAlerts.length ?? 0
+
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#05060c] font-mono text-white selection:bg-cyan-500/30">
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[36rem] w-[60rem] -translate-x-1/2 rounded-full bg-cyan-500/[0.07] blur-[140px]" />
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#08090f] text-white/90 antialiased selection:bg-cyan-500/30">
+      {/* One soft colour wash behind the header — enough to keep the page
+          from reading as flat grey, without the animated blob field the
+          previous version had competing with the content. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
+        <div className="absolute -top-32 left-1/4 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-cyan-500/20 blur-[110px]" />
+        <div className="absolute -top-24 right-1/4 h-56 w-[30rem] translate-x-1/2 rounded-full bg-fuchsia-500/20 blur-[110px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* header */}
+        <header className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-cyan-400/70">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan-400" />
-              {now.toUTCString().slice(17, 25)} UTC
-            </div>
-            <h1 className="bg-gradient-to-r from-cyan-300 via-white to-fuchsia-400 bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent sm:text-5xl">
+            <h1 className="bg-gradient-to-r from-cyan-300 via-white to-fuchsia-300 bg-clip-text font-display text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
               PowerScale
             </h1>
-            <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/40">Command Center</p>
+            <p className="mt-0.5 text-xs text-white/45">
+              {now.toUTCString().slice(17, 22)} UTC · autopilot for @powerscaleshorts
+            </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <StatusPill lockActive={status?.lockActive} paused={status?.automationPaused} unreachable={!!statusError} />
+          <div className="flex flex-wrap items-center gap-2">
+            <StatusBadge lockActive={status?.lockActive} paused={status?.automationPaused} unreachable={!!statusError} />
             <button
               onClick={togglePause}
               disabled={pauseBusy || !status}
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-wide text-white/70 transition-colors hover:border-slate-300/50 hover:text-slate-200 disabled:opacity-40"
+              className="rounded-full bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/65 transition-colors hover:bg-white/10 hover:text-white/95 disabled:opacity-40"
             >
-              {status?.automationPaused ? '▶ Resume Automation' : '⏸ Pause Automation'}
+              {status?.automationPaused ? 'Resume' : 'Pause'}
             </button>
             <a
               href="https://youtube.com/@powerscaleshorts"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-wide text-white/70 transition-colors hover:border-cyan-400/50 hover:text-cyan-300"
+              className="rounded-full bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/65 transition-colors hover:bg-white/10 hover:text-cyan-300"
             >
-              @powerscaleshorts ↗
+              Channel ↗
             </a>
           </div>
         </header>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          <HudTile label="Vidu Fuel" accent="#22d3ee">
-            <div className="text-2xl font-bold tabular-nums text-cyan-300">{status?.viduBalanceUsd != null ? `$${remainingDisplay}` : '—'}</div>
-            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full transition-[width] duration-1000" style={{ width: `${fuelPct}%`, background: fuelColor }} />
-            </div>
-            <div className="mt-1 text-xs text-white/35">
-              {status?.viduCreditsRemaining != null ? `${status.viduCreditsRemaining} credits` : 'balance check failed'} of ${status?.viduTotalLoaded ?? '—'}
-            </div>
-          </HudTile>
-
-          <HudTile label="Active Model" accent="#f472b6">
-            <div className="text-lg font-bold uppercase text-fuchsia-300">{modelDisplay}</div>
-            <div className="mt-1 text-xs text-white/35">~$0.68–$0.90/video · direct Vidu API</div>
-          </HudTile>
-
-          <HudTile label="Next Auto-Launch" accent="#ffd400">
-            <div className="text-2xl font-bold tabular-nums text-amber-300">{status?.automationPaused ? '—:—:—' : formatCountdown(countdownMs)}</div>
-            <div className="mt-1 text-xs text-white/35">{status?.automationPaused ? 'paused' : status?.cronSchedule ?? '—'}</div>
-          </HudTile>
-
-          <HudTile label="Recent Battles" accent="#39ff14">
-            <div className="text-2xl font-bold tabular-nums text-lime-300">{battlesDisplay}</div>
-            <div className="mt-1 text-xs text-white/35">last 15 tracked</div>
-          </HudTile>
-
-          <HudTile label="Last Checked" accent="#94a3b8">
-            <div className="text-sm font-bold text-white/70">{status ? relativeTime(status.checkedAt) : '—'}</div>
-            <div className="mt-1 text-xs text-white/35">auto-refresh 15s</div>
-          </HudTile>
+        {/* at-a-glance numbers */}
+        <div className="mt-6">
+          <StatStrip status={status} countdownMs={countdownMs} />
         </div>
 
-        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Launch a Battle</div>
-            <div className="flex gap-1 rounded-full border border-white/10 bg-black/30 p-1">
+        {/* section nav */}
+        <nav className="mt-6 flex gap-1 overflow-x-auto rounded-xl border border-white/10 bg-white/[0.03] p-1">
+          {SECTIONS.map((s) => {
+            const badge = s.key === 'queue' ? queueCount : s.key === 'system' ? alertCount : 0
+            const active = section === s.key
+            return (
               <button
-                onClick={() => setLaunchMode('multi')}
-                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide transition-colors ${
-                  launchMode === 'multi' ? 'bg-cyan-400/20 text-cyan-200' : 'text-white/40 hover:text-white/70'
+                key={s.key}
+                onClick={() => setSection(s.key)}
+                className={`flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
+                  active
+                    ? 'bg-gradient-to-b from-cyan-400/25 to-cyan-400/10 text-cyan-100 shadow-[inset_0_0_0_1px_rgba(34,211,238,0.35)]'
+                    : 'text-white/45 hover:bg-white/5 hover:text-white/80'
                 }`}
               >
-                3-Clip
+                {s.label}
+                {badge > 0 && (
+                  <span
+                    className={`rounded-full px-1.5 text-[10px] font-bold tabular-nums ${
+                      s.key === 'system' ? 'bg-amber-400/20 text-amber-300' : 'bg-cyan-400/20 text-cyan-300'
+                    }`}
+                  >
+                    {badge}
+                  </span>
+                )}
               </button>
-              <button
-                onClick={() => setLaunchMode('single')}
-                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide transition-colors ${
-                  launchMode === 'single' ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white/70'
-                }`}
-              >
-                1-Clip
-              </button>
+            )
+          })}
+        </nav>
+
+        {/* section body */}
+        <main className="mt-4">
+          {section === 'launch' && (
+            <div className="mx-auto max-w-xl">
+              <LaunchPanel roster={roster} lockActive={!!status?.lockActive} state={triggerState} onLaunch={launch} />
             </div>
-          </div>
-
-          {launchMode === 'multi' ? (
-            <>
-              <div className="grid grid-cols-2 gap-3">
-                <select
-                  value={charA}
-                  onChange={(e) => setCharA(e.target.value)}
-                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
-                >
-                  <option value="">🎲 Random</option>
-                  {roster?.map((c) => (
-                    <option key={c.name} value={c.name} disabled={c.name === charB}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={charB}
-                  onChange={(e) => setCharB(e.target.value)}
-                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
-                >
-                  <option value="">🎲 Random</option>
-                  {roster?.map((c) => (
-                    <option key={c.name} value={c.name} disabled={c.name === charA}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-white/40">
-                3 stitched clips (intro / fight / finish) using each character&apos;s reference image plus a background
-                reference when the setting has one. ~$0.90/video.
-              </p>
-              {pickerIncomplete && <p className="mt-2 text-xs text-amber-300/80">Pick both characters, or leave both on Random.</p>}
-            </>
-          ) : (
-            <>
-              <div className="grid grid-cols-2 gap-3">
-                <select
-                  value={charA1}
-                  onChange={(e) => setCharA1(e.target.value)}
-                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
-                >
-                  <option value="">🎲 Random</option>
-                  {singleRoster?.map((c) => (
-                    <option key={c.name} value={c.name} disabled={c.name === charB1}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={charB1}
-                  onChange={(e) => setCharB1(e.target.value)}
-                  className="rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm text-white/80 outline-none focus:border-cyan-400/60"
-                >
-                  <option value="">🎲 Random</option>
-                  {singleRoster?.map((c) => (
-                    <option key={c.name} value={c.name} disabled={c.name === charA1}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-white/40">
-                One continuous clip from text only — no reference images. Sukuna is left out of this roster; his
-                likeness needs a reference image to look right. ~$0.68/video.
-              </p>
-              {singlePickerIncomplete && <p className="mt-2 text-xs text-amber-300/80">Pick both characters, or leave both on Random.</p>}
-            </>
           )}
 
-          <p className="mt-3 text-[11px] text-white/30">
-            Lands as an unlisted draft below — nothing posts live from here. It publishes automatically on the next
-            scheduled run, or hit Publish now on the draft.
-          </p>
-        </div>
-
-        <div className="mt-6 flex flex-col items-center gap-3">
-          {launchMode === 'multi' ? (
-            <button
-              onClick={handleTrigger}
-              disabled={status?.lockActive || triggerState === 'sending' || pickerIncomplete}
-              className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
-                status?.lockActive || pickerIncomplete
-                  ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
-                  : triggerState === 'confirm'
-                  ? 'border border-amber-400 bg-amber-400/20 text-amber-200'
-                  : triggerState === 'sent'
-                  ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
-                  : triggerState === 'error'
-                  ? 'border border-red-400 bg-red-400/20 text-red-200'
-                  : 'border border-cyan-400/60 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-cyan-100 hover:scale-[1.03]'
-              }`}
-            >
-              {status?.lockActive
-                ? '🔒 Rendering In Progress'
-                : triggerState === 'sending'
-                ? 'Launching…'
-                : triggerState === 'sent'
-                ? '✅ Battle Launched'
-                : triggerState === 'error'
-                ? '⚠ Launch Failed — Retry'
-                : triggerState === 'confirm'
-                ? 'Confirm? ~$0.90 in render cost — saved as a draft'
-                : '⚡ Generate 3-Clip Draft'}
-            </button>
-          ) : (
-            <button
-              onClick={handleSingleTrigger}
-              disabled={status?.lockActive || singleTriggerState === 'sending' || singlePickerIncomplete}
-              className={`relative overflow-hidden rounded-full px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] transition-all ${
-                status?.lockActive || singlePickerIncomplete
-                  ? 'cursor-not-allowed border border-white/10 bg-white/5 text-white/30'
-                  : singleTriggerState === 'confirm'
-                  ? 'border border-amber-400 bg-amber-400/20 text-amber-200'
-                  : singleTriggerState === 'sent'
-                  ? 'border border-emerald-400 bg-emerald-400/20 text-emerald-200'
-                  : singleTriggerState === 'error'
-                  ? 'border border-red-400 bg-red-400/20 text-red-200'
-                  : 'border border-white/30 bg-white/10 text-white/80 hover:scale-[1.03] hover:border-white/50'
-              }`}
-            >
-              {status?.lockActive
-                ? '🔒 Rendering In Progress'
-                : singleTriggerState === 'sending'
-                ? 'Launching…'
-                : singleTriggerState === 'sent'
-                ? '✅ Battle Launched'
-                : singleTriggerState === 'error'
-                ? '⚠ Launch Failed — Retry'
-                : singleTriggerState === 'confirm'
-                ? 'Confirm? ~$0.68 in render cost — saved as a draft'
-                : '🎬 Generate 1-Clip Draft'}
-            </button>
+          {section === 'queue' && (
+            <QueueSection
+              drafts={drafts}
+              publishingId={publishingDraftId}
+              onPublish={publishDraft}
+              holdBusyId={holdBusyId}
+              onHold={holdDraft}
+              onReorder={reorderDrafts}
+            />
           )}
-          {(launchMode === 'multi' ? triggerState : singleTriggerState) === 'confirm' && (
-            <p className="text-[11px] text-white/40">Click again within a few seconds to confirm</p>
+
+          {section === 'library' && (
+            <LibrarySection
+              videos={videos}
+              modelStats={modelStats}
+              topPerformers={topPerformers}
+              notConfigured={videosNotConfigured}
+              unreachable={videosUnreachable}
+            />
           )}
-        </div>
 
-        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm">
-          <div className="mb-3 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.15em] text-white/50">
-            <span>Posting Schedule</span>
-            <span className="text-white/30">{status?.cronSchedule ?? '—'}</span>
-          </div>
-          <div className="flex gap-2">
-            {Object.keys(CRON_DAY_PATTERNS).map((preset) => {
-              const active = activeCronPreset === preset
-              const confirming = cronConfirmPreset === preset
-              return (
-                <button
-                  key={preset}
-                  onClick={() => requestCronChange(preset)}
-                  disabled={cronBusy}
-                  className={`flex-1 rounded-md border px-3 py-2 text-[11px] uppercase tracking-widest transition-colors disabled:opacity-40 ${
-                    confirming
-                      ? 'border-amber-400 bg-amber-400/20 text-amber-200'
-                      : active
-                      ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200'
-                      : 'border-white/15 text-white/50 hover:border-white/30'
-                  }`}
-                >
-                  {confirming ? 'Confirm?' : CRON_LABELS[preset]}
-                </button>
-              )
-            })}
-          </div>
-          <div className="mb-3 mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-white/50">Posting Time (ET)</div>
-          <div className="flex gap-2">
-            {CRON_HOUR_PRESETS.map(({ label, hourUtc }) => {
-              const active = activeCronHourUtc === hourUtc
-              const confirming = cronConfirmHour === hourUtc
-              return (
-                <button
-                  key={hourUtc}
-                  onClick={() => requestCronHourChange(hourUtc)}
-                  disabled={cronBusy}
-                  className={`flex-1 rounded-md border px-3 py-2 text-[11px] uppercase tracking-widest transition-colors disabled:opacity-40 ${
-                    confirming
-                      ? 'border-amber-400 bg-amber-400/20 text-amber-200'
-                      : active
-                      ? 'border-cyan-400/60 bg-cyan-400/10 text-cyan-200'
-                      : 'border-white/15 text-white/50 hover:border-white/30'
-                  }`}
-                >
-                  {confirming ? 'Confirm?' : label}
-                </button>
-              )
-            })}
-          </div>
-          <p className="mt-3 text-[11px] text-white/40">
-            {status && status.queuedDraftsCount > 0
-              ? `${status.queuedDraftsCount} draft${status.queuedDraftsCount === 1 ? '' : 's'} queued — the next scheduled run posts from the queue instead of generating.`
-              : 'Queue is empty — the next scheduled run generates and posts a fresh video.'}
-            {status && status.heldDraftsCount > 0
-              ? ` (${status.heldDraftsCount} held draft${status.heldDraftsCount === 1 ? '' : 's'} not counted.)`
-              : ''}
-          </p>
-        </div>
+          {section === 'system' && (
+            <SystemSection
+              status={status}
+              statusError={statusError}
+              activeCronPreset={activeCronPreset}
+              activeCronHourUtc={activeCronHourUtc}
+              cronBusy={cronBusy}
+              cronConfirmPreset={cronConfirmPreset}
+              cronConfirmHour={cronConfirmHour}
+              onCronPreset={requestCronChange}
+              onCronHour={requestCronHourChange}
+            />
+          )}
+        </main>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-7">
-          <div className="lg:col-span-2">
-            <BattleLogPanel matchups={status?.recentMatchups ?? []} />
-          </div>
-          <div className="lg:col-span-3">
-            <TerminalPanel lines={status?.lastLogLines ?? []} unreachable={!!statusError} />
-          </div>
-          <div className="lg:col-span-2">
-            <AlertsPanel alerts={status?.recentAlerts ?? []} />
-          </div>
-        </div>
-
-        <DraftsPanel
-          drafts={drafts}
-          publishingId={publishingDraftId}
-          onPublish={publishDraft}
-          holdBusyId={holdBusyId}
-          onHold={holdDraft}
-          onReorder={reorderDrafts}
-        />
-
-        <div className="mt-8">
-          <TopPerformersPanel characters={topPerformers} />
-        </div>
-
-        <VideoGrid
-          videos={videos}
-          modelStats={modelStats}
-          notConfigured={videosNotConfigured}
-          unreachable={videosUnreachable}
-          sort={videoSort}
-          onSortChange={setVideoSort}
-        />
-
-        <footer className="mt-10 border-t border-white/10 pt-4 text-center text-[10px] uppercase tracking-widest text-white/20">
-          channel {CHANNEL_ID} · droplet {DROPLET_LABEL} · {status?.cronSchedule ?? 'cron —'}
+        <footer className="mt-10 border-t border-white/10 pt-4 text-center font-mono text-[10px] text-white/20">
+          {CHANNEL_ID} · {DROPLET_LABEL} · {status?.cronSchedule ?? 'cron —'}
         </footer>
       </div>
     </div>
