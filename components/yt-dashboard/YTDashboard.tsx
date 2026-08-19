@@ -475,6 +475,7 @@ function PaperTrailBody({ item }: { item: PaperTrail }) {
 
 function DraftCard({
   d,
+  position,
   publishing,
   confirming,
   holdBusy,
@@ -487,6 +488,9 @@ function DraftCard({
   onDragEnd,
 }: {
   d: DraftItem
+  // 1-based slot in the posting queue, or null for held drafts (which have
+  // no slot — getNextQueuedDraft on the droplet skips them entirely).
+  position: number | null
   publishing: boolean
   confirming: boolean
   holdBusy: boolean
@@ -499,31 +503,45 @@ function DraftCard({
   onDragEnd: () => void
 }) {
   const [open, setOpen] = useState(false)
+  const queued = position != null
+  const isNext = position === 1
   return (
     <div
-      draggable
+      draggable={queued}
       onDragStart={onDragStart}
       onDragOver={onDragOverCard}
       onDrop={onDropCard}
       onDragEnd={onDragEnd}
-      className={`overflow-hidden rounded-xl border bg-white/[0.03] transition-opacity ${dragging ? 'opacity-30' : d.held ? 'opacity-55' : ''} ${
-        d.held ? 'border-white/10' : 'border-white/10 hover:border-white/20'
+      className={`relative overflow-hidden rounded-xl border transition-opacity ${dragging ? 'opacity-30' : queued ? '' : 'opacity-60'} ${
+        isNext ? 'border-emerald-400/50 bg-emerald-400/[0.06]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
       }`}
     >
+      {queued && (
+        <span
+          className={`absolute left-2 top-2 z-10 flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-xs font-bold ${
+            isNext ? 'bg-emerald-400 text-black' : 'bg-black/75 text-white/70'
+          }`}
+          title={isNext ? 'Posts on the next scheduled run' : `Slot ${position} in the queue`}
+        >
+          {position}
+        </span>
+      )}
       <a href={`https://youtube.com/shorts/${d.videoId}`} target="_blank" rel="noopener noreferrer" draggable={false}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`} alt={d.title} className="aspect-video w-full object-cover" />
       </a>
       <div className="p-3">
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 cursor-grab select-none text-white/25 active:cursor-grabbing" title="Drag to reorder">
-            ⠿
-          </span>
+          {queued && (
+            <span className="mt-0.5 cursor-grab select-none text-white/25 active:cursor-grabbing" title="Drag to reorder">
+              ⠿
+            </span>
+          )}
           <div className="line-clamp-2 flex-1 text-xs font-medium leading-snug text-white/80">{d.title}</div>
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {d.held ? <Chip>held</Chip> : <Chip tone="good">queued</Chip>}
+          {isNext && <Chip tone="good">next up</Chip>}
           {d.model && <Chip tone="info">{d.model}</Chip>}
           <span className="text-xs text-white/30">{relativeTime(d.postedAt)}</span>
         </div>
@@ -625,40 +643,68 @@ function QueueSection({
 
   const byId = new Map(drafts.map((d) => [d.videoId, d]))
   const ordered = order.map((id) => byId.get(id)).filter((d): d is DraftItem => !!d)
+  // Two genuinely different things that were previously mixed into one grid:
+  // what the next scheduled run will actually post (in order), and what's
+  // been deliberately parked. `order` still holds every id so reordering
+  // keeps sending the droplet a complete list, exactly as before.
+  const queued = ordered.filter((d) => !d.held)
+  const held = ordered.filter((d) => d.held)
+
+  const card = (d: DraftItem, position: number | null) => (
+    <DraftCard
+      key={d.videoId}
+      d={d}
+      position={position}
+      publishing={publishingId === d.videoId}
+      confirming={confirmId === d.videoId}
+      holdBusy={holdBusyId === d.videoId}
+      onPublishClick={() => handleClick(d.videoId)}
+      onHold={() => onHold(d.videoId, !d.held)}
+      dragging={dragId === d.videoId}
+      onDragStart={() => setDragId(d.videoId)}
+      onDragOverCard={(e) => e.preventDefault()}
+      onDropCard={() => handleDrop(d.videoId)}
+      onDragEnd={() => setDragId(null)}
+    />
+  )
 
   return (
-    <Card className="p-5">
-      <CardTitle accent="#22d3ee" right={<span className="text-xs text-white/35">Drag to reorder</span>}>Draft queue</CardTitle>
-      {ordered.length === 0 ? (
-        <Empty>
-          Nothing queued. The next scheduled run will generate a fresh video instead of posting from here.
-        </Empty>
-      ) : (
-        <>
+    <div className="space-y-4">
+      <Card className="p-5">
+        <CardTitle
+          accent="#34d399"
+          right={queued.length > 1 ? <span className="text-xs text-white/35">Drag to reorder</span> : undefined}
+        >
+          Posting queue
+          <span className="ml-1.5 font-normal text-white/35">({queued.length})</span>
+        </CardTitle>
+        {queued.length === 0 ? (
+          <Empty>
+            Nothing waiting to post. The next scheduled run will generate a fresh video instead.
+          </Empty>
+        ) : (
+          <>
+            <p className="mb-4 text-xs text-white/40">
+              Unlisted until they post. The next scheduled run takes <span className="text-emerald-300/80">#1</span>, then works down.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">{queued.map((d, i) => card(d, i + 1))}</div>
+          </>
+        )}
+      </Card>
+
+      {held.length > 0 && (
+        <Card className="p-5">
+          <CardTitle accent="#94a3b8">
+            Held back
+            <span className="ml-1.5 font-normal text-white/35">({held.length})</span>
+          </CardTitle>
           <p className="mb-4 text-xs text-white/40">
-            Unlisted until published. The next scheduled run takes the top one that isn’t held.
+            Parked — these never post automatically. Requeue one to put it back in line, or publish it directly.
           </p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {ordered.map((d) => (
-              <DraftCard
-                key={d.videoId}
-                d={d}
-                publishing={publishingId === d.videoId}
-                confirming={confirmId === d.videoId}
-                holdBusy={holdBusyId === d.videoId}
-                onPublishClick={() => handleClick(d.videoId)}
-                onHold={() => onHold(d.videoId, !d.held)}
-                dragging={dragId === d.videoId}
-                onDragStart={() => setDragId(d.videoId)}
-                onDragOverCard={(e) => e.preventDefault()}
-                onDropCard={() => handleDrop(d.videoId)}
-                onDragEnd={() => setDragId(null)}
-              />
-            ))}
-          </div>
-        </>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">{held.map((d) => card(d, null))}</div>
+        </Card>
       )}
-    </Card>
+    </div>
   )
 }
 
