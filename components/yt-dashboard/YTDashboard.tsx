@@ -47,6 +47,12 @@ type PaperTrail = {
   pickMethod?: string | null
 }
 
+// renderMode is 'multishot' (3 clips, reference images) or 'singleshot'
+// (1 continuous clip, text only). The droplet derives it from the model
+// name for videos logged before the field existed, so it's populated for
+// the whole back catalogue — see renderModeOf() in statusServer.js.
+type RenderMode = 'multishot' | 'singleshot'
+
 type VideoItem = {
   id: string
   title: string
@@ -56,7 +62,12 @@ type VideoItem = {
   likes: number
   comments: number
   model: string | null
+  renderMode: RenderMode | null
   dryRun: boolean
+  // Sent by the droplet's /videos (getVideosCached) — a dry-run draft that
+  // was later published counts as a real video, so the two flags together
+  // are what distinguish "still an unlisted draft" from "went live".
+  published: boolean
 } & PaperTrail
 
 type ModelStats = Record<
@@ -67,6 +78,7 @@ type ModelStats = Record<
 type DraftItem = {
   videoId: string
   model: string | null
+  renderMode: RenderMode | null
   loserName: string
   title: string
   postedAt: string
@@ -113,6 +125,10 @@ const MODE_INFO: Record<LaunchMode, { label: string; cost: string; blurb: string
     blurb: 'The original single continuous take, generated from text only — no reference images. Cheaper, but likenesses drift more.',
   },
 }
+
+// Short labels for the render modes, used on cards and in the comparison.
+const RENDER_MODE_LABEL: Record<RenderMode, string> = { multishot: '3-clip', singleshot: '1-clip' }
+const RENDER_MODE_COLOR: Record<RenderMode, string> = { multishot: '#22d3ee', singleshot: '#c084fc' }
 
 // Sukuna is excluded from 1-clip specifically: he's the character with real
 // "doesn't look right" comments on the channel ("Temu Sukuna") from before
@@ -542,7 +558,14 @@ function DraftCard({
 
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {isNext && <Chip tone="good">next up</Chip>}
-          {d.model && <Chip tone="info">{d.model}</Chip>}
+          {d.renderMode && (
+            <span
+              className="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+              style={{ color: RENDER_MODE_COLOR[d.renderMode], background: `${RENDER_MODE_COLOR[d.renderMode]}26` }}
+            >
+              {RENDER_MODE_LABEL[d.renderMode]}
+            </span>
+          )}
           <span className="text-xs text-white/30">{relativeTime(d.postedAt)}</span>
         </div>
 
@@ -742,7 +765,14 @@ function VideoCard({ v }: { v: VideoItem }) {
           <span title="comments">💬 {formatNum(v.comments)}</span>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {v.model && <Chip tone="info">{v.model}</Chip>}
+          {v.renderMode && (
+            <span
+              className="rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+              style={{ color: RENDER_MODE_COLOR[v.renderMode], background: `${RENDER_MODE_COLOR[v.renderMode]}26` }}
+            >
+              {RENDER_MODE_LABEL[v.renderMode]}
+            </span>
+          )}
           {v.dryRun && <Chip>unlisted</Chip>}
           <span className="text-xs text-white/30">{relativeTime(v.publishedAt)}</span>
         </div>
@@ -758,37 +788,122 @@ function VideoCard({ v }: { v: VideoItem }) {
   )
 }
 
+function medianDaysOld(videos: VideoItem[]) {
+  if (videos.length === 0) return null
+  const days = videos
+    .map((v) => (Date.now() - new Date(v.publishedAt).getTime()) / 86_400_000)
+    .sort((a, b) => a - b)
+  return days[Math.floor(days.length / 2)]
+}
+
+// 3-clip vs 1-clip head-to-head. Deliberately shows sample size and age
+// alongside the averages: at the time this was built the 3-clip videos were
+// ~1 day old and the 1-clip ones a median of 16 days, so raw average views
+// made 3-clip look far worse purely because it had had less time to
+// accumulate. Presenting the averages alone would have been misleading.
+function FormatComparison({ videos, stats }: { videos: VideoItem[]; stats: ModelStats }) {
+  const modes: RenderMode[] = ['multishot', 'singleshot']
+  const present = modes.filter((m) => stats[m]?.count)
+  if (present.length === 0) return null
+
+  const ages = Object.fromEntries(
+    modes.map((m) => [m, medianDaysOld(videos.filter((v) => v.renderMode === m && !(v.dryRun && !v.published)))])
+  ) as Record<RenderMode, number | null>
+
+  const best = Math.max(...present.map((m) => stats[m].avgViews))
+  const leader = present.length === 2 ? present.reduce((a, b) => (stats[a].avgViews >= stats[b].avgViews ? a : b)) : null
+
+  // Only call a winner when both sides have a few videos AND comparable
+  // maturity — otherwise say plainly that it's too early.
+  const youngest = Math.min(...present.map((m) => ages[m] ?? 0))
+  const oldest = Math.max(...present.map((m) => ages[m] ?? 0))
+  const thinSample = present.some((m) => stats[m].count < 4)
+  const ageSkewed = present.length === 2 && oldest > 5 && youngest < oldest / 3
+  const inconclusive = thinSample || ageSkewed
+
+  return (
+    <Card className="p-5">
+      <CardTitle accent="#22d3ee">Format performance — 3-clip vs 1-clip</CardTitle>
+      <div className="space-y-3">
+        {present.map((m) => {
+          const s = stats[m]
+          const pct = best > 0 ? Math.max(4, (s.avgViews / best) * 100) : 4
+          const age = ages[m]
+          return (
+            <div key={m}>
+              <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
+                <span className="flex items-center gap-2 text-sm font-semibold" style={{ color: RENDER_MODE_COLOR[m] }}>
+                  {RENDER_MODE_LABEL[m]}
+                  {!inconclusive && leader === m && <Chip tone="good">ahead</Chip>}
+                </span>
+                <span className="text-xs tabular-nums text-white/45">
+                  {formatNum(s.avgViews)} avg views · {s.avgLikes} avg likes
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-black/40">
+                <div
+                  className="h-full rounded-full transition-[width] duration-700"
+                  style={{ width: `${pct}%`, background: RENDER_MODE_COLOR[m] }}
+                />
+              </div>
+              <div className="mt-1 text-xs text-white/35">
+                {s.count} video{s.count === 1 ? '' : 's'}
+                {age != null && ` · median ${age < 1 ? 'under a day' : `${Math.round(age)} day${Math.round(age) === 1 ? '' : 's'}`} old`}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {inconclusive && (
+        <p className="mt-4 rounded-lg border border-amber-400/25 bg-amber-400/[0.07] px-3 py-2.5 text-xs leading-relaxed text-amber-200/90">
+          Too early to call.{' '}
+          {ageSkewed
+            ? 'The newer format hasn’t had the same time to pick up views, so comparing averages now favours whichever format is older.'
+            : 'One format still has very few videos — a single outlier moves the average a lot.'}
+        </p>
+      )}
+    </Card>
+  )
+}
+
 function LibrarySection({
   videos,
   modelStats,
+  renderModeStats,
   topPerformers,
   notConfigured,
   unreachable,
 }: {
   videos: VideoItem[] | null
   modelStats: ModelStats
+  renderModeStats: ModelStats
   topPerformers: string[]
   notConfigured: boolean
   unreachable: boolean
 }) {
   const [sort, setSort] = useState<VideoSort>('recent')
   const [query, setQuery] = useState('')
+  const [formatFilter, setFormatFilter] = useState<RenderMode | 'all'>('all')
 
   const shown = useMemo(() => {
     if (!videos) return null
     let arr = [...videos]
     const q = query.trim().toLowerCase()
     if (q) arr = arr.filter((v) => v.title.toLowerCase().includes(q))
+    if (formatFilter !== 'all') arr = arr.filter((v) => v.renderMode === formatFilter)
     if (sort === 'views') arr.sort((a, b) => b.views - a.views)
     else if (sort === 'engagement') arr.sort((a, b) => b.likes + b.comments - (a.likes + a.comments))
     else arr.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     return arr
-  }, [videos, sort, query])
+  }, [videos, sort, query, formatFilter])
 
   const modelEntries = Object.entries(modelStats)
 
   return (
     <div className="space-y-4">
+      {videos && <FormatComparison videos={videos} stats={renderModeStats} />}
+
       {(modelEntries.length > 0 || topPerformers.length > 0) && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {modelEntries.length > 0 && (
@@ -862,6 +977,21 @@ function LibrarySection({
         >
           Published videos
         </CardTitle>
+
+        <div className="mb-4 flex flex-wrap items-center gap-1.5">
+          {([['all', 'All formats'], ['multishot', '3-clip'], ['singleshot', '1-clip']] as const).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setFormatFilter(key)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                formatFilter === key ? 'bg-white/15 text-white/95' : 'bg-white/5 text-white/45 hover:text-white/75'
+              }`}
+              style={formatFilter === key && key !== 'all' ? { color: RENDER_MODE_COLOR[key], background: `${RENDER_MODE_COLOR[key]}22` } : undefined}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
         {notConfigured || unreachable ? (
           <Empty>Live stats unavailable{unreachable ? ' — can’t reach the droplet' : ''}</Empty>
@@ -1065,6 +1195,7 @@ export default function YTDashboard() {
   const [statusError, setStatusError] = useState<string | null>(null)
   const [videos, setVideos] = useState<VideoItem[] | null>(null)
   const [modelStats, setModelStats] = useState<ModelStats>({})
+  const [renderModeStats, setRenderModeStats] = useState<ModelStats>({})
   const [topPerformers, setTopPerformers] = useState<string[]>([])
   const [videosNotConfigured, setVideosNotConfigured] = useState(false)
   const [videosUnreachable, setVideosUnreachable] = useState(false)
@@ -1102,6 +1233,7 @@ export default function YTDashboard() {
       if (!res.ok) throw new Error(data?.error ?? 'failed')
       setVideos(data.videos ?? [])
       setModelStats(data.modelStats ?? {})
+      setRenderModeStats(data.renderModeStats ?? {})
       setTopPerformers(data.topPerformers ?? [])
       setVideosNotConfigured(data.configured === false)
       setVideosUnreachable(false)
@@ -1411,6 +1543,7 @@ export default function YTDashboard() {
             <LibrarySection
               videos={videos}
               modelStats={modelStats}
+              renderModeStats={renderModeStats}
               topPerformers={topPerformers}
               notConfigured={videosNotConfigured}
               unreachable={videosUnreachable}
