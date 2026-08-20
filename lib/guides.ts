@@ -2076,4 +2076,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'should-you-refinance-or-consolidate-student-loans',
+    title: 'Should You Refinance or Consolidate Your Student Loans?',
+    metaTitle: 'Refinance vs. Consolidate Student Loans: What’s the Difference?',
+    description:
+      'They sound like the same move but they’re not. Here’s the real difference between refinancing and consolidating student loans — and why one can quietly cost you federal protections.',
+    date: '2026-08-20',
+    category: 'College Money',
+    intro:
+      'You graduate with a stack of separate loans, different servicers, different due dates, maybe different interest rates — and somewhere online you saw an ad promising to combine them into one lower payment. Sounds great. But "consolidate" and "refinance" get used interchangeably online when they’re actually two very different moves, one federal and reversible-ish, one private and permanent. Mixing them up can cost you real protections.',
+    sections: [
+      {
+        heading: 'Consolidation: a federal move that simplifies, but rarely saves money',
+        body: 'Federal loan consolidation (officially a Direct Consolidation Loan) combines multiple federal loans into a single new federal loan with one monthly payment and one servicer. The new interest rate isn’t negotiated or based on your credit — it’s a weighted average of your existing loans’ rates, rounded up to the nearest one-eighth of a percent. So consolidation almost never lowers your rate; sometimes it rounds it up slightly.\n\nWhat consolidation actually buys you is access, not savings: it can bring older loan types (like FFEL or Perkins loans) into eligibility for income-driven repayment plans or Public Service Loan Forgiveness (PSLF), and it resets a defaulted federal loan back into good standing. It stays 100% federal the entire time, which means every federal protection — deferment, forbearance, income-driven repayment, forgiveness programs — stays intact.',
+      },
+      {
+        heading: 'Refinancing: a private move that can lower your rate, but trades away federal protections',
+        body: 'Refinancing means taking your loans — federal, private, or both — to a private lender (a bank, credit union, or online lender) who pays them off and issues you a brand-new private loan, ideally at a lower interest rate. Refinancing is entirely credit-based: the lender looks at your credit score, income, and employment history, which is exactly why it tends to make more sense a few years after graduation than the day you walk across the stage, once you have income and credit history to show for it.\n\nThe catch, and it’s a big one: if you refinance federal loans into a private loan, they become private permanently. There’s no undo button. You lose access to income-driven repayment, federal deferment and forbearance, PSLF and other federal forgiveness programs, and any future federal relief programs — even ones that don’t exist yet. Refinancing purely private loans doesn’t carry this risk, since you’re not giving up anything you didn’t already lack.',
+      },
+      {
+        heading: 'When refinancing federal loans is actually worth considering',
+        body: 'Refinancing federal loans into a private one can make sense if all of the following are true: your income is stable and comfortably covers the new payment, you have no realistic path to PSLF or another forgiveness program, you’re confident you won’t need an income-driven plan if your situation changes, and a private lender is offering you a meaningfully lower rate than your current weighted average. If you’re not sure about all four, the safer default is to leave federal loans federal — the protections are only valuable when you still have them, and you can’t buy them back once you’ve traded them away.\n\nPrivate lenders usually offer both fixed rates (locked for the life of the loan) and variable rates (which start lower but can rise over time). A fixed rate is the more predictable, generally safer choice unless you plan to pay the loan off quickly.',
+      },
+      {
+        heading: 'What neither option does',
+        body: 'Neither consolidation nor refinancing reduces how much you originally borrowed — you still owe the same principal (consolidation may add a small rounding bump; refinancing might add or remove fees depending on the lender). Neither is loan forgiveness. And extending your repayment term to shrink the monthly payment, which both consolidation and refinancing commonly offer, usually means paying more total interest over the life of the loan even if the rate itself is lower — a smaller monthly number can still be a more expensive loan overall.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know what you have first: list every loan, whether it’s federal or private, and its current rate.\n2. If your only goal is one payment and one due date, and all your loans are federal, consolidation keeps every protection intact.\n3. If you’re chasing PSLF or might need income-driven repayment someday, do not refinance your federal loans into a private loan.\n4. Only shop refinancing once you have steady income and decent credit — that’s when private lenders actually offer competitively lower rates.\n5. Compare the total interest paid over the full term, not just the monthly payment, before signing anything.\n6. Get any rate quote in writing and confirm whether it’s fixed or variable before you commit.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Is student loan consolidation the same as refinancing?',
+        a: 'No. Consolidation combines federal loans into one federal loan at a weighted-average rate and keeps all federal protections. Refinancing replaces loans with a new private loan, potentially at a lower rate, but permanently strips away federal protections from any federal loans included.',
+      },
+      {
+        q: 'Does refinancing lower my student loan interest rate?',
+        a: 'It can, especially once you have steady income and good credit — private lenders set refinance rates based on your financial profile, not a fixed formula. But a lower rate isn’t guaranteed, and it comes at the cost of federal protections if the original loans were federal.',
+      },
+      {
+        q: 'Can I un-refinance a federal loan back to federal after I’ve done it?',
+        a: 'No. Once a federal loan is refinanced into a private loan, that’s permanent — there’s no process to convert it back to a federal loan or restore federal protections like income-driven repayment or PSLF eligibility.',
+      },
+      {
+        q: 'Will consolidating my federal loans lower my monthly payment?',
+        a: 'It might, mainly by extending your repayment term, but it usually doesn’t lower your interest rate — the new rate is a weighted average of your existing loans, rounded up. A lower monthly payment from a longer term often means more total interest paid over time.',
+      },
+    ],
+  },
 ]
