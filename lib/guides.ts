@@ -2128,4 +2128,52 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-overtime-pay-get-taxed-more',
+    title: 'Does Overtime Pay Get Taxed at a Higher Rate?',
+    metaTitle: 'Does Overtime Get Taxed More? The Myth, Explained',
+    description:
+      'No — overtime isn’t taxed at some special higher rate. Here’s why your overtime paycheck can still feel smaller, and what actually happens to your tax bracket.',
+    date: '2026-08-21',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You picked up an extra shift, worked past 40 hours, and the overtime check felt underwhelming — maybe even smaller per hour than you expected. Every break room has someone swearing overtime gets taxed at some brutal special rate, so it’s "not worth it." That rumor is wrong. Here’s what’s actually happening to that check, and why it still feels off.',
+    sections: [
+      {
+        heading: 'What overtime pay actually is',
+        body: 'Under the federal Fair Labor Standards Act (FLSA), most hourly ("nonexempt") employees must be paid 1.5x their regular hourly rate for every hour worked beyond 40 in a single workweek. Work 44 hours at $16/hour and your first 40 hours pay normally, but those last 4 hours pay at $24/hour instead.\n\nSome states go further. California, for example, generally requires overtime pay after 8 hours in a single day, not just after 40 in a week, and double time past 12 hours in a day. Rules vary by state, so check your own state’s labor department if daily overtime might apply to you.\n\nNot everyone qualifies. Salaried employees classified as "exempt" — a status tied to their job duties and salary level under FLSA rules — generally aren’t entitled to overtime at all, no matter how many hours they work. If you’re hourly, you’re almost certainly nonexempt and covered.',
+      },
+      {
+        heading: 'The myth: overtime pushes your whole paycheck into a higher tax bracket',
+        body: 'The US federal income tax system is a marginal bracket system, not a flat one. That means each bracket’s rate only applies to the slice of income that falls inside it — not to your entire income once you cross the line. If the 12% bracket tops out at some threshold and the 22% bracket picks up from there, earning one dollar over that threshold does not make your first dollar taxed at 22%. It just means that one extra dollar is taxed at 22%, while every dollar before it is still taxed at the lower rates that applied to it.\n\nSo "overtime bumped me into a higher bracket" isn’t really a loss — even in the rare case where an extra shift does push part of your income into a higher bracket, only that sliver of income is taxed at the higher rate. You always keep the majority of every extra dollar you earn, no matter how much overtime you work.',
+      },
+      {
+        heading: 'Why the check still feels smaller than expected',
+        body: 'The confusion usually comes from withholding, not your actual tax bill. Payroll systems often calculate withholding based on what your pay would be if every paycheck were that size for the whole year — so a single bigger check (regular pay plus a chunk of overtime) can trigger a higher withholding percentage for that pay period than your regular checks get. That’s an estimate, not your real tax rate. If too much gets withheld from an overtime-heavy check, you get it back as part of your refund when you file.\n\nFICA (Social Security and Medicare) does come out of overtime pay at the same flat rates as regular pay — 6.2% and 1.45% — with no special overtime rate, high or low. That withholding is real and permanent either way, just like on a regular check.',
+      },
+      {
+        heading: 'So is picking up overtime actually worth it?',
+        body: 'Financially, yes, almost always. Say your marginal federal rate is 12%: every overtime dollar still nets you 88 cents after federal income tax before FICA and any state tax, and you’re earning that dollar at 1.5x your normal rate to begin with. Even someone whose overtime dollars get taxed at a higher marginal rate than their regular pay is still taking home the majority of each extra dollar — there’s no tax rule that makes working more hours a losing trade.\n\nThe one real trade-off is time and, depending on your income and other benefits, whether extra income affects things like need-based financial aid calculations or income-limited benefits — worth checking if either applies to you.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm you’re classified as "nonexempt" — that’s what makes you eligible for time-and-a-half overtime pay under federal law.\n2. Check your pay stub: overtime hours should show a rate 1.5x your regular hourly rate (or higher under some state rules).\n3. Don’t skip a shift over "tax bracket" fears — marginal brackets mean you keep most of every extra dollar.\n4. If your withholding consistently feels too high on bigger checks, you’ll likely see it evened out as a larger refund when you file.\n5. Consider directing extra overtime income into a Roth IRA or emergency fund before it disappears into everyday spending.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Roth IRA', '401(k)', 'Inflation'],
+    faq: [
+      {
+        q: 'Does working overtime put you in a higher tax bracket?',
+        a: 'It can push part of your income into a higher bracket, but US federal tax brackets are marginal — only the income within that higher bracket is taxed at the higher rate. Your earlier income keeps being taxed at the lower rates it already qualified for.',
+      },
+      {
+        q: 'Why does my overtime check have more tax withheld than usual?',
+        a: 'Payroll withholding formulas often treat a bigger single paycheck as if every check were that size for the year, which can withhold more than your actual tax bill requires. If you’re overwithheld, you get the difference back when you file your tax return.',
+      },
+      {
+        q: 'Is overtime pay taxed differently than regular pay?',
+        a: 'No. Overtime wages are taxed using the same federal income tax brackets and the same FICA rates (6.2% Social Security, 1.45% Medicare) as regular wages. There is no separate, higher tax rate that applies specifically to overtime.',
+      },
+    ],
+  },
 ]
