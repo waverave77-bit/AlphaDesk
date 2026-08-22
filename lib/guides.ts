@@ -2176,4 +2176,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'should-you-freeze-your-credit-as-a-teenager',
+    title: 'Should You Freeze Your Credit Before You Even Have One?',
+    metaTitle: 'Credit Freeze for Teens: Why Kids Are Identity Theft Targets',
+    description:
+      'Kids are prime identity theft targets because their SSN sits unused for years. Here’s how a free credit freeze actually works, and when you’d need one.',
+    date: '2026-08-22',
+    category: 'Credit',
+    intro:
+      'You probably don’t have a credit score yet — which sounds like nothing to protect. That’s exactly why identity thieves like targeting kids and teens: a stolen Social Security number with no credit file attached can be used for years before anyone notices. Here’s what a credit freeze actually does, and how to get one for free.',
+    sections: [
+      {
+        heading: 'Why minors are actually a favorite target for identity theft',
+        body: 'An adult’s stolen SSN usually gets caught fast — a weird charge shows up, a credit monitoring alert fires, a bank flags something off. A kid’s SSN has none of that. Most minors have no credit file at all, so a thief can open credit cards or take out loans in a child’s name and nobody is watching that file for suspicious activity, because there isn’t supposed to be any activity yet.\n\nThe fraud often isn’t discovered for years — sometimes not until the teenager turns 18, applies for their first real credit card or a student loan, and finds a decade of unpaid debt already sitting under their name. By then the paper trail is old and untangling it takes months.',
+      },
+      {
+        heading: 'What a credit freeze actually does (and doesn’t do)',
+        body: 'A credit freeze restricts access to your credit report so that most lenders can’t pull it — and without being able to check your report, they generally won’t approve a new account in your name. That blocks the core move identity thieves rely on: opening fresh credit using your stolen information.\n\nA freeze does not touch your existing accounts, does not lower your credit score, and does not stop you from using cards or accounts you already have. It only blocks brand-new applications from going through while it’s active. Since a federal law passed in 2018, freezing and unfreezing your credit is free for everyone, at all three nationwide bureaus, with no limit on how many times you do it.',
+      },
+      {
+        heading: 'How to freeze credit for a minor (or your own, once you turn 18)',
+        body: 'Most kids don’t have a credit file yet, so a parent or guardian has to ask each of the three bureaus — Equifax, Experian, and TransUnion — to create a file for the child and freeze it immediately, before anyone else gets the chance to open one fraudulently. Each bureau has its own process for a minor’s freeze, usually requiring the parent to mail or upload proof of the child’s identity (birth certificate or Social Security card) and proof of guardianship. You have to contact all three bureaus separately — freezing at one doesn’t freeze the others.\n\nOnce you turn 18, you can freeze your own credit report the same way, directly through each bureau’s website. Whoever sets up the freeze gets a PIN or password — save it somewhere safe, because you’ll need it to lift the freeze later.',
+      },
+      {
+        heading: 'Freeze vs. fraud alert vs. credit monitoring',
+        body: 'A credit freeze is the strongest option — it blocks new accounts from being opened outright until you lift it. A fraud alert is lighter: it doesn’t block anything, but it requires lenders to take extra steps to verify your identity before approving an application. A standard fraud alert is free and lasts one year (renewable); an extended fraud alert lasts seven years but generally requires filing an identity theft report with the FTC or police first.\n\nCredit monitoring is different from both — it’s a service (free or paid) that alerts you after something happens on your file, like a new account or hard inquiry. It’s useful as a backup, but it’s reactive. A freeze prevents the fraud in the first place; monitoring just tells you faster once it’s already happened.',
+      },
+      {
+        heading: 'When you need to temporarily lift a freeze',
+        body: 'A freeze isn’t permanent — you can lift it whenever you actually want to apply for something, like your first credit card, an apartment lease, or a car loan, since the landlord or lender will need to pull your report. Most bureaus let you thaw your file instantly online or through an app, either for a specific window of time or for one specific company, and it can automatically re-freeze afterward. Forgetting to lift it before applying is the most common freeze-related headache — you’ll just get an instant denial with no explanation until you realize your report is locked.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Ask a parent whether you already have a credit file — most minors don’t, and that’s normal.\n2. If you’re under 18, ask a parent to create and freeze a protected file for you at Equifax, Experian, and TransUnion.\n3. The moment you turn 18 and aren’t about to apply for credit, freeze your own file at all three bureaus — it’s free and reversible.\n4. Save the PIN or password each bureau gives you — you’ll need it to lift the freeze later.\n5. Before applying for a card, apartment, or loan, lift the freeze at all three bureaus first, or expect an automatic denial.\n6. Prefer applications to keep moving without lifting a freeze every time? A free fraud alert is a lighter-touch alternative.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does freezing your credit hurt your credit score?',
+        a: 'No. A credit freeze has zero effect on your credit score — it only blocks new accounts from being opened using your report while it’s active.',
+      },
+      {
+        q: 'Can identity thieves really use a kid’s Social Security number?',
+        a: 'Yes. Since most minors have no credit file at all, fraud on a child’s SSN often goes undetected for years — sometimes not discovered until the teen applies for their own first credit card or loan.',
+      },
+      {
+        q: 'Is a credit freeze free?',
+        a: 'Yes. Federal law made freezing and unfreezing your credit free for everyone at all three major bureaus, with no limit on how many times you do it.',
+      },
+      {
+        q: 'What’s the difference between a credit freeze and a fraud alert?',
+        a: 'A freeze blocks new accounts from being opened at all until you lift it. A fraud alert lets applications go through but requires the lender to verify your identity first. A freeze is the stronger protection of the two.',
+      },
+    ],
+  },
 ]
