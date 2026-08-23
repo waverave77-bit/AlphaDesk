@@ -96,6 +96,9 @@ def load(path, default):
         return default
 
 
+_USED_CLIP_IDS = set()   # Pexels video ids already used in this render run
+
+
 def pexels_search(query, api_key):
     """Picks a random result from the top matches, not always the first —
     the same keyword phrase gets reused across many entries, and always
@@ -108,7 +111,15 @@ def pexels_search(query, api_key):
     videos = data.get("videos", [])
     if not videos:
         return None
-    pick = random.choice(videos[:8])
+    # Randomising alone still collides: rendering a batch, two entries sharing a
+    # keyword each roll from the same 8-result pool and land on the same clip
+    # ~1-in-8 of the time (caught live — "cash stack close up" gave hook-17 and
+    # hook-19 the identical shot). Track what this run already used and prefer
+    # anything unused, so a batch never repeats footage across videos.
+    pool = videos[:8]
+    fresh = [v for v in pool if v["id"] not in _USED_CLIP_IDS]
+    pick = random.choice(fresh or pool)
+    _USED_CLIP_IDS.add(pick["id"])
     files = sorted(pick["video_files"], key=lambda f: f.get("width", 0), reverse=True)
     return files[0]["link"] if files else None
 

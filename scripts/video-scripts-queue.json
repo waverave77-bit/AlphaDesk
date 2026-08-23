@@ -466,5 +466,239 @@
       "#hustle"
     ],
     "status": "pending"
+  },
+  {
+    "id": 17,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "Investor.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "moody",
+    "caption": "Nobody hands you the title. The day you buy your first share of an index fund, that's it \u2014 you're an investor, and the only thing left is time.",
+    "hashtags": [
+      "#investing",
+      "#money",
+      "#stocks",
+      "#wealth",
+      "#finance"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "new york stock exchange facade",
+      "luxury watch close up wrist",
+      "cash stack close up",
+      "private jet on tarmac",
+      "stock market ticker screen close up",
+      "mercedes benz close up",
+      "gold bars stacked close up",
+      "wall street street sign",
+      "luxury car interior dashboard",
+      "hands counting cash close up",
+      "stock exchange trading floor wide shot"
+    ]
+  },
+  {
+    "id": 18,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "Owner.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "phonk",
+    "caption": "You can spend $200 on a phone from a company, or own a piece of the company that made it. Only one of those pays you back.",
+    "hashtags": [
+      "#investing",
+      "#stocks",
+      "#money",
+      "#ownership",
+      "#wealth"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "wall street bull statue",
+      "luxury car close up night",
+      "stack of hundred dollar bills",
+      "private jet interior",
+      "rolex watch close up",
+      "stock exchange trading floor wide shot",
+      "gold bullion close up",
+      "bmw driving city night",
+      "money counting machine close up",
+      "new york stock exchange facade",
+      "designer watch close up"
+    ]
+  },
+  {
+    "id": 19,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "CEO.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "phonk",
+    "caption": "Running a company and running your own money are the same skill: decide what's worth owning, then be patient enough to let it work. One of them you can start today with $50.",
+    "hashtags": [
+      "#ceo",
+      "#investing",
+      "#money",
+      "#wealth",
+      "#business"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "gold bars stacked close up",
+      "stock market ticker screen close up",
+      "cash stack close up",
+      "luxury watch close up wrist",
+      "sports car driving at night",
+      "private jet on tarmac",
+      "wall street street sign",
+      "hands counting cash close up",
+      "luxury car convoy driving",
+      "gold bullion close up",
+      "new york stock exchange facade"
+    ]
+  },
+  {
+    "id": 20,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "Self employed.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "hiphop",
+    "caption": "A job pays you for your hours. Assets pay you for your decisions. The goal was never to stop working \u2014 it's owning enough that working becomes a choice.",
+    "hashtags": [
+      "#selfemployed",
+      "#investing",
+      "#passiveincome",
+      "#money",
+      "#wealth"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "money counting machine close up",
+      "private jet interior",
+      "stack of hundred dollar bills",
+      "designer watch close up",
+      "luxury car interior dashboard",
+      "stock exchange trading floor wide shot",
+      "gold bars stacked close up",
+      "mercedes benz close up",
+      "wall street bull statue",
+      "cash stack close up",
+      "stock market ticker screen close up"
+    ]
+  },
+  {
+    "id": 21,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "Founder.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "moody",
+    "caption": "Every company in your portfolio started as one person who decided to own something instead of just working for someone. Buying a share is joining the other side of that trade.",
+    "hashtags": [
+      "#founder",
+      "#investing",
+      "#stocks",
+      "#money",
+      "#business"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "new york stock exchange facade",
+      "rolex watch close up",
+      "gold bullion close up",
+      "luxury car close up night",
+      "hands counting cash close up",
+      "private jet on tarmac",
+      "wall street street sign",
+      "sports car driving at night",
+      "stack of hundred dollar bills",
+      "stock exchange trading floor wide shot",
+      "luxury watch close up wrist"
+    ]
+  },
+  {
+    "id": 22,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "hook_lines": [
+      {
+        "text": "Landlord.",
+        "start": 0,
+        "end": 15
+      }
+    ],
+    "mood": "lofi",
+    "caption": "You don't need a house to own real estate. A REIT lets you own a slice of apartment buildings and warehouses for the price of one share \u2014 rent checks included.",
+    "hashtags": [
+      "#realestate",
+      "#reit",
+      "#investing",
+      "#passiveincome",
+      "#money"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "gold bars stacked close up",
+      "private jet on tarmac",
+      "luxury car convoy driving",
+      "cash stack close up",
+      "designer watch close up",
+      "wall street bull statue",
+      "bmw driving city night",
+      "money counting machine close up",
+      "stock market ticker screen close up",
+      "gold bullion close up",
+      "mercedes benz close up"
+    ]
   }
 ]

@@ -226,5 +226,119 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 17,
+    "video": "hook-17.mp4",
+    "video_music": "hook-17-music.mp4",
+    "caption": "Nobody hands you the title. The day you buy your first share of an index fund, that's it \u2014 you're an investor, and the only thing left is time.",
+    "hashtags": [
+      "#investing",
+      "#money",
+      "#stocks",
+      "#wealth",
+      "#finance"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 18,
+    "video": "hook-18.mp4",
+    "video_music": "hook-18-music.mp4",
+    "caption": "You can spend $200 on a phone from a company, or own a piece of the company that made it. Only one of those pays you back.",
+    "hashtags": [
+      "#investing",
+      "#stocks",
+      "#money",
+      "#ownership",
+      "#wealth"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 19,
+    "video": "hook-19.mp4",
+    "video_music": "hook-19-music.mp4",
+    "caption": "Running a company and running your own money are the same skill: decide what's worth owning, then be patient enough to let it work. One of them you can start today with $50.",
+    "hashtags": [
+      "#ceo",
+      "#investing",
+      "#money",
+      "#wealth",
+      "#business"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 20,
+    "video": "hook-20.mp4",
+    "video_music": "hook-20-music.mp4",
+    "caption": "A job pays you for your hours. Assets pay you for your decisions. The goal was never to stop working \u2014 it's owning enough that working becomes a choice.",
+    "hashtags": [
+      "#selfemployed",
+      "#investing",
+      "#passiveincome",
+      "#money",
+      "#wealth"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 21,
+    "video": "hook-21.mp4",
+    "video_music": "hook-21-music.mp4",
+    "caption": "Every company in your portfolio started as one person who decided to own something instead of just working for someone. Buying a share is joining the other side of that trade.",
+    "hashtags": [
+      "#founder",
+      "#investing",
+      "#stocks",
+      "#money",
+      "#business"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 22,
+    "video": "hook-22.mp4",
+    "video_music": "hook-22-music.mp4",
+    "caption": "You don't need a house to own real estate. A REIT lets you own a slice of apartment buildings and warehouses for the price of one share \u2014 rent checks included.",
+    "hashtags": [
+      "#realestate",
+      "#reit",
+      "#investing",
+      "#passiveincome",
+      "#money"
+    ],
+    "based_on_format": "single-word identity/concept flex (needm_rari 'CEO.'-style) \u2014 our own two highest-retention reels were 'Shareholder.' (50.5%) and 'Analyst.' (39.2%), both single words; 1-2 word overlays averaged 30.1% retention vs 23.4% for 4+ words",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]
