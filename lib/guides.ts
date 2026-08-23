@@ -2232,4 +2232,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'roth-401k-vs-traditional-401k-which-to-pick',
+    title: 'Roth 401(k) or Traditional 401(k): Which Should You Pick at Your First Job?',
+    metaTitle: 'Roth 401(k) vs. Traditional 401(k): Which One to Choose',
+    description:
+      'Your first job’s 401(k) enrollment asks Roth or Traditional before explaining either. Here’s the real difference, and why young workers usually pick Roth.',
+    date: '2026-08-23',
+    category: 'Investing',
+    intro:
+      'Somewhere in your new-hire paperwork, there’s a dropdown asking you to pick "Roth" or "Traditional" for your 401(k) — with zero explanation of what either does to your paycheck or your future. The short version: it’s not about which account is better, it’s about when you’d rather pay taxes. For most people starting their first job, the answer is clearer than it looks.',
+    sections: [
+      {
+        heading: 'The one difference that actually matters: when you pay taxes',
+        body: 'A Traditional 401(k) takes your contribution out of your paycheck before income tax is calculated — so a $200 contribution might only shrink your take-home pay by $170 or so, depending on your tax bracket. You get taxed later, when you withdraw the money in retirement, on both what you put in and everything it grew into.\n\nA Roth 401(k) does the opposite. Your contribution comes out of your paycheck after taxes are already taken — so that same $200 contribution costs you the full $200 now. In exchange, the entire balance, including decades of growth, comes out completely tax-free in retirement. You never pay taxes on it again.\n\nEvery other feature — the annual contribution limit, the investment options, whether your employer matches — is identical between the two. The only real question is whether you’d rather pay the IRS now or later.',
+      },
+      {
+        heading: 'Why Roth usually wins when you’re young and early-career',
+        body: 'Tax brackets are based on income, and most people starting their first job are sitting in one of the lowest brackets they’ll ever be in. Paying tax on that $200 now, while your income (and tax rate) is low, is often cheaper than paying tax decades from now — when raises, promotions, and career growth have likely pushed you into a higher bracket.\n\nThere’s also the compounding angle: every dollar of growth inside a Roth 401(k) is permanently tax-free. If you contribute at 22 and the account grows for 40+ years before retirement, you’re shielding decades of gains from tax — not just the amount you originally put in. The earlier the money goes in, the bigger that tax-free growth pile becomes by the time it matters.',
+      },
+      {
+        heading: 'When Traditional makes more sense instead',
+        body: 'The math flips if you’re already in a high tax bracket and expect to be in a lower one after you retire — common for someone deep into a high-earning career, not someone just starting out. Traditional also helps right now if lowering your current taxable income matters for another reason, like staying eligible for an income-limited tax credit.\n\nA lot of people split the difference and contribute to both once they can afford to, since there’s no rule against holding both types at the same employer — you’re just managing one combined contribution limit across them, not doubling it.',
+      },
+      {
+        heading: 'The fine print people miss',
+        body: 'Employer match money is a separate pot from your own contributions. Even if you choose Roth for your own contributions, your employer’s matching dollars almost always land in a traditional, pre-tax account by default — meaning you’ll owe tax on that portion (and its growth) when you withdraw it in retirement, unless your plan specifically offers a Roth matching option.\n\nRoth 401(k)s also don’t have the income limits that block high earners from contributing directly to a Roth IRA — anyone can contribute to a Roth 401(k) regardless of how much they earn, as long as their employer offers one. And unlike a Roth IRA, a Roth 401(k) used to require you to start taking withdrawals in your seventies — a rule that was eliminated, so Roth 401(k) balances now grow tax-free for as long as you want, just like a Roth IRA.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check if your employer’s plan offers both Roth and Traditional 401(k) options — not all smaller companies do.\n2. If you’re early in your career and in a lower tax bracket, default to Roth unless you have a specific reason not to.\n3. Contribute at least enough to get the full employer match, regardless of which type you pick — that match is free money either way.\n4. Don’t assume your employer’s match is tax-free just because your own contributions are — check which bucket it lands in.\n5. Revisit the choice if your income jumps significantly — the right answer can change as your tax bracket does.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Compound Interest', 'Portfolio'],
+    faq: [
+      {
+        q: 'Is a Roth 401(k) better than a Traditional 401(k)?',
+        a: 'Neither is universally better — it depends on whether your tax rate is likely to be higher now or in retirement. Most people just starting their career are in a lower bracket now than they’ll be later, which is why Roth is usually the default recommendation for young workers.',
+      },
+      {
+        q: 'Can I contribute to both a Roth and Traditional 401(k) at the same job?',
+        a: 'Yes, if your employer’s plan offers both. You’re not doubling your contribution limit by splitting between them — the annual IRS limit applies to your combined contributions across both types.',
+      },
+      {
+        q: 'Does my employer’s 401(k) match go into my Roth account?',
+        a: 'Usually not. Employer matching contributions are typically deposited into a traditional, pre-tax account by default, even if your own contributions go into a Roth 401(k) — unless your plan specifically offers a Roth match option.',
+      },
+      {
+        q: 'Is there an income limit to contribute to a Roth 401(k)?',
+        a: 'No. Unlike a Roth IRA, which phases out at higher incomes, a Roth 401(k) has no income limit — anyone can contribute regardless of how much they earn, as long as their employer offers one.',
+      },
+    ],
+  },
 ]
