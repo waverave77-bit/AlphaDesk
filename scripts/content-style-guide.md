@@ -37,10 +37,38 @@ Real examples that prove this works:
   this format, as long as it's delivered as one punchy line, not a
   teaching sequence.
 
+**OUR OWN PERFORMANCE DATA (Aug 2026, 16 posted reels — this now
+outranks the general guidance below):**
+Pulled real Instagram retention (avg watch time / video length) for every
+reel we've posted. On-screen text length maps to retention almost monotonically:
+
+| on-screen text | avg retention | avg reach |
+|---|---|---|
+| **1–2 words** | **30.1%** | **233** |
+| 3 words | 25.6% | 124 |
+| 4+ words | 23.4% | 115 |
+
+The two best reels we have ever posted were both **single-word identity
+titles**: "Shareholder." (50.5% retention, 1,048 reach) and "Analyst."
+(39.2%). The worst was our longest, "3 months of expenses. zero stress."
+(19.2%, and the only post to ever draw 0 likes).
+
+**So: default to ONE WORD, and make that word a job/status title someone
+would want to claim** — "CEO.", "Shareholder.", "Analyst.", "Investor.",
+"Owner.", "Founder.", "Self employed.", "Landlord." This is the
+needm_rari template and it is the single most reliable thing we have.
+Abstract finance nouns ("Compounding.", "Equity.", "Dividends.") are NOT
+the same thing and should be avoided — they read as jargon, not as a flex.
+
+Honest caveat, do not over-fit: reach is dominated by algorithmic luck.
+The same file ("Shareholder.") got 123 reach in July and 1,048 in August.
+Text length reliably moves RETENTION; it does not guarantee reach. The
+strategy is to keep making the higher-retention format and take more swings.
+
 **Rules:**
-- The on-screen text is 2–8 words, total — but shorter is better.
-  1-3 words ("Investing.", "Old money.", "CEO.") is the ideal; treat
-  8 as a ceiling, not a target. It is NOT a sequence of hook lines
+- The on-screen text should be ONE WORD wherever possible; 2 words is
+  fine, 3 is a stretch, 4+ is measurably worse (see the table above).
+  Treat a job/status title as the default shape. It is NOT a sequence of hook lines
   building up a point. It does not explain anything. It does not
   teach. It is a vibe, a flex, or a one-line fact delivered as a flex
   (see the S&P 500 example above).

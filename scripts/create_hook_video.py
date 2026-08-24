@@ -67,6 +67,7 @@ SCRIPTS_QUEUE = os.path.join(REPO, "scripts", "video-scripts-queue.json")
 VIDEOS_QUEUE = os.path.join(REPO, "scripts", "hook-videos-queue.json")
 OUTPUT_DIR = os.path.join(REPO, "public", "hook-videos")
 MOVIE_CLIPS_DIR = os.path.join(REPO, "stock-footage", "movie-clips")
+VETTED_CLIPS = os.path.join(REPO, "scripts", "vetted-clips.json")
 MOVIE_CLIPS_MANIFEST = os.path.join(MOVIE_CLIPS_DIR, "manifest.json")
 AUDIO_DIR = os.path.join(REPO, "stock-footage", "audio")
 WIDTH, HEIGHT = 1080, 1920
@@ -97,6 +98,31 @@ def load(path, default):
 
 
 _USED_CLIP_IDS = set()   # Pexels video ids already used in this render run
+_VETTED = None
+
+
+def _vetted_ids(query):
+    """Hand-reviewed clip ids for a keyword (scripts/vetted-clips.json)."""
+    global _VETTED
+    if _VETTED is None:
+        try:
+            _VETTED = {k: v for k, v in load(VETTED_CLIPS, {}).items() if not k.startswith("_")}
+        except Exception:
+            _VETTED = {}
+    return _VETTED.get(query, [])
+
+
+def pexels_lookup(video_id, api_key):
+    """Fetch one specific Pexels video by id (used for vetted clips)."""
+    url = f"https://api.pexels.com/videos/videos/{video_id}"
+    req = urllib.request.Request(url, headers={"Authorization": api_key, "User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            v = json.load(resp)
+    except Exception:
+        return None
+    files = sorted(v.get("video_files", []), key=lambda f: f.get("width", 0), reverse=True)
+    return files[0]["link"] if files else None
 
 
 def pexels_search(query, api_key):
@@ -117,6 +143,9 @@ def pexels_search(query, api_key):
     # hook-19 the identical shot). Track what this run already used and prefer
     # anything unused, so a batch never repeats footage across videos.
     pool = videos[:8]
+    vetted = _vetted_ids(query)
+    if vetted:
+        pool = [v for v in pool if v["id"] in vetted] or pool
     fresh = [v for v in pool if v["id"] not in _USED_CLIP_IDS]
     pick = random.choice(fresh or pool)
     _USED_CLIP_IDS.add(pick["id"])
@@ -339,7 +368,18 @@ def main():
                     extract_movie_clip_segment(movie_clip, 4, dest)
                     clip_paths.append(dest)
                     continue
-                link = None if args.test else pexels_search(keyword, api_key)
+                link = None
+                if not args.test:
+                    # Prefer hand-reviewed clips; only fall back to live search
+                    # for keywords not yet vetted. Live search has repeatedly
+                    # returned off-brand footage (see scripts/vetted-clips.json).
+                    for vid in [v for v in _vetted_ids(keyword) if v not in _USED_CLIP_IDS] or _vetted_ids(keyword):
+                        link = pexels_lookup(vid, api_key)
+                        if link:
+                            _USED_CLIP_IDS.add(vid)
+                            break
+                    if not link:
+                        link = pexels_search(keyword, api_key)
                 if link:
                     download(link, dest)
                 else:

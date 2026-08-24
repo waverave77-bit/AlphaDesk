@@ -340,5 +340,62 @@
       "instagram_reels",
       "youtube_shorts"
     ]
+  },
+  {
+    "id": 23,
+    "video": "hook-23.mp4",
+    "video_music": "hook-23-music.mp4",
+    "caption": "It isn't one big payday. It's owning boring things for a long time \u2014 index funds, a retirement account, and decades you can't get back later.",
+    "hashtags": [
+      "#millionaire",
+      "#investing",
+      "#money",
+      "#wealth",
+      "#finance"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 24,
+    "video": "hook-24.mp4",
+    "video_music": "hook-24-music.mp4",
+    "caption": "Nobody promotes you into wealth. The people who get there decide early that a chunk of every paycheck buys ownership instead of stuff.",
+    "hashtags": [
+      "#executive",
+      "#investing",
+      "#money",
+      "#career",
+      "#wealth"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
+  },
+  {
+    "id": 25,
+    "video": "hook-25.mp4",
+    "video_music": "hook-25-music.mp4",
+    "caption": "The number matters less than what you keep. Someone saving 20% of $60K is building faster than someone spending all of $150K.",
+    "hashtags": [
+      "#sixfigures",
+      "#money",
+      "#investing",
+      "#salary",
+      "#wealth"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ]
   }
 ]

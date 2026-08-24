@@ -700,5 +700,107 @@
       "gold bullion close up",
       "mercedes benz close up"
     ]
+  },
+  {
+    "id": 23,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "hook_lines": [
+      {
+        "text": "Millionaire.",
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "mood": "phonk",
+    "caption": "It isn't one big payday. It's owning boring things for a long time \u2014 index funds, a retirement account, and decades you can't get back later.",
+    "hashtags": [
+      "#millionaire",
+      "#investing",
+      "#money",
+      "#wealth",
+      "#finance"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "gold bars stacked close up",
+      "private jet on tarmac",
+      "cash stack close up",
+      "rolex watch close up",
+      "new york stock exchange facade",
+      "luxury car close up night"
+    ]
+  },
+  {
+    "id": 24,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "hook_lines": [
+      {
+        "text": "Executive.",
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "mood": "moody",
+    "caption": "Nobody promotes you into wealth. The people who get there decide early that a chunk of every paycheck buys ownership instead of stuff.",
+    "hashtags": [
+      "#executive",
+      "#investing",
+      "#money",
+      "#career",
+      "#wealth"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "luxury car interior dashboard",
+      "designer watch close up",
+      "private jet interior",
+      "stock exchange trading floor wide shot",
+      "stack of hundred dollar bills",
+      "wall street street sign"
+    ]
+  },
+  {
+    "id": 25,
+    "platform_targets": [
+      "tiktok",
+      "instagram_reels",
+      "youtube_shorts"
+    ],
+    "based_on_format": "A/B TEST (length): identical single-word identity format as #17-22 but 8s instead of 15s. Live data: avg watch time is ~4s regardless of length, so a 15s video reads as ~27% retention while the same attention on an 8s video is ~50% + a far higher completion/loop rate, which Reels weights heavily. Compare these three against #17-22 before changing the standard length.",
+    "hook_lines": [
+      {
+        "text": "Six figures.",
+        "start": 0,
+        "end": 8
+      }
+    ],
+    "mood": "hiphop",
+    "caption": "The number matters less than what you keep. Someone saving 20% of $60K is building faster than someone spending all of $150K.",
+    "hashtags": [
+      "#sixfigures",
+      "#money",
+      "#investing",
+      "#salary",
+      "#wealth"
+    ],
+    "status": "pending",
+    "footage_keywords": [
+      "money counting machine close up",
+      "mercedes benz close up",
+      "gold bullion close up",
+      "hands counting cash close up",
+      "stock market ticker screen close up",
+      "wall street bull statue"
+    ]
   }
 ]
