@@ -2284,4 +2284,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-target-date-fund-should-you-use-one',
+    title: 'What Is a Target-Date Fund, and Should You Use One in Your 401(k)?',
+    metaTitle: 'Target-Date Funds Explained: The Default 401(k) Investment',
+    description:
+      'Your 401(k) auto-enrolled you into a fund with a year in its name. Here’s what a target-date fund actually does, what it costs, and when to use something else.',
+    date: '2026-08-24',
+    category: 'Investing',
+    intro:
+      'You log into your new 401(k) and your money is already sitting in something called "Target 2065 Fund" — nobody asked you, it just happened. That’s not a mistake. Target-date funds are the default investment in most workplace retirement plans, built specifically for people who don’t want to pick individual funds. Here’s what’s actually inside one, and whether the "set it and forget it" pitch holds up.',
+    sections: [
+      {
+        heading: 'What a target-date fund actually is',
+        body: 'A target-date fund is a single fund that holds a mix of other funds — usually a blend of US stocks, international stocks, and bonds — chosen around one target retirement year, which is the number in its name. "Target 2065" is built for someone who expects to retire around 2065; "Target 2030" is built for someone retiring much sooner. You don’t pick the individual pieces. The fund company sets the mix and adjusts it automatically over time.\n\nThe appeal is that it replaces a decision most first-time investors aren’t equipped to make well: how much should be in stocks versus bonds, and how should that change as you age? Instead of choosing five or six separate funds and rebalancing them yourself every year, you own one fund that does both jobs for you.',
+      },
+      {
+        heading: 'The "glide path": why the mix changes without you doing anything',
+        body: 'The core mechanic is called a glide path. When your target date is decades away, the fund holds mostly stocks — often 85–90%+ — because you have a long time horizon and can ride out downturns in exchange for higher long-term growth. As the target year gets closer, the fund gradually sells off some stock exposure and shifts into bonds, which are generally steadier but lower-growth, to reduce the odds of a bad crash wiping out your balance right before you need the money.\n\nA fund dated for the 2060s might be almost entirely in stocks today. The same fund company’s fund dated for next year is likely to hold a much larger slice in bonds and cash-like assets already. Neither allocation is fixed — it quietly shifts every year on its own, which is the entire point: nobody has to remember to log in and rebalance manually as retirement approaches.',
+      },
+      {
+        heading: 'Why it’s the default in most 401(k)s',
+        body: 'Federal rules let employers auto-enroll workers into their 401(k) and place uninvested contributions into a "Qualified Default Investment Alternative," or QDIA — a type of investment the Department of Labor considers reasonable for someone who hasn’t made an active choice. Target-date funds are, by far, the most common QDIA employers pick, which is exactly why you may have found your paycheck contributions landing in one automatically, with a target year usually estimated from your birth year and a standard retirement age around 65.\n\nThat default isn’t a bad one. For someone who genuinely doesn’t want to manage individual fund choices, a reputable target-date fund is a legitimate, research-backed way to stay invested appropriately for your age without doing any ongoing work.',
+      },
+      {
+        heading: 'The real cost, and where it can go wrong',
+        body: 'A target-date fund is a "fund of funds" — it holds other funds inside it, and you can be charged fees at both layers. Some are built from ultra-low-cost index funds and carry a total expense ratio not much higher than a plain S&P 500 index fund. Others — especially older or actively managed target-date series — layer on meaningfully higher costs for the same basic service, sometimes several times more. The fee isn’t always obvious from the fund’s name alone, so it’s worth pulling up the actual expense ratio in your 401(k)’s fund menu before assuming it’s cheap.\n\nThe other thing to watch is duplication. If you also hold a Roth IRA or a separate brokerage account with its own stock and bond funds, a target-date fund in your 401(k) is already fully diversified on its own — layering more individual stock or bond funds on top of it, without accounting for the target-date fund’s existing mix, can leave you more concentrated or more conservative than you intended without realizing it.',
+      },
+      {
+        heading: 'When it’s not the right fit',
+        body: 'A target-date fund assumes a "typical" retirement timeline and a generic risk tolerance for your age — it doesn’t know your actual plans. If you intend to retire earlier or later than the standard assumption, want more control over how much risk you take, or already have other accounts you’d rather coordinate a specific overall mix across, picking your own funds (or a simpler two- or three-fund portfolio) can fit better than the automatic glide path.\n\nIt’s also worth comparing the fund’s fee and glide path against just building your own simple mix from a couple of low-cost index funds — a total US stock index fund and a total bond index fund, for instance — and rebalancing once a year yourself. That takes a bit more effort but can cost less and gives you direct control over the stock-to-bond split at every stage, rather than accepting the default the fund company chose.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Find the actual target-date fund you’re enrolled in in your 401(k)’s fund menu and check its expense ratio — don’t assume it’s cheap just because it’s the default.\n2. Confirm the target year roughly matches when you actually plan to retire — most plans pick one automatically based on your birth year, and you can usually change it.\n3. If you hold other retirement or brokerage accounts, check whether their funds overlap with or contradict the target-date fund’s existing stock/bond mix.\n4. Compare the fund’s fee and glide path against a simple do-it-yourself two- or three-fund portfolio before assuming the default is the cheapest option.\n5. If a target-date fund fits, you generally don’t need to touch it again — that’s the entire design. Revisit only if your retirement timeline changes significantly.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Mutual Fund', 'Diversification', 'Rebalancing', 'Index'],
+    faq: [
+      {
+        q: 'What does the year in a target-date fund’s name mean?',
+        a: 'It’s the approximate year you’re expected to retire and start withdrawing from the fund. The fund company uses that year to set how aggressive or conservative the current stock-to-bond mix should be, and adjusts it automatically as the year approaches.',
+      },
+      {
+        q: 'Is a target-date fund good for beginners?',
+        a: 'Generally yes — it’s a single fund that handles diversification and gradual risk reduction automatically, which is why it’s the most common default investment in workplace retirement plans. The main things to check are its fee and whether the target year matches your actual plans.',
+      },
+      {
+        q: 'Can I choose a different target-date fund than the one I was enrolled in?',
+        a: 'Usually yes. Most 401(k) plans let you switch to a different target-year fund in the same series, or opt out entirely and pick your own funds from the plan’s menu.',
+      },
+      {
+        q: 'Do target-date funds have higher fees than index funds?',
+        a: 'It depends on the series. Some are built from low-cost index funds and cost barely more than a plain index fund; others, especially actively managed target-date series, charge noticeably more for the same basic service. Check the actual expense ratio rather than assuming.',
+      },
+    ],
+  },
 ]
