@@ -2340,4 +2340,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-need-renters-insurance-in-your-first-apartment',
+    title: 'Do You Need Renters Insurance in Your First Apartment (or Dorm)?',
+    metaTitle: 'Do You Need Renters Insurance? What It Covers and What It Costs',
+    description:
+      'Your landlord’s insurance doesn’t cover your stuff — a renters policy usually does, often for less than a streaming subscription. Here’s what it actually pays for.',
+    date: '2026-08-25',
+    category: 'Saving',
+    intro:
+      'You signed the lease, moved your stuff in, and somewhere in the paperwork was a line about renters insurance that you either skipped or didn’t fully register. It feels optional — until a pipe bursts, a laptop gets stolen, or a friend slips in your kitchen. Here’s what a policy actually covers, what it costs, and why "my landlord has insurance" is one of the most expensive assumptions a new renter can make.',
+    sections: [
+      {
+        heading: 'The myth that gets people burned: your landlord’s policy doesn’t cover your stuff',
+        body: 'A landlord’s insurance policy protects the building — the walls, the roof, the plumbing, the appliances that came with the unit. It does not cover anything that belongs to you. If a fire, a burst pipe, or a break-in damages or destroys your laptop, your clothes, your furniture, or your bike, the landlord’s policy pays to fix the building and stops there. Your belongings are your responsibility unless you have your own coverage.\n\nMost new renters don’t find this out until it’s already too late — a stolen laptop or a water-damaged mattress is a normal moving-in-your-20s expense, but replacing everything out of pocket at once is a very different story than filing a claim.',
+      },
+      {
+        heading: 'What a renters policy actually covers',
+        body: 'A standard renters policy bundles three separate protections into one. Personal property coverage reimburses you if your belongings are stolen or damaged by a covered event — fire, smoke, vandalism, certain types of water damage like a burst pipe — and it typically follows your stuff even outside the apartment, so a laptop stolen out of your car or a bike stolen off campus is usually still covered up to your policy limit.\n\nLiability coverage is the part people underrate: if a guest is injured in your apartment and sues you, or you accidentally cause damage to someone else’s property — you leave a candle burning and it damages the unit below yours, or your dog bites a visitor — liability coverage pays legal costs and damages up to your policy limit, commonly $100,000 as a baseline, with higher limits available for a small added premium.\n\nThe third piece, loss of use (sometimes called additional living expenses), pays for a hotel or short-term rental and related extra costs if a covered event makes your apartment temporarily unlivable while it’s repaired.',
+      },
+      {
+        heading: 'What it actually costs',
+        body: 'Renters insurance is one of the cheapest policies in the entire insurance world — for a basic policy on a typical apartment, quotes commonly land somewhere in the ballpark of $10 to $30 a month, depending on your location, how much coverage you choose, and your deductible. That’s often less than a single streaming or food-delivery subscription.\n\nThe price moves with a few levers: a higher coverage limit costs more, a higher deductible (what you pay out of pocket before the policy kicks in) lowers the monthly premium, and many insurers knock a discount off the price — commonly cited in the 5–15% range — if you bundle the policy with an auto insurance plan, including one your parents already have.',
+      },
+      {
+        heading: 'Replacement cost vs. actual cash value — the fine print that changes your payout',
+        body: 'Policies come in two payout styles, and the difference is easy to miss when you’re skimming a quote. Replacement cost coverage pays what it actually costs to buy a new equivalent item today. Actual cash value coverage pays what your old item was worth after depreciation — so a three-year-old laptop might only get you a few hundred dollars, nowhere near what a new one costs.\n\nActual cash value policies are cheaper, which is exactly why they’re common on budget quotes. For most first-time renters, the small extra monthly cost of replacement cost coverage is worth it — the whole point of the policy is not being stuck buying a new laptop or bed frame out of pocket.',
+      },
+      {
+        heading: 'What it doesn’t cover',
+        body: 'Standard renters policies are "named peril" policies — they list specific covered events (fire, smoke, theft, vandalism, certain water damage) rather than covering everything. Flood damage and earthquake damage are almost always excluded and require a separate policy, such as flood coverage through the National Flood Insurance Program, if you live somewhere those risks are real.\n\nHigh-value items can also run into sub-limits — a policy might cap what it pays out for stolen jewelry or camera gear at a few hundred or a couple thousand dollars, well under what a nice ring or a real camera setup is worth. Covering those fully usually requires a separate rider (sometimes called a floater) added to the policy.\n\nRoommates are the other catch: a policy generally only covers whoever is listed as a named insured. If your roommate isn’t on your policy, their belongings usually aren’t covered by it — which is why many roommate situations end up with either everyone added by name or everyone carrying their own separate policy.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your lease — many landlords and property managers now require proof of renters insurance, often with a minimum liability limit, before you get your keys.\n2. Get quotes from a couple of insurers, and ask your (or your parents’) auto insurer about a bundling discount before picking one.\n3. Choose replacement cost coverage over actual cash value if the price difference is small — actual cash value payouts on older items are often disappointing.\n4. Take a quick photo inventory of your stuff (electronics, furniture, anything valuable) so a claim isn’t a memory test later.\n5. If you own anything genuinely high-value — a camera, jewelry, a gaming PC — ask whether it needs a separate rider, since standard policies often cap those categories.\n6. Living with roommates? Confirm who’s actually named on the policy, since an unnamed roommate’s belongings usually aren’t covered.',
+      },
+    ],
+    relatedTerms: ['Hedge', 'Black Swan', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Is renters insurance required by law?',
+        a: 'No federal or state law requires it, but many landlords and property management companies require proof of a policy — often with a minimum liability limit — as a condition of the lease. Check your lease before assuming it’s optional.',
+      },
+      {
+        q: 'Does renters insurance cover my roommate’s belongings?',
+        a: 'Generally only if they’re listed as a named insured on the same policy. A policy in just your name usually doesn’t cover an unnamed roommate’s stuff, which is why many roommates either get added to one policy or carry separate ones.',
+      },
+      {
+        q: 'How much renters insurance coverage do I actually need?',
+        a: 'Enough to replace what you actually own — add up the realistic cost to replace your electronics, furniture, and clothes. For a typical first apartment that’s often a more modest number than people assume, which is part of why the coverage is so cheap.',
+      },
+      {
+        q: 'Does renters insurance cover flood or earthquake damage?',
+        a: 'No — standard renters policies exclude flood and earthquake damage. Those require separate coverage, such as a flood policy through the National Flood Insurance Program, if you live somewhere that risk is realistic.',
+      },
+    ],
+  },
 ]
