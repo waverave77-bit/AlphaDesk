@@ -2396,4 +2396,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-use-a-roth-ira-to-buy-your-first-house',
+    title: 'Can You Use a Roth IRA to Buy Your First House?',
+    metaTitle: 'Roth IRA First-Time Homebuyer Rule: The $10,000 Exception',
+    description:
+      'Yes — the IRS lets first-time buyers pull up to $10,000 of Roth IRA earnings penalty-free. Here’s the 5-year rule, the tax catch, and why it’s rarely the smart move.',
+    date: '2026-08-26',
+    category: 'Investing',
+    intro:
+      'Somewhere between opening a Roth IRA and actually wanting to buy a place, you probably heard a rumor that you can just pull the money out for a down payment. The rumor is true, sort of — there’s a real IRS exception built for exactly this. But the fine print decides whether that withdrawal is genuinely free or quietly taxed, and whether raiding retirement money for a house is even a good idea in the first place.',
+    sections: [
+      {
+        heading: 'The short answer: yes, up to $10,000 — but it’s a lifetime cap',
+        body: 'The IRS has a specific carve-out called the "first-time homebuyer exception." It lets you withdraw up to $10,000 from a Roth IRA to buy, build, or rebuild a first home — for yourself, your spouse, your kids, your grandkids, or your parents — without paying the usual 10% early-withdrawal penalty. That $10,000 is not an annual allowance. It’s a lifetime limit per person, and once you’ve used it, it’s gone for good.\n\nIf you’re married and both spouses have their own Roth IRA and both qualify as first-time buyers, you can each pull $10,000, effectively $20,000 combined toward the same home purchase.',
+      },
+      {
+        heading: 'The two pots inside your Roth: contributions vs. earnings',
+        body: 'A Roth IRA isn’t one blob of money — the IRS tracks it as layers, and withdrawals come out in a specific order. Contributions (the actual dollars you put in) always come out first, and because you already paid income tax on that money before it went in, you can withdraw your contributions at any time, for any reason, completely tax- and penalty-free. This has nothing to do with buying a house — it’s true on day one of having the account.\n\nEarnings (the growth your contributions generated) are the part the homebuyer exception actually applies to. Those are the dollars that are normally locked up until age 59½, and the $10,000 first-time-homebuyer rule is what lets you touch a slice of them early without the penalty.',
+      },
+      {
+        heading: 'The catch: the 5-year rule decides whether the $10,000 is truly tax-free',
+        body: 'This is the part most people miss. The first-time homebuyer exception always waives the 10% penalty on up to $10,000 of earnings. Whether you also owe income tax on that $10,000 depends on a separate condition: the Roth IRA’s 5-year rule.\n\nEvery Roth IRA has a clock that starts on January 1 of the year of your first contribution to any Roth IRA. If that 5-year clock has run out by the time you withdraw, the $10,000 in earnings comes out completely tax-free as well as penalty-free — a true "qualified distribution." If you haven’t hit the 5-year mark yet, the 10% penalty is still waived, but the earnings portion gets taxed as ordinary income. Same $10,000, very different bill, depending entirely on timing.',
+      },
+      {
+        heading: 'What actually counts as "first-time," and the 120-day rule',
+        body: 'The IRS definition of "first-time homebuyer" is more generous than it sounds — you (and your spouse, if married) just need to have had no ownership interest in a main home during the two years before the new purchase. Owned a house years ago, sold it, and rented since? You likely still qualify.\n\nOne procedural detail that trips people up: the withdrawn money generally has to be used toward the home purchase — the down payment, closing costs, or building costs — within 120 days of taking it out. Pull the money early "just in case" and let it sit in a checking account past that window, and it can lose the exception entirely.',
+      },
+      {
+        heading: 'Why raiding a Roth for a house is rarely the smart move, even though it’s legal',
+        body: 'Legal and smart aren’t the same thing here. Every dollar pulled out of a Roth IRA is a dollar that stops compounding tax-free for retirement — and that account has decades to work with if you started it young. $10,000 taken out in your mid-20s could easily have grown into $60,000–$100,000+ by retirement age, using the market’s long-term historical average return, money you’re trading for a modest dent in a down payment today.\n\nA dedicated high-yield savings account is almost always the better tool for house-down-payment money specifically. It has no lifetime cap, no 5-year clock, no tax questions, and money you might need in the next 1–5 years shouldn’t be sitting in the stock market at all — a market downturn right before closing on a house is a bad time to discover your down payment lost 20% of its value. The Roth homebuyer exception exists as a real option for people who genuinely need it, not as the default first place to save for a house.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know your numbers: contributions come out tax- and penalty-free anytime; the $10,000 first-time-homebuyer exception applies only to earnings, and only once, ever.\n2. Check your 5-year clock — it starts January 1 of the year of your first-ever Roth contribution, not the specific contribution you’re withdrawing.\n3. Confirm you meet the "first-time" definition: no ownership interest in a main home in the prior two years.\n4. Use the withdrawn earnings within 120 days of taking them out, and keep documentation tying the withdrawal to the purchase.\n5. Before touching the Roth, price out a dedicated high-yield savings account for the down payment instead — it’s simpler, has no lifetime cap, and doesn’t cost you decades of tax-free retirement growth.\n6. If you do use the exception, talk to a tax preparer or use tax software that handles Form 8606 — Roth withdrawals need to be reported correctly to actually get the tax-free treatment you’re expecting.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Portfolio'],
+    faq: [
+      {
+        q: 'Is the $10,000 Roth IRA homebuyer withdrawal per year or for life?',
+        a: 'It’s a lifetime limit per person, not an annual allowance. Once you’ve used your $10,000 under the first-time homebuyer exception, it can’t be used again.',
+      },
+      {
+        q: 'Do I pay taxes on a Roth IRA withdrawal used to buy a house?',
+        a: 'Your contributions are always tax- and penalty-free. The $10,000 in earnings is always penalty-free under the homebuyer exception, but it’s only tax-free too if your Roth IRA has been open at least 5 years — otherwise the earnings are taxed as ordinary income.',
+      },
+      {
+        q: 'Can my spouse and I each use the $10,000 exception for the same house?',
+        a: 'Yes — if you’re both first-time buyers and each have your own Roth IRA, you can each withdraw up to $10,000, for up to $20,000 combined toward one home.',
+      },
+      {
+        q: 'Does this same rule work for a 401(k)?',
+        a: 'No. The first-time homebuyer exception is specific to IRAs (both Roth and Traditional). A 401(k) has different rules — typically a loan option or a hardship withdrawal, which come with their own separate conditions and costs.',
+      },
+    ],
+  },
 ]
