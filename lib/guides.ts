@@ -2452,4 +2452,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'is-your-money-safe-in-a-bank-what-fdic-insurance-covers',
+    title: 'Is Your Money Safe in a Bank? What FDIC Insurance Actually Covers',
+    metaTitle: 'FDIC Insurance Explained: What’s Covered Up to $250,000',
+    description:
+      'Your bank deposits are insured up to $250,000 per person, per bank — but not everything with "FDIC insured" in the fine print actually is. Here’s how it really works.',
+    date: '2026-08-27',
+    category: 'Saving',
+    intro:
+      'You’ve seen the little sign at the bank, or the fine print at the bottom of a banking app’s homepage: "Member FDIC." Most people nod along without knowing what it actually promises. Here’s the real coverage, the gaps that catch people off guard, and why a popular fintech collapse in 2024 turned "FDIC insured" into a much more complicated sentence than it sounds.',
+    sections: [
+      {
+        heading: 'The short answer: up to $250,000, per person, per bank',
+        body: 'The FDIC (Federal Deposit Insurance Corporation) is a US government agency that insures deposits at member banks. If your bank fails, the FDIC guarantees you get your money back — up to $250,000 per depositor, per insured bank, per "ownership category."\n\nThat last part matters more than people realize. $250,000 isn’t a flat cap on everything you own at one bank — it resets across different ownership categories. A single account in your name alone is insured up to $250,000. A joint account with a partner is insured up to $250,000 per co-owner, so $500,000 total. Certain retirement accounts, like an IRA held at the same bank, get their own separate $250,000 bucket. Realistically, almost nobody hits these limits early in life — but the structure is worth knowing once your balances grow.',
+      },
+      {
+        heading: 'What counts, and what doesn’t',
+        body: 'FDIC insurance covers actual deposit accounts: checking accounts, savings accounts, money market deposit accounts, and CDs (certificates of deposit). If the bank goes under, that money is protected no matter what.\n\nIt does not cover investments, even if you bought them through your bank’s website or a banker sitting three feet from the teller line. Stocks, bonds, mutual funds, ETFs, cryptocurrency, and the contents of a safe deposit box are all outside FDIC protection — because those aren’t deposits, they’re investments that can lose value on their own regardless of whether the bank is healthy. FDIC insurance protects against the bank failing, not against the market moving.',
+      },
+      {
+        heading: 'Credit unions have their own version: NCUA',
+        body: 'If you bank at a credit union instead of a traditional bank, the FDIC doesn’t apply — but an equivalent does. The NCUA (National Credit Union Administration) insures deposits at credit unions on essentially the same terms: $250,000 per person, per credit union, per ownership category. Functionally it’s the same promise from a different agency. Look for "Federally Insured by NCUA" instead of "Member FDIC" on the signage.',
+      },
+      {
+        heading: 'The neobank trap: "FDIC insured" doesn’t always mean what you think',
+        body: 'Trendy banking apps and fintechs — the ones that live entirely on your phone with no branches — usually aren’t banks themselves. They partner with a real, chartered bank behind the scenes and pass FDIC coverage through to your account. Marketing pages love to advertise this, and often it works exactly as promised.\n\nBut in 2024, a banking-as-a-service company called Synapse — the behind-the-scenes plumbing connecting several popular fintech apps to their partner banks — collapsed. Thousands of customers found themselves locked out of their money for months, in some cases with account balances that didn’t clearly match up to any single insured bank. The underlying bank accounts were technically FDIC-insured, but the insurance protects you if the bank fails — not if the middleman software company connecting you to the bank falls apart and the recordkeeping turns into a mess. It was a real wake-up call that "FDIC insured" printed on an app’s homepage isn’t automatically the same guarantee as a direct account at a well-known bank.',
+      },
+      {
+        heading: 'Your brokerage account is different: that’s SIPC, not FDIC',
+        body: 'Money sitting in a brokerage account — the cash and investments in your Fidelity, Schwab, or Robinhood account — isn’t FDIC territory at all. It falls under SIPC (Securities Investor Protection Corporation) instead, which protects up to $500,000 per customer (including up to $250,000 in cash) if the brokerage itself fails or your assets go missing due to fraud.\n\nSIPC does not protect you from your investments simply losing value — if your index fund drops 20% in a crash, SIPC doesn’t reimburse you a cent, because that’s normal market risk, not the brokerage failing. Two different agencies, two different jobs: FDIC covers "the bank collapsed," SIPC covers "the brokerage collapsed" — neither covers "the market went down."',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before opening any account, look for "Member FDIC" (banks) or "Federally Insured by NCUA" (credit unions) — or search the institution on the FDIC’s BankFind tool.\n2. If you’re using a banking app instead of a traditional bank, check who the actual partner bank is, not just whether the word "FDIC" appears on the homepage.\n3. Know the $250,000-per-ownership-category structure — it resets separately for individual, joint, and certain retirement accounts at the same bank.\n4. Remember FDIC/NCUA insurance is for deposits only — stocks, crypto, and mutual funds are never covered by it, regardless of where you bought them.\n5. For a brokerage account, look for SIPC coverage instead — it protects against the firm failing, not against your investments losing value.',
+      },
+    ],
+    relatedTerms: ['Federal Reserve', 'Liquidity', 'Counterparty Risk', 'Inflation'],
+    faq: [
+      {
+        q: 'What is the FDIC insurance limit?',
+        a: '$250,000 per depositor, per insured bank, per ownership category. A joint account is insured up to $250,000 per co-owner, so $500,000 total for two people.',
+      },
+      {
+        q: 'Does FDIC insurance cover stocks or crypto?',
+        a: 'No. FDIC insurance only covers deposit accounts — checking, savings, money market deposit accounts, and CDs. Investments like stocks, mutual funds, and cryptocurrency are never covered, even if purchased through a bank.',
+      },
+      {
+        q: 'Are banking apps and fintechs FDIC insured?',
+        a: 'Often, through a partner bank behind the scenes — but the 2024 Synapse collapse showed that pass-through coverage can still leave customers locked out of funds for months if the middleman company connecting the app to the bank fails. Check who the actual partner bank is before trusting the label alone.',
+      },
+      {
+        q: 'What’s the difference between FDIC and SIPC?',
+        a: 'FDIC insures bank deposits if the bank fails. SIPC insures brokerage accounts (up to $500,000, including $250,000 in cash) if the brokerage fails — but neither one protects you from investments simply losing value in the market.',
+      },
+    ],
+  },
 ]
