@@ -2508,4 +2508,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'lump-sum-vs-dollar-cost-averaging-investing',
+    title: 'Lump Sum vs. Dollar-Cost Averaging: Which Actually Makes You More Money?',
+    metaTitle: 'Lump Sum vs. Dollar-Cost Averaging: What the Data Says',
+    description:
+      'Got a windfall — graduation cash, a bonus, savings you finally want to invest? Here’s what the actual data says about investing it all at once vs. spreading it out.',
+    date: '2026-08-28',
+    category: 'Investing',
+    intro:
+      'You’ve got a chunk of money — graduation gifts, a summer’s worth of savings, maybe your first real bonus — and you’re staring at the "invest" button wondering whether to drop it all in today or feed it in slowly over a few months. Both strategies have a name, and the data on which one wins is clearer, and more counterintuitive, than most people expect.',
+    sections: [
+      {
+        heading: 'The two strategies, defined',
+        body: 'A lump sum means investing the entire amount the moment you have it — one purchase, fully invested by the end of the day. Dollar-cost averaging (DCA) means splitting that same amount into equal pieces and investing a fixed portion on a schedule — say, one-sixth of it every month for six months — regardless of what the market is doing that day.\n\nBoth strategies assume you already have the full amount sitting in cash and are deciding how to deploy it. That’s different from investing a little every paycheck because that’s when the money shows up — that’s not really a strategy choice at all, it’s just how regular income works, and it happens to look like DCA by default.',
+      },
+      {
+        heading: 'What the data actually says: lump sum usually wins',
+        body: 'This surprises almost everyone the first time they hear it: research comparing the two approaches across decades of market history — most famously a widely cited Vanguard study — has found that investing a lump sum immediately outperformed spreading the same amount out over the following 12 months in roughly two out of every three historical periods tested.\n\nThe reason isn’t magic, it’s math: markets rise more often than they fall over any given year, so money invested sooner spends more time exposed to that upward drift. Every month you keep half your windfall in cash "waiting for a better entry point" is a month that cash isn’t compounding. DCA only wins when the market happens to drop during your spread-out buying window — which happens, just less often than it doesn’t.',
+      },
+      {
+        heading: 'So why does everyone still recommend DCA?',
+        body: 'Because the math and the psychology point in different directions. Dumping $10,000 into the market on a Tuesday and watching it drop 8% by Friday feels awful, even though the odds favored you going in — and that gut-punch is exactly what causes people to panic-sell at the worst possible time, permanently locking in a loss the lump-sum math never accounted for.\n\nDollar-cost averaging trades a bit of expected return for a lot of peace of mind. If spreading a windfall over three or six months is the difference between actually staying invested through a rough patch versus panicking and pulling everything out, DCA’s lower expected return is still the better real-world outcome for that person. The "right" strategy is whichever one you’ll actually stick with.',
+      },
+      {
+        heading: 'When lump sum is the clear move',
+        body: 'If the money is going into a long-term account you won’t touch for years — a Roth IRA, a 401(k) rollover, a brokerage account earmarked for retirement — and you’re confident you won’t check the balance every day and panic, investing it as soon as it lands is the historically better bet. This is especially true around annual contribution limits: if you come into enough money to max out a Roth IRA for the year, investing that full amount on day one gives it the maximum possible time to compound, rather than trickling it in and losing months of growth for no real emotional benefit.',
+      },
+      {
+        heading: 'The version most teens are actually living: it’s already DCA',
+        body: 'Here’s the part that makes this whole debate mostly academic for most young investors: if you’re investing a slice of each paycheck as it arrives — which is how almost everyone under 25 actually builds a portfolio — you’re not choosing between lump sum and DCA at all. You’re dollar-cost averaging by default, because you don’t have a lump sum sitting around to deploy differently. The debate only really applies to actual windfalls: a graduation gift, an inheritance, a tax refund, money that was sitting in a savings account for a goal that changed.\n\nFor regular paycheck investing, the only real decision is consistency: automate the contribution so it happens whether or not you remember, and don’t pause it during a downturn — that’s when the shares you’re buying are on sale.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. If it’s a windfall (gift, bonus, refund, inheritance) going into a long-term account: lump sum wins on average — invest it as soon as it clears.\n2. If watching the balance every day would genuinely wreck your peace of mind, split it over 3–6 months instead — a strategy you’ll stick with beats a better one you’ll abandon.\n3. If you’re investing from your paycheck as it arrives, you’re already dollar-cost averaging — there’s no separate decision to make.\n4. Never pause automated contributions during a market drop — that’s the DCA strategy doing exactly what it’s supposed to do.\n5. Prioritize maxing tax-advantaged accounts (Roth IRA, 401(k) match) with a windfall before parking extra cash in a regular taxable brokerage account.',
+      },
+    ],
+    relatedTerms: ['Dollar-Cost Averaging', 'Index Investing', 'Volatility', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Is dollar-cost averaging better than investing a lump sum?',
+        a: 'Historically, no — a lump sum invested immediately has outperformed spreading the same amount out over months in roughly two-thirds of historical periods, simply because markets rise more often than they fall. DCA’s real advantage is emotional, not mathematical.',
+      },
+      {
+        q: 'I just got a graduation gift or bonus — should I invest it all at once?',
+        a: 'If it’s going into a long-term account you won’t touch for years, investing it as soon as it clears has historically been the better bet. If a sudden drop right after would genuinely make you panic-sell, splitting it over a few months is a reasonable trade of some expected return for peace of mind.',
+      },
+      {
+        q: 'Is investing part of every paycheck the same as dollar-cost averaging?',
+        a: 'Functionally, yes. If you’re investing a fixed amount on a regular schedule because that’s when the money arrives, you’re already dollar-cost averaging — there’s no separate lump-sum-vs-DCA decision to make with paycheck contributions.',
+      },
+      {
+        q: 'Does dollar-cost averaging protect you from a market crash?',
+        a: 'It softens the timing risk of investing everything right before a drop, since you’re buying at a mix of prices over time — but it doesn’t protect your money once it’s invested. A crash still affects your entire balance, no matter how it was deposited.',
+      },
+    ],
+  },
 ]
