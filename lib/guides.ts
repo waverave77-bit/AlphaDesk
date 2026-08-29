@@ -2564,4 +2564,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'sinking-fund-vs-emergency-fund',
+    title: 'What Is a Sinking Fund and How Is It Different From an Emergency Fund?',
+    metaTitle: 'Sinking Fund vs. Emergency Fund: What’s the Difference?',
+    description:
+      'A sinking fund and an emergency fund aren’t the same account with two names. Here’s the real difference, why you probably need both, and how to set each one up.',
+    date: '2026-08-29',
+    category: 'Saving',
+    intro:
+      'You’ve already got an emergency fund started, or at least a savings account with some cushion in it — so why do budgeting apps and finance creators keep telling you to also build a “sinking fund”? They’re not the same thing wearing two names. A sinking fund solves a completely different problem than an emergency fund, and mixing the two is exactly how people end up raiding “emergency” money for a laptop that broke right on schedule.',
+    sections: [
+      {
+        heading: 'What a sinking fund actually is',
+        body: 'A sinking fund is money you save on purpose, in small amounts over time, for a specific expense you already know is coming — even though you don’t know the exact date or dollar amount yet. The term comes from accounting, where companies "sink" money into a fund over years to pay off a future debt or replace equipment before it wears out. Applied to your own budget, it just means this: instead of getting blindsided by a $400 tire replacement or a $150 holiday gift budget, you saw it coming months ago and already set the cash aside a little at a time.\n\nThe expense itself isn’t a surprise — a five-year-old laptop will eventually need replacing, flights home for winter break happen every year, car registration renews on the same month every year. A sinking fund turns a predictable-but-irregular expense into a small, boring monthly transfer instead of a financial gut-punch when the bill actually shows up.',
+      },
+      {
+        heading: 'Sinking fund vs. emergency fund: the core difference',
+        body: 'An emergency fund is for the expense you can’t predict — a layoff, a surprise medical bill, a car problem you never saw coming. It exists to protect you from the unknown, which is why it needs to stay large, untouched, and ready for anything at all.\n\nA sinking fund is for the expense you can predict, just not the exact date or amount. You know a new laptop is coming eventually. You know you’ll want to fly home for the holidays. You know car insurance renews every six months. None of that is an emergency — it’s just irregular, which makes it easy to forget to plan for until the bill lands and wrecks your month.\n\nMixing the two up is the real problem people run into: raiding your emergency fund every time a "known" expense shows up means the fund never actually grows to the size you’d need for a real crisis, because it keeps getting drained by things that were never emergencies to begin with.',
+      },
+      {
+        heading: 'How to actually set one up',
+        body: 'The mechanics are simple: open a separate savings account — or use a bank’s free "buckets" or "vaults" feature, which most major online banks now build directly into a single high-yield savings account — for each specific goal, and automate a small transfer into it every payday. If car registration costs $150 once a year, that’s about $12.50 a month set aside — invisible in your budget day to day, but the full amount is just sitting there ready when the bill shows up instead of catching you off guard.\n\nThe math is always the same three inputs: roughly how much the expense will cost, roughly when it’s due, and how many months you have between now and then. Divide the cost by the number of months, and that’s your automated transfer amount.',
+      },
+      {
+        heading: 'Common sinking funds worth having',
+        body: 'Not every expense needs its own labeled bucket, but a few show up often enough for teens and young adults that they’re worth setting up on purpose: car maintenance and registration (tires, oil changes, the annual renewal fee), holiday and birthday gifts (an entire December budget that’s easy to plan for months ahead and somehow still "surprises" people every year), textbooks or course fees each semester, a phone or laptop replacement fund, and travel — flights home for break, a trip with friends.\n\nYou don’t need to start all of them at once. Pick the one or two expenses that have blown up your budget before, and build sinking funds for those first.',
+      },
+      {
+        heading: 'Where to keep sinking fund money',
+        body: 'Same rule as an emergency fund: keep it liquid and boring, not invested. A high-yield savings account (HYSA) is the standard choice — it still earns meaningful interest while staying fully accessible within a day or two, with no risk of the balance dropping the week before you need it. Many online banks let you create multiple named sub-accounts within one HYSA, so your emergency fund, your travel fund, and your laptop fund can all earn the same interest rate while staying separated, so you’re less tempted to blur them together.\n\nAvoid putting sinking fund money in a brokerage account, even for a goal 12+ months out. The whole point of a sinking fund is that you already know roughly when the bill is coming — a market drop right before you need the cash isn’t a risk worth taking for money with a defined, near-term purpose.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. List the irregular-but-predictable expenses that have caught you off guard before (car costs, holidays, tech replacements, travel).\n2. Estimate a rough cost and rough timeline for each one.\n3. Divide the cost by the number of months until it’s due — that’s your automated monthly transfer.\n4. Open a separate account or sub-account/bucket for each goal so the money doesn’t blend into regular spending.\n5. Keep the funds in an FDIC-insured, high-yield savings account — never invested.\n6. Build your emergency fund and your sinking funds at the same time, but never let one cover the other.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Inflation', 'Compound Interest', 'Yield'],
+    faq: [
+      {
+        q: 'Is a sinking fund the same as an emergency fund?',
+        a: 'No. An emergency fund covers the expense you can’t predict, like a layoff or a surprise medical bill. A sinking fund covers an expense you can predict — you just don’t know the exact date or amount — like holiday gifts, a car repair, or a laptop replacement.',
+      },
+      {
+        q: 'How much should I put in a sinking fund each month?',
+        a: 'Take the rough cost of the expense and divide it by the number of months until you’ll need it. A $600 laptop you expect to replace in 12 months means saving about $50 a month.',
+      },
+      {
+        q: 'Where should I keep a sinking fund?',
+        a: 'In a liquid, FDIC-insured account like a high-yield savings account — the same place an emergency fund belongs. Many banks let you create separate labeled sub-accounts inside one HYSA so each goal stays organized without opening multiple accounts.',
+      },
+      {
+        q: 'Do I need more than one sinking fund?',
+        a: 'You can have as many as you want, one for each predictable-but-irregular expense — but it’s fine to start with just one or two for whatever has blown up your budget before, and add more over time.',
+      },
+    ],
+  },
 ]
