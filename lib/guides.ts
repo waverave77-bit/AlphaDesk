@@ -2620,4 +2620,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-do-payday-loans-work-why-so-expensive',
+    title: 'How Do Payday Loans Work, and Why Are They So Expensive?',
+    metaTitle: 'How Payday Loans Work: The Real APR and Safer Alternatives',
+    description:
+      'A payday loan advertises a flat fee, not an interest rate — but run that fee through the math and it usually works out to 300%+ APR. Here’s how the trap works.',
+    date: '2026-08-30',
+    category: 'Credit',
+    intro:
+      'Payday loan ads and storefronts sell a simple pitch: borrow $300 against your next paycheck, pay back $345 in two weeks, no credit check required. It sounds like a flat, manageable fee — not a loan with an interest rate at all. Run that same fee through the math lenders use for every other loan, and it turns into one of the most expensive ways to borrow money that’s still legal.',
+    sections: [
+      {
+        heading: 'What a payday loan actually is',
+        body: 'A payday loan is a small, short-term loan — usually $100 to $500 — that you’re expected to repay in full, plus a fee, on your next payday, typically about two weeks later. You write a postdated check or authorize an electronic withdrawal for the full amount up front, and the lender cashes it (or pulls the funds) on the due date. Storefront payday lenders and their online equivalents rarely check your credit score, which is exactly why they market themselves to people who can’t easily get approved for a credit card or a personal loan.\n\nThe fee is usually quoted as a flat dollar amount per $100 borrowed — commonly somewhere in the $10 to $30 range per $100 for a two-week loan. That framing is what makes it sound cheap. Nobody advertises the APR.',
+      },
+      {
+        heading: 'The math nobody puts on the sign',
+        body: 'An interest rate only makes sense compared over a full year, which is what APR (annual percentage rate) is for — it takes any fee and any loan term and converts it into one standardized yearly number so you can compare completely different loans apples to apples. A $15 fee on a $100 loan sounds small. But that $15 was charged for only two weeks of borrowing. Stretch that same fee rate out to a full year (there are about 26 two-week periods in a year) and it works out to somewhere in the neighborhood of 300% to 400% APR — sometimes higher depending on the state and lender.\n\nFor comparison, even a genuinely expensive credit card usually charges somewhere around 20–30% APR, and that’s considered high by credit card standards. A payday loan can cost ten times that rate for the exact same size of debt.',
+      },
+      {
+        heading: 'Why it becomes a trap instead of a one-time fix',
+        body: 'The loan is structured to be repaid in full, in one lump sum, in about two weeks — but the entire reason most borrowers take one out is that they don’t have enough cash on hand right now. Two weeks rarely fixes that. When the due date hits and the money still isn’t there, many borrowers "roll over" the loan: pay just the fee, and push the same principal out another two weeks for another fee.\n\nThat’s the mechanism that turns a single emergency loan into a much larger problem — the same $300 debt can generate fee after fee for months without the principal ever shrinking. Federal consumer watchdogs have repeatedly found that a large share of payday lending revenue comes from borrowers stuck reborrowing again and again, not from one-time loans that get paid off on schedule.',
+      },
+      {
+        heading: 'The rules aren’t the same everywhere',
+        body: 'Payday lending is regulated at the state level, and the rules vary enormously. Some states cap the fees lenders can charge or cap the effective APR outright, and a number of states have banned traditional payday loans entirely. Other states allow the fee structures described above with few limits, which is why the same loan can be dramatically cheaper (or unavailable) just by crossing a state line.\n\nOne group gets a strong federal backstop regardless of state: under the Military Lending Act, active-duty servicemembers and their dependents can’t legally be charged more than a 36% "military APR" on payday loans, car title loans, and several other short-term credit products — a rate cap civilians don’t automatically get.',
+      },
+      {
+        heading: 'Safer options when you’re actually short on cash',
+        body: 'If a bill is due before your next paycheck, a payday loan should be close to the last option on the list, not the first. A federal credit union Payday Alternative Loan (PAL) is built specifically to compete with payday lenders — loan amounts generally run $200 to $2,000, repayment terms stretch from one to twelve months instead of two weeks, and by federal rule the APR is capped at 28%, with a small, capped application fee. You typically need to already be a credit union member (often for at least a month) to qualify.\n\nOther options worth trying first: asking your employer about an early or advance paycheck, a paycheck-advance app (read the tip and fee structure carefully — some function like a cheaper payday loan, not a free one), a 0% introductory-APR credit card if you already have one with room on it, or simply asking family for a short-term loan. All of them beat triple-digit APR in almost every realistic scenario.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before taking a payday loan, calculate the actual APR — multiply the two-week fee rate by about 26 to see the real annual cost.\n2. Check if a credit union near you offers a Payday Alternative Loan (PAL) — federally capped at 28% APR, a fraction of a typical payday loan.\n3. Ask your employer about an early paycheck or advance before borrowing from anyone else.\n4. If you must use a paycheck-advance app, read the tip/fee structure closely — some effectively charge payday-loan-level rates dressed up as "optional tips."\n5. If you ever do take a payday loan, plan the full repayment before the due date arrives — a rollover is what turns a one-time fee into a recurring one.\n6. If you’re active-duty military or a dependent, know that the Military Lending Act caps your rate on these products at 36% — a lender charging more than that to you is breaking federal law.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'What APR do payday loans actually charge?',
+        a: 'Payday loans are usually quoted as a flat fee per $100 borrowed, commonly $10–$30 for a two-week loan. Converted to an annual percentage rate for comparison, that typically works out to roughly 300%–400% APR or more.',
+      },
+      {
+        q: 'Why do people get stuck in a payday loan cycle?',
+        a: 'The loan is due in full, in one lump sum, about two weeks after you borrow it. Many borrowers can’t repay the full amount that fast, so they pay just the fee and roll the loan into another two-week term — generating a new fee each time without the original debt shrinking.',
+      },
+      {
+        q: 'Is there a safer alternative to a payday loan?',
+        a: 'A credit union Payday Alternative Loan (PAL) is the closest direct substitute — federally capped at 28% APR with terms of one to twelve months, versus 300%+ APR and a two-week term for a typical payday loan. Employer paycheck advances and borrowing from family are also usually far cheaper.',
+      },
+      {
+        q: 'Are payday loans legal everywhere in the US?',
+        a: 'No. Payday lending is regulated state by state — some states cap the fees or APR, and several have banned traditional payday loans outright. Rates and availability can differ sharply depending on where you live.',
+      },
+    ],
+  },
 ]
