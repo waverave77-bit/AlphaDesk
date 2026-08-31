@@ -2676,4 +2676,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-your-parents-claim-you-as-a-dependent-if-you-have-a-job',
+    title: 'Can Your Parents Still Claim You as a Dependent If You Have a Job?',
+    metaTitle: 'Claimed as a Dependent With a Job? The Actual IRS Rules',
+    description:
+      'A part-time job doesn’t automatically end your parents’ ability to claim you as a dependent. Here’s the real IRS support test, your shrunken standard deduction, and the kiddie tax.',
+    date: '2026-08-31',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You got a job, filled out your first W-4, and now you’re wondering if that means your parents can’t claim you on their taxes anymore. It’s a reasonable guess — and it’s wrong. Whether you can be claimed as a dependent has almost nothing to do with how much you earn, and almost everything to do with who’s actually paying for your life.',
+    sections: [
+      {
+        heading: 'The myth: earning money kicks you off your parents’ return',
+        body: 'The rule people assume exists — "if you earn over some amount, you’re on your own" — doesn’t apply to most teens and college students. For the IRS category almost every dependent kid falls into, called a "qualifying child," there is no income limit at all. You could earn a genuinely large amount from a job and still be perfectly eligible to be claimed.\n\nWhat actually determines it is four tests, and every one of them has to be true: relationship (you’re their child, stepchild, foster child, sibling, or a descendant of one of those), age (you’re under 19 at the end of the year, or under 24 if you were a full-time student for at least five months of the year, or any age if you’re permanently and totally disabled), residency (you lived with the parent for more than half the year), and support (you did not provide more than half of your own financial support for the year).',
+      },
+      {
+        heading: 'The test that actually decides it: support, not income',
+        body: 'The support test is where the confusion usually lives, because it’s not asking "how much did you earn" — it’s asking "who paid for your life." Support includes housing, food, medical care, transportation, and education costs. If your parents are still covering rent (or a paid-off house), groceries, insurance, and most of your other costs, you almost certainly didn’t provide more than half of your own support, even if your paycheck covers your phone bill, gas, and going out with friends.\n\nThe residency test has a quiet exception worth knowing too: living away at college counts as a "temporary absence." A dorm room doesn’t break the "lived with the parent more than half the year" requirement — the IRS still treats your parents’ home as where you live.',
+      },
+      {
+        heading: 'Your own standard deduction shrinks — but you probably still owe $0',
+        body: 'Being claimed as someone else’s dependent does change one thing on your own return: your standard deduction isn’t the full amount a non-dependent filer gets. Instead, it’s the greater of a small flat floor (a bit over $1,000, adjusted for inflation each year) or your earned income plus $450 — capped at the regular single filer’s standard deduction (roughly $16,100 for the 2026 tax year).\n\nIn practice, that formula still shields most working teens from owing anything. Earn $9,000 from a part-time and summer job as a dependent, and your deduction works out to roughly $9,450 — comfortably more than what you earned, so your federal taxable income lands at $0. You still file to get back whatever federal income tax was withheld from your paychecks; being a dependent doesn’t forfeit that refund.',
+      },
+      {
+        heading: 'The kiddie tax: the one place this actually gets more expensive',
+        body: 'There’s one real cost to being claimed as a dependent while also holding investments: the "kiddie tax." It only applies to unearned income — interest, dividends, and capital gains, the kind of income a custodial brokerage or custodial Roth account can generate — never to wages from an actual job.\n\nA small amount of a dependent’s unearned income each year is tax-free, the next small slice is taxed at the dependent’s own (usually low) rate, and anything above that gets taxed at the parent’s marginal tax rate instead — reported on IRS Form 8615. The thresholds are modest and adjust yearly, so check the current numbers before assuming last year’s figures still apply. The rule exists to stop families from parking large investment portfolios in a kid’s name purely to dodge tax at the parent’s higher bracket — it doesn’t touch a typical teen’s paycheck or a modest custodial account generating a small amount of dividends a year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. If you’re under 19 (or under 24 and a full-time student) and your parents still cover most of your housing, food, and other costs, they can almost certainly still claim you — a job alone doesn’t change that.\n2. Living in a dorm doesn’t break the residency test — it counts as a "temporary absence" from your parents’ home.\n3. File your own tax return if you had income or had tax withheld, even if you’re claimed as a dependent — you just check the box saying someone else can claim you, and you can still get withheld money refunded.\n4. Watch your unearned income (dividends and interest from a custodial or brokerage account) — amounts above the kiddie-tax threshold get taxed at your parent’s rate, not yours.\n5. Remember that FAFSA "dependent student" status is a completely different test from tax dependent status — being claimed on a tax return doesn’t automatically determine your FAFSA status, and vice versa.\n6. Talk to your parents before tax season about who’s claiming what, so neither of you accidentally files in a way that conflicts with the other’s return.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Dividend', 'Compound Interest', 'Portfolio'],
+    faq: [
+      {
+        q: 'Does having a job disqualify me from being claimed as a dependent?',
+        a: 'No. For the "qualifying child" category almost every teen and college student falls into, there’s no income limit at all. What matters is age, residency, and whether you provided more than half of your own financial support — not how much you earned.',
+      },
+      {
+        q: 'Do I still have to file my own tax return if my parents claim me?',
+        a: 'Yes, if you had income (especially if tax was withheld from your paychecks). You file your own return, check the box indicating someone else can claim you, and your parents don’t report your wages on their return.',
+      },
+      {
+        q: 'What is the kiddie tax?',
+        a: 'A rule that taxes a dependent’s unearned income — interest, dividends, capital gains, typically from a custodial or brokerage account — above a certain yearly threshold at the parent’s tax rate instead of the child’s. It doesn’t apply to wages from a job.',
+      },
+      {
+        q: 'Does being claimed as a dependent affect my financial aid?',
+        a: 'Tax dependent status and FAFSA dependent status are separate systems with different rules. Being claimed on your parents’ tax return doesn’t automatically make you a "dependent student" for FAFSA purposes, and vice versa — check each one on its own terms.',
+      },
+    ],
+  },
 ]
