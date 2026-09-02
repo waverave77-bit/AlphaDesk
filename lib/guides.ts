@@ -2780,4 +2780,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-being-an-authorized-user-build-your-credit-score',
+    title: 'Does Being an Authorized User Build Your Credit Score?',
+    metaTitle: 'Authorized User Credit Cards: Do They Actually Build Credit?',
+    description:
+      'Getting added as an authorized user on a parent’s credit card can jump-start your credit score fast — or drag it down. Here’s how the strategy really works.',
+    date: '2026-09-02',
+    category: 'Credit',
+    intro:
+      'Your mom or dad offers to add you as an authorized user on their credit card. You get a card with your name on it, you never touch the bill, and somehow your credit score can climb because of it. It sounds like a loophole — and in a well-understood, completely legitimate way, it kind of is. Here’s exactly how it works, what can go wrong, and the shady paid version of this trick you should stay away from.',
+    sections: [
+      {
+        heading: 'What “authorized user” actually means',
+        body: 'An authorized user is someone added to another person’s existing credit card account. You get your own card and can spend on it, but you carry zero legal responsibility for paying the bill. That’s the key difference from a joint account holder, who shares equal legal responsibility for the debt. If you’re an authorized user on your dad’s card and he stops paying, you can’t be sued or sent to collections over it — the primary cardholder is on the hook, not you.\n\nMost major issuers — Chase, American Express, Capital One, Discover, Citi — will add an authorized user of almost any age, including kids well under 18. Some set no minimum age at all; others set a low floor like 13 or 15. Policies vary by issuer, so it’s worth checking directly rather than assuming.',
+      },
+      {
+        heading: 'How it can boost your score',
+        body: 'Most — not all — card issuers report the account’s full history to the three credit bureaus (Equifax, Experian, and TransUnion) under the authorized user’s name too, not just the primary cardholder’s. That means the account’s age, its on-time payment history, and how much of the limit is being used can all show up on your credit report, even though you never applied for the card and aren’t the one paying the bill.\n\nThis matters most for length of credit history, a factor that makes up a meaningful chunk of your FICO score. If a parent has had a card open for 15 years with a spotless payment record, being added as an authorized user can instantly hand your thin or nonexistent credit file a 15-year-old account. For a teenager or a new adult with no credit history at all, this is often the fastest legitimate way to go from no score to a usable one.',
+      },
+      {
+        heading: 'How it can also hurt you',
+        body: 'The same mechanism cuts both ways. If the primary cardholder misses payments, runs the balance up near the credit limit, or defaults, that negative history can land on your credit report too — dragging your score down for something you had no control over. A missed payment can stay on a credit report for years.\n\nBefore agreeing to be added — or asking to be added — to someone’s card, it’s worth an honest conversation about how they actually use it. A card that carries a maxed-out balance for months at a time is not one you want tied to your name, even as a non-liable authorized user.',
+      },
+      {
+        heading: 'The scam version: paying strangers for “tradelines”',
+        body: 'There’s a shady corner of the internet built around this exact loophole: companies that pay people with old, high-limit, perfect-payment credit cards to add total strangers as authorized users for a fee, sometimes hundreds or thousands of dollars per “tradeline.” Buyers hope a sudden, seasoned, high-limit account will spike their score right before a mortgage or car loan application.\n\nThis is not the same as a parent adding their own kid. Modern FICO scoring models are specifically built to detect and discount this kind of rented-tradeline pattern, so it often doesn’t deliver what sellers promise. Lenders have gotten wise to it too and can flag or deny applications that look artificially inflated this way. Stick to the version where you actually know and trust the person whose account you’re being added to.',
+      },
+      {
+        heading: 'Your checklist before becoming an authorized user',
+        body: '1. Confirm the issuer actually reports authorized user activity to all three bureaus — some don’t report it at all, which means it won’t move your score either way.\n2. Check the account’s real history: its age, its on-time payment record, and how close the balance usually runs to the limit.\n3. You don’t have to actually use the physical card for the credit-building benefit to apply — plenty of people leave it in a drawer.\n4. Ask the primary cardholder to give you a heads-up before major changes, like closing the card or letting the balance run high.\n5. Once you’ve built your own credit history, you can ask to be removed — this usually doesn’t hurt your score if you already have solid accounts of your own by then.\n6. Never pay a stranger to add you as an authorized user. Legitimate credit-building only works with someone you actually know.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Do I have to pay the bill if I’m an authorized user?',
+        a: 'No. Authorized users have no legal obligation to pay — only the primary cardholder is responsible for the debt. That’s the core difference between an authorized user and a joint account holder.',
+      },
+      {
+        q: 'How old do you have to be to become an authorized user?',
+        a: 'It depends on the issuer. Some major card companies allow authorized users of almost any age, including young children; others set a minimum around 13 or 15. There’s no universal rule, so check with the specific card issuer.',
+      },
+      {
+        q: 'Can being an authorized user hurt my credit score?',
+        a: 'Yes. If the primary cardholder misses payments or carries a high balance relative to the limit, that negative activity can show up on your credit report too, even though you’re not legally responsible for the debt.',
+      },
+      {
+        q: 'Does every credit card report authorized users to the credit bureaus?',
+        a: 'No — this is the detail people miss most. Some issuers don’t report authorized user activity at all, which means being added won’t affect your credit report either way. Ask the issuer directly before assuming it will help.',
+      },
+    ],
+  },
 ]
