@@ -2832,4 +2832,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-paying-off-a-loan-hurt-your-credit-score',
+    title: 'Does Paying Off a Loan Hurt Your Credit Score?',
+    metaTitle: 'Does Paying Off a Loan Hurt Your Credit Score? The Real Mechanics',
+    description:
+      'You finally pay off a car loan or student loan and your score dips instead of jumping. Here’s why that can happen, why it’s temporary, and why paying it off is still right.',
+    date: '2026-09-03',
+    category: 'Credit',
+    intro:
+      'You make the last payment on a car loan or a private student loan expecting your credit score to jump — and a few weeks later it ticks down instead. That’s not a glitch, and it’s not a punishment for doing the responsible thing. Here’s exactly what your score is reacting to, what actually stays on your report, and why paying off debt is still almost always the right move regardless of what the number does.',
+    sections: [
+      {
+        heading: 'Short answer: sometimes a small dip, and it’s temporary',
+        body: 'Paying off an installment loan — a car loan, a personal loan, a student loan — can cause a small, short-lived dip in your credit score for some people. It doesn’t happen to everyone, and when it does happen, it’s rarely dramatic. It also has nothing to do with the loan itself being “bad” for you. It’s a side effect of how scoring models read your file the moment your active account list changes.',
+      },
+      {
+        heading: 'Why the dip can happen: credit mix and active installment history',
+        body: 'FICO scores are built from five weighted ingredients: payment history (roughly 35%), amounts owed (roughly 30%), length of credit history (roughly 15%), credit mix (roughly 10%), and new credit (roughly 10%). Credit mix rewards you for successfully managing different types of credit — revolving accounts like credit cards, and installment accounts like auto loans, student loans, or personal loans.\n\nIf that car loan was your only open installment account, paying it off removes your only active example of that credit type from the mix, even though the account still shows up on your report as closed and paid. Since credit mix is only about 10% of the score, this effect is usually small — but for someone with a thin credit file (just one or two accounts total), a small factor can move the number more noticeably than it would for someone with a long, varied history.',
+      },
+      {
+        heading: 'What doesn’t happen: your payment history doesn’t disappear',
+        body: 'This is the part that trips people up the most. Paying off a loan does not erase it from your credit report. A closed account that was paid as agreed can stay on your credit report for up to 10 years from the closing date, and it keeps counting toward your length of credit history and your on-time payment record the entire time it’s listed. The positive history you built by paying on time for years doesn’t vanish the moment the balance hits zero — it just switches from “open” to “closed, paid as agreed.”\n\nThe only accounts that get removed relatively fast are negative ones: a loan with missed payments generally falls off your report about 7 years after the first missed payment that led to the delinquency, regardless of whether you eventually paid it off.',
+      },
+      {
+        heading: 'Installment loans vs. credit cards: a different mechanism entirely',
+        body: 'Paying off a credit card and paying off an installment loan affect your score through different paths. Revolving accounts (credit cards, lines of credit) feed directly into your credit utilization — the percentage of your available revolving credit you’re currently using, which is a big chunk of the “amounts owed” category. Installment loans like auto or student loans don’t work that way; scoring models care much less about the remaining balance on a fixed-payment loan than they do about revolving balances.\n\nThat’s also why closing a paid-off credit card is a separate, generally riskier move than paying off an installment loan: closing a card can reduce your total available revolving credit, which can spike your utilization percentage even if your spending hasn’t changed. Paying off a car loan or student loan doesn’t touch your utilization at all, because installment balances were never part of that calculation the same way.',
+      },
+      {
+        heading: 'Should you pay it off anyway? Yes — almost always',
+        body: 'A possible few-point dip is a rounding error compared to what you gain by eliminating the debt: you stop paying interest, your monthly cash flow frees up, and your debt-to-income ratio — a number lenders weigh heavily for future approvals like a mortgage — improves immediately. Debt-to-income isn’t part of your credit score at all, but it’s a separate, major factor lenders check on top of your score, and paying off a loan early helps it every time.\n\nThe only real exception is if you’re about to apply for a big loan (a mortgage, for example) in the next few weeks and want to keep your active credit mix looking exactly as-is until after approval — timing, not avoidance, is the only legitimate reason to think twice. Outside of that narrow case, knocking out debt you can afford to pay off is virtually never the wrong call just because of a possible temporary dip.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Don’t panic over a small dip after paying off a loan — check that payments were reported correctly, then give it a few statement cycles to settle.\n2. Remember: a paid, closed account in good standing keeps helping your length of credit history for up to 10 years — it isn’t erased.\n3. If you’re planning a big loan application soon, ask your lender whether timing a payoff before or after makes sense for your file.\n4. Don’t let score anxiety talk you into carrying debt you could pay off — the interest saved and lower debt-to-income almost always outweigh a few points.\n5. If losing your only installment account bothers your credit mix long-term, you don’t need to take on new debt to fix it — a thin credit mix is a minor factor next to payment history and utilization.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Why did my credit score drop after I paid off my car loan?',
+        a: 'It’s usually a small side effect of credit mix — if that loan was your only open installment account, removing it from your active accounts can nudge the score down slightly. It’s typically temporary and small, and the account keeps counting toward your history for years after.',
+      },
+      {
+        q: 'Does paying off a loan early hurt your credit more than paying it off on schedule?',
+        a: 'No — how you pay it off (early or on the original schedule) matters far less than whether you paid on time. Either way, the paid, closed account can stay on your report for up to 10 years and keeps contributing to your payment history.',
+      },
+      {
+        q: 'Does paying off a student loan remove it from your credit report?',
+        a: 'No. A paid-off loan doesn’t disappear — it switches to a closed, paid status and can remain on your credit report for up to 10 years, still counting toward your length of credit history.',
+      },
+      {
+        q: 'Should I avoid paying off debt to protect my credit score?',
+        a: 'No. Any possible score dip from paying off an installment loan is typically small and temporary, while the interest savings and improved debt-to-income ratio are real and lasting. Paying off debt you can afford to pay off is almost always the right move.',
+      },
+    ],
+  },
 ]
