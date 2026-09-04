@@ -2888,4 +2888,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-federal-work-study-work-is-it-worth-it',
+    title: 'How Does Federal Work-Study Actually Work, and Is It Worth Doing?',
+    metaTitle: 'Federal Work-Study Explained: Pay, Hours & FAFSA Impact',
+    description:
+      'Federal work-study isn’t free money — it’s a part-time job you have to find. Here’s how the pay, hours, and hidden FAFSA advantage actually work.',
+    date: '2026-09-04',
+    category: 'College Money',
+    intro:
+      'Your financial aid offer lists “Federal Work-Study: $2,800” right next to your grants and loans, and it’s easy to assume that’s cash headed your way. It’s not — it’s eligibility for a part-time campus job, and you only see the money if you actually find one and clock the hours. Here’s what work-study really pays, how you get it, and the one FAFSA advantage it has that a regular job doesn’t.',
+    sections: [
+      {
+        heading: 'What a work-study “award” actually is',
+        body: 'Federal Work-Study (FWS) is a federal financial aid program, not a grant and not a loan. The dollar figure on your aid offer is a ceiling on how much you’re eligible to earn that year through an approved part-time job — it isn’t a balance that gets applied to your tuition bill or deposited into your account automatically. If you never find a work-study job, or you find one but only work a few hours, you simply don’t collect the rest of that number. Nothing converts it to cash or a loan on your behalf.\n\nThe program is need-based, meaning it only shows up on aid offers for students whose FAFSA results show financial need, and it’s jointly funded by the federal government and the college (or an approved off-campus employer, often a nonprofit or public agency). Each school gets a limited pool of work-study funding for the year, which is part of why timing matters — more on that below.',
+      },
+      {
+        heading: 'How you actually get paid',
+        body: 'Work-study jobs pay an hourly wage — at least the federal minimum wage (which has stayed at $7.25/hour since 2009, though many states, cities, and campus jobs pay more) — and the money comes to you as a regular paycheck, usually biweekly or monthly, just like any other part-time job. You choose what to do with it: tuition, textbooks, rent, or spending money. It’s fundamentally a job, with a timesheet and a supervisor, not aid that reduces your bill automatically the way a grant does.\n\nSchools cap the hours you can work so your total earnings don’t exceed your award amount for the year, and most also limit hours per week — often somewhere around 10–20 hours during the semester — so the job doesn’t eat into class time. Once you hit your award ceiling, you generally can’t keep earning under the work-study program for the rest of the year, even if the job itself continues.',
+      },
+      {
+        heading: 'Finding the job is on you, and the funding runs out',
+        body: 'Getting a work-study award on your aid offer doesn’t hand you a job — it makes you eligible to apply for one. You still have to search your school’s job board (usually run through the financial aid or career services office), apply, and interview, the same as any other part-time position. Popular campus jobs — library desks, tutoring centers, department offices — fill up fast, especially right before the fall semester starts.\n\nBecause each school’s work-study funding pool is limited and effectively awarded first-come, first-served in practice, showing up late in the process can mean the easiest, most convenient jobs are already taken, or that funding for new hires has run out entirely for the year. If you were awarded work-study, start the job search the moment your offer letter arrives — not the week classes begin.',
+      },
+      {
+        heading: 'The hidden advantage: it doesn’t count against next year’s aid',
+        body: 'Here’s the detail that makes work-study meaningfully better than an identical-paying off-campus job: earnings from federal work-study are excluded from the income the FAFSA counts against you the following year. A regular part-time job’s wages get added to your reported income and can raise your Student Aid Index (SAI), which can shrink your need-based aid the next time you file. Work-study earnings, because they’re classified as need-based employment, are specifically carved out of that calculation.\n\nPractically, that means two students who each earn $3,000 over a summer or school year can end up with different aid packages the next year — the one who earned it through work-study keeps more aid eligibility intact, while the one who earned it at a regular retail or restaurant job may see eligibility shrink slightly because that income counted.',
+      },
+      {
+        heading: 'Work-study vs. a regular part-time job',
+        body: 'A regular off-campus job usually wins on raw earning potential — no award ceiling tied to financial need, and often more available hours. Work-study wins on convenience and FAFSA treatment: schedules are typically built around class times, the job is on or near campus, and some positions — tutoring, research assistance, community-service placements — look better on a resume than an equivalent retail shift.\n\nThe honest comparison depends on what you need most. If you’re trying to maximize total income and can find a well-paying off-campus job, work-study’s earnings cap can actually leave money on the table. If you value the schedule flexibility, the campus connections, or you’re relying on aid in future years and want to protect your SAI, work-study is usually the better trade even at a lower ceiling.\n\nOne upside either way: work-study wages count as earned income, which is exactly what qualifies you to contribute to a Roth IRA — even a small amount redirected from a semester of work-study earnings gets decades of tax-free compounding before retirement.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your aid offer for a work-study award amount — remember it’s a ceiling on eligible earnings, not cash you’ve already been given.\n2. Start browsing your school’s work-study job board as soon as your aid offer arrives, before the semester starts.\n3. Ask your financial aid office directly whether work-study funding is still available if you’re applying mid-semester.\n4. Compare the realistic hours and pay against an off-campus job — don’t assume work-study automatically pays more.\n5. If you have leftover work-study earnings, consider putting some into a custodial or personal Roth IRA — it’s earned income, so it qualifies.\n6. Don’t count on the full award amount when budgeting for the semester — you’re only paid for hours you actually work.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', '401(k)'],
+    faq: [
+      {
+        q: 'Is federal work-study free money?',
+        a: 'No — it’s eligibility to earn up to a set amount through an approved part-time job. You only receive money for hours you actually work, and if you never find or start a work-study job, that award amount simply goes unused.',
+      },
+      {
+        q: 'Does work-study pay go toward my tuition bill automatically?',
+        a: 'No. Unlike a grant or scholarship, work-study pays you directly as a paycheck for hours worked — you decide whether to put it toward tuition, books, or living expenses.',
+      },
+      {
+        q: 'Does a work-study job hurt my financial aid the next year?',
+        a: 'The opposite — federal work-study earnings are excluded from the income the FAFSA counts against you on future applications, unlike wages from a regular off-campus job, which can raise your Student Aid Index and shrink next year’s need-based aid.',
+      },
+      {
+        q: 'What happens if I don’t use my full work-study award?',
+        a: 'It’s simply left unused — unused work-study eligibility doesn’t roll over, convert to cash, or get replaced with a loan. You’re only paid for hours actually worked before the award period ends.',
+      },
+    ],
+  },
 ]
