@@ -2944,4 +2944,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-parent-plus-loan-how-is-it-different',
+    title: 'What Is a Parent PLUS Loan, and How Is It Different From a Student Loan?',
+    metaTitle: 'Parent PLUS Loans Explained: Rates, Fees & Who Owes the Money',
+    description:
+      'A Parent PLUS Loan is federal debt in your parent’s name, not yours — with a higher rate, a bigger fee, and different rules than the loans you take out yourself.',
+    date: '2026-09-05',
+    category: 'College Money',
+    intro:
+      'Your financial aid offer covers most of the cost, but there’s still a gap — and your school suggests a “Parent PLUS Loan” to close it. It sounds like just another student loan with a different name. It isn’t. It’s a completely separate federal loan, borrowed by your parent, in your parent’s name, with different rates, different fees, and different rules than the loans sitting on your own account. Here’s who actually owes the money and why the fine print matters.',
+    sections: [
+      {
+        heading: 'It’s your parent’s loan, not yours',
+        body: 'A Direct PLUS Loan for Parents (the full name — everyone just says "Parent PLUS") is a federal loan issued to a parent of a dependent undergraduate, to help cover costs the rest of the financial aid package doesn’t. The key detail people gloss over: the parent is the borrower. Their name is on the promissory note, it appears on their credit report, and they are the one legally required to repay it — not the student, even though the money paid for the student’s education.\n\nThis is a completely different legal relationship than the Direct Subsidized and Unsubsidized Loans that show up on a student’s own FAFSA-based aid offer. Those are the student’s debt, under the student’s name, and the student’s responsibility to repay after graduation. A Parent PLUS Loan never becomes the student’s debt automatically — if a parent wants the student to eventually take it over, the only real path is the student refinancing it into a private loan in their own name later, which requires qualifying on their own credit and income.',
+      },
+      {
+        heading: 'The credit check most federal loans skip',
+        body: 'Direct Subsidized and Unsubsidized Loans don’t require a credit check at all — that’s a big part of why they’re available to nearly every undergrad regardless of financial background. Parent PLUS Loans are the exception: the Department of Education runs a credit check on the parent-borrower, though it’s a fairly narrow one. It doesn’t look at income, debt-to-income ratio, or a credit score the way a private lender would. It’s specifically checking for an "adverse credit history" — things like recent accounts in collections, a bankruptcy, a foreclosure, or a pattern of serious delinquency in the last several years.\n\nA parent with a mediocre credit score but no major red flags on that list will typically still qualify. If a parent is denied for adverse credit, they generally have two options to move forward anyway: appeal by documenting extenuating circumstances, or get an endorser (the PLUS version of a cosigner) who doesn’t have adverse credit history themselves. Getting denied also unlocks something for the student — they become eligible to borrow a higher amount through their own Direct Unsubsidized Loan than they otherwise could have.',
+      },
+      {
+        heading: 'The rate and fee are both worse than a student loan',
+        body: 'Parent PLUS Loans carry a fixed interest rate set annually by Congress, and it is consistently the highest rate among the federal student loan programs — noticeably above the rate charged on Direct Subsidized and Unsubsidized Loans for the same school year. On top of that, PLUS loans charge an origination fee that gets deducted from every disbursement before the money ever reaches the school — and that fee is several times higher than the origination fee on a student’s own Direct Loan.\n\nBoth the rate and the fee reset each year and apply to loans first disbursed in that award year, so a loan taken out for freshman year can carry a different rate than the one taken out for senior year. There’s no way to negotiate either number — every parent who qualifies gets the same rate and fee that year, unlike a private loan where a stronger credit profile can buy a better rate.',
+      },
+      {
+        heading: 'Interest starts immediately, and repayment options are more limited',
+        body: 'Direct Subsidized Loans don’t accrue interest while the student is in school — the government covers it. Parent PLUS Loans get no such break: interest starts accruing from the moment the loan is disbursed, even if the parent isn’t required to make payments yet. Parents can request a deferment while their child is enrolled at least half-time, but the interest keeps piling up during that deferment and gets added to the balance later if it isn’t paid along the way.\n\nRepayment plans are also more restrictive. Parent PLUS Loans aren’t directly eligible for most income-driven repayment plans available to students. The workaround is consolidating the Parent PLUS Loan into a Direct Consolidation Loan, which then opens up eligibility for Income-Contingent Repayment (ICR) — generally the only income-driven option a PLUS borrower can access, and typically less generous than the plans available on a student’s own federal loans.',
+      },
+      {
+        heading: 'When it actually makes sense — and the alternative worth comparing',
+        body: 'Parent PLUS Loans exist to fill a real gap: federal student loan amounts are capped fairly low, and for many families the remaining cost of attendance is bigger than those caps. Compared to a private student loan, Parent PLUS has one big advantage — access. It doesn’t require strong income or a great score, just the absence of adverse credit history, so it’s often available to families a private lender would decline. It also comes with federal protections private loans don’t always match, like access to deferment and (after consolidation) income-driven repayment.\n\nThe honest comparison is against a private parent loan or a private student loan with a strong cosigner: those can sometimes beat the Parent PLUS rate for borrowers with excellent credit, since private lenders price based on the full credit profile instead of a flat rate for everyone. Before signing, it’s worth getting a private loan quote to compare — the "federal loan" label doesn’t automatically mean it’s the cheaper option for every family.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm whose name is actually on the loan — a Parent PLUS Loan is never the student’s legal debt, no matter who benefits from it.\n2. Compare the current Parent PLUS rate and origination fee against a private loan quote before assuming federal is automatically cheaper.\n3. If a parent gets denied for adverse credit, ask the school about the extra Direct Unsubsidized Loan amount that unlocks for the student.\n4. Ask about deferment while in school, but remember interest still accrues and gets added to the balance later.\n5. If income-driven repayment matters, know that a Parent PLUS Loan only becomes eligible for ICR after being consolidated — it’s not automatic.\n6. Don’t assume the loan can be handed off to the student later — the only real path is a private refinance in the student’s own name and credit.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'Who is legally responsible for repaying a Parent PLUS Loan?',
+        a: 'The parent who took it out — it’s their federal loan, under their name and credit file, not the student’s. The student benefits from the money, but has no legal obligation to repay it.',
+      },
+      {
+        q: 'Can a Parent PLUS Loan be transferred to the student after graduation?',
+        a: 'Not directly. The only realistic way to shift the debt is for the student to take out a private refinance loan in their own name and use it to pay off the Parent PLUS balance — which requires the student to qualify on their own income and credit.',
+      },
+      {
+        q: 'Does a Parent PLUS Loan show up on the student’s credit report?',
+        a: 'No. Since the parent is the borrower, the loan is reported to the credit bureaus under the parent’s file only — it has no direct effect on the student’s credit.',
+      },
+      {
+        q: 'What happens if a parent is denied a Parent PLUS Loan?',
+        a: 'They can appeal with documentation of extenuating circumstances or add an endorser without adverse credit history. Either way, the denial also raises how much the student can borrow through their own Direct Unsubsidized Loan.',
+      },
+    ],
+  },
 ]
