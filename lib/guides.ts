@@ -3000,4 +3000,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'is-a-robo-advisor-worth-it-for-beginners',
+    title: 'Is a Robo-Advisor Worth It for a Beginner Investor?',
+    metaTitle: 'Robo-Advisors Explained: Fees, How They Work, Worth It?',
+    description:
+      'A robo-advisor builds and rebalances your portfolio for a small annual fee. Here’s what you actually get, what it costs, and when doing it yourself is smarter.',
+    date: '2026-09-06',
+    category: 'Investing',
+    intro:
+      'You want to start investing but the idea of picking your own ETFs feels like guessing. A robo-advisor answers a short questionnaire about your goals and risk tolerance, then builds and maintains a diversified portfolio for you automatically. It’s not magic and it’s not free — here’s exactly what you’re paying for and whether it beats doing it yourself.',
+    sections: [
+      {
+        heading: 'What a robo-advisor actually does',
+        body: 'A robo-advisor is software, offered by companies like Betterment, Wealthfront, Schwab Intelligent Portfolios, and Fidelity Go, that automates the parts of investing that used to require a human advisor. You answer questions about your age, goals, timeline, and comfort with risk. The algorithm then builds you a diversified portfolio, almost always made of low-cost ETFs spread across US stocks, international stocks, and bonds, in a mix matched to your risk profile.\n\nFrom there it runs on autopilot: it invests new deposits according to your target mix, and it periodically rebalances the portfolio back to that mix as some assets grow faster than others. That’s the entire pitch — the diversification and discipline of a good long-term portfolio, without you having to research individual funds or remember to rebalance.',
+      },
+      {
+        heading: 'What it costs, and what that buys you',
+        body: 'Most robo-advisors charge an annual advisory fee of roughly 0.25% of your account balance — so $2.50 a year for every $1,000 invested. A few, like Schwab Intelligent Portfolios, charge no advisory fee at all but require you to hold a slice of your portfolio in cash, which earns little to nothing and effectively becomes the cost instead.\n\nOn top of the advisory fee, you still pay the expense ratio baked into the underlying ETFs — typically another 0.03% to 0.15% a year, since robo-advisors mostly use the same cheap index ETFs a DIY investor would buy directly. Compare that to a traditional human financial advisor, who commonly charges around 1% of assets per year — four times more than a typical robo-advisor — often to build a similar diversified portfolio.',
+      },
+      {
+        heading: 'The one feature that can actually pay for the fee: tax-loss harvesting',
+        body: 'Several robo-advisors, including Betterment and Wealthfront, automatically scan your taxable account for investments that have dropped in value and sell them to realize a loss — then immediately buy a similar (not identical, to avoid the wash-sale rule) investment so you stay invested. That realized loss can offset gains elsewhere in your portfolio, or up to $3,000 of ordinary income per year, lowering your tax bill.\n\nThis only matters in a regular taxable brokerage account — it does nothing inside a Roth IRA or 401(k), since those accounts aren’t taxed on gains or losses in the first place. For someone with a sizable taxable account, automated tax-loss harvesting can be worth more over a year than the entire advisory fee. For a teenager or college student with a small Roth IRA, it’s a feature you’re not even using yet.',
+      },
+      {
+        heading: 'When doing it yourself is the better move',
+        body: 'A robo-advisor is solving a problem you may not have yet if you’re just starting out with a Roth IRA or a small brokerage account. Buying one or two broad, low-cost index ETFs yourself and reinvesting dividends accomplishes most of the same diversification, with no advisory fee at all — just the ETF’s own expense ratio, often under 0.05% a year for a total market fund.\n\nThe tradeoff is that you become responsible for rebalancing yourself, which for a simple two- or three-fund portfolio usually means checking in once or twice a year and nudging your allocation back toward your target — not a heavy lift. A robo-advisor earns its fee mainly when your finances get more complex: a larger taxable account where tax-loss harvesting has real dollars to work with, multiple goals with different timelines, or simply wanting the account to run itself without any ongoing attention from you.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. If your only account is a small Roth IRA or brokerage account, compare the robo-advisor’s 0.25%-ish fee against just buying a broad index ETF yourself for near-zero cost.\n2. If you do use a robo-advisor, check whether it requires an uninvested cash allocation instead of (or in addition to) a fee — that’s a real cost even at “0%.”\n3. Tax-loss harvesting only helps in a taxable account, never inside a Roth IRA or 401(k) — don’t pay extra for a feature your account type can’t use.\n4. Whichever route you pick, confirm the underlying holdings are diversified, low-cost ETFs, not actively managed funds with higher expense ratios hiding the real cost.\n5. Re-check your risk questionnaire answers every year or two — robo-advisors only rebalance to the target you gave them, and that target should shift as your timeline changes.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Index Investing', 'Diversification', 'Rebalancing', 'Tax-Loss Harvesting'],
+    faq: [
+      {
+        q: 'Is a robo-advisor better than picking my own stocks?',
+        a: 'For most beginners, yes — robo-advisors default to diversified, low-cost ETFs instead of individual stock picks, which removes the risk of putting too much money in one company. The tradeoff is you give up any chance of beating the market, but you also avoid the more common risk of badly underperforming it.',
+      },
+      {
+        q: 'How much does a robo-advisor cost compared to a human financial advisor?',
+        a: 'Most robo-advisors charge around 0.25% of your account balance per year, versus roughly 1% for a typical human financial advisor — plus the underlying ETF expense ratios in both cases, which are usually small either way.',
+      },
+      {
+        q: 'Do I need a lot of money to use a robo-advisor?',
+        a: 'No. Most major robo-advisors have low or no account minimums, so you can start with whatever you have, even a small Roth IRA contribution from a part-time job.',
+      },
+      {
+        q: 'Can I lose money with a robo-advisor?',
+        a: 'Yes. A robo-advisor manages how your money is invested, but it can’t protect you from the market going down — you still own real stocks and bonds through ETFs, and their value can drop just like any other investment.',
+      },
+    ],
+  },
 ]
