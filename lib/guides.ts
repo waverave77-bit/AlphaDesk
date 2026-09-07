@@ -3052,4 +3052,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-pell-grant-do-you-have-to-pay-it-back',
+    title: 'What Is a Pell Grant, and Do You Ever Have to Pay It Back?',
+    metaTitle: 'Pell Grant Explained: Amount, Eligibility & Repayment Rules',
+    description:
+      'A Pell Grant is federal money for college that usually doesn’t get repaid — but the award amount, who qualifies, and a lifetime limit all work differently than most students assume.',
+    date: '2026-09-07',
+    category: 'College Money',
+    intro:
+      'Your financial aid offer lists a Pell Grant right next to your loans and work-study, and it’s tempting to lump it in with everything else as "aid you’ll deal with later." It shouldn’t be lumped in — a Pell Grant is money the federal government gives you because you qualify by need, and in almost every case you never pay a cent of it back. Here’s how much you can actually get, the specific situations where you could owe some of it back anyway, and the lifetime clock most students never hear about until it runs out.',
+    sections: [
+      {
+        heading: 'What a Pell Grant actually is',
+        body: 'A Federal Pell Grant is money the U.S. Department of Education gives directly toward your undergraduate education based on financial need — not academic merit, not athletic ability, just need as calculated from your FAFSA. Unlike a scholarship from a private organization or your school, it comes straight from the federal government, and nearly every college and career school in the country that accepts federal aid can disburse it.\n\nThe defining feature, the one that separates it from every loan in your aid package: a Pell Grant is not borrowed money. It doesn’t accrue interest, there’s no promissory note, and in the ordinary course of finishing your classes, you never write a check back to the government for it. That puts it in the same "doesn’t get repaid" category as a scholarship — the mechanics are just federal instead of private.',
+      },
+      {
+        heading: 'How much you can actually get',
+        body: 'There’s no flat dollar amount every Pell recipient gets — the award is calculated individually using your Student Aid Index (SAI) from the FAFSA, your school’s cost of attendance, and your enrollment status (full-time, three-quarter-time, half-time, or less than half-time). Students with the lowest SAI and full-time enrollment qualify for the largest award in a given year; less financial need or less-than-full-time enrollment shrinks it proportionally.\n\nCongress resets the maximum award for each award year, and it’s adjusted periodically rather than following a fixed formula tied to inflation — in recent award years the maximum has landed in the neighborhood of $7,400 for the highest-need, full-time student, but that exact number shifts, so check the current figure at studentaid.gov rather than trusting any number you read elsewhere, including this page a year from now. One detail worth knowing: a family with a sufficiently low or negative SAI can qualify for the maximum award automatically, without every dollar of the formula being spelled out to the student.',
+      },
+      {
+        heading: 'Do you actually have to pay it back?',
+        body: 'In the normal case — you enroll, you attend your classes, you finish the term — no. That’s the entire point of a grant instead of a loan. But there are a few specific situations where some of it can come back to bite you, and "I didn’t know that was a thing" is the most common reaction students have when it happens.\n\nThe big one: withdrawing from school before finishing a significant chunk of the term. Federal rules require your school to calculate how much of your aid you actually "earned" based on how much of the term you completed — a process called Return of Title IV Funds. Leave before that threshold and a portion of your Pell Grant is considered unearned, which your school and sometimes you personally may have to return to the Department of Education. The second situation is simpler: if your eligibility was based on inaccurate information, whether by mistake or fraud, you can be required to repay the difference once it’s corrected. A Pell Grant overpayment sitting on your record can also block you from receiving further federal aid until it’s resolved.',
+      },
+      {
+        heading: 'The lifetime limit almost nobody mentions: 600%',
+        body: 'Pell Grant eligibility isn’t just about qualifying each year — it’s also capped over your lifetime. The Department of Education tracks a number called Lifetime Eligibility Used (LEU), and the cap sits at 600%, which works out to roughly 12 full-time semesters, or six academic years. Every term you’re enrolled full-time and receive Pell funding uses up about 100% of a year’s worth; a part-time term uses up a smaller percentage instead.\n\nOnce you hit 600%, that’s it — no more Pell Grant money, even if you haven’t finished a degree yet. This trips up students who change majors more than once, take a lighter course load for several semesters, or stretch a four-year degree into six or seven years for other reasons. You can check your own used percentage anytime by logging into your account at studentaid.gov — it’s worth a look well before you get anywhere close to the limit.',
+      },
+      {
+        heading: 'Who actually qualifies',
+        body: 'You need to file the FAFSA every year and show financial need through your SAI — there’s no separate Pell Grant application. Beyond need, the core requirements are being a US citizen or eligible noncitizen with a valid Social Security number, being enrolled in an eligible undergraduate degree or certificate program, and not already holding a bachelor’s degree (a narrow exception exists for some post-baccalaureate teacher certification programs).\n\nYou also have to maintain what your school defines as Satisfactory Academic Progress — generally a minimum GPA and pace toward completing your program — and not be in default on any existing federal student loans. None of this is automatic just because you’re broke; the FAFSA and your school’s financial aid office are what actually turn "I qualify" into money showing up against your tuition bill.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. File the FAFSA every year you’re enrolled — Pell eligibility is recalculated annually and there’s no separate application.\n2. Look up the current award year’s maximum at studentaid.gov instead of relying on a number you saw somewhere else.\n3. If you’re thinking about withdrawing mid-term, ask your financial aid office how much of your Pell Grant you’d be considered to have "earned" first — leaving early can turn free money into money you owe.\n4. Check your Lifetime Eligibility Used percentage on your studentaid.gov account, especially if you’ve changed majors or taken reduced course loads.\n5. Confirm you’re maintaining your school’s Satisfactory Academic Progress standards — falling behind can cut off your Pell eligibility even mid-degree.\n6. Remember a Pell Grant can be tax-free, but only for the portion spent on tuition and required course costs — money it covers for room and board is still taxable income.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Diversification'],
+    faq: [
+      {
+        q: 'Do you have to pay back a Pell Grant?',
+        a: 'Almost never in the ordinary course of finishing your classes — a Pell Grant isn’t a loan and doesn’t accrue interest. The exceptions are withdrawing before completing enough of the term (which can create a repayable "unearned" portion) or receiving it based on incorrect information.',
+      },
+      {
+        q: 'How much money can you get from a Pell Grant?',
+        a: 'It varies by student — it’s calculated from your SAI, your school’s cost of attendance, and your enrollment status, so there’s no single number every recipient gets. Check studentaid.gov for the current award year’s maximum for full-time, highest-need students.',
+      },
+      {
+        q: 'Can graduate students get a Pell Grant?',
+        a: 'No — Pell Grants are for undergraduates who haven’t already earned a bachelor’s degree, with a narrow exception for some post-baccalaureate teacher certification programs.',
+      },
+      {
+        q: 'How many years can you receive a Pell Grant?',
+        a: 'Up to 600% Lifetime Eligibility Used, which works out to roughly 12 full-time semesters, or about six academic years. Part-time enrollment uses up a smaller percentage per term, stretching that further in calendar years.',
+      },
+    ],
+  },
 ]
