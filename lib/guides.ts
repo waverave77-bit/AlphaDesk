@@ -3108,4 +3108,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-get-your-security-deposit-back',
+    title: 'How Do You Get Your Full Security Deposit Back When You Move Out?',
+    metaTitle: 'Getting Your Security Deposit Back: Rules, Deadlines & Deductions',
+    description:
+      'Security deposit deductions aren’t random — landlords can only charge for real damage, must return the money by a legal deadline, and owe it back if they blow it. Here’s how it actually works.',
+    date: '2026-09-08',
+    category: 'Saving',
+    intro:
+      'You handed over a chunk of cash — often a full month’s rent — just to get the keys, and now you’re moving out wondering if you’ll ever see it again. Whether you get it all back mostly comes down to three things: what you documented on day one, what actually counts as damage versus normal wear and tear, and whether your landlord follows the legal deadline for returning it. Here’s how the process actually works, and what to do if a landlord tries to keep money they’re not entitled to.',
+    sections: [
+      {
+        heading: 'What a security deposit actually is',
+        body: 'A security deposit is money your landlord holds — not spends — as protection against unpaid rent or damage beyond normal use. It is not the same thing as last month’s rent, even though some landlords informally treat it that way; check your lease for which one you actually paid, because the rules for getting each back can differ.\n\nMany states cap how much a landlord can legally charge, often somewhere around one to two months’ rent, though whether a cap exists at all — and how high it is — varies a lot by state. Some states also require the deposit to sit in a separate account, sometimes one that earns interest for you. None of this is optional for the landlord to disclose if you ask, so it’s worth asking on day one rather than assuming.',
+      },
+      {
+        heading: 'Normal wear and tear vs. actual damage — the line that decides your refund',
+        body: 'Landlords can only deduct for damage beyond “normal wear and tear,” which is a legal standard, not just whatever the landlord personally feels like charging for. Normal wear and tear covers the gradual, expected deterioration from ordinary living — faded paint, a worn path in the carpet from foot traffic, small nail holes from hanging a picture, stiff door hinges after a couple of years. Landlords are expected to eat that cost as part of owning rental property.\n\nActual damage is different: a fist-sized hole in the drywall, deep pet stains soaked into carpet padding, a cracked window, a missing appliance. That’s the kind of thing that can legally come out of your deposit. If your lease says you’re also responsible for a professional move-out cleaning, that’s usually a separate lease term, not a wear-and-tear issue — read that clause before you do your own cleaning and assume it’s covered.',
+      },
+      {
+        heading: 'Document everything — at move-in and at move-out',
+        body: 'The single biggest lever you have is proof. On move-in day, before you unpack a single box, walk through every room and photograph or video every existing scuff, stain, and scratch, with a timestamp. If your landlord uses a move-in checklist, fill it out honestly and get a signed copy for yourself — if they don’t offer one, write your own and email it to them so there’s a dated record.\n\nDo the exact same walkthrough on move-out day, right after your things are out and before you hand back the keys. If a dispute ever comes down to your word against your landlord’s, dated photos showing a scuff was already there when you moved in are the difference between losing $300 and getting it back.',
+      },
+      {
+        heading: 'The deadline landlords have to return it — and what happens if they blow it',
+        body: 'Nearly every state sets a legal deadline for a landlord to either return your full deposit or send you an itemized list of what they deducted and why. That window commonly falls somewhere between two and four weeks after you move out, though some states allow more time and a few allow less — look up your specific state’s tenant rights page or housing authority site rather than assuming a number from a different state applies to you.\n\nMiss that deadline, and many states penalize the landlord for it — sometimes forcing them to return the entire deposit regardless of any damage, and in some states allowing you to sue for double or even triple the amount if the landlord acted in bad faith. The deadline exists specifically so landlords can’t just sit on your money indefinitely without explanation.',
+      },
+      {
+        heading: 'If they wrongfully keep it: demand letter, then small claims court',
+        body: 'If the deadline passes with no refund and no itemized explanation, start by requesting an itemized statement in writing if you haven’t already gotten one. If that goes nowhere, send a formal written demand letter — reference your move-in and move-out photos, your state’s legal deadline, and a specific date by which you expect payment.\n\nIf the landlord still doesn’t pay what they owe, most states let you sue in small claims court without hiring a lawyer, for amounts up to a state-specific limit — filing fees are usually modest, and the forms are available through your local courthouse or state judiciary website. Landlords who know a tenant kept good records and is willing to file often settle before it ever gets that far.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Read your lease for the deposit amount, any move-out cleaning clause, and the required written notice period before you leave.\n2. Photograph and video every room the day you move in, before unpacking, and keep copies somewhere other than your phone.\n3. Give written notice of your move-out date on the timeline your lease requires — often 30 days.\n4. Patch small nail holes, replace burned-out bulbs, and clean the unit before your final walkthrough — small fixes now can prevent bigger deductions later.\n5. Photograph the empty unit again on move-out day, and give your landlord a forwarding address in writing so the refund has somewhere to go.\n6. If your state’s deadline passes with no refund and no itemized list, send a written demand letter before considering small claims court.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Inflation', 'Compound Interest'],
+    faq: [
+      {
+        q: 'How long does a landlord have to return your security deposit?',
+        a: 'It depends on your state — commonly somewhere between two and four weeks after move-out, though some states allow more time. Check your state’s tenant rights or housing authority page for the exact deadline where you live.',
+      },
+      {
+        q: 'Can a landlord charge you for normal wear and tear?',
+        a: 'No. Normal wear and tear — faded paint, minor carpet wear, small nail holes — is a cost landlords are expected to absorb. Deductions are only supposed to cover damage beyond ordinary use, like large holes or deep stains.',
+      },
+      {
+        q: 'What should you do if your landlord won’t return your deposit?',
+        a: 'Request an itemized list of deductions in writing, then send a formal demand letter referencing your documentation and your state’s legal deadline. If that doesn’t work, most states let you sue in small claims court without a lawyer.',
+      },
+      {
+        q: 'Is a security deposit the same as last month’s rent?',
+        a: 'Not usually — they serve different purposes even though some landlords use the terms loosely. Check your lease to see exactly what you paid and what it’s meant to cover.',
+      },
+    ],
+  },
 ]
