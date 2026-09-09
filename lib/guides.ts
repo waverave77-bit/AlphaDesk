@@ -3164,4 +3164,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-minors-pay-taxes-on-investments-kiddie-tax',
+    title: 'Do Minors Pay Taxes on Investments? The Kiddie Tax, Explained',
+    metaTitle: 'Kiddie Tax Explained: Do Minors Pay Taxes on Investments?',
+    description:
+      'Your custodial account made money this year — does the IRS actually want a cut? Here’s how the “kiddie tax” works, who has to file, and why a Roth IRA skips it entirely.',
+    date: '2026-09-09',
+    category: 'Investing',
+    intro:
+      'You (or a parent) opened a custodial account, put some money into an index fund, and it actually grew. Now tax season is coming and someone mentioned you might owe something on it — even though you’re still a minor and never touched a paycheck. That’s the “kiddie tax,” and while the nickname sounds like a joke, the mechanics are real, they’re not that complicated once you see the structure, and there’s a very simple way to avoid most of it.',
+    sections: [
+      {
+        heading: 'The short answer: yes, but only on “unearned” income, and only above a small threshold',
+        body: 'The kiddie tax is the informal name for a federal rule (officially the "Tax for Certain Children Who Have Unearned Income," filed on IRS Form 8615) that stops parents from parking large investments in a child’s name purely to get the child’s lower tax rate. It only applies to unearned income — dividends, interest, and capital gains from investments — not wages from a job.\n\nThe structure has three tiers. A small amount of unearned income each year (roughly $1,300, though this figure is adjusted for inflation annually, so check the current IRS number) is completely tax-free. The next similar-sized slice is taxed at the child’s own — usually very low — tax rate. Anything above that combined amount (roughly $2,600 total, again inflation-adjusted) gets taxed at the parent’s marginal tax rate, which is the whole point of the rule: it removes the incentive to shift big investment gains into a kid’s name to dodge tax.',
+      },
+      {
+        heading: 'What counts as “unearned” income — and what definitely doesn’t',
+        body: 'Unearned income is money that comes from having money, not from working: dividends paid by stocks you own, interest from a savings account or bond, and capital gains from selling an investment for more than you paid. This is the income a custodial brokerage account (UGMA/UTMA) or a regular taxable account generates every year it holds appreciating or dividend-paying assets.\n\nEarned income is completely different and never touches the kiddie tax rule — wages from a summer job, a W-2, or documented self-employment are taxed under the normal rules for the child, regardless of age. A 16-year-old who earns $4,000 lifeguarding owes tax (or, more likely, owes nothing and gets a refund) exactly like any other taxpayer under the standard deduction — that income never gets bumped up to a parent’s rate.',
+      },
+      {
+        heading: 'Who actually files — the kid, or the parents?',
+        body: 'There are two paths once a child’s unearned income crosses the tax-free threshold. Usually, the child files their own tax return with Form 8615 attached, which calculates the portion of their investment income taxed at the parent’s rate. Alternatively, if the child’s income is only from interest, dividends, and capital gain distributions (not from selling individual stocks) and stays under a set ceiling, a parent can elect to report it directly on their own return using Form 8814 instead of the child filing separately.\n\nEach option has trade-offs — electing Form 8814 is simpler paperwork, but it can nudge up the parent’s adjusted gross income in ways that affect other things (like certain deductions or credits), while a separate child return keeps things cleanly split. This is a genuine "ask a tax preparer" situation once the numbers get large enough to matter.',
+      },
+      {
+        heading: 'Why a Roth IRA sidesteps this rule almost completely',
+        body: 'The kiddie tax only bites when investment income is realized and reported in a given year — which is exactly how a normal taxable custodial brokerage account works: dividends get paid out and capital gains get realized (and reported) the year you sell. A Roth IRA works completely differently. Money inside it grows without generating any taxable event year to year, so there’s no annual “unearned income” for the kiddie tax to apply to in the first place.\n\nThis is one more reason a custodial Roth IRA (which requires earned income to fund, not allowance) is such a strong first account for a teenager: the same investment growth that would slowly rack up kiddie-tax exposure inside a taxable custodial account grows completely tax-free and untouched inside a Roth, for decades.',
+      },
+      {
+        heading: 'A concrete example',
+        body: 'Say a custodial account holding an S&P 500 index fund generates $3,600 in dividends and realized gains in one year. Using the rough thresholds above: the first ~$1,300 is tax-free. The next ~$1,300 is taxed at the child’s own low rate. The remaining ~$1,000 gets taxed at whatever marginal rate the parent pays on their own income — which could be notably higher than the child’s rate. The exact dollar-for-dollar tax bill depends on the parent’s bracket and the year’s official thresholds, but the shape of it is always the same: a small tax-free zone, a small low-rate zone, then parent-rate for the rest.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know the difference: wages from a job are earned income and are never subject to the kiddie tax, no matter the amount.\n2. Track dividends, interest, and realized capital gains generated inside any custodial or taxable brokerage account each year.\n3. If unearned income stays under the small annual tax-free threshold, there’s usually nothing to file for kiddie tax purposes.\n4. Above that, a parent or tax preparer needs to decide between the child filing Form 8615 or the parent electing Form 8814 — the numbers determine which is cheaper.\n5. If you have earned income, prioritize funding a custodial Roth IRA — growth inside it never triggers this rule at all.\n6. Check the current year’s exact IRS thresholds before filing — they’re adjusted for inflation annually and the numbers here are approximate.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Dividend', 'Compound Interest', 'Portfolio'],
+    faq: [
+      {
+        q: 'Do kids have to pay taxes on a custodial account?',
+        a: 'Yes, once the account’s unearned income — dividends, interest, capital gains — exceeds a small annual tax-free threshold. Income above that is taxed, partly at the child’s own rate and partly at the parent’s marginal tax rate.',
+      },
+      {
+        q: 'Does the kiddie tax apply to a Roth IRA?',
+        a: 'No. The kiddie tax applies to taxable investment accounts where dividends and gains are realized and reported each year. A Roth IRA grows without generating annual taxable income, so there’s nothing for the rule to tax.',
+      },
+      {
+        q: 'Does a part-time job count toward the kiddie tax?',
+        a: 'No. Wages from a job are earned income and are taxed under normal rules for the child at any age — the kiddie tax only applies to unearned income like dividends, interest, and investment gains.',
+      },
+      {
+        q: 'At what age does the kiddie tax stop applying?',
+        a: 'Generally it applies to unearned income for children under 18, and can extend through age 23 for full-time students who don’t provide more than half of their own financial support. Check current IRS rules, since the details can shift.',
+      },
+    ],
+  },
 ]
