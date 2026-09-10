@@ -3220,4 +3220,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-checking-your-credit-score-hurt-it-hard-vs-soft-inquiries',
+    title: 'Does Checking Your Credit Score Hurt It? Hard vs. Soft Inquiries Explained',
+    metaTitle: 'Hard vs. Soft Credit Inquiries: Does Checking Your Score Hurt It?',
+    description:
+      'Checking your own score never hurts it — applying for a card or loan can, a little. Here’s the real difference between hard and soft credit inquiries, with actual numbers.',
+    date: '2026-09-10',
+    category: 'Credit',
+    intro:
+      'You want to check your credit score before applying for your first credit card, but a friend swears "checking your credit hurts your credit." That advice is half right and half a myth stuck in everyone’s head from a decade ago. There are two completely different kinds of credit checks, and only one of them touches your score at all.',
+    sections: [
+      {
+        heading: 'Soft inquiry vs. hard inquiry — the actual difference',
+        body: 'A soft inquiry (or "soft pull") happens whenever your credit report is checked without you applying for new credit. Checking your own score through your bank’s app, Credit Karma, or Experian — always a soft pull. Pre-qualified credit card or insurance offers that show up in the mail — also soft pulls, because the lender is just checking if you’d likely qualify, not deciding on a real application yet. Soft inquiries never affect your score, and only you can see them on your own report — a lender reviewing your file won’t see them at all.\n\nA hard inquiry (or "hard pull") happens when you actually apply for credit and a lender pulls your full report to make a real approval decision — a credit card, an auto loan, a student loan, sometimes an apartment lease or a phone contract. Hard inquiries are visible to every future lender who looks at your report, and unlike soft pulls, they can shave a small amount off your score.',
+      },
+      {
+        heading: 'How many points does a hard inquiry actually cost?',
+        body: 'For most people, a single hard inquiry costs somewhere around five points, give or take — often less if you already have a long, healthy credit history. The effect is usually bigger, proportionally, if you have a thin file with few accounts, since one new inquiry makes up a larger share of the limited data a scoring model has to work with.\n\nInquiries ("New Credit") are only one piece of one category in the FICO scoring formula, and that whole category is a relatively small slice of your total score — your payment history and credit utilization matter far more. One hard pull for a card you actually need is not something to lose sleep over. Racking up five or six hard pulls in a short window while opening multiple accounts is a different story — that pattern reads as risk to a lender, separate from the small per-inquiry point hit.',
+      },
+      {
+        heading: 'Rate shopping: why comparing loan offers doesn’t stack penalties',
+        body: 'If applying for a loan always cost you points, comparing rates for a car or a mortgage would be financially punishing. Scoring models account for this: FICO groups multiple hard inquiries for the same type of loan — auto, mortgage, or student loans — into a single inquiry, as long as they all happen within a short shopping window (commonly somewhere in the 14–45 day range depending on the FICO version a lender uses). Rate-shop for a car loan across five dealerships in a week, and it typically counts as one pull, not five.\n\nThat protection does not extend to credit cards the same way. Applying for three different credit cards in one month generally does count as three separate hard inquiries, because there’s no equivalent "shopping window" built in for card applications.',
+      },
+      {
+        heading: 'How long a hard inquiry actually sticks around',
+        body: 'A hard inquiry stays visible on your credit report for about two years. But its effect on your actual score fades much faster — for FICO scoring purposes, an inquiry generally stops affecting your score after about 12 months, even though it remains listed on the report (and visible to you) for the full two years. Practically, that means the ding from applying for a card today is essentially gone from your score well before it disappears from your report entirely.',
+      },
+      {
+        heading: 'When your credit gets checked without you applying for anything',
+        body: 'Soft inquiries also happen in places people don’t expect. An employer running a background check (with your written authorization) typically triggers a soft pull, not a hard one. A landlord’s tenant-screening service is sometimes a hard pull and sometimes soft, depending on the service — worth asking before you apply for multiple apartments in the same week. Credit card issuers you already have an account with periodically do soft pulls to review your existing account, which is normal account maintenance, not a new application.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your own score as often as you want — through your bank, a card issuer’s free tool, or Credit Karma — it’s always a soft pull with zero score impact.\n2. Before applying for a new card, ask if the issuer offers pre-qualification — that step uses a soft pull, so you can see your odds before risking a hard inquiry.\n3. If you’re comparing auto or student loan offers, do all the rate-shopping within the same short window (a couple of weeks) so it counts as one inquiry, not several.\n4. Don’t apply for multiple credit cards back-to-back just to compare — each application is its own hard pull.\n5. Don’t panic over one hard inquiry from a card or loan you actually needed — it’s a small, temporary factor next to payment history and utilization.\n6. If a landlord or employer wants to run a credit check, ask whether it’s a hard or soft pull before you authorize it.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does checking your own credit score hurt it?',
+        a: 'No. Checking your own score — through your bank, a card issuer, or a free service like Credit Karma — is always a soft inquiry, and soft inquiries never affect your credit score.',
+      },
+      {
+        q: 'How many points does a hard inquiry take off your credit score?',
+        a: 'Typically around five points, though the exact impact varies by scoring model and how thin or established your credit file already is. It’s a small, temporary factor compared to payment history and credit utilization.',
+      },
+      {
+        q: 'How long does a hard inquiry affect your credit score?',
+        a: 'It generally stops affecting your score after about 12 months, even though it stays listed on your credit report for about two years total.',
+      },
+      {
+        q: 'Does rate shopping for a loan hurt your credit score multiple times?',
+        a: 'Usually not. FICO groups multiple hard inquiries for the same type of loan — auto, mortgage, or student loans — made within a short window into a single inquiry. This grouping generally doesn’t apply to credit card applications, which are typically counted separately.',
+      },
+    ],
+  },
 ]
