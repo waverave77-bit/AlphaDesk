@@ -3276,4 +3276,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-do-taxes-work-with-two-jobs-multiple-w2s',
+    title: 'How Do Taxes Work If You Have Two Jobs (Multiple W-2s)?',
+    metaTitle: 'Taxes With Two Jobs: Why Multiple W-2s Can Mean You Owe',
+    description:
+      'Working two part-time jobs? You file one return with both W-2s combined — but each employer withholds as if it’s your only job, which can leave you owing.',
+    date: '2026-09-11',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Maybe you’re bagging groceries on weekdays and hosting at a restaurant on weekends, or you switched jobs mid-year and now have two W-2s sitting in your inbox. Good news: you don’t file two tax returns. Better-to-know news: having two employers is exactly the situation where people who expected a refund end up owing money instead — and the reason is a quirk in how withholding actually works.',
+    sections: [
+      {
+        heading: 'One return, both W-2s combined',
+        body: 'Every employer you worked for during the year sends you a separate W-2 by the end of January. You don’t file separately for each job — you enter every W-2 into the same tax return, and your total income is simply the sum of all of them. There’s no penalty or extra form just for having worked two jobs; tax software handles multiple W-2s the same way it handles one.\n\nThe standard deduction — the amount of income that isn’t taxed at all — applies once per person, per year, no matter how many employers you had. It doesn’t stack or multiply because you have two jobs.',
+      },
+      {
+        heading: 'Why two jobs can under-withhold your taxes',
+        body: 'Here’s the part that surprises people: each employer withholds tax as if that job were your only source of income. Employer A looks at your paycheck from them alone and applies the standard withholding tables assuming you have one job and one standard deduction. Employer B does the exact same thing, independently, with zero knowledge that Employer A exists.\n\nThe problem is that your standard deduction and your tax brackets can only really apply once — but two employers are each quietly assuming they get to apply it for you. If both incomes are small, this rarely matters. But once your combined income climbs enough to push you into taxable territory (past the standard deduction) or into a higher bracket than either job alone would suggest, neither employer withheld enough to cover the real combined bill. Nobody did anything wrong — it’s just how the paycheck-by-paycheck withholding system is built.',
+      },
+      {
+        heading: 'The fix: the W-4’s "Multiple Jobs" step',
+        body: 'The W-4 form you fill out for each new job has a section called Step 2: Multiple Jobs or Spouse Works, built specifically for this situation. It gives you a few options: use the IRS’s online Tax Withholding Estimator for the most accurate result, fill out the Multiple Jobs Worksheet printed on the W-4 itself, or — the simplest but roughest option — check a box indicating you have two jobs of similar pay, which tells both employers’ payroll systems to withhold at a higher rate to compensate.\n\nIf you already have two W-2 jobs going and didn’t do this, you can submit an updated W-4 to either employer at any time — you don’t need to wait until a new job to fix your withholding. A quick alternative some people use instead: ask one employer to withhold a flat extra dollar amount per paycheck (there’s a line for this on the W-4), which sidesteps the worksheet entirely.',
+      },
+      {
+        heading: 'What about Social Security tax — does it get withheld twice?',
+        body: 'Yes, and normally that’s completely correct — each employer withholds Social Security tax (6.2%) and Medicare tax (1.45%) independently, because from each employer’s point of view, you’re a new employee starting from zero. For the overwhelming majority of teens and young adults working part-time or entry-level jobs, this is a non-issue.\n\nThere is one edge case worth knowing about for later in your career: Social Security tax only applies up to an annual wage base limit that adjusts most years. If you ever earn enough combined income across multiple employers in one year to exceed that limit, you can end up with more Social Security tax withheld in total than the law actually requires — and you’d claim the excess back as a credit when you file. It’s a real rule, but it only kicks in at income levels well above what most first and second jobs pay.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Keep track of which employers you worked for during the year — each one owes you a W-2 by January 31.\n2. File one tax return and enter every W-2 you received — never file separately per job.\n3. If you’re working two jobs at the same time, fill out Step 2 of the W-4 (or use the IRS withholding estimator) at both jobs so withholding accounts for your combined income.\n4. If you switched jobs mid-year and both were short-term, check whether your combined income actually cleared the standard deduction before assuming you’re in the clear.\n5. When you file, double-check that your tax software or preparer has added income from every W-2 — a missing form is a common reason people get an IRS notice later.\n6. If you end up owing unexpectedly, adjust withholding for next year rather than just hoping it works out again.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Inflation'],
+    faq: [
+      {
+        q: 'Do I file two tax returns if I have two jobs?',
+        a: 'No. You file one federal return per year and include every W-2 you received, no matter how many employers you had. Your total income is the sum of all your W-2s.',
+      },
+      {
+        q: 'Why do I owe taxes when I have two part-time jobs?',
+        a: 'Each employer withholds tax assuming their paycheck is your only income, applying the standard deduction and tax brackets independently. Once your combined income from both jobs is high enough, neither employer withheld quite enough to cover the real combined tax bill — a gap you settle when you file.',
+      },
+      {
+        q: 'Is Social Security tax withheld twice if you have two employers?',
+        a: 'Yes, each employer withholds it independently, and for the vast majority of part-time and entry-level earners that’s correct and expected. Only if your combined income across employers exceeds the annual Social Security wage base — a level far above typical first or second jobs — would you have overpaid and be owed a credit back.',
+      },
+      {
+        q: 'How do I fix my withholding if I have multiple jobs?',
+        a: 'Submit an updated W-4 to your employer(s) and fill out Step 2 (Multiple Jobs or Spouse Works), or use the IRS’s online Tax Withholding Estimator for a more precise number. You can update a W-4 at any time — you don’t need to wait for a new job.',
+      },
+    ],
+  },
 ]
