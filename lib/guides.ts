@@ -3328,4 +3328,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-deduct-student-loan-interest-on-your-taxes',
+    title: 'Can You Deduct Student Loan Interest on Your Taxes?',
+    metaTitle: 'Student Loan Interest Deduction: How Much You Can Actually Deduct',
+    description:
+      'Yes — up to $2,500 a year, and you don’t even need to itemize. Here’s the income phase-out, who’s actually allowed to claim it, and where to find the number.',
+    date: '2026-09-12',
+    category: 'College Money',
+    intro:
+      'Your loan servicer emails you a tax form every January and most people never open it. That’s a mistake — the student loan interest deduction is one of the few tax breaks aimed squarely at people paying off college debt, and it works even if you take the standard deduction. Here’s exactly how much it’s worth, who actually qualifies, and the rule about parent-paid loans that trips up more families than you’d think.',
+    sections: [
+      {
+        heading: 'It’s an “above-the-line” deduction — you don’t need to itemize',
+        body: 'Most tax deductions only help if you itemize, which the vast majority of young filers skip because the standard deduction is bigger anyway. The student loan interest deduction is different — it’s an “above-the-line” adjustment to income, meaning it reduces your taxable income directly, on top of whatever standard deduction you already claim.\n\nThat matters because a normal W-2 employee taking the standard deduction, with zero itemized expenses, can still claim this. You report it on Schedule 1 of Form 1040, and it lowers your total income before the standard deduction is even applied.',
+      },
+      {
+        heading: 'The cap: $2,500 a year — and it’s a deduction, not a credit',
+        body: 'The most you can deduct is $2,500 per year, or the actual interest you paid, whichever is smaller. Pay $900 in interest for the year and you deduct $900 — the cap only matters once your interest paid crosses it.\n\nA deduction and a credit are not the same thing, and this is where people overestimate the benefit. A $2,500 deduction doesn’t cut $2,500 off your tax bill — it reduces the income you’re taxed on by $2,500. In the 12% bracket, that’s worth roughly $300 in actual tax savings. In the 22% bracket, roughly $550. Still real money for free, just not dollar-for-dollar.',
+      },
+      {
+        heading: 'The income phase-out — this deduction disappears at higher incomes',
+        body: 'The deduction phases out once your modified adjusted gross income (MAGI) crosses a threshold that the IRS adjusts for inflation most years. In recent years that phase-out has started somewhere in the $80,000s for single filers and roughly double that for married couples filing jointly, disappearing entirely a bit higher — but the exact numbers shift annually, so check the current-year IRS limits (Publication 970) before assuming you qualify.\n\nOne filing status kills the deduction outright regardless of income: married filing separately. If you’re married and file separately, you can’t claim this deduction at all — one of several reasons couples with student debt run the numbers before choosing that filing status.',
+      },
+      {
+        heading: 'The rule everyone gets wrong: who’s actually allowed to claim it',
+        body: 'Two things both have to be true for you to claim this deduction: you must be legally obligated to repay the loan, and you must have actually made the payment (or be treated as having made it). Miss either one and you can’t claim it, even if the loan has your name on it.\n\nHere’s the quirk that surprises a lot of families: if a parent pays on a loan that’s legally in the student’s name — not a Parent PLUS loan, but one the student personally signed for — the IRS treats that payment as a gift to the student, who is then treated as having paid the interest themselves. So the student, not the parent, gets to claim the deduction — but only if nobody claims that student as a dependent that year. If the student is still claimed as a dependent, the deduction is lost entirely: the student can’t claim it because dependents are excluded from this deduction outright, and the parent can’t claim it because they were never legally obligated on the loan.',
+      },
+      {
+        heading: 'Where the number comes from: Form 1098-E',
+        body: 'Any loan servicer you paid at least $600 in interest to during the year is required to send you a Form 1098-E, usually by the end of January, showing the exact amount of interest you paid. Switched servicers mid-year or have multiple loans across providers? You’ll get one 1098-E per servicer — add them together.\n\nPaid less than $600 in interest to a single servicer? You can still claim the deduction; the servicer just isn’t required to send you a form for it. Pull the interest total from your loan account’s payment history or year-end statement instead.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up the interest shown on every Form 1098-E you received — one per loan servicer, not per loan.\n2. Claim it on Schedule 1 of Form 1040 as an adjustment to income — you don’t need to itemize.\n3. Check the current-year MAGI phase-out thresholds before assuming you qualify, especially once you’re earning a full-time salary.\n4. Filing married filing separately? You lose this deduction entirely — factor that into the decision.\n5. If a parent is paying on a loan that’s legally yours, confirm whether you’re being claimed as a dependent this year — it determines whether anyone can deduct that interest at all.\n6. Consider directing part of the tax refund this deduction generates into a Roth IRA — free money is the easiest money to actually save.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'Do I need to itemize to deduct student loan interest?',
+        a: 'No — it’s an above-the-line deduction, so you can claim it in addition to the standard deduction. It’s reported on Schedule 1 of Form 1040 as an adjustment to income.',
+      },
+      {
+        q: 'How much student loan interest can you deduct?',
+        a: 'Up to $2,500 per year, or the actual interest you paid if that’s less. It reduces your taxable income rather than your tax bill directly — the real savings work out to roughly your tax bracket percentage times the amount deducted.',
+      },
+      {
+        q: 'Can my parents deduct student loan interest if they make the payments?',
+        a: 'Only if the loan is legally in their name, like a Parent PLUS loan. If the loan is in the student’s name and a parent pays it, the IRS treats it as a gift to the student — the student can claim the deduction instead, as long as no one claims them as a dependent that year.',
+      },
+      {
+        q: 'Is there an income limit for the student loan interest deduction?',
+        a: 'Yes — it phases out above a modified adjusted gross income threshold that the IRS adjusts for inflation most years, and it disappears entirely if you file married filing separately. Check the current-year IRS limits before assuming you qualify.',
+      },
+    ],
+  },
 ]
