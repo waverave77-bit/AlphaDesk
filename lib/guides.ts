@@ -3384,4 +3384,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-on-crypto',
+    title: 'Do You Have to Pay Taxes on Crypto? Bitcoin, Ethereum, and NFTs Explained',
+    metaTitle: 'Do You Pay Taxes on Crypto? Bitcoin, Ethereum & NFT Taxes',
+    description:
+      'Buying and holding crypto isn’t taxed — but trading coins, spending crypto, and staking rewards usually are. Here’s exactly when the IRS gets a cut.',
+    date: '2026-09-13',
+    category: 'Investing',
+    intro:
+      'Crypto feels like it lives outside the normal financial system — no W-2, no automatic withholding, sometimes not even a real name attached to the wallet. That feeling is wrong. The IRS has taxed cryptocurrency as property since 2014, and that single classification means way more of what you do with it is taxable than most people realize — often starting long before you ever convert a coin back into dollars.',
+    sections: [
+      {
+        heading: 'Crypto is property, not currency — and that decides almost everything',
+        body: 'The IRS treats cryptocurrency the same way it treats a stock or a piece of real estate: as property. Not as cash, and not as a foreign currency, even though it spends like one. That classification is the whole ballgame, because property triggers a taxable event every time you "dispose" of it — sell it, trade it, or spend it — the same way selling a share of stock does.\n\nBuying crypto with dollars and simply holding it is not taxable, same as buying and holding a stock — you owe nothing on paper gains until you actually do something with the coin. Moving crypto between your own wallets or your own accounts on different exchanges isn’t a disposal either, since you never gave anything up. Form 1040 now asks a direct yes-or-no question near the top about whether you received, sold, exchanged, or otherwise disposed of a digital asset during the year — answer it honestly even in a year you only bought and held.',
+      },
+      {
+        heading: 'Trading one coin for another counts as a sale — even with no cash involved',
+        body: 'This is the part that trips up almost everyone new to crypto: swapping Bitcoin for Ethereum, or any coin for any other coin, is treated as selling the first coin at its fair market value and immediately buying the second one. The "sale" side of that swap realizes a capital gain or loss, exactly like it would if you’d sold the Bitcoin for dollars first — even though no cash ever touched a bank account.\n\nSpending crypto works the same way. Buy a coffee, an NFT, or a game skin with Bitcoin, and you’ve disposed of that Bitcoin at its value on the day you spent it — the gain or loss is the difference between that value and what you originally paid for it. The one-year holding period rule works exactly like it does for stocks: hold more than a year before disposing and the gain is taxed at the lower long-term capital gains rates (0%, 15%, or 20%, depending on income); a year or less and it’s taxed as a short-term gain at your regular income tax rate.',
+      },
+      {
+        heading: 'Getting paid in crypto, staking, and mining are taxed as income first',
+        body: 'If you receive crypto instead of cash — payment for freelance work, a staking reward, a mining payout, an airdrop, a referral bonus — its fair market value on the day you receive it counts as ordinary income right away, taxed at your regular income tax rate just like a paycheck or 1099 payment. This happens whether or not you ever sell the coin.\n\nThat same value also becomes your cost basis going forward. So a coin you earned through staking is taxed twice over its life, at two different moments: once as ordinary income when you receive it, and again as a capital gain or loss (short- or long-term, depending on how long you hold it) on whatever it’s worth when you eventually sell or trade it — measured only against the value on the day you received it, not from zero.',
+      },
+      {
+        heading: 'NFTs follow the same playbook — with one extra wrinkle',
+        body: 'Buying, selling, and trading NFTs is taxed under the same capital gains framework as any other crypto asset — gain or loss based on your cost basis, holding period determining short- versus long-term rates. The extra wrinkle is that certain NFTs can be classified as "collectibles" (the same bucket as art, coins, or trading cards), which can carry a higher top long-term capital gains rate than the usual ceiling that applies to stocks and most other property. Whether a specific NFT counts as a collectible is decided case by case, so keep detailed records of what you paid and when, and treat any sizable NFT sale as something worth running by a tax professional rather than guessing.',
+      },
+      {
+        heading: 'The loophole that (for now) doesn’t apply to crypto: wash sales',
+        body: 'With stocks, the wash-sale rule blocks you from claiming a tax loss if you sell a stock at a loss and buy the same one back within 30 days before or after. That rule technically applies only to "securities" under current law, and because crypto is classified as property rather than a security, it has so far fallen outside the wash-sale rule entirely.\n\nIn practice, that means an investor can sell a crypto position at a loss to capture the tax write-off and buy it right back the same day, without waiting out the 30-day window a stock investor would face. Lawmakers have repeatedly proposed closing this gap, so treat it as today’s rule rather than something permanent — check current law before relying on it for a large trade.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Track every buy, sell, trade, and spend — not just cash-outs — since coin-to-coin swaps and purchases are taxable disposals too.\n2. Record the date and fair market value of anything you receive as crypto income (staking, mining, payment for work) — that value is taxable now and your cost basis later.\n3. Most exchanges offer a downloadable transaction history or tax report — pull it well before filing season instead of reconstructing it from memory.\n4. Report every taxable disposal on Form 8949 and Schedule D, no matter how small — there’s no minimum dollar amount that excuses you from reporting.\n5. Answer the digital asset question on Form 1040 truthfully every year, even one where you only bought and held.\n6. If NFT sales or crypto income are a meaningful part of your finances, get a tax professional involved rather than guessing on collectible classification or basis tracking.',
+      },
+    ],
+    relatedTerms: ['Volatility', 'Tax-Loss Harvesting', 'Diversification', 'Liquidity'],
+    faq: [
+      {
+        q: 'Do I owe taxes if I just buy and hold crypto?',
+        a: 'No. Buying crypto with cash and holding it isn’t a taxable event, the same as buying and holding a stock. Tax applies once you sell, trade, or spend it.',
+      },
+      {
+        q: 'Is trading one cryptocurrency for another taxable?',
+        a: 'Yes. Swapping, say, Bitcoin for Ethereum is treated as selling the Bitcoin at its fair market value and buying Ethereum with the proceeds — the sale side triggers a capital gain or loss even though no cash ever hit a bank account.',
+      },
+      {
+        q: 'Do I have to report crypto if the exchange never sent me a tax form?',
+        a: 'Yes. You owe tax on every taxable crypto transaction regardless of whether an exchange sends you a form, and Form 1040 asks a direct yes-or-no question about digital asset activity every year.',
+      },
+      {
+        q: 'Are NFTs taxed differently from other crypto?',
+        a: 'Mostly the same capital gains rules apply based on your cost basis and holding period, but some NFTs can be classified as "collectibles," which can carry a higher top long-term tax rate than typical crypto or stock gains.',
+      },
+    ],
+  },
 ]
