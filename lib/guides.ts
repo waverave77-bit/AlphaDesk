@@ -3440,4 +3440,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-the-savers-credit-do-college-students-qualify',
+    title: 'What Is the Saver’s Credit — and Why Don’t Most College Students Qualify?',
+    metaTitle: 'Saver’s Credit Explained: Who Actually Qualifies',
+    description:
+      'The Saver’s Credit can refund up to 50% of what you put into a Roth IRA or 401(k) — but full-time students are shut out by name. Here’s who actually qualifies.',
+    date: '2026-09-14',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Somewhere between your first job and your first tax return, you may run into a line called the "Retirement Savings Contributions Credit" — the Saver’s Credit — that sounds like it was practically designed for a broke 19-year-old putting $30 a month into a Roth IRA. In a lot of ways it was. But there’s one rule buried in the eligibility requirements that disqualifies the single biggest group of people who’d otherwise love it: full-time students.',
+    sections: [
+      {
+        heading: 'What the Saver’s Credit actually does',
+        body: 'The Saver’s Credit is a tax credit — not a deduction — for putting money into a retirement account. A deduction just shrinks the income you’re taxed on; a credit comes straight off your tax bill, dollar for dollar, which makes it far more valuable per dollar. Contribute to a Roth IRA, traditional IRA, 401(k), 403(b), or a few other retirement account types, and depending on your income, the IRS will hand back 50%, 20%, or 10% of what you put in — on top of every other benefit that account already gives you.\n\nThe credit applies to up to $2,000 of contributions per person ($4,000 total for a married couple filing jointly, each spouse’s contributions counted separately), so the maximum possible credit is $1,000 for a single filer or $2,000 for a married couple — and that’s in addition to the money still sitting in your retirement account, growing. You’re not choosing between the Roth IRA and the credit; contributing to the Roth is what unlocks the credit in the first place.',
+      },
+      {
+        heading: 'The income cutoffs that decide your percentage',
+        body: 'Your credit rate — 50%, 20%, or 10% — depends on your adjusted gross income (AGI), and the three income bands step down as you earn more: the lowest earners get the full 50% back, a middle band gets 20%, and a higher band still gets 10% before the credit disappears entirely. These exact dollar cutoffs are adjusted for inflation most years, so don’t treat any specific number as permanent — but as a rough sense of scale, recent years have put the 50% tier somewhere in the low-$20,000s of AGI for a single filer, with the credit phasing out entirely somewhere in the high-$30,000s to low-$40,000s. Married filing jointly limits run roughly double the single-filer numbers, and head of household falls in between.\n\nBecause the bands move every year, look up the current year’s thresholds on the IRS Form 8880 instructions before assuming you do or don’t qualify — a few thousand dollars of income can be the difference between a 50% match and a 10% one.',
+      },
+      {
+        heading: 'The catch that knocks out most college students',
+        body: 'Here’s the rule that surprises almost everyone: you cannot claim the Saver’s Credit if you were a full-time student for any part of five calendar months during the tax year, regardless of how low your income was. "Full-time" is defined by your school, not the IRS — if your college or program considers you full-time for even one term that touches five different months, you’re excluded for the whole year, even if you worked a real job and funded a Roth IRA with real paychecks.\n\nThis isn’t a loophole or an oversight — the credit is intentionally designed to reward workers, not subsidize students who are (in the government’s eyes) primarily being supported to study rather than earn. You also can’t claim it if someone else claims you as a dependent on their tax return, or if you’re under 18 by the end of the year.\n\nWho does still qualify: part-time or less-than-half-time students, students who graduated partway through the year and worked full-time afterward, gap-year workers, and graduate students or night-school students who don’t meet their school’s full-time threshold. It’s worth checking your enrollment status carefully instead of assuming either way.',
+      },
+      {
+        heading: 'Why it’s nonrefundable — and when that actually matters',
+        body: 'The Saver’s Credit is nonrefundable, meaning it can only reduce your federal tax bill down to $0 — it can never generate a refund bigger than what you already owed. That detail quietly guts the credit for a lot of young earners: if you made less than the standard deduction for the year (a very common situation for part-time or summer workers), your federal tax bill is already $0, so a credit that reduces tax owed has nothing left to reduce. On paper you "qualify," but the credit is worth exactly nothing to you that year.\n\nWhere the credit actually pays off is the income band just above that point — someone in a first full-time job, no longer a full-time student, earning enough to owe a real (if modest) amount of federal tax, who’s also contributing to a Roth IRA or a workplace 401(k). For that person, a $1,000 Roth contribution paired with a 50% credit rate means the IRS effectively pays $500 of your own contribution back to you at tax time — one of the highest-leverage matches available to anyone at that income level.',
+      },
+      {
+        heading: 'How to actually claim it',
+        body: 'The Saver’s Credit isn’t automatic — you claim it by filing Form 8880 along with your regular tax return, whether you take the standard deduction or itemize. You’ll need your contribution records: your W-2’s Box 12 for 401(k) or 403(b) contributions made through payroll, and your IRA custodian’s year-end statement for anything you put into a Roth or traditional IRA directly.\n\nOne wrinkle: any money you withdrew from a retirement account during a multi-year "testing period" around the credit year reduces the contribution amount you can claim, since the IRS doesn’t want you claiming a credit on money you just took back out. If you haven’t touched your retirement accounts, this won’t affect you — but it’s worth knowing about if you’ve ever taken an early withdrawal.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your school’s definition of "full-time" for the tax year — if it applied to you for any part of five months, you don’t qualify no matter your income.\n2. Confirm nobody else claims you as a dependent on their tax return.\n3. Look up the current year’s income thresholds on the IRS Form 8880 instructions rather than assuming last year’s numbers still apply.\n4. Keep your Roth IRA or 401(k) contribution records (W-2 Box 12, custodian statements) so you can fill out Form 8880 accurately.\n5. Remember the credit is nonrefundable — it only helps if you actually owe federal tax before applying it.\n6. File Form 8880 with your return even if you’re not sure you qualify; the math takes a few minutes and costs nothing to check.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Can a college student claim the Saver’s Credit?',
+        a: 'Only if they weren’t a full-time student for any part of five calendar months during the tax year. Part-time students, students who graduated mid-year and then worked full-time, and gap-year workers can still qualify; traditional full-time undergrads generally can’t, regardless of income.',
+      },
+      {
+        q: 'Is the Saver’s Credit worth claiming for a small Roth IRA contribution?',
+        a: 'Yes — there’s no minimum contribution required. Even a $200 contribution can earn a 50%, 20%, or 10% credit depending on your income, and filing Form 8880 to check takes only a few minutes.',
+      },
+      {
+        q: 'Do I need to itemize deductions to get the Saver’s Credit?',
+        a: 'No. The Saver’s Credit is claimed on Form 8880 independently of whether you take the standard deduction or itemize.',
+      },
+      {
+        q: 'Does claiming the Saver’s Credit lower how much I can contribute to my IRA?',
+        a: 'No. The credit is a separate tax benefit calculated on top of your contribution — it doesn’t count against your annual IRA or 401(k) contribution limit in any way.',
+      },
+    ],
+  },
 ]
