@@ -3496,4 +3496,64 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-fill-out-a-w-4-for-your-first-job',
+    title: 'How Do You Fill Out a W-4 for Your First Job?',
+    metaTitle: 'How to Fill Out a W-4 Form: First Job Walkthrough',
+    description:
+      'Your first W-4 decides how much of every paycheck disappears before you see it. Here’s a step-by-step walkthrough of what to actually put on each line.',
+    date: '2026-09-15',
+    category: 'Paychecks & Taxes',
+    intro:
+      'On your first day at a new job, HR hands you a stack of paperwork and somewhere in it is a form called a W-4 — and almost nobody explains what it’s actually for. It’s not a tax bill and it’s not optional busywork. It’s the form that tells your employer how much of each paycheck to send to the IRS on your behalf, and getting it wrong means either handing the government an interest-free loan or owing money you didn’t expect next April.',
+    sections: [
+      {
+        heading: 'What a W-4 actually does (and what it doesn’t)',
+        body: 'A W-4 is not the form that reports your income — that’s the W-2, which your employer sends you in January after the year is over. The W-4 is a prediction. It tells your employer’s payroll system how much federal income tax to withhold from each check, based on your best guess of what you’ll owe for the whole year. Withhold too much and you get a refund next spring — basically a loan you gave the government for free. Withhold too little and you could owe money (plus a possible penalty) when you file.\n\nThe form was redesigned starting with the 2020 tax year and no longer uses "allowances" — if you’ve heard an older sibling or parent talk about "claiming 1" or "claiming 0," that language is outdated. The current version works in dollar amounts and steps instead, and most first-time filers only need to touch two of them.',
+      },
+      {
+        heading: 'Step 1: Personal information — the only step everyone fills out',
+        body: 'This is just your name, address, Social Security number, and filing status (almost always "Single" for a first job, unless you’re married). Every employee completes Step 1 — there’s no skipping it.',
+      },
+      {
+        heading: 'Steps 2–4: usually blank for a single-job teen or student',
+        body: 'Step 2 is for people who hold more than one job at once, or whose spouse also works — it exists to prevent under-withholding when your combined household income pushes you into a different bracket than either job alone would suggest. If this is your only job, leave it blank.\n\nStep 3 is for claiming dependents (kids or other qualifying relatives you financially support) — not relevant if you’re a dependent yourself, which most teens and college students are. Step 4 is for extra, optional adjustments: other income not from a job (like solid freelance or investment income), itemized deductions instead of the standard deduction, or a flat extra dollar amount you want withheld each pay period. Almost no first-time filer needs to touch Step 4 either. For most teens with one part-time or summer job, Steps 2 through 4 are simply left blank, and that’s correct — not a mistake.',
+      },
+      {
+        heading: 'Step 5: sign it — this is what makes it valid',
+        body: 'You sign and date the form. An unsigned W-4 isn’t valid, and payroll can’t process it. That’s the entire form for someone with one job and no dependents: fill in Step 1, sign Step 5, done.',
+      },
+      {
+        heading: 'The "Exempt" option — and when it actually applies to you',
+        body: 'Below Step 4 on the form there\'s a line where you can write "Exempt" instead of filling out the withholding steps. Writing Exempt tells your employer to withhold $0 in federal income tax from every check. This is legitimate — not a loophole — but only if both of these are true: you owed no federal income tax last year, and you expect to owe no federal income tax this year. For a lot of teens working a summer or part-time job under the standard deduction (income low enough that your federal tax bill rounds to $0), that’s genuinely accurate.\n\nTwo catches: Exempt status only lasts one calendar year, so you have to refile it every January if you still qualify, and it only affects federal income tax withholding — Social Security (6.2%) and Medicare (1.45%) still come out of every check no matter what you write on the W-4. If you’re not confident you’ll stay under the threshold for the full year (say, you might pick up a lot more hours or a second job), it’s safer to leave withholding on and collect any overpayment as a refund next spring instead of guessing wrong.',
+      },
+      {
+        heading: 'When to fill out a new one',
+        body: 'You’re not locked into what you wrote on day one. Ask HR or check your payroll portal for a new W-4 anytime — most people update it when they start a second job, get married, have a big income change, or realize their last tax refund (or tax bill) was way bigger than expected. There’s no limit on how often you can submit a new one, and it only affects future paychecks, not past ones.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Fill in Step 1 (name, address, SSN, filing status) — every employee does this.\n2. Leave Steps 2–4 blank if you have one job, aren’t married, and don’t claim dependents — that’s normal, not an error.\n3. Only write "Exempt" if you owed $0 in federal tax last year and expect $0 this year — and remember to refile it each January.\n4. Sign and date Step 5 — an unsigned form doesn’t count.\n5. Check your first pay stub against your expected hours × wage. A big unexplained gap is worth asking payroll about.\n6. Set a reminder to revisit your W-4 whenever your job situation changes — new job, second job, or a big swing in hours.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'Do I have to fill out a W-4 for a part-time or summer job?',
+        a: 'Yes — every employee fills one out before their first paycheck, even for short-term, part-time, or seasonal work. It’s how your employer knows how much federal income tax to withhold.',
+      },
+      {
+        q: 'What happens if I don’t fill out a W-4?',
+        a: 'Your employer is required to withhold at the highest default rate (as if you were single with no adjustments) until you submit one, which usually means a smaller paycheck than necessary. Submitting the form promptly avoids over-withholding.',
+      },
+      {
+        q: 'Can I claim "Exempt" on my W-4 as a student?',
+        a: 'Only if you owed no federal income tax last year and expect to owe none this year — which is common for teens earning under the standard deduction. It stops federal income tax withholding but not Social Security or Medicare, and it must be refiled every January.',
+      },
+      {
+        q: 'Does a W-4 affect my paycheck right away?',
+        a: 'It applies to your next payroll run after it’s processed, not retroactively. If you update it mid-year, only future checks reflect the change — past withholding stays the same.',
+      },
+    ],
+  },
 ]
