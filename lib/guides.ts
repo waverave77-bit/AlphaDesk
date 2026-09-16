@@ -3556,4 +3556,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-have-to-file-taxes-if-you-only-made-a-little-money',
+    title: 'Do You Have to File a Tax Return If You Only Made a Little Money?',
+    metaTitle: 'Do You Have to File Taxes With a Small Income? The Real Rules',
+    description:
+      'Not always — but the rules change fast once side gigs or self-employment income get involved. Here’s exactly when a small paycheck still requires a return.',
+    date: '2026-09-16',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You worked a handful of shifts, made a few thousand dollars, and now it’s tax season — does someone making that little even need to bother filing? Sometimes no, sometimes yes, and the answer depends a lot less on how much you made than on where that money came from.',
+    sections: [
+      {
+        heading: 'The short answer: it depends on the type of income, not just the total',
+        body: 'The IRS treats three kinds of income differently when deciding whether you have to file: earned income (wages from a W-2 job), unearned income (interest, dividends, capital gains), and self-employment income (1099 gig work or freelancing). Each has its own filing threshold, and if you have a mix of all three, you have to check all three tests — not just pick the friendliest one.\n\nBeing claimed as someone else’s dependent (which applies to most teens and college students still living with a parent) also changes the math. A dependent’s filing thresholds are generally lower than an independent adult’s, especially for unearned income.',
+      },
+      {
+        heading: 'If you only had a W-2 job and someone claims you as a dependent',
+        body: 'For a dependent with only wage income, you generally have to file once your earned income clears the standard deduction for a single filer — an amount that adjusts for inflation every year and has been running well above $14,000 in recent years. Under that, a typical summer or part-time job usually doesn’t create a federal filing requirement on wages alone.\n\nUnearned income works very differently and kicks in at a much lower bar — commonly cited as being in the $1,300 range for a dependent, though the exact figure shifts slightly each tax year. If you have both earned and unearned income, there’s a combined test too: you can be required to file even under both individual thresholds if your total gross income is high enough. Because these numbers move every year, the honest rule of thumb is: if your only income was a few thousand dollars from one job, you probably aren’t required to file — but check the current-year numbers before assuming, especially if you also earned interest on a savings account or sold any stock.',
+      },
+      {
+        heading: 'The $400 rule that catches side-hustlers off guard',
+        body: 'Self-employment income plays by completely different rules, and it doesn’t care how small your regular paycheck was. If your net self-employment earnings — DoorDash, Uber, freelance design work, lawn mowing you invoice for — hit $400 or more in a year, you’re required to file a return and pay self-employment tax, full stop. This threshold is separate from (and much lower than) the wage-income threshold, and it applies whether or not anyone claims you as a dependent.\n\nThis is the scenario most likely to surprise a student: a W-2 summer job paying $4,000 might create no filing requirement at all, but $500 of weekend gig work on the side can flip that to "yes, you must file" — because of the self-employment income, not the total amount earned.',
+      },
+      {
+        heading: 'Why you might want to file even when you don’t have to',
+        body: 'If your employer withheld any federal income tax from your paychecks (check Box 2 on your W-2) and your income was low enough that you didn’t actually owe any tax, filing is the only way to get that money back as a refund. The IRS doesn’t send it automatically — you have to file a return to claim it, even if you were never required to file one in the first place.\n\nOne real deadline to know: refunds aren’t claimable forever. You generally have three years from the original filing deadline to file and collect a refund you’re owed. After that window closes, the money is gone for good — it becomes the property of the U.S. Treasury.',
+      },
+      {
+        heading: 'What happens if you skip a return you were actually required to file',
+        body: 'The IRS calculates the failure-to-file penalty as a percentage of unpaid tax — so if your income was low enough that you didn’t owe anything, there’s effectively no penalty for filing late or not at all, though interest and penalties can still apply once you do owe self-employment tax under the $400 rule. That said, "no penalty" doesn’t mean "no consequences": your employer and any gig platforms already reported your income to the IRS on your W-2 or 1099, so the IRS has a record even if you never file. Skipping a return you were required to file can also delay things later — like verifying income for a student loan, an apartment application, or the FAFSA, which sometimes asks for a copy of your tax return.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up your income by type — W-2 wages, interest/dividends, and any 1099 or cash self-employment income — separately.\n2. If you had any self-employment income at all, check whether it hit $400 net; if so, you must file regardless of your other income.\n3. If you only had wage income, compare it to the current year’s standard deduction before assuming you’re off the hook.\n4. Check Box 2 of your W-2 — if it shows federal tax withheld, file to get it back, even if you weren’t required to.\n5. Don’t skip a required return just because you think you owe nothing — the IRS already has your income reported by your employer or platform.\n6. Mark your calendar: unclaimed refunds expire three years after the original filing deadline.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'Do I have to file taxes if I only made a few thousand dollars from a summer job?',
+        a: 'Usually not, if that was your only income and it stayed under the standard deduction for a single filer — but you should still file if your employer withheld any federal tax, since filing is the only way to get that money back.',
+      },
+      {
+        q: 'Do I have to file taxes if I made less than $400 from a side hustle?',
+        a: 'The $400 self-employment filing threshold applies to net self-employment earnings specifically. Below that, self-employment tax generally isn’t triggered, but you’d still need to factor in any W-2 wages or unearned income separately.',
+      },
+      {
+        q: 'Will I get in trouble if I don’t file and didn’t owe any tax?',
+        a: 'The failure-to-file penalty is based on unpaid tax, so there’s effectively nothing to penalize if you owed nothing. But your income is still reported to the IRS by whoever paid you, and skipping a required return can complicate things like loan or FAFSA applications later.',
+      },
+      {
+        q: 'How long do I have to claim a tax refund I never filed for?',
+        a: 'Generally three years from the original filing deadline. After that, an unclaimed refund is forfeited and can’t be recovered.',
+      },
+    ],
+  },
 ]
