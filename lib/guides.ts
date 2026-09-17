@@ -3612,4 +3612,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-long-is-the-student-loan-grace-period-after-graduation',
+    title: 'How Long Do You Have Before Student Loan Payments Start After Graduation?',
+    metaTitle: 'Student Loan Grace Period After Graduation, Explained',
+    description:
+      'Federal student loans don’t bill you the day you graduate — there’s a grace period first. Here’s how long it lasts, who it costs, and what to do before it ends.',
+    date: '2026-09-17',
+    category: 'College Money',
+    intro:
+      'You just graduated, dropped below half-time enrollment, or withdrew — and now you’re staring at loan balances wondering when the bill actually shows up. The good news: federal loans build in a buffer before the first payment is due. The less-good news: interest doesn’t always wait with you, and what you do during that window can change how much you owe for years.',
+    sections: [
+      {
+        heading: 'The 6-month grace period, explained',
+        body: 'Federal Direct Loans (subsidized and unsubsidized) generally come with a 6-month grace period that starts the moment you graduate, leave school, or drop below half-time enrollment — not the day you first borrowed. During those 6 months, you’re not required to make any payments, and your servicer uses that time to send you a repayment schedule and get your first due date on the calendar. Grad PLUS loans typically follow a similar 6-month buffer before the first payment comes due.\n\nOne detail people miss: the grace period is generally available only once per loan. If you use part of it, then re-enroll at least half-time and later leave school again, you typically don’t get a fresh full 6 months the second time around — so it’s worth confirming your remaining grace period with your servicer rather than assuming you have the full window twice.',
+      },
+      {
+        heading: 'Subsidized vs. unsubsidized: who actually pays for the grace period',
+        body: 'This is the split that matters most financially. On a subsidized federal loan, the government pays the interest that accrues during your grace period — so the balance you start repaying is the same one you left school with. On an unsubsidized loan, interest keeps accruing the entire 6 months whether you’re paying attention or not, and if you don’t pay it off before repayment begins, that accrued interest typically capitalizes — gets added to your principal balance — meaning you then pay interest on top of that interest for the rest of the loan’s life.\n\nA few hundred dollars of unpaid interest capitalizing doesn’t sound dramatic in the moment, but it’s extra principal that compounds against you for the full repayment term — often a decade or more.',
+      },
+      {
+        heading: 'The easiest free move: pay the interest during grace period',
+        body: 'You’re not required to pay anything during the grace period, but you’re allowed to — and for unsubsidized loans, paying off the accrued interest before repayment officially starts is one of the highest-value moves available. It stops that interest from capitalizing into your principal, which means every future payment goes slightly further because you’re not paying interest on interest that never needed to exist.\n\nEven partial payments help: paying down some of the accrued interest before the grace period ends reduces exactly how much gets capitalized, even if you can’t cover all of it.',
+      },
+      {
+        heading: 'Picking a repayment plan before autopilot kicks in',
+        body: 'If you don’t actively choose a repayment plan, your servicer will typically default you into the Standard 10-year plan once the grace period ends — fixed payments, paid off in a decade. That’s often not the cheapest or most manageable option for every income situation. Income-driven repayment plans base your monthly payment on your income and family size instead of your balance, which can lower payments significantly if you’re starting a lower-paying job or between offers — though the tradeoff is usually paying more interest over a longer timeline.\n\nThe grace period is the right time to compare plans on your servicer’s website, not the week your first payment is due. Switching plans is generally possible later too, but starting on the right plan avoids an avoidable scramble.',
+      },
+      {
+        heading: 'Private loans play by different rules',
+        body: 'Everything above describes federal Direct Loans, which have a grace period written into federal regulations. Private student loans have no guaranteed grace period at all — some lenders offer 6 months, some offer less, and it’s spelled out in your original promissory note, not federal law. Interest on private loans almost always accrues from the day the loan was disbursed, grace period or not, since private loans are rarely subsidized.\n\nIf you have private loans, check the servicer’s portal or your loan documents for the actual grace period length rather than assuming it matches your federal loans — assuming a 6-month buffer that doesn’t exist is how people end up missing a first payment by accident.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm your grace period end date and first payment due date directly with your loan servicer — don’t guess from memory.\n2. If you have unsubsidized federal loans, pay off as much accrued interest as you can before repayment starts to avoid capitalization.\n3. Compare repayment plans (Standard, graduated, income-driven) before the grace period ends instead of accepting the servicer’s default plan.\n4. Update your contact info and enroll in autopay with your servicer — most offer a small interest-rate discount for it.\n5. If you have private loans, check your promissory note for the actual grace period length instead of assuming it matches federal rules.\n6. Returning to school before your grace period ends? Ask your servicer whether you’ll still have a grace period left when you leave again.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Compound Interest', 'Federal Reserve', 'Liquidity'],
+    faq: [
+      {
+        q: 'How long is the grace period before federal student loans go into repayment?',
+        a: 'Generally 6 months after you graduate, drop below half-time enrollment, or leave school, for Direct subsidized, unsubsidized, and Grad PLUS loans. It’s typically available only once per loan.',
+      },
+      {
+        q: 'Does interest accrue during the student loan grace period?',
+        a: 'On subsidized federal loans, no — the government covers interest during the grace period. On unsubsidized federal loans and most private loans, yes — interest keeps accruing, and on federal unsubsidized loans it typically capitalizes into your principal if unpaid when repayment begins.',
+      },
+      {
+        q: 'Do private student loans have the same 6-month grace period as federal loans?',
+        a: 'Not necessarily. Private lenders set their own grace period terms in the promissory note — it might be 6 months, shorter, or structured differently, so check your loan documents instead of assuming it matches federal rules.',
+      },
+      {
+        q: 'Should I make payments during my grace period even though I don’t have to?',
+        a: 'If you have unsubsidized loans, paying off the accrued interest before repayment starts is generally worth it — it prevents that interest from capitalizing into your principal balance and reduces what you pay over the life of the loan.',
+      },
+    ],
+  },
 ]
