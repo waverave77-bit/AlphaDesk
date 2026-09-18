@@ -3668,4 +3668,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'etf-vs-mutual-fund-difference',
+    title: 'ETF vs. Mutual Fund: What’s the Real Difference, and Which Should You Buy?',
+    metaTitle: 'ETF vs. Mutual Fund: The Real Difference, Explained Simply',
+    description:
+      'Both hold a basket of stocks, but they trade, price, and get taxed differently. Here’s what actually separates an ETF from a mutual fund — and which one to buy first.',
+    date: '2026-09-18',
+    category: 'Investing',
+    intro:
+      'You’ve been told to “just buy an index fund,” but the app is showing you two different things that both seem to do the same job — an ETF and a mutual fund. They can hold the exact same 500 stocks and still behave completely differently once you actually own them. Here’s what separates them, and why it matters more for your first purchase than most people realize.',
+    sections: [
+      {
+        heading: 'Same idea, different container',
+        body: 'Both an ETF (exchange-traded fund) and a mutual fund pool money from thousands of investors and use it to buy a basket of stocks, bonds, or other assets, so you get instant diversification from a single purchase instead of hand-picking dozens of individual companies. An S&P 500 ETF and an S&P 500 index mutual fund can hold literally the same 500 companies in roughly the same proportions — the underlying investment isn’t the difference.\n\nThe difference is the wrapper: how you buy it, when its price updates, and what happens behind the scenes when money moves in and out of the fund.',
+      },
+      {
+        heading: 'How and when you can actually trade them',
+        body: 'An ETF trades on a stock exchange all day long, just like a share of Apple or Tesla — its price ticks up and down in real time, and you can buy or sell any time the market is open, using a market order or a limit order. A mutual fund doesn’t trade during the day at all. Every buy or sell order placed gets bundled together and executed once, after the market closes, at a single price for the day called the net asset value (NAV). Buy a mutual fund at 10 a.m. or at 3:45 p.m. and you get the same closing price either way.\n\nFor a long-term, buy-and-hold investor this rarely matters in practice — you’re not trying to time an hour of the day. It matters more if you’re investing a lump sum and want to see and control the exact price you’re paying.',
+      },
+      {
+        heading: 'Cost: expense ratios and minimums',
+        body: 'Both fund types charge an expense ratio — an annual fee taken automatically out of your returns, expressed as a percentage of what you have invested. Broad, passively managed index ETFs are usually the cheapest option available, commonly well under 0.10% a year, sometimes as low as 0.03%. Actively managed mutual funds, where a manager is picking investments rather than tracking an index, typically charge far more — often somewhere between 0.5% and 1.5% a year, and that gap compounds against you every year you hold it.\n\nMinimums are the other practical difference. Most ETFs have no minimum beyond the price of one share (and many brokers now let you buy fractional shares, so even that barely matters). Many mutual funds still set their own minimum initial investment — often $500 to $3,000 — even inside a brokerage account that itself has a $0 minimum.',
+      },
+      {
+        heading: 'The tax difference that catches people off guard',
+        body: 'This one only matters in a regular taxable brokerage account — it’s irrelevant inside a Roth IRA or 401(k), where growth isn’t taxed year to year regardless of which wrapper you use.\n\nMutual funds are required to distribute any net capital gains they realize during the year to every shareholder, usually in December — even if you personally never sold a single share. That distribution is taxable to you the year it’s paid, which means a mutual fund can hand you a tax bill in a year the fund actually lost value, if it sold winning positions along the way. ETFs largely sidestep this because of how shares are created and redeemed behind the scenes (a mechanism most investors never need to understand in detail), so they tend to generate far fewer surprise year-end capital gains distributions. In practice, this makes ETFs the more tax-efficient default for a taxable brokerage account.',
+      },
+      {
+        heading: 'Why you’ll still run into mutual funds anyway',
+        body: 'If ETFs are usually cheaper and more tax-efficient, why do mutual funds still exist everywhere? Mostly because of 401(k) plans. Employer retirement plans process contributions from every employee on the same payroll schedule, and mutual funds’ once-a-day, bundled-pricing structure fits that batch processing far more easily than an ETF’s all-day trading does. That’s why a lot of 401(k) menus are built entirely out of mutual funds, sometimes with no ETF option at all — you’re not doing anything wrong by using them there, it’s just how the plumbing of employer plans tends to work.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. In a taxable brokerage account, default to a broad ETF over a mutual fund tracking the same index — same exposure, usually lower cost, and fewer surprise tax bills.\n2. Inside a Roth IRA or 401(k), the tax-efficiency difference stops mattering — pick based on expense ratio and what’s actually offered.\n3. Check a mutual fund’s minimum initial investment before assuming your $0-minimum brokerage account covers it.\n4. Compare expense ratios directly — a 1% fund needs to outperform a 0.05% fund by a full percentage point every year just to break even with it.\n5. If your 401(k) only offers mutual funds, that’s normal — use the lowest-cost index option on the menu rather than holding out for an ETF that isn’t there.',
+      },
+    ],
+    relatedTerms: ['ETF', 'Mutual Fund', 'Index Investing', 'Diversification', 'Dollar-Cost Averaging', 'Broker'],
+    faq: [
+      {
+        q: 'Is an ETF better than a mutual fund?',
+        a: 'For a taxable brokerage account, ETFs are usually the better default — typically lower expense ratios, no minimum beyond one share price, and fewer surprise year-end capital gains distributions. Inside a Roth IRA or 401(k), the tax difference disappears, so the choice comes down to cost and what your plan offers.',
+      },
+      {
+        q: 'Can an ETF and a mutual fund hold the exact same investments?',
+        a: 'Yes. Plenty of fund companies offer an S&P 500 ETF and an S&P 500 index mutual fund that hold essentially the same underlying companies in similar proportions. The investment itself can be nearly identical — the wrapper (how it trades, prices, and gets taxed) is what differs.',
+      },
+      {
+        q: 'Why do 401(k) plans mostly offer mutual funds instead of ETFs?',
+        a: 'Employer retirement plans process every employee’s contribution on the same payroll schedule, and a mutual fund’s once-a-day, bundled pricing fits that batch processing better than an ETF’s all-day trading. It’s a plumbing reason, not a sign mutual funds are the better product.',
+      },
+      {
+        q: 'Do I pay taxes on a mutual fund every year even if I never sell it?',
+        a: 'In a taxable brokerage account, potentially yes — mutual funds must pass along any net capital gains they realize to shareholders, usually in December, and that’s taxable to you even if you never sold a share yourself. This doesn’t happen inside a Roth IRA or 401(k).',
+      },
+    ],
+  },
 ]
