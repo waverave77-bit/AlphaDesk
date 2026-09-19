@@ -3724,4 +3724,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-carrying-a-credit-card-balance-help-your-credit-score',
+    title: 'Does Carrying a Credit Card Balance Actually Help Your Credit Score?',
+    metaTitle: 'Does Carrying a Balance Help Your Credit Score? (No — Here’s Why)',
+    description:
+      'No — carrying a balance and paying interest does nothing for your credit score. Here’s what the bureaus actually see, and why this myth costs people real money.',
+    date: '2026-09-19',
+    category: 'Credit',
+    intro:
+      'Someone told you — a parent, a friend, a random comment thread — that you have to leave a little unpaid on your credit card each month or your score won’t grow. It’s one of the most common pieces of credit advice out there, and it is completely false. Here’s what your score actually looks at, and why this myth has probably cost people more in interest than almost any other piece of bad financial advice.',
+    sections: [
+      {
+        heading: 'Where the myth comes from',
+        body: 'The confusion comes from mixing up two real things: using a credit card (good for your score) and carrying a balance past the due date (not good, and not required). People see that their score goes up the longer they have an active card, and assume the “active” part means an unpaid balance has to be sitting there. It doesn’t. A card can be used constantly and still be paid off in full every single month — that’s not just allowed, it’s the entire goal.',
+      },
+      {
+        heading: 'What your score actually looks at',
+        body: 'A FICO score is built from five weighted categories: payment history (about 35%, whether you’ve paid on time), amounts owed (about 30%, mostly your credit utilization), length of credit history (about 15%), credit mix (about 10%), and new credit (about 10%). Notice what’s missing — there is no category for “interest paid” or “balance carried.” Paying interest doesn’t appear anywhere in the formula as a positive input. It’s simply the cost of borrowing money for longer than the grace period, with zero credit-building benefit attached.',
+      },
+      {
+        heading: 'The part people get backwards: what actually gets reported',
+        body: 'Card issuers report your account to the three credit bureaus roughly once a month, usually around your statement closing date — and what they report is your statement balance, not whether you ended up paying it in full or carrying it forward. If you charge $400 in a cycle and pay it off completely by the due date, the bureaus still saw a $400 balance reported that month, and that balance is what feeds into your utilization calculation.\n\nIn other words, the score-relevant number is identical whether you pay that $400 off immediately or drag it out for six months paying interest. The only difference the second option adds is the interest charge itself — money spent for a credit-score effect that was never there to begin with.',
+      },
+      {
+        heading: 'Carrying a balance can actually hurt more than it helps',
+        body: 'Because utilization — your balance divided by your credit limit, both per card and across all your cards combined — is the second-biggest scoring factor, a balance that lingers and grows tends to push utilization up over time, not stay neutral. Experts generally recommend keeping utilization under 30%, and under 10% is even better if you’re trying to maximize your score. Someone who lets balances ride month to month is far more likely to creep toward a high utilization ratio than someone who zeroes their statement out every cycle, simply because unpaid interest keeps adding to the balance on top of new spending.',
+      },
+      {
+        heading: 'The one real nuance worth knowing',
+        body: 'A handful of very engaged score-optimizers point to a tiny wrinkle: if your reported statement balance is $0 every single month, a small number of scoring models can treat the account as “inactive” for that cycle, which very slightly softens its impact on your utilization math. The fix for this has nothing to do with paying interest — it just means letting at least one normal purchase post and show up on your statement before you pay it off by the due date, so a small, real balance gets reported. That’s a world away from “carry debt on purpose.” You can get 100% of this benefit while still paying zero interest.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Use your card for real purchases you were already going to make — groceries, gas, a subscription — not extra spending to “build credit.”\n2. Pay the full statement balance by the due date, every cycle, without exception.\n3. If you want a nonzero reported balance for the tiny utilization nuance, let one normal purchase post before paying it off — never leave it unpaid on purpose.\n4. Set autopay for at least the full statement balance so a missed due date never turns into accidental interest or a late-payment mark.\n5. Track your utilization percentage, not your raw balance — the same $200 balance means something very different on a $500 limit versus a $5,000 limit.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'Do I need to carry a balance on my credit card to build credit?',
+        a: 'No. Credit bureaus receive your statement balance whether or not you pay it in full, so carrying a balance and paying interest provides zero extra credit-score benefit over paying in full every month.',
+      },
+      {
+        q: 'What actually builds a good credit score?',
+        a: 'Paying on time every month (about 35% of a FICO score) and keeping your credit utilization low (about 30%) are the two biggest factors. Both are fully achievable while paying your statement balance in full every cycle.',
+      },
+      {
+        q: 'Does paying off my credit card in full hurt my score?',
+        a: 'No — paying in full is exactly what you should do. It avoids interest entirely and still reports a balance and an on-time payment to the bureaus, which is all the scoring formula actually rewards.',
+      },
+      {
+        q: 'Is it bad to have a $0 balance on my credit card every month?',
+        a: 'It’s not bad, but a small number of scoring models slightly favor a small, real reported balance over a $0 balance every cycle. You can get that benefit by letting one purchase post before paying it off — never by leaving debt unpaid on purpose.',
+      },
+    ],
+  },
 ]
