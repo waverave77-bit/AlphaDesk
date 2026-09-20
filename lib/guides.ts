@@ -3780,4 +3780,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-stock-split-does-it-change-what-your-shares-are-worth',
+    title: 'What Is a Stock Split, and Does It Change What Your Shares Are Worth?',
+    metaTitle: 'What Is a Stock Split? What Actually Changes (and What Doesn’t)',
+    description:
+      'A stock split multiplies your share count and divides the price — but your total investment is worth exactly the same. Here’s the real mechanics and examples.',
+    date: '2026-09-20',
+    category: 'Investing',
+    intro:
+      'A stock you own splits, your app suddenly shows way more shares, and the price per share drops just as fast — and for a second it can genuinely look like free money appeared overnight. It didn’t. Here’s exactly what a split does, what it doesn’t do, and why some companies run the trick in reverse.',
+    sections: [
+      {
+        heading: 'The mechanics: more shares, lower price, same total value',
+        body: 'A stock split takes each existing share and divides it into multiple new shares, while dividing the price by that same number — so the total dollar value of what you own never moves. If a company does a 10-for-1 split, every 1 share you owned becomes 10 shares, and the price per share becomes one-tenth of what it was.\n\nSay you owned 10 shares at $1,200 each — a $12,000 position. After a 10-for-1 split, you own 100 shares at $120 each. Still $12,000. Nothing about the company changed, and nothing about your money changed. You just sliced the same pizza into more, smaller pieces.',
+      },
+      {
+        heading: 'Why companies actually do this',
+        body: 'If a split doesn’t create value, why bother? Mostly psychology and accessibility. A $1,000+ share price can feel intimidating or out of reach to a new investor, even though most brokers now let you buy fractional shares — meaning the “I can’t afford one share” problem was already solved before splits came back into fashion. Lower nominal prices also tend to increase trading volume and can make options contracts (which control 100 shares each) far cheaper to trade, since a call option on a $120 stock ties up a lot less money than one on a $1,200 stock.\n\nIn short: a split is a repackaging decision, not a financial one. It’s aimed at how the stock looks and trades, not at what it’s worth.',
+      },
+      {
+        heading: 'The recent split parade: real examples',
+        body: 'Nvidia did a 10-for-1 split in June 2024, turning a roughly $1,200 stock into a roughly $120 stock overnight — the company’s value didn’t change, its share count went from about 2.5 billion to about 25 billion. Apple has split twice this century: 7-for-1 in 2014 and 4-for-1 in August 2020, when its price dropped from around $500 to around $125. Alphabet (Google) did a 20-for-1 split in July 2022, taking a roughly $2,240 stock down to around $112. Tesla split 5-for-1 in 2020 and again 3-for-1 in August 2022. Walmart did a 3-for-1 split in February 2024. In every one of these, the company’s market cap — total value — was the same the day after the split as the day before.',
+      },
+      {
+        heading: 'Reverse splits: the same trick running backward',
+        body: 'A reverse split combines multiple shares into fewer, more expensive ones — the mirror image of a regular split. Own 10 shares at $2 each and the company does a 1-for-10 reverse split, and you end up with 1 share worth $20. Same math, same "no value created" rule, just running in the opposite direction.\n\nHere’s the part worth paying attention to: reverse splits are far more often a warning sign than a regular split is. The NYSE and Nasdaq both require listed stocks to keep a minimum bid price (commonly $1) — fall below that for 30 consecutive trading days and a company risks getting delisted. A reverse split is the fastest way to artificially push the price back above that line without the business actually improving. General Electric did a 1-for-8 reverse split in 2021 during a broader company breakup and restructuring — not every reverse split means a company is in crisis, but seeing one should make you ask why, not assume it’s good news.',
+      },
+      {
+        heading: 'Does a split make a stock a better buy?',
+        body: 'No — and this is the single most common misconception. A split doesn’t touch revenue, profit, or the number of dollars the company is actually worth. Earnings per share (EPS) gets divided by the same factor as the price, so the P/E ratio — how expensive the stock is relative to its profits — stays identical. A stock that was overvalued before a split is exactly as overvalued after it, just measured in smaller units.\n\nSome studies have found stocks drift slightly higher in the weeks around a split announcement, likely because a split is often a signal that management feels confident about the stock’s run-up. But that’s a psychological and momentum effect, not a mathematical one — and it’s not something to count on. Buying a stock purely because it announced a split is buying a marketing decision, not a business.',
+      },
+      {
+        heading: 'Your checklist if a stock you own announces a split',
+        body: '1. Do nothing — your broker automatically adjusts your share count and cost basis on the split date; you don’t need to place any trades.\n2. Check your total position value before and after — it should be unchanged, aside from normal daily price movement.\n3. If you have an open limit order at the pre-split price, double-check it after the split — some brokers auto-adjust it, some cancel it.\n4. If you hold options on the stock, know that standard splits trigger an automatic adjustment to the contract’s strike price and share count — you don’t have to do this manually.\n5. Don’t buy a stock just because a split was announced — look at the same fundamentals (revenue, profit, valuation) you’d look at any other day.\n6. If it’s a reverse split, find out why before assuming anything — check whether it’s exchange-listing compliance, a merger structure, or a sign the business is struggling.',
+      },
+    ],
+    relatedTerms: ['Stock Split', 'Share', 'Market Cap', 'Dividend', 'Liquidity'],
+    faq: [
+      {
+        q: 'Does a stock split increase the value of my investment?',
+        a: 'No. A split only changes how many shares you hold and the price per share — the total dollar value of your position is exactly the same immediately before and after.',
+      },
+      {
+        q: 'Should I buy a stock because it just announced a split?',
+        a: 'A split alone isn’t a reason to buy — it doesn’t change the company’s revenue, profit, or valuation. Any decision should be based on the same fundamentals you’d check for any other stock.',
+      },
+      {
+        q: 'What is a reverse stock split, and is it always bad news?',
+        a: 'A reverse split combines shares to raise the per-share price rather than lower it. It’s often used to avoid falling below an exchange’s minimum price requirement, and while it isn’t automatically a disaster, it’s worth finding out why a company did one before assuming it’s good news.',
+      },
+      {
+        q: 'Do stock splits affect dividends?',
+        a: 'The total dollar amount of dividends you receive stays the same, but the per-share dividend amount adjusts down proportionally to match the new, larger share count — the same way the price does.',
+      },
+    ],
+  },
 ]
