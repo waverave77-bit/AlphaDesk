@@ -3836,4 +3836,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'apr-vs-apy-whats-the-difference',
+    title: 'What’s the Difference Between APR and APY, and Why Does It Cost You Money?',
+    metaTitle: 'APR vs. APY: What the Difference Actually Costs You',
+    description:
+      'APR and APY look almost identical but measure different things — one ignores compounding, one includes it. Here’s the real math behind cards, loans, and savings rates.',
+    date: '2026-09-21',
+    category: 'Saving',
+    intro:
+      'You’ve seen APR on a credit card offer and APY on a savings account ad, and assumed they were basically the same thing with different labels. They’re not — and the gap between them is either quietly costing you money or quietly making you less than you think. Here’s the actual math, and why it’s never a coincidence which one shows up on which product.',
+    sections: [
+      {
+        heading: 'Two acronyms, one letter apart, completely different jobs',
+        body: 'APR stands for Annual Percentage Rate — a simple yearly interest rate that does not account for compounding within the year. It shows up on credit cards, auto loans, mortgages, and personal loans: anywhere you’re borrowing money.\n\nAPY stands for Annual Percentage Yield — a yearly rate that does account for compounding within the year. It shows up on savings accounts, high-yield savings accounts, CDs, and money market accounts: anywhere you’re earning interest.\n\nThey get used almost interchangeably in casual conversation, but no bank or lender ever prints “APY” on a credit card statement or “APR” on a savings account. That pattern isn’t random — it’s built into how each number is calculated.',
+      },
+      {
+        heading: 'The math: what compounding actually adds',
+        body: 'The formula that connects them is APY = (1 + r/n)^n − 1, where r is the nominal annual rate and n is the number of times interest compounds per year. If interest only compounded once a year, APR and APY would be the exact same number — compounding is the entire source of the gap.\n\nExample: a nominal 5% rate compounded monthly (n = 12) works out to an APY of about 5.12%. Compounded daily (n = 365), that same 5% nominal rate becomes an APY of about 5.13%. The more frequently interest compounds, the bigger the gap between the nominal rate and the true annual return — though the difference shrinks as compounding gets more frequent, since each additional compounding period adds less than the one before it.',
+      },
+      {
+        heading: 'Why your credit card shows APR and your savings account shows APY',
+        body: 'US law requires lenders to disclose the APR on loans and credit cards, standardized so you can compare the cost of borrowing across different offers. APR ignores compounding, which means it’s the smaller, more modest-looking number for a company that’s about to charge you interest.\n\nDeposit accounts, on the other hand, are required to advertise APY — the number that includes compounding, and therefore the larger, better-looking number for a bank that’s about to pay you interest. Same underlying math, same institutions, but the number each one is required to lead with happens to be the smaller one when they’re collecting and the bigger one when they’re paying. It isn’t a conspiracy — it’s just which figure the disclosure rules for each product settled on — but it’s worth knowing so the numbers don’t trick you either way.',
+      },
+      {
+        heading: 'Real numbers: what the gap costs on debt vs. earns on savings',
+        body: 'Carry a $3,000 balance on a credit card advertised at 24.99% APR, compounded daily (typical for revolving credit). Run that through the compounding formula and the true annual cost — the APY-equivalent — comes out closer to 28%. That extra few percentage points is real interest charged on your balance; the card issuer is only required to show you the smaller APR figure.\n\nFlip it around for savings: a high-yield savings account advertising 4.50% APY compounded daily corresponds to a nominal rate a bit lower than 4.50%. The bank leads with the bigger APY number because it’s legally required to — and because it makes the account look more competitive, which in this case is also the number you actually want to compare.',
+      },
+      {
+        heading: 'Your checklist for comparing rates without getting tricked',
+        body: '1. Comparing two loans or credit cards? Compare APR to APR — never let one issuer’s APR go up against another’s APY.\n2. Comparing two savings accounts or CDs? Compare APY to APY, and check the compounding frequency (daily usually beats monthly at the same headline rate).\n3. Want the true cost of an APR-quoted debt? Run it through the compounding formula using the account’s actual compounding frequency, listed in the card or loan terms.\n4. Watch for “deferred interest” on 0% APR promotional offers — some retail cards charge all the interest that accrued during the promo period retroactively if the balance isn’t paid off in full before it ends.\n5. A slightly higher APY with less frequent compounding can sometimes lose to a slightly lower APY compounded more often — check the account’s actual compounding schedule, not just the headline percentage.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Yield', 'Federal Reserve', 'Credit Rating', 'Liquidity'],
+    faq: [
+      {
+        q: 'Is APY always higher than APR for the same rate?',
+        a: 'For the same nominal interest rate, APY is always equal to or higher than APR, because APY includes the effect of compounding within the year. They’re only identical when interest compounds just once a year.',
+      },
+      {
+        q: 'Which number should I actually pay attention to — APR or APY?',
+        a: 'It depends which side of the transaction you’re on. Borrowing money (credit cards, loans) — focus on APR, since that’s the standardized figure lenders must disclose for comparing borrowing costs. Saving money — focus on APY, since it reflects what you’ll actually earn including compounding.',
+      },
+      {
+        q: 'Does a 0% APR credit card offer mean no interest, ever?',
+        a: 'Only during the promotional period and only if you meet the card’s terms. Many promotional offers use deferred interest, meaning if you don’t pay the balance in full by the end date, you can be charged all the interest that would have accrued the entire time, not just interest going forward.',
+      },
+      {
+        q: 'Why don’t banks just advertise one consistent rate for everything?',
+        a: 'Federal disclosure rules require APR on credit products and APY on deposit products specifically so consumers can make apples-to-apples comparisons within each category — but the two labels aren’t designed to be compared against each other, which is exactly where the confusion comes from.',
+      },
+    ],
+  },
 ]
