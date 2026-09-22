@@ -3888,4 +3888,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'tax-credit-vs-tax-deduction-difference',
+    title: 'What’s the Difference Between a Tax Credit and a Tax Deduction?',
+    metaTitle: 'Tax Credit vs. Tax Deduction: What Actually Saves You More',
+    description:
+      'A $1,000 deduction and a $1,000 credit are not the same $1,000 — one shrinks your taxable income, the other cuts your bill directly. Here’s the real math.',
+    date: '2026-09-22',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You’ve heard both terms thrown around like they mean the same thing — "tax write-off," "tax break," "tax credit," "tax deduction" — but they don’t. One of them is worth noticeably more than the other, and knowing which is which changes how much a specific tax break is actually worth to you.',
+    sections: [
+      {
+        heading: 'The one-sentence version',
+        body: 'A tax deduction reduces the amount of your income that gets taxed. A tax credit reduces the amount of tax you owe, directly, dollar for dollar. A deduction shrinks the pie before the tax rate gets applied to it; a credit takes a bite straight out of the bill after the math is already done. That difference sounds small until you run actual numbers, and then it isn’t.',
+      },
+      {
+        heading: 'The math side by side',
+        body: 'Say you’re in the 12% marginal tax bracket. A $1,000 deduction lowers your taxable income by $1,000 — but the actual tax savings is only 12% of that, or $120. Your tax bill drops by $120, not $1,000.\n\nA $1,000 credit works completely differently: it cuts $1,000 straight off your tax bill, no matter what bracket you’re in. Someone in the 12% bracket and someone in the 24% bracket both get the exact same $1,000 knocked off what they owe from a $1,000 credit — but that same $1,000 deduction is worth $120 to the first person and $240 to the second. Deductions are worth more the higher your tax bracket is; credits are worth the same to everyone who qualifies.',
+      },
+      {
+        heading: 'The standard deduction: the one almost everyone already gets',
+        body: 'Every filer can take the standard deduction — a flat amount (a bit over $14,000 for a single filer, adjusted upward most years for inflation) that gets subtracted from your income automatically, no receipts required. The alternative is itemizing — adding up specific deductible expenses like mortgage interest, large medical bills, or charitable donations one by one — but itemizing only helps if those add up to more than the standard deduction, which is rare for young filers who rent, don’t have huge medical bills, and don’t donate large sums. For most people early in their career, the standard deduction wins without any extra paperwork.',
+      },
+      {
+        heading: 'Refundable vs. nonrefundable credits — the detail that changes everything',
+        body: 'Not all credits work the same way once your tax bill hits zero. A nonrefundable credit can only reduce what you owe down to $0 — if the credit is bigger than your tax bill, the extra amount just disappears. A refundable credit keeps going past $0 and can actually increase your refund, putting money in your pocket even if you owed nothing to begin with.\n\nThe Earned Income Tax Credit is refundable, which is exactly why it matters so much for lower-income workers, including plenty of part-time and entry-level earners. The Saver’s Credit and the Lifetime Learning Credit, by contrast, are nonrefundable — they can zero out your bill but won’t generate extra cash back. The American Opportunity Credit (for college expenses) is partially refundable, up to a set portion of it. Before assuming a credit will boost your refund, it’s worth checking which category it falls into.',
+      },
+      {
+        heading: 'Real examples you’ll actually run into',
+        body: 'Deductions you’re likely to see: the standard deduction (automatic), and the student loan interest deduction (up to a capped amount per year, phasing out at higher income, and available even if you take the standard deduction — it’s an "above the line" adjustment, not something that requires itemizing).\n\nCredits you’re likely to see: education credits like the American Opportunity Credit and Lifetime Learning Credit if you’re paying tuition, the Saver’s Credit if you’re a lower-income filer contributing to a Roth IRA or 401(k), and the Earned Income Tax Credit if your income and filing situation qualify. None of these are automatic — most require checking a box or filling out a specific form when you file, so a tax software walkthrough (or a free filing option) that actually asks the right questions is worth using instead of guessing.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know the difference before you get excited about a number: a "$1,000 deduction" is not $1,000 back — do the bracket math first.\n2. Take the standard deduction unless you’re confident your itemized expenses genuinely add up to more.\n3. Check whether any credit you’re eligible for is refundable — that’s the difference between "zeroes out your bill" and "adds to your refund."\n4. Don’t assume tax software applies every credit automatically — some require you to actively answer questions about tuition, retirement contributions, or income to unlock them.\n5. If your income is low relative to your retirement contributions, look into whether you qualify for the Saver’s Credit — it’s one of the most overlooked credits for young earners.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'Is a tax credit or a tax deduction better?',
+        a: 'Dollar for dollar, a credit is almost always worth more — it cuts your tax bill directly, while a deduction only cuts your bill by your tax rate times the deduction amount. A $1,000 credit beats a $1,000 deduction for nearly everyone.',
+      },
+      {
+        q: 'Do I have to itemize to claim a tax credit?',
+        a: 'No. Credits are separate from the deduction question entirely — you can take the standard deduction and still claim any tax credits you qualify for. Itemizing only affects deductions, not credits.',
+      },
+      {
+        q: 'What does "refundable" mean for a tax credit?',
+        a: 'A refundable credit can reduce your tax bill below $0, meaning you can get money back even if you didn’t owe anything. A nonrefundable credit can only bring your bill down to $0 — any leftover credit amount is lost.',
+      },
+      {
+        q: 'Is the standard deduction the same as a tax credit?',
+        a: 'No — it’s a deduction. It reduces your taxable income, not your tax bill directly, but you get it automatically without needing receipts or proof of expenses, which is why almost every young filer uses it.',
+      },
+    ],
+  },
 ]
