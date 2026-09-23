@@ -3944,4 +3944,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'are-credit-card-rewards-worth-it',
+    title: 'Are Credit Card Rewards Worth It? How Cash Back and Points Actually Work',
+    metaTitle: 'Are Credit Card Rewards Worth It? Cash Back vs. Points Explained',
+    description:
+      'A 2% cash back card sounds like free money — until you run the math against a 24% APR. Here’s how rewards actually work and when they’re worth chasing.',
+    date: '2026-09-23',
+    category: 'Credit',
+    intro:
+      'Every credit card ad promises "free money" — 2% back, 5x points, a $200 sign-up bonus. Some of that is real. Most of it only pays off under one condition that the ad never mentions. Here’s how rewards math actually works, and why the wrong card can turn "free money" into a net loss.',
+    sections: [
+      {
+        heading: 'The rule that decides everything: rewards only work if you never carry a balance',
+        body: 'A rewards card and a regular card charge the same interest if you don’t pay in full — commonly somewhere in the low-to-mid 20% APR range today. Carry a balance for even one month and the interest wipes out years of rewards in a single statement.\n\nRun the numbers: a $1,000 balance carried for a year at 24% APR costs roughly $240 in interest if untouched. A 2% cash back card earns you $20 on that same $1,000 in spending. The interest is more than ten times the reward. This is the whole game — rewards cards are a good deal for people who already pay their statement balance in full every month, and a genuinely bad deal for people who don’t, because the extra spending a rewards card tends to encourage only makes the math worse.',
+      },
+      {
+        heading: 'Cash back vs. points vs. miles — what the percentages actually mean',
+        body: 'Flat-rate cash back cards are the simplest: every purchase earns the same percentage back, commonly around 1.5%–2%, paid out as statement credit, a deposit, or a check. No categories to track, no expiration games — what you see is what you get.\n\nPoints and miles cards (usually tied to travel) earn a certain number of points per dollar instead of a cash percentage, and the value of a point depends entirely on how you redeem it. Redeemed for a statement credit or gift card, a point is often worth close to a cent or less. Redeemed for flights or hotels through the right program, the same point can be worth two cents or more. That spread is why serious points collectors obsess over redemption — the sign-up offer says "60,000 points," but whether that’s worth $300 or $1,200 depends entirely on what you redeem it for.\n\nCategory cards sit in between: a flat 1%–2% on everything, but 3%–5% on specific categories like groceries, gas, or dining. These pay more if your spending actually matches the categories — and less than a simple flat-rate card if it doesn’t.',
+      },
+      {
+        heading: 'The tracking trap: caps, rotating categories, and activation',
+        body: 'Many bonus-category cards cap how much elevated cash back you can earn. A common structure is 5% back on a category up to a set amount of spending per quarter (for example, the first $1,500 in combined bonus-category purchases), and just 1% on anything beyond that cap. Spend past it without noticing, and the rest of the quarter quietly reverts to the lowest rate.\n\nSome cards go further and rotate their bonus categories every quarter — gas one quarter, groceries the next — and require you to manually activate the new category online or in the app before purchases count. Forget to activate, and you earn the base rate all quarter even though the card was advertised as 5% back. A flat-rate card with no categories to manage is a completely reasonable trade-off for anyone who doesn’t want a recurring calendar reminder just to earn full rewards.',
+      },
+      {
+        heading: 'Sign-up bonuses: the biggest reward is the first one',
+        body: 'The single largest reward most people will ever earn from a credit card isn’t the ongoing cash back — it’s the welcome bonus for opening the card, often several hundred dollars in value for hitting a minimum spending requirement within the first few months (a common structure is something like "spend $500 in the first 3 months"). Done naturally, with spending you were going to do anyway, that bonus is close to free money.\n\nThe trap is spending more than you normally would just to "hit the bonus" — buying things you didn’t need, or putting spending on the card that you can’t actually pay off by the due date. A $200 bonus earned by carrying a $500 balance at 24% APR for a few months can cost more in interest than the bonus was worth. The bonus only pays off if the spending required to earn it was going to happen anyway.',
+      },
+      {
+        heading: 'Are credit card rewards taxable?',
+        body: 'This surprises people: cash back and points earned from spending are generally treated by the IRS as a rebate or discount on your purchase, not as income — so you don’t owe tax on the 2% you earned buying groceries, no matter how much you rack up in a year.\n\nSign-up bonuses work the same way as long as they require you to actually spend money to earn them (like "spend $500, get $200"). The exception is a bonus you get just for opening an account with no spending required — banks sometimes issue a 1099 for those, since the IRS treats a no-strings-attached bonus as income rather than a rebate on a purchase you made.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Only chase rewards if you already pay your statement balance in full every month — otherwise interest erases the reward many times over.\n2. As a first card, a simple flat-rate cash back card (no annual fee, no categories to track) usually beats a complicated points card.\n3. Before applying for a category card, check the spending caps and whether categories need to be manually activated each quarter.\n4. Only spend toward a sign-up bonus with money you were already going to spend — never stretch your budget just to hit the minimum.\n5. Compare an annual-fee card’s rewards rate against a no-fee card honestly — the fee has to be earned back in extra rewards before the card is actually ahead.\n6. Don’t assume rewards are taxable income — spending-based cash back and points generally aren’t, though no-spend account-opening bonuses sometimes are.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Are credit card rewards actually worth it?',
+        a: 'Only if you pay your statement balance in full every month. A 24% APR on even a small carried balance costs far more in interest than a 1.5%–2% cash back rate earns back, so rewards are a real benefit for disciplined spenders and a losing trade for anyone who carries debt.',
+      },
+      {
+        q: 'Is cash back better than travel points?',
+        a: 'For most beginners, yes — cash back is simple and its value never fluctuates. Points and miles can be worth more per point if redeemed carefully for travel, but their value swings widely by redemption method, and it’s easy to redeem them for far less than they’re "worth" on paper.',
+      },
+      {
+        q: 'Do you have to pay taxes on credit card cash back?',
+        a: 'Generally no. The IRS treats cash back and points earned from spending as a rebate on a purchase, not taxable income. The exception is a bonus you receive just for opening an account with no spending requirement, which can sometimes be reported as income.',
+      },
+      {
+        q: 'Is it worth paying an annual fee for a rewards card?',
+        a: 'Only if the extra rewards and perks you’ll actually use are worth more than the fee. Run the math on your real spending first — a $95 annual fee needs to be earned back in higher rewards rates or perks before the card comes out ahead of a no-fee alternative.',
+      },
+    ],
+  },
 ]
