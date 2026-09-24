@@ -4000,4 +4000,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-a-credit-builder-loan-work',
+    title: 'How Does a Credit Builder Loan Work?',
+    metaTitle: 'How Does a Credit Builder Loan Work? A Beginner’s Guide',
+    description:
+      'A credit builder loan locks your own money away first, then pays it back later — backwards, but one of the fastest, cheapest ways to build credit from zero.',
+    date: '2026-09-24',
+    category: 'Credit',
+    intro:
+      'A credit builder loan is a loan where you never actually get the money upfront — you make payments first, and the lender hands you the cash (or most of it) at the end. It sounds backwards, but for someone with no credit history at all, it’s one of the fastest, cheapest ways to build a real credit score. Here’s exactly how the mechanic works, what it costs, and how to tell a good one from a bad one.',
+    sections: [
+      {
+        heading: 'The mechanic: you’re borrowing money you can’t spend yet',
+        body: 'A credit builder loan flips a normal loan inside out. With a regular loan, the bank hands you cash today and you pay it back over time. With a credit builder loan, the "loan" amount — usually somewhere between $300 and $1,000 — gets deposited into a locked savings account the moment you’re approved. You never touch it. Instead, you make fixed monthly payments (principal plus interest) for a set term, typically 6 to 24 months. Once you’ve paid the whole thing off, the lender unlocks the account and hands you the money, minus whatever interest and fees you paid along the way.\n\nSo functionally, you’re not "borrowing" in the way most people picture it — you’re forcing yourself to save on a schedule, while the lender reports every one of those payments to the credit bureaus as if it were a real loan. Because it is one.',
+      },
+      {
+        heading: 'How it actually moves your credit score',
+        body: 'Two ingredients matter most for a credit score with no history: payment history (the single biggest factor in most scoring models) and credit mix (a smaller but real factor). A credit builder loan hits both at once. Every on-time payment gets reported to Equifax, Experian, and TransUnion as a positive mark on an installment loan — a different loan type than a credit card, which is where the "mix" benefit comes from.\n\nBecause the loan reports monthly, a score can start to appear within a reporting cycle or two of opening one, and many first-time borrowers go from no score at all to a decent starting score by the end of a 12-month term — assuming every payment was on time. One missed or late payment reports just as visibly as an on-time one, and it can do real damage precisely because there’s no other history yet to absorb the hit.',
+      },
+      {
+        heading: 'Credit builder loan vs. secured credit card',
+        body: 'These are the two most common "start from zero" tools, and people mix them up. A secured credit card requires you to put down a cash deposit upfront — often $200 to $500 — that becomes your credit limit, and you get to spend against it immediately while it reports every month like a normal card. A credit builder loan works in the opposite direction: no upfront cash from you, no spending power at all, just fixed payments that unlock a lump sum at the end.\n\nThey’re not competitors — they build different parts of your credit file (installment vs. revolving), and plenty of people use both at once, since credit mix rewards having more than one type. If you need to actually spend on credit day to day, a secured card fits better. If you want a forced-savings tool that doubles as credit building, the loan fits better.',
+      },
+      {
+        heading: 'What it actually costs — the APR looks scarier than the dollar cost',
+        body: 'Credit builder loan APRs can look alarming — commonly in the high single digits to mid-teens, sometimes higher depending on the lender. But because the loan amount is small and the term is short, the actual dollar cost is usually modest. A $500 loan over 12 months at around 10% APR often costs somewhere in the ballpark of $25–$30 in total interest, not $50 — because you’re paying down the balance the whole time, the same way any amortizing loan works.\n\nWatch for two costs beyond interest: some lenders charge a flat origination or administrative fee (commonly $10–$25) regardless of how the loan performs, and a few programs pay little to no interest on the locked savings itself, meaning your money sits there earning nothing while you pay to access it later. Read the fee schedule before signing — the best programs are transparent about the total dollar cost, not just the advertised APR.',
+      },
+      {
+        heading: 'Where to find a legitimate one',
+        body: 'Credit unions and community banks have offered credit builder loans for decades, often with lower fees than newer apps since they’re not chasing venture-scale profit on a small loan. Several fintech apps also offer them entirely online, sometimes with no credit check required to open one — useful if your file is too thin to qualify for much else.\n\nBefore opening one anywhere, confirm two things directly with the lender: that payments are reported to all three bureaus (some only report to one or two, which weakens the benefit), and what happens if you need to close the loan early — some refund your paid-in balance minus fees, others penalize an early exit more heavily.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm the lender reports to all three credit bureaus — Equifax, Experian, and TransUnion — not just one.\n2. Compare total dollar cost across lenders (interest plus fees), not just the advertised APR.\n3. Pick a loan amount and term you can comfortably pay every single month — one missed payment can outweigh months of on-time progress.\n4. Set up autopay so a payment never slips by accident.\n5. Check whether the locked savings earns any interest while it sits there — some programs pay a small return, others pay nothing.\n6. Pair it with a secured credit card if you can — installment plus revolving history together builds a stronger file than either alone.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Compound Interest', 'Federal Reserve', 'Liquidity'],
+    faq: [
+      {
+        q: 'Is a credit builder loan worth it?',
+        a: 'For someone with no credit history, generally yes — the cost is usually small and it directly builds two of the biggest factors in a credit score: payment history and credit mix. It’s less useful once you already have an established file from other accounts.',
+      },
+      {
+        q: 'How fast does a credit builder loan raise your score?',
+        a: 'Most lenders report monthly, so a score can appear within a reporting cycle or two of opening one — but building a strong score takes the full term of on-time payments, commonly 6 to 24 months. There’s no shortcut; the "builder" part is the on-time payments themselves.',
+      },
+      {
+        q: 'What happens if I miss a payment on a credit builder loan?',
+        a: 'It gets reported as a late payment just like any other loan, which can hurt your score meaningfully — especially since you likely don’t have other history yet to offset it. Autopay is the easiest way to avoid this.',
+      },
+      {
+        q: 'Do I get my money back at the end of a credit builder loan?',
+        a: 'Yes — once you finish paying it off, the lender releases the locked balance to you, minus the interest and any fees you paid along the way. You end up with a modest chunk of savings and a completed loan on your credit report.',
+      },
+    ],
+  },
 ]
