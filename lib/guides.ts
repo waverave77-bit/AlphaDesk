@@ -4056,4 +4056,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-factors-determine-your-credit-score',
+    title: 'What Determines Your Credit Score? The 5 Factors, Ranked by Weight',
+    metaTitle: 'The 5 Factors That Make Up Your Credit Score, Explained',
+    description:
+      'Your credit score isn’t random — it’s five weighted factors, and two of them matter way more than the rest. Here’s the actual breakdown and what to focus on first.',
+    date: '2026-09-25',
+    category: 'Credit',
+    intro:
+      'Everyone tells you to "build credit" and "watch your utilization," but almost nobody explains that a credit score is really just a weighted average of five separate categories — and two of them matter more than the other three combined. Here’s the actual breakdown FICO uses, ranked from most to least important, so you know exactly where to put your attention.',
+    sections: [
+      {
+        heading: 'Payment history (~35%) — by far the biggest piece',
+        body: 'Whether you’ve paid your bills on time is the single heaviest factor in most credit scoring models, commonly cited around 35% of a FICO score. This covers every account that reports to the bureaus — credit cards, auto loans, student loans, even some phone and utility accounts if they report. A single late payment usually isn’t reported until it’s about 30 days past due, but once it hits that mark it can knock a meaningful chunk off your score, and the damage gets worse the longer it goes unpaid (30, 60, 90+ days are tracked separately and hit harder each step). A bankruptcy or an account sent to collections is the most severe version of this category and can weigh on your score for years.\n\nThere’s no trick here — the entire category is just "did you pay what you owed, when you owed it." Automating minimum payments on every account is the single highest-leverage thing you can do for your score.',
+      },
+      {
+        heading: 'Amounts owed / credit utilization (~30%) — how much of your limit you’re using',
+        body: 'This category looks at how much of your available revolving credit you’re actually using, most importantly your overall credit utilization ratio: total balances divided by total credit limits, across all your cards. The commonly cited rule of thumb is to stay under 30% utilization, and under 10% is generally considered even better for a top-tier score. The catch most people miss: this number is usually calculated from whatever balance is sitting on your account on your statement closing date — not whether you carry a balance month to month or pay it off in full. You can pay your card off completely every month and still show high utilization if you happened to charge a lot right before the statement cut.\n\nIf your utilization looks high, paying down the balance before the statement closes (not just before the due date) is the fastest lever you have.',
+      },
+      {
+        heading: 'Length of credit history (~15%) — why this one just takes time',
+        body: 'This factor looks at the age of your oldest account, the age of your newest account, and the average age across all of them. It’s the one category you genuinely cannot rush — there’s no strategy that substitutes for time. This is also exactly why teenagers and young adults tend to have lower scores than older adults with identical payment habits: it’s not a penalty for anything you did wrong, it’s just math based on how long your file has existed.\n\nThe practical takeaway: keep your oldest account open, even if you stop using it regularly. Closing your first-ever credit card doesn’t erase its history immediately, but it will eventually stop counting toward your average age once it drops off your report — quietly working against a factor you spent years building.',
+      },
+      {
+        heading: 'Credit mix (~10%) — small, and not worth forcing',
+        body: 'Scoring models give a modest amount of credit for successfully managing different types of credit — revolving accounts (credit cards) and installment accounts (auto loans, student loans, a credit builder loan) at the same time. It shows a scoring model that you can handle more than one kind of obligation responsibly.\n\nBecause this is only about 10% of the total score, it’s not worth taking out a loan you don’t need or paying interest on debt purely to "diversify" your file. If you naturally end up with a mix — a credit card plus a student loan, say — you’ll get some credit for it. Chasing this factor on its own is usually not worth the cost.',
+      },
+      {
+        heading: 'New credit (~10%) — recent inquiries and freshly opened accounts',
+        body: 'This category tracks how many hard inquiries you’ve had recently and how many new accounts you’ve opened. Each hard inquiry (applying for a real card or loan, not checking your own score) typically costs somewhere around five points, and opening several new accounts in a short window can look risky to a lender even if each individual application was reasonable on its own. This is the smallest of the five factors, and its effect on your score fades well before the inquiry itself disappears from your report.\n\nSpacing out applications — rather than applying for multiple cards in the same month — keeps this category from dragging on an otherwise strong file.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Automate at least the minimum payment on every account — payment history is worth more than every other factor combined, roughly speaking.\n2. Pay down credit card balances before the statement closing date, not just before the due date, to lower reported utilization.\n3. Keep your oldest account open, even unused, to protect your average length of credit history.\n4. Don’t open a loan or card purely to "improve your mix" — it’s a 10% factor, not worth paying interest for.\n5. Space out new credit applications by a few months instead of applying for several accounts back-to-back.\n6. Check your full credit report (not just your score) at least once a year for errors — a mistake in any of these categories can drag your score down for reasons that aren’t actually your fault.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'What is the most important factor in your credit score?',
+        a: 'Payment history, commonly cited at around 35% of a FICO score — more than any other single category. Paying every bill on time, every time, is the highest-leverage thing you can do for your score.',
+      },
+      {
+        q: 'What percentage of your credit score is utilization?',
+        a: 'Amounts owed — mostly your credit utilization ratio — is commonly cited at around 30% of a FICO score, the second-largest factor behind payment history.',
+      },
+      {
+        q: 'Does closing a credit card hurt your credit score?',
+        a: 'It can, mainly by shortening your average length of credit history and reducing your total available credit (which raises your utilization ratio). This effect tends to matter most for your oldest or highest-limit card.',
+      },
+      {
+        q: 'Is a 700 credit score good?',
+        a: 'Generally yes. On the common 300–850 FICO scale, scores are often grouped roughly as: below 580 poor, 580–669 fair, 670–739 good, 740–799 very good, and 800+ exceptional — so 700 lands solidly in the "good" range, though exact cutoffs vary slightly by lender and scoring model.',
+      },
+    ],
+  },
 ]
