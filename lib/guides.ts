@@ -4112,4 +4112,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-calculate-your-net-worth-in-your-20s',
+    title: 'How Do You Calculate Your Net Worth in Your 20s (and Why It’s Often Negative)?',
+    metaTitle: 'How to Calculate Your Net Worth in Your Teens or 20s',
+    description:
+      'Net worth isn’t your income — it’s assets minus liabilities. Here’s exactly what counts, why a negative number is normal early on, and how to track it.',
+    date: '2026-09-26',
+    category: 'Saving',
+    intro:
+      'Everyone talks about net worth like it’s some milestone number to hit, but almost nobody explains what actually goes into it — or why a huge share of people in their early 20s have a negative one and are still doing everything right. Here’s exactly what counts as an asset, what counts as a liability, and how to track the number without it wrecking your week every time the market dips.',
+    sections: [
+      {
+        heading: 'What net worth actually means — and what it doesn’t',
+        body: 'Net worth is one number: everything you own minus everything you owe. Add up your assets — cash, investments, anything with real resale value — then subtract your liabilities — credit card balances, loans, anything you owe someone else. Whatever’s left is your net worth. It can be positive, it can be negative, and either one is just information, not a verdict on you as a person.\n\nIt’s also a completely different number from your income. A doctor earning $250,000 a year with $300,000 in student loans and no savings can have a lower net worth than a barista earning $35,000 who’s been quietly investing $50 a paycheck for five years. Income is what flows in and out each month — cash flow. Net worth is the balance left standing after years of that flow. Confusing the two is how people end up feeling behind when they’re not, or ahead when they’re not.',
+      },
+      {
+        heading: 'What actually counts as an asset',
+        body: 'Assets are anything you own that has real, sellable value today — not what you paid for it or what you hope it’s worth someday. The big ones for most young adults: the balance in your checking and savings accounts, your brokerage account, your Roth IRA or 401(k) balance (specifically the vested portion — employer contributions you haven’t worked long enough to fully own yet don’t count), and the current resale value of a car, checked against an actual pricing guide rather than what you paid for it.\n\nWhat doesn’t count, even though it can feel like it should: your expected future salary, the “value” of your degree, or the retail price of clothes and electronics you own. Those things are real, but they’re not liquid — you can’t convert them to cash at anything close to what they’re worth to you, so most net worth trackers leave them out entirely.',
+      },
+      {
+        heading: 'What actually counts as a liability',
+        body: 'A liability is any money you owe, no matter who you owe it to. That includes credit card balances (the full statement balance, not just the minimum due), federal and private student loans, an auto loan balance, a Buy Now, Pay Later installment plan, and even money borrowed from family if you’re genuinely expected to pay it back.\n\nOne detail people get wrong: for a loan like a car loan, the liability is the remaining balance you owe today, not the original amount you borrowed. Take out a $20,000 car loan and pay it down to $13,000 over two years, and your liability today is $13,000 — the $7,000 you’ve already paid off is gone from both sides of the equation.',
+      },
+      {
+        heading: 'Why a negative net worth in your teens and 20s is normal, not a red flag',
+        body: 'Add up federal and private student loans — often tens of thousands of dollars for a four-year degree — against a bank account that might have a few thousand dollars in it, and the math comes out negative for a huge share of people in their late teens and twenties. That’s not a personal failure; it’s the predictable result of borrowing money for something that pays off over decades, not instantly.\n\nWhat actually matters at this age isn’t the number itself — it’s the direction it’s moving. A net worth of -$15,000 that improves by $3,000 a year because you’re paying down debt and starting to save is in a completely different position than the same -$15,000 that gets worse every year. Track the trend, not the snapshot.',
+      },
+      {
+        heading: 'How often to actually check it — and the trap to avoid',
+        body: 'Once a quarter is plenty for most people, monthly at most. Checking daily or weekly turns a long-term measurement into a source of anxiety, especially once you own any stocks or funds, because the market moves your “number” up and down constantly for reasons that have nothing to do with your actual financial habits.\n\nThe simplest approach: keep a spreadsheet, or use the free net worth tracker built into most banking and investing apps, with two columns — assets and liabilities — and update it on the same day every quarter. Watching the total move over a year or two, not a single day, is the entire point.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. List every account with real cash value — checking, savings, brokerage, Roth IRA, vested 401(k) — and add up the balances.\n2. Add the current resale value of anything big you own outright, like a car, using an actual pricing guide rather than what you paid.\n3. List every debt you owe — credit cards, student loans, auto loan, BNPL plans — using today’s remaining balance, not the original amount borrowed.\n4. Subtract total liabilities from total assets. Negative is a completely normal starting point, especially with student loans.\n5. Recalculate on the same day every quarter, and track the number over time instead of reacting to any single update.',
+      },
+    ],
+    relatedTerms: ['Portfolio', 'Compound Interest', 'Liquidity', 'Diversification'],
+    faq: [
+      {
+        q: 'What is considered a good net worth for someone in their 20s?',
+        a: 'There’s no single “good” number — it depends heavily on student debt, income, and cost of living. What matters more than hitting a benchmark is that your net worth is trending upward year over year as you pay down debt and start saving or investing.',
+      },
+      {
+        q: 'Is it normal to have a negative net worth in college or right after graduating?',
+        a: 'Yes — extremely common. Student loan balances alone put a large share of recent graduates in negative net worth territory before they’ve had any real time to save. It becomes a concern only if the trend keeps getting worse instead of improving.',
+      },
+      {
+        q: 'Does net worth include the value of a car or other stuff you own?',
+        a: 'It can include your car’s actual resale value (check a pricing guide, not what you paid), but most net worth calculations skip smaller depreciating items like clothes, furniture, or electronics since they’re not realistically convertible to meaningful cash.',
+      },
+      {
+        q: 'How is net worth different from income?',
+        a: 'Income is money flowing in over a period of time, like a paycheck. Net worth is a snapshot of everything you own minus everything you owe at one moment. It’s possible to have a high income and a low, or negative, net worth — or the reverse.',
+      },
+    ],
+  },
 ]
