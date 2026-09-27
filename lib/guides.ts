@@ -4168,4 +4168,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-public-service-loan-forgiveness-pslf-work',
+    title: 'How Does Public Service Loan Forgiveness (PSLF) Actually Work?',
+    metaTitle: 'Public Service Loan Forgiveness (PSLF) Explained: The Real Rules',
+    description:
+      'PSLF wipes out your remaining federal student loan balance after 120 qualifying payments in public service — but the rules are stricter than they sound. Here’s how it really works.',
+    date: '2026-09-27',
+    category: 'College Money',
+    intro:
+      'You heard that working for the government or a nonprofit for ten years gets your student loans forgiven, and it sounds almost too generous to be real. It is real — plenty of borrowers have had five- and six-figure balances wiped out — but PSLF has a reputation for rejecting people over technicalities that are easy to avoid if you know about them ahead of time. Here’s what actually counts, what doesn’t, and how to track your progress without getting burned a decade in.',
+    sections: [
+      {
+        heading: 'The basic deal: 120 payments, then the rest is forgiven',
+        body: 'Public Service Loan Forgiveness cancels whatever federal student loan balance you have left — principal and interest — after you’ve made 120 qualifying monthly payments (10 years’ worth) while working full-time for a qualifying employer. The payments don’t have to be consecutive: if you leave public service for a stretch and come back later, the payments you already made still count, they just stop piling up while you’re out.\n\nUnlike some other loan-discharge situations, the amount forgiven under PSLF is not treated as taxable income at the federal level — that exclusion is written into the law that created the program, not a temporary rule that could quietly expire. That’s a real, permanent advantage over some other forgiveness paths, where a canceled balance has sometimes counted as income.',
+      },
+      {
+        heading: 'Only Direct Loans qualify — and this trips up more people than anything else',
+        body: 'PSLF only counts payments made on federal Direct Loans (Direct Subsidized, Direct Unsubsidized, Direct PLUS, and Direct Consolidation Loans). Older FFEL Program loans and Perkins Loans don’t qualify on their own, even though they’re also federal money — a lot of borrowers who started college before Direct Loans became the standard have loans in this category without ever realizing it.\n\nThe fix, if this applies to you, is consolidating those older loans into a Direct Consolidation Loan. But it comes with a real cost: consolidating generally starts your qualifying-payment count over from zero on the newly consolidated loan. The earlier you check your exact loan types on studentaid.gov, the less progress you risk losing later.',
+      },
+      {
+        heading: 'What counts as a “qualifying employer” — and what doesn’t',
+        body: 'A qualifying employer is a government organization at any level — federal, state, local, or tribal — or a tax-exempt 501(c)(3) nonprofit. A narrower set of other nonprofits can also qualify if their primary purpose is a specific list of public services, but that category is worth confirming directly through the PSLF Help Tool rather than assuming.\n\nWhat doesn’t count: for-profit employers, labor unions, and partisan political organizations, no matter how public-service-oriented the actual work feels. It’s the employer’s tax status that matters, not your job title. You also generally need to work full-time — at least 30 hours a week or whatever your employer defines as full-time, whichever is greater — and multiple part-time public-service jobs can sometimes be combined to clear that bar.',
+      },
+      {
+        heading: 'You also need the right repayment plan',
+        body: 'A qualifying payment has to be made under a qualifying repayment plan — generally an income-driven repayment plan or the 10-year Standard Repayment Plan. In practice, almost nobody actually uses the Standard 10-year plan for PSLF, because that plan pays the loan off in full by year ten anyway, leaving nothing left to forgive. The entire benefit of PSLF depends on being on an income-driven plan that stretches payments out based on what you earn, so a balance is still sitting there at year ten to wipe out.\n\nThe payment amount matters too — it generally has to be the full amount due under your plan, made within a short window of the due date, for that month to count. A $0 monthly payment under an income-driven plan (common for lower earners early in a career) still counts as a qualifying payment, as long as it was genuinely the correct amount due that month.',
+      },
+      {
+        heading: 'Track it yourself — don’t assume your servicer is counting for you',
+        body: 'PSLF built up a reputation for denying a large share of applicants, and most of those denials trace back to the same handful of preventable issues — wrong loan type, wrong employer, wrong repayment plan, or missing paperwork — rather than genuine ineligibility. The best protection is submitting the PSLF form (through the PSLF Help Tool on studentaid.gov) every year and every time you change employers, instead of waiting until year ten to find out whether your years actually counted.\n\nSubmitting that form regularly does two things: it certifies your employment for that stretch of time, and it gives you a running, verified count of qualifying payments from the government itself — so if something is wrong, you find out with years left to fix it, not after a decade of assuming it was fine.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm your loans are Direct Loans on studentaid.gov — if you have FFEL or Perkins loans, look into consolidating early, since it generally resets your qualifying-payment count.\n2. Confirm your employer actually qualifies (government or 501(c)(3) nonprofit) using the PSLF Help Tool before counting on years of payments.\n3. Get on an income-driven repayment plan if you’re not already — the Standard 10-year plan leaves nothing left to forgive.\n4. Submit the PSLF form annually and every time you change jobs, rather than waiting until year ten to check.\n5. Keep your own records — pay stubs, employment certifications, confirmation of submitted forms — in case your servicer’s count is ever wrong.\n6. Don’t refinance federal loans into a private loan if PSLF is part of your plan — that move permanently forfeits eligibility.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'How many years of payments does PSLF require?',
+        a: '120 qualifying monthly payments — the equivalent of 10 years — made while working full-time for a qualifying government or nonprofit employer. The payments don’t need to be consecutive.',
+      },
+      {
+        q: 'Is PSLF forgiveness taxed as income?',
+        a: 'No. Unlike some other loan-discharge programs, the amount forgiven under PSLF is excluded from taxable income at the federal level by the law that created the program.',
+      },
+      {
+        q: 'Do private student loans qualify for PSLF?',
+        a: 'No. PSLF only applies to federal Direct Loans. Private loans, and older federal loan types like FFEL or Perkins loans, don’t qualify unless those older federal loans are first consolidated into a Direct Consolidation Loan.',
+      },
+      {
+        q: 'What happens if I switch jobs during my 120 payments?',
+        a: 'Nothing already earned is lost. If your new employer also qualifies, submit a new PSLF form to certify the new employment and keep counting. If you move to a non-qualifying employer, payments made during that stretch simply don’t count toward your 120 — but the qualifying payments you already made aren’t erased.',
+      },
+    ],
+  },
 ]
