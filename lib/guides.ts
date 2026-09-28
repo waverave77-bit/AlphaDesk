@@ -4224,4 +4224,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-fica-tax-why-is-it-taken-out-of-my-paycheck',
+    title: 'What Is FICA Tax and Why Is It Taken Out of Every Paycheck?',
+    metaTitle: 'What Is FICA Tax? Social Security & Medicare Withholding Explained',
+    description:
+      'FICA quietly takes 7.65% out of every paycheck before you see it. Here’s exactly where that money goes, the math behind it, and the student exemption most people miss.',
+    date: '2026-09-28',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You open your first paystub, and there it is — a line called "FICA" taking a bite out of your check before federal and state tax even get involved. It’s not a mistake, and it’s not optional. FICA is actually two separate taxes bundled together, and understanding the math behind it explains a lot about how Social Security and Medicare stay funded — and why your take-home pay is smaller than your hourly rate times your hours.',
+    sections: [
+      {
+        heading: 'FICA isn’t one tax — it’s two, bundled together',
+        body: 'FICA stands for the Federal Insurance Contributions Act, the law that funds Social Security and Medicare. It shows up as a single line on your paystub, but it’s really two separate programs: the Social Security portion pays retirement, disability, and survivor benefits, and the Medicare portion pays for health coverage once you turn 65 (or sooner if you become disabled).\n\nThis is completely separate from federal and state income tax, which fund general government spending and get calculated based on your W-4 and tax bracket. FICA is a flat percentage of your wages — it doesn’t care about your filing status, deductions, or how many jobs you have. Everyone with wage income pays the same rate.',
+      },
+      {
+        heading: 'The exact math: 7.65% out of your check, 15.3% total',
+        body: 'FICA breaks down into 6.2% for Social Security and 1.45% for Medicare — 7.65% combined, withheld directly from your gross pay. Your employer then matches that exact amount out of their own pocket, so the government actually collects 15.3% of your wages total. You just only see half of it on your paystub.\n\nSay you’re paid $800 on a biweekly check. Social Security takes $49.60, Medicare takes $11.60, and $61.20 disappears before you ever touch the money. The Social Security portion stops once your wages for the year cross an annual wage base cap that adjusts every year (it was $176,100 for 2025) — a threshold that matters for high earners but essentially never touches a teenager or first-job worker. The Medicare portion has no cap at all; it applies to every dollar you earn no matter how much.',
+      },
+      {
+        heading: 'Gig work and freelancing: you pay both halves yourself',
+        body: 'If you’re paid on a 1099 as a freelancer, rideshare driver, or gig worker instead of a W-2 employee, there’s no employer to split FICA with — so you owe the full 15.3% yourself through what’s called self-employment tax. On $10,000 of freelance income, that’s roughly $1,530 owed on top of regular income tax, which is why gig workers are told to set aside a real chunk of every payment for taxes instead of spending it all.\n\nThere’s a small offset: you get to deduct half of that self-employment tax when calculating your taxable income, which softens the blow slightly. But it’s still real money leaving your pocket that a W-2 employee never has to budget for directly, since their employer quietly covers the other half.',
+      },
+      {
+        heading: 'The exemption almost nobody knows about: student workers',
+        body: 'There’s a real, IRS-recognized exception called the student FICA exemption. If you’re enrolled at least half-time at a school and you work for that same school — think work-study, a library job, or an on-campus research position — your wages from that job can be exempt from FICA withholding entirely. Check your paystub: if there’s no Social Security or Medicare line being deducted from a campus job, this is usually why.\n\nThe exemption is specifically about the relationship between student and school — it generally doesn’t apply once you’re working full-time, once you’ve graduated, or at an off-campus job unrelated to your school. It also doesn’t affect income tax, which still applies normally. It’s a narrow rule, but it can mean a noticeably bigger paycheck for students working on campus.',
+      },
+      {
+        heading: 'Do you ever get this money back?',
+        body: 'Not the way you might expect. FICA isn’t like income tax withholding, where overpaying during the year gets refunded when you file — it goes straight into the Social Security and Medicare trust funds and isn’t sitting in a personal account with your name on it. You can’t withdraw it early, and there’s no line on your tax return that sends it back to you just because you didn’t use it this year.\n\nWhat it does buy you is eligibility. Every year you earn enough in wages, you accumulate up to four "credits" toward Social Security, and you generally need 40 credits — about ten years of steady work — to qualify for retirement benefits later. So even though it feels like money vanishing, it’s building toward a real, if distant, benefit.',
+      },
+      {
+        heading: 'Your checklist for reading FICA on a paystub',
+        body: '1. Find the two separate lines — often labeled "Social Security" or "OASDI," and "Medicare" — and add them together. Combined, they should equal about 7.65% of your gross pay.\n2. If you have a campus job and are enrolled at least half-time, check whether FICA is being withheld at all — you may qualify for the student exemption.\n3. If you freelance or do gig work, set aside roughly 15.3% of every payment for self-employment tax, separate from what you save for income tax.\n4. Don’t confuse FICA with federal or state income tax withholding — they’re separate lines funding completely different things.\n5. Remember FICA isn’t refundable like overwithheld income tax — treat it as a permanent, non-negotiable deduction, not a rate you can adjust on your W-4.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Is FICA the same thing as income tax?',
+        a: 'No. FICA funds Social Security and Medicare specifically, at a flat 7.65% rate matched by your employer. Income tax funds general government spending and is calculated separately based on your W-4, filing status, and tax bracket.',
+      },
+      {
+        q: 'Can you opt out of paying FICA tax?',
+        a: 'Generally no — it applies to almost all wage income. The main exceptions are narrow, recognized cases like the student FICA exemption for students working for the school they attend, certain religious groups, and some nonresident visa holders.',
+      },
+      {
+        q: 'Do employers really match my FICA contribution?',
+        a: 'Yes. Your employer pays an equal 7.65% out of their own funds on top of what’s withheld from your paycheck, so the government collects 15.3% of your wages total between the two of you.',
+      },
+      {
+        q: 'What happens to my FICA money if I never claim Social Security or Medicare?',
+        a: 'It isn’t refunded. FICA funds the Social Security and Medicare trust funds directly rather than a personal account, but paying into it builds the work credits you need to become eligible for retirement, disability, and Medicare benefits later.',
+      },
+    ],
+  },
 ]
