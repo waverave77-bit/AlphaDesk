@@ -4280,4 +4280,64 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-withdraw-money-from-a-roth-ira-before-retirement',
+    title: 'Can You Withdraw Money From a Roth IRA Before Retirement?',
+    metaTitle: 'Roth IRA Early Withdrawal Rules: Penalties, Exceptions & the 5-Year Rule',
+    description:
+      'Yes, but it depends what you’re pulling out — contributions or earnings. Here’s the 10% penalty, the 5-year rule, and the exceptions that let you skip it.',
+    date: '2026-09-29',
+    category: 'Investing',
+    intro:
+      'Short answer: yes — but what you actually get to keep tax- and penalty-free depends entirely on what you’re withdrawing, money you put in, or money it earned. Mix those two up and it turns into an expensive mistake. Here’s exactly how the IRS treats each one.',
+    sections: [
+      {
+        heading: 'Your contributions come out anytime, penalty-free',
+        body: 'A Roth IRA is funded with money you’ve already paid income tax on. Because of that, the IRS lets you withdraw your own contributions — the actual dollars you deposited — at any age, for any reason, with zero tax and zero penalty. You could open a Roth at 17, put in $2,000 from a summer job, and pull that same $2,000 back out at 19 for a car repair without owing the IRS anything.\n\nThis is what makes a Roth IRA unusual among retirement accounts. A 401(k) or traditional IRA generally locks up your money — touch it early and you’re paying taxes plus a penalty on the whole withdrawal. A Roth only restricts the part that’s actually growth.',
+      },
+      {
+        heading: 'Earnings are a different story — the 10% penalty',
+        body: 'Once you start withdrawing more than you contributed, you’re dipping into earnings — the gains your investments produced. Pull those out before you turn 59½, and in most cases you owe both regular income tax on the growth and a 10% early withdrawal penalty on top.\n\nExample: you contributed $5,000 total over a few years, and the account has grown to $6,500. Withdraw $5,000 or less, and it’s all penalty-free contributions. Withdraw the full $6,500, and that extra $1,500 of earnings gets hit with income tax plus a $150 penalty — unless an exception applies.',
+      },
+      {
+        heading: 'The IRS withdrawal order works in your favor',
+        body: 'You don’t get to choose whether a withdrawal counts as "contributions" or "earnings" — the IRS has a fixed ordering rule, and it happens to favor you. Every withdrawal is treated as coming from your contributions first, then any converted amounts, and only after both of those are fully drained does a withdrawal start touching earnings.\n\nPractically, this means a teenager or 20-something who’s only been contributing for a few years can withdraw a meaningful amount before ever hitting the taxable, penalized portion — because most of a young account’s balance is still original contributions, not years of compounding.',
+      },
+      {
+        heading: 'Exceptions that let you skip the 10% penalty on earnings',
+        body: 'Even on the earnings portion, the IRS carves out several situations where the 10% penalty doesn’t apply (you may still owe income tax on the earnings unless the account also meets the 5-year rule below). The most useful ones for young adults: up to $10,000 lifetime for a first-time home purchase, qualified higher-education expenses for yourself or a family member, a permanent disability, up to $5,000 per birth or adoption, unreimbursed medical expenses above a share of your income, and health insurance premiums while collecting unemployment. There are a few narrower exceptions too, like an IRS levy or the account owner’s death.\n\nThe first-time homebuyer exception is the one most 20-somethings actually use — it’s explicitly why the Roth IRA shows up in "how do I save for a house" conversations alongside pure retirement ones.',
+      },
+      {
+        heading: 'The 5-year rule — the part everyone forgets',
+        body: 'Separate from the age-59½ rule, your Roth IRA also has to have been open for at least 5 tax years (counting from January 1 of the year you made your first contribution) before earnings can come out completely tax- and penalty-free — even if you’re past 59½. Open your first Roth at 58, and you could still owe tax on earnings withdrawn at 60 if the account hasn’t hit its 5-year mark yet.\n\nThe upside for teens and college students: if you open a Roth at 16 or 18, this clock starts running decades before you’ll ever need the money, so the 5-year rule ends up being a non-issue by the time retirement actually arrives.',
+      },
+      {
+        heading: 'Why raiding it early still costs you, even when it’s technically "free"',
+        body: 'Withdrawing your own contributions doesn’t trigger a tax bill, but it isn’t actually free — you lose all the future compounding that money would have generated. At the stock market’s long-term average of roughly 10% per year, money doubles about every 7 years. Pull out $2,000 at 19 instead of leaving it invested, and you’re not just short $2,000 — you’re short the $16,000+ it could have grown into by retirement.\n\nA Roth IRA being flexible enough to raid in an emergency is a safety net, not a spending account. Treat the ability to withdraw contributions penalty-free as a last resort, not a feature you plan around.',
+      },
+      {
+        heading: 'Your checklist before withdrawing from a Roth IRA early',
+        body: '1. Check your total contributions to date (your brokerage statement or app usually separates "contributions" from "earnings").\n2. Confirm your withdrawal amount is at or below that contribution total — if so, it’s tax- and penalty-free.\n3. If you need more than you’ve contributed, check whether an exception applies (first home, education, disability) before assuming you’ll pay the 10% penalty.\n4. Know your account’s open date — that’s when your 5-year clock started.\n5. Before withdrawing anything, ask whether a smaller emergency fund or a short-term loan could cover the need instead, so your invested money keeps compounding.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Index', 'Portfolio'],
+    faq: [
+      {
+        q: 'Can you take your contributions out of a Roth IRA without a penalty?',
+        a: 'Yes. Because Roth contributions are made with after-tax money, you can withdraw the amount you contributed at any age, for any reason, without owing tax or a penalty.',
+      },
+      {
+        q: 'What is the Roth IRA 10% penalty for?',
+        a: 'It applies to withdrawals of earnings (investment growth, not your original contributions) taken before age 59½, unless you qualify for an exception like a first-time home purchase or qualified education expenses.',
+      },
+      {
+        q: 'What is the Roth IRA 5-year rule?',
+        a: 'Your account must have been open at least 5 tax years, starting January 1 of the year of your first contribution, before earnings withdrawals count as fully tax- and penalty-free — even after age 59½.',
+      },
+      {
+        q: 'Does withdrawing money from a Roth IRA hurt your credit score?',
+        a: 'No. Retirement account withdrawals aren’t reported to credit bureaus at all — credit scores are based on borrowing and repayment history, not savings or investment activity.',
+      },
+    ],
+  },
 ]
