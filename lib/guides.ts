@@ -4340,4 +4340,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-dispute-an-error-on-your-credit-report',
+    title: 'How Do You Dispute an Error on Your Credit Report?',
+    metaTitle: 'How to Dispute a Credit Report Error: Step-by-Step (Free, Legal Process)',
+    description:
+      'Found a wrong account or a late payment that isn’t yours? Here’s how to dispute a credit report error with each bureau, for free, and what happens in the 30-day window.',
+    date: '2026-09-30',
+    category: 'Credit',
+    intro:
+      'Short answer: you have a legal right to dispute it, it doesn’t cost anything, and you don’t need to hire anyone to do it for you. The company that reported the error has to prove it’s accurate — if they can’t, it comes off your file. Here’s exactly how the process works and how to keep it from dragging on for months.',
+    sections: [
+      {
+        heading: 'Start by pulling all three reports — not just one',
+        body: 'Equifax, Experian, and TransUnion each keep a separate file on you. A lender or landlord might only ever check one of them, so an error can sit unnoticed on a report you never see. You’re entitled to free copies from all three through AnnualCreditReport.com — the only site actually authorized under federal law to provide them at no cost. Anything else asking for a credit card number to “check your score” is a different product, not your official report.\n\nPull all three and compare them side by side. It’s common to find an error on one bureau’s version and not the other two, because furnishers (the banks, lenders, and collection agencies that report your activity) don’t always send updates to every bureau at the same time.',
+      },
+      {
+        heading: 'What actually counts as a disputable error',
+        body: 'A dispute has to be about factual accuracy, not something you simply don’t like. Legitimate grounds include: an account that isn’t yours (often a sign of identity theft or a mixed file where someone with a similar name or Social Security number got tangled up with your record), a late payment marked on a bill you actually paid on time, the same debt listed twice under different names, a wrong balance or credit limit, or an old negative item that should have aged off. Most negative information — late payments, collections, charge-offs — has to be removed after 7 years, and most Chapter 7 bankruptcies drop off after 10.\n\nWhat you can’t dispute successfully: an account that’s accurately reported just because the late payment was embarrassing, or a collections account you genuinely owe. The dispute process fixes mistakes — it isn’t a way to erase true, unflattering history.',
+      },
+      {
+        heading: 'How to actually file the dispute',
+        body: 'Each bureau lets you file online, which is fastest, but a written dispute sent by certified mail creates a paper trail that’s harder for anyone to lose or ignore. Include a copy of the report with the error circled, a short explanation of what’s wrong, and copies (never originals) of any supporting documents — a bank statement showing an on-time payment, a police report for identity theft, whatever proves your case.\n\nYou can dispute directly with the bureau, directly with the furnisher (the credit card company or lender that reported the info), or both at once. Disputing with both tends to resolve faster, since the furnisher has its own separate legal obligation under the Fair Credit Reporting Act to investigate once notified. Keep a copy of everything you send and the date you sent it.',
+      },
+      {
+        heading: 'The 30-day clock — and how it can stretch to 45',
+        body: 'Once a bureau receives your dispute, the Fair Credit Reporting Act requires it to investigate and respond within 30 days. The bureau forwards your dispute to the furnisher, who has to check its own records and report back. If the furnisher can’t verify the information is accurate, the bureau must remove or correct it. The 30-day window can extend to 45 days if you submit additional information after your initial dispute, so send everything relevant up front if you want the faster deadline to apply.\n\nAt the end of the investigation, the bureau has to send you the results in writing, along with a free updated copy of your report if anything changed.',
+      },
+      {
+        heading: 'What happens if they refuse to fix it',
+        body: 'If the investigation comes back saying the item is accurate but you still disagree, you can add a personal statement of up to 100 words to your file explaining your side — future lenders who pull your report will see it. You can also file a free complaint with the Consumer Financial Protection Bureau at consumerfinance.gov, which forwards it directly to the company involved and typically gets a written response within about 15 days. A CFPB complaint often gets faster attention than a second round of disputing with the bureau alone, because the company has to respond to a federal regulator, not just you.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pull free reports from all three bureaus at AnnualCreditReport.com and compare them.\n2. Circle only genuine factual errors — wrong accounts, wrong late marks, wrong balances, items past their 7- or 10-year removal date.\n3. File the dispute in writing (online or certified mail) with the bureau, the furnisher, or both, and attach supporting documents.\n4. Track the date you filed — the bureau owes you a written response within 30 days (45 if you added more info).\n5. If it’s not fixed, add a 100-word statement to your file and file a free complaint at consumerfinance.gov.\n6. Never pay a “credit repair” company to do this — the entire process is free and you can do every step yourself.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Counterparty Risk', 'Inflation'],
+    faq: [
+      {
+        q: 'Does disputing a credit report error cost money?',
+        a: 'No. Filing a dispute with a credit bureau or furnisher is free under federal law. You never need to pay a third-party “credit repair” company to do something you can do yourself for free.',
+      },
+      {
+        q: 'Does disputing an item hurt your credit score?',
+        a: 'No. Filing a dispute isn’t a credit inquiry and doesn’t appear on your report as an inquiry, so it has no direct effect on your score either way.',
+      },
+      {
+        q: 'How long does a credit report dispute take?',
+        a: 'The bureau generally has to complete its investigation and respond within 30 days of receiving your dispute, extendable to 45 days if you submit more supporting information during that window.',
+      },
+      {
+        q: 'Can you dispute a late payment that actually happened?',
+        a: 'No. Disputes are for factual inaccuracies. If the late payment genuinely occurred and is reported correctly, it can’t be removed just because it’s hurting your score — it will age off after about 7 years.',
+      },
+    ],
+  },
 ]
