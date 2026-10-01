@@ -3177,7 +3177,7 @@ export const GUIDES: Guide[] = [
     sections: [
       {
         heading: 'The short answer: yes, but only on “unearned” income, and only above a small threshold',
-        body: 'The kiddie tax is the informal name for a federal rule (officially the "Tax for Certain Children Who Have Unearned Income," filed on IRS Form 8615) that stops parents from parking large investments in a child’s name purely to get the child’s lower tax rate. It only applies to unearned income — dividends, interest, and capital gains from investments — not wages from a job.\n\nThe structure has three tiers. A small amount of unearned income each year (roughly $1,300, though this figure is adjusted for inflation annually, so check the current IRS number) is completely tax-free. The next similar-sized slice is taxed at the child’s own — usually very low — tax rate. Anything above that combined amount (roughly $2,600 total, again inflation-adjusted) gets taxed at the parent’s marginal tax rate, which is the whole point of the rule: it removes the incentive to shift big investment gains into a kid’s name to dodge tax.',
+        body: 'The kiddie tax is the informal name for a federal rule (officially the "Tax for Certain Children Who Have Unearned Income," filed on IRS Form 8615) that stops parents from parking large investments in a child’s name purely to get the child’s lower tax rate. It only applies to unearned income — dividends, interest, and capital gains from investments — not wages from a job.\n\nThe structure has three tiers. A small amount of unearned income each year (roughly $1,350, though this figure is adjusted for inflation annually, so check the current IRS number) is completely tax-free. The next similar-sized slice is taxed at the child’s own — usually very low — tax rate. Anything above that combined amount (roughly $2,700 total, again inflation-adjusted) gets taxed at the parent’s marginal tax rate, which is the whole point of the rule: it removes the incentive to shift big investment gains into a kid’s name to dodge tax.',
       },
       {
         heading: 'What counts as “unearned” income — and what definitely doesn’t',
@@ -3193,7 +3193,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'A concrete example',
-        body: 'Say a custodial account holding an S&P 500 index fund generates $3,600 in dividends and realized gains in one year. Using the rough thresholds above: the first ~$1,300 is tax-free. The next ~$1,300 is taxed at the child’s own low rate. The remaining ~$1,000 gets taxed at whatever marginal rate the parent pays on their own income — which could be notably higher than the child’s rate. The exact dollar-for-dollar tax bill depends on the parent’s bracket and the year’s official thresholds, but the shape of it is always the same: a small tax-free zone, a small low-rate zone, then parent-rate for the rest.',
+        body: 'Say a custodial account holding an S&P 500 index fund generates $3,600 in dividends and realized gains in one year. Using the rough thresholds above: the first ~$1,350 is tax-free. The next ~$1,350 is taxed at the child’s own low rate. The remaining ~$900 gets taxed at whatever marginal rate the parent pays on their own income — which could be notably higher than the child’s rate. The exact dollar-for-dollar tax bill depends on the parent’s bracket and the year’s official thresholds, but the shape of it is always the same: a small tax-free zone, a small low-rate zone, then parent-rate for the rest.',
       },
       {
         heading: 'Your checklist',
@@ -3909,7 +3909,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'The standard deduction: the one almost everyone already gets',
-        body: 'Every filer can take the standard deduction — a flat amount (a bit over $14,000 for a single filer, adjusted upward most years for inflation) that gets subtracted from your income automatically, no receipts required. The alternative is itemizing — adding up specific deductible expenses like mortgage interest, large medical bills, or charitable donations one by one — but itemizing only helps if those add up to more than the standard deduction, which is rare for young filers who rent, don’t have huge medical bills, and don’t donate large sums. For most people early in their career, the standard deduction wins without any extra paperwork.',
+        body: 'Every filer can take the standard deduction — a flat amount (a bit over $16,000 for a single filer, adjusted upward most years for inflation) that gets subtracted from your income automatically, no receipts required. The alternative is itemizing — adding up specific deductible expenses like mortgage interest, large medical bills, or charitable donations one by one — but itemizing only helps if those add up to more than the standard deduction, which is rare for young filers who rent, don’t have huge medical bills, and don’t donate large sums. For most people early in their career, the standard deduction wins without any extra paperwork.',
       },
       {
         heading: 'Refundable vs. nonrefundable credits — the detail that changes everything',
@@ -4241,7 +4241,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'The exact math: 7.65% out of your check, 15.3% total',
-        body: 'FICA breaks down into 6.2% for Social Security and 1.45% for Medicare — 7.65% combined, withheld directly from your gross pay. Your employer then matches that exact amount out of their own pocket, so the government actually collects 15.3% of your wages total. You just only see half of it on your paystub.\n\nSay you’re paid $800 on a biweekly check. Social Security takes $49.60, Medicare takes $11.60, and $61.20 disappears before you ever touch the money. The Social Security portion stops once your wages for the year cross an annual wage base cap that adjusts every year (it was $176,100 for 2025) — a threshold that matters for high earners but essentially never touches a teenager or first-job worker. The Medicare portion has no cap at all; it applies to every dollar you earn no matter how much.',
+        body: 'FICA breaks down into 6.2% for Social Security and 1.45% for Medicare — 7.65% combined, withheld directly from your gross pay. Your employer then matches that exact amount out of their own pocket, so the government actually collects 15.3% of your wages total. You just only see half of it on your paystub.\n\nSay you’re paid $800 on a biweekly check. Social Security takes $49.60, Medicare takes $11.60, and $61.20 disappears before you ever touch the money. The Social Security portion stops once your wages for the year cross an annual wage base cap that adjusts every year (it’s $184,500 for 2026) — a threshold that matters for high earners but essentially never touches a teenager or first-job worker. The Medicare portion has no cap at all; it applies to every dollar you earn no matter how much.',
       },
       {
         heading: 'Gig work and freelancing: you pay both halves yourself',
