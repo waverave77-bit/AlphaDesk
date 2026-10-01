@@ -4396,4 +4396,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-miss-a-credit-card-payment',
+    title: 'What Actually Happens If You Miss a Credit Card Payment?',
+    metaTitle: 'What Happens If You Miss a Credit Card Payment — Day by Day',
+    description:
+      'A missed credit card payment doesn’t hit all at once — there’s a late fee first, then a credit score hit, then a penalty APR, then collections. Here’s the real timeline.',
+    date: '2026-10-01',
+    category: 'Credit',
+    intro:
+      'You missed the due date on your credit card — maybe you forgot, maybe the money just wasn’t there. The good news: the consequences don’t all land on day one. The bad news: there’s a real clock running, and exactly where you are on it determines whether this costs you a small fee or follows you for years. Here’s the actual timeline, day by day.',
+    sections: [
+      {
+        heading: 'Days 1–29: a late fee, but your credit score is probably still safe',
+        body: 'The moment you’re past the due date, most issuers charge a late fee automatically — commonly somewhere in the $25–$40 range, with the exact cap set and adjusted periodically under federal rules. You’ll also lose your grace period: if you were carrying no balance before, interest can now start accruing on new purchases immediately instead of giving you an interest-free window.\n\nHere’s the part most people don’t know: issuers generally don’t report a late payment to the credit bureaus until it’s a full 30 days past due. So if you catch it and pay within the first few weeks, you’ll likely eat a fee and some interest, but your credit score usually never sees it. This is the cheapest possible version of a missed payment — and the window you want to hit every time.',
+      },
+      {
+        heading: 'Day 30: the point of no return for your credit score',
+        body: 'Once a payment is 30 days late, issuers typically report it to Equifax, Experian, and TransUnion as a "30 days past due" mark — and this is where real damage starts. How many points you lose depends heavily on where your score started: someone with a very good score (740+) tends to lose more points than someone with a fair score, because a late payment is a bigger surprise relative to a clean history. Either way, it’s a real, visible hit.\n\nThat 30-day late mark doesn’t just vanish once you pay — it sits on your credit report for up to 7 years from the date of the missed payment, even after the balance is paid in full. Paying the overdue amount stops things from getting worse, but it doesn’t erase the mark that’s already been reported.',
+      },
+      {
+        heading: 'Day 60: a penalty APR can kick in',
+        body: 'Under the federal CARD Act, once a payment is 60 days late, your issuer is legally allowed to hit you with a penalty APR — often significantly higher than your regular rate — and apply it not just to new purchases but to your existing balance too. This is on top of the 30- and 60-day late marks now stacking on your credit report, each one worse than the last (30, 60, 90+ days late are tracked as separate, increasingly severe categories).\n\nThere’s a legal path back, though: the same law requires issuers to review your account after 6 consecutive on-time minimum payments and consider restoring your original rate. It’s not automatic in every case, but it means a penalty APR isn’t necessarily permanent if you get current and stay current.',
+      },
+      {
+        heading: 'Around day 180: charge-off and collections — the deepest hole',
+        body: 'If a balance stays unpaid for about 180 days (roughly six months), the issuer typically "charges it off" — an accounting move where they write the debt off as a loss on their books. This does not mean you stop owing the money. Instead, the issuer usually sells the debt to a collections agency, which then has its own legal right to pursue you for it, and a new "collections account" shows up on your credit report as a separate, additional negative mark on top of the late payments that got you there.\n\nFrom here, consequences can escalate further: collections calls, a potential lawsuit over the debt, and in some states a judgment that allows wage garnishment. This is the version of a missed payment that genuinely reshapes your finances for years — which is exactly why the goal is to never let a missed payment ride past the first 30 days.',
+      },
+      {
+        heading: 'How to undo the damage — or stop it before it starts',
+        body: 'If you’re newly late, the single best move is just paying the full past-due amount immediately — stopping the clock before it hits 30, 60, or 180 days matters more than almost anything else you can do. If you’ve generally paid on time for a long stretch and this was a one-off slip, call the issuer and ask for a "goodwill adjustment" — a request to remove the late mark as a courtesy. It’s not guaranteed, but issuers grant these more often than people expect, especially for a first-time miss on an otherwise clean account.\n\nGoing forward, set up autopay for at least the minimum payment on every card you own. It costs nothing, and it removes the single most common cause of a missed payment: simply forgetting the date.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. If you’re under 30 days late, pay the full past-due balance now — you’ll likely only owe a fee, not a credit score hit.\n2. If you’re past 30 days, pay immediately anyway to stop further 60- and 90-day marks from stacking on top.\n3. After catching up, call your issuer and ask about a goodwill adjustment if this was a one-time slip on an otherwise good account.\n4. Set up autopay for at least the minimum payment on every card — this is the single best way to never have this problem again.\n5. If a debt reaches collections, get the agreement in writing before paying anything, and know that even a paid collections account stays on your report for years.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'How many days late can you be on a credit card before it hurts your credit score?',
+        a: 'Issuers generally don’t report a late payment to the credit bureaus until it’s a full 30 days past due. Pay within those first 30 days and you’ll likely only owe a late fee and some interest — your score usually stays untouched.',
+      },
+      {
+        q: 'Does a missed credit card payment ever come off your credit report?',
+        a: 'A late payment mark stays on your credit report for up to 7 years from the date it was missed, even after you pay the balance in full. Paying stops further damage — it doesn’t erase the mark that’s already there.',
+      },
+      {
+        q: 'What is a penalty APR?',
+        a: 'A higher interest rate — often well above your card’s normal rate — that issuers are allowed to apply once a payment is 60 days late, under the federal CARD Act. It can apply to your existing balance, not just new purchases, though issuers must reconsider it after 6 consecutive on-time payments.',
+      },
+      {
+        q: 'What happens if you never pay a missed credit card payment?',
+        a: 'Around 180 days of nonpayment, the issuer typically charges off the debt and often sells it to a collections agency, which adds a new negative mark to your report on top of the late payments and can pursue the debt through calls or even a lawsuit.',
+      },
+    ],
+  },
 ]
