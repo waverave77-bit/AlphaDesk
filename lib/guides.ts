@@ -4452,4 +4452,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'why-are-my-credit-scores-different-on-different-apps',
+    title: 'Why Are My Credit Scores Different on Every App?',
+    metaTitle: 'Why Your Credit Score Differs by App: FICO vs. VantageScore',
+    description:
+      'Credit Karma says 720, your bank app says 681, and your card issuer says something else entirely — none of them are wrong. Here’s why scores never match, and which one actually counts.',
+    date: '2026-10-02',
+    category: 'Credit',
+    intro:
+      'You check your score on three different apps in the same afternoon and get three different numbers — sometimes 30 or 40 points apart. It feels like one of them has to be lying to you. None of them are. You don’t have one credit score; you have dozens, built from different data and different math, and almost nobody explains that before handing you an app.',
+    sections: [
+      {
+        heading: 'There’s no single "real" score — there are two competing companies',
+        body: 'FICO (the Fair Isaac Corporation) has been scoring credit since 1989 and is still what most lenders actually pull when you apply for a mortgage, auto loan, or credit card. VantageScore is a newer competitor, created jointly by Equifax, Experian, and TransUnion in 2006, and it’s what powers most of the free "educational" scores you see inside banking apps and sites like Credit Karma.\n\nBoth land on a familiar 300–850 scale in their mainstream consumer versions, which is exactly why people assume they’re measuring the same thing. They’re not. They’re two separate companies with two separate formulas, built from overlapping but not identical data.',
+      },
+      {
+        heading: 'They don’t weight the same information the same way',
+        body: 'FICO famously breaks its score into five weighted categories — payment history, amounts owed, length of history, credit mix, and new credit, roughly in that order of importance. VantageScore uses a different model entirely, grouping factors into tiers like "extremely influential," "highly influential," and "moderately influential" rather than fixed percentages, and it can be more forgiving in places FICO isn’t.\n\nThe clearest example: VantageScore can generate a score for someone with as little as one month of credit history and a single reported account. Most FICO models traditionally need at least six months of history and one account that’s reported activity within the last six months. That’s why a brand-new credit user can sometimes see a VantageScore pop up on an app weeks before a FICO score would even exist for them.',
+      },
+      {
+        heading: 'Even the same formula gives different numbers at different bureaus',
+        body: 'Equifax, Experian, and TransUnion are three separate companies, and not every lender reports to all three. A store card might report only to one bureau; an old auto loan might have dropped off a second bureau’s file already. That means the same scoring formula, run on three different bureaus’ data, can easily produce three different numbers for the same person — commonly a 20-ish point spread even with no errors anywhere, and sometimes much more if an account is missing entirely from one file.\n\nThis is also why a mistake on your report (see our guide on disputing credit report errors) usually only shows up as a weird number on one bureau’s score, not all three — which is often the first clue something’s actually wrong versus just normal variation.',
+      },
+      {
+        heading: 'Even "FICO" isn’t one score — there are industry-specific versions',
+        body: 'FICO itself has released many versions over the decades, and the industry hasn’t moved on from all of them. FICO 8 is the most widely used general-purpose version, but mortgage underwriting rules set by Fannie Mae and Freddie Mac still require lenders to pull older versions — FICO 2, 4, or 5, depending on the bureau — when you apply for a home loan. Auto lenders often use a specialized "FICO Auto Score," and card issuers sometimes use a "FICO Bankcard Score" — both tuned to predict default risk for that specific type of debt, and both commonly scored on a wider 250–900 scale instead of 300–850.\n\nSo the "FICO score" your bank shows you and the FICO score an actual mortgage underwriter pulls six months later can be two legitimately different numbers, built from two different formulas, even from the exact same bureau on the exact same day.',
+      },
+      {
+        heading: 'What the free score in your app is actually for',
+        body: 'The score sitting in your banking app or Credit Karma is almost always a VantageScore pulled from one bureau, labeled "educational" for a reason — it’s a genuinely useful tool for watching your trend line move up or down over time, and it reacts to the same real behaviors (on-time payments, utilization, new accounts) that every scoring model cares about. What it isn’t is a guarantee of the exact number a lender will see. The gap between your app’s number and a lender’s pulled score is rarely a sign that anything is broken — it’s just two different rulers measuring the same thing slightly differently.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Stop hunting for the one "true" score — track the trend on whatever free score you can see, not the exact digit.\n2. Before a major application (mortgage, auto loan), ask the lender which bureau and score version they’ll pull, since it may differ from what your app shows you.\n3. Don’t panic over a 20–40 point gap between two legitimate scores — that’s normal cross-bureau and cross-model variation, not an error.\n4. If one bureau’s score is unusually far off the other two (50+ points), pull that bureau’s full report and check for a missing or incorrect account.\n5. Get your full credit reports (not just scores) from all three bureaus at least once a year through the official annualcreditreport.com, since the underlying data — not the score — is what you can actually dispute and fix.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Which credit score is the real one?',
+        a: 'There isn’t a single real one. FICO and VantageScore are separate companies with separate formulas, each bureau holds slightly different data, and even FICO has multiple industry-specific versions — so several different, legitimate scores can exist for you at the same time.',
+      },
+      {
+        q: 'Why is my Credit Karma score different from my bank’s score?',
+        a: 'They’re often both VantageScore, but pulled from different bureaus or on different dates, and the two bureaus may not have identical data on file for you yet — which alone can account for a meaningful point gap.',
+      },
+      {
+        q: 'Does checking my score on multiple apps hurt my credit?',
+        a: 'No. Checking your own score, on any number of apps, is a soft inquiry and never affects your credit score. Only a hard inquiry from an actual lender application can do that.',
+      },
+      {
+        q: 'Which score do mortgage lenders actually use?',
+        a: 'Typically an older FICO version (FICO 2, 4, or 5 depending on the bureau) required by Fannie Mae and Freddie Mac underwriting rules — pulled from all three bureaus, with lenders commonly using the middle of the three scores rather than the highest or lowest.',
+      },
+    ],
+  },
 ]
