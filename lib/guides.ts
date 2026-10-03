@@ -4508,4 +4508,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-are-rsus-how-are-they-taxed',
+    title: 'What Are RSUs, and How Are They Taxed When Your Job Gives You Stock?',
+    metaTitle: 'RSUs Explained: How Restricted Stock Units Are Taxed',
+    description:
+      'Your offer letter mentions RSUs on top of salary — here’s what that stock actually is, when the IRS taxes it, and the cost-basis mistake that makes people overpay.',
+    date: '2026-10-03',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You got an offer letter that lists salary, plus "4,000 RSUs vesting over 4 years," and it sounds like a bonus you don’t have to think about. It isn’t. RSUs are real income, taxed on a schedule you don’t control, and the one detail almost nobody explains upfront — cost basis — is the exact thing that causes people to accidentally pay tax on the same money twice.',
+    sections: [
+      {
+        heading: 'What an RSU actually is',
+        body: 'A Restricted Stock Unit is a promise from your employer to give you a set number of company shares in the future, as long as you’re still employed when the conditions are met. It’s not a stock option — with an option you’d have to pay a "strike price" to buy the shares. With an RSU, you pay nothing; you just have to wait, and the company grants the shares to you outright once they vest.\n\nThe word "restricted" refers to that waiting period. Until the shares vest, you don’t own them, can’t sell them, and they don’t count as your income yet. Get laid off or quit before a batch vests, and that unvested batch is simply forfeited — it was never really yours.',
+      },
+      {
+        heading: 'Vesting schedules: the calendar that controls when it becomes real',
+        body: 'A typical schedule is four years with a one-year "cliff" — nothing vests for the first 12 months, then a chunk vests all at once at the one-year mark, followed by smaller batches vesting monthly or quarterly for the remaining three years. Some companies front-load vesting (more in year one, less later); others spread it evenly. "Refresher" grants you get in later years layer on top, so a few years into a job it’s common to have several overlapping vesting schedules running at once.\n\nThe number that matters for taxes isn’t the number of shares you were granted — it’s the number that actually vest in a given year, and what those specific shares were worth on the day they vested.',
+      },
+      {
+        heading: 'The tax hit lands at vesting, not at grant, and not at sale',
+        body: 'The IRS treats the fair market value of your shares on the vesting date as ordinary income — taxed exactly like wages, stacked right on top of your salary for that pay period. It shows up on your W-2, and it’s subject to federal income tax, Social Security, Medicare, and any state income tax, the same deductions covered in our guide on why your paycheck is smaller than you calculated.\n\nMost employers handle the tax bill through "sell-to-cover": they automatically sell a portion of the shares that just vested — often enough to cover the IRS’s flat federal withholding rate on supplemental wages, commonly 22% for most employees — and deposit the rest of the shares into your brokerage account. The catch is that 22% is a default withholding rate, not necessarily your real tax rate. If your total income puts you in a higher bracket, that flat withholding usually undershoots what you actually owe, which is why a big vesting year can mean an unpleasant surprise — or an extra payment — when you file your return the following spring.',
+      },
+      {
+        heading: 'The cost-basis trap: don’t pay tax on the same dollars twice',
+        body: 'Once shares vest, you own them like any other stock, and if you eventually sell, you owe capital gains tax on whatever they gained (or lost) after vesting — not on the full sale amount. Your cost basis (the starting point for calculating that gain) is the fair market value on the day they vested, which was already taxed as income. Sell the shares the same day they vest, and in most cases there’s little or no additional gain to tax, since the sale price and the vesting-day value are close to identical.\n\nHere’s the trap: brokerages often report a cost basis of $0 (or just your original purchase price, if any) on the 1099-B they send you, because they don’t always track the income your employer already reported on your W-2. If you file using that $0 basis without correcting it, you’ll be taxed on the entire sale price as a capital gain — on top of the income tax you already paid at vesting. You have to manually adjust the basis on your tax return (or make sure your tax software does) to the fair market value at vesting, using records from your employer’s stock plan portal.',
+      },
+      {
+        heading: 'The question after vesting: hold the stock, or sell it?',
+        body: 'There’s no tax reason to hold vested RSU shares — you already paid income tax on their full value whether you keep them or sell immediately. From here it’s purely an investing decision, and the honest answer for most people is to sell most or all of it and reinvest the cash into a diversified index fund. Owning a large pile of your own employer’s stock means your paycheck, your bonus, your job security, and a chunk of your net worth are all riding on the same company — a textbook case of concentration risk. If that company has a bad year, you can lose your income and your portfolio value at the same time.\n\nSelling vested RSUs to diversify isn’t "giving up on the company" — it’s just not betting your whole financial life on one employer twice.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know your vesting schedule — mark the dates, since that’s when the tax bill (and the decision to sell or hold) actually happens.\n2. Expect roughly 22% federal withholding at vesting by default, and set aside extra cash if your income likely puts you above that bracket.\n3. When shares vest, treat the vesting-day value as already-taxed income, not free money.\n4. Before filing taxes after a sale, check your 1099-B’s cost basis against your employer’s stock plan records — correct it to the vesting-date value if it shows $0 or looks too low.\n5. Default to selling most vested shares and reinvesting into a diversified index fund rather than stacking up concentrated employer stock.',
+      },
+    ],
+    relatedTerms: ['Stock', 'Share', 'Concentration Risk', 'Diversification'],
+    faq: [
+      {
+        q: 'Are RSUs taxed when granted or when they vest?',
+        a: 'When they vest. Being granted RSUs isn’t a taxable event — you don’t own anything yet. The fair market value of the shares on the day each batch vests is taxed as ordinary income, added to your W-2 wages.',
+      },
+      {
+        q: 'Do I pay taxes twice on RSUs?',
+        a: 'You shouldn’t, but it’s a common mistake. The vesting-date value is taxed once as income. If you later sell, you only owe capital gains tax on additional gains after vesting — not the full sale price. The double-tax mistake happens when your cost basis isn’t corrected from the $0 that sometimes appears on your 1099-B.',
+      },
+      {
+        q: 'Should I sell my RSUs as soon as they vest?',
+        a: 'Many financial advisors lean toward selling most or all of it, since you’ve already paid income tax on the full value regardless of whether you keep the shares — holding on is a fresh investing bet on your own employer, not a tax strategy.',
+      },
+      {
+        q: 'What happens to unvested RSUs if I quit or get laid off?',
+        a: 'They’re typically forfeited. Unvested RSUs aren’t yours yet — most plans cancel any batch that hasn’t vested by your last day, though some severance agreements negotiate exceptions.',
+      },
+    ],
+  },
 ]
