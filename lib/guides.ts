@@ -4564,4 +4564,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-a-secured-credit-card-work',
+    title: 'How Does a Secured Credit Card Work, and Is It Worth It?',
+    metaTitle: 'Secured Credit Cards Explained: How They Work and When to Get One',
+    description:
+      'A secured credit card uses a refundable deposit as your credit limit. Here’s exactly how it builds credit, the fees to watch for, and how to get your deposit back.',
+    date: '2026-10-04',
+    category: 'Credit',
+    intro:
+      'You’ve got no credit history, so no one will approve you for a regular credit card — and you can’t build credit without one. A secured credit card is the way around that catch. You put down a deposit, the bank hands you a real credit card, and if you use it right, you graduate out of needing the deposit at all within a year or so. Here’s exactly how the mechanics work, and where people get tripped up.',
+    sections: [
+      {
+        heading: 'What a secured credit card actually is',
+        body: 'A secured credit card works like any other credit card — you swipe it, you get a bill, you owe a minimum payment — except it’s backed by a cash deposit you pay upfront, usually between $200 and $500 depending on the issuer. That deposit typically becomes your credit limit dollar for dollar: put down $300, get a $300 limit.\n\nThe deposit isn’t a fee. It sits in an account the bank controls, and it only gets touched if you stop paying. If you pay your bill like normal, the deposit just sits there as the bank’s insurance policy — and it comes back to you later. Compare that to an unsecured card, where the bank is trusting your credit history alone to get repaid. With no history yet, that trust doesn’t exist, so the deposit stands in for it.',
+      },
+      {
+        heading: 'How a deposit turns into real credit history',
+        body: 'This is the part people don’t expect: secured cards report to Equifax, Experian, and TransUnion exactly the same way unsecured cards do. Your payment history, your credit utilization, and the account’s age all get reported monthly, and FICO and VantageScore don’t apply any penalty or asterisk for the word "secured" on the card. A secured card paid on time every month for a year builds your score the same as an unsecured card paid on time every month for a year.\n\nThe only thing a secured card can’t do is raise your limit the way an unsecured card’s issuer might over time — your limit is tied to your deposit, so it stays flat unless you add more money or the issuer upgrades you.',
+      },
+      {
+        heading: 'Secured card vs. credit builder loan vs. authorized user',
+        body: 'All three are common first steps into credit, and they work differently. A secured card is revolving credit — you can carry a balance, pay it down, and use it again, which is exactly the kind of account mix (and utilization behavior) that scoring models reward. A credit builder loan flips the order: you "borrow" a small amount that sits locked in a savings account while you make fixed monthly payments, and you get the money (plus whatever interest it earned) at the end — useful, but it builds installment credit history, not revolving, and gives you nothing to spend in the meantime. Becoming an authorized user on a parent’s well-managed card can boost your score fastest with zero deposit required, but it depends entirely on someone else’s good habits and willingness to add you.\n\nFor most people with no credit file at all, a secured card is the most self-contained option: no cosigner needed, no dependence on someone else’s account, and it actually functions as a card you can use day to day.',
+      },
+      {
+        heading: 'Fees that quietly make a secured card a bad deal',
+        body: 'Your deposit is refundable — but plenty of secured cards also charge an annual fee, and a smaller number charge non-refundable account-opening or "processing" fees on top of the deposit. A $35 annual fee on a $300 limit is a real cost that a no-fee secured card from a major bank or credit union doesn’t charge, so it’s worth shopping before accepting the first offer that shows up in an ad.\n\nBe especially careful not to confuse a legitimate secured card with the subprime unsecured cards marketed to people with bad credit, which sometimes carry large upfront or monthly fees in exchange for a tiny limit and no deposit at all — those can cost more over a year than a secured card’s refundable deposit ever does. And like any credit card, secured cards charge interest (often in the 25–30% range) on any balance you don’t pay off by the due date, so the actual goal is to use it lightly and pay the statement balance in full every month, never just the minimum.',
+      },
+      {
+        heading: 'Getting your deposit back — how "graduating" works',
+        body: 'Most major issuers automatically review secured accounts after roughly 6 to 12 months of on-time payments. If your history looks good, they’ll either convert the account to an unsecured card and mail your deposit back, or close the secured card and open a new unsecured one in its place. Some issuers require you to call and ask rather than doing it automatically, so it’s worth checking in around the six-month mark instead of assuming it happens on its own.\n\nIf you close the secured card yourself instead of graduating it, you get the deposit back too, but you lose the account history that card was building — so it’s almost always better to wait for the upgrade than to close and reapply for something else.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Look for a secured card with no annual fee and a deposit you can actually afford — $200–$300 is typical at major banks and credit unions.\n2. Confirm the issuer reports to all three credit bureaus before applying (nearly all do, but it’s worth checking).\n3. Use it for one or two small recurring charges and pay the full statement balance every month — never carry a balance to "build credit faster," that’s a myth and it just costs you interest.\n4. Mark your calendar for month 6 and month 12 to check (or call) about graduating to an unsecured card and getting your deposit back.\n5. Once you graduate, keep the account open — it becomes your oldest piece of credit history, which matters for years afterward.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Counterparty Risk', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Does a secured credit card hurt your credit score?',
+        a: 'No, not on its own. It affects your score the same way any credit card does — through payment history and utilization. Paid on time with a low balance, it helps your score; carrying a high balance or missing payments hurts it, exactly like an unsecured card.',
+      },
+      {
+        q: 'How much money do you need for a secured credit card?',
+        a: 'Most secured cards require a refundable deposit between $200 and $500, which typically becomes your credit limit. Some issuers offer options as low as $49–$100 to start, with the option to add more later.',
+      },
+      {
+        q: 'Do you get your deposit back from a secured credit card?',
+        a: 'Yes, as long as you haven’t defaulted on the balance. You get it back either when the issuer upgrades you to an unsecured card after a good payment history, or when you close the account in good standing.',
+      },
+      {
+        q: 'Is a secured credit card better than a credit builder loan for building credit?',
+        a: 'Neither is strictly "better" — they build different parts of your credit profile. A secured card builds revolving credit history and gives you a usable card; a credit builder loan builds installment history and forces a savings habit. Many people benefit from eventually having both types of account.',
+      },
+    ],
+  },
 ]
