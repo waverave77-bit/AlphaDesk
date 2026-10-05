@@ -4620,4 +4620,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'money-market-account-vs-high-yield-savings-account',
+    title: 'Money Market Account vs. High-Yield Savings Account: What’s the Difference?',
+    metaTitle: 'Money Market Account vs. High-Yield Savings: Key Differences',
+    description:
+      'Both pay competitive interest and both are FDIC-insured — so what actually separates a money market account from a high-yield savings account? Here’s the real breakdown.',
+    date: '2026-10-05',
+    category: 'Saving',
+    intro:
+      'You’re comparing savings options and two of them look nearly identical: a "money market account" and a "high-yield savings account," both advertising a similar interest rate. They’re close cousins, not the same thing — and there’s a third, differently-named product that gets confused with both. Here’s what actually separates them and which one fits where you are right now.',
+    sections: [
+      {
+        heading: 'The core similarity: both are FDIC-insured bank accounts',
+        body: 'A money market account (MMA) and a high-yield savings account (HYSA) are both deposit accounts held at a bank or credit union, and both are typically insured up to $250,000 per depositor, per institution by the FDIC (or NCUA at credit unions). Neither one holds stocks, bonds, or anything that can lose value the way an investment does — your balance doesn’t fluctuate with the market. Both also pay interest well above what a traditional brick-and-mortar savings account offers, because online and mid-size banks compete harder for deposits than giant national banks with branches on every corner.\n\nAt a basic level, they solve the same problem: a safe place to park money you want growing a little faster than a 0.01% traditional savings account, without locking it away.',
+      },
+      {
+        heading: 'Where they actually differ: access and minimums',
+        body: 'The real-world difference shows up in how you get the money back out. A high-yield savings account is usually app-only — you move money by electronic transfer to a linked checking account, which can take one to three business days. A money market account more often comes with check-writing privileges and sometimes a debit card, giving you a faster, more direct way to spend from it, closer to how a checking account behaves.\n\nMoney market accounts also more commonly require a higher minimum balance to open or to earn the advertised rate — sometimes $1,000 or more — while many of the top HYSAs have no minimum at all and no monthly fee regardless of balance. Both types are still subject to a federal rule that technically limited savings-style withdrawals to six per month; most banks quietly stopped enforcing that limit a few years ago, but it’s worth checking the specific account’s current policy before assuming unlimited transfers.',
+      },
+      {
+        heading: 'Don’t confuse either one with a money market fund',
+        body: 'This is where most of the confusion actually happens. A money market account (at a bank) is completely different from a money market fund (at a brokerage, like Fidelity or Schwab). A money market fund is a mutual fund that invests in very short-term, low-risk debt — things like Treasury bills — and while it’s historically very stable, it is technically an investment, not a deposit account, and it is not FDIC-insured. Money market funds are the default place uninvested cash sits inside a brokerage account, and their yield moves closely with short-term interest rates set by the Federal Reserve.\n\nIf you see "money market" attached to a brokerage account rather than a bank account, you’re looking at a fund, not an insured deposit — the names overlap but the protections don’t.',
+      },
+      {
+        heading: 'Which rate actually wins?',
+        body: 'There’s no permanent winner — rates on both products are variable and move with the Federal Reserve’s target interest rate, so whichever one is paying more this month can flip in six months. In practice, top-paying HYSAs and top-paying MMAs tend to land within a fraction of a percentage point of each other at any given time, because they’re competing for the same deposits. The bigger driver of your actual return is which specific bank you pick, not which product category you pick — a mediocre HYSA can easily pay less than a competitive MMA, and vice versa.\n\nThe smarter question usually isn’t "which product pays more" but "which features do I need" — check-writing and debit access, or a lower minimum balance and a simpler app.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm the account is FDIC-insured (or NCUA-insured at a credit union) before depositing anything — this should be stated clearly on the bank’s site.\n2. Compare the actual APY (annual percentage yield) between a few online banks rather than assuming either product category automatically wins.\n3. Check the minimum balance to open and the minimum to earn the top rate — some accounts pay a much lower rate below a certain balance.\n4. If you’ll need to write checks or swipe a debit card from this money regularly, lean toward a money market account; if you just want to move money to checking when needed, a HYSA is usually simpler and fee-free.\n5. Keep this money separate from a brokerage account’s money market fund — same name, very different product, and only the bank account carries deposit insurance.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Inflation', 'Compound Interest', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Is a money market account safer than a high-yield savings account?',
+        a: 'Neither is safer than the other — both are FDIC-insured bank deposit accounts (up to $250,000 per depositor, per institution), so your principal is protected the same way in either one. The difference is in features like check-writing access and minimum balances, not safety.',
+      },
+      {
+        q: 'Can you lose money in a money market account?',
+        a: 'Not in a bank money market account — it’s an insured deposit, not an investment, so your balance doesn’t drop with the market. A money market fund at a brokerage is different: it’s an investment and isn’t FDIC-insured, though it’s historically very stable.',
+      },
+      {
+        q: 'Do money market accounts pay more interest than savings accounts?',
+        a: 'Not reliably — rates on both move with the Federal Reserve’s benchmark rate, and the specific bank you choose matters more than the product category. Compare actual APYs across a few online banks rather than assuming one type automatically pays more.',
+      },
+      {
+        q: 'What’s the difference between a money market account and a money market fund?',
+        a: 'A money market account is a bank deposit account and is FDIC-insured. A money market fund is a brokerage investment that holds short-term debt like Treasury bills — it’s not a deposit and isn’t FDIC-insured, even though the name sounds nearly identical.',
+      },
+    ],
+  },
 ]
