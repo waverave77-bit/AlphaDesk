@@ -4672,4 +4672,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-on-money-your-parents-give-you',
+    title: 'Do You Have to Pay Taxes on Money Your Parents Give You?',
+    metaTitle: 'Do You Pay Taxes on Money Your Parents Gift You?',
+    description:
+      'Your parents handed you a few thousand dollars — do you owe the IRS anything? Here’s how gift tax actually works, and who really pays it.',
+    date: '2026-10-07',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your parents just handed you $5,000 for a car, or your grandma wired $10,000 toward tuition, and now you’re wondering if the IRS wants a cut. Good news: as the person receiving a gift, you almost certainly owe nothing — the rules work very differently than you’d expect, and the tax bill (if there is one at all) usually isn’t yours to worry about.',
+    sections: [
+      {
+        heading: 'The short answer: gift tax is the giver’s problem, not yours',
+        body: 'In the US, gift tax is paid — if it’s ever paid at all — by the person giving the money, not the person receiving it. If your parents, grandparents, or anyone else hands you cash, pays for your car, or wires you tuition money, that’s a gift, and gifts are not taxable income to you. You don’t report it on your tax return, you don’t owe income tax on it, and in the vast majority of cases nobody owes any tax on it at all.\n\nThis surprises people because it feels like "free money" should be taxed somehow. It isn’t, because the government already taxed that money once — when the giver earned it. Taxing it again when it changes hands would be double-dipping.',
+      },
+      {
+        heading: 'How much can someone give you before anyone has to file paperwork?',
+        body: 'The IRS allows any one person to give any other person up to a set amount per year without any tax form being required at all — $19,000 per recipient for the 2025 tax year, and the number typically ticks up slightly most years to keep pace with inflation. That limit is per giver, per recipient, per year — so two parents can jointly give you up to double that amount, and grandparents can each give you their own separate amount on top of that, all without anyone filing anything.\n\nFew families ever bump into this limit in a single year. A $5,000 gift for a car or a $10,000 check toward your first semester of tuition sits comfortably below it.',
+      },
+      {
+        heading: 'What happens if a gift goes over the limit?',
+        body: 'Going over the annual exclusion doesn’t automatically create a tax bill — it just means the giver has to file IRS Form 709 to report it. The amount above the yearly limit then gets subtracted from the giver’s lifetime gift and estate tax exemption, which is well over $13 million per person. Almost nobody actually exhausts that lifetime exemption, so in practice, even a generous gift that technically requires a form rarely results in any actual tax owed by anyone, giver or receiver.\n\nThere are a couple of common exceptions that skip the exclusion entirely and don’t count against anyone’s limit: money paid directly to a school for tuition, and money paid directly to a medical provider for someone’s healthcare. Those have to go straight to the institution, not through your bank account, to qualify.',
+      },
+      {
+        heading: 'Does a cash gift affect your own taxes or financial aid?',
+        body: 'A gift doesn’t show up as income on your tax return, so it won’t push you into a higher tax bracket or affect whether you need to file. But it can still matter in two indirect ways. First, if you invest the gifted money, any interest, dividends, or capital gains that money earns afterward IS taxable to you going forward — the gift itself is tax-free, but what it grows into isn’t automatically protected (unless it’s inside a Roth IRA or similar account). Second, if the money sits in your name — a custodial account, a checking account with your name on it — it counts as your asset on the FAFSA, which can reduce need-based financial aid slightly more than if the same money stayed in a parent’s name.',
+      },
+      {
+        heading: 'One thing a gift can’t do: count as “earned income” for a Roth IRA',
+        body: 'A common mix-up: gifted money cannot be contributed to a Roth IRA on its own, because Roth contributions are capped at what you actually earned from work that year — allowance and gifts don’t count as earned income. But the money doesn’t have to sit idle, either. If you have a part-time job or self-employment income, a parent or grandparent’s gift can effectively fund the Roth contribution — you earn $2,000 lifeguarding, and instead of spending that $2,000, you contribute it to your Roth while living on the gifted cash. The IRS doesn’t trace dollar-for-dollar where contributed money "came from," it just checks that your total contribution doesn’t exceed your total earned income for the year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Relax — as the recipient, a cash gift from family is not taxable income to you, and you don’t report it on your tax return.\n2. The giver only needs to file paperwork (Form 709) if a single gift to you exceeds the annual exclusion ($19,000 for 2025) — and even then, tax is rarely actually owed.\n3. If you invest the gift, track what it earns afterward — that growth (interest, dividends, capital gains) is taxable to you going forward.\n4. If financial aid matters, know that gifted money sitting in your name counts as your asset on the FAFSA.\n5. Want to combine a gift with a Roth IRA? You still need your own earned income that year — the gift can cover your living expenses while your paycheck funds the Roth.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Portfolio', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I have to report money my parents gave me on my taxes?',
+        a: 'No. Cash gifts from family aren’t taxable income, and you don’t report them on your federal tax return. The giver is the only one who might ever need to file paperwork, and only if a single gift to you exceeds the annual exclusion.',
+      },
+      {
+        q: 'How much money can my parents give me without tax consequences?',
+        a: 'Each parent can give you up to the annual exclusion amount — $19,000 per parent for 2025 — with zero paperwork required. Two parents together can give up to double that in the same year, all tax-free.',
+      },
+      {
+        q: 'Is a gift from my parents considered income for financial aid purposes?',
+        a: 'It’s not taxable income, but if the money ends up sitting in an account in your name, it does count as your asset on the FAFSA, which can reduce need-based aid slightly more than money kept in a parent’s name.',
+      },
+      {
+        q: 'Can I use gifted money to contribute to a Roth IRA?',
+        a: 'Not directly — Roth contributions are capped at your own earned income for the year, and gifts don’t count as earned income. But gifted money can cover your expenses while you redirect your paycheck into the Roth, which accomplishes the same thing.',
+      },
+    ],
+  },
 ]
