@@ -4728,4 +4728,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'why-is-my-bonus-taxed-so-much',
+    title: 'Why Is My Bonus Taxed So Much? (And Do You Get It Back?)',
+    metaTitle: 'Why Is My Bonus Taxed So High? Supplemental Wage Rules Explained',
+    description:
+      'Your bonus check feels like it got robbed — here’s why bonuses get withheld at a different rate than your paycheck, and whether you get that money back.',
+    date: '2026-10-08',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You were promised a $2,000 bonus, and the direct deposit that landed was closer to $1,400. Before you assume payroll made a mistake, know this: bonuses aren’t taxed at a higher rate than your regular paycheck — they’re just withheld differently, and that upfront bite is usually bigger than what you actually owe.',
+    sections: [
+      {
+        heading: 'Your bonus isn’t taxed more — it’s withheld more',
+        body: 'Here’s the mix-up almost everyone makes: the number that gets taken out of your bonus on payday is withholding, not your actual tax bill. Withholding is the IRS’s best guess at what you’ll owe, collected upfront so you don’t face one giant bill in April. Your real tax liability is only calculated once a year, when you file your return — based on your total income for the whole year, taxed at your actual marginal rate.\n\nBonuses, commissions, severance pay, and other one-time payments fall into a category the IRS calls “supplemental wages,” and supplemental wages get special withholding rules that are almost always more aggressive than your normal paycheck withholding. That’s the entire reason the bonus check feels smaller than it should — not because the government taxes bonuses at some punitive rate.',
+      },
+      {
+        heading: 'The flat 22% method (and the 37% version for big bonuses)',
+        body: 'When your employer pays a bonus as its own separate check, the simplest and most common approach is the percentage method: withhold a flat 22% for federal taxes, no matter what tax bracket you’re actually in. That rate applies to bonuses up to $1 million in a calendar year. Any amount above $1 million gets withheld at 37% — the top federal bracket — regardless of your income.\n\nThe 22% flat rate is the same for a high schooler earning minimum wage and a VP earning $300,000. If your actual marginal tax rate is lower than 22% (true for most teens and most early-career workers), the withholding overshoots your real tax bill — which sets up the refund explained below.',
+      },
+      {
+        heading: 'The aggregate method: why a bonus added to your paycheck hits even harder',
+        body: 'Some employers don’t cut a separate bonus check — they fold the bonus into your regular paycheck for that pay period. When that happens, payroll often uses the aggregate method instead: it adds the bonus to your normal wages for that period, calculates withholding on the combined total as if you earned that much every single pay period of the year, and then subtracts what was already withheld from your regular pay.\n\nThis is usually the version that feels brutal. A $1,000 bonus added to a $1,500 paycheck makes that one paycheck look like you earn $2,500 every two weeks, or about $65,000 a year — pushing the withholding on that period into a much higher bracket than your actual annual income justifies. The money isn’t gone, it’s just over-withheld for that one period.',
+      },
+      {
+        heading: 'FICA still takes its cut either way',
+        body: 'Regardless of which federal withholding method your employer uses, your bonus is still regular wages for Social Security and Medicare purposes. That means 6.2% comes out for Social Security (up to the annual wage base cap, which adjusts most years) and 1.45% comes out for Medicare, with no cap at all on the Medicare portion. High earners also owe an extra 0.9% Medicare surtax on wages above a set threshold, though that rarely applies to anyone early in their career. State income tax withholding, where applicable, gets tacked on separately using your state’s own supplemental wage rules.',
+      },
+      {
+        heading: 'Do you actually get the extra withholding back?',
+        body: 'Usually, yes — if too much was withheld from your bonus relative to your real tax bracket, it comes back as part of your tax refund (or shrinks whatever you owe) when you file. Withholding from every paycheck and every bonus you received all year gets lumped together and compared against your actual tax liability on your return. Overpaid all year through 22%-flat bonus withholding while your real marginal rate is 10% or 12%? That difference comes back to you.\n\nThe flip side: if you’re a high earner whose actual marginal rate is above 22%, bonus withholding can undershoot what you owe, meaning you might owe more at tax time instead of getting it back. For most teens and students with modest total income, the first scenario is far more common.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Don’t panic at the smaller-than-expected bonus deposit — withholding is an estimate, not your final tax bill.\n2. Check your pay stub to see whether the bonus was taxed as its own check (likely the flat 22% method) or folded into a regular paycheck (likely the aggregate method).\n3. Remember FICA (Social Security + Medicare) comes out of a bonus just like any paycheck — that part isn’t refundable.\n4. File your taxes and compare your total withholding for the year against your actual tax bracket — over-withheld bonus money usually shows up in your refund.\n5. If a big bonus is coming and you’d rather not wait for a refund, some employers let you adjust your W-4 for the rest of the year to reduce future withholding.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'Is a bonus taxed at a higher rate than regular income?',
+        a: 'No — your actual tax rate depends only on your total yearly income and tax bracket. What’s different is withholding: employers often withhold a flat 22% from bonuses upfront, which can be higher than your real marginal rate.',
+      },
+      {
+        q: 'Why did my bonus check feel so much smaller than expected?',
+        a: 'Likely one of two reasons: a flat 22% federal withholding rate was applied (plus state tax and FICA on top), or your employer used the aggregate method, combining the bonus with a regular paycheck and withholding as if that whole amount were your normal pay for every period of the year.',
+      },
+      {
+        q: 'Do you get bonus tax withholding back?',
+        a: 'If the amount withheld from your bonus was more than your actual tax bracket requires — true for most students and early-career workers — yes, the difference comes back as part of your refund when you file your tax return.',
+      },
+      {
+        q: 'Does FICA tax apply to bonuses?',
+        a: 'Yes. Social Security (6.2%, up to the annual wage base cap) and Medicare (1.45%, uncapped) are withheld from bonuses exactly like they are from a normal paycheck.',
+      },
+    ],
+  },
 ]
