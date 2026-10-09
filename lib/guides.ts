@@ -4784,4 +4784,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-paying-rent-on-time-build-your-credit-score',
+    title: 'Does Paying Rent on Time Build Your Credit Score?',
+    metaTitle: 'Does Rent Build Credit? How Rent Reporting Actually Works',
+    description:
+      'Rent is probably your biggest monthly bill, but your landlord likely isn’t reporting it to the credit bureaus. Here’s how rent-reporting services fix that — and the catch.',
+    date: '2026-10-09',
+    category: 'Credit',
+    intro:
+      'You pay rent every single month, on time, like clockwork — and your credit report doesn’t know it exists. That’s not a glitch. Rent works differently from loans and credit cards, and unless you specifically opt into a reporting service, that monthly payment is doing nothing for your credit file at all.',
+    sections: [
+      {
+        heading: 'The default answer: no, not automatically',
+        body: 'Credit card issuers and loan servicers are set up to report your payment activity to the three major credit bureaus — Equifax, Experian, and TransUnion — every single month, automatically, as part of how those industries operate. Landlords are not. Most property owners and management companies have no direct pipeline to the bureaus, so your rent payment history simply isn’t tracked anywhere that matters for your credit score, no matter how reliably you pay.\n\nThis is a strange gap. For a lot of young renters, rent is the single largest recurring payment they make — often bigger than a car payment or a credit card bill — yet it contributes zero points toward the credit file that lenders will eventually use to decide whether to approve them for an apartment, a car, or a mortgage.',
+      },
+      {
+        heading: 'Rent-reporting services are the workaround',
+        body: 'A handful of third-party services exist specifically to close this gap: Experian Boost, Esusu, Piñata, RentTrack, LevelCredit, and Rental Kharma are some of the better-known names. They connect to your bank account or lease to verify your rent payments, then report that payment history to one or more of the credit bureaus on your behalf.\n\nSome are free to the tenant (Experian Boost, for example, doesn’t charge a fee), while others charge a small monthly fee or a one-time setup cost, sometimes covered by the landlord instead of the renter. A few can add retroactive history — pulling in up to a year or two of past rent payments you’ve already made — while others only start reporting from the day you sign up forward. That distinction matters a lot depending on your payment history, which the next section covers.',
+      },
+      {
+        heading: 'Which credit scores actually count it',
+        body: 'Not every credit score treats rent the same way. Some of the newer scoring models were specifically built to recognize rental payment history as its own type of trade line and factor it in. Other models — including versions still widely used by mortgage lenders — may not pull in rental data the same way, or at all, depending on the bureau and the specific report a lender pulls.\n\nThe practical result: signing up for a rent-reporting service can move some of your credit scores noticeably while barely nudging others. Before assuming rent reporting is a silver bullet, it’s worth checking which particular score matters for whatever you’re trying to qualify for next — an apartment, a car loan, a first credit card — since the answer isn’t always the same score the reporting service advertises improving.',
+      },
+      {
+        heading: 'The catch: it can cut both ways',
+        body: 'Once your rent becomes a reported line on your credit file, it behaves like any other account — which means a late payment can hurt your score the same way a missed credit card or loan payment would. If your rent payment history has been inconsistent, enrolling in a service that only reports going forward (not retroactively) limits your downside to future payments, which you can then control.\n\nBefore signing up for any service, read the fine print on exactly what gets reported. Some only report positive, on-time payments. Others report everything, including late ones. Enrolling in the wrong one at the wrong time can do more harm than the good it was supposed to create.',
+      },
+      {
+        heading: 'Who it’s actually worth it for',
+        body: 'Rent reporting delivers the biggest payoff for people with a thin or nonexistent credit file — someone whose credit history is just one secured card, or nothing at all — because a big, consistent monthly payment gives a scoring model a lot more data to work with. If you already have several accounts reporting positively (a credit card in good standing, a car loan, a credit-builder loan), the marginal benefit of adding rent is smaller, though usually still positive.\n\nRent reporting isn’t a replacement for the other standard ways to build a first credit file — it’s an addition. Most people get the best results combining it with at least one traditional account that reports automatically, rather than relying on rent alone.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Ask your landlord or property manager directly whether rent payments are already being reported — some larger management companies have this built in automatically now.\n2. If not, compare a couple of rent-reporting services on cost, which bureau(s) they report to, and whether they offer retroactive history.\n3. Check whether the service reports late payments too, not just on-time ones, before enrolling.\n4. If your rent history has any recent late payments, favor a service that only reports going forward.\n5. Don’t treat rent reporting as your only credit-building move — pair it with at least one traditional reporting account for the fullest effect.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Does paying rent on time automatically build your credit score?',
+        a: 'No. Landlords generally don’t report payment activity to the credit bureaus the way credit card issuers and loan servicers do, so on-time rent does nothing for your credit file unless you or your landlord specifically opts into a rent-reporting service.',
+      },
+      {
+        q: 'Is Experian Boost worth using for rent?',
+        a: 'For most people with a thin credit file, yes — it’s free and can add verified rent (and sometimes utility) payment history to your file. Just know it typically affects the specific score it feeds into, not necessarily every score a lender might pull.',
+      },
+      {
+        q: 'Can rent-reporting services add my past rent payments retroactively?',
+        a: 'Some can, often up to a year or two of history, while others only start reporting from your enrollment date forward. Check this before signing up, since it changes how quickly the service actually helps your file.',
+      },
+      {
+        q: 'Can a late rent payment hurt your credit score?',
+        a: 'Only if that rent payment is being reported in the first place. Once you’re enrolled in a rent-reporting service, a late payment can count against you just like a missed credit card or loan payment would.',
+      },
+    ],
+  },
 ]
