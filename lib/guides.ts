@@ -4840,4 +4840,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'is-a-store-credit-card-worth-it-for-your-first-credit-card',
+    title: 'Is a Store Credit Card Worth It for Your First Credit Card?',
+    metaTitle: 'Store Credit Cards Explained: Worth It as a First Card?',
+    description:
+      'That “save 20% today” offer at checkout is a real credit card with a very high APR. Here’s how store cards actually work and whether one should be your first.',
+    date: '2026-10-10',
+    category: 'Credit',
+    intro:
+      'You’re at checkout — in store or online — and a cashier or a popup offers you 15% or 20% off right now if you open “their” card. It sounds like free money, and in a narrow sense it is. But a store credit card is still a real credit card, with real mechanics that can help or hurt your credit file depending on what you do with it after the discount hits.',
+    sections: [
+      {
+        heading: 'Two kinds of “store card,” and the difference matters',
+        body: 'Retailers generally offer two different products under the same pitch. A private-label card can only be used at that one retailer (and sometimes its sister brands) — no Visa, Mastercard, or Amex logo on it, no swiping it anywhere else. A co-branded card carries a major network logo alongside the store’s branding, so it works everywhere that network is accepted, while still giving extra rewards back at the store that issued it.\n\nPrivate-label cards are easier to get approved for because the retailer’s risk is capped — you can only rack up debt in their stores. Co-branded cards usually require a stronger credit profile because the issuing bank is extending you a card that works anywhere, which is a bigger risk on their end.',
+      },
+      {
+        heading: 'The discount is real — but it is bait for a reason',
+        body: 'That first-purchase discount is a genuine, one-time saving, and taking it on a purchase you were already going to make is a fine way to shave a few dollars off a bill. The retailer isn’t handing it out of generosity, though — they’re buying your future spending behavior. Every swipe of that card afterward tends to nudge you toward shopping at that one store more, and the card itself usually only earns its best rewards rate there, not everywhere else.\n\nThe math only works in your favor if you pay the statement balance in full every month. The instant you carry a balance, the next section explains exactly how fast that one-time discount gets erased.',
+      },
+      {
+        heading: 'Why store cards carry some of the highest APRs you will see',
+        body: 'Store cards are consistently among the most expensive cards on the market — their APRs are routinely several points higher than the average general-purpose credit card, often landing in the high-20s to low-30s percent range depending on the issuer and your credit profile. The retailer can afford to approve riskier applicants and hand out steep discounts partly because, if you ever carry a balance, the interest charged makes up for it many times over.\n\nRun a simple example: a $100 purchase with a 20% instant discount saves you $20 upfront. Carry that $80 balance at a store-card-level APR and skip just one payment deadline, and the interest charged in a single missed cycle can wipe out a meaningful chunk of that $20 savings — with the clock resetting every month you don’t pay in full.',
+      },
+      {
+        heading: 'Does a store card actually build your credit?',
+        body: 'Yes, through the exact same mechanics as any other credit card — on-time payment history and credit utilization are the two biggest ingredients in your score, and a store card reports both to the credit bureaus just like a regular card does. Held responsibly, it’s a legitimate way to start a credit file from nothing.\n\nThe catch is the low starting credit limit most store cards come with, often just a few hundred dollars. A low limit makes your utilization ratio (the percentage of your limit you’re using) swing wildly — a single $150 purchase on a $300 limit puts you at 50% utilization, well above the roughly 30% ceiling most guidance recommends staying under, and far above the under-10% range that tends to help scores the most. Applying also triggers a hard inquiry, which can ding your score by a few points for a few months, and a brand-new account temporarily lowers the average age of your credit file — a small, normal side effect of opening any new card, not unique to store cards.',
+      },
+      {
+        heading: 'When it makes sense, and when a different first card is smarter',
+        body: 'A store card can be a reasonable first card if you genuinely shop at that retailer often, you’re confident you’ll pay the full statement balance every month, and your other options (a secured card, a credit-builder loan, becoming an authorized user on a parent’s account) aren’t available to you yet. In that narrow situation, it reports to the bureaus the same way a “better” card does, and the account history starts accumulating either way.\n\nIt’s usually the wrong first move if the appeal is mainly the checkout discount, if you don’t shop at that store often enough to actually use the rewards, or if you already qualify for a secured card or a general rewards card with a lower APR and a credit limit that won’t swing your utilization around so easily. A general-purpose card also builds a more useful track record, since it’s relevant to every lender, not just one retailer’s underwriting team.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Decide before you apply whether you can pay the statement balance in full every month — if the honest answer is no, skip it regardless of the discount.\n2. Check whether the offer is a private-label card (one store only) or co-branded (usable anywhere) — co-branded is more useful long-term.\n3. Ask what the ongoing APR is, not just the day-one discount — compare it against any other card you could realistically qualify for.\n4. Once approved, keep your utilization low relative to the (likely small) starting limit rather than charging up to the max to “get the deal.”\n5. Set up autopay for at least the statement balance so a forgotten due date never turns a discount into a net loss.\n6. If you’re approved for a general rewards or secured card around the same time, compare the two on APR and usefulness before defaulting to the store card out of convenience.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Is it bad to get a store credit card for the first-purchase discount?',
+        a: 'Not by itself — taking a discount on something you were already buying is fine. It becomes a bad move only if you carry a balance afterward, since store cards tend to carry some of the highest APRs available, which can erase the discount’s value quickly.',
+      },
+      {
+        q: 'Do store credit cards build credit the same way as a regular credit card?',
+        a: 'Yes. They report payment history and utilization to the credit bureaus just like any other card, so paying on time and keeping your balance low relative to your limit builds credit the same way.',
+      },
+      {
+        q: 'What’s the difference between a private-label and a co-branded store card?',
+        a: 'A private-label card only works at that one retailer. A co-branded card carries a major network logo (Visa, Mastercard, Amex) and works anywhere that network is accepted, while still offering extra rewards at the issuing store — it’s generally more useful and a bit harder to qualify for.',
+      },
+      {
+        q: 'Why do store cards have such high interest rates?',
+        a: 'Retailers approve riskier applicants and hand out steep sign-up discounts partly because a high APR on any balance that gets carried more than makes up for it — the discount is a loss leader, not a gift.',
+      },
+    ],
+  },
 ]
