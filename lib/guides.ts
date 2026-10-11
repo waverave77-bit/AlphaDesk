@@ -4896,4 +4896,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-get-a-credit-card-under-21-without-a-cosigner',
+    title: 'Can You Get a Credit Card Under 21 Without a Cosigner?',
+    metaTitle: 'Credit Cards Under 21 Without a Cosigner: What’s Allowed',
+    description:
+      'Federal law requires most applicants under 21 to show independent income or add a cosigner. Here’s exactly what counts as income, and the cards that skip the requirement entirely.',
+    date: '2026-10-11',
+    category: 'Credit',
+    intro:
+      'You’ve probably heard you need a parent to cosign before you can get a credit card under 21. That’s only half true — it’s a real federal rule, but it has an exception that a lot of 18-to-20-year-olds qualify for without realizing it, plus a couple of card types that sidestep the whole issue.',
+    sections: [
+      {
+        heading: 'The actual rule: the CARD Act’s under-21 provision',
+        body: 'The Credit CARD Act of 2009 added a specific protection for young applicants: before a credit card issuer can approve anyone under 21, the applicant has to show either an independent ability to make the minimum payments, or a cosigner, joint applicant, or guarantor who is 21 or older and agrees to be on the hook for the debt. The rule exists because, before 2009, card companies set up tables on college campuses and signed up students with no income and no plan to pay — Congress specifically targeted that practice.\n\nThe key word is "independent." For applicants under 21, issuers generally only count income you can show is actually yours — a paycheck, documented self-employment, work-study earnings — not a parent’s income, even if your parents are happy to help with the bill. That’s different from applicants 21 and over, who are allowed to count reasonably accessible household income. If you’re under 21 with no income of your own, a cosigner is the only way around the requirement on a standard card.',
+      },
+      {
+        heading: 'What counts as "independent income" when you’re under 21',
+        body: 'Issuers want to see income that’s documented and recurring, not a one-time gift. A part-time or full-time job with pay stubs, income from a 1099 gig you can show on paper, and regular allowance deposits if they’re truly consistent and you can document them, can all potentially count — but policies vary by issuer, and some want to see a certain amount of history before approving. Unemployment income or financial aid disbursed directly to you may or may not qualify depending on the card. When you apply, you’ll be asked for your gross annual income and sometimes documentation to back it up — be honest, since overstating income on an application is a federal offense and can get a card frozen or an account closed if the issuer later asks for proof.',
+      },
+      {
+        heading: 'Student credit cards: built around this exact problem',
+        body: 'Banks noticed that a huge share of their future long-term customers are turned away at 18 because they have no credit history and only part-time income, so they built a product specifically for that gap. Student credit cards usually carry lower starting credit limits (often a few hundred to around $1,000–$2,000), more forgiving approval criteria, and sometimes a grace period on the first late fee or a bonus for good grades. They still have to follow the same CARD Act income rule — you’ll still need to show some income on the application — but the bar tends to be lower than on a general rewards card, and some issuers factor in proof of enrollment as a positive signal.',
+      },
+      {
+        heading: 'Secured cards and authorized-user status: paths with no cosigner needed',
+        body: 'A secured credit card requires a refundable cash deposit — commonly in the $200–$500 range — that usually becomes your credit limit. Because the deposit covers the issuer’s risk, secured cards don’t trigger the same independent-income scrutiny as unsecured cards, and approval is realistic even with little or no income. You get the deposit back when you close the account in good standing or get upgraded to an unsecured card, and the payment history reports to the credit bureaus exactly like any other card.\n\nBecoming an authorized user on a parent’s existing card is a different route entirely — you’re not applying for your own card at all, so the under-21 income rule doesn’t apply. The primary cardholder’s on-time payments and low balance can start showing up on your credit report, giving you a head start on a credit file before you ever fill out an application yourself.',
+      },
+      {
+        heading: 'Your checklist before you apply',
+        body: '1. Figure out whether you have documentable income of your own — pay stubs or 1099 records count; allowance usually doesn’t unless it’s truly consistent and provable.\n2. No independent income yet? A secured card or becoming an authorized user gets you building credit without a cosigner or an income requirement.\n3. Some income, but thin credit history? Look at student credit cards first — they’re built for exactly this situation.\n4. If you do need a cosigner, make sure they understand they’re legally responsible for the balance if you don’t pay — missed payments hit their credit file too.\n5. Whatever card you get, keep the balance low relative to the limit and pay it in full every month — approval is step one, the habit is what actually builds the score.\n6. At 21, the independent-income requirement disappears and you can count household income — worth revisiting your options once you cross that line.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Can I get a credit card at 18 without my parents?',
+        a: 'Yes, if you can document independent income — a job or self-employment earnings — or if you go with a secured card, which doesn’t require a cosigner because a cash deposit covers the risk instead.',
+      },
+      {
+        q: 'What counts as income on a credit card application if you’re under 21?',
+        a: 'Generally only income that’s documented as yours: wages, salary, or self-employment earnings. A parent’s income doesn’t count toward your application unless that parent is officially added as a cosigner.',
+      },
+      {
+        q: 'Do student credit cards still require a cosigner?',
+        a: 'Not necessarily, but they still have to follow the same federal rule as any other card — applicants under 21 need to show some independent income. Student cards just tend to have a lower bar and smaller starting limits.',
+      },
+      {
+        q: 'Is becoming an authorized user better than applying for my own card under 21?',
+        a: 'It’s a different tool, not strictly better or worse. Authorized-user status can build your credit file passively with zero application and no income requirement, but you don’t control the account — your credit depends on how responsibly the primary cardholder uses it.',
+      },
+    ],
+  },
 ]
