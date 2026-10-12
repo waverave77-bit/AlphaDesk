@@ -4948,4 +4948,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-an-espp-and-how-is-it-taxed',
+    title: 'What Is an ESPP, and Is It Worth Participating In?',
+    metaTitle: 'ESPP Explained: How Employee Stock Purchase Plans Work',
+    description:
+      'Your benefits packet mentions an ESPP discount on company stock — here’s how the discount, the lookback feature, and the IRS tax rules actually work.',
+    date: '2026-10-12',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your new job’s benefits packet mentions an ESPP — a chance to buy company stock at a discount straight from your paycheck. It sounds like free money, and in a lot of cases it basically is, but the discount comes with a lookback mechanic, an IRS contribution cap, and a tax rule that can surprise you if you sell at the wrong time.',
+    sections: [
+      {
+        heading: 'What an ESPP actually is',
+        body: 'An Employee Stock Purchase Plan lets you set aside a percentage of each paycheck — commonly up to 10%–15% of salary, depending on the plan — into a holding account. At the end of a set window called the offering period (often six months), the plan uses that accumulated cash to buy company stock on your behalf, usually at a discount off the market price. You don’t pick the purchase date and you don’t pay a trading commission — the plan does it automatically, all at once, for everyone enrolled.\n\nNot every ESPP works the same way, so check your plan document for the specific discount percentage, offering period length, and whether a lookback feature (below) applies — the mechanics described here are typical of a "qualified" Section 423 plan, but your employer’s plan may differ in the details.',
+      },
+      {
+        heading: 'The discount — and the lookback feature that makes it better',
+        body: 'The headline number is the discount, typically up to 15% off the stock price. Where it gets interesting is the lookback provision, which a lot of plans include: instead of discounting off the price on the purchase date, the plan discounts off whichever price is lower — the price at the start of the offering period or the price at the end.\n\nSay the stock is $50 at the start of a six-month offering period and $60 at the end. With a 15% discount and a lookback, your purchase price is 85% of $50 (the lower price) — $42.50 per share. But you’re buying stock that’s actually worth $60. That’s $17.50 of built-in value per share, roughly a 41% gain the moment the purchase settles — before you’ve taken on a single day of market risk from that point forward. That’s the reason ESPPs are often called the best risk-adjusted deal in a benefits packet.',
+      },
+      {
+        heading: 'The IRS caps how much you can put in',
+        body: 'Qualified ESPPs are capped by federal tax law at $25,000 worth of stock per calendar year, valued at the stock’s price when the offering period begins — not the discounted price you actually pay. In practice, your plan will also set its own lower cap on payroll contributions, often a percentage of salary, so most employees never bump into the $25,000 ceiling at all. It mostly matters if you’re a higher earner contributing the maximum percentage your plan allows.',
+      },
+      {
+        heading: 'How the IRS taxes the shares — qualifying vs. disqualifying disposition',
+        body: 'This is the part almost nobody explains clearly. There are two ways the IRS can tax an ESPP sale, and which one applies depends entirely on how long you hold the shares after buying them.\n\nSell before you’ve held the shares at least one year from the purchase date AND two years from the start of the offering period, and it’s a disqualifying disposition: the discount you received — the difference between the stock’s price at purchase and what you actually paid — is taxed as ordinary income, no matter what the stock is worth when you sell. Any additional gain or loss between the purchase-date price and your actual sale price is taxed separately as a capital gain or loss.\n\nHold past both of those dates and it’s a qualifying disposition: part of your gain (generally the smaller of the original discount or your total profit) is still taxed as ordinary income, but the rest qualifies for the lower long-term capital gains rate. The tradeoff is real — better tax treatment in exchange for one to two years of price risk sitting in a single stock.',
+      },
+      {
+        heading: 'The risk nobody warns you about: your paycheck and your stock come from the same place',
+        body: 'An ESPP ties a chunk of your savings to the exact same company that already pays your salary. If the company hits a rough stretch, you can face a pay freeze, a layoff, and a stock drop all at the same time — the opposite of diversification. Employees who had most of their 401(k) in Enron stock learned this the hard way when the company collapsed and both their jobs and their savings disappeared together.\n\nMany financial planners suggest selling ESPP shares soon after purchase — locking in the discount as a cash gain — and reinvesting the proceeds into a diversified index fund, rather than letting company stock accumulate as a large share of your net worth. You give up the shot at a qualifying disposition’s better tax rate, but you also remove the concentration risk. There’s no universally right answer here; it depends on how much you already trust and depend on that one employer.',
+      },
+      {
+        heading: 'Your checklist before you enroll',
+        body: '1. Read your plan document for the exact discount percentage, offering period length, and whether a lookback applies — plans vary.\n2. If your cash flow allows it, contribute enough to capture the discount — it’s often the highest guaranteed return available to you anywhere.\n3. Decide your selling strategy before the first purchase happens: sell immediately to lock in the discount with less risk, or hold for a qualifying disposition’s better tax treatment with more price risk.\n4. Track your own cost basis. Brokers sometimes report only what you paid on tax forms, not the discount already taxed as income — without adjusting, you can accidentally pay tax on the same money twice.\n5. Cap how much company stock you let build up relative to your total savings — you already depend on this employer for your paycheck.\n6. Remember: on a disqualifying disposition, you owe ordinary income tax on the discount even if the stock price later drops below what you paid.',
+      },
+    ],
+    relatedTerms: ['Stock', 'Share', 'Diversification', 'Concentration Risk'],
+    faq: [
+      {
+        q: 'Is an ESPP worth participating in?',
+        a: 'For most employees, yes — a 10%–15% discount is a return that’s hard to find anywhere else with so little risk, especially if you plan to sell right after purchase. It’s less clear-cut if your plan has no discount or lookback, or if company stock would end up dominating your savings.',
+      },
+      {
+        q: 'What’s the difference between an ESPP and RSUs?',
+        a: 'An ESPP is stock you buy yourself, at a discount, with money deducted from your own paycheck. RSUs are shares your employer grants you for free that vest over time — no purchase involved either way.',
+      },
+      {
+        q: 'Can you lose money in an ESPP?',
+        a: 'Yes. If the stock drops below your purchase price before you sell, you can take a loss on the shares — the discount cushions that risk but doesn’t eliminate it. You can also owe ordinary income tax on the original discount even if the stock later falls.',
+      },
+      {
+        q: 'Do you have to pay taxes on an ESPP right when you buy the stock?',
+        a: 'No. Taxes are triggered when you sell the shares, not when you purchase them. What you owe then, and at what rate, depends on whether the sale counts as a qualifying or disqualifying disposition.',
+      },
+    ],
+  },
 ]
