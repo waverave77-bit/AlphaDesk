@@ -5004,4 +5004,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-when-a-0-percent-intro-apr-offer-ends',
+    title: 'What Happens When a 0% Intro APR Credit Card Offer Ends?',
+    metaTitle: '0% Intro APR Offers: What Happens When They End',
+    description:
+      'A 0% intro APR offer isn’t free money forever — here’s what happens to your balance the day it expires, and the deferred-interest trap that can bill you retroactively.',
+    date: '2026-10-13',
+    category: 'Credit',
+    intro:
+      'You got approved for a card advertising "0% APR for 15 months" and figured you had over a year to not think about interest. That clock is running whether you’re thinking about it or not, and what happens when it hits zero depends on which kind of 0% offer you actually have — one version just starts charging interest going forward, and the other can bill you for everything retroactively.',
+    sections: [
+      {
+        heading: 'Two different things get called "0% APR"',
+        body: 'A standard 0% intro APR offer, the kind most general-purpose credit cards run, applies to either new purchases, balance transfers, or both, for a promotional window that commonly runs somewhere in the 12-to-21-month range depending on the card. During that window you owe no interest on the balance the offer covers, full stop.\n\nA deferred-interest promotion is a different animal, usually attached to store and retail financing — furniture, electronics, mattresses — advertised as something like "no interest if paid in full within 12 months." It looks identical to a 0% APR offer on the sales floor, but the fine print works completely differently, and that difference is the entire point of this guide.',
+      },
+      {
+        heading: 'Standard 0% APR: interest starts on what’s left, going forward',
+        body: 'With a normal intro APR offer, once the promotional period ends, your card’s regular variable APR kicks in — and it only applies to the balance still sitting there from that point forward. If you had $2,000 left on the day the promo expired, interest starts accruing on that $2,000 starting that day. Whatever you already paid off during the 0% window stays interest-free; you don’t get charged retroactively for the months that already passed.\n\nThe regular APR you land on after the intro period can be a lot higher than it felt while you weren’t paying it — commonly in the high-teens to high-20s percent range, and often a variable rate that moves with the Federal Reserve’s benchmark rate. Check your card’s terms for the exact "go-to APR" before you ever carry a balance into it.',
+      },
+      {
+        heading: 'Deferred interest: the retroactive trap',
+        body: 'This is the one that catches people. With a deferred-interest promotion, the issuer calculates interest on your original purchase amount from the original purchase date the entire time — it just waives charging it to you as long as you pay the full balance before the promo deadline. Pay it off with one day to spare and you owe nothing extra, exactly like a real 0% offer.\n\nBut miss that deadline by even a small remaining balance — $20 left on a $1,500 purchase — and the issuer can charge you interest on the full original $1,500, backdated to the purchase date, not just on the $20 you still owed. Depending on the APR and how long the promotional period ran, that can turn a small oversight into hundreds of dollars of interest appearing on a single statement. The Consumer Financial Protection Bureau has flagged deferred-interest financing specifically because this mechanic surprises so many people who assumed it worked like ordinary 0% APR.',
+      },
+      {
+        heading: 'How to tell which one you have, and not get burned',
+        body: 'Read the actual terms, not the sign in the store or the email subject line — look for the phrase "deferred interest" versus a straightforward "0% APR" disclosure in the card agreement; issuers are legally required to disclose which structure applies. If you can’t find the distinction in writing, assume the stricter deferred-interest rules apply and plan accordingly.\n\nEither way, the safest move is the same: divide your balance by the number of months left in the promotional period and set that as an automatic payment, so the balance hits zero before the deadline no matter what. Mark the actual expiration date on your phone’s calendar, not just "sometime next year" — issuers aren’t required to remind you before a deferred-interest deadline hits, and a missed $20 payment is what turns the trap into real money owed. Also avoid piling new purchases onto a card mid-promo without checking whether new charges get their own clock or get swept into the same deadline; policies vary by issuer.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Find out whether your offer is standard 0% APR (interest applies going forward only) or deferred interest (interest can apply retroactively to the full original balance).\n2. Calculate balance ÷ months remaining and set that as an automatic monthly payment.\n3. Put the actual expiration date on a calendar reminder — a week early, not the day of.\n4. Know your card’s regular APR after the promo ends before you ever plan to carry a balance into it.\n5. If you’re close to the deadline and won’t finish paying it off, call the issuer before it expires — some will work with you, but none will undo interest that already posted.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Compound Interest', 'Liquidity'],
+    faq: [
+      {
+        q: 'What happens if I don’t pay off my 0% APR balance in time?',
+        a: 'On a standard 0% APR offer, your card’s regular APR starts applying to whatever balance is left, going forward only — you’re not charged for the months that already passed interest-free. On a deferred-interest promotion, missing the deadline can trigger interest backdated to the original purchase date on the entire original amount, not just what’s left.',
+      },
+      {
+        q: 'Is a 0% APR credit card offer the same as a deferred-interest promotion?',
+        a: 'No, even though they’re often advertised with similar language. A true 0% APR offer only charges interest on the remaining balance after the promo ends. A deferred-interest promotion — common with store and retail financing — can bill you retroactively for interest on the full original purchase if you don’t pay it off completely by the deadline.',
+      },
+      {
+        q: 'Does a balance transfer to a 0% APR card always come with a fee?',
+        a: 'Almost always. Most balance transfer offers charge an upfront fee, commonly in the 3%–5% range of the amount transferred, even though the interest itself is 0% during the promo. Factor that fee into whether the transfer actually saves you money.',
+      },
+      {
+        q: 'What APR do I pay after a 0% intro period ends?',
+        a: 'Your card’s standard ongoing APR, which is disclosed in the card’s terms and is often a variable rate tied to the Federal Reserve’s benchmark rate. It can be significantly higher than the 0% you got used to, so check it before you let a balance roll into it.',
+      },
+    ],
+  },
 ]
