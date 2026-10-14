@@ -5056,4 +5056,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-roll-over-leftover-529-plan-money-into-a-roth-ira',
+    title: 'Can You Roll Over Leftover 529 Plan Money Into a Roth IRA?',
+    metaTitle: '529-to-Roth IRA Rollover: How the Leftover-Funds Rule Works',
+    description:
+      'Didn’t spend all your 529 college savings? A newer rule lets you move leftover funds into a Roth IRA tax- and penalty-free — within specific limits.',
+    date: '2026-10-14',
+    category: 'College Money',
+    intro:
+      'For decades, the biggest knock against 529 plans was the same nagging question: what if the kid gets a scholarship, skips college, or just doesn’t spend it all — and the leftover money gets stuck, taxed, and penalized on the way out? A newer federal rule changes that calculus. Here’s how the 529-to-Roth IRA rollover actually works, and the conditions you have to meet to use it.',
+    sections: [
+      {
+        heading: 'The problem this rule was built to fix',
+        body: 'Before this option existed, pulling money out of a 529 for anything other than qualified education expenses triggered two costs: ordinary income tax on the earnings portion, plus a 10% penalty on top of that. Families who oversaved — or whose kid earned a full scholarship, chose a cheaper path, or skipped college entirely — were stuck either paying that penalty, slow-walking withdrawals over decades for a grandchild, or just leaving the account open indefinitely hoping a use would turn up.\n\nThe SECURE 2.0 Act created a third option, effective starting in 2024: under specific conditions, the beneficiary of a 529 plan can move leftover funds directly into their own Roth IRA, with no tax and no penalty on the transfer.',
+      },
+      {
+        heading: 'The core rule: a $35,000 lifetime cap, moved into the beneficiary’s own Roth',
+        body: 'The rollover has a lifetime limit of $35,000 per beneficiary — not per 529 account. The money has to move into a Roth IRA owned by the 529 plan’s beneficiary (the student), not the parent who funded the account, even if the parent originally opened and contributed to the 529.\n\nUnlike a normal Roth IRA contribution, this rollover isn’t blocked by the usual income limits that phase out high earners from contributing directly to a Roth. That matters because it means a beneficiary who already earns too much to open a regular Roth IRA can still use this pathway to get money into one.',
+      },
+      {
+        heading: 'The conditions that make this harder than it sounds',
+        body: 'This isn’t a one-click, dump-it-all-in move — three restrictions slow it down considerably. First, the 529 account must have been open for at least 15 years before any rollover is allowed, so a 529 opened the year before college won’t qualify in time. Second, any contributions made to the account in the preceding 5 years (and the earnings on those specific contributions) are not eligible to be rolled over — only older money qualifies. Third, and the one that trips people up most: the amount rolled over in any single year still counts against that year’s regular annual Roth IRA contribution limit (for 2026, generally $7,500, or $8,600 if the beneficiary is 50 or older) — it doesn’t stack on top of it.\n\nThat last rule means a $35,000 rollover isn’t something you do in one year. It has to be spread across roughly five or more years, limited by whatever the annual Roth contribution cap is each year, and the beneficiary can’t simultaneously make their own separate Roth contributions beyond that same combined cap.',
+      },
+      {
+        heading: 'What this rule does not do',
+        body: 'It doesn’t erase the point of planning ahead — the 15-year and 5-year lookback rules mean this isn’t a rescue option for money you need to move out quickly. It doesn’t let you roll 529 funds into a Roth IRA for anyone other than the named beneficiary; you can’t redirect a leftover balance into a sibling’s Roth without first changing who the 529’s beneficiary is (529 beneficiaries can usually be changed to another family member, which resets some of these clocks). And state tax treatment varies — some states don’t conform to this federal rule and may tax the rollover at the state level even though the IRS doesn’t, so it’s worth checking your specific state’s rules before relying on this.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm the 529 account has been open 15+ years before counting on this option.\n2. Only contributions (and their earnings) older than 5 years are eligible — recent deposits don’t qualify yet.\n3. Make sure the Roth IRA receiving the rollover is opened in the beneficiary’s own name, not the parent’s.\n4. Plan the rollover across multiple years — each year’s amount is capped by that year’s normal Roth contribution limit, combined with any direct contributions the beneficiary makes.\n5. Check whether your state taxes the rollover even though the federal government doesn’t.\n6. If the 529 still has a real shot at being used for education, remember qualified withdrawals remain completely tax-free — the Roth rollover is a backup plan for genuinely leftover funds, not an upgrade over using the money as intended.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Mutual Fund'],
+    faq: [
+      {
+        q: 'How much 529 money can you roll into a Roth IRA?',
+        a: 'Up to $35,000 per beneficiary over their lifetime, not per 529 account. It has to be moved gradually, since each year’s rollover amount is capped by that year’s normal annual Roth IRA contribution limit.',
+      },
+      {
+        q: 'Does the 529-to-Roth IRA rollover have income limits?',
+        a: 'No — this rollover isn’t subject to the income limits that normally block high earners from contributing directly to a Roth IRA. That’s one of the main reasons it’s useful even for families who wouldn’t otherwise qualify for a Roth.',
+      },
+      {
+        q: 'Can parents roll leftover 529 money into their own Roth IRA?',
+        a: 'No. The rollover must go into a Roth IRA owned by the 529 plan’s named beneficiary — typically the student — not the account owner who funded it, even if that was a parent.',
+      },
+      {
+        q: 'How long does a 529 account need to be open before you can roll money into a Roth IRA?',
+        a: 'At least 15 years. On top of that, any contributions made within the 5 years before the rollover (and their earnings) are excluded, so only older money in a long-held account actually qualifies.',
+      },
+    ],
+  },
 ]
