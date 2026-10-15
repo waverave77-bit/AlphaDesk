@@ -5108,4 +5108,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-credit-card-grace-period-how-to-never-pay-interest',
+    title: 'What Is a Credit Card Grace Period, and How Do You Never Pay Interest?',
+    metaTitle: 'Credit Card Grace Period Explained: How to Avoid Interest',
+    description:
+      'A credit card grace period is the window to pay your balance before interest kicks in — but it only works under specific conditions. Here’s how to keep it.',
+    date: '2026-10-15',
+    category: 'Credit',
+    intro:
+      'If you’ve ever paid off your credit card in full and been charged zero interest, you weren’t just lucky — you were using the grace period correctly. It’s the single reason credit cards can be used for free short-term borrowing, and it’s also the thing people accidentally lose the moment they carry a balance.',
+    sections: [
+      {
+        heading: 'What the grace period actually is',
+        body: 'The grace period is the stretch of time between the end of your billing cycle (when your statement closes) and your payment due date. Federal law — the Truth in Lending Act — requires that if a card offers a grace period, it must be at least 21 days long. Most issuers give 21 to 25 days.\n\nDuring that window, you can pay off your statement balance with zero interest charged on those purchases, even though you’ve already been using the money for weeks. It’s effectively an interest-free loan, as long as you follow the one rule that makes it work.',
+      },
+      {
+        heading: 'The rule that makes or breaks it: pay in full, every time',
+        body: 'The grace period only applies if you paid your previous statement balance in full by its due date. The instant you carry even a small balance into a new billing cycle, most cards remove the grace period entirely — and interest starts accruing immediately on new purchases from the day you make them, not from the statement date.\n\nThis is the part people miss: it’s not "pay the minimum and you’re fine." Paying the minimum keeps your account in good standing and avoids a late fee, but it does nothing to protect your grace period. Only a full balance payment resets it.',
+      },
+      {
+        heading: 'What the grace period does not cover',
+        body: 'Cash advances and balance transfers almost never get a grace period, even on cards that offer one for regular purchases. Interest on those usually starts accruing the day the transaction posts — and cash advance APRs are often higher than the card’s standard purchase APR, with an upfront fee on top. If you’re ever tempted to use a credit card ATM withdrawal "just this once," know that it’s one of the most expensive ways to get cash that exists.\n\nSome cards also apply a modified grace period or none at all to specific promotional balances. Always check your card’s terms (the Schumer box) rather than assuming every balance type is treated the same.',
+      },
+      {
+        heading: 'How issuers calculate the interest once you lose it',
+        body: 'Most issuers use the average daily balance method: they add up your balance for each day in the billing cycle, divide by the number of days, then apply a daily periodic rate (your APR ÷ 365) to that average. Once you’ve lost the grace period, interest compounds daily on whatever you owe — including new purchases from the moment they post, not from the statement date. That’s why a single missed full payment can make the next month’s interest charge feel disproportionately large.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Pay your full statement balance by the due date every single cycle — not just the minimum.\n2. Set up autopay for the full statement balance as a safety net against forgetting.\n3. Never use a credit card for a cash advance; treat it as a last resort, not a convenience.\n4. Check your card’s terms for exactly how many days your grace period lasts.\n5. If you ever do carry a balance, pay it off completely as soon as possible — the grace period typically returns once you pay in full again.\n6. Don’t confuse the grace period with a 0% intro APR offer — they’re different mechanics that happen to both involve "no interest."',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'How long is a typical credit card grace period?',
+        a: 'Usually 21 to 25 days between when your statement closes and your payment is due. Federal law requires at least 21 days on any card that offers a grace period.',
+      },
+      {
+        q: 'Do you lose your grace period if you pay the minimum?',
+        a: 'Yes. Paying only the minimum keeps your account current and avoids late fees, but it does not preserve the grace period — only paying the full statement balance does that.',
+      },
+      {
+        q: 'Does a credit card grace period apply to cash advances?',
+        a: 'Almost never. Cash advances typically start accruing interest immediately, often at a higher APR than purchases, plus an upfront fee — regardless of whether your purchases have a grace period.',
+      },
+      {
+        q: 'Is a grace period the same as a 0% intro APR offer?',
+        a: 'No. A grace period is a standard feature that resets every month as long as you pay in full. A 0% intro APR is a temporary promotional rate that expires after a set number of months, after which the card’s standard APR applies.',
+      },
+    ],
+  },
 ]
