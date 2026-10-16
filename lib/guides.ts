@@ -5160,4 +5160,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-credit-card-cash-advance-and-why-is-it-so-expensive',
+    title: 'What Is a Credit Card Cash Advance, and Why Is It So Expensive?',
+    metaTitle: 'Credit Card Cash Advance Explained: Fees, APR, and Hidden Triggers',
+    description:
+      'A credit card cash advance lets you pull cash against your limit — but with its own fee, a higher APR, and no grace period. Here’s what it actually costs.',
+    date: '2026-10-16',
+    category: 'Credit',
+    intro:
+      'A credit card cash advance means pulling cash against your credit limit — at an ATM, over the counter at a bank, or with a convenience check mailed with your statement. It feels like your own money becoming cash, but issuers price it like a separate, far riskier loan than a normal purchase. Here’s exactly what it costs, plus the sneaky ways you can trigger one without ever touching an ATM.',
+    sections: [
+      {
+        heading: 'What actually counts as a cash advance',
+        body: 'The obvious version is sticking your credit card into an ATM and pulling out cash — most cards allow this, usually up to a lower limit than your main credit line. Less obvious: writing a “convenience check” your issuer mails you, getting cash back from a bank teller using your credit card, or buying foreign currency, casino chips, or lottery tickets with it.\n\nMany issuers also code certain purchases as cash advances behind the scenes even though no cash ever touches your hand — buying cryptocurrency, wiring money through a money-transfer service, or loading funds onto certain prepaid cards can all trigger cash advance treatment depending on the issuer. The only way to know for sure is to check your statement after the transaction or call your issuer before trying something unusual.',
+      },
+      {
+        heading: 'The three-part cost stack',
+        body: 'A cash advance charges you in three ways at once, and all three are worse than a regular purchase.\n\nFirst, a cash advance fee — typically 3% to 5% of the amount you take out, or a flat minimum (often around $10), whichever is higher. Pull out $200 and a 5% fee alone costs you $10 before you’ve spent a dollar of it.\n\nSecond, a separate — and usually higher — APR than the one on your purchases. Cash advance APRs commonly run several percentage points above a card’s purchase APR.\n\nThird, and the part that does the most damage: there’s no grace period. Regular purchases give you until your due date to pay in full before any interest applies. Cash advances start accruing interest from the moment the transaction posts, even if you pay your whole bill on time. There’s no way to borrow a cash advance for free, not even for a single day.\n\nStack an ATM operator’s own fee on top of your issuer’s cash advance fee, and you can lose real money before a single day of interest has even started.',
+      },
+      {
+        heading: 'Your cash advance limit is smaller — and separate',
+        body: 'Your card’s total credit limit is not what you can actually pull out as cash. Issuers set a separate, usually much smaller cash advance limit — often a modest fraction of your total credit limit, and it varies by issuer and card. A card with a $5,000 overall limit might only allow a small slice of that in cash advances, and that sub-limit is buried in your card’s terms, not shown on your app’s main balance screen.\n\nRunning up your cash advance limit also raises your overall credit utilization — the amount you owe relative to your total limit — which can hurt your credit score even if you’re planning to pay it off fast.',
+      },
+      {
+        heading: 'Why your minimum payment doesn’t touch it first',
+        body: 'The Credit CARD Act of 2009 requires that when you pay more than the minimum due, the issuer must apply the extra amount to the balance with the highest APR first. Since a cash advance usually carries the highest rate on the card, paying extra does attack it first — that part works in your favor.\n\nThe catch is the minimum payment itself. Issuers have more flexibility there, and many apply it toward the lowest-APR balance — like everyday purchases or a 0% promotional balance — first. If you only ever pay the minimum, your cash advance balance can sit there compounding daily interest for months while your statement makes it look like you’re making progress.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Treat ATM withdrawals, convenience checks, and bank-teller cash back on a credit card as a last resort, not a backup plan.\n2. Before buying crypto or using an unusual payment method with a credit card, check whether your issuer codes it as a cash advance.\n3. If you’ve already taken a cash advance, pay more than the minimum — the CARD Act forces your extra payment toward that high-APR balance first.\n4. Check your card’s terms for the actual cash advance APR and fee before you ever need the money, not after.\n5. Build a small cash buffer in a savings account so a real shortfall doesn’t send you to an ATM with your credit card instead.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Compound Interest', 'Federal Reserve', 'Liquidity'],
+    faq: [
+      {
+        q: 'Does withdrawing cash from an ATM with a credit card count as a cash advance?',
+        a: 'Yes — that’s the most common form of a cash advance, and it comes with its own fee, a separate and usually higher APR, and no grace period.',
+      },
+      {
+        q: 'Can you avoid interest on a cash advance by paying it off fast?',
+        a: 'You can limit how much interest builds up, but you can’t avoid it entirely. Unlike regular purchases, cash advances start accruing interest from the transaction date — there’s no grace period, even if you pay in full by your next due date.',
+      },
+      {
+        q: 'Is buying crypto with a credit card treated as a cash advance?',
+        a: 'It depends on the issuer. Many card companies code cryptocurrency purchases as cash advances or “cash equivalent” transactions, which triggers the fee and higher APR even though it looks like a normal purchase to you.',
+      },
+      {
+        q: 'What’s a cheaper alternative to a credit card cash advance?',
+        a: 'A small personal loan, an employer paycheck advance, overdraft protection linked to a savings account, or simply having an emergency fund are all typically far cheaper than a credit card cash advance.',
+      },
+    ],
+  },
 ]
