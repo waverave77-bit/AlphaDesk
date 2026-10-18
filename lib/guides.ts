@@ -5212,4 +5212,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-pay-taxes-on-savings-account-interest',
+    title: 'Do You Pay Taxes on Savings Account Interest?',
+    metaTitle: 'Do You Pay Taxes on Savings Account Interest? 1099-INT Explained',
+    description:
+      'Yes — savings account interest is taxable as ordinary income, even in a high-yield account. Here’s how the 1099-INT works and what you actually owe.',
+    date: '2026-10-18',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Short answer: yes. Every dollar of interest your bank pays you — from a basic savings account, a high-yield savings account, a money market account, or a CD — counts as taxable income, and the IRS finds out about it whether you report it or not. Here’s exactly how that works, including the one threshold people misunderstand.',
+    sections: [
+      {
+        heading: 'Yes, all of it — no matter which account pays it',
+        body: 'Interest from a savings account, a high-yield savings account (HYSA), a money market account, a CD, or even the tiny amount your checking account pays is taxable income in the eyes of the IRS. It doesn’t matter whether the bank is a giant brand-name bank or an online-only bank advertising a much higher rate — if they paid you interest, the IRS wants its share.\n\nThis catches people off guard after they move savings into a HYSA to actually keep up with inflation. Earning noticeably more interest than a traditional savings account pays is a real win, but it also means a chunk of taxable income now shows up on your return that basically didn’t exist before.',
+      },
+      {
+        heading: 'The 1099-INT — and the $10 myth',
+        body: 'If a bank or credit union pays you $10 or more in interest during the year, they’re required to send you (and the IRS) a Form 1099-INT, usually by the end of January the following year. That form lists exactly how much interest you earned, and the IRS matches it against what you report on your return.\n\nHere’s the part people get wrong: the $10 threshold is a reporting rule, not a tax rule. Even if you earn $4 in interest and never receive a 1099-INT, that $4 is still legally taxable income you’re supposed to report. Small amounts rarely get flagged on their own, but the obligation doesn’t disappear just because no form showed up in your inbox.',
+      },
+      {
+        heading: 'It’s taxed as ordinary income — not at the lower capital gains rate',
+        body: 'This is the detail that trips up people who’ve also started investing. Long-term capital gains and qualified dividends can qualify for lower, preferential tax rates. Savings account interest gets no such break — it’s taxed as ordinary income, stacked right on top of your wages, at your regular marginal tax rate.\n\nFor a teenager or college student with a part-time job and a HYSA, this usually isn’t a big deal, since your total income is probably low enough to sit in a low bracket anyway. But it matters more once you’re earning full-time income and holding a bigger cash cushion: the same amount of interest income gets taxed at a higher rate than the same amount of long-term stock gains would.',
+      },
+      {
+        heading: 'No, the bank usually doesn’t withhold tax for you',
+        body: 'Unlike a paycheck, where your employer automatically withholds federal (and often state) tax before you ever see the money, banks generally don’t withhold anything from the interest they pay you — unless you’re subject to backup withholding, which is rare and usually tied to a missing or incorrect taxpayer ID on file. The full interest amount hits your account, and the tax bill shows up later, when you file.\n\nThat means it’s on you to mentally set aside a portion of a sizable interest payout — especially if you’re keeping a large emergency fund in a HYSA and racking up real interest income over the year — so tax season doesn’t surprise you with a bill for money you’ve already spent.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Expect a 1099-INT from any bank or credit union that paid you $10 or more in interest during the year — it usually arrives by the end of January.\n2. Report all interest income on your tax return, even small amounts under $10 that never generated a form.\n3. Remember it’s taxed as ordinary income, not at the lower long-term capital gains rate your investments might qualify for.\n4. Don’t assume the bank withheld anything — set aside a portion of larger interest earnings so you’re not caught short at tax time.\n5. If you’re filing your own return for the first time, your tax software will walk you through reporting interest income automatically once you enter your 1099-INT.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Federal Reserve', 'Inflation', 'Yield'],
+    faq: [
+      {
+        q: 'Do you pay taxes on high-yield savings account interest?',
+        a: 'Yes — a HYSA’s interest is taxed exactly like interest from any other savings account: as ordinary income, reported on a 1099-INT if it’s $10 or more for the year.',
+      },
+      {
+        q: 'Do I have to report savings account interest under $10?',
+        a: 'Yes. The $10 threshold only determines whether the bank has to send you a 1099-INT — it doesn’t change the fact that all interest income is technically taxable, no matter how small.',
+      },
+      {
+        q: 'Is savings account interest taxed at the capital gains rate?',
+        a: 'No. Savings account interest is always taxed as ordinary income at your regular tax rate, unlike long-term capital gains or qualified dividends, which can qualify for lower preferential rates.',
+      },
+      {
+        q: 'Does the bank take taxes out of my interest automatically?',
+        a: 'Usually not. Banks typically pay you the full interest amount without withholding anything, so you’re responsible for setting money aside and reporting it when you file your taxes.',
+      },
+    ],
+  },
 ]
