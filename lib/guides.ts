@@ -5264,4 +5264,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-401k-vesting-schedule-when-is-the-match-yours',
+    title: 'What Is a 401(k) Vesting Schedule, and When Is Your Employer Match Actually Yours?',
+    metaTitle: '401(k) Vesting Schedule Explained: When the Match Is Really Yours',
+    description:
+      'Your 401(k) contributions are always 100% yours — but the employer match might not be. Here’s how vesting schedules work and what quitting early can cost you.',
+    date: '2026-10-19',
+    category: 'Investing',
+    intro:
+      'Your job matches 401(k) contributions and you’ve been counting that extra money as part of your retirement savings. Fair enough — but if you’re not fully "vested" yet, some or all of that match isn’t actually yours until you stick around long enough to earn it. Here’s how vesting schedules work, and why checking yours before you quit a job can be worth real money.',
+    sections: [
+      {
+        heading: 'Your own money is always 100% yours — immediately',
+        body: 'This part has no asterisk: every dollar you personally contribute from your paycheck into a 401(k), plus whatever it grows into, belongs to you the moment it lands in the account. Nobody can claw back your own contributions, no matter how fast you quit. Vesting only ever applies to money your employer puts in on your behalf — the match, and sometimes an additional profit-sharing contribution some companies add on top.',
+      },
+      {
+        heading: 'The two common vesting schedules',
+        body: 'A cliff vesting schedule gives you 0% of the employer match until you hit a specific milestone — commonly 3 years of service — at which point you jump to 100% all at once. Leave after 2 years and 11 months under a 3-year cliff, and every matched dollar goes back to the plan. Leave one month later, and all of it is yours.\n\nA graded vesting schedule phases ownership in gradually instead of all at once. A common structure is 0% in year one, then 20% per year starting in year two until you reach 100% at year six (20%, 40%, 60%, 80%, 100%). Under this kind of schedule, quitting partway through means you keep whatever percentage you’d already earned, not nothing.\n\nFederal rules under ERISA cap how slow an employer can make matching contributions vest, but there’s real variation between plans — some vest you immediately with no schedule at all, which companies increasingly use as a hiring perk. Profit-sharing contributions (separate from the match) are sometimes allowed to vest on a slower schedule than matching dollars. Never assume — the exact schedule is written into your plan’s Summary Plan Description, not a federal default.',
+      },
+      {
+        heading: 'What counts as a "year of service"',
+        body: 'Most plans define a year of service as working at least 1,000 hours within a 12-month period — roughly 20 hours a week for a year, well within a standard full-time schedule. Part-time or seasonal work can still count if you clear that hours threshold, so a slow first year doesn’t necessarily reset your vesting clock to zero. If you’re close to a vesting milestone and unsure whether a particular year counts, your plan administrator or HR can tell you your exact vested percentage — it’s usually visible right on your 401(k) account dashboard, often listed as "vested balance" next to your total balance.',
+      },
+      {
+        heading: 'Why this matters when you’re thinking about quitting',
+        body: 'Picture two job offers that look identical on paper, except one vests your match over 6 years and the other vests you immediately — the immediate-vesting offer is quietly worth more in guaranteed money, even at the same salary and match percentage. And if you’re already employed and approaching a vesting cliff, timing matters: leaving three months before a 3-year cliff hits can mean forfeiting years of accumulated employer match, while waiting those three months locks in 100% of it. It’s one of the few places where checking a specific date on your HR portal before handing in notice can be worth thousands of dollars.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Log into your 401(k) account and find your "vested balance" versus your total balance — the gap is what you’d lose if you quit today.\n2. Pull up your plan’s Summary Plan Description (ask HR if you can’t find it) to see the exact vesting schedule and how a "year of service" is counted.\n3. If you’re weighing a job change and sitting close to a vesting milestone, factor the forfeited match into your decision, not just the new salary.\n4. When comparing job offers, ask about the vesting schedule directly — immediate vesting is a real, quantifiable benefit, not a minor detail.\n5. Remember this never affects your own contributions or their growth — only the employer-funded portion is ever at risk.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Do I lose my own 401(k) contributions if I quit before I’m vested?',
+        a: 'No. Vesting schedules only apply to employer contributions — your own money, deducted from your paycheck, is always 100% yours immediately, along with any investment growth on it.',
+      },
+      {
+        q: 'How long does it take to be fully vested in a 401(k) match?',
+        a: 'It depends entirely on your employer’s plan — some vest you immediately, while others use a schedule that takes up to several years (commonly a 3-year cliff or a 6-year graded schedule). Check your plan’s Summary Plan Description for the exact timeline.',
+      },
+      {
+        q: 'What happens to unvested 401(k) money when you leave a job?',
+        a: 'Any employer-contributed money you haven’t vested in is forfeited back to the plan when you leave — it doesn’t follow you to your next job or get paid out to you.',
+      },
+      {
+        q: 'Can an employer ever vest you immediately?',
+        a: 'Yes. Immediate vesting means every employer match dollar is yours the moment it’s contributed, with no waiting period at all. Some companies offer this as a competitive hiring benefit.',
+      },
+    ],
+  },
 ]
