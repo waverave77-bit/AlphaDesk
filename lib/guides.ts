@@ -5316,4 +5316,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-does-income-driven-repayment-work-for-student-loans',
+    title: 'How Does Income-Driven Repayment Work for Federal Student Loans?',
+    metaTitle: 'Income-Driven Repayment (IDR) Explained: How the Math Actually Works',
+    description:
+      'Income-driven repayment ties your federal student loan payment to your income, not your balance. Here’s how the math works, the recertification trap, and the forgiveness catch.',
+    date: '2026-10-20',
+    category: 'College Money',
+    intro:
+      'Your standard 10-year student loan payment is calculated off your balance — borrow more, pay more, no matter what you earn. Income-driven repayment flips that: your monthly payment is calculated off your income and family size instead, which can drop a $400/month bill to $40 or even $0 for someone just starting out. It’s one of the most useful tools in the federal loan system, and also one of the easiest to get wrong if you don’t understand the mechanics underneath it.',
+    sections: [
+      {
+        heading: 'The basic idea: payment follows income, not balance',
+        body: 'Under an income-driven repayment (IDR) plan, your servicer calculates your monthly payment using a percentage of your "discretionary income" — roughly your income above a protected baseline tied to the federal poverty guideline for your family size — rather than using your loan balance and a fixed term the way the Standard 10-year plan does. Earn less, or support more people on the same income, and your required payment drops. Some borrowers early in their career, or between jobs, end up with a legitimate $0 monthly payment that still counts as current and in good standing.\n\nBecause the calculation depends on income and family size, your payment isn’t fixed for the life of the loan — it moves every year as those numbers change, which is the tradeoff for the lower payment up front.',
+      },
+      {
+        heading: 'There’s more than one plan, and the menu has shifted over the years',
+        body: 'Income-driven repayment isn’t one single plan — it’s a category that has included options like Income-Based Repayment (IBR), Pay As You Earn (PAYE), and Income-Contingent Repayment (ICR), each with its own percentage of discretionary income (historically somewhere in the 10%–20% range) and its own forgiveness timeline. Which plans are open to new borrowers, and the exact formulas behind them, has changed more than once due to legislation and litigation, so treat any specific plan name or percentage you hear secondhand as a starting point, not gospel. The current menu, your eligibility, and the actual numbers for your situation are always available — and worth re-checking — at studentaid.gov or through your loan servicer.',
+      },
+      {
+        heading: 'Only federal loans qualify, and recertifying on time actually matters',
+        body: 'IDR plans only apply to federal student loans — private student loans never offer income-based payments, which is one more reason refinancing federal loans into a private one is a one-way door worth thinking hard about first.\n\nOnce you’re enrolled, you have to recertify your income and family size every year, usually by submitting updated tax information through your servicer or the Department of Education. Miss that deadline and your payment doesn’t just stay the same — it can jump to what you’d owe under a standard plan based on your full balance, sometimes catching people off guard with a bill several times larger than what they’d budgeted for. Any interest that built up can also get capitalized (added to your principal) when that happens. Put the recertification date in your phone the same way you’d treat a bill due date.',
+      },
+      {
+        heading: 'The part everyone focuses on: forgiveness after 20–25 years',
+        body: 'If a balance is still outstanding after making qualifying payments for a set number of years under an IDR plan — commonly somewhere in the 20-to-25-year range depending on the specific plan and whether the debt is from undergrad or grad school — whatever is left gets forgiven. For someone with a high debt load relative to their income, that forgiven amount can be substantial.\n\nThe catch: forgiven IDR balances have historically been treated as taxable income in the year they’re cancelled, creating what people call a "tax bomb" — a tax bill on money you never actually received as cash. Federal law has temporarily exempted student loan forgiveness from taxes before, and that treatment can change again, so don’t assume either way. Some states also tax forgiven loan balances even in years the federal government doesn’t. If you’re on a 20-plus year forgiveness track, it’s worth checking the current tax treatment well before that date arrives, not the year it happens.',
+      },
+      {
+        heading: 'The tradeoff nobody mentions: a lower payment can mean a bigger balance',
+        body: 'A smaller monthly payment doesn’t shrink your interest charges — it just means more of each payment (or none of it, at $0) goes toward interest instead of principal. If your IDR payment is lower than the interest accruing that month, your balance can actually grow over time even though you’re paying exactly what you owe on paper. Some plans partially or fully cover that unpaid interest so it doesn’t snowball; older plans don’t. That’s not a reason to avoid IDR if you need the lower payment to stay current — a growing balance you can afford beats a standard payment you default on — but it is a reason to run the numbers instead of assuming "lower payment" automatically means "cheaper loan."',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Use the loan simulator at studentaid.gov to compare your actual IDR payment against the Standard 10-year payment before enrolling.\n2. Confirm which specific IDR plans you’re eligible for right now — the available menu has changed before and can change again.\n3. Mark your annual recertification deadline the moment you enroll, and recertify early rather than at the last minute.\n4. If you’re also pursuing Public Service Loan Forgiveness, confirm your IDR plan qualifies for that too — not every IDR plan automatically counts.\n5. If you’re on a long-term forgiveness track, check the current tax treatment of forgiven IDR balances periodically rather than assuming it’s tax-free.\n6. Never let federal loans go into IDR and then get refinanced into a private loan without understanding you’d permanently lose access to income-driven payments and forgiveness.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Credit Rating', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Can your student loan payment really be $0 under income-driven repayment?',
+        a: 'Yes. If your discretionary income calculates to zero or close to it — common for low earners or large households — your required monthly payment can legitimately be $0 and still count as a qualifying, on-time payment.',
+      },
+      {
+        q: 'Do private student loans qualify for income-driven repayment?',
+        a: 'No. Income-driven repayment is only available on federal student loans. Private lenders don’t offer income-based payment plans, which is an important factor to weigh before refinancing federal loans into a private one.',
+      },
+      {
+        q: 'Is loan forgiveness under income-driven repayment taxed?',
+        a: 'It depends on current law at the time your balance is forgiven. Forgiven amounts have historically been treated as taxable income, though that treatment has been temporarily suspended by federal law before. Check current IRS guidance as your forgiveness date approaches rather than assuming either outcome.',
+      },
+      {
+        q: 'What happens if I miss my income recertification deadline?',
+        a: 'Your payment can reset to a much higher amount based on the Standard repayment plan and your full balance, and any unpaid interest can capitalize into your principal. Recertify on time every year to avoid the jump.',
+      },
+    ],
+  },
 ]
