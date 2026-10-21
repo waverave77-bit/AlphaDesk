@@ -5372,4 +5372,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-foreign-transaction-fee-how-to-avoid-it',
+    title: 'What Is a Foreign Transaction Fee, and How Do You Avoid It?',
+    metaTitle: 'Foreign Transaction Fees Explained — and How to Avoid Them',
+    description:
+      'Studying abroad or traveling with your card? A foreign transaction fee can quietly add 1–3% to every swipe — here’s how it works and which cards skip it.',
+    date: '2026-10-21',
+    category: 'Credit',
+    intro:
+      'You swipe your card at a café in another country, and a few weeks later your statement shows a little extra tacked onto every single purchase from that trip. That’s a foreign transaction fee — a charge almost nobody notices until they add it up after a semester abroad or a two-week trip — and it’s one of the easiest fees in all of banking to avoid completely if you check for it before you leave instead of after you land.',
+    sections: [
+      {
+        heading: 'What a foreign transaction fee actually is',
+        body: 'A foreign transaction fee is a surcharge your card issuer adds to any purchase made in a foreign currency, and sometimes to any purchase simply processed through a bank outside the US, even if you were charged in dollars. It’s typically 1%–3% of the purchase, added automatically, with nothing on the receipt to flag it.\n\nThe fee is usually two layers stacked together: the card network (Visa or Mastercard) charges roughly a 1% currency-conversion fee, and your card issuer often adds another 1%–2% on top for itself. On $1,000 of spending during a semester abroad, a 3% fee quietly costs $30 — not life-changing, but real money for something that costs you nothing to avoid.',
+      },
+      {
+        heading: 'The trap at the register: dynamic currency conversion',
+        body: 'Abroad, a card machine or ATM will sometimes ask, "Would you like to be charged in US dollars instead?" It sounds like a convenience. It’s actually a separate, optional fee called dynamic currency conversion (DCC), and the exchange rate the merchant applies is almost always worse than the rate your card network would give you — commonly 3%–10% worse.\n\nThe move is always the same: decline the conversion and choose to be charged in the local currency. Your card network converts it afterward using its own rate, which is typically close to the real market exchange rate. Saying yes to "pay in dollars" at checkout is one of the most common ways travelers quietly overpay without ever realizing it happened.',
+      },
+      {
+        heading: 'Not every card charges this fee — check before you travel',
+        body: 'Foreign transaction fees aren’t universal; they’re a choice each issuer makes. Plenty of basic starter and student credit cards charge the full 1%–3%, while many travel rewards cards, and a growing number of everyday cards, now advertise "no foreign transaction fees" as a selling point.\n\nThe same split exists for debit cards. Big traditional banks commonly charge around 3% on foreign purchases and ATM withdrawals, while some online banks and brokerage cash-management accounts are known for charging no foreign transaction fee at all and reimbursing ATM fees worldwide. Before any trip, pull up your card’s terms and search for the phrase "foreign transaction fee" — if it isn’t mentioned at all, that’s usually a sign the card doesn’t charge one.',
+      },
+      {
+        heading: 'ATM withdrawals abroad can stack three fees at once',
+        body: 'Pulling cash from a foreign ATM is where fees pile up worst. A single withdrawal can rack up your own bank’s foreign ATM fee, the foreign ATM operator’s own surcharge (often $3–$5 or more, deducted right there at the machine), and a foreign transaction fee on top of the converted amount.\n\nIf you’re traveling for more than a few days, it’s worth getting one account built specifically for this before you go: a debit card with no foreign transaction fee and ATM fee reimbursement. A little planning done weeks ahead of a trip, instead of the night before, can save real money across a semester abroad or a long trip.',
+      },
+      {
+        heading: 'Your checklist before you travel',
+        body: '1. Check every card you plan to bring for the phrase "foreign transaction fee" in its terms — no mention usually means no fee.\n2. If your main card charges one, apply for a no-foreign-fee credit card a few weeks before the trip, since approval and shipping take time.\n3. Always choose to pay in the local currency, never "US dollars," whenever a foreign terminal or ATM offers the choice.\n4. Withdraw larger amounts less often from ATMs abroad to cut down how many flat ATM fees you pay overall.\n5. Notify your bank you’re traveling if your card requires it, so a legitimate purchase doesn’t get flagged and frozen as fraud.\n6. Carry a backup card on a different network (Visa and Mastercard aren’t accepted equally everywhere) in case one gets declined.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Do all credit cards charge a foreign transaction fee?',
+        a: 'No — it’s decided by each issuer, not required by law. Many student and basic starter cards charge 1%–3% on foreign purchases, while a growing number of travel and even everyday cards now advertise no foreign transaction fee at all. Check your specific card’s terms before a trip.',
+      },
+      {
+        q: 'Is it better to use a debit or credit card when traveling abroad?',
+        a: 'A credit card with no foreign transaction fee is usually the better default for purchases — it carries stronger fraud protection than a debit card and doesn’t expose your bank account directly. Keep a no-fee debit card mainly for ATM cash withdrawals.',
+      },
+      {
+        q: 'What is dynamic currency conversion, and why should I decline it?',
+        a: 'It’s when a foreign merchant or ATM offers to charge you in your home currency instead of the local one. The exchange rate used is almost always worse than what your card network would apply, so declining it and paying in the local currency typically saves money.',
+      },
+      {
+        q: 'How much can foreign transaction fees actually cost on a trip?',
+        a: 'At a typical 3% fee, $2,000 of spending on a semester abroad or a long trip costs an extra $60 — money that disappears for zero benefit if you’re carrying a card that charges the fee instead of one that doesn’t.',
+      },
+    ],
+  },
 ]
