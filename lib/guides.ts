@@ -5424,4 +5424,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-credit-card-balance-transfer-is-it-worth-it',
+    title: 'What Is a Credit Card Balance Transfer, and Is It Actually Worth the Fee?',
+    metaTitle: 'Credit Card Balance Transfers Explained: Fees, APR & the Math',
+    description:
+      'A balance transfer moves high-interest debt onto a 0% APR card for an upfront fee — here’s the real math on when that trade saves money and when it backfires.',
+    date: '2026-10-22',
+    category: 'Credit',
+    intro:
+      'You’re carrying a balance on a card charging 24% interest, and an offer lands in your inbox for a new card with “0% APR on balance transfers for 15 months.” It sounds like a free reset button, but it isn’t free — there’s a fee attached, a deadline to beat, and a few ways the whole thing can quietly stop working in your favor. Here’s how to actually run the numbers before you apply.',
+    sections: [
+      {
+        heading: 'What a balance transfer actually does',
+        body: 'A balance transfer moves debt you owe on one credit card onto a different credit card — usually one offering a low or 0% introductory APR for a limited promotional window. You apply for the new card (or use one you already have), request the transfer, and the new issuer pays off the old balance directly. The debt hasn’t disappeared; it’s just moved somewhere that charges less interest for a while.\n\nThe appeal is simple: if you’re paying 20%+ interest on an existing balance, moving it somewhere that charges 0% for over a year means every payment you make actually shrinks the debt, instead of a big chunk of it evaporating into interest first.',
+      },
+      {
+        heading: 'The transfer fee is the cost of entry',
+        body: 'Almost every balance transfer charges an upfront fee, commonly in the 3%–5% range of the amount you move, added to your new card’s balance the moment the transfer completes. Move $4,000 at a 3% fee and you start the new card already owing $4,120 — the fee is real money, even though the interest rate on it is 0%.\n\nThis fee is the whole reason a balance transfer isn’t automatically a good idea. It only makes sense if the interest you avoid paying on the old card is bigger than the fee you pay to make the move.',
+      },
+      {
+        heading: 'The math: when it actually saves you money',
+        body: 'Run a simple comparison before applying. Say you owe $3,000 on a card charging 24% APR, and you can realistically pay $300/month toward it. Left where it is, a meaningful chunk of each payment goes to interest before it touches the principal — plausibly $500–$700 in total interest before the balance is gone.\n\nMove that same $3,000 to a card with a 3% transfer fee ($90) and 0% APR for 15 months, and — paying that same $300/month — the balance is fully paid off within the promo window with zero interest, for a total cost of just the $90 fee. The savings in this example run several hundred dollars, purely from redirecting money that would’ve gone to interest into principal instead. The math only works this well if you can actually pay off the transferred amount before the promotional rate ends — a balance transfer doesn’t erase debt, it just buys you an interest-free runway to pay it down faster.',
+      },
+      {
+        heading: 'The traps that erase the savings',
+        body: 'Transfers usually have to happen within a window after opening the new card — often somewhere around 45 to 60 days — or they don’t qualify for the promotional rate at all. Miss that window and you’ve opened a new account, taken a credit inquiry, and gotten none of the benefit.\n\nThe 0% rate almost always applies only to the transferred balance, not to new purchases on the same card — new spending frequently starts accruing interest immediately at the card’s regular (non-promotional) APR. Using your new “0% card” to also swipe for everyday purchases can quietly rack up interest on top of the debt you were trying to pay down.\n\nAnd the promo window is a deadline, not a suggestion. Whatever balance is still sitting there when it ends starts accruing interest at the card’s standard ongoing APR — which can be just as high as the card you transferred away from. If you can’t realistically pay off the full amount before the promo ends, the transfer only delays the interest instead of avoiding it.',
+      },
+      {
+        heading: 'What a balance transfer does to your credit score',
+        body: 'Opening a new card triggers a hard inquiry and adds a new account to your file, both of which can cause a small, temporary dip in your score — and a new account also lowers the average age of your accounts, which matters for your score too. Neither effect tends to be large or permanent on its own.\n\nWhat often helps afterward: your credit utilization (how much of your available credit you’re using) usually improves, for two reasons. The old card’s balance drops to zero, and your total available credit across all cards goes up because you’ve added a new credit limit. As long as you don’t run the old card back up or max out the new one, utilization — and the score impact that comes with it — tends to improve within a few months, not get worse. One caution: don’t close the old card right after transferring the balance. Closing it removes that available credit from the utilization calculation and can shorten your credit history, both of which can push your score the wrong way.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up the transfer fee (commonly 3%–5%) against the interest you’d realistically pay if you left the balance where it is — only transfer if the fee is clearly smaller.\n2. Complete the transfer inside the issuer’s window (often 45–60 days of account opening) or you likely lose the promotional rate.\n3. Divide the balance by the number of promo months and set that as an automatic payment so it’s fully paid off before the 0% period ends.\n4. Avoid putting new purchases on the transfer card — they usually accrue interest at the regular APR from day one, separately from the 0% promo balance.\n5. Keep the old card open (ideally unused) instead of closing it, so you don’t shrink your available credit or shorten your credit history.\n6. Know the card’s standard go-to APR before you commit, in case any balance is still left when the promotional period ends.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Is a balance transfer worth the fee?',
+        a: 'Usually yes, if the transfer fee (commonly 3%–5%) is smaller than the interest you’d otherwise pay on the old card, and you can realistically pay off the transferred amount before the promotional 0% period ends. If you can’t pay it off in time, the savings shrink or disappear.',
+      },
+      {
+        q: 'Does a balance transfer hurt your credit score?',
+        a: 'There’s usually a small, temporary dip from the hard inquiry and new account, but utilization often improves afterward since the old balance drops to zero and your total available credit goes up — as long as you don’t run either card back up.',
+      },
+      {
+        q: 'Can you transfer a balance to a card you already have?',
+        a: 'Sometimes, but most of the best promotional rates are reserved for new cards, since issuers use 0% balance transfer offers to win new customers. Check the specific terms — some issuers also won’t let you transfer a balance between two cards they both issue.',
+      },
+      {
+        q: 'What happens if I don’t pay off the balance before the 0% period ends?',
+        a: 'Whatever balance remains starts accruing interest at the card’s standard ongoing APR, going forward from that point — not retroactively on the whole original amount, the way some store deferred-interest promotions work. Still, that standard APR can be just as high as the card you transferred away from.',
+      },
+    ],
+  },
 ]
