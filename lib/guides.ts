@@ -5480,4 +5480,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-you-borrow-from-your-401k-how-401k-loans-work',
+    title: 'Can You Borrow From Your 401(k)? How 401(k) Loans Actually Work',
+    metaTitle: '401(k) Loans Explained: Limits, Repayment & the Real Risk',
+    description:
+      'You can borrow from your own 401(k) — up to 50% of your vested balance or $50,000. Here’s how repayment actually works, and the risk if you leave your job.',
+    date: '2026-10-23',
+    category: 'Investing',
+    intro:
+      'You’re staring at a bill you can’t quite cover, and your 401(k) balance is sitting right there — money that’s technically yours. Most plans do let you borrow against it, and it feels like a victimless move since you’re “paying yourself back.” The mechanics are more specific than that, and the risk shows up at a moment you probably aren’t planning for: the day you leave the job.',
+    sections: [
+      {
+        heading: 'How a 401(k) loan actually works',
+        body: 'Unlike a bank loan, a 401(k) loan has no credit check and doesn’t touch your credit report — you’re borrowing from your own account balance, not from a lender. The IRS caps how much: generally the lesser of $50,000 or 50% of your vested balance (many plans will still let you borrow up to $10,000 even if 50% of your balance is smaller than that).\n\nThe money leaves your investments — sold off to hand to you in cash — and your repayments, plus interest, go right back into your account. The interest rate is usually modest, often set a point or two above the prime rate, and unlike a bank loan, that interest is paid to yourself instead of a lender. It sounds like a wash. It isn’t quite.',
+      },
+      {
+        heading: 'The repayment timeline is stricter than people expect',
+        body: 'Most plans require full repayment within 5 years, usually through automatic payroll deduction — you genuinely can’t opt out of a payment once it’s set up, the same way you can’t skip a paycheck deduction for your regular contributions. The one common exception: loans used to buy your primary residence often get a longer repayment window, sometimes up to 15 years, depending on the plan.\n\nMiss payments and the loan can be declared in “default,” at which point the unpaid balance gets reclassified as a distribution — taxed as ordinary income, plus a 10% early withdrawal penalty if you’re under 59½. Your retirement account just quietly becomes a tax bill.',
+      },
+      {
+        heading: 'The hidden cost: it’s not free, even if the interest rate is low',
+        body: 'Two costs rarely show up in the pitch. First, opportunity cost: the money you borrowed is out of the market while the loan is outstanding, so it earns nothing — not 0% in a neutral sense, but a real gap versus what it would have earned had it stayed invested and kept compounding. A $10,000 loan taken out for three years during a period when the market returns its long-run historical average isn’t just “paused” — it’s a few thousand dollars of missed growth that never gets reconstructed.\n\nSecond, for a traditional (pre-tax) 401(k), the repayments come out of your paycheck after tax — you’ve already paid income tax on the dollars you’re using to repay yourself. Then, decades later when you withdraw that same money in retirement, it gets taxed again as ordinary income. That principal effectively gets taxed twice, which never happens with money that goes in as a regular pre-tax contribution.',
+      },
+      {
+        heading: 'The real risk: leaving your job with a balance still outstanding',
+        body: 'This is the part that catches people off guard. If you quit, get laid off, or get fired while a 401(k) loan is outstanding, you don’t get years to pay it back anymore. Under current rules, you have until the tax filing deadline (including extensions) for that year to either repay the full remaining balance or roll it into an IRA or new employer’s plan.\n\nMiss that window and the outstanding balance becomes a “deemed distribution” — taxed as income in the year you left, plus the 10% early withdrawal penalty if you’re under 59½. Losing a job is already a financial shock; owing taxes on money you no longer have in hand makes it worse. If there’s any chance your job situation is unstable, that risk alone should weigh heavily against borrowing.',
+      },
+      {
+        heading: '401(k) loan vs. hardship withdrawal — not the same thing',
+        body: 'A 401(k) loan is temporary — you’re required to pay it back, and if you do, there’s no tax hit at all. A hardship withdrawal is permanent — the money comes out and never goes back in, it’s taxed as ordinary income in the year you take it, and (unless you qualify for a specific IRS exception) it typically carries the same 10% early withdrawal penalty if you’re under 59½. Plans generally only allow hardship withdrawals for a narrow list of “immediate and heavy” needs — things like preventing eviction or foreclosure, certain medical expenses, or funeral costs.\n\nIf your plan offers both and you genuinely need the cash, the loan is almost always the less damaging option, since it at least leaves the door open to undo the cost by repaying it.',
+      },
+      {
+        heading: 'Your checklist before borrowing from your own 401(k)',
+        body: '1. Ask your plan for the exact loan limit, interest rate, and repayment term before assuming the general rules apply to you — plans vary.\n2. Confirm how repayment actually happens (almost always payroll deduction) and make sure your take-home pay can absorb it.\n3. Have an honest conversation with yourself about job stability — a layoff turns a loan into an immediate tax bill.\n4. Compare the loan against other options first: an emergency fund, a 0% promotional credit card you can pay off fast, or a personal loan — all of which leave your retirement investments untouched.\n5. If you go ahead, keep contributing at least enough to capture any employer match during the loan — don’t let a loan quietly turn off your match too.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Compound Interest', 'Roth IRA', 'Leverage'],
+    faq: [
+      {
+        q: 'Does taking a 401(k) loan hurt your credit score?',
+        a: 'No. A 401(k) loan isn’t reported to credit bureaus and doesn’t require a credit check, because you’re borrowing against your own account balance, not from an outside lender.',
+      },
+      {
+        q: 'What happens if you don’t pay back a 401(k) loan?',
+        a: 'The unpaid balance becomes a “deemed distribution” — taxed as ordinary income in that year, plus a 10% early withdrawal penalty if you’re under 59½. This also happens automatically if you leave your job and don’t repay or roll over the balance by the tax filing deadline.',
+      },
+      {
+        q: 'Is interest on a 401(k) loan tax deductible?',
+        a: 'No. Unlike mortgage interest, 401(k) loan interest isn’t tax deductible — and you’re paying it to yourself with after-tax dollars anyway, so there’s no outside lender benefiting from it either.',
+      },
+      {
+        q: 'Is a 401(k) loan better than a hardship withdrawal?',
+        a: 'Usually, yes. A loan is temporary and tax-free if repaid on schedule, while a hardship withdrawal is permanent, taxed as income immediately, and typically hit with a 10% penalty if you’re under 59½.',
+      },
+    ],
+  },
 ]
