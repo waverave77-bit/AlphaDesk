@@ -5536,4 +5536,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'debt-snowball-vs-debt-avalanche-which-pays-off-debt-faster',
+    title: 'Debt Snowball or Debt Avalanche: Which Payoff Method Actually Saves You More?',
+    metaTitle: 'Debt Snowball vs. Debt Avalanche: Which Saves More Money?',
+    description:
+      'Snowball pays your smallest debt off first for quick wins — avalanche targets the highest interest rate to save the most money overall. Here’s how to actually choose.',
+    date: '2026-10-24',
+    category: 'Credit',
+    intro:
+      'You’ve got more than one balance to pay down — a credit card, maybe a store card, maybe a loan — and extra money each month to throw at them. Debt snowball and debt avalanche are the two most common game plans for where that extra money should go, and they can lead you to pay off the exact same debts in a completely different order. One saves you more money. The other is more likely to actually get finished.',
+    sections: [
+      {
+        heading: 'The two methods, side by side',
+        body: 'Debt snowball and debt avalanche are strategies for attacking multiple debts — credit cards, a personal loan, maybe a private student loan — when you have extra money beyond the minimums. Both start the same way: list every debt, its balance, its APR, and its minimum payment. Then they diverge on what to do with any extra cash.\n\nDebt snowball puts every extra dollar toward whichever balance is smallest, regardless of its interest rate, while you pay the minimum on everything else. Once that smallest debt is gone, you roll its old minimum payment into the extra you’re sending to the next-smallest balance — the “snowball” gets bigger every time a debt disappears. Debt avalanche does the same rolling mechanic, except it targets whichever debt has the highest APR first, not the smallest balance.',
+      },
+      {
+        heading: 'The math: why avalanche wins on paper',
+        body: 'Avalanche is the mathematically optimal method because interest cost is driven by rate, not balance size. Say you’re juggling three debts: a $3,000 credit card at 24% APR, an $800 store card at 18% APR, and a $6,000 personal loan at 9% APR.\n\nLook at just the interest accruing in a single month if nothing extra gets paid: the $3,000 card at 24% APR accrues roughly $60 that month (3,000 × 0.24 ÷ 12), the $800 card at 18% APR accrues roughly $12, and the $6,000 loan at 9% APR accrues roughly $45 — even though it has the biggest balance of the three. Dollar for dollar, the $3,000 card is quietly the most expensive debt in the pile, because rate matters more than size. Avalanche puts every extra dollar on that card first, which is exactly where it does the most good.\n\nSnowball, by contrast, would attack the $800 card first since it’s the smallest balance — even though it isn’t the one costing the most in interest. Over a full payoff period, avalanche almost always results in less total interest paid than snowball, assuming both methods get the same extra payment each month.',
+      },
+      {
+        heading: 'The psychology: why snowball still wins for a lot of people',
+        body: 'Snowball exists because personal finance is not actually a math problem for most people — it’s a behavior problem. Paying off that $800 card completely in a couple of months gives you a real, visible win: one less bill, one fewer minimum payment to track, proof the plan is working. Research on debt repayment behavior has found that people who get an early win by closing out a small account tend to stay more motivated and are more likely to finish paying off everything, compared to people who pick the mathematically optimal order and have to wait much longer to see any single account hit zero.\n\nIf you’ve started and abandoned a debt payoff plan before, that’s a sign momentum might matter more to you than theoretical savings. If you’re disciplined enough to stick with a plan even when progress feels invisible for a while, avalanche gets you out of debt for less money, full stop.',
+      },
+      {
+        heading: 'The part both methods agree on: minimums are not optional',
+        body: 'Neither method changes what you owe on the debts you’re not currently focused on — you still pay the minimum on every other balance, every month, on time, no exceptions. Missing a minimum on a “deprioritized” debt can trigger a late fee, a penalty APR, and real damage to your credit report, regardless of which strategy you’re following. Snowball and avalanche only decide where your extra money goes after every minimum is already covered — neither is a license to ignore anything.',
+      },
+      {
+        heading: 'Which one should you actually pick',
+        body: 'If the gap between your debts’ interest rates is small, the dollar difference between snowball and avalanche is small too — pick whichever one you’ll actually stick with, which for most people is snowball, because of the early wins. If one debt carries a dramatically higher rate than the rest (a store card at 28% sitting next to a student loan at 6%, for example), the avalanche savings get bigger and harder to ignore — that gap is worth pushing through a slower start for.\n\nA common middle ground: knock out any tiny debt (under roughly $200) first for a quick psychological win no matter which method you’re using, then switch to avalanche for everything left. You get a taste of progress without giving up much interest savings, since a very small balance barely moves the math either way.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. List every debt with its balance, APR, and minimum payment in one place — you can’t choose a method without seeing the full picture.\n2. Add up all your minimums and confirm you can cover every single one before committing extra money anywhere.\n3. Pick an order: smallest balance first (snowball), highest APR first (avalanche), or one tiny balance first then avalanche for the rest.\n4. Automate the minimum payments on every account so a missed payment never undoes your progress.\n5. Roll each payoff’s old minimum payment into the extra you’re sending to the next target — that’s what makes the “snowball” grow.\n6. Revisit the list every few months — a new balance transfer offer or a changed rate can shift which debt deserves the top spot.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Compound Interest', 'Risk/Reward Ratio', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Which saves more money, debt snowball or debt avalanche?',
+        a: 'Debt avalanche almost always saves more in total interest, because it targets the highest-APR debt first regardless of balance. Debt snowball can cost more in interest, but its small, fast wins help many people actually stick with the plan to the end.',
+      },
+      {
+        q: 'Does it matter which method I use if my interest rates are all similar?',
+        a: 'Less than you’d think. When your debts’ rates are close together, the dollar gap between snowball and avalanche shrinks too — in that case, picking the method you’re more likely to stay consistent with usually matters more than the math.',
+      },
+      {
+        q: 'Can I combine debt snowball and debt avalanche?',
+        a: 'Yes. A common approach is to pay off one or two very small balances first for an early motivational win, then switch to avalanche — attacking the highest-APR debt — for the remaining, larger balances.',
+      },
+      {
+        q: 'Does either method hurt my credit score?',
+        a: 'No — consistently paying down balances under either method tends to help your credit score over time by lowering your overall credit utilization, as long as you keep making every minimum payment on time along the way.',
+      },
+    ],
+  },
 ]
