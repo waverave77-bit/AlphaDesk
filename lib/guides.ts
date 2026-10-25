@@ -5592,4 +5592,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'american-opportunity-credit-vs-lifetime-learning-credit',
+    title: 'American Opportunity Credit or Lifetime Learning Credit: Which College Tax Break Should You Claim?',
+    metaTitle: 'American Opportunity Credit vs. Lifetime Learning Credit',
+    description:
+      'Two IRS credits can cut your tax bill for college costs by up to $2,500 a year — but you can only use one per student per year. Here’s how AOTC and LLC actually differ.',
+    date: '2026-10-25',
+    category: 'College Money',
+    intro:
+      'Tuition statement in hand, tax software asking "did you pay for college this year?" — and suddenly you’re staring at two credits with similar-sounding names and no idea which one actually applies to you. They’re not interchangeable, and picking wrong can mean leaving real money on the table. Here’s what each one actually does.',
+    sections: [
+      {
+        heading: 'Two different credits, both for the same bill',
+        body: 'The American Opportunity Tax Credit (AOTC) and the Lifetime Learning Credit (LLC) both let you claim a tax credit — not a deduction — based on tuition and other qualified education expenses you or your parents paid during the year. A deduction just shrinks the income you’re taxed on; a credit comes straight off the tax bill itself, dollar for dollar, which is why both of these are worth understanding even if you’ve never filed taxes with a 1098-T form before.\n\nThe expenses that count are tuition and mandatory enrollment fees paid to an eligible school. Room, board, transportation, and health insurance don’t qualify for either credit — only the actual cost of being enrolled does. You claim both credits using IRS Form 8863, and whoever claims the student as a dependent is generally the one who claims the credit, even if the student is the one who technically paid the bill.',
+      },
+      {
+        heading: 'The American Opportunity Tax Credit: bigger, but with more rules',
+        body: 'AOTC is worth up to $2,500 per student per year, calculated as 100% of the first $2,000 of qualified expenses plus 25% of the next $2,000. Unusually for a tax credit, 40% of it — up to $1,000 — is refundable, meaning you can get that portion back even if you owed $0 in federal tax to begin with. That refundable piece is a big deal for a student or new grad in a low tax bracket, since most credits (including the LLC) can only zero out a bill you already owe.\n\nThe tradeoffs: AOTC only applies to the first four years of post-secondary education, the student must be enrolled at least half-time in a program leading to a degree or credential, and it can only be claimed four total tax years per student, ever. It also phases out at higher incomes — roughly in the $80,000–$90,000 modified adjusted gross income range for a single filer, and roughly double that for a married couple filing jointly, though these thresholds can shift, so check the current year’s Form 8863 instructions rather than assuming last year’s numbers still apply.',
+      },
+      {
+        heading: 'The Lifetime Learning Credit: smaller, but far more flexible',
+        body: 'LLC is worth up to $2,000 per tax return (not per student) — 20% of up to $10,000 of qualified expenses across everyone on the return combined. Unlike AOTC, it’s entirely nonrefundable, so it can only reduce a tax bill you already owe down to $0; it can’t generate money back beyond that.\n\nWhat LLC gives up in size, it makes up in reach. There’s no four-year cap — you can claim it for grad school, a single night class, a certificate program, or any year you’re still chipping away at a degree after your AOTC years run out. There’s no half-time enrollment requirement either, so a student taking one class a semester while working full-time still qualifies. The income phase-out for LLC was aligned with AOTC’s in recent tax law, so the two credits generally cut off around the same income levels — but confirm the current year’s thresholds before counting on either one.',
+      },
+      {
+        heading: 'Why you can’t just claim both',
+        body: 'For the same student in the same tax year, you have to pick one credit or the other — you cannot claim AOTC and LLC on the same student’s expenses simultaneously. If a family has multiple kids in college in the same year, though, this restriction applies per student, not per return: one kid’s expenses can claim AOTC while a sibling’s separate expenses claim LLC, as long as neither student’s own costs get double-counted across both credits.\n\nThere’s a second trap worth knowing about: you can’t use the same dollar of qualified expenses for both a tax credit and tax-free money that already covered it. If a scholarship, grant, or a 529 plan withdrawal already paid a tuition bill tax-free, that portion of the bill can’t also be used to calculate either credit. Only the out-of-pocket (or loan-funded) portion of tuition counts toward AOTC or LLC.',
+      },
+      {
+        heading: 'How to actually decide which one to claim',
+        body: 'If the student is an undergrad in their first four years, enrolled at least half-time, and the family’s income is under the phase-out range, AOTC is almost always the better pick — it’s worth more per dollar of expense and part of it is refundable even at low income. Run the numbers anyway: a $2,500 AOTC claim against a $0 tax bill still nets a $1,000 refund, since that portion is refundable, while a $2,000 LLC claim against a $0 tax bill nets nothing.\n\nLLC becomes the right (and only available) choice once AOTC’s four years are used up, for grad school, for part-time or less-than-half-time enrollment, or for continuing education and certificate courses that aren’t part of a degree program. Some tax software will automatically calculate both and pick whichever nets a bigger refund — but it’s worth checking the result yourself, since the software can only compare what you actually entered.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Gather your 1098-T form from the school — it reports tuition billed and any scholarships or grants that were applied.\n2. Subtract any scholarship, grant, or tax-free 529 withdrawal already used for tuition — only the remaining out-of-pocket or loan-funded amount counts as a qualified expense.\n3. Check enrollment status and which year of school it is — half-time-or-more and within the first four years opens the door to AOTC.\n4. Confirm the household’s income is under the current year’s phase-out range on the IRS Form 8863 instructions.\n5. If multiple family members are in school the same year, consider whether splitting AOTC and LLC across different students nets a bigger total credit.\n6. File Form 8863 with your return — neither credit is applied automatically just because you paid tuition.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Can I claim both the American Opportunity Credit and the Lifetime Learning Credit?',
+        a: 'Not for the same student in the same year — you must choose one per student. If more than one student’s expenses appear on the same tax return, each student’s expenses can be matched to a different credit.',
+      },
+      {
+        q: 'Is the Lifetime Learning Credit refundable?',
+        a: 'No. LLC is entirely nonrefundable, so it can only reduce a tax bill you already owe down to $0. AOTC, by contrast, is up to 40% refundable, which can mean money back even with no tax bill at all.',
+      },
+      {
+        q: 'Does a 529 plan withdrawal cancel out the education tax credits?',
+        a: 'Only for the expenses it actually paid. You can’t use the same tuition dollars to justify a tax-free 529 withdrawal and a tax credit — but any tuition still paid out of pocket after the 529 withdrawal can still count toward AOTC or LLC.',
+      },
+      {
+        q: 'Can grad students claim either credit?',
+        a: 'Grad students can’t claim AOTC, since it’s limited to the first four years of post-secondary education. The Lifetime Learning Credit has no such limit, which makes it the one grad students and continuing-education students actually have access to.',
+      },
+    ],
+  },
 ]
