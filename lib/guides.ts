@@ -5648,4 +5648,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-old-ee-savings-bonds-still-earn-interest-should-you-cash-them',
+    title: 'Do Old EE Savings Bonds Still Earn Interest — and Should You Cash Them In?',
+    metaTitle: 'EE Savings Bonds Explained: Do They Still Earn Interest?',
+    description:
+      'That paper savings bond from your christening or graduation might be worth more than its face value — or it might have already stopped earning. Here’s how to check.',
+    date: '2026-10-26',
+    category: 'Saving',
+    intro:
+      'Somewhere in a drawer is a paper bond a grandparent gave you as a baby, with a face value like $50 printed on it — and no obvious way to tell what it’s actually worth today. EE savings bonds are one of the few investments that just sit there quietly for decades, and most people never check on them until they stumble across one. Here’s how they actually work, and how to find out whether yours is done earning or still growing.',
+    sections: [
+      {
+        heading: 'What an EE bond actually is',
+        body: 'An EE savings bond is a loan you (or whoever bought it for you) made directly to the US government, backed by the full faith and credit of the Treasury — essentially zero risk of losing the principal. Older paper EE bonds (and the E bonds that came before them) were typically sold at half their face value — pay $25, get a bond labeled $50 — and grew toward that printed face value over time as interest accrued. Since January 2012, EE bonds are only sold electronically through TreasuryDirect.gov, purchased at face value instead of a discount, and paper bonds are no longer issued at all.\n\nEither version works the same way once you own it: a fixed interest rate is set when the bond is issued and locked in for as long as you hold it, and interest accrues for up to 30 years from the issue date — at which point the bond hits "final maturity" and stops earning anything at all, whether or not you’ve cashed it in.',
+      },
+      {
+        heading: 'The headline feature: guaranteed to double in 20 years',
+        body: 'EE bonds come with an unusual Treasury guarantee: if you hold one for exactly 20 years from its issue date, it’s guaranteed to be worth at least double what you paid for it, no matter how low its stated fixed rate is. If the bond’s regular interest wouldn’t get it to double on its own by the 20-year mark, the Treasury makes a one-time lump-sum adjustment at that anniversary to bring it up to face value (or double the purchase price, for older discount bonds).\n\nThat guarantee is the entire selling point of an EE bond, and it’s also the trap: cash one out before year 20 and you only get the stated (often low) fixed rate — none of the doubling guarantee applies early. A bond that’s about to hit its 20-year mark can be worth meaningfully more a few months from now than it is today.',
+      },
+      {
+        heading: 'How to tell if yours has already stopped earning',
+        body: 'Every EE and E bond has a final maturity date exactly 30 years after it was issued — check the issue date printed on the bond (not the date you happen to be looking at it). A bond issued in 1996 stopped earning interest in 2026. Once a bond hits final maturity, it sits there worth nothing additional forever; there’s no benefit to leaving it uncashed any longer.\n\nThe fastest way to check any bond’s real status — current value, interest rate, next accrual date, and maturity date — is the free Savings Bond Calculator at TreasuryDirect.gov. Just enter the bond’s series, denomination, and issue date (all printed on a paper bond) to get an exact number. If you suspect a parent or grandparent owns bonds in your name that have been lost or forgotten entirely, the Treasury’s "Treasury Hunt" search tool can help track down matured, unclaimed bonds tied to a Social Security number.',
+      },
+      {
+        heading: 'How to actually cash one in',
+        body: 'Paper EE and E bonds can usually be cashed at a bank or credit union where you hold an account, as long as you can verify your identity — some institutions cap how much they’ll redeem on the spot or only do it for existing customers, so call ahead. Alternatively, you can convert a paper bond into an electronic one through TreasuryDirect’s "SmartExchange" program and manage or redeem it online from there.\n\nElectronic EE bonds bought through TreasuryDirect can only be cashed through your TreasuryDirect account, with the money deposited straight into a linked bank account. Either way, there’s a minimum 12-month holding period from issue before any EE bond can be cashed at all, and cashing one out before 5 years means forfeiting the most recent 3 months of interest as a penalty — the same rules that apply to I bonds.',
+      },
+      {
+        heading: 'Taxes: the interest is federally taxable the year you cash it',
+        body: 'EE bond interest is exempt from state and local income tax, but it is taxable at the federal level — as ordinary interest income, not at the lower capital gains rate. Most owners defer reporting any of it until the year they actually cash the bond or it reaches final maturity, whichever happens first, at which point the entire accumulated interest shows up as income for that one year. The Treasury sends a 1099-INT reporting the full amount once you redeem it or it matures.\n\nThere’s one more break worth knowing: if the bond proceeds are used to pay qualified higher education expenses in the same year it’s cashed, the interest can be excluded from federal tax entirely under the Education Savings Bond Program — subject to income limits and specific eligibility rules that are worth confirming on IRS.gov before counting on it. If a bond is sitting in a kid’s name, note that the kiddie tax can also apply to the interest once it’s reported.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Find the issue date on the bond and check whether it’s already past its 30-year final maturity — if so, cash it now, since it’s earning nothing further.\n2. Not yet matured? Run the exact issue date through the Savings Bond Calculator at TreasuryDirect.gov to see its current value and next interest-accrual date.\n3. If the bond is approaching its 20-year anniversary, consider waiting a few months — the guaranteed-doubling adjustment can be a meaningful jump.\n4. Check whether you’re past the 5-year mark before cashing, to avoid losing the last 3 months of interest.\n5. Keep records of the issue date and purchase price for tax purposes — you’ll need them (or TreasuryDirect’s records) when the 1099-INT interest gets reported.\n6. If you think bonds exist in your name that you’ve never seen, search Treasury Hunt before assuming they’re lost for good.',
+      },
+    ],
+    relatedTerms: ['Bond', 'Yield', 'Inflation', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Do EE savings bonds stop earning interest?',
+        a: 'Yes — every EE bond stops earning interest at final maturity, exactly 30 years from its issue date. Check the issue date printed on the bond; if it’s more than 30 years old, it’s done growing and there’s no reason to keep holding it.',
+      },
+      {
+        q: 'What’s the difference between an EE bond and an I bond?',
+        a: 'An EE bond has a fixed rate set at purchase that never changes, with the main upside being a Treasury guarantee to double in value after 20 years. An I bond’s rate is partly tied to inflation and resets every six months, so it has no fixed doubling guarantee but can keep pace with rising prices.',
+      },
+      {
+        q: 'How do I find out what my old savings bond is worth?',
+        a: 'Enter its series, denomination, and issue date into the free Savings Bond Calculator at TreasuryDirect.gov for an exact current value, interest rate, and maturity date.',
+      },
+      {
+        q: 'Do you pay taxes when you cash in a savings bond?',
+        a: 'Yes — the accumulated interest is taxable as ordinary income at the federal level the year you cash it in (or when it reaches final maturity, if earlier), though it’s exempt from state and local tax. A 1099-INT reports the amount.',
+      },
+    ],
+  },
 ]
