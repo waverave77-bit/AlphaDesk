@@ -5704,4 +5704,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-only-pay-the-minimum-on-your-credit-card',
+    title: 'What Happens If You Only Ever Pay the Minimum on Your Credit Card?',
+    metaTitle: 'Paying Only the Minimum on a Credit Card: The Real Cost',
+    description:
+      'The minimum payment is designed to keep you in debt as long as legally possible. Here’s the actual math behind why, and what your statement is already telling you about it.',
+    date: '2026-10-27',
+    category: 'Credit',
+    intro:
+      'Your statement says the minimum payment is $35, so you pay $35 and move on — the balance barely changes, but technically you’re "current," so it feels fine. It isn’t. The minimum payment is calculated to extract the maximum amount of interest from you over the maximum amount of time, and the math behind that is wilder than most people realize.',
+    sections: [
+      {
+        heading: 'How the minimum payment is actually calculated',
+        body: 'Most issuers set your minimum as whichever is larger: a flat dollar floor (commonly somewhere around $25–$35), or a small percentage of your balance — typically 1% to 3% of what you owe, sometimes stated as "1% of the balance plus that month’s interest and fees." Either way, the number is built to be just enough to keep the account in good standing, not to meaningfully reduce what you owe.\n\nBecause it’s a percentage, the minimum shrinks every single month as your balance shrinks — which sounds helpful but actually stretches the payoff out further, since a smaller and smaller slice of each payment chips away at principal.',
+      },
+      {
+        heading: 'Why so little of it touches the actual debt',
+        body: 'Credit card interest is calculated daily and added to your balance before your payment is applied, so your minimum payment has to cover that interest first — whatever’s left over (often not much) is what actually reduces principal. At a typical credit card APR in the low-to-mid 20s, a large chunk of an early minimum payment on a sizable balance can go straight to interest, with only a small remainder knocking down what you actually borrowed.\n\nThis is why a balance can feel "stuck" for months even while you’re paying on time every cycle — you’re servicing the interest, not the debt.',
+      },
+      {
+        heading: 'The box on your statement that spells it out, by law',
+        body: 'Since the 2009 CARD Act, every credit card statement in the US is legally required to include a "Minimum Payment Warning" box. It shows, using your real current balance and APR, how many years it would take to pay off the card making only minimum payments, the total interest you’d pay over that stretch, and — right next to it — what a fixed payment amount would need to be to clear the balance in 3 years instead, along with the interest you’d save by doing that.\n\nMost people have never opened that box. It’s usually the single most honest piece of financial disclosure in their entire wallet, and it’s sitting on a statement they already receive every month.',
+      },
+      {
+        heading: 'A realistic example',
+        body: 'Say you’re carrying a $4,000 balance at 24% APR, with a minimum set at 2% of the balance (or $35, whichever is larger). The first month’s minimum comes out to about $80 — and more than half of that is interest, not principal. As the balance inches down, 2% of it shrinks too, so the payment keeps getting smaller right along with your progress. Paying only the shrinking minimum on a balance like this commonly stretches the payoff well past a decade and can mean paying more in total interest than the original $4,000 you borrowed — all for a debt that, paid off aggressively, could realistically be gone in two or three years.',
+      },
+      {
+        heading: 'Minimum payments vs. missing a payment entirely — not the same thing',
+        body: 'Paying the minimum on time keeps your account in good standing: no late fee, no ding to your payment history (the single biggest factor in your credit score), and your account stays "current." Missing a payment altogether is a different and more serious problem — it can trigger late fees, a penalty APR, and a derogatory mark that can hurt your score for years. So minimum payments aren’t reckless in the way a missed payment is; they’re just expensive. The real cost of minimum-only payments shows up in interest paid and time spent in debt, not in your credit score directly — though the high balance-to-limit ratio they leave behind (your utilization) can quietly weigh your score down too.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Find the "Minimum Payment Warning" box on your actual statement or in your card’s app — it already does this math with your real numbers.\n2. Pay more than the minimum whenever possible, even an extra $20–$50 — because minimum payments are mostly interest, extra dollars go disproportionately toward principal.\n3. If you’re carrying balances on more than one card, use the debt avalanche (highest APR first) or debt snowball (smallest balance first) method to decide where extra payments go.\n4. Set autopay for at least the minimum so you never miss a payment entirely — then manually add extra on top each cycle.\n5. If the balance feels unmovable, look into a lower-APR personal loan, a credit union consolidation loan, or a 0% intro-APR balance transfer card to stop the interest meter while you pay it down.\n6. Before increasing spending on a card, ask whether you could pay this month’s charges off in full — if not, the next balance just resets the whole cycle.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Compound Interest', 'Federal Reserve', 'Liquidity'],
+    faq: [
+      {
+        q: 'What happens if I only pay the minimum on my credit card every month?',
+        a: 'You stay in good standing with no late fees, but because minimum payments are mostly interest, the balance shrinks very slowly. On a sizable balance, paying only the minimum can take a decade or more to pay off and cost more in total interest than the amount you originally borrowed.',
+      },
+      {
+        q: 'Does paying the minimum hurt your credit score?',
+        a: 'Not directly — on-time minimum payments count as "paid on time," which is the biggest factor in your score. But carrying a high balance for years keeps your credit utilization elevated, which can hold your score down even while you’re never late.',
+      },
+      {
+        q: 'How is the minimum payment on a credit card calculated?',
+        a: 'Most issuers use whichever is greater: a flat dollar amount (often around $25–$35) or a small percentage of your balance (typically 1%–3%), usually plus that cycle’s interest and fees. It’s designed to keep the account current, not to meaningfully pay down the debt.',
+      },
+      {
+        q: 'Where can I see how long it will take to pay off my card at the minimum payment?',
+        a: 'Check the "Minimum Payment Warning" box required on every US credit card statement by the CARD Act — it shows, using your real balance and APR, how long minimum-only payments would take and how much interest you’d pay, next to what a 3-year payoff plan would look like instead.',
+      },
+    ],
+  },
 ]
