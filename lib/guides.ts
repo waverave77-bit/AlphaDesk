@@ -5760,4 +5760,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'which-state-do-you-pay-income-tax-to-if-you-go-to-college-out-of-state',
+    title: 'Which State Do You Pay Income Tax To If You Go to College Out of State?',
+    metaTitle: 'Out-of-State College Taxes: Which State Taxes Your Paycheck?',
+    description:
+      'Working a campus job or summer internship in a different state than home? Here’s how state income tax residency actually works for college students.',
+    date: '2026-10-28',
+    category: 'College Money',
+    intro:
+      'You go to school in one state, your parents’ house (and your driver’s license) is in another, and now you’ve got a W-2 from a campus job or a summer internship in a third. Nobody hands you a manual for this — but the short version is that you can owe state tax in more than one place, and the rules depend on a legal concept most 19-year-olds have never heard of: domicile.',
+    sections: [
+      {
+        heading: 'Domicile vs. where you happen to be living',
+        body: 'Your domicile is your one true "permanent" home state — the place you intend to return to, even if you’re physically living somewhere else for school. Most states treat being an out-of-state college student as a temporary absence, not a change of domicile, as long as you keep ties there: your driver’s license, voter registration, your parents’ address, where you spend breaks. Just living in a dorm or off-campus apartment for nine months a year usually isn’t enough, by itself, to make a new state your domicile.\n\nThis matters because your domicile state generally gets to tax all of your income, no matter where you earned it — while other states can only tax the income you actually earned while working within their borders.',
+      },
+      {
+        heading: 'The job is where the tax usually follows',
+        body: 'States tax "nonresident" income based on where the work was physically performed. If your legal domicile is Ohio but you attend school in Pennsylvania and work a part-time campus job there, Pennsylvania can tax those wages because that’s where you did the work — and you’d likely file a nonresident PA return. Ohio, as your domicile state, can still tax that same income because domicile states tax worldwide income, not just in-state income.\n\nThat sounds like double taxation, and it would be, except for the next piece.',
+      },
+      {
+        heading: 'How states avoid taxing you twice: credits for taxes paid to another state',
+        body: 'Most states (not all — a handful, like reciprocal-agreement states, work differently) give their residents a credit on their home-state return for income tax legitimately paid to another state on the same income. In practice: you file a nonresident return in the work-state first, pay what you owe there, then file a resident return in your domicile state and claim a credit for that amount, up to what your domicile state would have charged on the same income. Net result is usually close to what you’d have paid in just one state — but you do have to file two returns to get there, and the credit doesn’t always cover 100% if the work-state’s tax rate is higher than your home state’s.\n\nA few neighboring states (like Pennsylvania and New Jersey, or Virginia/Maryland/D.C. and a few others) have reciprocity agreements that skip this entirely — if both states are on the list, you only pay tax to your domicile state regardless of where you worked, as long as you file the right exemption form with your employer.',
+      },
+      {
+        heading: 'Nine states have no wage income tax at all',
+        body: 'If your domicile or your work state is one of the nine states with no state income tax on wages (as of recent years: Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming), there’s simply nothing to file or owe on that side. A student domiciled in Texas working a summer internship in New York still owes New York nonresident tax on those wages — Texas just never enters the picture because it has no income tax to credit against.',
+      },
+      {
+        heading: 'Where employers get withholding wrong (and why your paycheck might be off)',
+        body: 'Campus HR and payroll departments process thousands of students and sometimes default to withholding tax based solely on the state the job is in, without asking about your domicile — or the reverse, withholding for your home state when the work-state actually gets first claim. Either way, the fix happens at tax-filing time, not on your paycheck: you’ll true it up when you file, potentially getting a refund from the state that over-withheld. If something looks off on your first few pay stubs, it’s worth a quick question to payroll, but it’s rarely worth panicking over mid-year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Figure out your domicile state — usually wherever your driver’s license, parents’ home, and voter registration are, not your dorm address.\n2. Keep a mental note of every state you physically worked in during the year (campus job state, internship state, remote-work-from-a-different-state situations).\n3. Check if your domicile state and work state have a reciprocity agreement — if so, file the employer exemption form so only one state withholds.\n4. If there’s no reciprocity, expect to file a nonresident return in the work state and a resident return in your domicile state, claiming a credit for tax paid to the other state.\n5. If either state has no income tax, you only need to deal with the other one.\n6. When in doubt, a free filing service (like IRS Free File or your state’s free filing portal) will walk you through nonresident and resident forms — this is a normal, common situation their software is built to handle.',
+      },
+    ],
+    relatedTerms: ['Federal Reserve', 'Liquidity', 'Inflation', 'Credit Rating'],
+    faq: [
+      {
+        q: 'Do I have to pay state income tax in both my home state and my college state?',
+        a: 'Possibly on paper, but usually not twice in effect. Your domicile (home) state can tax all your income, and your work state can tax what you earned there — but your home state typically gives you a credit for tax already paid to the work state, so you don’t truly pay twice on the same dollars.',
+      },
+      {
+        q: 'Does living in a dorm for school change my state of domicile?',
+        a: 'Generally no. Temporarily living somewhere for school doesn’t automatically change your legal domicile as long as you keep ties — license, voter registration, parents’ address — in your home state. You’d need to intentionally establish a new permanent home to change domicile.',
+      },
+      {
+        q: 'What is a state reciprocity agreement?',
+        a: 'It’s a deal between neighboring states where residents who work across the border only pay income tax to their home state, not the work state. If your domicile and work states have one, you file an exemption form with your employer so only your home state withholds.',
+      },
+      {
+        q: 'What if I do a summer internship in a state with no income tax?',
+        a: 'You still owe tax to your domicile state (if it has an income tax) on that income — a no-tax state just means nothing is owed to that particular state. The tax obligation doesn’t disappear; it just doesn’t get doubled up either.',
+      },
+    ],
+  },
 ]
