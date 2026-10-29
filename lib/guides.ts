@@ -5816,4 +5816,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-if-you-cant-pay-your-taxes-on-time',
+    title: 'What Happens If You Can’t Pay Your Taxes on Time?',
+    metaTitle: 'Can’t Pay Your Taxes? What Actually Happens (and What to Do)',
+    description:
+      'Owing the IRS money you don’t have isn’t a crime — but ignoring it makes things worse. Here’s what the penalties actually are, and how to set up a payment plan.',
+    date: '2026-10-29',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You finally did your taxes — maybe from a gig-work side hustle, maybe your W-4 was set up wrong — and the number at the bottom says you owe money you don’t have sitting in your account. That’s stressful, but it’s also extremely common, and it is not a crisis the way it feels like one. Here’s exactly what happens, what it costs, and the one move that fixes almost all of it.',
+    sections: [
+      {
+        heading: 'File anyway — even if you can’t pay a cent',
+        body: 'This is the single most important thing in this entire guide: file your return by the deadline even if you can’t pay what you owe. The penalty for not filing is roughly ten times worse than the penalty for not paying. If you genuinely need more time to prepare the paperwork, you can request a filing extension — but that only extends the deadline to file, not the deadline to pay. Any tax you owe is still due on the original date, and interest starts either way.\n\nThe mistake that actually hurts people is avoidance: skipping the return entirely because they can’t cover the bill. Filing a return you can’t fully pay is a completely normal, low-drama event. Not filing at all is the thing that snowballs.',
+      },
+      {
+        heading: 'The two penalties, and why they’re not the same size',
+        body: 'The failure-to-file penalty is 5% of your unpaid tax for every month (or partial month) your return is late, up to a maximum of 25%. The failure-to-pay penalty is a much smaller 0.5% of your unpaid tax per month, also capped at 25%. On top of both, the IRS charges interest on the unpaid balance, compounded daily, at a rate that resets every quarter and tends to sit in the high single digits annually.\n\nDo the math on a $1,000 balance: one month of failure-to-file costs $50, while one month of failure-to-pay only costs $5. That tenfold gap is exactly why filing on time — and paying whatever you can, even if it’s not the full amount — is the move, even when the full balance isn’t ready.',
+      },
+      {
+        heading: 'The IRS would rather set up a payment plan than chase you',
+        body: 'The IRS runs on getting paid eventually, not on punishing people who are short on cash. If your total balance (tax, penalties, and interest combined) is under $100,000, you can typically get a short-term payment plan giving you up to 180 extra days to pay in full, with no setup fee. If you need longer, a long-term installment agreement spreads payments out over as long as 72 months for balances under $50,000, usually with a modest setup fee that’s reduced (or waived) if you qualify as low-income or set up automatic bank withdrawals.\n\nYou can apply for either one directly on IRS.gov through the Online Payment Agreement tool, usually in under 15 minutes, without talking to anyone. Approval for these standard plans is close to automatic if you meet the balance thresholds and have filed all your required returns.',
+      },
+      {
+        heading: 'What not to do',
+        body: 'Don’t put the tax bill on a high-interest credit card or a payday-style loan to make it "disappear" today — credit card APRs routinely run higher than the IRS’s own interest rate, so you’d be trading a manageable government payment plan for a worse private one. Don’t ignore notices hoping it goes away; unpaid tax debt doesn’t expire, and ignoring it is how a manageable bill turns into wage garnishment or a federal tax lien years down the line. And don’t assume you need a tax resolution company that advertises "settle for pennies on the dollar" — those offer-in-compromise deals exist, but they’re reserved for genuine financial hardship cases and are rarely the right first move for a typical underpayment.',
+      },
+      {
+        heading: 'Why this happens a lot to teens, gig workers, and first jobs',
+        body: 'This scenario is especially common for anyone paid as a 1099 contractor (DoorDash, freelance work, content creation) because no employer withholds tax from those payments automatically — the full responsibility to set money aside falls on you. It also happens to W-2 employees who filled out their W-4 incorrectly, claimed too many allowances, or picked up a second job without adjusting withholding on either one. The fix going forward is the same in both cases: gig workers should set aside roughly 25–30% of each payment for taxes (and consider quarterly estimated payments), while W-4-related underpayment is usually solved by updating your withholding through your employer’s payroll system.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. File your return by the deadline no matter what — even with zero dollars available to pay.\n2. Pay whatever amount you can afford right now, even a partial payment, to shrink the balance the penalties apply to.\n3. If you can’t pay the rest within a few weeks, apply for an IRS payment plan online — short-term (180 days) if the gap is small, long-term installment (up to 72 months) if it’s bigger.\n4. Set up automatic bank withdrawals for the plan if you can — it often lowers or waives the setup fee.\n5. Going forward: gig workers set aside 25–30% of each payment; W-2 employees double-check their W-4 withholding, especially after a raise or a second job.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Inflation', 'Compound Interest', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Can you go to jail for not being able to pay your taxes?',
+        a: 'No — owing money you can’t immediately pay is a civil matter, not a crime. Jail time is reserved for deliberate fraud, like intentionally hiding income, not for simply being short on cash after filing an honest return.',
+      },
+      {
+        q: 'Does setting up an IRS payment plan hurt your credit score?',
+        a: 'No. The IRS doesn’t report payment plans to the credit bureaus, so agreeing to one has no direct effect on your credit score. A federal tax lien from years of unresolved debt is a different, much more serious situation — but a standard installment agreement doesn’t trigger that.',
+      },
+      {
+        q: 'Is it better to file on time and not pay, or wait and pay later?',
+        a: 'File on time every time. The failure-to-file penalty (5% per month) is ten times larger than the failure-to-pay penalty (0.5% per month). Filing late to "wait until you have the money" is the single costliest mistake in this situation.',
+      },
+      {
+        q: 'How much should gig workers set aside for taxes?',
+        a: 'A common rule of thumb is 25–30% of each payment, since no employer is withholding anything from 1099 income on your behalf. Setting it aside in a separate savings account as it comes in avoids the end-of-year scramble entirely.',
+      },
+    ],
+  },
 ]
