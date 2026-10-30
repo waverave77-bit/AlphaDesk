@@ -5872,4 +5872,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'why-do-some-months-have-3-paychecks',
+    title: 'Why Do Some Months Have 3 Paychecks Instead of 2?',
+    metaTitle: 'Why You Get 3 Paychecks Some Months (Biweekly Pay Explained)',
+    description:
+      'If you’re paid biweekly, two months a year bring a third paycheck. Here’s the math behind it, how to find your dates, and how to budget for it.',
+    date: '2026-10-30',
+    category: 'Paychecks & Taxes',
+    intro:
+      'One month, a paycheck shows up that you didn’t plan for — not a bonus, not a mistake, just an extra payday squeezed into a month that usually only gets two. If you’re paid every other week, this happens to you twice a year, and it’s pure calendar math, not a payroll error or free money from your employer.',
+    sections: [
+      {
+        heading: 'Biweekly and semi-monthly sound the same — they aren’t',
+        body: 'Biweekly means you’re paid every other week, on a fixed day like every other Friday. There are 52 weeks in a year, so a biweekly schedule produces 52 ÷ 2 = 26 paychecks a year.\n\nSemi-monthly means you’re paid twice a month on fixed calendar dates, like the 15th and the last day of the month. That’s 2 × 12 = 24 paychecks a year, always, because it’s tied to the calendar instead of a weekly cycle. Only a true biweekly schedule can ever produce a 3-paycheck month — semi-monthly never does, since it’s mathematically locked to exactly 2 per month.',
+      },
+      {
+        heading: 'The math behind the "extra" paycheck',
+        body: 'A year has 26 biweekly pay periods, but only 24 "normal" slots if you assume 2 paychecks land in every one of the 12 months. Those extra 2 paychecks have to land somewhere — and because a calendar year is about 365.25 days (roughly 52.18 weeks), the biweekly cycle drifts a little relative to the calendar every year. Eventually a payday that would have landed in early January instead falls on December 31st or January 1st of the prior cycle, pushing a third payment into a month that already had two.\n\nThis isn’t a one-time glitch — it happens on a predictable cycle, roughly every 6 months, which is why most biweekly employees see it twice in a calendar year.',
+      },
+      {
+        heading: 'How to find out when it happens to you',
+        body: 'There’s no universal answer like "it’s always March and September" — which months get the extra paycheck depends entirely on your specific employer’s payroll calendar and which day of the week you’re paid. Most companies publish a full-year pay calendar through payroll or HR (often in a benefits portal) at the start of the year. Pull it up and count the pay dates per month — the two months with 3 dates instead of 2 are your answer for this year.',
+      },
+      {
+        heading: 'The budgeting mistake this schedule causes',
+        body: 'Here’s the trap: if you estimate your monthly income as "one paycheck × 2," you’re quietly underestimating your real annual income. Your true yearly pay is paycheck amount × 26, not × 24 — so dividing by 12 instead gives you a more accurate monthly number than assuming every month works like the other ten.\n\nThe safer habit is to budget off (paycheck amount × 26) ÷ 12 as your real average monthly income, and treat the 2 oversized months each year as a bonus window rather than a baseline you can count on every month. People who spend the 3rd paycheck like normal income every time it shows up often find themselves short in the months that only bring 2.',
+      },
+      {
+        heading: 'Is the third paycheck taxed differently?',
+        body: 'No — this is a common myth. Each paycheck is withheld the same way, based on the same W-4 information and the same per-period tax tables, regardless of whether it’s the 2nd or 3rd paycheck that month. There’s no special "extra paycheck tax" and no extra rate. If anything feels off on that check, it’s usually payroll software doing standard per-period withholding math, not a penalty for the timing. Over the full year, any small over- or under-withholding evens out the same way it does for every other paycheck.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check your pay stub or HR portal to confirm whether you’re biweekly (every other week, 26x/year) or semi-monthly (fixed calendar dates, 24x/year) — only biweekly produces 3-paycheck months.\n2. Pull your employer’s full-year pay calendar and mark which two months give you a third paycheck this year.\n3. Budget your real monthly number as (paycheck amount × 26) ÷ 12, not paycheck × 2, so you’re not underestimating your actual annual income.\n4. Direct the 3rd paycheck toward savings, extra debt payoff, or a Roth IRA contribution instead of absorbing it into regular spending.\n5. If you contribute a flat percentage to a 401(k) each check, ask HR whether your employer "true-ups" the match at year-end — some don’t, which matters if you front-load contributions during high-paycheck months.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', '401(k)', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'How many paychecks are there in a year if I’m paid biweekly?',
+        a: '26 — two more than the 24 you’d get on a semi-monthly schedule (twice a month on fixed dates). Those 2 extra pay dates are what push a third payday into a single calendar month, twice a year.',
+      },
+      {
+        q: 'Does getting 3 paychecks in one month mean I earned more that year?',
+        a: 'No. Your annual pay is fixed and split into 26 biweekly paychecks no matter how they land on the calendar — the 3-paycheck month is a timing quirk, not extra income.',
+      },
+      {
+        q: 'Is my third paycheck taxed at a higher rate?',
+        a: 'No. Every paycheck is withheld the same way based on your W-4, regardless of which paycheck number it is that month. There’s no separate tax for an "extra" paycheck — it only feels that way.',
+      },
+      {
+        q: 'Which months will I get 3 paychecks this year?',
+        a: 'It depends on your employer’s specific pay calendar and which day of the week you’re paid, so it’s different for everyone. Check the full-year pay calendar from your payroll or HR portal rather than guessing from a generic rule.',
+      },
+    ],
+  },
 ]
