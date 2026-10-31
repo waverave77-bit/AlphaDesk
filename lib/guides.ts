@@ -5928,4 +5928,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'does-paying-your-phone-bill-build-your-credit-score',
+    title: 'Does Paying Your Phone Bill or Netflix on Time Build Your Credit Score?',
+    metaTitle: 'Does Paying Your Phone Bill Build Credit? Experian Boost Explained',
+    description:
+      'Phone, utility, and streaming bills aren’t reported to credit bureaus by default — but one free program lets you add them anyway. Here’s how it works.',
+    date: '2026-10-31',
+    category: 'Credit',
+    intro:
+      'You’ve paid your phone bill on time for two years straight, and your credit report has zero record of it. That’s not a glitch — phone, utility, and streaming companies almost never report payment history to the credit bureaus at all. But there’s a free, legitimate way to make those on-time payments count anyway, and it’s one of the few credit-building tools that can only help you, never hurt you.',
+    sections: [
+      {
+        heading: 'Why your phone bill doesn’t show up on your credit report',
+        body: 'Credit scores are built from data that lenders and bureaus actually collect. Credit card companies, auto lenders, and mortgage servicers report to Equifax, Experian, and TransUnion every month because they’re set up to do it and it’s standard practice in their industry. Phone carriers, electric companies, and streaming services generally aren’t part of that reporting pipeline — they bill you, you pay, and the transaction stays inside their own system.\n\nThat means years of perfect phone payments can sit there doing nothing for your credit file, while a single missed credit card payment can show up and hurt your score for years. It’s an asymmetry that catches a lot of people off guard the first time they check their report.',
+      },
+      {
+        heading: 'Experian Boost: the free opt-in that changes this',
+        body: 'Experian Boost is a free program where you link a bank account or card, and Experian scans your transaction history for recurring phone, utility, and certain streaming payments (think Netflix, Hulu, or similar subscriptions). Qualifying on-time payments get added directly to your Experian credit file, and you see the score impact instantly after connecting your account.\n\nThe detail that makes this safe to try: Experian Boost only ever adds positive payment history. If you missed a phone payment last year, it will not be added and it will not hurt you — the program is built to be upside-only. For someone with a thin credit file (not much history yet), this can add real points; for someone with an already-thick, well-established file, the effect is often small or negligible.',
+      },
+      {
+        heading: 'Experian Go: building a file from literally nothing',
+        body: 'If you’re 18 or older and have never had a credit card, loan, or any account that reports to the bureaus, you may not even have a credit file to boost yet. Experian Go is a separate, free program that lets you create a basic Experian credit file using just your Social Security number — no credit card or loan required to start. Once that file exists, you can layer Experian Boost on top of it, and start reporting your own on-time payment history for the first time.',
+      },
+      {
+        heading: 'What boosting your Experian score does NOT do',
+        body: 'This only affects your Experian-based score and only shows up when a lender specifically pulls Experian data. Equifax and TransUnion never see your boosted phone or utility history — if a lender pulls one of those two bureaus instead (and many auto lenders and mortgage lenders pull all three), the boost won’t be reflected there at all.\n\nIt also isn’t the same thing as rent-reporting services, which are separate programs that add your monthly rent payments to your file — phone and utility bills and rent are tracked through different systems, so you may need both if you want full coverage.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check whether you already have a credit file — if Experian shows nothing at all, start with Experian Go to create one using your SSN.\n2. Once you have a file (or if you already do), connect a bank account or card through Experian Boost to add phone, utility, and eligible streaming payment history.\n3. Don’t expect it to move your Equifax or TransUnion score — those are separate files that Boost doesn’t touch.\n4. Pair it with a secured credit card or credit-builder loan for payment history that reports to all three bureaus, not just one.\n5. Keep paying every bill on time regardless — Boost only adds positive history, so there’s nothing to lose by connecting an account, but late payments elsewhere can still hurt you the normal way.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Inflation'],
+    faq: [
+      {
+        q: 'Does paying my phone bill on time automatically build my credit?',
+        a: 'No. Phone, utility, and streaming companies generally don’t report payment history to credit bureaus by default. You have to opt in through a program like Experian Boost to get that history added to your file.',
+      },
+      {
+        q: 'Can Experian Boost ever hurt my credit score?',
+        a: 'No — it’s designed to only add positive, on-time payment history. Missed payments on the bills you connect are never added, so there’s no downside risk to trying it.',
+      },
+      {
+        q: 'Does Experian Boost improve my score with every lender?',
+        a: 'Only when a lender pulls your Experian report specifically. It has no effect on your Equifax or TransUnion files, and many lenders check one of those instead or in addition to Experian.',
+      },
+      {
+        q: 'What if I don’t have a credit file at all yet?',
+        a: 'Experian Go lets anyone 18 or older create a basic Experian credit file using just their Social Security number, with no credit card or loan needed first. You can then use Experian Boost on top of it.',
+      },
+    ],
+  },
 ]
