@@ -1933,7 +1933,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'How much you can actually buy, and where',
-        body: 'I bonds aren’t sold through a regular brokerage — you buy them directly from the US government at TreasuryDirect.gov, where you open a free account tied to your Social Security number. Electronic I bonds are capped at $10,000 per person per calendar year. You can also buy up to an additional $5,000 in paper I bonds, but only by using part of a federal tax refund to do so.\n\nThat $10,000 limit is per person, not per household, so a family of four could each open their own TreasuryDirect account and collectively buy up to $40,000 a year in electronic I bonds. A minor can own I bonds too, through a linked account a parent manages, similar to how a custodial brokerage account works.',
+        body: 'I bonds aren’t sold through a regular brokerage — you buy them directly from the US government at TreasuryDirect.gov, where you open a free account tied to your Social Security number. Electronic I bonds are capped at $10,000 per person per calendar year, and since 2025 that’s the only way to buy them — the Treasury discontinued the option to buy an additional $5,000 in paper I bonds with a federal tax refund.\n\nThat $10,000 limit is per person, not per household, so a family of four could each open their own TreasuryDirect account and collectively buy up to $40,000 a year in electronic I bonds. A minor can own I bonds too, through a linked account a parent manages, similar to how a custodial brokerage account works.',
       },
       {
         heading: 'How I bonds are taxed',
@@ -1956,7 +1956,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: 'How much can I buy in I bonds per year?',
-        a: 'Up to $10,000 per person per calendar year in electronic I bonds through TreasuryDirect, plus up to $5,000 more in paper I bonds if you use a federal tax refund to buy them.',
+        a: 'Up to $10,000 per person per calendar year in electronic I bonds through TreasuryDirect — that’s been the only way to buy them since 2025, when the Treasury discontinued the option to buy an additional $5,000 in paper I bonds with a federal tax refund.',
       },
       {
         q: 'Are I bonds better than a high-yield savings account?',
@@ -4705,7 +4705,7 @@ export const GUIDES: Guide[] = [
       },
       {
         heading: 'Your checklist',
-        body: '1. Relax — as the recipient, a cash gift from family is not taxable income to you, and you don’t report it on your tax return.\n2. The giver only needs to file paperwork (Form 709) if a single gift to you exceeds the annual exclusion ($19,000 for 2025) — and even then, tax is rarely actually owed.\n3. If you invest the gift, track what it earns afterward — that growth (interest, dividends, capital gains) is taxable to you going forward.\n4. If financial aid matters, know that gifted money sitting in your name counts as your asset on the FAFSA.\n5. Want to combine a gift with a Roth IRA? You still need your own earned income that year — the gift can cover your living expenses while your paycheck funds the Roth.',
+        body: '1. Relax — as the recipient, a cash gift from family is not taxable income to you, and you don’t report it on your tax return.\n2. The giver only needs to file paperwork (Form 709) if a single gift to you exceeds the annual exclusion ($19,000 for 2026) — and even then, tax is rarely actually owed.\n3. If you invest the gift, track what it earns afterward — that growth (interest, dividends, capital gains) is taxable to you going forward.\n4. If financial aid matters, know that gifted money sitting in your name counts as your asset on the FAFSA.\n5. Want to combine a gift with a Roth IRA? You still need your own earned income that year — the gift can cover your living expenses while your paycheck funds the Roth.',
       },
     ],
     relatedTerms: ['Roth IRA', 'Compound Interest', 'Portfolio', 'Diversification'],
@@ -4716,7 +4716,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: 'How much money can my parents give me without tax consequences?',
-        a: 'Each parent can give you up to the annual exclusion amount — $19,000 per parent for 2025 — with zero paperwork required. Two parents together can give up to double that in the same year, all tax-free.',
+        a: 'Each parent can give you up to the annual exclusion amount — $19,000 per parent for 2026 — with zero paperwork required. Two parents together can give up to double that in the same year, all tax-free.',
       },
       {
         q: 'Is a gift from my parents considered income for financial aid purposes?',
