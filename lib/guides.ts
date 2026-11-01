@@ -5980,4 +5980,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-403b-how-is-it-different-from-a-401k',
+    title: 'What Is a 403(b) and How Is It Different From a 401(k)?',
+    metaTitle: '403(b) vs 401(k): What’s the Difference and How Does It Work?',
+    description:
+      'A 403(b) is the nonprofit-and-school version of a 401(k) — same tax perks, similar limits, but a different investment menu. Here’s what teachers and nonprofit workers need to know.',
+    date: '2026-11-01',
+    category: 'Investing',
+    intro:
+      'If your first real job out of college is at a public school, hospital, or nonprofit, you probably won’t see a 401(k) on your benefits paperwork — you’ll see something called a 403(b) instead. It works almost exactly the same as a 401(k), with a couple of quirks that are actually worth knowing before you pick a contribution rate.',
+    sections: [
+      {
+        heading: 'What a 403(b) actually is',
+        body: 'A 403(b) is a tax-advantaged retirement account offered by public schools, universities, hospitals, churches, and other 501(c)(3) tax-exempt organizations — basically the nonprofit-and-government-sector version of a 401(k), which for-profit employers use instead. If you’re a teacher, a nurse at a nonprofit hospital, a university researcher, or you work for a charity, a 403(b) is probably the retirement account sitting in your onboarding paperwork.\n\nFunctionally, it works the same way a 401(k) does: money comes out of your paycheck before you touch it, grows tax-deferred (or tax-free in a Roth version), and you pick investments from a menu your employer selected.',
+      },
+      {
+        heading: 'Contribution limits — basically the same as a 401(k)',
+        body: '403(b) plans share the same employee elective deferral limit as 401(k) plans under federal tax law — $24,500 in 2026 — with an additional age-50-and-over catch-up contribution allowed on top. If your employer also contributes, through a match or a flat percentage, that’s added on top of your own contribution, up to a higher combined cap.\n\nYou can usually choose a traditional (pretax) 403(b), a Roth 403(b), or split contributions between both — the same choice you’d face with a 401(k). Pretax lowers your taxable income now; Roth means you pay tax today but every dollar of growth comes out tax-free in retirement.',
+      },
+      {
+        heading: 'The catch: investment menus and fees',
+        body: 'This is where 403(b) plans genuinely differ from 401(k)s, and not in a good way. Historically, 403(b) plans were built around annuity contracts sold by insurance companies, and some still default new employees into an annuity option with higher annual fees than a comparable index fund would charge. A fee difference of even 1% a year sounds small, but compounded over 30-plus years it can quietly cost tens of thousands of dollars in lost growth.\n\nNewer 403(b) plans increasingly offer low-cost mutual funds and index funds alongside the older annuity options — but it’s on you to check. Look up your plan’s fund lineup, compare the expense ratio on each option, and pick the lowest-cost index fund that fits your goals rather than defaulting to whatever the enrollment packet pre-selected.',
+      },
+      {
+        heading: 'The 15-years-of-service catch-up — a 403(b)-only perk',
+        body: '401(k)s only offer an age-based catch-up contribution. 403(b)s have a second, separate catch-up option that 401(k)s don’t: employees who’ve worked 15 years or more for a qualifying employer — schools, hospitals, churches, and certain other nonprofits — may be allowed to contribute extra above the standard limit, up to a lifetime maximum, with its own rules for how it stacks with the age-50 catch-up. It’s a narrow perk, but long-tenured teachers and hospital staff can genuinely benefit from it — worth asking HR about once you hit that mark.',
+      },
+      {
+        heading: 'What happens when you leave the job',
+        body: 'Your own contributions are always 100% yours. Employer contributions may vest on a schedule — some nonprofits vest immediately, others phase it in over several years — so check your plan documents before assuming a match is fully yours on day one.\n\nWhen you leave, you generally get the same options as a 401(k): leave the money where it is if your old plan allows it, roll it into your new employer’s 401(k) or 403(b), or roll it into an IRA, which often gives you a much wider, cheaper menu of investment choices than either employer plan offered.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check whether your 403(b) offers mutual funds or index funds, not just annuities — look at the fund lineup and expense ratios before picking anything.\n2. Decide pretax vs. Roth 403(b) based on whether you expect your tax rate to be higher or lower in retirement.\n3. Contribute at least enough to get the full employer match if one exists — it’s free money.\n4. If you’ve worked 15+ years for a qualifying employer, ask HR whether you qualify for the extra catch-up contribution.\n5. When you change jobs, roll the balance into your new plan or an IRA rather than cashing it out — cashing out triggers taxes and often a penalty.',
+      },
+    ],
+    relatedTerms: ['401(k)', 'Roth IRA', 'Mutual Fund', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Is a 403(b) the same as a 401(k)?',
+        a: 'Functionally, yes — same tax treatment, similar contribution limits, same paycheck-deduction setup. The difference is who can offer one: 401(k)s come from for-profit employers, 403(b)s come from public schools, hospitals, and other tax-exempt nonprofits.',
+      },
+      {
+        q: 'Can you lose money in a 403(b)?',
+        a: 'Yes — like a 401(k), your balance is invested in the market (or in an annuity), and its value moves with your underlying investments. There’s no guarantee against short-term losses, which is also why fees and fund choice matter so much over decades.',
+      },
+      {
+        q: 'Should you pick the Roth or traditional option in a 403(b)?',
+        a: 'If you expect to be in a lower tax bracket in retirement than you are now, traditional (pretax) usually wins. If you’re early in your career and expect your income — and tax rate — to rise, Roth often comes out ahead because you lock in today’s lower rate.',
+      },
+      {
+        q: 'What if your 403(b) only offers annuities?',
+        a: 'Ask HR if a mutual fund or index fund option exists within the plan — many do now. If annuities are genuinely the only choice and fees are high, contribute enough to get any employer match, then consider directing additional savings to an IRA with lower-cost options instead.',
+      },
+    ],
+  },
 ]
