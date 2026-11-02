@@ -6036,4 +6036,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'should-you-lease-or-buy-your-first-car',
+    title: 'Should You Lease or Buy Your First Car?',
+    metaTitle: 'Lease vs. Buy a Car: Which Is Smarter for a Young Adult?',
+    description:
+      'Leasing gets you a lower payment but no equity and a mileage cap — buying means a loan, full ownership, and eventual freedom from payments. Here’s the real math.',
+    date: '2026-11-02',
+    category: 'Credit',
+    intro:
+      'The dealership finance guy is going to push whichever option makes the monthly number look smallest, and that’s usually a lease. That doesn’t make it wrong for you — it just means the decision needs more than “which payment is lower” before you sign anything. Here’s what’s actually different under the hood.',
+    sections: [
+      {
+        heading: 'The core difference: renting the depreciation vs. buying the whole car',
+        body: 'When you lease, you’re not paying for the car — you’re paying for the chunk of its value it’s expected to lose while you drive it. The leasing company predicts what the car will be worth at the end of the term (the “residual value”) and you pay the difference between that and today’s price, spread over the lease, plus a financing charge. At the end, you hand the car back and owe nothing more — unless you’re over on mileage or wear, which gets billed separately.\n\nWhen you buy with a loan, you’re financing the full purchase price. Every payment chips away at what you owe (the “principal”) in addition to interest, and once the loan is paid off, the car is entirely yours — no mileage limits, no inspection, no handing back the keys. You built equity the whole time; with a lease, you built none.',
+      },
+      {
+        heading: 'What actually makes up a lease payment',
+        body: 'Three numbers drive a lease: the car’s price (capitalized cost), its predicted residual value at lease-end, and the “money factor” — a small decimal that functions like an interest rate (multiply it by 2,400 to get something close to an equivalent APR). Your monthly payment is roughly the depreciation (price minus residual, divided by the number of months) plus a finance charge based on the money factor.\n\nMost leases also cap your mileage — commonly somewhere in the 10,000 to 15,000 miles-per-year range — with a per-mile overage fee, often in the range of $0.15 to $0.30, charged at turn-in if you go over. Excess wear and tear (beyond normal) can also trigger charges when you return the car. Because the car is usually still under the manufacturer’s warranty for the whole lease term, you rarely pay for major repairs — that’s part of the appeal.',
+      },
+      {
+        heading: 'What actually makes up a loan payment',
+        body: 'An auto loan is simpler: you borrow the purchase price (minus any down payment and trade-in), and your payment is principal plus interest, spread over the loan term. Terms have stretched out in recent years — 60, 72, even 84 months are common now — which lowers the monthly payment but means you pay more total interest and stay “underwater” (owing more than the car is worth) for longer, since cars depreciate faster than a long loan pays down.\n\nOnce the loan is paid off, your payment disappears completely and the car still has resale or trade-in value — money a lessee never sees. The tradeoff is that you now own all the maintenance and repair costs once the factory warranty runs out, usually a few years in.',
+      },
+      {
+        heading: 'Where your credit score fits into both',
+        body: 'Both a lease and a loan run a hard inquiry and price the deal off your credit profile — better credit gets a lower money factor or a lower APR, and weaker credit gets a higher one (or gets declined). The practical difference: auto lenders have a wide range of subprime and first-time-buyer programs built specifically for thin credit files, often with a cosigner. Leasing companies tend to be stricter, because they’re betting on a specific resale value for a car they’ll have to re-sell themselves, and a risky lessee is a bigger gamble on that bet than a risky borrower is for a bank that can repossess and resell collateral either way.\n\nIf you’re leasing or financing your first car with little to no credit history, expect to need a cosigner or a larger down payment to get a reasonable rate either way — and consider whether a cheaper used car bought outright or with a small loan might be the faster way to build a track record before taking on a bigger lease or loan later.',
+      },
+      {
+        heading: 'When each one actually tends to make sense',
+        body: 'Leasing tends to fit people who want a new car with a warranty every few years, drive a predictable and moderate number of miles, keep the car in good shape, and would rather treat a car like a subscription than an asset. It’s also attractive if you hate the hassle of selling or trading in a used car every few years.\n\nBuying tends to win for anyone who drives a lot of miles, plans to keep a car for many years past the loan payoff (which is when a car gets genuinely cheap to own — just maintenance, no payment), wants the freedom to modify or sell on their own timeline, or simply doesn’t want to deal with mileage limits and end-of-lease inspections. Over a decade of driving, buying and keeping a car well past its loan tends to cost less in total than repeatedly leasing new ones back to back — the price of always driving something new is never truly going away.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Estimate your real annual mileage before you even look at a lease — if you’re consistently over the mileage cap, leasing gets expensive fast.\n2. Compare the money factor (× 2,400 for an APR-equivalent) against loan APR offers for the same credit tier — don’t just compare monthly payments.\n3. Factor in what happens after the term: a paid-off car you keep driving with no payment, versus a lease that ends with no asset at all.\n4. Check your own credit report and likely rate tier before you’re sitting at the dealership — negotiating leverage disappears once you’re excited about a specific car.\n5. Budget for maintenance and repairs if buying, since the warranty-covered years don’t last the life of the car.\n6. If credit history is thin, compare a cosigned loan on a cheaper used car against a lease — building ownership and credit history early is usually worth more than driving something newer.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Is it cheaper to lease or buy a car?',
+        a: 'Month-to-month, leasing is usually cheaper because you’re only paying for the car’s depreciation, not its full price. Over many years, buying and keeping a car past its loan payoff is usually cheaper overall, since the payments eventually stop while the car still has value — leasing means payments never really end.',
+      },
+      {
+        q: 'What happens if you go over the mileage limit on a lease?',
+        a: 'You’ll owe a per-mile overage fee at the end of the lease, commonly somewhere around $0.15 to $0.30 per mile over the limit. If you know you drive a lot, either negotiate a higher mileage allowance upfront (which raises the monthly payment) or consider buying instead.',
+      },
+      {
+        q: 'Do you need good credit to lease a car?',
+        a: 'Leasing companies tend to be stricter about credit than auto lenders, since they’re relying on resale value rather than just loan repayment. With thin or poor credit, you’re more likely to need a cosigner, a larger down payment, or to look at buying a used car with an auto-loan program built for first-time borrowers instead.',
+      },
+      {
+        q: 'Can you buy the car at the end of a lease?',
+        a: 'Usually, yes — most leases include a predetermined buyout price (the residual value set at the start of the lease). If the car turns out to be worth more than that on the used market, buying it out at lease-end can be a genuinely good deal.',
+      },
+    ],
+  },
 ]
