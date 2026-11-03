@@ -6092,4 +6092,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-student-loan-interest-capitalization',
+    title: 'What Is Student Loan Interest Capitalization — and Why Did Your Balance Jump?',
+    metaTitle: 'Student Loan Interest Capitalization Explained (Why Balances Spike)',
+    description:
+      'Capitalization adds unpaid interest to your loan’s principal, so you start paying interest on interest. Here’s exactly when it happens and how to stop it.',
+    date: '2026-11-03',
+    category: 'College Money',
+    intro:
+      'You check your loan servicer’s app the month after your grace period ends and the balance is suddenly a few hundred (or few thousand) dollars higher than you remember borrowing. You didn’t borrow more — your unpaid interest just got folded into your principal, and now you’re paying interest on that interest too. That one-time event is called capitalization, and it’s one of the few moments that can meaningfully reshape how much a loan actually costs you.',
+    sections: [
+      {
+        heading: 'What capitalization actually is',
+        body: 'Interest on a student loan accrues daily, whether or not you’re making payments. As long as you pay at least the interest that adds up each month, your principal (the amount you actually borrowed) never grows. Capitalization is what happens when that accrued-but-unpaid interest gets added directly to your principal balance at a specific trigger event — permanently increasing the amount you owe.\n\nAfter that point, interest is calculated on the new, larger balance — including the interest that just got folded in. You are now paying interest on interest, which is the opposite of how compounding works in your favor with investing. It doesn’t restart or compound daily forever; it’s a one-time bump each time a trigger event occurs, but those triggers can happen more than once over the life of a loan.',
+      },
+      {
+        heading: 'The moments that actually trigger it',
+        body: 'For federal unsubsidized loans and most private loans, interest accrues from the day the money is disbursed, but it typically only capitalizes — gets added to principal — at specific trigger points: when your grace period ends and repayment begins, when you leave an in-school deferment, when a period of deferment or forbearance ends, and when you leave certain income-driven repayment plans or fail to recertify your income on time.\n\nSubsidized federal loans don’t accrue interest at all while you’re in school or during the standard grace period, so there’s usually nothing to capitalize at that point — the unsubsidized and PLUS balances in a typical aid package are where this actually bites. Private loans vary by lender, but many capitalize at the same points: end of school, end of grace, end of any deferment.',
+      },
+      {
+        heading: 'The real-dollar impact',
+        body: 'Say you borrowed $10,000 in unsubsidized loans at a 6.5% rate and never paid a cent of interest during four years of school plus a six-month grace period. Interest accrues at roughly $650/year, so by the time grace ends you’ve accumulated close to $2,900 in unpaid interest. If that capitalizes, your new principal becomes about $12,900 — and every future interest calculation runs on that larger number, not the original $10,000. Over a standard 10-year term, that one capitalization event can add well over $1,000 in extra interest paid before the loan is gone, just from the compounding on the bumped-up balance.\n\nThe fix is simple in concept and hard in practice while you’re a broke student: paying even just the interest as it accrues — not the principal, just the interest — during school and grace period keeps the balance from ever growing. Many servicers let you make interest-only payments with no prepayment penalty, and even $20–$30/month on an unsubsidized loan can prevent most of the capitalized bump.',
+      },
+      {
+        heading: 'Where it shows up outside of school',
+        body: 'Capitalization isn’t just a graduation-day event. If you put loans into forbearance during a job loss or financial hardship, the interest that built up during that pause capitalizes when the forbearance ends. Switching income-driven repayment plans, or failing to recertify your income by the annual deadline and getting bumped to a different plan, can also trigger it. This is one reason loan servicers and consumer advocates generally recommend recertifying your income-driven repayment on time every year and avoiding forbearance unless deferment or an income-driven plan with a $0 payment is unavailable — forbearance pauses payments but rarely pauses interest, and the bill eventually comes due as a bigger principal.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check whether your loans are subsidized or unsubsidized — unsubsidized and PLUS loans are the ones quietly accruing interest right now, even in school.\n2. If you can afford anything at all while in school, pay the interest-only amount each month rather than letting it accrue and capitalize later.\n3. Before your grace period ends, log into your servicer account and pay off any accrued interest in a lump sum if you have the cash — it keeps your principal at the original borrowed amount.\n4. Recertify income-driven repayment plans every year on time to avoid an unexpected capitalization trigger.\n5. Treat forbearance as a last resort compared to a $0 income-driven payment — forbearance usually lets interest pile up and capitalize later; income-driven plans typically don’t capitalize unpaid interest the same way in most cases.\n6. After any deferment or forbearance ends, check your new principal balance against what you remember borrowing — a jump means capitalization happened.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Inflation', 'Credit Rating', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'Does all unpaid student loan interest eventually capitalize?',
+        a: 'Only at specific trigger events — typically when grace period ends, when deferment or forbearance ends, or when you leave certain income-driven repayment plans. It doesn’t compound continuously; it’s a one-time addition to principal each time one of those triggers occurs.',
+      },
+      {
+        q: 'Can you avoid capitalization completely?',
+        a: 'The most reliable way is to pay at least the interest that accrues each month before a trigger event hits, so there’s nothing left to add to your principal. Paying off any accrued interest in a lump sum right before grace period ends works too.',
+      },
+      {
+        q: 'Do subsidized loans capitalize interest?',
+        a: 'Rarely, because the federal government pays the interest on subsidized loans while you’re in school and during the standard grace period — there’s usually no accrued interest sitting there to capitalize at those points. Unsubsidized and PLUS loans are the ones that typically carry this risk.',
+      },
+      {
+        q: 'Why did my loan balance go up when I didn’t borrow more money?',
+        a: 'Your unpaid accrued interest almost certainly got capitalized — added to your principal — because of a trigger event like your grace period ending or a forbearance ending. Check your servicer’s account statement around that date to confirm.',
+      },
+    ],
+  },
 ]
