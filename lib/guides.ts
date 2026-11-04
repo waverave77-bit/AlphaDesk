@@ -6144,4 +6144,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'do-you-need-life-insurance-in-your-20s',
+    title: 'Do You Need Life Insurance in Your 20s?',
+    metaTitle: 'Life Insurance in Your 20s: Do You Actually Need It?',
+    description:
+      'Most 20-somethings don’t need life insurance — unless they have a kid, a partner who depends on their income, or cosigned private debt. Here’s how to tell.',
+    date: '2026-11-04',
+    category: 'Saving',
+    intro:
+      'A relative mentions it at Thanksgiving, or a "financial advisor" DMs you about a policy that "builds wealth," and suddenly you’re wondering if you’re behind on something at 23. Here’s the honest version: life insurance exists to protect people who depend on your income, not to protect you — so whether you need it depends entirely on whether anyone would be financially stuck if you died tomorrow.',
+    sections: [
+      {
+        heading: 'The honest answer: most people in their 20s don’t need it yet',
+        body: 'Life insurance pays a lump sum to someone else when you die. That payout only matters if someone is actually relying on your income or stuck with a debt your death would create. If you’re single, have no kids, and nobody would take a financial hit the day you were gone, a policy is mostly just a monthly bill with no real beneficiary who needs it.\n\nThat’s not the same as "nobody in their 20s needs it" — it just means the need comes from your specific situation, not your age. A few common triggers flip the answer to yes, and they’re worth checking against your own life before deciding either way.',
+      },
+      {
+        heading: 'Term life vs. whole life — the difference that decides almost everything',
+        body: 'Term life insurance covers you for a fixed window — 10, 20, or 30 years — and pays out only if you die during that term. There’s no savings or investment component; you’re simply buying pure protection, which is why it’s cheap. If the term ends and you’re still alive, the policy just expires with nothing paid out, the same way car insurance doesn’t refund you for a year without an accident.\n\nWhole life (and similar "permanent" policies like universal or indexed universal life) covers you for your entire life and bundles in a cash value component that’s supposed to grow over time. That bundling is also why it typically costs 10 to 15 times more than a term policy with the same death benefit. The standard advice from most fee-only financial planners — people who aren’t paid a commission to sell you a specific policy — is "buy term and invest the difference": get cheap term coverage sized to your actual need, then put what you would’ve spent on a whole life premium into a retirement account instead, where it isn’t tangled up with insurance fees.',
+      },
+      {
+        heading: 'What it actually costs at your age',
+        body: 'Being young and healthy is the cheapest life insurance will ever be for you, because premiums are priced heavily on age and health. A healthy nonsmoker in their 20s can often lock in a sizable term policy — enough to replace years of income or pay off a large debt — for somewhere in the ballpark of the cost of a streaming subscription or two per month. Exact pricing depends on your health, the insurer, the coverage amount, and the length of the term, so treat any specific number you see online as a rough starting point and get real quotes before assuming a figure.\n\nThe cost curve only moves in one direction with time: waiting until your 30s or 40s to buy the same coverage means paying meaningfully more for it, and a health issue that develops in between can make coverage far more expensive or harder to qualify for at all. If you already know you’ll need coverage eventually — say, you’re planning to have kids — locking in a term policy while you’re young and healthy is one of the few financial moves that gets strictly worse the longer you wait.',
+      },
+      {
+        heading: 'The situations where a 20-something actually should buy it',
+        body: 'A few specific situations flip life insurance from "skip it" to "get it": you have a kid or are about to, you have a spouse or partner who depends on your income to cover shared bills, or you’ve cosigned private debt with someone. That last one trips people up — federal student loans are discharged (forgiven) if the borrower dies, but private student loans, private co-signed auto loans, and other cosigned debt usually aren’t automatically forgiven. If a parent or partner cosigned a private loan with you, they can remain legally responsible for the full remaining balance if you die, which is exactly the kind of risk a cheap term policy is built to cover.\n\nIf your employer offers free or low-cost group life insurance — commonly a policy worth one or two times your salary — it’s usually worth opting into during enrollment since it costs little or nothing. Just don’t treat it as your whole plan: it typically isn’t portable, meaning it disappears the day you leave that job, right when you might need coverage most.',
+      },
+      {
+        heading: 'Watch out for the "insurance as an investment" pitch',
+        body: 'A specific sales pattern targets people in their 20s almost exclusively: a friend or acquaintance, often working a part-time or recruiting-style sales gig, pitches a permanent life insurance policy as a way to "build tax-free wealth" or get "guaranteed returns," sometimes alongside an invitation to also sell the same product to your friends. The policy itself isn’t illegal or fake — but the cash value inside a whole life or indexed universal life policy typically grows slowly for the first several years (much of your early premium pays commissions and fees), and cashing out early often triggers steep surrender charges. For nearly everyone in their 20s without a complex estate or business situation, a Roth IRA or a taxable brokerage account is a more direct, lower-fee way to actually build wealth — life insurance is there to replace income you won’t have, not to grow money you already have.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. No dependents, no partner relying on your income, and no cosigned debt? You likely don’t need a policy yet — revisit the question when your situation changes.\n2. Have a kid, a spouse, or a partner who’d struggle without your income? Price out a term policy sized around 10–12x your annual income.\n3. Cosigned a private student loan, car loan, or other debt? Either ask about a cosigner-release option once you qualify, or carry enough term coverage to cover the remaining balance.\n4. If your employer offers free group life insurance, take it — but don’t count on it alone, since it usually doesn’t move with you if you change jobs.\n5. If you do buy, default to term, not whole life or universal life, unless a fee-only (non-commissioned) advisor has walked through your specific case.\n6. Treat any pitch that frames life insurance as a "wealth-building investment" as a conversation to slow down on, not sign during.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Diversification', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Do I need life insurance in my 20s if I’m single with no kids?',
+        a: 'Usually not. Life insurance protects people who depend on your income or would be stuck with your debt. If nobody fits that description yet, a policy mostly just adds a monthly cost without a beneficiary who actually needs the payout.',
+      },
+      {
+        q: 'What happens to my student loans if I die?',
+        a: 'Federal student loans are discharged on the borrower’s death — the debt simply ends. Private student loans usually aren’t automatically forgiven, so a cosigner (often a parent) can remain responsible for the remaining balance unless the loan has a cosigner-release provision.',
+      },
+      {
+        q: 'Is whole life insurance a good investment for someone in their 20s?',
+        a: 'Generally no, according to most fee-only financial planners. Whole life bundles insurance with a slow-growing cash value and high fees. The more common recommendation is to buy cheap term coverage for the protection you actually need and invest the difference separately in a Roth IRA or brokerage account.',
+      },
+      {
+        q: 'How much does term life insurance cost at 25?',
+        a: 'It varies by health, insurer, coverage amount, and term length, but being young and healthy is typically the cheapest life insurance will ever be for you — premiums rise with age and with any new health issues, so getting quotes while you’re young and healthy locks in a lower rate for the life of the term.',
+      },
+    ],
+  },
 ]
