@@ -6200,4 +6200,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'sep-ira-vs-solo-401k-which-retirement-account-for-freelancers',
+    title: 'SEP-IRA vs. Solo 401(k): Which Retirement Account Should Freelancers Use?',
+    metaTitle: 'SEP-IRA vs. Solo 401(k) for Freelancers: Which to Pick',
+    description:
+      'Freelancers and gig workers don’t get an employer 401(k) — but a SEP-IRA or Solo 401(k) can let you save far more than a Roth IRA alone. Here’s how to pick.',
+    date: '2026-11-05',
+    category: 'Investing',
+    intro:
+      'You file a Schedule C instead of getting a W-2, which means nobody’s HR department ever sends you a 401(k) enrollment email. That doesn’t mean freelancers and gig workers are stuck with just a Roth IRA — there are two self-employed retirement accounts, the SEP-IRA and the Solo 401(k), that can let you shelter far more income than an employee with a regular job ever could. Here’s the real difference, with the numbers that actually decide which one fits.',
+    sections: [
+      {
+        heading: 'Start with the easy one: a Roth IRA works for everyone',
+        body: 'Any freelance, gig, or 1099 income counts as earned income, which means it qualifies you to contribute to a Roth IRA just like a W-2 paycheck would. The 2026 limit is $7,500 a year ($8,600 if you’re 50 or older), and a Roth IRA is the simplest account to open — no business paperwork, just a brokerage account you fund directly. For a lot of casual gig workers, a Roth IRA alone is genuinely enough.\n\nThe gap shows up once your self-employment income grows into something closer to a real small business. $7,500 a year stops being much of a dent once you’re netting $40,000–$50,000+ from freelancing, and that’s exactly the income level where a SEP-IRA or Solo 401(k) starts to matter — both let you contribute well beyond the IRA limit using the same self-employment earnings.',
+      },
+      {
+        heading: 'The SEP-IRA: simple, but employer-contribution-only',
+        body: 'A SEP-IRA (Simplified Employee Pension) is the easier of the two self-employed accounts to open and maintain — most brokerages let you set one up online in minutes with no annual filing requirement. The tradeoff for that simplicity is how the contribution works: everything you put in is treated as an "employer" contribution, capped at roughly 20% of your net self-employment earnings (after the deduction for half your self-employment tax), up to an overall dollar limit that the IRS adjusts for inflation most years and that has recently sat somewhere north of $70,000.\n\nThere’s no separate "employee" contribution the way a regular 401(k) has — which matters because it means a SEP-IRA only lets you save a meaningful amount once your net self-employment income is already fairly high. At lower income levels, the 20%-of-net-earnings math caps you well below what a Solo 401(k) would allow with the same income.',
+      },
+      {
+        heading: 'The Solo 401(k): more paperwork, usually a bigger contribution',
+        body: 'A Solo 401(k) (also called an individual 401(k)) is built for a self-employed person with no full-time employees other than a spouse. It lets you contribute in two separate buckets: an "employee" elective deferral — the same $24,500 limit a regular 401(k) employee gets in 2026 — plus an "employer" profit-sharing contribution of roughly 20% of your net self-employment earnings, with both buckets combining up to the same overall dollar cap as a SEP-IRA.\n\nThe practical effect: at moderate income levels, a Solo 401(k) usually lets you shelter meaningfully more than a SEP-IRA, because the employee deferral bucket doesn’t depend on your earnings being high enough to generate a big 20% slice — you can max out that $24,500 piece on a comparatively modest net profit. The cost is more setup — you typically need to establish the plan with a brokerage before the end of the tax year you want it to apply to, and once the account’s assets cross a certain size, there’s a short annual IRS form (Form 5500-EZ) to file. It’s also worth knowing some Solo 401(k) plans support a Roth option for the employee-deferral portion, which a SEP-IRA does not offer at all.',
+      },
+      {
+        heading: 'The deadline difference that trips people up',
+        body: 'A SEP-IRA can usually be opened and funded as late as your tax filing deadline (including extensions) for the year you’re contributing for — which makes it forgiving if you don’t realize until tax season how much you actually earned. A Solo 401(k), by contrast, generally has to be established by December 31 of the tax year itself, even though you can still fund the employer-contribution portion later, up to your filing deadline. Decide late in the year that a Solo 401(k) is the better fit, and you may have already missed the window to open one for that year — meaning a SEP-IRA, or just maxing a Roth IRA, becomes the fallback.',
+      },
+      {
+        heading: 'Which one actually fits your situation',
+        body: 'If your freelance or gig income is modest and inconsistent, a Roth IRA alone is usually the right amount of complexity — you get decades of tax-free growth without any business-account paperwork. If your net self-employment earnings are solidly into five figures and you want to shelter more than the Roth limit, a Solo 401(k) is generally the stronger choice at moderate income because of that separate employee-deferral bucket, as long as you open it before year-end. If you’d rather skip any annual filing obligation and your income is high enough that the 20%-of-net-earnings math already gets you close to the max anyway, a SEP-IRA’s simplicity becomes more appealing.\n\nOne thing that surprises people: these aren’t mutually exclusive with a Roth IRA. You can run a Roth IRA and a SEP-IRA or Solo 401(k) at the same time, since the Roth’s limit is separate from the self-employed account’s limit — just not a SEP-IRA and a Solo 401(k) together in the same business in the same year.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm your gig or freelance income is genuinely earned income (it is, by default) before assuming you need anything beyond a Roth IRA.\n2. Under roughly $40,000 in net self-employment earnings? A Roth IRA alone is usually enough — open one before building anything more complex.\n3. Want to save more than the Roth limit and your income supports it? Compare a Solo 401(k) (usually more generous at moderate income) against a SEP-IRA (simpler, fewer deadlines).\n4. If you’re leaning Solo 401(k), open the plan before December 31 of the tax year — you can still fund it later, but you can’t open it late.\n5. Keep a Roth IRA running alongside whichever self-employed account you pick — the two limits don’t compete with each other.\n6. Track your net self-employment earnings (income minus business expenses) carefully, since both accounts’ contribution limits are based on that number, not your gross revenue.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', '401(k)', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'Can a freelancer or gig worker have a 401(k) if their platform doesn’t offer one?',
+        a: 'Yes — it’s called a Solo 401(k), and it’s built specifically for self-employed people with no full-time employees. You open it yourself through a brokerage rather than through an employer.',
+      },
+      {
+        q: 'Is a SEP-IRA or a Solo 401(k) better for most gig workers?',
+        a: 'It depends on income. At moderate self-employment earnings, a Solo 401(k) usually allows a bigger contribution because it has a separate employee-deferral bucket on top of the employer contribution. A SEP-IRA is simpler to maintain but has no employee-deferral piece, so it takes higher earnings to shelter the same amount.',
+      },
+      {
+        q: 'Can you have both a Roth IRA and a SEP-IRA or Solo 401(k)?',
+        a: 'Yes. A Roth IRA’s contribution limit is entirely separate from a SEP-IRA or Solo 401(k)’s limit, so freelancers commonly fund both. You generally can’t run a SEP-IRA and a Solo 401(k) for the same self-employment income in the same year, though.',
+      },
+      {
+        q: 'What’s the deadline to open a Solo 401(k) or SEP-IRA?',
+        a: 'A Solo 401(k) generally needs to be established by December 31 of the tax year, though you can fund the employer-contribution portion later. A SEP-IRA is more forgiving — it can typically be opened and funded as late as your tax filing deadline, including extensions.',
+      },
+    ],
+  },
 ]
