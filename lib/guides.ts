@@ -6256,4 +6256,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-a-minor-open-a-bank-account-without-a-parent',
+    title: 'Can a Minor Open a Bank Account Without a Parent?',
+    metaTitle: 'Can a Minor Open a Bank Account Without a Parent?',
+    description:
+      'Short answer: no, not fully on your own — but teen checking accounts and joint accounts get you real banking (and a debit card) years before you turn 18.',
+    date: '2026-11-07',
+    category: 'Saving',
+    intro:
+      'You want somewhere to put birthday money and paycheck cash that isn’t a shoebox, but every bank’s sign-up form seems to assume you’re an adult. Here’s why that is, and the handful of completely legal ways around it that still get you a real account — and often a debit card — well before you turn 18.',
+    sections: [
+      {
+        heading: 'Why banks won’t just hand a minor an account',
+        body: 'It’s not that banks don’t want your money — it’s contract law. Opening a bank account is a legal agreement, and in the US, minors generally can’t be held to contracts the same way adults can. If something went wrong — an overdraft, a disputed fee, fraud on the account — the bank would have a hard time legally enforcing anything against someone under 18. So almost every bank’s solution is the same: a minor can have an account, just not alone. An adult (usually a parent or guardian) has to be on it too, as a joint owner or custodian, until the minor reaches the age of majority in their state (18 almost everywhere, 19 in a couple of states).\n\nThis is separate from the custodial brokerage and Roth IRA rules for investing — those are investment accounts governed by securities rules. A checking or savings account at a bank is a deposit account governed by the bank’s own contract requirements, and the "need an adult" rule applies even earlier, often starting around age 13 rather than requiring earned income.',
+      },
+      {
+        heading: 'Option 1: a joint account with a parent',
+        body: 'The most traditional route is a joint checking or savings account — you and a parent are both legal owners, both names are on the account, and either of you can deposit, withdraw, or see the transaction history. Most major banks and credit unions will open one of these for a teenager, often starting around age 13, sometimes younger at a local credit union.\n\nThe parent isn’t just a formality here — legally they have equal ownership and equal responsibility for the account, including any overdraft fees it racks up. That’s worth saying out loud before opening one: if you overdraft, it can affect your parent’s banking relationship too, not just an account that’s "yours."',
+      },
+      {
+        heading: 'Option 2: a teen-specific checking account with parental controls',
+        body: 'Several banks now offer accounts built specifically for teens, which work a lot like a joint account under the hood but come with an app layer that splits control between parent and teen. The parent typically gets visibility into every transaction and the ability to set spending limits, lock the card instantly, or auto-transfer allowance; the teen gets a real debit card, a mobile app, and the ability to spend their own money without asking for cash each time.\n\nWell-known examples include bank-issued teen checking accounts like Chase First Banking and Capital One MONEY, both structured as accounts linked to a parent’s existing account, and standalone debit-card-plus-app services like Greenlight or Step, which partner with a bank behind the scenes to hold the actual deposits. The mechanics vary — some are true checking accounts, some are prepaid-style debit cards — so check whether the money sits in an FDIC-insured bank account before assuming it’s covered the same way a traditional savings account would be.',
+      },
+      {
+        heading: 'What a minor genuinely cannot do alone',
+        body: 'There’s no legitimate workaround that lets a minor open a fully independent bank account — not a "special" bank, not an online-only app, not cash-only workarounds. Any service claiming a minor can open an account with zero parental involvement either isn’t actually a bank (it may not be FDIC-insured at all), or is quietly requiring a parent to set it up and just hiding that step from the marketing. Prepaid debit cards you can sometimes buy off a store shelf aren’t bank accounts either — they usually carry activation and monthly fees and don’t build any banking history.\n\nThe one thing minors can do entirely on their own, once they have a job: earn and keep the right to direct how their paycheck gets spent or saved, even if the account itself needs a co-owner.',
+      },
+      {
+        heading: 'What happens at 18',
+        body: 'Once you hit the age of majority, most joint or teen accounts can convert into a fully independent account in your name alone — the bank removes the parent as an owner, and you take sole control, often with the same account number and history intact. It’s worth calling the bank a little before your birthday to confirm the process, since some banks require you to actively request the conversion rather than doing it automatically. If the teen account you’ve been using doesn’t convert cleanly, that’s also a natural point to shop around — by then you’ll have a few years of banking habits to judge what you actually want from an account.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Decide between a plain joint account at your parent’s existing bank (simplest, often free) and a teen-specific account with an app and spending controls.\n2. Confirm the account — or the bank behind a debit-card app — is actually FDIC-insured (or NCUA-insured at a credit union) before depositing real money.\n3. Ask about fees upfront: monthly maintenance fees, ATM fees, and overdraft fees vary a lot between teen accounts and traditional joint accounts.\n4. If overdrafts are a concern, ask whether the account supports overdraft protection or simply declines a transaction instead of charging a fee — policies differ by bank.\n5. Keep at least a small cash cushion in the account rather than running it to zero — it avoids declined transactions and keeps good habits before you’re managing money fully solo.\n6. Mark your 18th birthday as a reminder to ask the bank about converting the account to your name alone.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Inflation', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'What age can you open a bank account without a parent?',
+        a: 'In the US, that’s 18 almost everywhere (19 in a couple of states) — the legal age of majority. Before that, a minor can still have an account, but a parent or guardian needs to be a joint owner or custodian on it.',
+      },
+      {
+        q: 'Can a 13-year-old get their own debit card?',
+        a: 'Yes, through a joint account with a parent or a teen-specific banking app — many of these programs start around age 13, and some start even younger. The card is tied to an account a parent co-owns or oversees, not a fully independent account.',
+      },
+      {
+        q: 'Is a teen debit card app like Greenlight the same as a bank account?',
+        a: 'Not exactly. Apps like Greenlight issue a debit card and hold the underlying deposits at a partner bank, so the money is typically FDIC-insured the same way a bank account’s deposits are — but the app itself isn’t a bank, and some charge a subscription fee that a plain joint checking account wouldn’t.',
+      },
+      {
+        q: 'Does a joint bank account with a parent affect financial aid like FAFSA?',
+        a: 'A joint checking or savings account is generally counted as the student’s asset on financial aid forms, similar to a custodial UGMA/UTMA account — worth knowing if keeping a large balance there could affect aid eligibility later.',
+      },
+    ],
+  },
 ]
