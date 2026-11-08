@@ -6312,4 +6312,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-tax-loss-harvesting-how-does-it-work',
+    title: 'What Is Tax-Loss Harvesting and How Does It Actually Save You Money?',
+    metaTitle: 'What Is Tax-Loss Harvesting? How It Actually Saves You Money',
+    description:
+      'Tax-loss harvesting means selling an investment at a loss on purpose to lower your tax bill — here’s how the $3,000 rule and the wash sale rule actually work.',
+    date: '2026-11-08',
+    category: 'Investing',
+    intro:
+      'A stock you bought is down 20%, and instead of just feeling bad about it, you can actually turn that loss into a tax break. Tax-loss harvesting is one of the only genuinely free lunches in investing — selling a losing position on purpose to offset gains, or even your regular income, at tax time. Here’s exactly how much it can save you, and the rule that trips up almost everyone who tries it.',
+    sections: [
+      {
+        heading: 'What tax-loss harvesting actually is',
+        body: 'Tax-loss harvesting means selling an investment that’s worth less than what you paid for it, locking in the loss on paper, and using that loss to cancel out taxes you’d otherwise owe. It only works in a regular taxable brokerage account — not a Roth IRA, traditional IRA, or 401(k), because those accounts aren’t taxed on gains or losses in the first place.\n\nSay you bought $2,000 of a stock and it’s now worth $1,400. If you sell, you’ve "realized" a $600 capital loss. That loss isn’t just a bummer — the IRS lets you use it to directly reduce your tax bill, which is the entire point of harvesting it.',
+      },
+      {
+        heading: 'How much it can actually save you — the $3,000 rule',
+        body: 'Capital losses first cancel out capital gains, dollar for dollar, with no limit. If you made $1,000 selling one stock for a profit and lost $600 on another, you only owe tax on $400 of net gain.\n\nIf your losses are bigger than your gains for the year, up to $3,000 of the leftover loss can be used to reduce your ordinary taxable income — the same income your paycheck taxes are calculated on. ($1,500 if you’re married and filing separately.) Any loss beyond that $3,000 doesn’t disappear — it carries forward to next year, and the year after that, for as long as it takes to use it up. There’s no expiration.\n\nFor someone in a 22% tax bracket, using the full $3,000 against ordinary income saves around $660 in actual taxes owed — real money, just for selling a position you were probably going to sell eventually anyway.',
+      },
+      {
+        heading: 'The wash sale rule — the part that trips people up',
+        body: 'Here’s the catch: the IRS doesn’t let you sell a losing stock just to immediately buy it right back and still claim the loss. That’s called a wash sale, and it voids the tax benefit. The rule covers a 61-day window — 30 days before the sale, the day of the sale, and 30 days after. If you buy the same stock, or something the IRS considers "substantially identical" (like a different share class of the same company), anywhere in that window, the loss is disallowed.\n\nThe wash sale rule applies across all of your accounts, not just the one you sold in. If you sell a stock at a loss in a taxable brokerage account and then buy it back inside your Roth IRA within 30 days, the loss still gets disallowed — and because it happened in a Roth, you don’t even get to add the disallowed loss back to your cost basis the way you normally would. It just evaporates. If you want to stay invested in the same general space, buying a similar-but-not-identical fund (a different index, a different ETF provider) sidesteps the rule entirely.',
+      },
+      {
+        heading: 'Where this actually matters for you right now',
+        body: 'If most of your money is in a Roth IRA, a 401(k), or a custodial account that hasn’t generated any gains yet, tax-loss harvesting doesn’t apply to you — there’s nothing to harvest, because those accounts either aren’t taxed annually or you haven’t sold anything yet. It only becomes relevant once you’re investing through a regular taxable brokerage account and you actually sell something at a loss.\n\nThat said, it’s worth knowing before you need it. The first time a stock you bought drops 20% and you’re debating whether to sell, remembering that the loss itself has value — even if the stock doesn’t recover — can make the decision easier.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Only applies to taxable brokerage accounts — not Roth IRAs, traditional IRAs, or 401(k)s.\n2. Losses offset gains first, dollar for dollar, with no cap.\n3. Extra losses beyond your gains can offset up to $3,000 of ordinary income per year ($1,500 if married filing separately).\n4. Unused losses carry forward to future tax years indefinitely — track them.\n5. Don’t buy back the same or a "substantially identical" security within 30 days before or after the sale, in any account you own — that’s a wash sale and kills the deduction.\n6. If you still like the sector or theme, swap into a similar-but-different fund instead of waiting out the 30 days.\n7. Keep records of every sale — your brokerage’s 1099-B will report it, but your own notes make tax season faster.',
+      },
+    ],
+    relatedTerms: ['Tax-Loss Harvesting', 'Stock', 'ETF', 'Volatility'],
+    faq: [
+      {
+        q: 'Does tax-loss harvesting work in a Roth IRA?',
+        a: 'No. Roth IRAs — along with traditional IRAs and 401(k)s — aren’t taxed on gains or losses each year, so there’s no tax benefit to harvesting a loss inside one. It only applies to regular taxable brokerage accounts.',
+      },
+      {
+        q: 'How much can you deduct from tax-loss harvesting?',
+        a: 'Losses offset capital gains first with no limit. Beyond that, up to $3,000 per year ($1,500 if married filing separately) can offset ordinary income, and anything left over carries forward to future years.',
+      },
+      {
+        q: 'What is the wash sale rule in simple terms?',
+        a: 'It’s the rule that voids your tax loss if you buy the same or a very similar investment within 30 days before or after you sold it at a loss. The window covers 61 days total and applies across all of your accounts, not just the one you sold in.',
+      },
+      {
+        q: 'Do you have to actually lose money to benefit from tax-loss harvesting?',
+        a: 'You have to sell to "realize" the loss — just holding a stock that’s down on paper doesn’t give you any tax benefit until you actually sell it.',
+      },
+    ],
+  },
 ]
