@@ -6364,4 +6364,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'credit-card-chargeback-vs-refund-whats-the-difference',
+    title: 'What Is a Credit Card Chargeback and How Is It Different From a Refund?',
+    metaTitle: 'Credit Card Chargeback vs. Refund: What’s the Difference?',
+    description:
+      'A refund is the merchant giving your money back voluntarily. A chargeback is your bank forcing it back. Here’s how disputes actually work, step by step.',
+    date: '2026-11-09',
+    category: 'Credit',
+    intro:
+      'You ordered something that never showed up, or a company you canceled kept charging your card anyway — and now you’re staring at your banking app wondering if "refund" and "dispute" are the same button. They’re not, and which one you use changes how fast you get your money back, and whether you get it back at all. Here’s the actual difference, and when each one is the right move.',
+    sections: [
+      {
+        heading: 'A refund happens when the merchant agrees with you',
+        body: 'A refund is simple: you contact the seller, they agree the charge should be reversed, and they process it themselves. Money typically lands back in your account in a few business days to about a week, depending on your bank. No bank investigation, no paperwork beyond an email or a return form — the merchant just pushes the money back through the same system they took it from.\n\nRefunds are the fastest, cleanest outcome, which is why every guide to disputing a charge says the same first step: contact the merchant before you do anything else. Most legitimate businesses would rather refund $20 than deal with a dispute, because disputes cost them money even when they win.',
+      },
+      {
+        heading: 'A chargeback happens when the merchant won’t cooperate — or can’t be reached',
+        body: 'A chargeback is a formal dispute you file with your card issuer, not the store. You’re telling your bank "this charge is wrong," and the bank — not the merchant — reverses it, then goes and recovers the money from the merchant’s bank on your behalf. You use this route when the merchant refuses to refund you, has gone silent, shut down, or when the charge was outright fraud (a card number stolen and used by someone else).\n\nUnder the Fair Credit Billing Act, credit card issuers are required to investigate billing error disputes you raise in writing, generally within 60 days of the statement that first showed the charge. Many issuers also accept disputes through the app or by phone and will often apply a provisional credit to your account within about 10 business days while they investigate — so you’re not out the money during the process the way you can be with a debit card dispute.',
+      },
+      {
+        heading: 'What actually happens after you file a chargeback',
+        body: 'Filing a chargeback kicks off a process with real steps on the other end, not just a button that instantly returns your money. Your bank notifies the merchant’s bank, which notifies the merchant. The merchant can accept the chargeback and let the money go, or fight it by submitting evidence — a signed delivery receipt, your IP address and login history, proof you used the service after the date you claim you canceled. That rebuttal is called "representment," and if the issuer finds it convincing, the chargeback can be reversed back onto you.\n\nThis is why chargebacks aren’t a free undo button for buyer’s remorse. Banks expect you to have tried resolving it with the merchant first, and filing one for a purchase you simply regret — rather than one that was fraudulent, undelivered, or billed incorrectly — is sometimes called "friendly fraud." Do it too often and card issuers can flag your account or, in extreme or clearly abusive cases, close it.',
+      },
+      {
+        heading: 'The subscription trap this actually solves',
+        body: 'The single most common reason a Gen Z cardholder files a chargeback isn’t fraud — it’s a subscription that kept charging after they thought they’d canceled, or a "free trial" that quietly converted into a $40/month charge nobody noticed for three billing cycles. If the company’s cancellation flow is a maze on purpose, or support just stops responding, a chargeback is a completely legitimate tool, not an overreaction.\n\nBefore filing, screenshot everything: the cancellation confirmation (if you got one), the app or account settings showing canceled status, and the charges themselves. That evidence makes your dispute far more likely to stick the first time, instead of bouncing back after the merchant submits a rebuttal.',
+      },
+      {
+        heading: 'Your checklist before disputing a charge',
+        body: '1. Try the merchant first — contact them directly and ask for a refund; it’s faster and doesn’t risk a "friendly fraud" flag on your account.\n2. If they refuse, go silent, or the charge was fraud you didn’t make, contact your card issuer to file a formal dispute/chargeback.\n3. File within the window your issuer gives you — don’t sit on it for months and assume you can still dispute it.\n4. Save evidence before you file: screenshots of cancellations, order confirmations, messages with customer support.\n5. Expect a provisional credit while it’s investigated, and know the merchant can respond with their own evidence before it’s final.\n6. Use chargebacks for real billing errors and fraud — not for a purchase you just changed your mind about.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Is a chargeback the same as a refund?',
+        a: 'No. A refund is the merchant voluntarily reversing a charge. A chargeback is a formal dispute filed with your card issuer that forces the reversal when the merchant won’t cooperate or the charge was fraudulent.',
+      },
+      {
+        q: 'How long do you have to dispute a credit card charge?',
+        a: 'Under the Fair Credit Billing Act, you generally need to submit a written dispute within 60 days of the statement that first shows the charge, though many issuers let you start the process sooner through their app.',
+      },
+      {
+        q: 'Can a merchant fight a chargeback?',
+        a: 'Yes — this is called representment. The merchant can submit evidence to your card issuer showing the charge was valid, and if the issuer agrees, the chargeback can be reversed back onto you.',
+      },
+      {
+        q: 'Can you get in trouble for filing too many chargebacks?',
+        a: 'Filing disputes for things that aren’t actually billing errors or fraud — sometimes called "friendly fraud" — can get your account flagged by your issuer, and repeated abuse can lead to a closed account.',
+      },
+    ],
+  },
 ]
