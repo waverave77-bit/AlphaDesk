@@ -6472,4 +6472,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-read-a-college-financial-aid-award-letter',
+    title: 'How Do You Read a College Financial Aid Award Letter?',
+    metaTitle: 'How to Read a Financial Aid Award Letter: Net Price Explained',
+    description:
+      'Your award letter buries loans next to grants and calls it all "aid." Here’s how to find the number that actually matters — net price — and compare offers correctly.',
+    date: '2026-11-11',
+    category: 'College Money',
+    intro:
+      'Two schools can send award letters with the same "Total Aid: $38,000" headline and mean completely different things — one might be mostly grants, the other mostly loans you have to pay back with interest. Award letters aren’t designed to confuse you on purpose, but every school formats them differently, uses different labels, and lumps gift aid and debt into the same bucket. Here’s how to pull apart what’s actually in yours.',
+    sections: [
+      {
+        heading: 'Start with the real first number: Cost of Attendance',
+        body: 'Cost of Attendance (COA) is the full price of a year at that school — not just tuition. It’s supposed to include tuition and fees, room and board, plus estimates for books, supplies, transportation, and personal expenses. That full figure is what any aid is actually being measured against.\n\nHere’s the catch: some award letters only display tuition and fees up top, because that’s the number the school directly bills you for, and bury or omit the rest. If your letter doesn’t show a complete COA, build your own — every school is required to post a net price calculator on its website, and it will show the full estimated cost, including the expenses that don’t show up on a tuition bill but absolutely show up in your bank account.',
+      },
+      {
+        heading: 'Gift aid vs. self-help aid — the distinction your letter blurs',
+        body: 'Financial aid comes in two fundamentally different flavors, and award letters routinely list them side by side as if they were equivalent. Gift aid — grants and scholarships — never has to be repaid. Self-help aid — work-study and loans — isn’t free: work-study has to be earned through an actual job, and loans have to be paid back, usually with interest.\n\nA letter that shows "$25,000 in financial aid" might mean $10,000 in grants and $15,000 in loans, or it might mean $23,000 in grants and $2,000 in work-study. Those are two very different financial situations wearing the same headline number. Scan every line item and sort each one into "never repaid" or "repaid or earned" before you look at anything else.',
+      },
+      {
+        heading: 'The number that actually matters: net price',
+        body: 'Net price = Cost of Attendance minus gift aid only (grants and scholarships — not loans, not work-study). That’s the amount your family needs to cover through savings, a payment plan, income during the year, or additional borrowing. It’s the single most useful number for comparing two different schools, because it strips out the debt that makes a "generous-looking" package misleading.\n\nA school with a lower sticker price can easily have a higher net price than a school with a higher sticker price but a bigger grant budget. Compare net price, never the advertised tuition number, and never the "total aid" number if it’s mixing in loans.',
+      },
+      {
+        heading: 'The loans hiding inside the package',
+        body: 'If your letter lists Direct Subsidized and Unsubsidized Loans, know the difference: on a subsidized loan, the federal government pays the interest while you’re enrolled at least half-time; on an unsubsidized loan, interest starts accruing from the day it’s disbursed, even while you’re still in school, and gets added to what you owe if you don’t pay it along the way. Dependent undergrads are generally capped at a combined $5,500 in year one (with only part of that available as subsidized), rising in later years — these are federal annual limits, not school-specific.\n\nA small origination fee is also deducted from federal loans before the money ever reaches the school, so the amount applied to your bill is slightly less than the amount you actually owe. And if you see a Parent PLUS Loan on your letter, read the fine print: that debt belongs to the parent who borrows it, not to the student, even though it’s listed right next to the student’s other aid.',
+      },
+      {
+        heading: 'Comparing letters side by side',
+        body: 'Because every school uses its own labels — "Expected Family Contribution," "Estimated Family Contribution," "Unmet Need," "Self-Help Aid" — the only reliable way to compare offers is to rebuild them yourself in the same format. For each school, write down: full COA (use the net price calculator if the letter is incomplete), total gift aid, net price, and total loans offered.\n\nThat side-by-side table often reorders the list completely. A school you assumed was unaffordable because of its sticker price can turn out to have the lowest net price once you subtract its grants — and a school that looked generous can turn out to be the most expensive once you realize most of its "aid" was loans.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Find or calculate the school’s full Cost of Attendance, including room, board, books, and personal expenses — not just tuition.\n2. Separate every line item into gift aid (grants, scholarships) or self-help aid (loans, work-study).\n3. Calculate net price: COA minus gift aid only. Ignore loans in this calculation.\n4. Note the loan types and amounts offered, and whether any are Parent PLUS loans billed to a parent, not you.\n5. Rebuild each school’s offer in the same format so you can compare net price across schools directly.\n6. Contact the financial aid office before deciding — some schools will review an offer if your circumstances have changed since you filed.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Inflation'],
+    faq: [
+      {
+        q: 'What is the difference between gift aid and self-help aid?',
+        a: 'Gift aid — grants and scholarships — never has to be repaid. Self-help aid — loans and work-study — isn’t free money: loans come with interest you repay later, and work-study has to be earned through an actual campus job.',
+      },
+      {
+        q: 'What is net price and why does it matter more than the sticker price?',
+        a: 'Net price is the Cost of Attendance minus gift aid only (not loans). It’s the real out-of-pocket number families face, and it can rank schools completely differently than their advertised tuition — a cheaper-looking school can have a higher net price once its smaller grant budget is factored in.',
+      },
+      {
+        q: 'Does a bigger "total aid" number always mean a better offer?',
+        a: 'No. Many award letters add loans and work-study into the same total as grants and scholarships, which can make a loan-heavy package look just as attractive as a grant-heavy one. Always separate the two before comparing offers.',
+      },
+      {
+        q: 'Who is responsible for repaying a Parent PLUS Loan?',
+        a: 'The parent who borrows it — not the student — even though it’s typically listed as part of the student’s financial aid package on the award letter.',
+      },
+    ],
+  },
 ]
