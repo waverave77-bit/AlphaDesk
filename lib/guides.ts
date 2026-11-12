@@ -6528,4 +6528,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-the-css-profile-do-you-need-it-besides-the-fafsa',
+    title: 'What Is the CSS Profile, and Do You Need It Besides the FAFSA?',
+    metaTitle: 'CSS Profile vs. FAFSA: What It Asks and Which Schools Need It',
+    description:
+      'The CSS Profile isn’t a backup FAFSA — it’s a separate, more invasive form some colleges use for their own aid. Here’s who needs it, what it asks, and the cost.',
+    date: '2026-11-12',
+    category: 'College Money',
+    intro:
+      'You already filed the FAFSA and figured financial aid was handled — then one of your schools emails asking for something called the CSS Profile, due weeks earlier than you expected. It isn’t a duplicate of the FAFSA and it isn’t optional if your school requires it. It’s a separate application, run by a different organization, that digs into your family’s finances in more detail to decide how much of the school’s own money you get.',
+    sections: [
+      {
+        heading: 'What the CSS Profile actually is',
+        body: 'The CSS Profile is an online financial aid application built and run by the College Board — the same nonprofit behind the SAT — not by the federal government. A few hundred colleges and scholarship programs use it, concentrated heavily among private universities and a smaller number of selective public ones. Public state schools and community colleges almost never require it.\n\nIts entire purpose is to help a school decide how to award its own institutional grants and scholarships — money that comes from the college’s endowment or budget, not from Washington. The FAFSA decides federal aid eligibility (Pell Grants, federal loans, work-study) and most state aid. If a school on your list doesn’t require the CSS Profile, skip it — filling it out for a school that doesn’t ask for it accomplishes nothing.',
+      },
+      {
+        heading: 'Why it asks so much more than the FAFSA',
+        body: 'The FAFSA runs on a federal formula with a fairly narrow set of inputs. The CSS Profile uses the College Board’s own "Institutional Methodology," which asks for a noticeably deeper financial picture: home equity in the family’s primary residence, the value of a family business or farm, retirement account balances (disclosed even though most schools don’t count them as available assets the way they would a checking account), and medical or private K-12 tuition expenses for siblings.\n\nThe logic is that two families with identical income can have very different ability to pay — one owns their home outright, the other rents and has medical debt — and a federal formula built around broad eligibility rules doesn’t capture that. Individual colleges can also layer on their own supplemental questions beyond the standard Profile form, so the exact questions can vary school to school even though you’re filling out the same base application each time.',
+      },
+      {
+        heading: 'The noncustodial parent wrinkle',
+        body: 'This is the part that catches divorced and separated families off guard. The FAFSA only wants financial information from the parent you lived with more over the past year. Most CSS Profile schools go further and require a separate form — often called the Noncustodial Profile (CSS ID: NCP) — filled out by the other biological or legal parent, regardless of custody arrangements, how long it’s been since they were involved, or whether they’re contributing to tuition at all.\n\nSome schools grant a waiver from this requirement in specific situations — abuse, abandonment, or a complete absence of contact — but it has to be requested and documented through the school directly; it isn’t automatic just because the relationship is estranged or difficult. If this applies to your family, start that conversation with the financial aid office months before the deadline, not the week it’s due.',
+      },
+      {
+        heading: 'Cost, timing, and deadlines that sneak up early',
+        body: 'Unlike the FAFSA, the CSS Profile charges a fee for each school you send it to, though fee waivers are available for students from lower-income families — check the eligibility criteria on the College Board’s site before assuming you have to pay. You submit one application but select every school and scholarship program individually, and each one is billed separately.\n\nThe form typically opens in the fall for the upcoming admissions cycle, around the same time the FAFSA does. The real trap is the deadline: colleges that use the CSS Profile often set their deadline to match early decision or early action — sometimes in November, well before most students are thinking about financial aid at all. Check each school’s specific CSS Profile deadline directly on their financial aid page; don’t assume it lines up with the FAFSA’s typically later timeline.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Check each school’s financial aid website directly for whether it requires the CSS Profile — don’t assume based on what other schools on your list need.\n2. If it’s required, find that specific school’s CSS Profile deadline — it’s often earlier than the FAFSA deadline, especially for early decision or early action applicants.\n3. If parents are divorced or separated, find out now whether the school requires a Noncustodial Profile, and start that conversation with the noncustodial parent (or the financial aid office, if a waiver might apply) well ahead of the deadline.\n4. Gather more documentation than the FAFSA needs: home value and mortgage balance, retirement account statements, and business or farm value if applicable.\n5. Check fee waiver eligibility before paying — don’t assume you have to pay the per-school fee without checking.\n6. File the CSS Profile in addition to the FAFSA, not instead of it — they unlock different pools of money and one doesn’t substitute for the other.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Compound Interest', 'Inflation', 'Roth IRA'],
+    faq: [
+      {
+        q: 'Do I need to file the CSS Profile if I already filed the FAFSA?',
+        a: 'Only if at least one of your schools requires it — check each school’s financial aid website directly. The two forms unlock different types of aid: the FAFSA covers federal (and most state) aid, while the CSS Profile determines eligibility for a school’s own institutional grants and scholarships. Filing one doesn’t substitute for the other.',
+      },
+      {
+        q: 'Is the CSS Profile the same as the FAFSA?',
+        a: 'No. The FAFSA is a federal government form that’s free and uses one standard formula. The CSS Profile is run by the College Board, costs a per-school fee (with waivers available), and asks for more detailed financial information — including home equity and, for divorced families, often a noncustodial parent’s finances.',
+      },
+      {
+        q: 'Does the CSS Profile require information from both parents if they’re divorced?',
+        a: 'Often yes, even from a noncustodial parent who isn’t claiming the student on taxes or contributing to tuition. This is a major difference from the FAFSA, which only asks about the custodial parent. Some schools offer waivers for specific circumstances like abandonment, but they have to be requested directly.',
+      },
+      {
+        q: 'How much does the CSS Profile cost?',
+        a: 'It charges a fee for the first school and a smaller fee for each additional school you send it to, with fee waivers available for students from lower-income families. Check current pricing and waiver eligibility on the College Board’s site before assuming you have to pay out of pocket.',
+      },
+    ],
+  },
 ]
