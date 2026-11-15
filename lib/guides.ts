@@ -6636,4 +6636,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-a-debt-to-income-ratio-why-does-it-matter',
+    title: 'What Is a Debt-to-Income Ratio, and Why Do Landlords and Lenders Check It?',
+    metaTitle: 'Debt-to-Income Ratio Explained: What Counts and What "Good" Looks Like',
+    description:
+      'Your debt-to-income ratio isn’t your credit score — it’s a separate number lenders (and some landlords) use to judge whether you can handle new debt. Here’s the math.',
+    date: '2026-11-15',
+    category: 'Credit',
+    intro:
+      'Your credit score says how reliably you’ve paid people back. Your debt-to-income ratio says something different: can your current income actually support one more bill? Lenders check both before approving a car loan, a credit card limit increase, or a mortgage years from now — and the math behind it is simple enough to calculate yourself before you ever apply.',
+    sections: [
+      {
+        heading: 'What debt-to-income ratio actually measures',
+        body: 'Debt-to-income ratio (DTI) is your total monthly debt payments divided by your gross monthly income, shown as a percentage. Gross means before taxes — the number on your offer letter, not your take-home pay.\n\nFormula: DTI = Total Monthly Debt Payments ÷ Gross Monthly Income × 100. If you earn $3,000 a month before taxes and pay $300 toward a car loan plus $150 in minimum credit card payments, your DTI is $450 ÷ $3,000 = 15%.\n\nLenders actually split this into two versions. The front-end ratio counts only housing costs (rent or a future mortgage payment) against your income. The back-end ratio counts housing plus every other debt payment — credit cards, car loans, student loans, personal loans. When people say "DTI" without specifying, they usually mean back-end.',
+      },
+      {
+        heading: 'What counts as debt — and what doesn’t',
+        body: 'DTI only counts recurring, fixed debt obligations: minimum credit card payments, student loan payments, car loan or lease payments, personal loan payments, and rent or mortgage. It does not count groceries, utilities, phone bills, streaming subscriptions, insurance premiums, or everyday spending — even though those absolutely affect your real budget.\n\nThat’s the biggest gap between DTI and how your money actually feels day to day. You can have a great DTI and still be stressed every month because your discretionary spending is out of control, or a mediocre DTI with plenty of breathing room because your debt is low-interest and your lifestyle is cheap. DTI is a lender’s risk number, not a budgeting tool — it tells them what they want to know, not everything that matters to you.',
+      },
+      {
+        heading: 'The numbers lenders actually use',
+        body: 'There’s no single universal cutoff, but the ranges are consistent across most lenders. A back-end DTI under 36% is generally considered strong and gives you the most approval options. Between roughly 36% and 43% is workable for many loans but starts narrowing your options or raising your rate. Above 43%, approval gets noticeably harder for most conventional loans — though it’s not an automatic rejection, and government-backed loans (like FHA mortgages) and borrowers with strong credit scores or large down payments can sometimes get approved well above that line.\n\nAuto lenders tend to care less about a single hard cutoff and more about the combination of DTI, credit score, and down payment — but a back-end DTI comfortably under 40% makes approval and rate shopping much easier. Credit card issuers rarely publish a DTI threshold at all; they lean more on income and credit history, though a very high DTI can still get an application declined or a lower limit offered than you expected.',
+      },
+      {
+        heading: 'Why landlords check something similar — but not identical',
+        body: 'Most landlords and property managers don’t calculate a formal DTI. Instead, they use an income-to-rent rule, commonly requiring your gross monthly income to be about 2.5 to 3 times the monthly rent. A $1,500/month apartment under a "3x rent" policy means they want to see roughly $4,500/month in gross income.\n\nHere’s where the two numbers quietly connect: that income test assumes your income is mostly free to cover rent. If you’re already sending a few hundred dollars a month toward student loans and a car payment, you might clear the landlord’s income multiple on paper while actually having very little room left over — which is exactly the situation a true DTI calculation would catch. Some landlords, especially larger property management companies that pull a full credit and background report, do look at existing debt payments directly. Either way, high fixed debt can work against a rental application even when the official policy only mentions income.',
+      },
+      {
+        heading: 'How to lower your DTI before a big application',
+        body: 'The two levers are the two halves of the formula: raise the income, or lower the debt payments (not just the total balance). Paying off or paying down a car loan or a credit card balance before applying can measurably shift your number, especially on smaller debts where the whole payment disappears. Avoid opening new credit — a new auto loan or furniture financing plan right before applying for an apartment or mortgage adds a monthly payment at the worst possible time.\n\nConsolidating high-payment debt into a lower monthly payment (for example, a longer-term personal loan replacing several credit cards) can lower your DTI on paper even if the total amount owed doesn’t change much — worth knowing, but also a reminder that DTI is a snapshot a lender checks, not a measure of whether a loan structure is actually smart for you long-term.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Add up all your required monthly debt payments — credit cards (minimums), student loans, car loan, any personal loans.\n2. Divide that total by your gross monthly income (before taxes) and multiply by 100.\n3. Under 36% is a strong position for most loans; 36–43% is workable but tightens your options; above 43% means you may need a stronger credit score, bigger down payment, or a different loan type.\n4. Before applying for an apartment, check whether your gross income clears roughly 2.5–3x the monthly rent — and remember existing debt still eats into that cushion even if the landlord never asks about it directly.\n5. Pay down a small debt entirely (rather than spreading extra payments thin) if you need a quick DTI improvement — eliminating a whole monthly payment moves the number more than partial paydowns.\n6. Hold off on new financing (cars, furniture, "buy now, pay later" plans) in the months before a big application like a mortgage or lease.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Leverage', 'Liquidity', 'Federal Reserve'],
+    faq: [
+      {
+        q: 'What is a good debt-to-income ratio?',
+        a: 'Most lenders consider a back-end DTI under 36% strong. Between 36% and 43% is still workable for many loans but narrows your options. Above 43% makes approval harder for conventional loans, though government-backed loans and strong credit can sometimes offset it.',
+      },
+      {
+        q: 'Does debt-to-income ratio affect my credit score?',
+        a: 'No — DTI isn’t part of your credit score calculation at all. It’s a separate number lenders check alongside your credit score when deciding whether to approve a new loan or how much to lend you.',
+      },
+      {
+        q: 'Do landlords actually check debt-to-income ratio?',
+        a: 'Most use a simpler income-to-rent rule instead, often requiring gross income of about 2.5–3x the monthly rent. Some larger property managers who pull a full credit report may also factor in existing debt payments directly.',
+      },
+      {
+        q: 'Does rent count toward my debt-to-income ratio?',
+        a: 'Yes — rent (or a mortgage payment) is counted as housing debt in both the front-end ratio (housing only) and the back-end ratio (housing plus all other debt payments).',
+      },
+    ],
+  },
 ]
