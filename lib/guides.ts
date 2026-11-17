@@ -6692,4 +6692,52 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'pay-off-credit-card-debt-or-invest-first',
+    title: 'Should You Pay Off Credit Card Debt or Invest First?',
+    metaTitle: 'Credit Card Debt or Investing First? Here’s the Real Math',
+    description:
+      'A credit card charging 20%+ interest is a guaranteed loss no investment reliably beats. Here’s the actual order to pay down debt and invest at the same time.',
+    date: '2026-11-17',
+    category: 'Credit',
+    intro:
+      'You’ve got a little extra money, a credit card balance that isn’t going away, and an app on your phone nudging you to “start investing today.” It feels like a toss-up. It isn’t. The interest rate on your card is almost always the deciding factor, and once you see the actual numbers side by side, the order stops being a debate.',
+    sections: [
+      {
+        heading: 'The math: your card’s APR is a guaranteed loss',
+        body: 'The average credit card today charges somewhere in the low-to-mid 20s in APR — call it 22%. If you carry a balance, that 22% isn’t a one-time fee, it’s what you lose every single year on whatever you still owe, compounding against you the same way interest compounds for you in an investment account.\n\nCompare that to the stock market, which has returned roughly 10% a year on average over long stretches — and that average hides years of -20% and years of +30%, with no guarantee any single year looks like the average at all. Paying off a 22% APR card is a guaranteed, risk-free 22% return. No index fund, no stock, no strategy offers a guaranteed return even close to that. The math isn’t close.',
+      },
+      {
+        heading: 'The one exception: never skip a free employer match',
+        body: 'If your job offers a 401(k) match — say, 50 cents on every dollar you contribute, up to some percentage of your salary — contribute at least enough to get the full match before you aggressively attack credit card debt. An instant 50% (or 100%) return on the match dollars is bigger than almost any card’s interest rate, so turning it down to pay down debt faster usually costs you more than it saves.\n\nOutside of a match that good, almost nothing beats paying off a double-digit-APR credit card first. This is the one carve-out, not a reason to deprioritize debt generally.',
+      },
+      {
+        heading: 'Why “but the market might go up” doesn’t change the answer',
+        body: 'The tempting counterargument: what if you invest instead and the market returns 15% this year? Even then, you’d be earning 15% on money that’s simultaneously losing 22% to your card balance — a net loss. And you don’t get to pick which year you invest in. The market could just as easily drop 15% the same year your card keeps charging 22% regardless, and now you’re down on both sides at once.\n\nPaying off the card removes risk entirely. Investing while carrying a high-interest balance adds risk on top of a guaranteed drain. Those aren’t equivalent bets, even though both involve moving money around.',
+      },
+      {
+        heading: 'The actual order of operations',
+        body: 'Personal finance educators generally converge on some version of this sequence when both debt and investing are competing for the same dollar: pay every minimum payment on every account, no exceptions, since a missed minimum triggers late fees and credit damage regardless of your bigger strategy. Build a small starter cushion — a few hundred dollars — so one car repair or vet bill doesn’t land right back on the card you’re trying to pay off. Capture any employer 401(k) match in full. Then throw every extra dollar at the highest-APR credit card debt until it’s gone, ignoring other goals in the meantime. Only after high-interest debt is cleared does it make sense to build a full 3–6 month emergency fund and ramp up regular investing.\n\nLow-interest debt changes this calculus. A federal student loan at 5–6%, or a car loan in a similar range, doesn’t carry the same urgency — the market’s long-term average return is close enough to those rates that paying minimums on low-interest debt while investing the rest is a reasonable, defensible choice. Credit cards almost never fall into that category.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. List every card’s balance and APR — the one with the highest rate is your priority target, regardless of balance size.\n2. Keep paying every minimum payment on every account, on time, with no exceptions.\n3. If your employer offers a 401(k) match, contribute enough to get all of it — then redirect everything else toward the card.\n4. Put extra cash toward the highest-APR balance until it hits zero before increasing how much you invest.\n5. Once high-interest cards are paid off, redirect that old payment amount into a Roth IRA or 401(k) instead of letting it quietly get absorbed into spending.\n6. Keep a small cash cushion the whole time so a surprise expense doesn’t go right back on the card you just paid down.',
+      },
+    ],
+    relatedTerms: ['Compound Interest', 'Leverage', 'Diversification', 'Volatility', 'Roth IRA'],
+    faq: [
+      {
+        q: 'Should I invest or pay off credit card debt first?',
+        a: 'Pay off the credit card debt first in almost every case. A typical card charges somewhere in the low-to-mid 20s in APR — a guaranteed loss that’s larger than the stock market’s realistic expected return. The one exception is contributing enough to capture a full employer 401(k) match before you attack the debt aggressively.',
+      },
+      {
+        q: 'Is it ever okay to invest while carrying credit card debt?',
+        a: 'Only up to the point of a free employer match — that specific return is usually higher than your card’s APR. Beyond that, investing while a high-interest card balance keeps growing is almost always a net loss once you account for both sides.',
+      },
+      {
+        q: 'Does this apply to student loans too?',
+        a: 'Not the same way. Federal student loans typically carry much lower rates than credit cards, often in a range close to the market’s long-term average return — which makes paying minimums on the loan while still investing a reasonable choice. High-APR debt like credit cards doesn’t have that same gray area.',
+      },
+    ],
+  },
 ]
