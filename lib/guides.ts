@@ -6740,4 +6740,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-long-does-it-take-to-get-money-after-selling-stock',
+    title: 'How Long Does It Take to Get Your Money After You Sell a Stock?',
+    metaTitle: 'How Long After Selling a Stock Can You Withdraw the Cash?',
+    description:
+      'Selling a stock doesn’t mean instant cash. Here’s how T+1 settlement works, what a “good faith violation” is, and how long until the money actually hits your bank account.',
+    date: '2026-11-18',
+    category: 'Investing',
+    intro:
+      'You hit sell, the position disappears from your portfolio, and the cash balance in your app jumps up immediately. Feels done. It isn’t — behind the scenes, that trade still has to “settle,” and until it does, the money isn’t fully yours to move around. Here’s what’s actually happening between the click and the cash.',
+    sections: [
+      {
+        heading: 'The trade executes instantly — the money settles a day later',
+        body: 'When you hit sell, the trade executes in milliseconds and your app updates to show the cash right away. But that number is provisional. Behind the scenes, the actual exchange of stock for cash — called settlement — takes an extra business day to finalize. This is known as T+1: trade date plus one business day.\n\nThat timeline got shorter recently. For decades US stock trades settled on a T+3 schedule, then T+2 starting in 2017. In May 2024, the SEC moved the entire US equities market to T+1, cutting the wait roughly in half. Sell on a Tuesday and the trade settles Wednesday (assuming no holidays in between). Sell on a Friday and it settles Monday, since weekends don’t count as business days.\n\nETFs and most stocks follow this same T+1 schedule. Options contracts settle on a similar next-business-day timeline, but some other assets — like certain bonds — can take longer.',
+      },
+      {
+        heading: 'Settled cash vs. unsettled cash — and the “good faith violation” trap',
+        body: 'In a standard cash account (no margin), you’re usually allowed to use the proceeds from a sale to buy something else right away, even before settlement finishes. Most apps let you do this without warning you. The catch: if you sell that new position before the original sale actually settles, you’ve committed what’s called a good faith violation under Federal Reserve Regulation T.\n\nOne good faith violation usually just gets you a warning. Rack up three within a rolling 12-month period, though, and your broker is required to restrict your account to settled-cash-only trading for 90 days — meaning you can only buy with cash that has already fully settled, no more using proceeds right away. It’s not a credit ding and it doesn’t follow you to a new broker, but it’s an annoying penalty box for a mistake most people don’t even realize they’re making.',
+      },
+      {
+        heading: 'Why the app sometimes acts like the cash is already available',
+        body: 'If your broker shows you “instant” buying power or lets you withdraw right after a sale, that’s usually the broker extending you a short-term advance backed by its own capital, not proof that settlement already happened. Margin-enabled accounts work similarly — the broker lets you tap into the value of settled holdings as a kind of credit line, which is a different mechanism than the sale itself settling faster.\n\nThis is also why two brokers can feel different for the exact same trade. One might show the proceeds as immediately spendable buying power while another shows them as “pending.” Underneath, the stock still takes the same T+1 timeline to actually settle at both.',
+      },
+      {
+        heading: 'Getting the cash into your actual bank account',
+        body: 'Settlement inside your brokerage account is only step one. Moving that money out to your checking account is a separate transfer, usually done through ACH, which typically takes another 1–3 business days to land. Some brokers offer faster options — instant or same-day transfers to a debit card — but usually for a fee and often capped at a limit.\n\nAdd it up and a realistic timeline from “I sold a stock” to “the cash is spendable in my checking account” is often 2–4 business days total, not the instant number your app shows the moment you hit sell. Plan around that if you’re selling specifically to cover a bill or a deadline — don’t sell the morning something is due.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Know the settlement date: trade date plus one business day (T+1), skipping weekends and market holidays.\n2. In a cash account, avoid selling a position you just bought with unsettled funds — that’s a good faith violation.\n3. Check your good faith violation count if your broker shows one; three in a rolling 12 months freezes your account to settled-cash-only trading for 90 days.\n4. Don’t confuse “buying power” shown in the app with settled cash — they can differ, especially on margin-enabled accounts.\n5. Budget 1–3 extra business days after settlement for an ACH withdrawal to actually reach your bank account.\n6. If you need cash by a specific date, sell several business days ahead of time, not the day before.',
+      },
+    ],
+    relatedTerms: ['Broker', 'Liquidity', 'Market Order', 'Day Trading', 'Margin'],
+    faq: [
+      {
+        q: 'Can I withdraw money right after selling a stock?',
+        a: 'Not immediately in most cases. The sale has to settle first, which under the current T+1 rule takes one business day after the trade date — then a separate bank transfer (usually 1–3 more business days) is needed to get the cash into your checking account.',
+      },
+      {
+        q: 'What is a good faith violation?',
+        a: 'It happens in a cash account when you buy a stock using proceeds from a sale that hasn’t settled yet, then sell that new position before the original sale settles. Three good faith violations within a rolling 12 months gets your account restricted to settled-cash-only trading for 90 days.',
+      },
+      {
+        q: 'Why does my broker show my cash balance as available immediately after I sell?',
+        a: 'Many brokers display a “buying power” number that updates instantly, but that’s often an advance the broker extends using its own capital or margin — not proof the trade has already settled. The underlying settlement still takes the standard T+1 timeline.',
+      },
+      {
+        q: 'Does T+1 settlement apply to ETFs and options too?',
+        a: 'Yes, most stocks, ETFs, and options settle on the same T+1 schedule the SEC adopted in 2024. Some other securities, like certain bonds, can settle on a different timeline.',
+      },
+    ],
+  },
 ]
