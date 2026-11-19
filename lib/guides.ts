@@ -6792,4 +6792,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'can-your-job-call-you-a-1099-contractor-instead-of-an-employee',
+    title: 'Can Your Job Legally Call You a “1099 Contractor” Instead of an Employee?',
+    metaTitle: '1099 vs. W-2 Misclassification: Is Your Job Doing It Illegally?',
+    description:
+      'Getting a 1099 instead of a W-2 isn’t always legal just because your boss says so. Here’s the actual test, why it saves employers money, and what to do if you’re misclassified.',
+    date: '2026-11-19',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You show up at the same time every shift, use the company’s equipment, take orders from a manager — and then at tax time a 1099-NEC shows up instead of a W-2. That’s not a paperwork preference. Whether you’re legally an employee or a contractor depends on how the job actually works, not on what your employer decided to call you, and getting it wrong costs you real money.',
+    sections: [
+      {
+        heading: 'The label doesn’t decide it — the facts of the job do',
+        body: 'Calling someone a “1099 contractor” doesn’t make them one. The IRS uses a facts-and-circumstances test built around three buckets of control: behavioral control (does the company direct how, when, and where you do the work, or just the end result?), financial control (do you have unreimbursed expenses, your own tools, the ability to work for other clients, and a chance to profit or lose money?), and the type of relationship (is there a written contract, do you get benefits like paid time off, is the work indefinite rather than project-based?). No single factor decides it — the IRS weighs all of them together.\n\nSeveral states go further. California and a handful of others use a stricter “ABC test” for many jobs: a worker is presumed to be an employee unless the company proves the worker is free from control, does work outside the company’s usual business, and independently operates their own established trade. Under that test, a lot of arrangements labeled “contractor” don’t survive scrutiny.',
+      },
+      {
+        heading: 'Why employers do it: it’s cheaper for them, not for you',
+        body: 'Classifying someone as a 1099 contractor instead of a W-2 employee saves the employer money in several places at once: no matching 7.65% employer share of Social Security and Medicare, no federal or state unemployment insurance tax, usually no workers’ comp coverage, no overtime pay requirement, and no health insurance, paid leave, or retirement matching. All of those costs that normally sit with the employer get pushed onto you instead, on top of the work itself.\n\nThat’s the financial logic behind it — and it’s also exactly why misclassification is one of the most common wage-and-hour violations regulators pursue. It’s not usually an honest mix-up.',
+      },
+      {
+        heading: 'The red flags that you’re misclassified',
+        body: 'A few signs point toward “this should be a W-2 job”: you’re required to work specific, set hours rather than choosing your own schedule; you work exclusively or almost exclusively for one company rather than serving multiple clients; you use the company’s equipment, software logins, and workspace rather than your own; you’re trained and directly supervised on how to do the work, not just handed a result to deliver; and the role is open-ended and ongoing rather than tied to a defined project with an end date.\n\nA genuine independent contractor usually sets their own hours, brings their own tools, can (and often does) work for other clients at the same time, and is paid for a deliverable rather than for showing up. The more a job looks like a regular shift with a boss, the weaker the case for 1099 status.',
+      },
+      {
+        heading: 'What misclassification actually costs you',
+        body: 'If you’re really functioning as an employee but get paid on a 1099, you absorb costs a W-2 employee never would. You owe the full 15.3% self-employment tax (both the employee and employer halves of Social Security and Medicare) instead of splitting 7.65% with an employer. Nothing is withheld, so you’re responsible for quarterly estimated payments yourself. You’re not covered by unemployment insurance if the job ends, you have no legal right to overtime pay for extra hours, and you typically get no employer-sponsored health insurance or retirement match. On an identical hourly rate, a misclassified “contractor” effectively takes home less and carries more risk than a properly classified employee doing the exact same job.',
+      },
+      {
+        heading: 'What to actually do about it',
+        body: 'Start by asking directly whether you can switch to W-2 status — sometimes it’s a legitimate oversight and gets fixed once flagged. If that doesn’t work, you can file IRS Form SS-8 to request an official determination of your worker status, or report the situation to the Department of Labor’s Wage and Hour Division, which investigates misclassification without requiring you to sue anyone. Many states also have their own labor agencies that handle these complaints faster than a federal one.\n\nWhile you sort it out, you can still file as self-employed and claim the deductions available to contractors (mileage, home office, equipment), plus deduct half of your self-employment tax — small consolations, but real ones. And misclassified or not, 1099 income still counts as earned income for Roth IRA eligibility, so it’s still worth routing some of it into tax-free retirement growth while you fix the bigger problem.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Compare your actual working conditions — schedule, tools, supervision, exclusivity — against the behavioral/financial/relationship test, not against what your pay stub calls you.\n2. Check whether your state uses the stricter ABC test, which flips the default assumption toward “employee.”\n3. If something feels off, ask your employer directly about reclassification before escalating.\n4. If that fails, file Form SS-8 with the IRS or report it to your state labor department or the DOL’s Wage and Hour Division.\n5. In the meantime, set aside 25–30% of each payment for self-employment tax and file quarterly estimated payments to avoid a penalty.\n6. Keep routing earned 1099 income into a Roth IRA even while the classification issue gets resolved — that part of the clock doesn’t need to wait.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', 'Liquidity', 'Inflation'],
+    faq: [
+      {
+        q: 'Can my employer just decide to pay me as a 1099 contractor?',
+        a: 'Not legally, if the actual working relationship looks like employment. The IRS and most states look at behavioral control, financial control, and the nature of the relationship — not the label on your paperwork — to decide whether you’re really an employee.',
+      },
+      {
+        q: 'What’s the difference between the IRS test and the ABC test?',
+        a: 'The IRS common law test weighs several factors together with no single one deciding the outcome. The ABC test, used by California and some other states, is stricter: it presumes you’re an employee unless the company can prove all three conditions — you’re free from control, your work is outside the company’s usual business, and you independently run your own established trade.',
+      },
+      {
+        q: 'What happens if I report my employer for misclassifying me?',
+        a: 'The IRS (via Form SS-8) or your state labor department can investigate and determine your correct status. If they find you were misclassified, the employer may owe back payroll taxes, unemployment insurance, and in some cases penalties — and you may be able to recover unpaid overtime or benefits.',
+      },
+      {
+        q: 'Do I still owe self-employment tax while a misclassification claim is pending?',
+        a: 'Yes. Keep filing as self-employed, pay quarterly estimated taxes, and claim the deductions available to contractors in the meantime — you can’t skip paying tax on income you actually received while the classification question is unresolved.',
+      },
+    ],
+  },
 ]
