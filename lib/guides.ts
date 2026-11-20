@@ -6848,4 +6848,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'should-you-ask-for-a-credit-limit-increase',
+    title: 'Should You Ask for a Credit Limit Increase, and Does It Hurt Your Score?',
+    metaTitle: 'Credit Limit Increase: How It Works and When to Ask',
+    description:
+      'A higher credit limit can boost your score by lowering utilization — but asking the wrong way triggers a hard inquiry. Here’s how to request one correctly.',
+    date: '2026-11-20',
+    category: 'Credit',
+    intro:
+      'Your card issuer sends an email offering to bump your limit, or you’re staring at a $500 cap wondering if asking for more is a trap. It isn’t — raising your limit is one of the few credit moves that’s almost always good for your score, as long as you ask the right way and don’t treat the extra room as extra money to spend.',
+    sections: [
+      {
+        heading: 'Why a higher limit helps your score at all',
+        body: 'Credit utilization — your balance divided by your limit — is the second-biggest factor in most scoring models, behind only payment history. Say you have a $1,000 limit and carry a $300 balance on the statement date: that’s 30% utilization, right at the edge of where scores start getting dinged. If your limit gets raised to $2,000 and your balance stays at $300, utilization drops to 15% with zero extra effort or spending on your part. The math, not your behavior, did the work.\n\nThis is why a limit increase is one of the only ways to improve your score passively. You don’t have to pay anything down or change a habit — the denominator in the utilization fraction just got bigger.',
+      },
+      {
+        heading: 'Two ways to ask — and only one risks your score',
+        body: 'Most major issuers (Chase, Discover, Capital One, Amex, and others) let you request a credit limit increase online or in the app, and many ask upfront whether you want a "soft pull" or a "hard pull" review. A soft inquiry doesn’t touch your score at all — issuers use it when they already have enough data on your account history to decide. A hard inquiry works like applying for a new card: it can cost a few points and stays on your report for about two years, though the effect fades within a few months.\n\nAlways check which type the issuer will run before confirming the request. Some issuers automatically review your account every several months and raise your limit without you asking — that automatic review is typically a soft pull and doesn’t affect your score either.',
+      },
+      {
+        heading: 'What issuers actually check before saying yes',
+        body: 'A limit increase request usually asks for your current income and sometimes your monthly housing payment — this is standard under the CARD Act, which requires issuers to verify you can reasonably repay any new credit extended to you. Beyond income, issuers weight your payment history on the account (on-time payments for at least 6-12 months typically helps your case), how much of your current limit you’ve been using, and your overall credit file elsewhere.\n\nAsking too soon after opening a card, or right after a missed payment, is more likely to get declined — and a declined request doesn’t undo a hard inquiry if you chose that option. Waiting until you’ve had the card at least six months with clean, on-time payments gives you a meaningfully better shot.',
+      },
+      {
+        heading: 'The trap: a bigger limit is not bigger income',
+        body: 'The entire benefit of a limit increase disappears the moment you start spending up to the new ceiling. Utilization only improves if your balance stays flat (or grows slower than the limit did) — if a $1,000 limit becomes $2,000 and your balance grows from $300 to $600, you’re back to 30% utilization and gained nothing but more room to get into trouble. Treat the new limit as a lower utilization percentage on your current spending, not as a bigger budget.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Wait until you’ve had the card at least 6 months with on-time payments before requesting an increase.\n2. Before confirming, check whether the issuer will run a soft or hard inquiry — pick soft whenever it’s offered.\n3. Request the increase through the issuer’s app or site rather than asking for an entirely new card, which always involves a hard pull.\n4. After approval, keep your spending the same — let the bigger limit lower your utilization percentage, don’t spend up to it.\n5. Space out increase requests by several months if declined; reapplying immediately rarely changes the outcome.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Liquidity', 'Federal Reserve', 'Diversification'],
+    faq: [
+      {
+        q: 'Does asking for a credit limit increase hurt your credit score?',
+        a: 'It depends on the inquiry type. If the issuer uses a soft pull, there’s no impact at all. If they use a hard pull, it can cost a few points temporarily, similar to applying for a new card — many issuers let you choose or will disclose which type they’ll run before you confirm the request.',
+      },
+      {
+        q: 'How often can you ask for a credit limit increase?',
+        a: 'There’s no fixed legal limit, but issuers generally expect at least a few months between requests, and most recommend waiting 6-12 months after your last approval or decline before asking again.',
+      },
+      {
+        q: 'Will a credit limit increase let me spend more without consequences?',
+        a: 'No — it only helps your score if your balance doesn’t grow along with the limit. Spending up to the new ceiling cancels out the utilization benefit and can lead to a bigger balance that’s harder to pay off.',
+      },
+      {
+        q: 'Do credit limit increases show up on my credit report?',
+        a: 'Yes, the new limit itself is reported to the bureaus and reflected in your utilization calculation. A soft-pull increase won’t add an inquiry to your report; a hard-pull increase will show the inquiry for about two years, though its effect on your score fades within months.',
+      },
+    ],
+  },
 ]
