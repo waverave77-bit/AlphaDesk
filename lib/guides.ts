@@ -6900,4 +6900,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-chexsystems-why-cant-you-open-a-bank-account',
+    title: 'What Is ChexSystems, and Why Won’t a Bank Let You Open an Account?',
+    metaTitle: 'ChexSystems Explained: Why Banks Are Rejecting Your Application',
+    description:
+      'Banks can reject a new checking account over something that has nothing to do with your credit score. Here’s what ChexSystems tracks and how to fix a bad record.',
+    date: '2026-11-21',
+    category: 'Saving',
+    intro:
+      'You walk in to open a basic checking account — no loan, no credit card, nothing that should touch your credit score — and get rejected anyway. That’s not a credit bureau problem. It’s almost certainly ChexSystems, a separate reporting agency banks use to screen new deposit accounts, and most people have never heard of it until it blocks them.',
+    sections: [
+      {
+        heading: 'ChexSystems is not a credit bureau',
+        body: 'Equifax, Experian, and TransUnion track how you handle borrowed money — credit cards, loans, on-time payments. ChexSystems tracks something different: how you’ve handled deposit accounts. It’s a consumer reporting agency that collects records from thousands of banks and credit unions about checking and savings accounts that closed with unpaid negative balances, were flagged for suspected fraud, or were closed by the bank for misuse.\n\nBecause it’s a separate system, your ChexSystems file can be a mess while your credit score is fine, or vice versa. A rejected checking account application almost never shows up on your credit report at all — banks pull ChexSystems instead of a credit bureau for most routine account openings.',
+      },
+      {
+        heading: 'What actually lands you in it',
+        body: 'The most common entry: an account got overdrawn, the bank tried to collect, and the balance eventually got charged off instead of paid — meaning you walked away owing the bank money on a closed account. Other common triggers include a bank suspecting fraudulent activity on the account (even if you weren’t the one responsible, like being a victim of check fraud), excessive overdrafts that led the bank to close the account involuntarily, or bouncing checks repeatedly.\n\nSimply closing an account in good standing, with a zero or positive balance, does not get reported. The trigger is almost always leaving a bank owing money, not the act of closing an account itself.',
+      },
+      {
+        heading: 'How long a record stays, and how to check yours',
+        body: 'Like credit bureaus, ChexSystems is governed by the Fair Credit Reporting Act, which caps how long most negative information can be reported — typically up to five years from the date of the incident, after which it has to come off automatically. You don’t have to wait blindly, either: you’re legally entitled to one free ChexSystems report every 12 months, separate from your free annual credit reports, requested directly through ChexSystems rather than through a credit bureau.\n\nPulling your own report doesn’t hurt anything — it’s not a score, just a record of entries, so there’s no inquiry penalty for checking. If something on it looks wrong (an account you never opened, a balance you already paid), you can dispute it with ChexSystems directly, the same way you’d dispute an error on a credit report.',
+      },
+      {
+        heading: 'Getting a bank account anyway',
+        body: 'A ChexSystems record doesn’t permanently lock you out of banking. Paying off the negative balance you owe is the single most useful step — some banks will remove the record once it’s paid, though that’s a courtesy, not a guarantee, so ask before assuming it. Separately, many banks and credit unions offer "second-chance" checking accounts built specifically for people with a ChexSystems history — they often come with a monthly fee and fewer features (no overdraft coverage, lower limits) but report good payment behavior and can convert to a regular account after a year or so of clean use.\n\nA handful of banks don’t pull ChexSystems at all for basic accounts — it’s worth asking directly before applying, since a rejection itself doesn’t ding your credit, but a pattern of rejections is still a hassle worth avoiding. A prepaid debit card isn’t a real substitute long-term, but it can bridge the gap while you clean up a record or wait out the one you can’t fix immediately.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. If a bank rejects your application, ask specifically whether it was a ChexSystems issue before assuming it’s a credit problem.\n2. Request your free ChexSystems report directly from ChexSystems — it won’t affect any score.\n3. Dispute anything inaccurate the same way you’d dispute a credit report error.\n4. Pay off any unpaid negative balance at the bank that reported it — this is the fix that matters most.\n5. If you need an account now, look specifically for a "second-chance" checking account rather than repeatedly applying and getting rejected elsewhere.\n6. Keep future accounts in good standing: avoid letting a balance go negative and unpaid, since that single event is what triggers most records.',
+      },
+    ],
+    relatedTerms: ['Liquidity', 'Credit Rating', 'Federal Reserve', 'Counterparty Risk'],
+    faq: [
+      {
+        q: 'Is ChexSystems the same as a credit score?',
+        a: 'No. ChexSystems is a separate reporting agency that tracks banking history — like unpaid overdrafts and suspected fraud — not borrowing history. A bad ChexSystems record usually doesn’t appear on your credit report or affect your credit score at all.',
+      },
+      {
+        q: 'How long does a negative ChexSystems record last?',
+        a: 'Typically up to five years from the date of the incident, after which it has to be removed under the same federal law that governs credit reports. Paying off what you owe sometimes gets a record removed sooner, but that’s up to the bank, not guaranteed.',
+      },
+      {
+        q: 'Can you open a bank account with a bad ChexSystems history?',
+        a: 'Yes — many banks and credit unions offer second-chance checking accounts designed for exactly this situation, and some banks don’t check ChexSystems for basic accounts at all. It limits your options, but it doesn’t eliminate them.',
+      },
+      {
+        q: 'Does checking your own ChexSystems report hurt it?',
+        a: 'No. You’re entitled to one free report every 12 months, and pulling it yourself is a self-check, not an inquiry that affects anything — there’s no score attached to damage in the first place.',
+      },
+    ],
+  },
 ]
