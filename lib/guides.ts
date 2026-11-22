@@ -6952,4 +6952,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'is-there-an-income-limit-for-a-roth-ira-what-if-you-earn-too-much',
+    title: 'Is There an Income Limit for a Roth IRA? What Happens If You Earn Too Much',
+    metaTitle: 'Roth IRA Income Limit: What Happens If You Earn Too Much',
+    description:
+      'Roth IRAs phase out at higher incomes — here’s exactly how the limit works, what the penalty for over-contributing looks like, and the legal workaround.',
+    date: '2026-11-22',
+    category: 'Investing',
+    intro:
+      'For most teens and early-career workers, the Roth IRA income limit is a non-issue — you’d need a six-figure salary to even brush up against it. But raises and promotions sneak up faster than people expect, and the rule isn’t a wall you suddenly slam into. It’s a gradual phase-out, with a real penalty if you contribute anyway without realizing you’ve crossed it.',
+    sections: [
+      {
+        heading: 'The limit is a phase-out range, not a cliff',
+        body: 'The IRS doesn’t just let you contribute the full amount one year and then zero the next. Once your income crosses a threshold (adjusted for inflation most years), how much you’re allowed to contribute shrinks gradually as you earn more, until it hits zero at the top of the range. For a single filer, that range has generally started somewhere in the $150,000s of income and phased out completely by the $160,000s–$170,000s; for married couples filing jointly, both numbers roughly double. The exact dollar cutoffs move most years, so check the current-year IRS thresholds before assuming where you land — but the shape of the rule (a gradual phase-out, not an on/off switch) stays the same.\n\nIf you’re in the middle of the range, your broker’s contribution calculator (or a tax app) will figure out the reduced amount you’re allowed to put in that year — you don’t have to do the math yourself.',
+      },
+      {
+        heading: 'What actually counts as "income" here',
+        body: 'The number that matters is your Modified Adjusted Gross Income (MAGI) — not your salary, and not your take-home pay. MAGI starts with your adjusted gross income (AGI, the number near the bottom of the front page of your tax return) and adds back a short list of specific deductions, like student loan interest or certain retirement account deductions. For most people with a straightforward W-2 job and no major deductions, MAGI lands very close to gross salary. It only really diverges once you start itemizing, deducting significant student loan interest, or have other adjustments going on — which is exactly why it’s worth double-checking the actual number instead of eyeballing your paycheck.',
+      },
+      {
+        heading: 'What happens if you contribute anyway and you’re over the limit',
+        body: 'If your MAGI ends up too high and you contributed directly to a Roth IRA anyway, the IRS treats it as an "excess contribution" — and it comes with a 6% excise tax, charged every single year the excess money (plus its earnings) stays in the account. That 6% doesn’t disappear on its own; it keeps getting charged annually until you fix it.\n\nThe fix is straightforward if you catch it before your tax filing deadline: withdraw the excess contribution and any earnings it generated, and report the earnings as income for that year. Some people instead "recharacterize" the contribution — moving it into a Traditional IRA before the deadline, since Traditional IRAs have no income limit on contributing (only on the tax deduction). Either move avoids the 6% penalty entirely; doing nothing does not.',
+      },
+      {
+        heading: 'The legal workaround: the backdoor Roth IRA',
+        body: 'High earners who are locked out of contributing directly still have a legal path in, commonly called a "backdoor Roth IRA." Step one: contribute to a Traditional IRA, which has no income limit on contributions (only the deduction phases out). Step two: convert that Traditional IRA balance to a Roth IRA — a conversion that isn’t blocked by the Roth income limit at all.\n\nThe complication to know about before trying this yourself: if you already have other pre-tax money sitting in a Traditional IRA from past contributions or rollovers, the IRS applies a "pro-rata rule" that taxes the conversion proportionally across all your Traditional IRA money, not just the new contribution — which can turn a clean, tax-free backdoor move into a partially taxable one. This is the point where it’s genuinely worth a conversation with a tax professional rather than guessing, since getting it wrong can mean paying tax twice on the same dollars.',
+      },
+      {
+        heading: 'Remember the 401(k) side door has no income limit at all',
+        body: 'If a raise pushes your MAGI near or past the Roth IRA threshold, a workplace Roth 401(k) — if your employer offers one — isn’t affected by any income limit whatsoever. Anyone can contribute to a Roth 401(k) regardless of salary, as long as their employer’s plan includes the option. It also carries a much higher annual contribution ceiling than an IRA. For someone earning enough to worry about the Roth IRA phase-out, routing more money into a Roth 401(k) is often the simplest fix — no backdoor maneuver required.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Calculate your actual MAGI (not just gross salary) before assuming you’re under or over the limit.\n2. Check the current-year IRS phase-out range for your filing status — the exact numbers shift most years.\n3. If you’re in the phase-out range, let your broker or tax software calculate the reduced contribution amount rather than guessing.\n4. Already contributed and realized you’re over? Withdraw the excess plus earnings, or recharacterize to a Traditional IRA, before your filing deadline to avoid the 6% excise tax.\n5. If you’re consistently over the limit, look into a backdoor Roth IRA — but get a tax professional involved if you already hold other pre-tax Traditional IRA money.\n6. Ask whether your employer offers a Roth 401(k) — it has no income limit and a much higher contribution ceiling than any IRA.',
+      },
+    ],
+    relatedTerms: ['Roth IRA', 'Compound Interest', '401(k)', 'Index', 'Portfolio'],
+    faq: [
+      {
+        q: 'What income level makes you ineligible for a Roth IRA?',
+        a: 'Eligibility phases out gradually over a range that generally starts in the $150,000s of MAGI for single filers (roughly double that for married couples filing jointly), disappearing entirely at the top of the range. The exact thresholds adjust most years, so confirm the current-year IRS numbers before assuming where you fall.',
+      },
+      {
+        q: 'What happens if you contribute to a Roth IRA and make too much money?',
+        a: 'The excess amount gets hit with a 6% excise tax every year it stays in the account. You can avoid it by withdrawing the excess contribution and its earnings, or recharacterizing it into a Traditional IRA, before your tax filing deadline.',
+      },
+      {
+        q: 'Is a backdoor Roth IRA legal?',
+        a: 'Yes. Contributing to a Traditional IRA (which has no income limit) and then converting it to a Roth IRA is a legal, commonly used strategy. The main complication is the pro-rata rule, which can make the conversion partially taxable if you already hold other pre-tax Traditional IRA money.',
+      },
+      {
+        q: 'Does a 401(k) have the same income limit as a Roth IRA?',
+        a: 'No. A Roth 401(k) has no income limit at all — anyone can contribute regardless of salary, as long as their employer offers one. Only the Roth IRA has an income-based phase-out.',
+      },
+    ],
+  },
 ]
