@@ -7008,4 +7008,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-happens-to-a-utma-account-when-you-turn-18',
+    title: 'What Happens to a UTMA Account When You Turn 18?',
+    metaTitle: 'UTMA Account at 18: Who Controls the Money and What You Can Do',
+    description:
+      'A custodial UTMA account transfers full control to you at a set age — but that age isn’t always 18, and once it hits, the money is legally yours to spend however you want.',
+    date: '2026-11-23',
+    category: 'Investing',
+    intro:
+      'If a parent or relative opened a custodial account for you as a kid, you’ve probably heard "it’s yours when you turn 18" without anyone explaining what that actually means. The short version: at a specific age set by your state, every dollar and every share in that account becomes completely yours, with zero restrictions on how you use it — which is exactly why it’s worth understanding before the handoff happens, not after.',
+    sections: [
+      {
+        heading: 'What a UTMA (or UGMA) account actually is',
+        body: 'UTMA stands for Uniform Transfers to Minors Act — the law that lets an adult "custodian" hold and manage money or investments on behalf of a minor until that minor is legally an adult. UGMA (Uniform Gifts to Minors Act) is the older, narrower version of the same idea, limited mostly to cash and securities; UTMA, which most states now use, also allows real estate and other property to be held in the account. Functionally, for a typical teenager, they work the same way: a parent or grandparent deposits money or buys stocks/ETFs inside the account, the custodian makes the investment decisions, and the account is titled in the minor’s Social Security number the whole time — meaning it was always legally the kid’s money, just under adult management.',
+      },
+      {
+        heading: 'The transfer age depends on your state — and it isn’t always 18',
+        body: 'This is the part that surprises people. The age at which control transfers, often called the "age of majority" or "age of termination" for custodial accounts, is set by state law and isn’t uniform. Many states default to 21 for UTMA accounts specifically, even though the general legal adult age is 18. Some states set it at 18. In a number of states, the custodian who originally opened the account could choose an age anywhere in an allowed range (commonly 18 to 21, sometimes later) when the account was created, which means two UTMA accounts opened for siblings in the same family could legally transfer at different ages if they were opened under different elections.\n\nIf you don’t know your transfer age, ask the custodian (usually a parent) or call the brokerage holding the account — it’s specified in the account paperwork and the brokerage’s system will have it on file.',
+      },
+      {
+        heading: 'What actually happens at the transfer age',
+        body: 'Once the account hits its termination age, control passes automatically — the custodian doesn’t get a vote, and there’s no legal mechanism to delay it just because a parent thinks the money should go to tuition instead of a car. The brokerage typically re-titles the account into the now-adult’s name alone, or requires them to open an individual account to receive the transferred assets. From that moment, the former minor can sell everything and withdraw the cash, keep it invested, or spend it on anything — there is no rule requiring the money to be used for education or anything else, regardless of what the custodian originally intended it for.\n\nThis is also why some families start having the "this money is for X" conversation years before the transfer — legally enforceable restrictions don’t exist once the account converts, so alignment has to happen through communication, not through the account structure.',
+      },
+      {
+        heading: 'Taxes and financial aid — know these before the money moves',
+        body: 'While the account is still custodial, any investment income it generates (dividends, interest, capital gains) is taxed to the minor under the "kiddie tax" rules, which tax a chunk of unearned income at the minor’s own low rate and the rest at the parent’s higher marginal rate once it crosses a threshold set each year by the IRS. The transfer itself isn’t a taxable event — you’re not "selling" anything by gaining control, so no tax is triggered just because the account re-titles.\n\nThe bigger financial-aid wrinkle hits earlier, before the transfer: on the FAFSA, a custodial UTMA/UGMA account counts as the student’s own asset, which federal aid formulas weigh far more heavily than a parent-owned account (parent assets get a much more generous exclusion). If college financial aid matters for your family, that’s worth knowing while the account is still being funded — it’s often too late to restructure by senior year of high school.',
+      },
+      {
+        heading: 'What to actually do with the money once it’s yours',
+        body: 'There’s no single right answer, but a few moves are worth considering in order. If you have earned income from a job, you can move some of the newly-controlled cash into a Roth IRA — contributions there are still capped at what you actually earned in a year, not by how much sits in the old UTMA, but shifting money toward a Roth lets it grow completely tax-free for decades. If part of the balance is already invested in a diversified index fund or ETF, there’s often no urgent reason to sell — selling can trigger capital gains tax, and a broad, low-cost fund is a reasonable thing to simply keep holding. What doesn’t make sense for most people: liquidating everything the week it transfers to make an impulse purchase, before you’ve had time to think through what the money is actually for.',
+      },
+      {
+        heading: 'Your checklist before the account transfers',
+        body: '1. Find out your account’s exact termination age — ask the custodian or call the brokerage directly.\n2. Review what’s actually in the account (cash vs. specific stocks/ETFs) before deciding whether to sell anything.\n3. If you have job income, plan how much of the transferred cash you want to route into a Roth IRA.\n4. Check whether selling anything right away would trigger a capital gains tax bill, and whether waiting changes that.\n5. If college aid is still ahead of you, talk to a parent now about how this account is reported on the FAFSA — don’t wait until the transfer to think about it.\n6. Once it transfers, open (or confirm) an individual brokerage account in your own name to hold the assets going forward.',
+      },
+    ],
+    relatedTerms: ['Stock', 'ETF', 'Portfolio', 'Roth IRA', 'Compound Interest', 'Diversification'],
+    faq: [
+      {
+        q: 'What age does a UTMA account transfer to the child?',
+        a: 'It depends on the state — commonly 18 or 21, and in some states the custodian could choose an age in that range when the account was opened. Check the account paperwork or ask the brokerage directly rather than assuming 18.',
+      },
+      {
+        q: 'Can a parent stop a UTMA account from transferring at the legal age?',
+        a: 'No. Once the account hits its state-mandated termination age, control transfers automatically to the now-adult beneficiary. There’s no legal way for the custodian to delay or block it.',
+      },
+      {
+        q: 'Do you pay taxes when a UTMA account transfers to you?',
+        a: 'The transfer itself isn’t a taxable event — nothing is being sold, just re-titled. Taxes only come into play if and when assets inside the account are actually sold, or from the ongoing kiddie-tax rules that applied while it was still custodial.',
+      },
+      {
+        q: 'What’s the difference between UTMA and UGMA?',
+        a: 'UGMA is the older, narrower version that generally only allows cash and securities. UTMA, which most states have adopted, also allows other property like real estate. For a typical account holding cash, stocks, and ETFs, they function the same way day to day.',
+      },
+    ],
+  },
 ]
