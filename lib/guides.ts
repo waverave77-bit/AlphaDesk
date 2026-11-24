@@ -7064,4 +7064,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-many-credit-cards-should-you-have-as-a-beginner',
+    title: 'How Many Credit Cards Should You Have as a Beginner?',
+    metaTitle: 'How Many Credit Cards Should a Beginner Have? The Real Answer',
+    description:
+      'There’s no magic number, but there is a smart order of operations. Here’s how many cards actually makes sense when you’re just starting to build credit.',
+    date: '2026-11-24',
+    category: 'Credit',
+    intro:
+      'Somewhere between "one card is plenty" and "churn ten cards for points" is the actual answer for someone just starting out — and it has less to do with a specific number and more to do with whether you can manage what you already have. Here’s how to think about pacing, what adding a card really does to your score, and when a second (or third) one actually makes sense.',
+    sections: [
+      {
+        heading: 'There’s no single right number — but there is a wrong pace',
+        body: 'Credit scoring models don’t reward a specific card count. What they reward is a long history of on-time payments and low balances relative to your limits — and both of those get harder to maintain the faster you add new accounts. A beginner who opens one card, uses it responsibly for a year, then adds a second is in a completely different position than someone who opens three cards in a single month, even if they end up with the same number of cards eventually.\n\nMost financial educators land on 2–3 cards as a reasonable long-term number for the average person — enough to build a mix and a cushion of available credit, not so many that tracking due dates becomes a chore. But "eventually" is the key word. As a beginner with little or no payment history, the first card is the only one that matters right now.',
+      },
+      {
+        heading: 'Why more cards can actually help your score — once you’re ready',
+        body: 'Two of the five main FICO ingredients benefit from having more than one card, which is why "just get one card and never add another" isn’t quite right either. Credit utilization (roughly 30% of a FICO score) is measured both per card and across all your cards combined — adding a second card increases your total available credit, so the same spending automatically becomes a lower percentage of your overall limit. Credit mix (roughly 10%) rewards having a couple of different account types rather than just one.\n\nThe catch: both of those benefits assume you’re paying every card in full, every month. A second card with a balance you’re not paying off doesn’t lower your effective utilization — it just gives you two bills to fall behind on instead of one.',
+      },
+      {
+        heading: 'What adding a card too fast actually costs you',
+        body: 'Every new card application triggers a hard inquiry, which typically costs a few points and fades within a few months — not a big deal in isolation, but it adds up if you’re applying for several cards close together. New accounts also pull down your average age of accounts (part of the 15% length-of-history factor), since a brand-new card has zero history. A beginner with one 8-month-old card has a lower average age than someone with no cards at all would after opening one — but adding a second and third card back to back resets that clock further each time.\n\nMany major issuers also track this directly. Chase, for example, generally won’t approve an applicant for most of its cards if they’ve opened five or more personal credit cards (from any issuer) in the past 24 months — a rule card enthusiasts call "5/24." If you think you might want a specific card down the road, applying for a pile of smaller ones first can accidentally lock you out of it for two years.',
+      },
+      {
+        heading: 'A realistic pace for a beginner',
+        body: 'Get your first card — a secured card, a student card, or an authorized-user spot on a parent’s account — and use it for at least 6–12 months before even thinking about a second. During that stretch, the goal isn’t rewards or perks; it’s proving to yourself (and to the bureaus) that you can keep a balance low and never miss a due date. Once that habit is solid and you have a real reason for a second card — a better rewards rate, a no-annual-fee upgrade, a card for a specific category like groceries or gas — adding one is reasonable.\n\nAfter that, space out any future applications by roughly 6 months to a year rather than opening cards back to back, and treat 2–3 cards as a comfortable ceiling until you have years of established history and a clear system for tracking multiple due dates.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Start with exactly one card and use it for 6–12 months before considering a second.\n2. Only add a new card once you’re confident you can pay every existing card in full, every month.\n3. Space new applications roughly 6–12 months apart instead of applying for several in a short window.\n4. Track utilization across all your cards combined, not just each one individually.\n5. Set every card to autopay the full statement balance so adding more cards never increases your risk of a missed payment.\n6. Don’t close your oldest card later just because you stopped using it — that account’s age is doing quiet work for your score.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Liquidity', 'Diversification'],
+    faq: [
+      {
+        q: 'Is having multiple credit cards bad for your credit score?',
+        a: 'Not inherently. Done right — low balances, on-time payments, applications spaced out over time — multiple cards can actually help by increasing your total available credit and diversifying your credit mix. The risk is adding cards faster than you can responsibly manage them.',
+      },
+      {
+        q: 'How many credit cards is too many?',
+        a: 'There’s no fixed number. The real test is whether you can track every due date and pay each balance in full every month. If you’re missing payments or carrying balances, you already have too many for where you are right now.',
+      },
+      {
+        q: 'Does applying for a new credit card hurt your score?',
+        a: 'Yes, slightly and temporarily. A new application triggers a hard inquiry (typically a few points, fading within months) and lowers your average account age. Applying for several cards close together compounds both effects.',
+      },
+      {
+        q: 'Should a beginner start with one card or several?',
+        a: 'One. Build a track record of on-time payments and low utilization on a single card for at least 6–12 months before adding a second — the habit matters more than the card count.',
+      },
+    ],
+  },
 ]
