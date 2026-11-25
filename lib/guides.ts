@@ -7116,4 +7116,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-read-a-pay-stub',
+    title: 'How Do You Read a Pay Stub? What Every Line Actually Means',
+    metaTitle: 'How to Read a Pay Stub: Gross Pay, Deductions, and Net Pay',
+    description:
+      'Gross pay, FICA, YTD, net pay — your pay stub is full of numbers nobody explains. Here’s what each line means and how to check it for errors.',
+    date: '2026-11-25',
+    category: 'Paychecks & Taxes',
+    intro:
+      'Your pay stub (sometimes called an earnings statement) is the one document that proves exactly how your paycheck turned into a smaller number than you expected. Most people never read past the "amount deposited" line — which means they never catch the mistakes that show up on it. Here’s what every section actually means, and how to check it in under two minutes each payday.',
+    sections: [
+      {
+        heading: 'The three numbers that matter most',
+        body: 'Every pay stub boils down to three figures. Gross pay is everything you earned before anything gets taken out — hours worked times your rate, plus overtime, bonuses, or tips. Deductions are everything subtracted from that: taxes, insurance, retirement contributions. Net pay (sometimes labeled "take-home pay") is what\'s left — the number that actually lands in your bank account.\n\nIf you only check one thing, check that gross pay matches what you expected: hours worked × hourly rate (or your salary divided by the number of pay periods). This is the number most likely to be wrong, since it depends on a timecard or a manager entering hours correctly — everything below it is just math applied to that starting figure.',
+      },
+      {
+        heading: 'The tax section: federal, FICA, and state',
+        body: 'Federal income tax withheld is an estimate based on the filing status and allowances you chose on your W-4 — it\'s a prepayment toward whatever you\'ll actually owe when you file a tax return, not a fixed fee. FICA is two separate taxes bundled together: Social Security (6.2% of your gross pay, employer-matched, up to an annual wage cap that adjusts most years — it was $176,100 in 2025) and Medicare (1.45% of your gross pay, with no cap at all — and an extra 0.9% once your wages at that employer pass $200,000, which won\'t apply to almost anyone reading this). Together, FICA takes 7.65% of a typical paycheck no matter how little you earn or how you filled out your W-4 — it\'s the one deduction that isn\'t negotiable.\n\nIf your state has an income tax, you\'ll see a state withholding line too, usually smaller than the federal line. A handful of states (Texas, Florida, Washington, and a few others) have no state income tax, so that line simply won\'t appear on a pay stub from those states.',
+      },
+      {
+        heading: 'Pre-tax vs. post-tax deductions — the order actually changes your tax bill',
+        body: 'Deductions fall into two buckets, and which bucket matters a lot. Pre-tax deductions — a traditional 401(k) contribution, HSA contribution, or employer health insurance premium — come out of your gross pay before taxes are calculated. That lowers the income the IRS taxes you on, which is why contributing to a 401(k) shrinks your tax bill, not just your take-home pay. Post-tax deductions — a Roth 401(k) contribution, a Roth IRA transfer, union dues — come out after taxes are already calculated, so they don\'t reduce what you\'re taxed on today (the tradeoff is tax-free withdrawals later).\n\nA pay stub usually lists these separately for exactly this reason. If you see "401(k)" above the tax lines or subtracted before "taxable gross," it\'s pre-tax. If it\'s listed after taxes, it\'s post-tax.',
+      },
+      {
+        heading: 'Year-to-date (YTD) totals — your running tally',
+        body: 'Next to almost every line, you\'ll see a "current" amount and a "YTD" (year-to-date) amount — the running total of that category since January 1st. YTD gross pay tells you how much you\'ve earned so far this year; YTD federal tax tells you how much has been withheld so far. These totals are what your W-2 is built from at year-end, so if your YTD numbers look off mid-year — say, YTD gross pay doesn\'t roughly match (hours × rate × pay periods so far) — that\'s worth flagging before it compounds into a bigger W-2 error in January.',
+      },
+      {
+        heading: 'Checking your pay stub for errors',
+        body: '1. Confirm gross pay matches your hours and rate (or your expected salary installment) for that period.\n2. Check that your filing status and any extra withholding on the stub match what you actually wrote on your W-4.\n3. Verify FICA is roughly 7.65% of gross pay (6.2% + 1.45%) — if it\'s noticeably off, flag it with payroll.\n4. Make sure any 401(k), HSA, or insurance deduction you signed up for is actually showing up — and at the amount you chose.\n5. Glance at YTD gross pay every few months and sanity-check it against hours × rate × pay periods elapsed.\n6. Save or download every stub (most payroll portals archive them) — you\'ll want them for loan applications, apartment rentals, and tax time.',
+      },
+      {
+        heading: 'What to do if something looks wrong',
+        body: 'Payroll errors are more common than people assume — a missed raise, a wrong filing status, hours entered incorrectly. If a number doesn\'t add up, go to your manager or HR/payroll contact directly rather than guessing or waiting for it to "sort itself out" — overpaid wages often have to be repaid later, and underpaid wages don\'t fix themselves without someone noticing. Keep a copy of the stub you\'re questioning; it\'s your evidence of what was actually paid versus what should have been.',
+      },
+    ],
+    relatedTerms: ['Federal Reserve', 'Inflation', 'Liquidity', 'Compound Interest'],
+    faq: [
+      {
+        q: 'What is the difference between gross pay and net pay?',
+        a: 'Gross pay is everything you earned before any deductions. Net pay is what\'s left after taxes and other deductions are subtracted — it\'s the amount actually deposited into your bank account.',
+      },
+      {
+        q: 'Why does my pay stub show FICA as two different amounts?',
+        a: 'FICA is actually two separate taxes — Social Security (6.2%) and Medicare (1.45%) — that get combined into one line on some stubs and split into two on others. Together they add up to 7.65% of your gross pay.',
+      },
+      {
+        q: 'What does YTD mean on a pay stub?',
+        a: 'YTD stands for "year-to-date" — the running total of that category (gross pay, taxes withheld, deductions) since January 1st of the current year, not just for that one pay period.',
+      },
+      {
+        q: 'Why is my 401(k) deduction subtracted before taxes are calculated?',
+        a: 'A traditional 401(k) contribution is a pre-tax deduction, meaning it lowers the income the IRS taxes you on for that paycheck. A Roth 401(k) contribution works the opposite way — it comes out after taxes, so withdrawals in retirement are tax-free instead.',
+      },
+    ],
+  },
 ]
