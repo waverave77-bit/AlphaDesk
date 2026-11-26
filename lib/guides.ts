@@ -7172,4 +7172,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'should-you-take-out-a-private-student-loan',
+    title: 'Should You Take Out a Private Student Loan If Federal Aid Isn’t Enough?',
+    metaTitle: 'Private Student Loans: What to Know Before You Borrow',
+    description:
+      'Federal loans run out before tuition does for a lot of students. Here’s how private student loans actually work — rates, cosigners, and what you give up.',
+    date: '2026-11-26',
+    category: 'College Money',
+    intro:
+      'Your financial aid award letter covers most of the bill, but not all of it — and a private student loan is sitting right there in the portal, looking like the easy fix. It can be the right call. It can also quietly cost you protections you’ll miss badly if your income doesn’t cooperate after graduation. Here’s the actual mechanics before you sign anything.',
+    sections: [
+      {
+        heading: 'Max out federal loans first — no exceptions',
+        body: 'Before a private loan ever enters the picture, borrow every dollar of federal Direct Loans you qualify for. Federal loans have fixed rates set by Congress each year, don’t require a credit check or cosigner for the student (except Parent PLUS loans), and come with safety nets no private lender offers: income-driven repayment, deferment, forbearance, and loan forgiveness programs like PSLF.\n\nDependent undergrads can generally borrow $5,500 in their first year, $6,500 in year two, and $7,500 in year three and beyond, capped at $31,000 total across all four years. Most students who qualify for independent status (or whose parent is denied a Parent PLUS loan) can borrow more — up to $12,500 a year and $57,500 total. If you haven’t hit those caps, there’s no reason to touch a private loan yet.',
+      },
+      {
+        heading: 'What a private student loan actually is',
+        body: 'A private student loan comes from a bank, credit union, or online lender (Sallie Mae, Discover, SoFi, and your own credit union are common names) rather than the federal government. The school still has to certify the amount — the lender can’t approve more than your official cost of attendance minus any other aid you’ve already received, so you can’t just borrow an arbitrary amount.\n\nRates come in two flavors: fixed (locked for the life of the loan) or variable (tied to an index that can rise or fall over time). Unlike federal loans, where everyone gets the same rate, your private rate is priced individually based on your credit profile — and most undergrads don’t have one yet.',
+      },
+      {
+        heading: 'Why almost every undergrad needs a cosigner',
+        body: 'Private lenders approve borrowers based on credit score, income, and debt-to-income ratio. An 18- or 19-year-old with no job history and no credit file usually can’t qualify alone, or only qualifies at a rate near the top of the lender’s range. That’s why the large majority of undergraduate private loans carry a cosigner — usually a parent — whose stronger credit file unlocks a meaningfully lower rate.\n\nA cosigner isn’t a reference; they’re equally legally responsible for every payment, and a missed payment hits both credit reports. Some lenders offer a "cosigner release" after a set number of consecutive on-time payments (often 12–48), but the student has to apply for it and pass a credit check on their own at that point — it’s not automatic.',
+      },
+      {
+        heading: 'The protections you give up',
+        body: 'This is the part that trips people up years later. Private loans generally don’t offer income-driven repayment plans that cap payments as a percentage of income, don’t qualify for federal forgiveness programs like PSLF, and any deferment or forbearance is entirely up to the lender’s discretion rather than a guaranteed right. If you lose your job or your first salary comes in lower than expected, a federal loan gives you documented options. A private loan gives you a phone call and hopes the lender is feeling generous.\n\nPrivate student loans are also historically very difficult to discharge in bankruptcy — courts apply a strict "undue hardship" standard that few borrowers successfully meet, so treat the debt as close to permanent until it’s paid off.',
+      },
+      {
+        heading: 'If you do need one, shop it like a loan — not a vibe',
+        body: 'Rate differences between lenders on the same applicant can be several percentage points. Most private lenders let you check your estimated rate with a soft credit pull that doesn’t affect your score, so compare at least three before picking one. Favor a fixed rate over variable unless you’re confident you’ll pay the loan off fast — variable rates can climb well above where they started if benchmark interest rates rise.\n\nAlso check whether a Parent PLUS loan (a federal loan your parent takes out, not you) would actually be cheaper than a private loan with a cosigner. PLUS loans have a higher, fixed origination fee but still carry federal protections that a private loan won’t.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Confirm you’ve borrowed the full amount of federal Direct Loans you qualify for before considering a private loan.\n2. Compare a Parent PLUS loan against private lender offers — federal protections sometimes beat a slightly lower private rate.\n3. Use soft-pull rate checks to compare at least three private lenders before applying for real.\n4. Choose a fixed rate unless you have a specific, realistic plan to pay the loan off quickly.\n5. Ask every lender you’re considering whether they offer a cosigner release, and what it actually requires.\n6. Before anyone cosigns, read the loan’s hardship/forbearance policy — it’s the lender’s choice, not a guaranteed right like it is on federal loans.',
+      },
+    ],
+    relatedTerms: ['Credit Rating', 'Federal Reserve', 'Inflation', 'Liquidity', 'Bond'],
+    faq: [
+      {
+        q: 'Should I take out a private student loan before maxing out federal loans?',
+        a: 'No. Federal Direct Loans have fixed rates, don’t usually require a cosigner, and come with income-driven repayment and forgiveness options private loans don’t offer. Borrow your full federal eligibility first.',
+      },
+      {
+        q: 'Do you need a cosigner for a private student loan?',
+        a: 'Almost always, if you’re an undergrad with little or no credit history and no independent income. A cosigner with a strong credit file can also get you a noticeably lower rate than you’d qualify for alone.',
+      },
+      {
+        q: 'Can private student loans be forgiven like federal loans?',
+        a: 'No. Programs like Public Service Loan Forgiveness only apply to federal Direct Loans. Private lenders set their own forbearance and hardship policies at their discretion, with no government forgiveness program behind them.',
+      },
+      {
+        q: 'Is a fixed or variable rate better for a private student loan?',
+        a: 'A fixed rate is the safer default for most borrowers since it won’t change over the life of the loan. A variable rate can start lower but may rise if the benchmark rate it’s tied to increases — it’s a better fit only if you’re confident you’ll pay off the balance quickly.',
+      },
+    ],
+  },
 ]
