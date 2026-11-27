@@ -7228,4 +7228,56 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'what-is-local-city-income-tax-on-your-paycheck',
+    title: 'What Is That “Local” or “City” Tax on Your Paycheck?',
+    metaTitle: 'Local Income Tax Explained: Why It’s on Your Pay Stub',
+    description:
+      'Federal and state tax make sense, but what’s this third “local” or “city” line taking money too? Here’s who actually charges it and why.',
+    date: '2026-11-27',
+    category: 'Paychecks & Taxes',
+    intro:
+      'You already know about federal tax and maybe state tax. Then a line labeled "Local Tax," "City Tax," or something like "RITA" or "EIT" shows up on your stub and takes a bite nobody warned you about. It’s not a scam and it’s not a mistake — a chunk of the US taxes wages at the city, county, or school-district level on top of state and federal, and whether you owe it depends entirely on your zip code.',
+    sections: [
+      {
+        heading: 'Local income tax is real, but it’s not everywhere',
+        body: 'Most of the country doesn’t have a local income tax at all — your paycheck only shows federal and (if your state has one) state withholding. But in certain states, cities, counties, or even school districts are legally allowed to levy their own separate income tax on top of everything else, usually to fund things state tax doesn’t cover directly, like city services or local schools.\n\nThis isn’t unique to one state. Pennsylvania has local Earned Income Tax (EIT) collected by nearly every municipality and school district, typically around 1% total split between the two. Ohio has municipal income tax — often administered through RITA (Regional Income Tax Agency) — in the large majority of its cities, generally in the 1%–2.5% range depending on the city. New York City adds its own resident income tax on top of New York State tax, and Philadelphia charges a Wage Tax of a few percent on both residents and people who merely work there without living there. Maryland counties each add a local tax on top of the state rate. Several Michigan cities, including Detroit, tax income too.',
+      },
+      {
+        heading: 'Why the line on your stub might say something unfamiliar',
+        body: 'The label varies a lot depending on who’s collecting it. It might say "Local," "City," "EIT," "RITA," "Occupational Tax," or just the name of the municipality itself. If you’ve never seen it before and just moved, started a new job, or moved out for college, it’s worth looking up — your payroll or HR department can tell you exactly which local jurisdiction is being withheld for and why.\n\nUnlike federal and state tax, which get calculated off your W-4 and a tax bracket, most local income taxes are a flat percentage of your wages with no brackets at all. That makes the math simple, but it also means there’s rarely a way to reduce it through deductions the way you sometimes can with federal tax.',
+      },
+      {
+        heading: 'Where you live vs. where you work can both tax you',
+        body: 'The trickiest part of local tax is that it can be based on where you live, where you work, or both. Some cities only tax residents. Others, like Philadelphia, tax anyone who works within city limits regardless of where they actually live. If your home municipality and work municipality both charge a local tax, many states have a credit system so you’re not fully taxed twice on the same income — but the credit isn’t automatic everywhere, and in a few mismatched city/county combinations you can genuinely owe a small amount to both.\n\nThis matters most for commuters: a student or young worker who lives in one town and takes a job in a city with its own wage tax should check whether their home municipality gives credit for taxes already paid to the work city, rather than assuming it works itself out.',
+      },
+      {
+        heading: 'It’s usually small, but it adds up over a career',
+        body: 'Local income tax rates are typically modest — often well under 4%, and in a lot of places closer to 1%. On a $600 paycheck, even a 2% local tax is only $12, easy to overlook next to federal withholding and FICA. But across a full year of paychecks, and across a whole working life, a percent or two of every dollar earned is real money — it’s just spread so thin per check that almost nobody notices it the way they notice a big federal tax bill.\n\nUnlike FICA, local tax generally isn’t a dedicated benefit you’ll draw from later — it functions like state tax, going toward general local government and school funding. There’s no personal account with your name on it building up from it.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Look for a line beyond "Federal" and "State" on your stub — it may be labeled Local, City, EIT, RITA, Wage Tax, or the municipality’s name.\n2. If you don’t recognize it, ask payroll or HR which jurisdiction it’s for and whether it’s based on where you live, where you work, or both.\n3. If you live in one town and work in a different one that both tax income, check whether your home jurisdiction credits tax already paid to your work jurisdiction.\n4. Moving to a new city, county, or state for college or a job? Check that jurisdiction’s local tax rules before you assume your take-home pay will match your old paycheck.\n5. Don’t confuse local income tax with FICA — local tax funds general city/school budgets, not a personal Social Security or Medicare benefit you’ll draw from later.',
+      },
+    ],
+    relatedTerms: ['Federal Reserve', 'Inflation', 'Liquidity', 'Compound Interest'],
+    faq: [
+      {
+        q: 'Does every state have a local income tax?',
+        a: 'No. Most states have no separate local income tax at all — only federal and, if applicable, state withholding show up on the stub. Local income tax exists in specific states like Pennsylvania, Ohio, Maryland, New York, and Michigan, usually at the city, county, or school-district level.',
+      },
+      {
+        q: 'Can I get taxed by both the city I live in and the city I work in?',
+        a: 'It’s possible if both charge a local income tax, though many jurisdictions offer a credit so you aren’t fully taxed twice on the same wages. The credit isn’t automatic everywhere, so it’s worth checking the specific cities or counties involved.',
+      },
+      {
+        q: 'Is local income tax the same as FICA?',
+        a: 'No. FICA (Social Security and Medicare) is a separate federal payroll tax that funds specific benefits you become eligible for later. Local income tax funds general city, county, or school-district budgets and works more like a smaller version of state income tax.',
+      },
+      {
+        q: 'Why is my friend’s paycheck in a different city missing a local tax line I have?',
+        a: 'Because local income tax depends entirely on the specific state, city, county, or school district involved — it’s not a national rule. Two people earning the same wage in different towns can have completely different local tax situations, or none at all.',
+      },
+    ],
+  },
 ]
