@@ -7280,4 +7280,60 @@ export const GUIDES: Guide[] = [
       },
     ],
   },
+  {
+    slug: 'is-your-brokerage-account-insured-what-sipc-covers',
+    title: 'Is Your Brokerage Account Insured? What SIPC Actually Covers',
+    metaTitle: 'SIPC Insurance Explained: What Happens If Your Broker Fails',
+    description:
+      'Your bank deposits have FDIC insurance — but what protects the stocks sitting in your Robinhood or Fidelity account? Here’s what SIPC covers, and what it flatly doesn’t.',
+    date: '2026-11-28',
+    category: 'Investing',
+    intro:
+      'You’ve probably heard that bank deposits are "FDIC insured." Brokerage accounts have a similar-sounding protection called SIPC — but it covers something completely different, and a lot of people assume it means their portfolio can’t lose money. It can’t stop a stock from crashing. What it actually does is protect you if the brokerage itself collapses, and the fine print matters more than the headline.',
+    sections: [
+      {
+        heading: 'SIPC protects you from your broker failing — not from your investments losing value',
+        body: 'The Securities Investor Protection Corporation (SIPC) is a nonprofit created by Congress in 1970 that steps in when a brokerage firm itself goes out of business — not when the stocks you own go down. If your broker becomes insolvent and customer assets go missing or can’t be accounted for, SIPC works with a court-appointed trustee to get your securities and cash back to you, typically by transferring your account to a different, healthy brokerage.\n\nThis is the single most misunderstood part of SIPC: it exists for the rare case where the company holding your account fails, not for the much more common case where your portfolio drops because the market had a bad year. If AAPL falls 30%, SIPC does nothing — and it was never supposed to.',
+      },
+      {
+        heading: 'The actual coverage numbers: $500,000, with a $250,000 cash sublimit',
+        body: 'SIPC covers up to $500,000 per customer, per separate capacity, including a limit of $250,000 for cash held in that account. "Per separate capacity" means the limits reset for different account types — an individual brokerage account, a joint account with a sibling or partner, and an IRA are each treated as a separate customer for coverage purposes, even at the same brokerage.\n\nIn a brokerage failure, the trustee’s first move is usually to transfer customer accounts — securities and cash intact — directly to another broker, which resolves most cases without anyone ever needing to file a SIPC claim. Formal claims and payouts, when needed, are historically rare, since the large majority of a failed brokerage’s customer assets are recovered and transferred rather than lost.',
+      },
+      {
+        heading: 'What SIPC does not cover',
+        body: 'SIPC does not cover a decline in the value of your investments — that’s ordinary market risk, and no insurance program covers it. It also doesn’t cover cryptocurrency held directly through a crypto exchange or crypto-only platform, since SIPC only protects "securities" as legally defined, and most cryptocurrencies aren’t classified that way.\n\nIt also doesn’t cover investments that were never actually registered or purchased on your behalf — a common feature of investment scams — nor does it cover losses from bad advice, a financial advisor’s poor stock picks, or commodities and futures contracts in most cases. And none of it applies if your broker was never a SIPC member in the first place, which is why checking membership before depositing real money matters.',
+      },
+      {
+        heading: 'Where the uninvested cash in your account actually lives',
+        body: 'Most brokers don’t just hold your uninvested cash as a bookkeeping entry — they "sweep" it into partner banks through a cash sweep program, where it becomes a real bank deposit. That swept cash is then protected by FDIC insurance (up to $250,000 per bank, per depositor, per ownership category) rather than SIPC, the same way a checking account would be.\n\nSome brokers spread swept cash across several partner banks specifically so a customer with a large cash balance can stack multiple $250,000 FDIC limits instead of being capped at one. It’s worth checking your specific broker’s cash sweep disclosure — the protection your cash gets depends on which program it’s enrolled in, not just which app you downloaded.',
+      },
+      {
+        heading: 'How to check if your broker is actually covered',
+        body: 'Every broker-dealer registered with the SEC is legally required to be a SIPC member, and reputable platforms advertise it directly — look for "Member SIPC" in the footer of the website or app. You can also search any firm by name on sipc.org to confirm active membership before moving money in.\n\nMany larger brokerages also carry additional private insurance — often called "excess SIPC" coverage, purchased from insurers like Lloyd’s of London — that kicks in above the federal $500,000 limit, sometimes covering balances into the millions in aggregate. This extra layer is a nice bonus for large accounts, but it’s irrelevant to the typical teen or young adult investor who’s nowhere near the base $500,000 limit to begin with.',
+      },
+      {
+        heading: 'Your checklist',
+        body: '1. Before depositing money anywhere, confirm the platform says "Member SIPC" or look it up directly on sipc.org.\n2. Remember SIPC replaces missing securities and cash if your broker fails — it does not reimburse you for a stock that simply went down in value.\n3. Know the numbers: $500,000 per separate account type, with a $250,000 sublimit specifically for cash.\n4. Don’t assume crypto held on an exchange has the same protection as stocks in a brokerage account — it generally doesn’t.\n5. If you keep a large uninvested cash balance, check your broker’s cash sweep program to see which bank(s) it lands in and whether you’re covered by FDIC.',
+      },
+    ],
+    relatedTerms: ['Broker', 'Liquidity', 'Counterparty Risk', 'Diversification', 'Bond'],
+    faq: [
+      {
+        q: 'Does SIPC protect me if my stocks lose value?',
+        a: 'No. SIPC only steps in if your brokerage firm itself fails and customer assets go missing — it has nothing to do with ordinary market losses, which no insurance program covers.',
+      },
+      {
+        q: 'Is cryptocurrency covered by SIPC?',
+        a: 'Generally no. SIPC protection applies to "securities" as legally defined, and most cryptocurrencies held on an exchange don’t fall into that category, so crypto balances typically aren’t covered the way stocks and ETFs are.',
+      },
+      {
+        q: 'What’s the difference between SIPC and FDIC?',
+        a: 'FDIC insures cash deposits at banks if the bank fails. SIPC covers securities and cash at brokerage firms if the brokerage fails. Many brokers sweep your uninvested cash into partner banks, where it becomes FDIC-insured instead of SIPC-protected.',
+      },
+      {
+        q: 'How much money does SIPC actually cover?',
+        a: 'Up to $500,000 per customer per separate account type (individual, joint, IRA, etc.), including a $250,000 limit specifically for cash within that account.',
+      },
+    ],
+  },
 ]
